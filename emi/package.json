@@ -6,10 +6,19 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
     "@playwright/test": "^1.59.1",
     "@types/node": "^25.5.2",
     "playwright": "^1.59.1"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.2",
+    "express": "^5.2.1",
+    "playwright-core": "^1.59.1",
+    "undici-types": "^7.18.2"
+  },
+  "description": ""
 }
