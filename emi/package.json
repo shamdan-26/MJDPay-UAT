@@ -1,9 +1,14 @@
 {
   "name": "playwright-project",
   "version": "1.0.0",
-  "main": "index.js",
   "type": "module",
-  "scripts": {},
+  "description": "Playwright project with MCP auto-heal and HTML reports",
+  "main": "runner.js",
+  "scripts": {
+    "start-server": "node server.js",
+    "run-test": "npx playwright test runner.js --reporter=html",
+    "test": "npm run start-server & sleep 3 && npm run run-test"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -12,15 +17,11 @@
     "@types/node": "^25.5.2",
     "playwright": "^1.59.1"
   },
-  "directories": {
-    "test": "tests"
-  },
   "dependencies": {
     "body-parser": "^2.2.2",
     "express": "^5.2.1",
     "node-fetch": "^3.3.2",
     "playwright-core": "^1.59.1",
     "undici-types": "^7.18.2"
-  },
-  "description": ""
+  }
 }
