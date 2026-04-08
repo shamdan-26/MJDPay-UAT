@@ -1,8 +1,14 @@
+import { test, expect } from '@playwright/test';
 import fetch from 'node-fetch';
 import { generateFix } from './agent.js';
+import fs from 'fs';
+import path from 'path';
 
-// غلاف async لتجنب خطأ await
-let script = `
+const screenshotDir = path.join(__dirname, 'screenshots');
+if (!fs.existsSync(screenshotDir)) fs.mkdirSync(screenshotDir);
+
+test('Google title test with MCP auto-heal', async ({ page }, testInfo) => {
+  let script = `
 (async () => {
   await page.goto('https://www.google.com');
   const title = await page.title();
@@ -12,41 +18,44 @@ let script = `
 })()
 `;
 
-async function runTest(script) {
-  const res = await fetch('http://localhost:3000/run-test', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ script })
-  });
-
-  return await res.json();
-}
-
-(async () => {
-  let result = await runTest(script);
-
-  if (!result.success) {
-    console.log('❌ Test failed:', result.error);
-
-    // عرض جزء من DOM لتسهيل التصحيح
-    console.log('📝 Snapshot of page DOM (first 500 chars):', result.dom.slice(0, 500));
-
-    try {
-      const fixedScript = await generateFix(
-        result.error,
-        script,
-        result.dom
-      );
-
-      console.log('🔧 Fixed script generated:\n', fixedScript);
-
-      // إعادة تجربة السكريبت بعد التصحيح
-      result = await runTest(fixedScript);
-    } catch (e) {
-      console.error('⚠️ Auto-heal failed:', e.message);
-      return;
-    }
+  async function runMCP(script) {
+    const res = await fetch('http://localhost:3000/run-test', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ script })
+    });
+    return await res.json();
   }
 
-  console.log(result.success ? '✅ Google title test passed' : '❌ Still failing');
-})();
+  let attempt = 1;
+  const maxAttempts = 3;
+  let success = false;
+
+  while (attempt <= maxAttempts && !success) {
+    const result = await runMCP(script);
+
+    if (result.success) {
+      console.log(`✅ MCP test passed on attempt #${attempt}`);
+      success = true;
+      break;
+    }
+
+    console.log(`❌ MCP test failed on attempt #${attempt}: ${result.error}`);
+    await page.screenshot({ path: path.join(screenshotDir, `fail_attempt_${attempt}.png`) });
+    console.log('📝 DOM snapshot (500 chars):', result.dom.slice(0, 500));
+
+    try {
+      script = await generateFix(result.error, script, result.dom);
+      console.log('🔧 Fixed script generated');
+    } catch (e) {
+      console.error('⚠️ Auto-heal failed:', e.message);
+      break;
+    }
+
+    attempt++;
+  }
+
+  if (!success) {
+    throw new Error('Test failed after auto-heal attempts');
+  }
+});
