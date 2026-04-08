@@ -13,13 +13,13 @@ const __dirname = path.dirname(__filename);
 const screenshotDir = path.join(__dirname, 'screenshots');
 if (!fs.existsSync(screenshotDir)) fs.mkdirSync(screenshotDir);
 
-test('google title test with MCP auto-heal', async ({ page }) => {
+test('Google title test with MCP auto-heal', async ({ page }) => {
   let script = `
 (async () => {
   await page.goto('https://www.google.com');
   const title = await page.title();
-  if (!title.includes('google')) {
-    throw new Error('Title is not google');
+  if (!title.includes('Google')) {
+    throw new Error('Title is not Google');
   }
 })()
 `;
