@@ -3,11 +3,17 @@ import fetch from 'node-fetch';
 import { generateFix } from './agent.js';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
+// تعويض __dirname في ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// مجلد لتخزين screenshots
 const screenshotDir = path.join(__dirname, 'screenshots');
 if (!fs.existsSync(screenshotDir)) fs.mkdirSync(screenshotDir);
 
-test('Google title test with MCP auto-heal', async ({ page }, testInfo) => {
+test('Google title test with MCP auto-heal', async ({ page }) => {
   let script = `
 (async () => {
   await page.goto('https://www.google.com');
