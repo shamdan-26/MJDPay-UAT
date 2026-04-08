@@ -1,9 +1,15 @@
 import fetch from 'node-fetch';
 import { generateFix } from './agent.js';
 
+// غلاف async لتجنب خطأ await
 let script = `
-await page.goto('https://www.google.com');
-await page.click('#wrong-id');
+(async () => {
+  await page.goto('https://www.google.com');
+  const title = await page.title();
+  if (!title.includes('Google')) {
+    throw new Error('Title is not Google');
+  }
+})()
 `;
 
 async function runTest(script) {
@@ -20,18 +26,27 @@ async function runTest(script) {
   let result = await runTest(script);
 
   if (!result.success) {
-    console.log('❌ Failed:', result.error);
+    console.log('❌ Test failed:', result.error);
 
-    const fixedScript = await generateFix(
-      result.error,
-      script,
-      result.dom
-    );
+    // عرض جزء من DOM لتسهيل التصحيح
+    console.log('📝 Snapshot of page DOM (first 500 chars):', result.dom.slice(0, 500));
 
-    console.log('🔧 Fixed script:', fixedScript);
+    try {
+      const fixedScript = await generateFix(
+        result.error,
+        script,
+        result.dom
+      );
 
-    result = await runTest(fixedScript);
+      console.log('🔧 Fixed script generated:\n', fixedScript);
+
+      // إعادة تجربة السكريبت بعد التصحيح
+      result = await runTest(fixedScript);
+    } catch (e) {
+      console.error('⚠️ Auto-heal failed:', e.message);
+      return;
+    }
   }
 
-  console.log(result.success ? '✅ Passed' : '❌ Still failing');
+  console.log(result.success ? '✅ Google title test passed' : '❌ Still failing');
 })();
