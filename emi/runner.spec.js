@@ -13,7 +13,8 @@ const __dirname = path.dirname(__filename);
 const screenshotDir = path.join(__dirname, 'screenshots');
 if (!fs.existsSync(screenshotDir)) fs.mkdirSync(screenshotDir);
 
-test('Google title test with MCP auto-heal', async ({ page }) => {
+test('Google title test with MCP auto-heal', async ({ page }, testInfo) => {
+
   let script = `
 (async () => {
   await page.goto('https://www.google.com');
@@ -40,16 +41,40 @@ test('Google title test with MCP auto-heal', async ({ page }) => {
   while (attempt <= maxAttempts && !success) {
     const result = await runMCP(script);
 
+    // ✅ نجاح
     if (result.success) {
       console.log(`✅ MCP test passed on attempt #${attempt}`);
       success = true;
       break;
     }
 
+    // ❌ فشل
     console.log(`❌ MCP test failed on attempt #${attempt}: ${result.error}`);
-    await page.screenshot({ path: path.join(screenshotDir, `fail_attempt_${attempt}.png`) });
+
+    // 📸 حفظ screenshot من MCP (وليس من Playwright page)
+    if (result.screenshot) {
+      const buffer = Buffer.from(result.screenshot, 'base64');
+
+      const filePath = path.join(
+        screenshotDir,
+        `fail_attempt_${attempt}.png`
+      );
+
+      fs.writeFileSync(filePath, buffer);
+
+      console.log(`📸 Screenshot saved: ${filePath}`);
+
+      // 🔥 attach داخل التقرير
+      await testInfo.attach(`mcp-screenshot-${attempt}`, {
+        path: filePath,
+        contentType: 'image/png'
+      });
+    }
+
+    // 🧠 عرض جزء من DOM
     console.log('📝 DOM snapshot (500 chars):', result.dom.slice(0, 500));
 
+    // 🔧 Auto-heal
     try {
       script = await generateFix(result.error, script, result.dom);
       console.log('🔧 Fixed script generated');
@@ -61,6 +86,7 @@ test('Google title test with MCP auto-heal', async ({ page }) => {
     attempt++;
   }
 
+  // ❌ فشل نهائي
   if (!success) {
     throw new Error('Test failed after auto-heal attempts');
   }
