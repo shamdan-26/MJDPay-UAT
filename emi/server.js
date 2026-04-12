@@ -13,17 +13,28 @@ app.post('/run-test', async (req, res) => {
 
   try {
     await eval(script);
+
     await browser.close();
 
     res.json({ success: true });
+
   } catch (e) {
-    const html = await page.content(); // مهم للـ auto-heal
+    // 🧠 DOM للـ auto-heal
+    const html = await page.content();
+
+    // 📸 screenshot من الصفحة الحقيقية (مهم!)
+    const screenshot = await page.screenshot({
+      encoding: 'base64',
+      fullPage: true
+    });
+
     await browser.close();
 
     res.json({
       success: false,
       error: e.message,
-      dom: html
+      dom: html,
+      screenshot   // 🔥 هذا أهم تعديل
     });
   }
 });
