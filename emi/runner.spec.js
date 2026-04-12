@@ -87,7 +87,5 @@ test('Google title test with MCP auto-heal', async ({ page }, testInfo) => {
   }
 
   // ❌ فشل نهائي
-  if (!success) {
-    throw new Error('Test failed after auto-heal attempts');
-  }
+  expect(success).toBe(true);
 });
