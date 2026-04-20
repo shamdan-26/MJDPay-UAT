@@ -2,24 +2,26 @@ import fetch from 'node-fetch';
 
 const OPENAI_API_KEY = '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';
 
-
 /**
- * AI Agent to fix Playwright test failures
+ * AI Auto-Healing for Playwright
  */
 export async function generateFix(error, script, dom, testData = null) {
 
   const prompt = `
-You are a senior Playwright automation engineer.
+You are an expert Playwright automation engineer specialized in fixing broken tests.
 
-Fix the following failing Playwright test.
+TASK:
+Fix the failing Playwright test completely.
 
-IMPORTANT RULES:
-- Return ONLY the corrected full JavaScript test file.
-- Do NOT add explanations.
-- Keep Playwright best practices.
-- Ensure LoginPage usage remains intact.
-- Ensure OTP handling logic is correct.
-- Ensure test works with data-driven JSON input.
+STRICT RULES:
+- Return ONLY the FULL corrected code file
+- Do NOT explain anything
+- Do NOT add comments outside code
+- Keep existing structure (Page Object Model if used)
+- Fix broken locators
+- Ensure test runs successfully
+- Keep data-driven structure if exists
+- Ensure OTP/login flows remain correct
 
 --------------------------------
 ERROR:
@@ -30,68 +32,82 @@ TEST DATA:
 ${testData ? JSON.stringify(testData, null, 2) : 'N/A'}
 
 --------------------------------
-SCRIPT:
+CURRENT SCRIPT:
 ${script}
 
 --------------------------------
-DOM:
+DOM SNAPSHOT:
 ${dom}
 
 --------------------------------
 OUTPUT:
-Return only the fixed script.
+Return only the fixed Playwright test file.
 `;
 
-  const response = await fetch('https://api.openai.com/v1/responses', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${OPENAI_API_KEY}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      model: 'gpt-5',
-      input: prompt
-    })
-  });
+  try {
+    const response = await fetch('https://api.openai.com/v1/responses', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'gpt-4.1-mini',
+        input: prompt
+      })
+    });
 
-  const data = await response.json();
+    const data = await response.json();
 
-  if (!data.output || !data.output[0]) {
-    throw new Error('Invalid response from OpenAI API');
+    if (!data.output || !data.output.length) {
+      throw new Error('Empty response from OpenAI');
+    }
+
+    // استخراج النص بشكل آمن
+    const text = data.output[0]?.content?.[0]?.text;
+
+    if (!text) {
+      throw new Error('Invalid AI response format');
+    }
+
+    return text;
+
+  } catch (err) {
+    console.error('AI Fix failed:', err.message);
+    throw err;
   }
-
-  return data.output[0].content[0].text;
 }
 
 /**
- * Optional helper: extract page DOM for debugging
+ * Extract DOM
  */
 export async function getPageDom(page) {
   return await page.content();
 }
 
 /**
- * Optional helper: wrap Playwright test execution with AI debugging
+ * Smart AI Recovery Runner
  */
 export async function runWithAIRecovery(testFn, context) {
   try {
     await testFn();
   } catch (error) {
-    console.log('Test failed, sending to AI agent...');
 
-    const dom = context?.page ? await context.page.content() : 'NO DOM';
+    console.log('❌ Test failed → sending to AI healer...');
+
+    const dom = context?.page ? await context.page.content() : 'NO DOM AVAILABLE';
+
     const script = testFn.toString();
 
-    const fixed = await generateFix(
+    const fixedScript = await generateFix(
       error.message,
       script,
-      dom
+      dom,
+      context?.testData
     );
 
-    console.log('--- FIXED SCRIPT FROM AI ---');
-    console.log(fixed);
+    console.log('✅ AI FIX GENERATED');
 
-    return fixed;
+    return fixedScript;
   }
 }
-
