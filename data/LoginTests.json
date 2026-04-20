@@ -1,0 +1,9 @@
+[
+  {
+    "description": "valid credentials with OTP",
+    "companyNumber": "F2147",
+    "mobileNumber": "510203012",
+    "password": "Aa#1234567",
+    "otpCode": "0000"
+  }
+]

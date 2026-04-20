@@ -1,0 +1,41 @@
+[
+  {
+    "description": "MADA topup",
+    "companyNumber": "F2147",
+    "mobileNumber": "510203012",
+    "password": "Aa#1234567",
+    "otpCode": "123456",
+    "amount": 10,
+    "paymentMethod": "MADA",
+    "cardNumber": "5541805721646120",
+    "expiry": "0528",
+    "holder": "MADA TEST",
+    "cvv": "123"
+  },
+  {
+    "description": "VISA topup",
+    "companyNumber": "F2147",
+    "mobileNumber": "510203012",
+    "password": "Aa#1234567",
+    "otpCode": "123456",
+    "amount": 10,
+    "paymentMethod": "VISA",
+    "cardNumber": "4200000000000000",
+    "expiry": "0528",
+    "holder": "VISA TEST",
+    "cvv": "123"
+  },
+  {
+    "description": "MASTER topup",
+    "companyNumber": "F2147",
+    "mobileNumber": "510203012",
+    "password": "Aa#1234567",
+    "otpCode": "123456",
+    "amount": 10,
+    "paymentMethod": "MASTER",
+    "cardNumber": "5541805721646120",
+    "expiry": "0528",
+    "holder": "MASTER TEST",
+    "cvv": "123"
+  }
+]
