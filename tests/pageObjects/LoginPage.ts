@@ -14,7 +14,7 @@ export class LoginPage {
         this.page = page;
         // استخدام Locators ذكية تعتمد على الـ ID والـ Role
         this.companyNumberInput = page.getByRole('textbox', { name: /company number/i });
-        this.mobileNumberInput = page.getByRole('textbox', { name: /number/i });
+        this.mobileNumberInput = page.getByRole('textbox', { name: /mobile number/i });
         this.passwordInput = page.getByRole('textbox', { name: /^password$/i });
         // UI now labels submit as "Log In"; keep a flexible matcher for future copy changes.
         this.submitLoginAction = page.getByRole('button', { name: /^(log in|sign in)$/i });
