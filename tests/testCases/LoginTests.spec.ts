@@ -1,6 +1,7 @@
 import { test } from '@playwright/test';
-import { LoginPage } from '../pageObjects/LoginPage';// هنا ستحتاجين لاستيراد الـ Utility الخاصة بالـ MongoDB لاحقاً
-// import { getLatestOtp } from '../utilities/OtpUtils'; 
+import { LoginPage } from '../pageObjects/LoginPage';
+import { runWithAIRecovery } from '../utils/runWithAIRecovery.js';
+
 const loginData = require('../../data/LoginTests.json');
 
 test.describe('MajdPay Login Tests', () => {
@@ -16,31 +17,43 @@ test.describe('MajdPay Login Tests', () => {
     const dataSets = loginData as LoginTestData[];
 
     for (const data of dataSets) {
+
         test(`Login for user: ${data.description}`, async ({ page }) => {
-            const loginPage = new LoginPage(page);
 
-            // 1. الذهاب للموقع
-            await loginPage.navigate();
+            await runWithAIRecovery(async () => {
 
-            // 2. إدخال البيانات (يمكنك جلبها من JSON لتعويض DataProvider)
-            await loginPage.login(data.companyNumber, data.mobileNumber, data.password);
+                const loginPage = new LoginPage(page);
 
-            // 3. التعامل مع الـ OTP
-            if (await loginPage.isOTPScreenDisplayed()) {
-                console.log('OTP Screen displayed, fetching code...');
+                // 1. الذهاب للموقع
+                await loginPage.navigate();
 
-                // ملاحظة: ستحتاجين لتحويل OtpWaiter إلى TypeScript 
-                // لنفترض أن الـ OTP هو 123456 للتجربة حالياً
-                const otpCode = data.otpCode ?? '';
+                // 2. تسجيل الدخول
+                await loginPage.login(
+                    data.companyNumber,
+                    data.mobileNumber,
+                    data.password
+                );
 
-                await loginPage.enterOTP(otpCode);
-                await loginPage.verifyButton.click();
-            }
+                // 3. التعامل مع OTP
+                if (await loginPage.isOTPScreenDisplayed()) {
+                    console.log('OTP Screen displayed, fetching code...');
 
-            // 4. التأكد من النجاح
-            await loginPage.assertLoginSuccess();
+                    const otpCode = data.otpCode ?? '';
+
+                    await loginPage.enterOTP(otpCode);
+                    await loginPage.verifyButton.click();
+                }
+
+                // 4. التحقق من نجاح الدخول
+                await loginPage.assertLoginSuccess();
+
+            }, {
+                page,
+                testData: data
+            });
 
         });
+
     }
 
 });
