@@ -21,7 +21,7 @@ test.describe('MajdPay Login Tests', () => {
  
             await loginPage.navigate();
  
-            await loginPage.login(data.companyNumber, data.Number, data.password);
+            await loginPage.login(data.companyNumber, data.mobileNumber, data.password);
  
             if (await loginPage.isOTPScreenDisplayed()) {
                 console.log('OTP Screen displayed, fetching code...');
