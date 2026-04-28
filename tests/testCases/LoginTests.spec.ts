@@ -23,7 +23,7 @@ test.describe('MajdPay Login Tests', () => {
             await loginPage.navigate();
  
             // 2. إدخال البيانات (يمكنك جلبها من JSON لتعويض DataProvider)
-            await loginPage.login(data.companyNumber, data.mobileNumber, data.password);
+            await loginPage.login(data.companyNumber, data.Number, data.password);
  
             // 3. التعامل مع الـ OTP
             if (await loginPage.isOTPScreenDisplayed()) {
