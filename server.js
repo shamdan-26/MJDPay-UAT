@@ -1,46 +1,32 @@
-import express from 'express';
-import bodyParser from 'body-parser';
 import { chromium } from 'playwright';
+import { generateFix } from './agent.js';
 
-const app = express();
-app.use(bodyParser.json());
-
-app.post('/run-test', async (req, res) => {
-  const { script } = req.body;
-
+async function runTest(script) {
   const browser = await chromium.launch();
   const page = await browser.newPage();
 
   try {
     await eval(script);
+    await browser.close();
+    return { success: true };
+
+  } catch (error) {
+
+    const dom = await page.content();
+    const screenshot = await page.screenshot({ encoding: 'base64' });
 
     await browser.close();
 
-    res.json({ success: true });
+    // 🧠 إرسال للـ AI fixer
+    const fixedScript = await generateFix(
+      error.message,
+      script,
+      dom
+    );
 
-  } catch (e) {
-    // 🧠 DOM للـ auto-heal
-    const html = await page.content();
+    console.log("🔧 AI fixed script received");
 
-    // 📸 screenshot من الصفحة الحقيقية (مهم!)
-    const screenshot = await page.screenshot({
-      encoding: 'base64',
-      fullPage: true
-    });
-
-    await browser.close();
-
-    res.json({
-      success: false,
-      error: e.message,
-      dom: html,
-      screenshot   // 🔥 هذا أهم تعديل
-    });
+    // 🔁 إعادة التشغيل بالنسخة الجديدة
+    return await runTest(fixedScript);
   }
-});
-
-app.listen(3000, () => {
-  console.log('🚀 MCP server running on port 3000');
-});
-
-
+}
