@@ -11,6 +11,12 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+declare const process: {
+  env: {
+    CI?: string;
+  };
+};
+
 export default defineConfig({
   testDir: './tests',
   timeout: 60000,
@@ -39,7 +45,7 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { headless: false, ...devices['Desktop Chrome'] },
+      use: { headless: false, channel: 'chrome', ...devices['Desktop Chrome'] },
     },
 
     /*{
