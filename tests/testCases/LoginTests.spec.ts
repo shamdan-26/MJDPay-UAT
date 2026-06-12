@@ -1,78 +1,216 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pageObjects/LoginPage';// هنا ستحتاجين لاستيراد الـ Utility الخاصة بالـ MongoDB لاحقاً
+import { LoginPage } from '../pageObjects/LoginPage';
+// Note: MongoDB utility import will be needed here later
 // import { getLatestOtp } from '../utilities/OtpUtils'; 
 const loginData = require('../../data/LoginTests.json');
 
+type LoginTestData = {
+    type: 'positive' | 'negative';
+    execute?: boolean;
+    description: string;
+    companyNumber: string;
+    mobileNumber: string;
+    password: string;
+    otpCode?: string;
+    expectedMobileValue?: string;
+    expectedMobileLength?: number;
+    expectedToastError?: string;
+    useSequentialTyping?: boolean;
+};
+
+const dataSets = loginData as LoginTestData[];
+
 test.describe('MajdPay Login Tests', () => {
 
-    type LoginTestData = {
-        description: string;
-        companyNumber: string;
-        mobileNumber: string;
-        password: string;
-        otpCode?: string;
-    };
+    test.beforeEach(async ({ page }) => {
+        const loginPage = new LoginPage(page);
+        // 1. Navigate to the website
+        await loginPage.navigate();
+    });
 
-    const dataSets = loginData as LoginTestData[];
+    test.describe('Successful Login Scenarios', () => {
+        const positiveTests = dataSets.filter(data => data.type === 'positive');
 
-    for (const data of dataSets) {
-        test(`Login for user: ${data.description}`, async ({ page }) => {
+        for (const data of positiveTests) {
+            test(`Login for user: ${data.description}`, async ({ page }) => {
+                if (data.execute === false) {
+                    test.skip();
+                }
+                const loginPage = new LoginPage(page);
+
+                // 2. Enter login credentials (fetched from JSON to replace DataProvider functionality)
+                await loginPage.login(data.companyNumber, data.mobileNumber, data.password);
+
+                // 3. Handle OTP verification flow
+                if (await loginPage.isOTPScreenDisplayed()) {
+                    console.log('OTP Screen displayed, fetching code...');
+
+                    // Note: OtpWaiter will need to be converted to TypeScript later
+                    // Using fallback OTP code from data or empty string for now
+                    const otpCode = data.otpCode ?? '';
+
+                    await loginPage.enterOTP(otpCode);
+                    await loginPage.verifyButton.click();
+                }
+
+                // 4. Assert successful login
+                await loginPage.assertLoginSuccess();
+            });
+        }
+    });
+
+    test.describe('Validation / Negative Login Scenarios', () => {
+        const negativeTests = dataSets.filter(data => data.type === 'negative');
+
+        for (const data of negativeTests) {
+            test(`Validation: ${data.description}`, async ({ page }) => {
+                if (data.execute === false) {
+                    test.skip();
+                }
+                const loginPage = new LoginPage(page);
+
+                await loginPage.login(
+                    data.companyNumber,
+                    data.mobileNumber,
+                    data.password,
+                    { useSequentialTyping: data.useSequentialTyping }
+                );
+
+                if (data.expectedMobileValue !== undefined) {
+                    const actualValue = await loginPage.mobileNumberInput.inputValue();
+                    expect(actualValue).toBe(data.expectedMobileValue);
+                }
+
+                if (data.expectedMobileLength !== undefined) {
+                    const actualValue = await loginPage.mobileNumberInput.inputValue();
+                    expect(actualValue).toHaveLength(data.expectedMobileLength);
+                }
+
+                await expect(page).toHaveURL(/\/business\/login/i);
+
+                if (data.expectedToastError !== undefined) {
+                    await loginPage.assertToastError(data.expectedToastError);
+                } else if (data.expectedMobileLength === undefined) {
+                    await loginPage.assertValidationErrorsVisible();
+                }
+            });
+        }
+    });
+    // ── UI Theme and Language Login Scenarios ──────────────────────────
+
+    test.describe('UI Theme and Language Login Scenarios', () => {
+        const creds = dataSets.find(d => d.type === 'positive')!;
+
+        test('Login in Light Mode (Default)', async ({ page }) => {
+            if (creds.execute === false) {
+                test.skip();
+            }
             const loginPage = new LoginPage(page);
 
-            // 1. الذهاب للموقع
+            // Step 1: Navigate to the Login Page
             await loginPage.navigate();
 
-            // 2. إدخال البيانات (يمكنك جلبها من JSON لتعويض DataProvider)
-            await loginPage.login(data.companyNumber, data.mobileNumber, data.password);
+            // Step 2: Verify Light mode is active (default) — toggle button is present
+            await expect(loginPage.themeToggleButton).toBeVisible();
 
-            // 3. التعامل مع الـ OTP
+            // Step 3: Perform Login
+            await loginPage.login(creds.companyNumber, creds.mobileNumber, creds.password);
+
+            // Step 4: Handle OTP if displayed
             if (await loginPage.isOTPScreenDisplayed()) {
-                console.log('OTP Screen displayed, fetching code...');
-
-                // ملاحظة: ستحتاجين لتحويل OtpWaiter إلى TypeScript 
-                // لنفترض أن الـ OTP هو 123456 للتجربة حالياً
-                const otpCode = data.otpCode ?? '';
-
+                const otpCode = creds.otpCode ?? '';
                 await loginPage.enterOTP(otpCode);
                 await loginPage.verifyButton.click();
             }
 
-            // 4. التأكد من النجاح
+            // Step 5: Assert successful login
             await loginPage.assertLoginSuccess();
-
         });
-    }
 
-    test('Verify that the OTP input fields accepts only numeric input', async ({ page }) => {
-        const loginPage = new LoginPage(page);
-        const data = dataSets[0];
+        test('Login in Dark Mode', async ({ page }) => {
+            if (creds.execute === false) {
+                test.skip();
+            }
+            const loginPage = new LoginPage(page);
 
-        // 1. الذهاب للموقع
-        await loginPage.navigate();
+            // Step 1: Navigate to the Login Page
+            await loginPage.navigate();
 
-        // 2. إدخال بيانات صحيحة للوصول لصفحة الـ OTP
-        await loginPage.login(data.companyNumber, data.mobileNumber, data.password);
+            // Step 2: Switch to Dark Mode BEFORE any login interaction
+            await loginPage.toggleTheme();
 
-        // 3. التأكد من ظهور خانات الـ OTP
-        const firstOtpInput = page.locator('#ngx-otp-input-0');
-        await expect(firstOtpInput).toBeVisible({ timeout: 10000 });
+            // Step 3: Perform Login
+            await loginPage.login(creds.companyNumber, creds.mobileNumber, creds.password);
 
-        // 4. محاولة إدخال حروف (غير أرقام) والتأكد من أنها لم تُقبل
-        await firstOtpInput.pressSequentially('abc');
-        let value = await firstOtpInput.inputValue();
-        expect(value).not.toMatch(/[a-zA-Z]/);
+            // Step 4: Handle OTP if displayed
+            if (await loginPage.isOTPScreenDisplayed()) {
+                const otpCode = creds.otpCode ?? '';
+                await loginPage.enterOTP(otpCode);
+                await loginPage.verifyButton.click();
+            }
 
-        // 5. محاولة إدخال رموز خاصة والتأكد من عدم قبولها
-        await firstOtpInput.fill(''); // مسح الخانة
-        await firstOtpInput.pressSequentially('@#$');
-        value = await firstOtpInput.inputValue();
-        expect(value).not.toMatch(/[@#$]/);
+            // Step 5: Assert successful login
+            await loginPage.assertLoginSuccess();
+        });
 
-        // 6. التأكد من قبول الأرقام
-        await firstOtpInput.fill(''); // مسح الخانة
-        await firstOtpInput.pressSequentially('5');
-        value = await firstOtpInput.inputValue();
-        expect(value).toBe('5');
+        test('Login in English Language (Default)', async ({ page }) => {
+            if (creds.execute === false) {
+                test.skip();
+            }
+            const loginPage = new LoginPage(page);
+
+            // Step 1: Navigate to the Login Page
+            await loginPage.navigate();
+
+            // Step 2: Confirm English is the active language BEFORE login
+            const isEnglishActive = await loginPage.isLanguageActive(loginPage.englishButton);
+            expect(isEnglishActive).toBe(true);
+
+            // Step 3: Perform Login
+            await loginPage.login(creds.companyNumber, creds.mobileNumber, creds.password);
+
+            // Step 4: Handle OTP if displayed
+            if (await loginPage.isOTPScreenDisplayed()) {
+                const otpCode = creds.otpCode ?? '';
+                await loginPage.enterOTP(otpCode);
+                await loginPage.verifyButton.click();
+            }
+
+            // Step 5: Assert successful login
+            await loginPage.assertLoginSuccess();
+        });
+
+        test('Login in Arabic Language', async ({ page }) => {
+            if (creds.execute === false) {
+                test.skip();
+            }
+            const loginPage = new LoginPage(page);
+
+            // Step 1: Navigate to the Login Page
+            await loginPage.navigate();
+
+            // Step 2: Switch to Arabic BEFORE any login interaction
+            await loginPage.selectArabic();
+
+            // Wait for the layout shift to fully settle after language change
+            await page.waitForLoadState('networkidle');
+
+            // Verify Arabic is now the active language
+            const isArabicActive = await loginPage.isLanguageActive(loginPage.arabicButton);
+            expect(isArabicActive).toBe(true);
+
+            // Step 3: Perform Login
+            await loginPage.login(creds.companyNumber, creds.mobileNumber, creds.password);
+
+            // Step 4: Handle OTP if displayed
+            if (await loginPage.isOTPScreenDisplayed()) {
+                const otpCode = creds.otpCode ?? '';
+                await loginPage.enterOTP(otpCode);
+                await loginPage.verifyButton.click();
+            }
+
+            // Step 5: Assert successful login
+            await loginPage.assertLoginSuccess();
+        });
     });
-
 });

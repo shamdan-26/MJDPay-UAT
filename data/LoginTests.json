@@ -1,9 +1,105 @@
 [
   {
-    "description": "valid credentials with OTP",
+    "type": "positive",
+    "execute": true,
+    "description": "valid credentials",
     "companyNumber": "F2147",
     "mobileNumber": "510203012",
     "password": "Aa#1234567",
     "otpCode": "0000"
+  },
+  {
+    "type": "negative",
+    "execute": true,
+    "description": "all fields empty",
+    "companyNumber": "",
+    "mobileNumber": "",
+    "password": ""
+  },
+  {
+    "type": "negative",
+    "execute": true,
+    "description": "company number empty",
+    "companyNumber": "",
+    "mobileNumber": "510203012",
+    "password": "Aa#1234567"
+  },
+  {
+    "type": "negative",
+    "execute": true,
+    "description": "mobile number empty",
+    "companyNumber": "F2147",
+    "mobileNumber": "",
+    "password": "Aa#1234567"
+  },
+  {
+    "type": "negative",
+    "execute": true,
+    "description": "password empty",
+    "companyNumber": "F2147",
+    "mobileNumber": "510203012",
+    "password": ""
+  },
+  {
+    "type": "negative",
+    "execute": true,
+    "description": "Invalid Mobile Number (Unregistered)",
+    "companyNumber": "F2147",
+    "mobileNumber": "510203099",
+    "password": "Aa#1234567",
+    "expectedToastError": "User not found"
+  },
+  {
+    "type": "negative",
+    "execute": true,
+    "description": "Invalid Password",
+    "companyNumber": "F2147",
+    "mobileNumber": "510203012",
+    "password": "WrongPassword123!",
+    "expectedToastError": "Invalid credentials, please try again."
+  },
+  {
+    "type": "negative",
+    "execute": true,
+    "description": "Invalid Company Number",
+    "companyNumber": "F9999",
+    "mobileNumber": "510203012",
+    "password": "Aa#1234567",
+    "expectedToastError": "User not found"
+  },
+  {
+    "type": "negative",
+    "execute": true,
+    "description": "Mobile Starts Without 5",
+    "companyNumber": "F2147",
+    "mobileNumber": "410203012",
+    "password": "Aa#1234567"
+  },
+  {
+    "type": "negative",
+    "execute": true,
+    "description": "Mobile Number Length (Too Short)",
+    "companyNumber": "F2147",
+    "mobileNumber": "5102030",
+    "password": "Aa#1234567"
+  },
+  {
+    "type": "negative",
+    "execute": true,
+    "description": "Mobile Number Length (Too Long)",
+    "companyNumber": "F2147",
+    "mobileNumber": "51020301234",
+    "password": "Aa#1234567",
+    "expectedMobileLength": 9
+  },
+  {
+    "type": "negative",
+    "execute": true,
+    "description": "Alphabetical Characters in Mobile Field",
+    "companyNumber": "F2147",
+    "mobileNumber": "abcdefghi",
+    "password": "Aa#1234567",
+    "expectedMobileValue": "",
+    "useSequentialTyping": true
   }
 ]
