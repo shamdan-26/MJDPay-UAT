@@ -18,6 +18,7 @@ declare const process: {
 };
 
 export default defineConfig({
+  globalSetup: './Utils/LoginSession.ts',
   testDir: './tests',
   timeout: 60000,
   /* Run tests in files in parallel */
@@ -43,10 +44,10 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-    {
+   /*  {
       name: 'chromium',
       use: { headless: false, channel: 'chrome', ...devices['Desktop Chrome'] },
-    },
+    }, */
 
     /*{
       name: 'firefox',
