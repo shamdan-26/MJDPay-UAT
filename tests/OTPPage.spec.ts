@@ -29,49 +29,49 @@ test.describe('OTP Dialog - Change Password', () => {
         await page.getByRole('button', { name: 'reset password' }).click();
 
         // Wait for the OTP dialog to appear
-        await page.locator('.my-modal-container').waitFor({ state: 'visible', timeout: 15000 });
+        await page.locator("//div[@class='my-modal-container']").waitFor({ state: 'visible', timeout: 15000 });
     });
 
     // ── Dialog elements ───────────────────────────────────────────────────────
 
     test('should display the OTP dialog', async ({ page }) => {
-        await expect(page.locator('.my-modal-container')).toBeVisible();
+        await expect(page.locator("//div[@class='my-modal-container']")).toBeVisible();
     });
 
     test('should display the "Enter OTP" title', async ({ page }) => {
-        await expect(page.locator('.my-modal-container').getByText('Enter OTP')).toBeVisible();
+        await expect(page.locator("//div[@class='my-modal-container']").getByText('Enter OTP')).toBeVisible();
     });
 
     test('should display the instruction message', async ({ page }) => {
-        await expect(page.locator('.my-modal-container').getByText('A Code Has Been Sent To You, In Order To Continue With The Change Password Process.')).toBeVisible();
+        await expect(page.locator("//div[@class='my-modal-container']").getByText('A Code Has Been Sent To You, In Order To Continue With The Change Password Process.')).toBeVisible();
     });
 
     test('should display 4 OTP input boxes', async ({ page }) => {
-        const otpInputs = page.locator('.my-modal-container').locator('input');
+        const otpInputs = page.locator("//div[@class='my-modal-container']").locator('input');
         await expect(otpInputs).toHaveCount(4);
     });
 
     test('should display the countdown timer', async ({ page }) => {
-        await expect(page.locator('.my-modal-container').getByText(/Code Ends/)).toBeVisible();
+        await expect(page.locator("//div[@class='my-modal-container']").getByText(/Code Ends/)).toBeVisible();
     });
 
     test('should display the resend option', async ({ page }) => {
-        await expect(page.locator('.my-modal-container').getByText("Didn't Receive Code?")).toBeVisible();
-        await expect(page.locator('.my-modal-container').getByText('Click to resend')).toBeVisible();
+        await expect(page.locator("//div[@class='my-modal-container']").getByText("Didn't Receive Code?")).toBeVisible();
+        await expect(page.locator("//div[@class='my-modal-container']").getByText('Click to resend')).toBeVisible();
     });
 
     test('should display the Cancel button', async ({ page }) => {
-        await expect(page.locator('.my-modal-container').getByRole('button', { name: 'Cancel' })).toBeVisible();
+        await expect(page.locator("//div[@class='my-modal-container']").getByRole('button', { name: 'Cancel' })).toBeVisible();
     });
 
     test('should display the Confirm button', async ({ page }) => {
-        await expect(page.locator('.my-modal-container').getByRole('button', { name: 'Confirm' })).toBeVisible();
+        await expect(page.locator("//div[@class='my-modal-container']").getByRole('button', { name: 'Confirm' })).toBeVisible();
     });
 
     // ── OTP input ─────────────────────────────────────────────────────────────
 
     test('should accept input in the OTP boxes', async ({ page }) => {
-        const inputs = page.locator('.my-modal-container').locator('input');
+        const inputs = page.locator("//div[@class='my-modal-container']").locator('input');
         await inputs.nth(0).fill('1');
         await inputs.nth(1).fill('2');
         await inputs.nth(2).fill('3');
@@ -81,14 +81,14 @@ test.describe('OTP Dialog - Change Password', () => {
     });
 
     test('should keep Confirm button disabled when OTP boxes are empty', async ({ page }) => {
-        await expect(page.locator('.my-modal-container').getByRole('button', { name: 'Confirm' })).toBeDisabled();
+        await expect(page.locator("//div[@class='my-modal-container']").getByRole('button', { name: 'Confirm' })).toBeDisabled();
     });
 
     // ── Cancel ────────────────────────────────────────────────────────────────
 
     test('should close the OTP dialog when Cancel is clicked', async ({ page }) => {
-        await page.locator('.my-modal-container').getByRole('button', { name: 'Cancel' }).click();
-        await expect(page.locator('.my-modal-container')).not.toBeVisible();
+        await page.locator("//div[@class='my-modal-container']").getByRole('button', { name: 'Cancel' }).click();
+        await expect(page.locator("//div[@class='my-modal-container']")).not.toBeVisible();
     });
 
 });
