@@ -112,10 +112,9 @@ test.describe('Forgot Password - Step 2 (New Password)', () => {
         await expect(page.getByRole('textbox', { name: 'Confirm password' })).toHaveValue('Aa#1234567');
     });
 
-    // ── OTP popup ─────────────────────────────────────────────────────────────
+    // ── Form submission ───────────────────────────────────────────────────────
 
-    test('should open the OTP popup when submit is clicked with matching passwords', async ({ page }) => {
-        // Mock the reset-password API so the backend responds successfully and triggers the OTP popup
+    test('should navigate to login page after successful password reset', async ({ page }) => {
         await page.route('**/auth/passwords/**', route =>
             route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
         );
@@ -123,7 +122,7 @@ test.describe('Forgot Password - Step 2 (New Password)', () => {
         await page.getByRole('textbox', { name: 'New Password' }).fill('Aa#1234567');
         await page.getByRole('textbox', { name: 'Confirm password' }).fill('Aa#1234567');
         await page.getByRole('button', { name: SUBMIT_BUTTON }).click();
-        await expect(page.locator('[role="dialog"], .otp-popup, [class*="otp"], [class*="modal"]').first()).toBeVisible({ timeout: 10000 });
+        await expect(page).toHaveURL(/login/, { timeout: 10000 });
     });
 
 });
