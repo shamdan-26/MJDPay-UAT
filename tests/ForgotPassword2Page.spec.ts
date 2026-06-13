@@ -4,8 +4,7 @@ const FORGOT_URL = 'https://uat.majdpay.com/business/auth/forgot-password';
 const VALID_COMPANY = 'L3999';
 const VALID_MOBILE  = '500318143';
 
-// TODO: Replace 'BUTTON_TEXT' with the actual text on the submit button (e.g. 'Submit', 'Confirm', 'Reset Password')
-const SUBMIT_BUTTON = 'BUTTON_TEXT';
+const SUBMIT_BUTTON = 'Save';
 
 test.describe('Forgot Password - Step 2 (New Password)', () => {
     test.describe.configure({ mode: 'serial' });
@@ -13,6 +12,12 @@ test.describe('Forgot Password - Step 2 (New Password)', () => {
     test.beforeEach(async ({ page, context }) => {
         // Grant geolocation and navigate to step 1
         await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+
+        // Mock the forgot-password API to bypass device-fingerprint check in UAT
+        await page.route('**/auth/passwords/forget', route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
+        );
+
         await page.goto(FORGOT_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
         // Fill step 1 and proceed to step 2
