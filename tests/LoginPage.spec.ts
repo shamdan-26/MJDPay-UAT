@@ -111,6 +111,7 @@ test.describe('Verify Login page', () => {
         const input = page.getByRole('textbox', { name: 'Password' });
         await expect(input).toBeVisible();
         await expect(input).toHaveAttribute('type', 'password');
+        await expect(input).not.toHaveAttribute('placeholder', 'general.input_password');
         await expect(input).toHaveAttribute('placeholder', 'Input Password');
     })
 
