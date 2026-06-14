@@ -35,7 +35,7 @@ export class BankTransferPage {
 
     // Predefined amounts locator helper
     private predefinedAmounts(): Locator {
-        return this.page.locator("//li[contains(@id,'amount_')]");
+        return this.page.locator("//button[contains(@id,'amount_')]");
     }
 
     // ---------- Actions ----------

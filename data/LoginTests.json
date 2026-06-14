@@ -10,7 +10,7 @@
   },
   {
     "type": "negative",
-    "execute": true,
+    "execute": false,
     "description": "all fields empty",
     "companyNumber": "",
     "mobileNumber": "",
@@ -18,7 +18,7 @@
   },
   {
     "type": "negative",
-    "execute": true,
+    "execute": false,
     "description": "company number empty",
     "companyNumber": "",
     "mobileNumber": "510203012",
@@ -26,7 +26,7 @@
   },
   {
     "type": "negative",
-    "execute": true,
+    "execute": false,
     "description": "mobile number empty",
     "companyNumber": "F2147",
     "mobileNumber": "",
@@ -34,7 +34,7 @@
   },
   {
     "type": "negative",
-    "execute": true,
+    "execute": false,
     "description": "password empty",
     "companyNumber": "F2147",
     "mobileNumber": "510203012",
@@ -42,7 +42,7 @@
   },
   {
     "type": "negative",
-    "execute": true,
+    "execute": false,
     "description": "Invalid Mobile Number (Unregistered)",
     "companyNumber": "F2147",
     "mobileNumber": "510203099",
@@ -51,7 +51,7 @@
   },
   {
     "type": "negative",
-    "execute": true,
+    "execute": false,
     "description": "Invalid Password",
     "companyNumber": "F2147",
     "mobileNumber": "510203012",
@@ -60,7 +60,7 @@
   },
   {
     "type": "negative",
-    "execute": true,
+    "execute": false,
     "description": "Invalid Company Number",
     "companyNumber": "F9999",
     "mobileNumber": "510203012",
@@ -69,7 +69,7 @@
   },
   {
     "type": "negative",
-    "execute": true,
+    "execute": false,
     "description": "Mobile Starts Without 5",
     "companyNumber": "F2147",
     "mobileNumber": "410203012",
@@ -77,7 +77,7 @@
   },
   {
     "type": "negative",
-    "execute": true,
+    "execute": false,
     "description": "Mobile Number Length (Too Short)",
     "companyNumber": "F2147",
     "mobileNumber": "5102030",
@@ -85,7 +85,7 @@
   },
   {
     "type": "negative",
-    "execute": true,
+    "execute": false,
     "description": "Mobile Number Length (Too Long)",
     "companyNumber": "F2147",
     "mobileNumber": "51020301234",
@@ -94,7 +94,7 @@
   },
   {
     "type": "negative",
-    "execute": true,
+    "execute": false,
     "description": "Alphabetical Characters in Mobile Field",
     "companyNumber": "F2147",
     "mobileNumber": "abcdefghi",

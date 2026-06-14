@@ -28,6 +28,7 @@ export class LoginPage {
             .or(page.getByRole('textbox', { name: /رقم الشركة/i }));
         this.mobileNumberInput = page.getByRole('textbox', { name: /mobile number/i })
             .or(page.getByRole('textbox', { name: /رقم الجوال/i }));
+
         this.passwordInput = page.getByRole('textbox', { name: /^password$/i })
             .or(page.getByRole('textbox', { name: /كلمة المرور/i }));
 
@@ -86,8 +87,7 @@ export class LoginPage {
     }
 
     async assertLoginSuccess() {
-        const expectedUrl = 'https://uat.majdpay.com/business/main/home';
-        await expect(this.page).toHaveURL(expectedUrl, { timeout: 10000 });
+        await expect(this.page).toHaveURL(/\/business\/main\/home/i, { timeout: 10000 });
 
         // Captures the entire scrollable page for audit trail
         await this.page.screenshot({ path: 'full-page.png', fullPage: true });

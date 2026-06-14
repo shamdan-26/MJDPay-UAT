@@ -86,7 +86,7 @@ test.describe('MajdPay Login Tests', () => {
                     expect(actualValue).toHaveLength(data.expectedMobileLength);
                 }
 
-                await expect(page).toHaveURL(/\/business\/login/i);
+                await expect(page).toHaveURL(/\/business\/auth\/login/i);
 
                 if (data.expectedToastError !== undefined) {
                     await loginPage.assertToastError(data.expectedToastError);
@@ -192,8 +192,8 @@ test.describe('MajdPay Login Tests', () => {
             // Step 2: Switch to Arabic BEFORE any login interaction
             await loginPage.selectArabic();
 
-            // Wait for the layout shift to fully settle after language change
-            await page.waitForLoadState('networkidle');
+            // Wait for Arabic language to be active (more stable than networkidle)
+            await expect(loginPage.arabicButton).toHaveAttribute('aria-pressed', 'true');
 
             // Verify Arabic is now the active language
             const isArabicActive = await loginPage.isLanguageActive(loginPage.arabicButton);
