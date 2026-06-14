@@ -101,5 +101,14 @@
     "password": "Aa#1234567",
     "expectedMobileValue": "",
     "useSequentialTyping": true
+  },
+  {
+    "type": "positive",
+    "execute": true,
+    "description": "Password visibility test credentials",
+    "companyNumber": "F2147",
+    "mobileNumber": "510203012",
+    "password": "Aa#1234567",
+    "otpCode": "0000"
   }
 ]

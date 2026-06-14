@@ -17,6 +17,9 @@ export class LoginPage {
     readonly englishButton: Locator;
     readonly arabicButton: Locator;
 
+    // Password visibility locator
+    readonly passwordToggleButton: Locator;
+
     constructor(page: Page) {
         this.page = page;
 
@@ -40,10 +43,14 @@ export class LoginPage {
         this.languageDropdown = page.locator('#text_langDropdown');
         this.englishButton = page.locator('button#text_languageItem:has-text("EN")');
         this.arabicButton = page.locator('button#text_languageItem:has-text("العربية")');
+
+        // Password visibility toggle (assuming eye icon button)
+        this.passwordToggleButton = page.locator('button[aria-label*="Show password" i], button[aria-label*="Hide password" i], .password-toggle, .eye-icon, [data-testid*="password-toggle"]')
+            .first();
     }
 
     async navigate() {
-        await this.page.goto('https://uat.majdpay.com/business/login');
+        await this.page.goto('https://uat.majdpay.com/business/auth/login');
     }
 
     async login(cn: string, mobile: string, pass: string, options?: { useSequentialTyping?: boolean }) {
@@ -124,5 +131,21 @@ export class LoginPage {
         if (ariaPressed === 'true') return true;
         const classList = await button.getAttribute('class') ?? '';
         return classList.includes('is-active');
+    }
+
+    // ---------- Password Visibility Actions ----------
+
+    async togglePasswordVisibility() {
+        await this.passwordToggleButton.click();
+    }
+
+    async isPasswordMasked(): Promise<boolean> {
+        const type = await this.passwordInput.getAttribute('type');
+        return type === 'password';
+    }
+
+    async isPasswordVisible(): Promise<boolean> {
+        const type = await this.passwordInput.getAttribute('type');
+        return type === 'text';
     }
 }

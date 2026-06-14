@@ -213,4 +213,71 @@ test.describe('MajdPay Login Tests', () => {
             await loginPage.assertLoginSuccess();
         });
     });
+
+    // ── Password Visibility Scenarios ────────────────────────────
+
+    test.describe('Password Visibility Scenarios', () => {
+        const creds = dataSets.find(d => d.type === 'positive')!;
+
+        test('Merchant - Verify that the text inside the password field is masked by default', async ({ page }) => {
+            if (creds.execute === false) {
+                test.skip();
+            }
+            const loginPage = new LoginPage(page);
+
+            // Step 1: Navigate to the Login Page
+            await loginPage.navigate();
+
+            // Step 2: Enter password only (dummy) to test password masking
+            await loginPage.passwordInput.fill('DummyPassword123!');
+
+            // Assert password field is masked by default (type=password)
+            expect(await loginPage.isPasswordMasked()).toBeTruthy();
+        });
+
+        test('Merchant - Show the password', async ({ page }) => {
+            if (creds.execute === false) {
+                test.skip();
+            }
+            const loginPage = new LoginPage(page);
+
+            // Step 1: Navigate to the Login Page
+            await loginPage.navigate();
+
+            // Step 2: Enter password only (dummy)
+            await loginPage.passwordInput.fill('DummyPassword123!');
+
+            // Step 3: Verify password is initially masked
+            expect(await loginPage.isPasswordMasked()).toBeTruthy();
+
+            // Step 4: Click to show password
+            await loginPage.togglePasswordVisibility();
+
+            // Step 5: Verify password is now visible (type=text)
+            expect(await loginPage.isPasswordVisible()).toBeTruthy();
+        });
+
+        test('Merchant - Hide the password', async ({ page }) => {
+            if (creds.execute === false) {
+                test.skip();
+            }
+            const loginPage = new LoginPage(page);
+
+            // Step 1: Navigate to the Login Page
+            await loginPage.navigate();
+
+            // Step 2: Enter password only (dummy)
+            await loginPage.passwordInput.fill('DummyPassword123!');
+
+            // Step 3: Click to show password first
+            await loginPage.togglePasswordVisibility();
+            expect(await loginPage.isPasswordVisible()).toBeTruthy();
+
+            // Step 4: Click to hide password
+            await loginPage.togglePasswordVisibility();
+
+            // Step 5: Verify password is masked again
+            expect(await loginPage.isPasswordMasked()).toBeTruthy();
+        });
+    });
 });
