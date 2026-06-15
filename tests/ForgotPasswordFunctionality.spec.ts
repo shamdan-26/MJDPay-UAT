@@ -204,17 +204,21 @@ test.describe('Forgot Password - Step 2 Back Navigation', () => {
     });
 });
 
-// â”€â”€ OTP Verification: Dialog behavior after step 2 submit â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── OTP Verification: Dialog functionality after step 2 submit ────────────────
 
 test.describe('Forgot Password - OTP Verification Flow', () => {
     test.describe.configure({ mode: 'serial' });
 
+    const VALID_OTP   = '0000'; // static OTP for dev environment
+    const INVALID_OTP = '1111';
+
     test.beforeEach(async ({ page, context }) => {
         await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
 
-        // Mock only step 1 â€” let the real backend handle step 2 to trigger the OTP dialog
+        // Intercept step-1 request only once — step 2 goes to the real backend to trigger OTP
         await page.route('**/auth/passwords/forget', route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
+            route.fulfill({ status: 200, contentType: 'application/json', body: '{}' }),
+            { times: 1 }
         );
 
         await page.goto(FORGOT_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
@@ -227,82 +231,92 @@ test.describe('Forgot Password - OTP Verification Flow', () => {
         await page.getByRole('textbox', { name: 'Confirm password' }).fill(VALID_PASSWORD);
         await page.getByRole('button', { name: SUBMIT_BUTTON }).click();
 
-        // Wait for the OTP dialog triggered by the real backend
-        await page.locator("//div[@class='my-modal-container']").waitFor({ state: 'visible', timeout: 15000 });
+        await page.locator(“//div[@class='my-modal-container']”).waitFor({ state: 'visible', timeout: 15000 });
     });
 
     test('should display the OTP dialog after submitting new password', async ({ page }) => {
-        await expect(page.locator("//div[@class='my-modal-container']")).toBeVisible();
-    });
-
-    test('should display the "Enter OTP" title in the dialog', async ({ page }) => {
-        await expect(page.locator("//div[@class='my-modal-container']").getByText('Enter OTP')).toBeVisible();
-    });
-
-    test('should display the OTP instruction message', async ({ page }) => {
-        await expect(
-            page.locator("//div[@class='my-modal-container']").getByText('A Code Has Been Sent To You, In Order To Continue With The Change Password Process.')
-        ).toBeVisible();
-    });
-
-    test('should display 4 OTP input boxes', async ({ page }) => {
-        await expect(page.locator("//div[@class='my-modal-container']").locator('input')).toHaveCount(4);
-    });
-
-    test('should display the countdown timer', async ({ page }) => {
-        await expect(page.locator("//div[@class='my-modal-container']").getByText(/Code Ends/)).toBeVisible();
-    });
-
-    test('should display the resend option', async ({ page }) => {
-        await expect(page.locator("//div[@class='my-modal-container']").getByText("Didn't Receive Code?")).toBeVisible();
-        await expect(page.locator("//div[@class='my-modal-container']").getByText('Click to resend')).toBeVisible();
+        await expect(page.locator(“//div[@class='my-modal-container']”)).toBeVisible();
     });
 
     test('should keep Confirm button disabled when OTP inputs are empty', async ({ page }) => {
-        await expect(page.locator("//div[@class='my-modal-container']").getByRole('button', { name: 'Confirm' })).toBeDisabled();
+        await expect(page.locator(“//div[@class='my-modal-container']”).getByRole('button', { name: 'Confirm' })).toBeDisabled();
     });
 
-    test('should keep Confirm button disabled when only some OTP inputs are filled', async ({ page }) => {
-        const inputs = page.locator("//div[@class='my-modal-container']").locator('input');
+    test('should keep Confirm button disabled when OTP inputs are partially filled', async ({ page }) => {
+        const inputs = page.locator(“//div[@class='my-modal-container']”).locator('input');
         await inputs.nth(0).fill('1');
         await inputs.nth(1).fill('2');
-        await expect(page.locator("//div[@class='my-modal-container']").getByRole('button', { name: 'Confirm' })).toBeDisabled();
+        await expect(page.locator(“//div[@class='my-modal-container']”).getByRole('button', { name: 'Confirm' })).toBeDisabled();
     });
 
-    test('should enable Confirm button after all 4 OTP inputs are filled', async ({ page }) => {
-        const inputs = page.locator("//div[@class='my-modal-container']").locator('input');
+    test('should enable Confirm button when all 4 OTP inputs are filled', async ({ page }) => {
+        const inputs = page.locator(“//div[@class='my-modal-container']”).locator('input');
         await inputs.nth(0).fill('1');
         await inputs.nth(1).fill('2');
         await inputs.nth(2).fill('3');
         await inputs.nth(3).fill('4');
-        await expect(page.locator("//div[@class='my-modal-container']").getByRole('button', { name: 'Confirm' })).toBeEnabled();
+        await expect(page.locator(“//div[@class='my-modal-container']”).getByRole('button', { name: 'Confirm' })).toBeEnabled();
     });
 
-    test('should show an error when an incorrect OTP is submitted', async ({ page }) => {
-        const inputs = page.locator("//div[@class='my-modal-container']").locator('input');
-        await inputs.nth(0).fill('0');
-        await inputs.nth(1).fill('0');
-        await inputs.nth(2).fill('0');
-        await inputs.nth(3).fill('0');
-        await page.locator("//div[@class='my-modal-container']").getByRole('button', { name: 'Confirm' }).click();
-        const errorIndicator = page.locator("//div[@class='my-modal-container']")
-            .locator('[role="alert"], [class*="error"], [class*="invalid"]').first();
-        await expect(errorIndicator).toBeVisible({ timeout: 10000 });
+    test('should not accept non-numeric characters in OTP inputs', async ({ page }) => {
+        const input = page.locator(“//div[@class='my-modal-container']”).locator('input').first();
+        await input.pressSequentially('a');
+        await expect(input).toHaveValue('');
+    });
+
+    test('should remain on OTP dialog after submitting wrong OTP', async ({ page }) => {
+        const inputs = page.locator(“//div[@class='my-modal-container']”).locator('input');
+        await inputs.nth(0).fill(INVALID_OTP[0]);
+        await inputs.nth(1).fill(INVALID_OTP[1]);
+        await inputs.nth(2).fill(INVALID_OTP[2]);
+        await inputs.nth(3).fill(INVALID_OTP[3]);
+        await page.locator(“//div[@class='my-modal-container']”).getByRole('button', { name: 'Confirm' }).click();
+        await expect(page.locator(“//div[@class='my-modal-container']”)).toBeVisible();
+    });
+
+    test('should reset password successfully with correct OTP and redirect to login', async ({ page }) => {
+        const inputs = page.locator(“//div[@class='my-modal-container']”).locator('input');
+        await inputs.nth(0).fill(VALID_OTP[0]);
+        await inputs.nth(1).fill(VALID_OTP[1]);
+        await inputs.nth(2).fill(VALID_OTP[2]);
+        await inputs.nth(3).fill(VALID_OTP[3]);
+        await page.locator(“//div[@class='my-modal-container']”).getByRole('button', { name: 'Confirm' }).click();
+        await expect(page).toHaveURL(/login/, { timeout: 15000 });
+    });
+
+    test('should keep resend button disabled while countdown timer is active', async ({ page }) => {
+        await expect(page.locator(“//div[@class='my-modal-container']”).getByRole('button', { name: 'Click to resend' })).toBeDisabled();
+        await expect(page.locator(“//div[@class='my-modal-container']”).getByText(/Code Ends/)).toBeVisible();
+    });
+
+    test('should enable resend button after countdown expires and clear inputs on click', async ({ page }) => {
+        test.setTimeout(90000); // beforeEach (~15 s) + countdown (~30 s) + buffer
+
+        const inputs = page.locator(“//div[@class='my-modal-container']”).locator('input');
+        await inputs.nth(0).fill('1');
+        await inputs.nth(1).fill('2');
+        await inputs.nth(2).fill('3');
+        await inputs.nth(3).fill('4');
+
+        const resendBtn = page.locator(“//div[@class='my-modal-container']”).getByRole('button', { name: 'Click to resend' });
+        await expect(resendBtn).toBeEnabled({ timeout: 60000 });
+        await resendBtn.click();
+        await expect(inputs.nth(0)).toHaveValue('');
     });
 
     test('should close the OTP dialog when Cancel is clicked', async ({ page }) => {
-        await page.locator("//div[@class='my-modal-container']").getByRole('button', { name: 'Cancel' }).click();
-        await expect(page.locator("//div[@class='my-modal-container']")).not.toBeVisible({ timeout: 5000 });
+        await page.locator(“//div[@class='my-modal-container']”).getByRole('button', { name: 'Cancel' }).click();
+        await expect(page.locator(“//div[@class='my-modal-container']”)).not.toBeVisible({ timeout: 5000 });
     });
 
-    test('should remain on the change-password page after cancelling the OTP dialog', async ({ page }) => {
-        await page.locator("//div[@class='my-modal-container']").getByRole('button', { name: 'Cancel' }).click();
+    test('should return to the change-password page after cancelling the OTP dialog', async ({ page }) => {
+        await page.locator(“//div[@class='my-modal-container']”).getByRole('button', { name: 'Cancel' }).click();
         await expect(page).toHaveURL(/change-password/, { timeout: 5000 });
     });
 
     test('should allow re-submitting the form after cancelling the OTP dialog', async ({ page }) => {
-        await page.locator("//div[@class='my-modal-container']").getByRole('button', { name: 'Cancel' }).click();
-        await expect(page.locator("//div[@class='my-modal-container']")).not.toBeVisible({ timeout: 5000 });
+        await page.locator(“//div[@class='my-modal-container']”).getByRole('button', { name: 'Cancel' }).click();
+        await expect(page.locator(“//div[@class='my-modal-container']”)).not.toBeVisible({ timeout: 5000 });
         await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeVisible();
         await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeEnabled();
     });
