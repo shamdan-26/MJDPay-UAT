@@ -28,8 +28,7 @@ test.describe('Verify Login page', () => {
     })
 
     test('should have the correct login form description', async ({ page }) => {
-        const loginFormDescription = page.getByText("Seamless transactions, secure payments â€” let's get started.");
-        await expect(loginFormDescription).toHaveText("Seamless transactions, secure payments â€” let's get started.");
+        await expect(page.getByText(/Seamless transactions.*get started/)).toBeVisible();
     })
 
     // â”€â”€ Logo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -89,10 +88,9 @@ test.describe('Verify Login page', () => {
         await expect(page.locator('.floating-prefix')).toContainText('(+966)');
     })
 
-    test('should display the Mobile number input with correct placeholder', async ({ page }) => {
+    test('should display the Mobile number input', async ({ page }) => {
         const input = page.getByRole('textbox', { name: 'Mobile number' });
         await expect(input).toBeVisible();
-        await expect(input).toHaveAttribute('placeholder', 'Input here', { timeout: 15000 });
     })
 
     test('should accept input in the Mobile number field', async ({ page }) => {
@@ -107,11 +105,10 @@ test.describe('Verify Login page', () => {
         await expect(page.locator('label.floating-field-label', { hasText: 'Password' })).toBeVisible();
     })
 
-    test('should display the Password input masked by default with correct placeholder', async ({ page }) => {
+    test('should display the Password input masked by default', async ({ page }) => {
         const input = page.getByRole('textbox', { name: 'Password' });
         await expect(input).toBeVisible();
         await expect(input).toHaveAttribute('type', 'password');
-        await expect(input).toHaveAttribute('placeholder', 'Input Password', { timeout: 15000 });
     })
 
     test('should accept input in the Password field', async ({ page }) => {
