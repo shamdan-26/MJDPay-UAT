@@ -39,11 +39,11 @@ test.describe('Forgot Password Page', () => {
     });
 
     test('should display the Arabic language button', async ({ page }) => {
-        await expect(page.getByRole('button', { name: 'Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©' })).toBeVisible();
+        await expect(page.getByRole('button', { name: 'العربية' })).toBeVisible();
     });
 
     test('should switch to Arabic (RTL) when Arabic button is clicked', async ({ page }) => {
-        await page.getByRole('button', { name: 'Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©' }).click();
+        await page.getByRole('button', { name: 'العربية' }).click();
         await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     });
 

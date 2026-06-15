@@ -47,11 +47,11 @@ test.describe('Verify Login page', () => {
     })
 
     test('should display the Arabic language button', async ({ page }) => {
-        await expect(page.getByRole('button', { name: 'Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©' })).toBeVisible();
+        await expect(page.getByRole('button', { name: 'العربية' })).toBeVisible();
     })
 
     test('should switch to Arabic (RTL) when Arabic button is clicked', async ({ page }) => {
-        await page.getByRole('button', { name: 'Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©' }).click();
+        await page.getByRole('button', { name: 'العربية' }).click();
         await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     })
 
@@ -92,6 +92,7 @@ test.describe('Verify Login page', () => {
     test('should display the Mobile number input with correct placeholder', async ({ page }) => {
         const input = page.getByRole('textbox', { name: 'Mobile number' });
         await expect(input).toBeVisible();
+        await expect(input).not.toHaveAttribute('placeholder', 'general.input_here');
         await expect(input).toHaveAttribute('placeholder', 'Input here');
     })
 
