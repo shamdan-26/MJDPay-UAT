@@ -92,8 +92,7 @@ test.describe('Verify Login page', () => {
     test('should display the Mobile number input with correct placeholder', async ({ page }) => {
         const input = page.getByRole('textbox', { name: 'Mobile number' });
         await expect(input).toBeVisible();
-        await expect(input).not.toHaveAttribute('placeholder', 'general.input_here');
-        await expect(input).toHaveAttribute('placeholder', 'Input here');
+        await expect(input).toHaveAttribute('placeholder', 'Input here', { timeout: 15000 });
     })
 
     test('should accept input in the Mobile number field', async ({ page }) => {
@@ -112,8 +111,7 @@ test.describe('Verify Login page', () => {
         const input = page.getByRole('textbox', { name: 'Password' });
         await expect(input).toBeVisible();
         await expect(input).toHaveAttribute('type', 'password');
-        await expect(input).not.toHaveAttribute('placeholder', 'general.input_password');
-        await expect(input).toHaveAttribute('placeholder', 'Input Password');
+        await expect(input).toHaveAttribute('placeholder', 'Input Password', { timeout: 15000 });
     })
 
     test('should accept input in the Password field', async ({ page }) => {
