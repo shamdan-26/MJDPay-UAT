@@ -150,4 +150,87 @@ test.describe('Login Functionality', () => {
         await expect(page).not.toHaveURL(URL);
     });
 
+    // ── OTP functionality ─────────────────────────────────────────────────────
+
+    test.describe('OTP popup functionality', () => {
+        const VALID_OTP   = '0000'; // static OTP for dev environment
+        const INVALID_OTP = '1111';
+
+        test.beforeEach(async ({ page }) => {
+            await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
+            await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
+            await page.locator('input[aria-label="Password"]').fill(VALID_PASSWORD);
+            await page.getByRole('button', { name: 'Log In' }).click();
+            await page.getByRole('heading', { name: 'Enter OTP' }).waitFor({ state: 'visible', timeout: 15000 });
+        });
+
+        test('should enable Verify button when all 4 OTP inputs are filled', async ({ page }) => {
+            const inputs = page.getByRole('textbox', { name: 'One time password input' });
+            await inputs.nth(0).fill('1');
+            await inputs.nth(1).fill('2');
+            await inputs.nth(2).fill('3');
+            await inputs.nth(3).fill('4');
+            await expect(page.getByRole('button', { name: 'Verify' })).toBeEnabled();
+        });
+
+        test('should keep Verify button disabled when OTP inputs are partially filled', async ({ page }) => {
+            const inputs = page.getByRole('textbox', { name: 'One time password input' });
+            await inputs.nth(0).fill('1');
+            await inputs.nth(1).fill('2');
+            await expect(page.getByRole('button', { name: 'Verify' })).toBeDisabled();
+        });
+
+        test('should not accept non-numeric characters in OTP inputs', async ({ page }) => {
+            const input = page.getByRole('textbox', { name: 'One time password input' }).first();
+            await input.pressSequentially('a');
+            await expect(input).toHaveValue('');
+        });
+
+        test('should close OTP popup and return to login page when Cancel is clicked', async ({ page }) => {
+            await page.getByRole('button', { name: 'Cancel' }).click();
+            await expect(page.getByRole('heading', { name: 'Enter OTP' })).not.toBeVisible();
+            await expect(page.getByRole('button', { name: 'Log In' })).toBeVisible();
+        });
+
+        test('should remain on OTP popup after submitting wrong OTP', async ({ page }) => {
+            const inputs = page.getByRole('textbox', { name: 'One time password input' });
+            await inputs.nth(0).fill(INVALID_OTP[0]);
+            await inputs.nth(1).fill(INVALID_OTP[1]);
+            await inputs.nth(2).fill(INVALID_OTP[2]);
+            await inputs.nth(3).fill(INVALID_OTP[3]);
+            await page.getByRole('button', { name: 'Verify' }).click();
+            await expect(page.getByRole('heading', { name: 'Enter OTP' })).toBeVisible();
+        });
+
+        test('should log in successfully with correct OTP', async ({ page }) => {
+            const inputs = page.getByRole('textbox', { name: 'One time password input' });
+            await inputs.nth(0).fill(VALID_OTP[0]);
+            await inputs.nth(1).fill(VALID_OTP[1]);
+            await inputs.nth(2).fill(VALID_OTP[2]);
+            await inputs.nth(3).fill(VALID_OTP[3]);
+            await page.getByRole('button', { name: 'Verify' }).click();
+            await expect(page).not.toHaveURL(/auth\/login/);
+        });
+
+        test('should keep resend button disabled while countdown timer is active', async ({ page }) => {
+            await expect(page.getByRole('button', { name: 'Click to resend' })).toBeDisabled();
+            await expect(page.getByText(/Code ends/)).toBeVisible();
+        });
+
+        test('should enable resend button after countdown expires and clear inputs on click', async ({ page }) => {
+            test.setTimeout(90000); // beforeEach (~15 s) + countdown (~30 s) + buffer
+
+            const inputs = page.getByRole('textbox', { name: 'One time password input' });
+            await inputs.nth(0).fill('1');
+            await inputs.nth(1).fill('2');
+            await inputs.nth(2).fill('3');
+            await inputs.nth(3).fill('4');
+
+            const resendBtn = page.getByRole('button', { name: 'Click to resend' });
+            await expect(resendBtn).toBeEnabled({ timeout: 60000 });
+            await resendBtn.click();
+            await expect(inputs.nth(0)).toHaveValue('');
+        });
+    });
+
 });
