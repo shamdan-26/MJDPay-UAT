@@ -1,6 +1,6 @@
-import { test, expect } from '@playwright/test';
+﻿import { test, expect } from '@playwright/test';
 
-const FORGOT_URL = 'https://uat.majdpay.com/business/auth/forgot-password';
+const FORGOT_URL = 'https://dev.majdpay.com/business/auth/forgot-password';
 const VALID_COMPANY = 'L3999';
 const VALID_MOBILE  = '500318143';
 
@@ -10,7 +10,7 @@ test.describe('Forgot Password - Step 2 (New Password)', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+        await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
 
         // Mock the forgot-password API to bypass device-fingerprint check in UAT
         await page.route('**/auth/passwords/forget', route =>
@@ -23,11 +23,11 @@ test.describe('Forgot Password - Step 2 (New Password)', () => {
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
         await page.getByRole('button', { name: 'Next' }).click();
 
-        // Wait for step 2 — both fields share placeholder "Input Password", use role instead
+        // Wait for step 2 â€” both fields share placeholder "Input Password", use role instead
         await page.getByRole('textbox', { name: 'New Password' }).waitFor({ state: 'visible', timeout: 15000 });
     });
 
-    // ── Page elements ─────────────────────────────────────────────────────────
+    // â”€â”€ Page elements â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the New Password field', async ({ page }) => {
         await expect(page.getByRole('textbox', { name: 'New Password' })).toBeVisible();
@@ -49,7 +49,7 @@ test.describe('Forgot Password - Step 2 (New Password)', () => {
         await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeVisible();
     });
 
-    // ── Show / hide password toggles ──────────────────────────────────────────
+    // â”€â”€ Show / hide password toggles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should reveal New Password when show toggle is clicked', async ({ page }) => {
         const newPassInput = page.getByRole('textbox', { name: 'New Password' });
@@ -65,7 +65,7 @@ test.describe('Forgot Password - Step 2 (New Password)', () => {
         await expect(confirmInput).toHaveAttribute('type', 'text');
     });
 
-    // ── Button state ──────────────────────────────────────────────────────────
+    // â”€â”€ Button state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should keep submit button disabled when both fields are empty', async ({ page }) => {
         await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeDisabled();
@@ -87,7 +87,7 @@ test.describe('Forgot Password - Step 2 (New Password)', () => {
         await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeEnabled();
     });
 
-    // ── Password validation ───────────────────────────────────────────────────
+    // â”€â”€ Password validation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should show an error or keep button disabled when passwords do not match', async ({ page }) => {
         await page.getByRole('textbox', { name: 'New Password' }).fill('Aa#1234567');
@@ -112,7 +112,7 @@ test.describe('Forgot Password - Step 2 (New Password)', () => {
         await expect(page.getByRole('textbox', { name: 'Confirm password' })).toHaveValue('Aa#1234567');
     });
 
-    // ── Form submission ───────────────────────────────────────────────────────
+    // â”€â”€ Form submission â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should navigate to login page after successful password reset', async ({ page }) => {
         await page.route('**/auth/passwords/**', route =>

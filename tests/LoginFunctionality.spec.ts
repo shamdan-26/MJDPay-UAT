@@ -1,8 +1,8 @@
-
+﻿
 
 import { test, expect } from '@playwright/test';
 
-const URL = 'https://uat.majdpay.com/business/auth/login';
+const URL = 'https://dev.majdpay.com/business/auth/login';
 const VALID_COMPANY  = 'L3999';
 const VALID_MOBILE   = '500318143';
 const VALID_PASSWORD = 'Aa#1234567';
@@ -11,11 +11,11 @@ test.describe('Login Functionality', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+        await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
         await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     });
 
-    // ── Valid login ───────────────────────────────────────────────────────────
+    // â”€â”€ Valid login â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should log in successfully with valid credentials', async ({ page }) => {
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
@@ -25,7 +25,7 @@ test.describe('Login Functionality', () => {
         await expect(page).not.toHaveURL(URL);
     });
 
-    // ── Invalid credentials ───────────────────────────────────────────────────
+    // â”€â”€ Invalid credentials â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should show an error with wrong password', async ({ page }) => {
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
@@ -59,7 +59,7 @@ test.describe('Login Functionality', () => {
         await expect(page).toHaveURL(URL);
     });
 
-    // ── Empty fields ──────────────────────────────────────────────────────────
+    // â”€â”€ Empty fields â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should keep Log In button disabled when all fields are empty', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'Log In' })).toBeDisabled();
@@ -98,7 +98,7 @@ test.describe('Login Functionality', () => {
         await expect(page.getByRole('button', { name: 'Log In' })).toBeDisabled();
     });
 
-    // ── Enable button ─────────────────────────────────────────────────────────
+    // â”€â”€ Enable button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should enable Log In button when all fields are filled with valid credentials', async ({ page }) => {
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
@@ -107,7 +107,7 @@ test.describe('Login Functionality', () => {
         await expect(page.getByRole('button', { name: 'Log In' })).toBeEnabled();
     });
 
-    // ── Field clearing ────────────────────────────────────────────────────────
+    // â”€â”€ Field clearing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should disable Log In button again after clearing a filled field', async ({ page }) => {
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
@@ -118,7 +118,7 @@ test.describe('Login Functionality', () => {
         await expect(page.getByRole('button', { name: 'Log In' })).toBeDisabled();
     });
 
-    // ── Password visibility ───────────────────────────────────────────────────
+    // â”€â”€ Password visibility â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should reveal password when show password toggle is clicked', async ({ page }) => {
         const passwordInput = page.locator('input[aria-label="Password"]');
@@ -138,7 +138,7 @@ test.describe('Login Functionality', () => {
         await expect(passwordInput).toHaveAttribute('type', 'password');
     });
 
-    // ── Navigation ────────────────────────────────────────────────────────────
+    // â”€â”€ Navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should navigate to Forgot Password page', async ({ page }) => {
         await page.getByText('Forgot Password?').click();

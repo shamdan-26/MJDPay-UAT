@@ -1,12 +1,12 @@
-import { test, expect } from '@playwright/test'
+﻿import { test, expect } from '@playwright/test'
 
 test.describe('Verify Login page', () => {
     test.beforeEach(async ({ page }) => {
-        await page.goto('https://uat.majdpay.com/business/auth/login');
+        await page.goto('https://dev.majdpay.com/business/auth/login');
     });
 
     test('should be able to open the URL', async ({ page }) => {
-        await expect(page).toHaveURL('https://uat.majdpay.com/business/auth/login');
+        await expect(page).toHaveURL('https://dev.majdpay.com/business/auth/login');
     })
 
     test('should have the correct title', async ({ page }) => {
@@ -28,11 +28,11 @@ test.describe('Verify Login page', () => {
     })
 
     test('should have the correct login form description', async ({ page }) => {
-        const loginFormDescription = page.getByText("Seamless transactions, secure payments — let's get started.");
-        await expect(loginFormDescription).toHaveText("Seamless transactions, secure payments — let's get started.");
+        const loginFormDescription = page.getByText("Seamless transactions, secure payments â€” let's get started.");
+        await expect(loginFormDescription).toHaveText("Seamless transactions, secure payments â€” let's get started.");
     })
 
-    // ── Logo ──────────────────────────────────────────────────────────────────
+    // â”€â”€ Logo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the MJD Pay logo', async ({ page }) => {
          const logo = page.locator('img[alt="MJD Pay"]');
@@ -40,28 +40,28 @@ test.describe('Verify Login page', () => {
         //await expect(logo.getByRole('img', { name: 'MJD Pay' })).toBeVisible();
     })
 
-    // ── Language switcher ─────────────────────────────────────────────────────
+    // â”€â”€ Language switcher â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the EN language button', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'EN' })).toBeVisible();
     })
 
     test('should display the Arabic language button', async ({ page }) => {
-        await expect(page.getByRole('button', { name: 'العربية' })).toBeVisible();
+        await expect(page.getByRole('button', { name: 'Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©' })).toBeVisible();
     })
 
     test('should switch to Arabic (RTL) when Arabic button is clicked', async ({ page }) => {
-        await page.getByRole('button', { name: 'العربية' }).click();
+        await page.getByRole('button', { name: 'Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©' }).click();
         await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     })
 
-    // ── Theme toggle ──────────────────────────────────────────────────────────
+    // â”€â”€ Theme toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the theme toggle button', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'Switch theme' })).toBeVisible();
     })
 
-    // ── Company number field ──────────────────────────────────────────────────
+    // â”€â”€ Company number field â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the Company number label', async ({ page }) => {
         await expect(page.getByText('Company number')).toBeVisible();
@@ -79,7 +79,7 @@ test.describe('Verify Login page', () => {
         await expect(input).toHaveValue('123456789');
     })
 
-    // ── Mobile number field ───────────────────────────────────────────────────
+    // â”€â”€ Mobile number field â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the Mobile number label', async ({ page }) => {
         await expect(page.getByText('Mobile number')).toBeVisible();
@@ -101,7 +101,7 @@ test.describe('Verify Login page', () => {
         await expect(input).toHaveValue('500318143');
     })
 
-    // ── Password field ────────────────────────────────────────────────────────
+    // â”€â”€ Password field â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the Password label', async ({ page }) => {
         await expect(page.locator('label.floating-field-label', { hasText: 'Password' })).toBeVisible();
@@ -121,7 +121,7 @@ test.describe('Verify Login page', () => {
         await expect(input).toHaveValue('Secret@123');
     })
 
-    // ── Show/hide password toggle ─────────────────────────────────────────────
+    // â”€â”€ Show/hide password toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the Show password button', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'Show password' })).toBeVisible();
@@ -136,7 +136,7 @@ test.describe('Verify Login page', () => {
     await expect(passwordInput).toHaveAttribute('type', 'text');
     })
 
-    // ── Forgot Password ───────────────────────────────────────────────────────
+    // â”€â”€ Forgot Password â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the Forgot Password link', async ({ page }) => {
         await expect(page.getByText('Forgot Password?')).toBeVisible();
@@ -144,10 +144,10 @@ test.describe('Verify Login page', () => {
 
     test('should navigate away from login when Forgot Password is clicked', async ({ page }) => {
         await page.getByText('Forgot Password?').click();
-        await expect(page).not.toHaveURL('https://uat.majdpay.com/business/auth/login');
+        await expect(page).not.toHaveURL('https://dev.majdpay.com/business/auth/login');
     })
 
-    // ── Log In button ─────────────────────────────────────────────────────────
+    // â”€â”€ Log In button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the Log In button as visible and disabled until form is filled', async ({ page }) => {
         const loginBtn = page.getByRole('button', { name: 'Log In' });
@@ -171,7 +171,7 @@ test.describe('Verify Login page', () => {
         await expect(page.locator('body')).toContainText(/.+/);
     })
 
-    // ── Sign Up ───────────────────────────────────────────────────────────────
+    // â”€â”€ Sign Up â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the "New to MJD PAY?" text', async ({ page }) => {
         await expect(page.getByText('New to MJD PAY?')).toBeVisible();
@@ -183,7 +183,7 @@ test.describe('Verify Login page', () => {
 
     test('should navigate away from login when Sign Up is clicked', async ({ page }) => {
         await page.getByText('Sign Up').click();
-        await expect(page).not.toHaveURL('https://uat.majdpay.com/business/auth/login');
+        await expect(page).not.toHaveURL('https://dev.majdpay.com/business/auth/login');
     })
 
 })

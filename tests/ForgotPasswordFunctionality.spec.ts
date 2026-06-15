@@ -1,18 +1,18 @@
-import { test, expect } from '@playwright/test';
+﻿import { test, expect } from '@playwright/test';
 
-const FORGOT_URL     = 'https://uat.majdpay.com/business/auth/forgot-password';
+const FORGOT_URL     = 'https://dev.majdpay.com/business/auth/forgot-password';
 const VALID_COMPANY  = 'L3999';
 const VALID_MOBILE   = '500318143';
 const VALID_PASSWORD = 'Aa#1234567';
 const SUBMIT_BUTTON  = 'reset password';
 
-// ── Step 1: Credential validation & navigation ────────────────────────────────
+// â”€â”€ Step 1: Credential validation & navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 test.describe('Forgot Password - Step 1 Functionality', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+        await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
         await page.goto(FORGOT_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     });
 
@@ -70,13 +70,13 @@ test.describe('Forgot Password - Step 1 Functionality', () => {
     });
 });
 
-// ── Step 2: Password validation logic ─────────────────────────────────────────
+// â”€â”€ Step 2: Password validation logic â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 test.describe('Forgot Password - Step 2 Password Validation', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+        await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
         await page.route('**/auth/passwords/forget', route =>
             route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
         );
@@ -170,13 +170,13 @@ test.describe('Forgot Password - Step 2 Password Validation', () => {
     });
 });
 
-// ── Step 2: Back navigation ───────────────────────────────────────────────────
+// â”€â”€ Step 2: Back navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 test.describe('Forgot Password - Step 2 Back Navigation', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+        await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
         await page.route('**/auth/passwords/forget', route =>
             route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
         );
@@ -204,15 +204,15 @@ test.describe('Forgot Password - Step 2 Back Navigation', () => {
     });
 });
 
-// ── OTP Verification: Dialog behavior after step 2 submit ────────────────────
+// â”€â”€ OTP Verification: Dialog behavior after step 2 submit â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 test.describe('Forgot Password - OTP Verification Flow', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+        await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
 
-        // Mock only step 1 — let the real backend handle step 2 to trigger the OTP dialog
+        // Mock only step 1 â€” let the real backend handle step 2 to trigger the OTP dialog
         await page.route('**/auth/passwords/forget', route =>
             route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
         );
@@ -308,26 +308,26 @@ test.describe('Forgot Password - OTP Verification Flow', () => {
     });
 });
 
-// ── End-to-End: Complete password reset flow ──────────────────────────────────
+// â”€â”€ End-to-End: Complete password reset flow â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 test.describe('Forgot Password - End-to-End Flow', () => {
     test.describe.configure({ mode: 'serial' });
 
     test('should complete the full forgot-password flow and redirect to the login page', async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+        await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
 
         // Mock both the step-1 lookup and the step-2 reset endpoints
         await page.route('**/auth/passwords/**', route =>
             route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
         );
 
-        // Step 1 — fill and submit
+        // Step 1 â€” fill and submit
         await page.goto(FORGOT_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
         await page.getByRole('button', { name: 'Next' }).click();
 
-        // Step 2 — fill matching passwords and submit
+        // Step 2 â€” fill matching passwords and submit
         await page.getByRole('textbox', { name: 'New Password' }).waitFor({ state: 'visible', timeout: 15000 });
         await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
         await page.getByRole('textbox', { name: 'Confirm password' }).fill(VALID_PASSWORD);
@@ -338,7 +338,7 @@ test.describe('Forgot Password - End-to-End Flow', () => {
     });
 
     test('should not redirect to login when reset is submitted with mismatched passwords', async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+        await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
         await page.route('**/auth/passwords/forget', route =>
             route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
         );
@@ -352,7 +352,7 @@ test.describe('Forgot Password - End-to-End Flow', () => {
         await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
         await page.getByRole('textbox', { name: 'Confirm password' }).fill('DifferentPass#1');
 
-        // Submit button must be disabled — the form should not allow submission
+        // Submit button must be disabled â€” the form should not allow submission
         await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeDisabled();
         await expect(page).not.toHaveURL(/login/);
     });

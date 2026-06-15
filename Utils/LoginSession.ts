@@ -1,6 +1,6 @@
-import { chromium } from '@playwright/test';
+﻿import { chromium } from '@playwright/test';
 
-const URL = 'https://uat.majdpay.com/business/auth/login';
+const URL = 'https://dev.majdpay.com/business/auth/login';
 const VALID_COMPANY  = 'L3999';
 const VALID_MOBILE   = '500318143';
 const VALID_PASSWORD = 'Aa#1234567';
@@ -12,7 +12,7 @@ async function loginSession(){
 
     const requestContext = await browser.newContext();
     await requestContext.request.post(
-        'https://gateway-uat.majdpay.com/auth/signin', 
+        'https://gateway-dev.majdpay.com/auth/signin', 
         {
             data: {
                 password: VALID_PASSWORD,
