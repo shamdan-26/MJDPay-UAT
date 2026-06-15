@@ -3,8 +3,8 @@
 import { test, expect } from '@playwright/test';
 
 const URL = 'https://dev.majdpay.com/business/auth/login';
-const VALID_COMPANY  = 'L3999';
-const VALID_MOBILE   = '500318143';
+const VALID_COMPANY  = 'A2316';
+const VALID_MOBILE   = '500021788';
 const VALID_PASSWORD = 'Aa#1234567';
 
 test.describe('Login Functionality', () => {
@@ -17,12 +17,12 @@ test.describe('Login Functionality', () => {
 
     // â”€â”€ Valid login â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-    test('should log in successfully with valid credentials', async ({ page }) => {
+    test('should display OTP dialog after submitting valid credentials', async ({ page }) => {
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
         await page.locator('input[aria-label="Password"]').fill(VALID_PASSWORD);
         await page.getByRole('button', { name: 'Log In' }).click();
-        await expect(page).not.toHaveURL(URL);
+        await expect(page.getByRole('heading', { name: 'Enter OTP' })).toBeVisible({ timeout: 15000 });
     });
 
     // â”€â”€ Invalid credentials â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
