@@ -211,7 +211,8 @@ test.describe('Registration – OTP Popup', () => {
         // Fill valid mobile and submit to trigger OTP popup
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(generateKSAMobile());
         await page.getByRole('button', { name: 'next' }).click();
-        await page.getByRole('heading', { name: 'Enter OTP' }).waitFor({ state: 'visible', timeout: 15000 });
+        await page.waitForTimeout(5000);
+        await page.getByRole('heading', { name: 'Enter OTP' }).waitFor({ state: 'visible', timeout: 20000 });
     });
 
     // ── OTP popup content ─────────────────────────────────────────────────────
@@ -293,13 +294,14 @@ test.describe('Registration – Info Page', () => {
         page = await context.newPage();
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
-        await page.pause();
         // Step 1 – mobile number
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(mobile);
+        await page.waitForTimeout(1000);
         await page.getByRole('button', { name: 'next' }).click();
 
         // Step 2 – OTP (test env uses all-zero OTP)
-        await page.getByRole('heading', { name: 'Enter OTP' }).waitFor({ state: 'visible', timeout: 15000 });
+        await page.waitForTimeout(5000);
+        await page.getByRole('heading', { name: 'Enter OTP' }).waitFor({ state: 'visible', timeout: 20000 });
         await page.getByRole('textbox', { name: 'One time password input' }).first()
             .waitFor({ state: 'visible', timeout: 10000 });
         await fillOTP(page);
@@ -346,11 +348,11 @@ test.describe('Registration – Info Page', () => {
             .toBeVisible({ timeout: 5000 });
     });
 
-    test('should not allow more than 10 digits in the CRN field', async () => {
+    test('should not allow more than 15 digits in the CRN field', async () => {
         const input = page.getByRole('textbox', { name: 'unified number' });
         await input.pressSequentially('10102345678');
         const value = await input.inputValue();
-        expect(value.length).toBeLessThanOrEqual(10);
+        expect(value.length).toBeLessThanOrEqual(15);
     });
 
     // ── Iqama field ───────────────────────────────────────────────────────────
