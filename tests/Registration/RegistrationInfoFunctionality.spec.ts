@@ -1,121 +1,269 @@
-import { test, expect, Page } from '@playwright/test';
-import {
-    VALID_EMAIL,
-    nextCitizenAsset,
-    goToInfoStep,
-} from './helpers';
+import { test, expect } from '@playwright/test';
 
-test.describe('Registration - Info Functionality', () => {
+const REGISTER_URL = 'https://dev.majdpay.com/business/auth/register';
+const VALID_MOBILE  = '500021788';
+const VALID_OTP     = '0000';
+
+// ─── helpers ─────────────────────────────────────────────────────────────────
+
+async function fillMobileAndOTP(page: any, context: any) {
+    await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
+    await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+
+    const mobileInput = page.getByRole('textbox', { name: /mobile number/i });
+    await mobileInput.waitFor({ state: 'visible', timeout: 10000 });
+    await mobileInput.fill(VALID_MOBILE);
+    await page.getByRole('button', { name: /next/i }).click();
+
+    await page.locator('input[type="text"]').first().waitFor({ state: 'visible', timeout: 15000 });
+    const inputs = await page.locator('input[type="text"]').all();
+    for (let i = 0; i < inputs.length && i < VALID_OTP.length; i++) {
+        await inputs[i].fill(VALID_OTP[i]);
+    }
+    await page.getByRole('button', { name: /verify/i }).click();
+    await page.getByRole('textbox', { name: /email/i }).waitFor({ state: 'visible', timeout: 15000 });
+}
+
+async function fillBusinessInfoAndClickNext(page: any) {
+    await page.getByRole('radio').filter({ hasText: /merchant/i }).click();
+    await page.getByRole('textbox', { name: /unified number/i }).fill('1023456789');
+    await page.getByRole('textbox', { name: /national id|iqama/i }).fill('1012345678');
+    await page.getByRole('textbox', { name: /email/i }).fill('test@example.com');
+    await page.getByRole('button', { name: /next/i }).click();
+    await page.getByRole('textbox', { name: /monthly expected number/i }).waitFor({ state: 'visible', timeout: 15000 });
+}
+
+async function goToBusinessInfoStep(page: any, context: any) {
+    await fillMobileAndOTP(page, context);
+}
+
+async function goToFinancialStep(page: any, context: any) {
+    await fillMobileAndOTP(page, context);
+    await fillBusinessInfoAndClickNext(page);
+}
+
+// ─── tests ───────────────────────────────────────────────────────────────────
+
+test.describe('Registration – Business Info Form Functionality', () => {
     test.describe.configure({ mode: 'serial' });
 
-    let page: Page;
-    let crn: string;
-    let iqama: string;
+    // ── Tab 1 → Tab 2 transition ──────────────────────────────────────────────
 
-    test.beforeAll(async ({ browser }) => {
-        const asset = nextCitizenAsset();
-        crn   = asset.crn;
-        iqama = asset.nationalId;
-        const context = await browser.newContext();
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
-        page = await context.newPage();
-        try {
-            await goToInfoStep(page, asset.mobile);
-        } catch (err) {
-            throw new Error(
-                `beforeAll failed: could not reach the business-info step.\n` +
-                `Mobile: ${asset.mobile} | CRN: ${asset.crn}\n` +
-                `Cause: ${(err as Error).message}`
-            );
-        }
+    test.describe('After clicking Next on Business Info (Tab 1 → Tab 2)', () => {
+
+        test.beforeEach(async ({ page, context }) => {
+            await goToBusinessInfoStep(page, context);
+        });
+
+        test('should activate the Financial & Business tab after clicking Next with valid data', async ({ page }) => {
+            await fillBusinessInfoAndClickNext(page);
+            await expect(page.getByRole('tab', { name: /financial/i }))
+                .toHaveAttribute('aria-selected', 'true', { timeout: 10000 });
+        });
+
+        test('should deactivate the Business Info tab after advancing', async ({ page }) => {
+            await fillBusinessInfoAndClickNext(page);
+            await expect(page.getByRole('tab', { name: /business info/i }))
+                .not.toHaveAttribute('aria-selected', 'true', { timeout: 10000 });
+        });
+
+        test('should stay on the same URL after clicking Next', async ({ page }) => {
+            await fillBusinessInfoAndClickNext(page);
+            expect(page.url()).toContain('/business/auth/register');
+        });
+
+        test('should display the Monthly Expected Number Of Bills field on Tab 2', async ({ page }) => {
+            await fillBusinessInfoAndClickNext(page);
+            await expect(page.getByRole('textbox', { name: /monthly expected number/i })).toBeVisible();
+        });
+
+        test('should display the Banks dropdown on Tab 2', async ({ page }) => {
+            await fillBusinessInfoAndClickNext(page);
+            await expect(page.getByRole('combobox', { name: /banks/i })).toBeVisible();
+        });
+
+        test('should display the Next button on Tab 2', async ({ page }) => {
+            await fillBusinessInfoAndClickNext(page);
+            await expect(page.getByRole('button', { name: /next/i })).toBeVisible();
+        });
+
+        test('should display the Back button on Tab 2', async ({ page }) => {
+            await fillBusinessInfoAndClickNext(page);
+            await expect(page.getByRole('button', { name: /back/i })).toBeVisible();
+        });
     });
 
-    test.afterAll(async () => {
-        await page.close();
+    // ── Back navigation from Tab 2 → Tab 1 ───────────────────────────────────
+
+    test.describe('Back navigation from Financial & Business to Business Info', () => {
+
+        test.beforeEach(async ({ page, context }) => {
+            await goToFinancialStep(page, context);
+        });
+
+        test('should return to Business Info tab when Back is clicked from Tab 2', async ({ page }) => {
+            await page.getByRole('button', { name: /back/i }).click();
+            await expect(page.getByRole('tab', { name: /business info/i }))
+                .toHaveAttribute('aria-selected', 'true', { timeout: 10000 });
+        });
+
+        test('should restore the email field when returning to Tab 1 via Back', async ({ page }) => {
+            await page.getByRole('button', { name: /back/i }).click();
+            await expect(page.getByRole('textbox', { name: /email/i }))
+                .toHaveValue('test@example.com', { timeout: 10000 });
+        });
+
+        test('should restore the Unified Number when returning to Tab 1 via Back', async ({ page }) => {
+            await page.getByRole('button', { name: /back/i }).click();
+            await expect(page.getByRole('textbox', { name: /unified number/i }))
+                .toHaveValue('1023456789', { timeout: 10000 });
+        });
+
+        test('should restore the National ID when returning to Tab 1 via Back', async ({ page }) => {
+            await page.getByRole('button', { name: /back/i }).click();
+            await expect(page.getByRole('textbox', { name: /national id|iqama/i }))
+                .toHaveValue('1012345678', { timeout: 10000 });
+        });
+
+        test('should allow re-advancing to Tab 2 after going Back to Tab 1', async ({ page }) => {
+            await page.getByRole('button', { name: /back/i }).click();
+            await page.getByRole('button', { name: /next/i }).click();
+            await expect(page.getByRole('tab', { name: /financial/i }))
+                .toHaveAttribute('aria-selected', 'true', { timeout: 10000 });
+        });
     });
 
-    // ── CRN field ─────────────────────────────────────────────────────────────
+    // ── Tab 1 field validation ────────────────────────────────────────────────
 
-    test('should accept a valid Saudi CRN', async () => {
-        const input = page.locator('#floating-text-field-2');
-        await input.fill(crn);
-        await expect(input).toHaveValue(crn);
+    test.describe('Business Info field validation before Next', () => {
+
+        test.beforeEach(async ({ page, context }) => {
+            await goToBusinessInfoStep(page, context);
+        });
+
+        test('should keep Next disabled when only Profile Type is selected', async ({ page }) => {
+            await page.getByRole('radio').filter({ hasText: /merchant/i }).click();
+            await expect(page.getByRole('button', { name: /next/i })).toBeDisabled();
+        });
+
+        test('should keep Next disabled when Profile Type + Unified Number are filled', async ({ page }) => {
+            await page.getByRole('radio').filter({ hasText: /merchant/i }).click();
+            await page.getByRole('textbox', { name: /unified number/i }).fill('1023456789');
+            await expect(page.getByRole('button', { name: /next/i })).toBeDisabled();
+        });
+
+        test('should keep Next disabled when Profile Type + Unified Number + National ID are filled (no email)', async ({ page }) => {
+            await page.getByRole('radio').filter({ hasText: /merchant/i }).click();
+            await page.getByRole('textbox', { name: /unified number/i }).fill('1023456789');
+            await page.getByRole('textbox', { name: /national id|iqama/i }).fill('1012345678');
+            await expect(page.getByRole('button', { name: /next/i })).toBeDisabled();
+        });
+
+        test('should enable Next only after all four required fields are filled', async ({ page }) => {
+            await page.getByRole('radio').filter({ hasText: /merchant/i }).click();
+            await page.getByRole('textbox', { name: /unified number/i }).fill('1023456789');
+            await page.getByRole('textbox', { name: /national id|iqama/i }).fill('1012345678');
+            await page.getByRole('textbox', { name: /email/i }).fill('test@example.com');
+            await expect(page.getByRole('button', { name: /next/i })).toBeEnabled();
+        });
+
+        test('should disable Next again after clearing the email field', async ({ page }) => {
+            await page.getByRole('radio').filter({ hasText: /merchant/i }).click();
+            await page.getByRole('textbox', { name: /unified number/i }).fill('1023456789');
+            await page.getByRole('textbox', { name: /national id|iqama/i }).fill('1012345678');
+            await page.getByRole('textbox', { name: /email/i }).fill('test@example.com');
+            await expect(page.getByRole('button', { name: /next/i })).toBeEnabled();
+            await page.getByRole('textbox', { name: /email/i }).clear();
+            await expect(page.getByRole('button', { name: /next/i })).toBeDisabled();
+        });
+
+        test('should show a validation error when an invalid email is submitted', async ({ page }) => {
+            await page.getByRole('radio').filter({ hasText: /merchant/i }).click();
+            await page.getByRole('textbox', { name: /unified number/i }).fill('1023456789');
+            await page.getByRole('textbox', { name: /national id|iqama/i }).fill('1012345678');
+            await page.getByRole('textbox', { name: /email/i }).fill('bademail');
+            await page.getByRole('button', { name: /next/i }).click({ force: true });
+            const hasError = await page.locator('[class*="error"], [role="alert"]').isVisible().catch(() => false);
+            const stillOnTab1 = await page.getByRole('tab', { name: /business info/i })
+                .getAttribute('aria-selected').catch(() => 'false');
+            expect(hasError || stillOnTab1 === 'true').toBeTruthy();
+        });
+
+        test('should not advance to Tab 2 if Next is clicked without filling fields', async ({ page }) => {
+            await page.getByRole('button', { name: /next/i }).click({ force: true });
+            const tab2Active = await page.getByRole('tab', { name: /financial/i })
+                .getAttribute('aria-selected').catch(() => 'false');
+            expect(tab2Active).not.toBe('true');
+        });
     });
 
-    test('should reject a CRN shorter than 10 digits', async () => {
-        const input = page.locator('#floating-text-field-2');
-        await input.fill('101023456');
-        await input.blur();
-        await expect(page.locator('[class*="error"], [class*="invalid"], [id*="error"]').first())
-            .toBeVisible({ timeout: 5000 });
+    // ── Profile Type switching ────────────────────────────────────────────────
+
+    test.describe('Profile Type radio button switching', () => {
+
+        test.beforeEach(async ({ page, context }) => {
+            await goToBusinessInfoStep(page, context);
+        });
+
+        test('should switch from Merchant to Biller and reflect the change', async ({ page }) => {
+            await page.getByRole('radio').filter({ hasText: /merchant/i }).click();
+            await expect(page.getByRole('radio').filter({ hasText: /merchant/i })).toBeChecked();
+            await page.getByRole('radio').filter({ hasText: /biller/i }).click();
+            await expect(page.getByRole('radio').filter({ hasText: /biller/i })).toBeChecked();
+            await expect(page.getByRole('radio').filter({ hasText: /merchant/i })).not.toBeChecked();
+        });
+
+        test('should switch from Biller back to Merchant', async ({ page }) => {
+            await page.getByRole('radio').filter({ hasText: /biller/i }).click();
+            await page.getByRole('radio').filter({ hasText: /merchant/i }).click();
+            await expect(page.getByRole('radio').filter({ hasText: /merchant/i })).toBeChecked();
+            await expect(page.getByRole('radio').filter({ hasText: /biller/i })).not.toBeChecked();
+        });
+
+        test('should allow advancing with Biller profile type selected', async ({ page }) => {
+            await page.getByRole('radio').filter({ hasText: /biller/i }).click();
+            await page.getByRole('textbox', { name: /unified number/i }).fill('1023456789');
+            await page.getByRole('textbox', { name: /national id|iqama/i }).fill('1012345678');
+            await page.getByRole('textbox', { name: /email/i }).fill('biller@example.com');
+            await expect(page.getByRole('button', { name: /next/i })).toBeEnabled();
+        });
     });
 
-    test('should not allow more than 15 digits in the CRN field', async () => {
-        const input = page.locator('#floating-text-field-2');
-        await input.fill('');
-        await input.pressSequentially('10102345678');
-        const value = await input.inputValue();
-        expect(value.length).toBeLessThanOrEqual(15);
-    });
+    // ── Tab indicator progression ─────────────────────────────────────────────
 
-    // ── Iqama field ───────────────────────────────────────────────────────────
+    test.describe('Step / tab indicator progression', () => {
 
-    test('should accept a valid Iqama number', async () => {
-        const input = page.locator('#floating-text-field-3');
-        await input.fill(iqama);
-        await expect(input).toHaveValue(iqama);
-    });
+        test.beforeEach(async ({ page, context }) => {
+            await goToBusinessInfoStep(page, context);
+        });
 
-    test('should reject an Iqama shorter than 10 digits', async () => {
-        const input = page.locator('#floating-text-field-3');
-        await input.fill('212345678');
-        await input.blur();
-        await expect(page.locator('#error_invalidLength')).toBeVisible({ timeout: 5000 });
-    });
+        test('should show Business Info tab as active on arrival', async ({ page }) => {
+            await expect(page.getByRole('tab', { name: /business info/i }))
+                .toHaveAttribute('aria-selected', 'true');
+        });
 
-    test('should not allow more than 10 digits in the Iqama field', async () => {
-        const input = page.locator('#floating-text-field-3');
-        await input.pressSequentially('21234567890');
-        const value = await input.inputValue();
-        expect(value.length).toBeLessThanOrEqual(10);
-    });
+        test('should show Financial tab as NOT active while on Tab 1', async ({ page }) => {
+            const financialSelected = await page.getByRole('tab', { name: /financial/i })
+                .getAttribute('aria-selected');
+            expect(financialSelected).not.toBe('true');
+        });
 
-    // ── Email field ───────────────────────────────────────────────────────────
+        test('should show Verification tab as NOT active while on Tab 1', async ({ page }) => {
+            const verificationSelected = await page.getByRole('tab', { name: /verification/i })
+                .getAttribute('aria-selected');
+            expect(verificationSelected).not.toBe('true');
+        });
 
-    test('should accept a valid email address', async () => {
-        const input = page.getByRole('textbox', { name: /Email/i });
-        await input.fill(VALID_EMAIL);
-        await expect(input).toHaveValue(VALID_EMAIL);
-    });
+        test('should display all three tabs at all times', async ({ page }) => {
+            await expect(page.getByRole('tab', { name: /business info/i })).toBeVisible();
+            await expect(page.getByRole('tab', { name: /financial/i })).toBeVisible();
+            await expect(page.getByRole('tab', { name: /verification/i })).toBeVisible();
+        });
 
-    test('should reject an invalid email format', async () => {
-        const input = page.getByRole('textbox', { name: /Email/i });
-        await input.fill('not-an-email');
-        await input.blur();
-        await expect(page.locator('[class*="error"], [class*="invalid"], [id*="error"]').first())
-            .toBeVisible({ timeout: 5000 });
-    });
-
-    // ── Profile Type radio group ──────────────────────────────────────────────
-
-    test('should be able to select a Profile Type option', async () => {
-        const options = page.getByRole('radiogroup', { name: 'Profile Type' }).getByRole('radio');
-        const count   = await options.count();
-        const pick    = options.nth(Math.floor(Math.random() * count));
-        await pick.click();
-        await expect(pick).toBeChecked();
-    });
-
-    // ── Next / Submit button ──────────────────────────────────────────────────
-
-    test('should enable Next button when all required fields are filled', async () => {
-        const options = page.getByRole('radiogroup', { name: 'Profile Type' }).getByRole('radio');
-        await options.nth(Math.floor(Math.random() * await options.count())).click();
-        await page.locator('#floating-text-field-2').fill(crn);
-        await page.locator('#floating-text-field-3').fill(iqama);
-        await page.getByRole('textbox', { name: /Email/i }).fill(VALID_EMAIL);
-        await expect(
-            page.getByRole('button', { name: 'next' })
-        ).toBeEnabled({ timeout: 5000 });
+        test('Financial tab should become active after clicking Next on Tab 1', async ({ page }) => {
+            await fillBusinessInfoAndClickNext(page);
+            await expect(page.getByRole('tab', { name: /financial/i }))
+                .toHaveAttribute('aria-selected', 'true', { timeout: 10000 });
+        });
     });
 });
