@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 const FORGOT_URL     = 'https://dev.majdpay.com/business/auth/forgot-password';
-const VALID_COMPANY  = 'L3999';
-const VALID_MOBILE   = '500318143';
+const VALID_COMPANY  = 'A2316';
+const VALID_MOBILE   = '500021788';
 const VALID_PASSWORD = 'Aa#1234567';
 const SUBMIT_BUTTON  = 'reset password';
 
@@ -219,7 +219,13 @@ test.describe('Forgot Password - OTP Verification Flow', () => {
         await page.goto(FORGOT_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
-        await page.getByRole('button', { name: 'Next' }).click();
+        await Promise.all([
+            page.waitForResponse(
+                resp => resp.url().includes('passwords/forget') && resp.status() === 200,
+                { timeout: 15000 }
+            ),
+            page.getByRole('button', { name: 'Next' }).click(),
+        ]);
 
         await page.getByRole('textbox', { name: 'New Password' }).waitFor({ state: 'visible', timeout: 15000 });
         await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
