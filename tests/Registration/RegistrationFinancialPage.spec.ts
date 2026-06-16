@@ -11,22 +11,22 @@ test.describe('Registration – Financial & Business Page', () => {
         await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
         page = await context.newPage();
         await goToFinancialStep(page);
-        await page.waitForTimeout(2000);
     }, 120_000);
 
-    /* test.afterAll(async () => {
+    test.afterAll(async () => {
         await page.close();
-    }); */
+    });
 
     // ── Tab indicator ─────────────────────────────────────────────────────────
 
     test('should show the Financial & Business step fields on arrival', async () => {
-        await page.locator('#register-form-title').waitFor({ state: 'visible', timeout: 20000 });
         await expect(page.getByRole('textbox', { name: /monthly expected number/i })).toBeVisible();
     });
 
-    test('should display the step progression indicator', async () => {
+    test('should display all three step indicators', async () => {
+        await expect(page.getByText(/business info/i).first()).toBeVisible();
         await expect(page.getByText(/financial/i).first()).toBeVisible();
+        await expect(page.getByText(/verification/i).first()).toBeVisible();
     });
 
     // ── Monthly Expected Number Of Bills ──────────────────────────────────────

@@ -5,6 +5,11 @@ export const REGISTER_URL = 'https://dev.majdpay.com/business/auth/register';
 
 export const VALID_EMAIL = 's.hamdan@dg-cash.com';
 
+/** Generates a unique email for each test run to avoid duplicate-registration rejections. */
+export function generateEmail(): string {
+    return `test+${Date.now()}@dg-cash.com`;
+}
+
 // ── Pre-generated test assets (from Assets.xlsx) ──────────────────────────────
 // Citizen_IDs sheet: Saudi_CRN | Citizen_ID | Saudi_Mobile (strip leading 966)
 const CITIZEN_ASSETS = [
@@ -67,9 +72,9 @@ export async function fillOTP(page: Page) {
     }
 }
 
-export async function goToInfoStep(page: Page): Promise<void> {
+export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
     await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-    await page.getByRole('textbox', { name: 'Mobile number' }).fill(generateKSAMobile());
+    await page.getByRole('textbox', { name: 'Mobile number' }).fill(mobile ?? generateKSAMobile());
     await page.waitForTimeout(1000);
     await page.getByRole('button', { name: 'next' }).click();
     await page.waitForTimeout(5000);
@@ -85,27 +90,24 @@ export async function goToInfoStep(page: Page): Promise<void> {
 }
 
 export async function goToFinancialStep(page: Page): Promise<void> {
-    await goToInfoStep(page);
     const asset = nextResidentAsset();
+    await goToInfoStep(page, asset.mobile);
     await page.getByRole('radiogroup', { name: 'Profile Type' }).getByRole('radio').first().click();
     await page.getByRole('textbox', { name: 'unified number' }).fill(asset.crn);
     await page.getByRole('textbox', { name: 'National ID/Iqama' }).fill(asset.nationalId);
-    await page.getByRole('textbox', { name: /Email/i }).fill(VALID_EMAIL);
+    await page.getByRole('textbox', { name: /Email/i }).fill(generateEmail());
     await page.getByRole('button', { name: 'next' }).click();
-    // Wait for server-side validation round-trip to finish
     await page.getByRole('button', { name: 'Loading' })
         .waitFor({ state: 'hidden', timeout: 20000 })
         .catch(() => {});
     const advanced = await page.getByRole('textbox', { name: /monthly expected number/i })
         .isVisible({ timeout: 3000 }).catch(() => false);
     if (!advanced) {
-        const errorMsg = await page
-            .locator('[class*="error"], [role="alert"], [class*="toast"]')
-            .first().textContent().catch(() => '—');
+        const errorMsg = await page.evaluate(() => document.body.innerText).catch(() => '—');
         throw new Error(
-            `Business Info step was rejected by the backend. ` +
-            `Error: "${errorMsg?.trim()}". CRN=${asset.crn}, ID=${asset.nationalId}. ` +
-            `Check that these values exist in the dev environment DB.`
+            `Business Info step was rejected by the backend.\n` +
+            `CRN=${asset.crn}, ID=${asset.nationalId}, Mobile=${asset.mobile}.\n` +
+            `Page text: ${errorMsg?.slice(0, 300)}`
         );
     }
 }
