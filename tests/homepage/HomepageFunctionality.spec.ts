@@ -70,7 +70,7 @@ test.describe('Homepage – Functionality', () => {
 
     test('should log out successfully from account menu', async ({ page }) => {
         await page.locator('#logout').click();
-        await page.getByRole('button', { name: 'proceed' }).isVisible();
+        await expect(page.getByRole('button', { name: 'proceed' })).toBeVisible();
     });
 
     test('should not be able to access homepage after logout', async ({ page }) => {
