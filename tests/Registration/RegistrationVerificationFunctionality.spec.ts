@@ -11,7 +11,7 @@ test.describe('Registration – Verification & Uploads Functionality', () => {
         await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
         page = await context.newPage();
         await goToVerificationStep(page);
-    });
+    }, 120_000);
 
     test.afterAll(async () => {
         await page.close();

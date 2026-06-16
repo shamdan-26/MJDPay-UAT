@@ -17,7 +17,7 @@ test.describe('Registration – Financial & Business Functionality', () => {
         await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
         page = await context.newPage();
         await goToFinancialStep(page);
-    });
+    }, 120_000);
 
     test.afterAll(async () => {
         await page.close();

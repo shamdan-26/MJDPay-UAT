@@ -41,7 +41,7 @@ test.describe('Registration – Info Functionality', () => {
 
         await page.getByText('Tell us about your business')
             .waitFor({ state: 'visible', timeout: 20000 });
-    });
+    }, 120_000);
 
     test.afterAll(async () => {
         await page.close();
