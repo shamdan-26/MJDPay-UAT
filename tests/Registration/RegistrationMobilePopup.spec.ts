@@ -3,15 +3,22 @@ import { test, expect } from '@playwright/test';
 const LOGIN_URL    = 'https://dev.majdpay.com/business/auth/login';
 const REGISTER_URL = 'https://dev.majdpay.com/business/auth/register';
 
-// KSA mobile: starts with 5, exactly 9 digits
-const VALID_KSA_MOBILE = '500318143';
+const VALID_EMAIL = 's.hamdan@dg-cash.com';
 
-// Registration Info form test data
+// KSA mobile: starts with 5, exactly 9 digits
+function generateKSAMobile(): string {
+    return '5' + Math.floor(Math.random() * 1e8).toString().padStart(8, '0');
+}
+
 // Saudi CRN: 10 digits, starts with 1
-const VALID_CRN   = '1010234567';
+function generateCRN(): string {
+    return '1' + Math.floor(Math.random() * 1e9).toString().padStart(9, '0');
+}
+
 // Iqama (Resident ID): 10 digits, starts with 2
-const VALID_IQAMA = '2123456789';
-const VALID_EMAIL  = 's.hamdan@dg-cash.com';
+function generateIqama(): string {
+    return '2' + Math.floor(Math.random() * 1e9).toString().padStart(9, '0');
+}
 
 // ── Shared helper: fill OTP with all-zero digit ───────────────────────────────
 
@@ -45,7 +52,10 @@ async function selectRandomOption(page: any, dropdownLocator: any) {
 test.describe('Registration – Mobile Number Page', () => {
     test.describe.configure({ mode: 'serial' });
 
+    let mobile: string;
+
     test.beforeEach(async ({ page, context }) => {
+        mobile = generateKSAMobile();
         await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     });
@@ -122,8 +132,8 @@ test.describe('Registration – Mobile Number Page', () => {
     });
 
     test('should accept input in the Mobile number field', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_KSA_MOBILE);
-        await expect(page.getByRole('textbox', { name: 'Mobile number' })).toHaveValue(VALID_KSA_MOBILE);
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill(mobile);
+        await expect(page.getByRole('textbox', { name: 'Mobile number' })).toHaveValue(mobile);
     });
 
     // ── Next button ───────────────────────────────────────────────────────────
@@ -137,13 +147,13 @@ test.describe('Registration – Mobile Number Page', () => {
     });
 
     test('should enable Next button when a valid KSA mobile number is filled', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_KSA_MOBILE);
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill(mobile);
         await expect(page.getByRole('button', { name: 'next' })).toBeEnabled();
     });
 
     test('should disable Next button again after clearing the Mobile number field', async ({ page }) => {
         const input = page.getByRole('textbox', { name: 'Mobile number' });
-        await input.fill(VALID_KSA_MOBILE);
+        await input.fill(mobile);
         await expect(page.getByRole('button', { name: 'next' })).toBeEnabled();
         await input.clear();
         await expect(page.getByRole('button', { name: 'next' })).toBeDisabled();
@@ -199,7 +209,7 @@ test.describe('Registration – OTP Popup', () => {
         await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
         // Fill valid mobile and submit to trigger OTP popup
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_KSA_MOBILE);
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill(generateKSAMobile());
         await page.getByRole('button', { name: 'next' }).click();
         await page.getByRole('heading', { name: 'Enter OTP' }).waitFor({ state: 'visible', timeout: 15000 });
     });
@@ -270,15 +280,21 @@ test.describe('Registration – Info Page', () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: any;
+    let mobile: string;
+    let crn: string;
+    let iqama: string;
 
     test.beforeAll(async ({ browser }) => {
+        mobile = generateKSAMobile();
+        crn    = generateCRN();
+        iqama  = generateIqama();
         const context = await browser.newContext();
         await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
         page = await context.newPage();
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
         // Step 1 – mobile number
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_KSA_MOBILE);
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill(mobile);
         await page.getByRole('button', { name: 'next' }).click();
 
         // Step 2 – OTP (test env uses all-zero OTP)
@@ -317,8 +333,8 @@ test.describe('Registration – Info Page', () => {
 
     test('should accept a valid Saudi CRN', async () => {
         const input = page.getByRole('textbox', { name: /CRN|Commercial Registration/i });
-        await input.fill(VALID_CRN);
-        await expect(input).toHaveValue(VALID_CRN);
+        await input.fill(crn);
+        await expect(input).toHaveValue(crn);
     });
 
     test('should reject a CRN shorter than 10 digits', async () => {
@@ -348,8 +364,8 @@ test.describe('Registration – Info Page', () => {
 
     test('should accept a valid Iqama number', async () => {
         const input = page.getByRole('textbox', { name: /Iqama|Iqāma|Residence/i });
-        await input.fill(VALID_IQAMA);
-        await expect(input).toHaveValue(VALID_IQAMA);
+        await input.fill(iqama);
+        await expect(input).toHaveValue(iqama);
     });
 
     test('should reject an Iqama shorter than 10 digits', async () => {
@@ -423,8 +439,8 @@ test.describe('Registration – Info Page', () => {
     });
 
     test('should enable Next button when all required fields are filled', async () => {
-        await page.getByRole('textbox', { name: /CRN|Commercial Registration/i }).fill(VALID_CRN);
-        await page.getByRole('textbox', { name: /Iqama|Iqāma|Residence/i }).fill(VALID_IQAMA);
+        await page.getByRole('textbox', { name: /CRN|Commercial Registration/i }).fill(crn);
+        await page.getByRole('textbox', { name: /Iqama|Iqāma|Residence/i }).fill(iqama);
         await page.getByRole('textbox', { name: /Email/i }).fill(VALID_EMAIL);
         const dropdown = page.getByRole('combobox', { name: /Profile Type|Profile/i })
             .or(page.locator('[id*="profile"], [name*="profile"]').first());
