@@ -23,6 +23,5 @@ export async function loginAsMerchant(page: Page): Promise<void> {
         await inputs.nth(i).fill(VALID_OTP[i]);
     }
     await page.getByRole('button', { name: 'Verify' }).click();
-    await page.pause();
     await page.waitForURL(/\/business\/main\/home/, { timeout: 20000 });
 }
