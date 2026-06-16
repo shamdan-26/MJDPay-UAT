@@ -2,9 +2,9 @@ import { test, expect, Page } from '@playwright/test';
 import {
     REGISTER_URL,
     VALID_EMAIL,
+    VALID_CRN,
+    VALID_IQAMA,
     generateKSAMobile,
-    generateCRN,
-    generateIqama,
     fillOTP,
 } from './helpers';
 
@@ -16,8 +16,8 @@ test.describe('Registration – Info Functionality', () => {
     let iqama: string;
 
     test.beforeAll(async ({ browser }) => {
-        crn   = generateCRN();
-        iqama = generateIqama();
+        crn   = VALID_CRN;
+        iqama = VALID_IQAMA;
         const context = await browser.newContext();
         await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
         page = await context.newPage();

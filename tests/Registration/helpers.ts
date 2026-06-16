@@ -5,16 +5,37 @@ export const REGISTER_URL = 'https://dev.majdpay.com/business/auth/register';
 
 export const VALID_EMAIL = 's.hamdan@dg-cash.com';
 
+// Use hardcoded values accepted by the dev backend.
+// Randomly generated CRN/Iqama fail server-side validation and leave
+// the Next button stuck in "Loading" state indefinitely.
+export const VALID_CRN   = '1023456789';
+export const VALID_IQAMA = '1012345678';
+
 export function generateKSAMobile(): string {
     return '5' + Math.floor(Math.random() * 1e8).toString().padStart(8, '0');
 }
 
+function luhnCheckDigit(partial: string): number {
+    const digits = (partial + '0').split('').map(Number);
+    let sum = 0;
+    let alternate = false;
+    for (let i = digits.length - 1; i >= 0; i--) {
+        let n = digits[i];
+        if (alternate) { n *= 2; if (n > 9) n -= 9; }
+        sum += n;
+        alternate = !alternate;
+    }
+    return (10 - (sum % 10)) % 10;
+}
+
 export function generateCRN(): string {
-    return '1' + Math.floor(Math.random() * 1e9).toString().padStart(9, '0');
+    const partial = '1' + Math.floor(Math.random() * 1e8).toString().padStart(8, '0');
+    return partial + luhnCheckDigit(partial);
 }
 
 export function generateIqama(): string {
-    return '2' + Math.floor(Math.random() * 1e9).toString().padStart(9, '0');
+    const partial = '2' + Math.floor(Math.random() * 1e8).toString().padStart(8, '0');
+    return partial + luhnCheckDigit(partial);
 }
 
 export async function fillOTP(page: Page) {
@@ -45,15 +66,14 @@ export async function goToInfoStep(page: Page): Promise<void> {
 
 export async function goToFinancialStep(page: Page): Promise<void> {
     await goToInfoStep(page);
-    const crn   = generateCRN();
-    const iqama = generateIqama();
-    const options = page.getByRole('radiogroup', { name: 'Profile Type' }).getByRole('radio');
-    await options.first().click();
-    await page.getByRole('textbox', { name: 'unified number' }).fill(crn);
-    await page.getByRole('textbox', { name: 'National ID/Iqama' }).fill(iqama);
+    await page.getByRole('radiogroup', { name: 'Profile Type' }).getByRole('radio').first().click();
+    await page.getByRole('textbox', { name: 'unified number' }).fill(VALID_CRN);
+    await page.getByRole('textbox', { name: 'National ID/Iqama' }).fill(VALID_IQAMA);
     await page.getByRole('textbox', { name: /Email/i }).fill(VALID_EMAIL);
     await page.getByRole('button', { name: 'next' }).click();
-    await page.waitForTimeout(2000);
+    // Wait for server-side CRN/Iqama validation to resolve before asserting the next step
+    await page.getByRole('button', { name: 'Loading' })
+        .waitFor({ state: 'hidden', timeout: 20000 });
     await page.getByRole('textbox', { name: /monthly expected number/i })
         .waitFor({ state: 'visible', timeout: 15000 });
 }
