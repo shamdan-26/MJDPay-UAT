@@ -308,6 +308,7 @@ test.describe('Registration – Info Page', () => {
         const verifyBtn = page.getByRole('button', { name: 'Verify' });
         await expect(verifyBtn).toBeEnabled({ timeout: 10000 });
         await verifyBtn.click();
+        await page.waitForTimeout(3000);
 
         // Step 3 – wait for Registration Info form
         await page.getByText('Tell us about your business')
