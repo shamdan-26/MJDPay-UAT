@@ -269,8 +269,12 @@ test.describe('Registration – OTP Popup', () => {
 test.describe('Registration – Info Page', () => {
     test.describe.configure({ mode: 'serial' });
 
-    test.beforeEach(async ({ page, context }) => {
+    let page: any;
+
+    test.beforeAll(async ({ browser }) => {
+        const context = await browser.newContext();
         await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
+        page = await context.newPage();
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
         // Step 1 – mobile number
@@ -291,29 +295,33 @@ test.describe('Registration – Info Page', () => {
             .waitFor({ state: 'visible', timeout: 20000 });
     });
 
+    test.afterAll(async () => {
+        await page.close();
+    });
+
     // ── Page content ──────────────────────────────────────────────────────────
 
-    test('should display the registration info form heading', async ({ page }) => {
+    test('should display the registration info form heading', async () => {
         await expect(page.getByText('Tell us about your business')).toBeVisible();
     });
 
     // ── CRN field ─────────────────────────────────────────────────────────────
 
-    test('should display the CRN field label', async ({ page }) => {
+    test('should display the CRN field label', async () => {
         await expect(page.getByText(/CRN|Commercial Registration/i).first()).toBeVisible();
     });
 
-    test('should display the CRN input', async ({ page }) => {
+    test('should display the CRN input', async () => {
         await expect(page.getByRole('textbox', { name: /CRN|Commercial Registration/i })).toBeVisible();
     });
 
-    test('should accept a valid Saudi CRN', async ({ page }) => {
+    test('should accept a valid Saudi CRN', async () => {
         const input = page.getByRole('textbox', { name: /CRN|Commercial Registration/i });
         await input.fill(VALID_CRN);
         await expect(input).toHaveValue(VALID_CRN);
     });
 
-    test('should reject a CRN shorter than 10 digits', async ({ page }) => {
+    test('should reject a CRN shorter than 10 digits', async () => {
         const input = page.getByRole('textbox', { name: /CRN|Commercial Registration/i });
         await input.fill('101023456');
         await input.blur();
@@ -321,7 +329,7 @@ test.describe('Registration – Info Page', () => {
             .toBeVisible({ timeout: 5000 });
     });
 
-    test('should not allow more than 10 digits in the CRN field', async ({ page }) => {
+    test('should not allow more than 10 digits in the CRN field', async () => {
         const input = page.getByRole('textbox', { name: /CRN|Commercial Registration/i });
         await input.pressSequentially('10102345678');
         const value = await input.inputValue();
@@ -330,21 +338,21 @@ test.describe('Registration – Info Page', () => {
 
     // ── Iqama field ───────────────────────────────────────────────────────────
 
-    test('should display the Iqama field label', async ({ page }) => {
+    test('should display the Iqama field label', async () => {
         await expect(page.getByText(/Iqama|Iqāma|Residence/i).first()).toBeVisible();
     });
 
-    test('should display the Iqama input', async ({ page }) => {
+    test('should display the Iqama input', async () => {
         await expect(page.getByRole('textbox', { name: /Iqama|Iqāma|Residence/i })).toBeVisible();
     });
 
-    test('should accept a valid Iqama number', async ({ page }) => {
+    test('should accept a valid Iqama number', async () => {
         const input = page.getByRole('textbox', { name: /Iqama|Iqāma|Residence/i });
         await input.fill(VALID_IQAMA);
         await expect(input).toHaveValue(VALID_IQAMA);
     });
 
-    test('should reject an Iqama shorter than 10 digits', async ({ page }) => {
+    test('should reject an Iqama shorter than 10 digits', async () => {
         const input = page.getByRole('textbox', { name: /Iqama|Iqāma|Residence/i });
         await input.fill('212345678');
         await input.blur();
@@ -352,7 +360,7 @@ test.describe('Registration – Info Page', () => {
             .toBeVisible({ timeout: 5000 });
     });
 
-    test('should not allow more than 10 digits in the Iqama field', async ({ page }) => {
+    test('should not allow more than 10 digits in the Iqama field', async () => {
         const input = page.getByRole('textbox', { name: /Iqama|Iqāma|Residence/i });
         await input.pressSequentially('21234567890');
         const value = await input.inputValue();
@@ -361,21 +369,21 @@ test.describe('Registration – Info Page', () => {
 
     // ── Email field ───────────────────────────────────────────────────────────
 
-    test('should display the Email field label', async ({ page }) => {
+    test('should display the Email field label', async () => {
         await expect(page.getByText(/Email/i).first()).toBeVisible();
     });
 
-    test('should display the Email input', async ({ page }) => {
+    test('should display the Email input', async () => {
         await expect(page.getByRole('textbox', { name: /Email/i })).toBeVisible();
     });
 
-    test('should accept a valid email address', async ({ page }) => {
+    test('should accept a valid email address', async () => {
         const input = page.getByRole('textbox', { name: /Email/i });
         await input.fill(VALID_EMAIL);
         await expect(input).toHaveValue(VALID_EMAIL);
     });
 
-    test('should reject an invalid email format', async ({ page }) => {
+    test('should reject an invalid email format', async () => {
         const input = page.getByRole('textbox', { name: /Email/i });
         await input.fill('not-an-email');
         await input.blur();
@@ -385,14 +393,14 @@ test.describe('Registration – Info Page', () => {
 
     // ── Profile Type dropdown ─────────────────────────────────────────────────
 
-    test('should display the Profile Type dropdown', async ({ page }) => {
+    test('should display the Profile Type dropdown', async () => {
         await expect(
             page.getByRole('combobox', { name: /Profile Type|Profile/i })
                 .or(page.locator('[id*="profile"], [name*="profile"], [placeholder*="profile" i]').first())
         ).toBeVisible({ timeout: 5000 });
     });
 
-    test('should be able to select a Profile Type option', async ({ page }) => {
+    test('should be able to select a Profile Type option', async () => {
         const dropdown = page.getByRole('combobox', { name: /Profile Type|Profile/i })
             .or(page.locator('[id*="profile"], [name*="profile"]').first());
         await selectRandomOption(page, dropdown);
@@ -402,19 +410,19 @@ test.describe('Registration – Info Page', () => {
 
     // ── Next / Submit button ──────────────────────────────────────────────────
 
-    test('should display the Next button', async ({ page }) => {
+    test('should display the Next button', async () => {
         await expect(
             page.getByRole('button', { name: /next|submit|continue/i }).first()
         ).toBeVisible();
     });
 
-    test('should have the Next button disabled when required fields are empty', async ({ page }) => {
+    test('should have the Next button disabled when required fields are empty', async () => {
         await expect(
             page.getByRole('button', { name: /next|submit|continue/i }).first()
         ).toBeDisabled();
     });
 
-    test('should enable Next button when all required fields are filled', async ({ page }) => {
+    test('should enable Next button when all required fields are filled', async () => {
         await page.getByRole('textbox', { name: /CRN|Commercial Registration/i }).fill(VALID_CRN);
         await page.getByRole('textbox', { name: /Iqama|Iqāma|Residence/i }).fill(VALID_IQAMA);
         await page.getByRole('textbox', { name: /Email/i }).fill(VALID_EMAIL);
