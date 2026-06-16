@@ -293,6 +293,7 @@ test.describe('Registration – Info Page', () => {
         page = await context.newPage();
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
+        await page.pause();
         // Step 1 – mobile number
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(mobile);
         await page.getByRole('button', { name: 'next' }).click();
@@ -311,7 +312,7 @@ test.describe('Registration – Info Page', () => {
             .waitFor({ state: 'visible', timeout: 20000 });
     });
 
-    test.afterAll(async () => {
+    test.afterAll(async () => { 
         await page.close();
     });
 
@@ -324,21 +325,21 @@ test.describe('Registration – Info Page', () => {
     // ── CRN field ─────────────────────────────────────────────────────────────
 
     test('should display the CRN field label', async () => {
-        await expect(page.getByText(/CRN|Commercial Registration/i).first()).toBeVisible();
+        await expect(page.getByText('unified number').first()).toBeVisible();
     });
 
     test('should display the CRN input', async () => {
-        await expect(page.getByRole('textbox', { name: /CRN|Commercial Registration/i })).toBeVisible();
+        await expect(page.getByRole('textbox', { name: 'unified number' })).toBeVisible();
     });
 
     test('should accept a valid Saudi CRN', async () => {
-        const input = page.getByRole('textbox', { name: /CRN|Commercial Registration/i });
+        const input = page.getByRole('textbox', { name: 'unified number' });
         await input.fill(crn);
         await expect(input).toHaveValue(crn);
     });
 
     test('should reject a CRN shorter than 10 digits', async () => {
-        const input = page.getByRole('textbox', { name: /CRN|Commercial Registration/i });
+        const input = page.getByRole('textbox', { name: 'unified number' });
         await input.fill('101023456');
         await input.blur();
         await expect(page.locator('[class*="error"], [class*="invalid"], [id*="error"]').first())
@@ -346,7 +347,7 @@ test.describe('Registration – Info Page', () => {
     });
 
     test('should not allow more than 10 digits in the CRN field', async () => {
-        const input = page.getByRole('textbox', { name: /CRN|Commercial Registration/i });
+        const input = page.getByRole('textbox', { name: 'unified number' });
         await input.pressSequentially('10102345678');
         const value = await input.inputValue();
         expect(value.length).toBeLessThanOrEqual(10);
@@ -355,21 +356,21 @@ test.describe('Registration – Info Page', () => {
     // ── Iqama field ───────────────────────────────────────────────────────────
 
     test('should display the Iqama field label', async () => {
-        await expect(page.getByText(/Iqama|Iqāma|Residence/i).first()).toBeVisible();
+        await expect(page.getByText('National ID/Iqama').first()).toBeVisible();
     });
 
     test('should display the Iqama input', async () => {
-        await expect(page.getByRole('textbox', { name: /Iqama|Iqāma|Residence/i })).toBeVisible();
+        await expect(page.getByRole('textbox', { name: 'National ID/Iqama' })).toBeVisible();
     });
 
     test('should accept a valid Iqama number', async () => {
-        const input = page.getByRole('textbox', { name: /Iqama|Iqāma|Residence/i });
+        const input = page.getByRole('textbox', { name: 'National ID/Iqama' });
         await input.fill(iqama);
         await expect(input).toHaveValue(iqama);
     });
 
     test('should reject an Iqama shorter than 10 digits', async () => {
-        const input = page.getByRole('textbox', { name: /Iqama|Iqāma|Residence/i });
+        const input = page.getByRole('textbox', { name: 'National ID/Iqama' });
         await input.fill('212345678');
         await input.blur();
         await expect(page.locator('[class*="error"], [class*="invalid"], [id*="error"]').first())
@@ -377,7 +378,7 @@ test.describe('Registration – Info Page', () => {
     });
 
     test('should not allow more than 10 digits in the Iqama field', async () => {
-        const input = page.getByRole('textbox', { name: /Iqama|Iqāma|Residence/i });
+        const input = page.getByRole('textbox', { name: 'National ID/Iqama' });
         await input.pressSequentially('21234567890');
         const value = await input.inputValue();
         expect(value.length).toBeLessThanOrEqual(10);
@@ -407,21 +408,18 @@ test.describe('Registration – Info Page', () => {
             .toBeVisible({ timeout: 5000 });
     });
 
-    // ── Profile Type dropdown ─────────────────────────────────────────────────
+    // ── Profile Type radio group ──────────────────────────────────────────────
 
-    test('should display the Profile Type dropdown', async () => {
-        await expect(
-            page.getByRole('combobox', { name: /Profile Type|Profile/i })
-                .or(page.locator('[id*="profile"], [name*="profile"], [placeholder*="profile" i]').first())
-        ).toBeVisible({ timeout: 5000 });
+    test('should display the Profile Type options', async () => {
+        await expect(page.getByRole('radiogroup', { name: 'Profile Type' })).toBeVisible();
     });
 
     test('should be able to select a Profile Type option', async () => {
-        const dropdown = page.getByRole('combobox', { name: /Profile Type|Profile/i })
-            .or(page.locator('[id*="profile"], [name*="profile"]').first());
-        await selectRandomOption(page, dropdown);
-        const value = await dropdown.inputValue().catch(() => dropdown.locator('..').innerText());
-        expect(value.trim().length).toBeGreaterThan(0);
+        const options = page.getByRole('radiogroup', { name: 'Profile Type' }).getByRole('radio');
+        const count = await options.count();
+        const pick  = options.nth(Math.floor(Math.random() * count));
+        await pick.click();
+        await expect(pick).toBeChecked();
     });
 
     // ── Next / Submit button ──────────────────────────────────────────────────
@@ -439,14 +437,13 @@ test.describe('Registration – Info Page', () => {
     });
 
     test('should enable Next button when all required fields are filled', async () => {
-        await page.getByRole('textbox', { name: /CRN|Commercial Registration/i }).fill(crn);
-        await page.getByRole('textbox', { name: /Iqama|Iqāma|Residence/i }).fill(iqama);
+        const options = page.getByRole('radiogroup', { name: 'Profile Type' }).getByRole('radio');
+        await options.nth(Math.floor(Math.random() * await options.count())).click();
+        await page.getByRole('textbox', { name: 'unified number' }).fill(crn);
+        await page.getByRole('textbox', { name: 'National ID/Iqama' }).fill(iqama);
         await page.getByRole('textbox', { name: /Email/i }).fill(VALID_EMAIL);
-        const dropdown = page.getByRole('combobox', { name: /Profile Type|Profile/i })
-            .or(page.locator('[id*="profile"], [name*="profile"]').first());
-        await selectRandomOption(page, dropdown);
         await expect(
-            page.getByRole('button', { name: /next|submit|continue/i }).first()
+            page.getByRole('button', { name: 'next' })
         ).toBeEnabled({ timeout: 5000 });
     });
 });
