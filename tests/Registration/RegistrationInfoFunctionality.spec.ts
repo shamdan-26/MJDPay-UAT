@@ -6,6 +6,7 @@ import {
     VALID_IQAMA,
     generateKSAMobile,
     fillOTP,
+    nextCitizenAsset,
 } from './helpers';
 
 test.describe('Registration – Info Functionality', () => {
@@ -16,8 +17,9 @@ test.describe('Registration – Info Functionality', () => {
     let iqama: string;
 
     test.beforeAll(async ({ browser }) => {
-        crn   = VALID_CRN;
-        iqama = VALID_IQAMA;
+        const asset = nextCitizenAsset();
+        crn   = asset.crn;
+        iqama = asset.nationalId;
         const context = await browser.newContext();
         await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
         page = await context.newPage();
