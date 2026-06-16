@@ -1,9 +1,5 @@
 import { test, expect } from '@playwright/test';
-
-const LOGIN_URL      = 'https://dev.majdpay.com/business/auth/login';
-const VALID_COMPANY  = 'A2316';
-const VALID_MOBILE   = '500021788';
-const VALID_PASSWORD = 'Aa#1234567';
+import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD } from './helpers';
 
 test.describe('Verify Login OTP page', () => {
     test.beforeEach(async ({ page, context }) => {
@@ -16,7 +12,7 @@ test.describe('Verify Login OTP page', () => {
         await page.getByRole('heading', { name: 'Enter OTP' }).waitFor({ state: 'visible', timeout: 15000 });
     });
 
-    // ── Heading & instruction ─────────────────────────────────────────────
+    // ── Heading & instruction ─────────────────────────────────────────────────
 
     test('should display the Enter OTP heading', async ({ page }) => {
         await expect(page.getByRole('heading', { name: 'Enter OTP' })).toBeVisible();
@@ -26,13 +22,13 @@ test.describe('Verify Login OTP page', () => {
         await expect(page.getByText('A code has been sent to you, in order to continue with the login process.')).toBeVisible();
     });
 
-    // ── OTP inputs ────────────────────────────────────────────────────────
+    // ── OTP inputs ────────────────────────────────────────────────────────────
 
     test('should display 4 OTP input boxes', async ({ page }) => {
         await expect(page.getByRole('textbox', { name: 'One time password input' })).toHaveCount(4);
     });
 
-    // ── Timer & resend ────────────────────────────────────────────────────
+    // ── Timer & resend ────────────────────────────────────────────────────────
 
     test('should display the countdown timer', async ({ page }) => {
         await expect(page.getByText(/Code ends/)).toBeVisible();
@@ -42,7 +38,7 @@ test.describe('Verify Login OTP page', () => {
         await expect(page.getByRole('button', { name: 'Click to resend' })).toBeVisible();
     });
 
-    // ── Action buttons ────────────────────────────────────────────────────
+    // ── Action buttons ────────────────────────────────────────────────────────
 
     test('should display the Cancel button', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'Cancel' })).toBeVisible();
@@ -59,5 +55,4 @@ test.describe('Verify Login OTP page', () => {
     test('should display the Click to resend button as disabled initially', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'Click to resend' })).toBeDisabled();
     });
-
-})
+});

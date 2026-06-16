@@ -1,33 +1,25 @@
-﻿import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test';
+import { FORGOT_URL, SUBMIT_BUTTON, VALID_PASSWORD } from './helpers';
 
-const FORGOT_URL = 'https://dev.majdpay.com/business/auth/forgot-password';
 const VALID_COMPANY = 'L3999';
 const VALID_MOBILE  = '500318143';
-
-const SUBMIT_BUTTON = 'reset password';
 
 test.describe('Forgot Password - Step 2 (New Password)', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
         await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
-
-        // Mock the forgot-password API to bypass device-fingerprint check in UAT
         await page.route('**/auth/passwords/forget', route =>
             route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
         );
-
         await page.goto(FORGOT_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
         await page.getByRole('button', { name: 'Next' }).click();
-
-        // Wait for step 2 â€” both fields share placeholder "Input Password", use role instead
         await page.getByRole('textbox', { name: 'New Password' }).waitFor({ state: 'visible', timeout: 15000 });
     });
 
-    // â”€â”€ Page elements â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Page elements ─────────────────────────────────────────────────────────
 
     test('should display the New Password field', async ({ page }) => {
         await expect(page.getByRole('textbox', { name: 'New Password' })).toBeVisible();
@@ -49,48 +41,48 @@ test.describe('Forgot Password - Step 2 (New Password)', () => {
         await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeVisible();
     });
 
-    // â”€â”€ Show / hide password toggles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Show / hide password toggles ──────────────────────────────────────────
 
     test('should reveal New Password when show toggle is clicked', async ({ page }) => {
         const newPassInput = page.getByRole('textbox', { name: 'New Password' });
-        await newPassInput.fill('Aa#1234567');
+        await newPassInput.fill(VALID_PASSWORD);
         await page.getByRole('button', { name: 'Show password' }).first().click();
         await expect(newPassInput).toHaveAttribute('type', 'text');
     });
 
     test('should reveal Confirm Password when show toggle is clicked', async ({ page }) => {
         const confirmInput = page.getByRole('textbox', { name: 'Confirm password' });
-        await confirmInput.fill('Aa#1234567');
+        await confirmInput.fill(VALID_PASSWORD);
         await page.getByRole('button', { name: 'Show password' }).nth(1).click();
         await expect(confirmInput).toHaveAttribute('type', 'text');
     });
 
-    // â”€â”€ Button state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Button state ──────────────────────────────────────────────────────────
 
     test('should keep submit button disabled when both fields are empty', async ({ page }) => {
         await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeDisabled();
     });
 
     test('should keep submit button disabled when only New Password is filled', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'New Password' }).fill('Aa#1234567');
+        await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
         await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeDisabled();
     });
 
     test('should keep submit button disabled when only Confirm Password is filled', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Confirm password' }).fill('Aa#1234567');
+        await page.getByRole('textbox', { name: 'Confirm password' }).fill(VALID_PASSWORD);
         await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeDisabled();
     });
 
     test('should enable submit button when both passwords match', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'New Password' }).fill('Aa#1234567');
-        await page.getByRole('textbox', { name: 'Confirm password' }).fill('Aa#1234567');
+        await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
+        await page.getByRole('textbox', { name: 'Confirm password' }).fill(VALID_PASSWORD);
         await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeEnabled();
     });
 
-    // â”€â”€ Password validation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Password validation ───────────────────────────────────────────────────
 
     test('should show an error or keep button disabled when passwords do not match', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'New Password' }).fill('Aa#1234567');
+        await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
         await page.getByRole('textbox', { name: 'Confirm password' }).fill('DifferentPass#1');
         const submitBtn = page.getByRole('button', { name: SUBMIT_BUTTON });
         const isDisabled = await submitBtn.isDisabled();
@@ -103,26 +95,24 @@ test.describe('Forgot Password - Step 2 (New Password)', () => {
     });
 
     test('should accept input in the New Password field', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'New Password' }).fill('Aa#1234567');
-        await expect(page.getByRole('textbox', { name: 'New Password' })).toHaveValue('Aa#1234567');
+        await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
+        await expect(page.getByRole('textbox', { name: 'New Password' })).toHaveValue(VALID_PASSWORD);
     });
 
     test('should accept input in the Confirm Password field', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Confirm password' }).fill('Aa#1234567');
-        await expect(page.getByRole('textbox', { name: 'Confirm password' })).toHaveValue('Aa#1234567');
+        await page.getByRole('textbox', { name: 'Confirm password' }).fill(VALID_PASSWORD);
+        await expect(page.getByRole('textbox', { name: 'Confirm password' })).toHaveValue(VALID_PASSWORD);
     });
 
-    // â”€â”€ Form submission â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Form submission ───────────────────────────────────────────────────────
 
     test('should navigate to login page after successful password reset', async ({ page }) => {
         await page.route('**/auth/passwords/**', route =>
             route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
         );
-
-        await page.getByRole('textbox', { name: 'New Password' }).fill('Aa#1234567');
-        await page.getByRole('textbox', { name: 'Confirm password' }).fill('Aa#1234567');
+        await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
+        await page.getByRole('textbox', { name: 'Confirm password' }).fill(VALID_PASSWORD);
         await page.getByRole('button', { name: SUBMIT_BUTTON }).click();
         await expect(page).toHaveURL(/login/, { timeout: 10000 });
     });
-
 });

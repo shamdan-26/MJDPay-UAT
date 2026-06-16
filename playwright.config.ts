@@ -18,7 +18,7 @@ declare const process: {
 };
 
 export default defineConfig({
-  globalSetup: './Utils/LoginSession.ts',
+  globalSetup: './support/global-setup.ts',
   testDir: './tests',
   timeout: 60000,
   /* Run tests in files in parallel */

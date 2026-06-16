@@ -1,21 +1,22 @@
-﻿
-
 import { test, expect } from '@playwright/test';
-
-const URL = 'https://dev.majdpay.com/business/auth/login';
-const VALID_COMPANY  = 'A2316';
-const VALID_MOBILE   = '500021788';
-const VALID_PASSWORD = 'Aa#1234567';
+import {
+    LOGIN_URL,
+    VALID_COMPANY,
+    VALID_MOBILE,
+    VALID_PASSWORD,
+    VALID_OTP,
+    INVALID_OTP,
+} from './helpers';
 
 test.describe('Login Functionality', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
         await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
-        await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     });
 
-    // â”€â”€ Valid login â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Valid login ───────────────────────────────────────────────────────────
 
     test('should display OTP dialog after submitting valid credentials', async ({ page }) => {
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
@@ -25,14 +26,14 @@ test.describe('Login Functionality', () => {
         await expect(page.getByRole('heading', { name: 'Enter OTP' })).toBeVisible({ timeout: 15000 });
     });
 
-    // â”€â”€ Invalid credentials â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Invalid credentials ───────────────────────────────────────────────────
 
     test('should show an error with wrong password', async ({ page }) => {
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
         await page.locator('input[aria-label="Password"]').fill('WrongPass@99');
         await page.getByRole('button', { name: 'Log In' }).click();
-        await expect(page).toHaveURL(URL);
+        await expect(page).toHaveURL(LOGIN_URL);
     });
 
     test('should show an error with wrong company number', async ({ page }) => {
@@ -40,7 +41,7 @@ test.describe('Login Functionality', () => {
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
         await page.locator('input[aria-label="Password"]').fill(VALID_PASSWORD);
         await page.getByRole('button', { name: 'Log In' }).click();
-        await expect(page).toHaveURL(URL);
+        await expect(page).toHaveURL(LOGIN_URL);
     });
 
     test('should show an error with wrong mobile number', async ({ page }) => {
@@ -48,7 +49,7 @@ test.describe('Login Functionality', () => {
         await page.getByRole('textbox', { name: 'Mobile number' }).fill('500000000');
         await page.locator('input[aria-label="Password"]').fill(VALID_PASSWORD);
         await page.getByRole('button', { name: 'Log In' }).click();
-        await expect(page).toHaveURL(URL);
+        await expect(page).toHaveURL(LOGIN_URL);
     });
 
     test('should show an error with all wrong credentials', async ({ page }) => {
@@ -56,10 +57,10 @@ test.describe('Login Functionality', () => {
         await page.getByRole('textbox', { name: 'Mobile number' }).fill('500000000');
         await page.locator('input[aria-label="Password"]').fill('WrongPass@99');
         await page.getByRole('button', { name: 'Log In' }).click();
-        await expect(page).toHaveURL(URL);
+        await expect(page).toHaveURL(LOGIN_URL);
     });
 
-    // â”€â”€ Empty fields â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Empty fields ──────────────────────────────────────────────────────────
 
     test('should keep Log In button disabled when all fields are empty', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'Log In' })).toBeDisabled();
@@ -98,7 +99,7 @@ test.describe('Login Functionality', () => {
         await expect(page.getByRole('button', { name: 'Log In' })).toBeDisabled();
     });
 
-    // â”€â”€ Enable button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Enable button ─────────────────────────────────────────────────────────
 
     test('should enable Log In button when all fields are filled with valid credentials', async ({ page }) => {
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
@@ -107,7 +108,7 @@ test.describe('Login Functionality', () => {
         await expect(page.getByRole('button', { name: 'Log In' })).toBeEnabled();
     });
 
-    // â”€â”€ Field clearing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Field clearing ────────────────────────────────────────────────────────
 
     test('should disable Log In button again after clearing a filled field', async ({ page }) => {
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
@@ -118,7 +119,7 @@ test.describe('Login Functionality', () => {
         await expect(page.getByRole('button', { name: 'Log In' })).toBeDisabled();
     });
 
-    // â”€â”€ Password visibility â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Password visibility ───────────────────────────────────────────────────
 
     test('should reveal password when show password toggle is clicked', async ({ page }) => {
         const passwordInput = page.locator('input[aria-label="Password"]');
@@ -138,24 +139,21 @@ test.describe('Login Functionality', () => {
         await expect(passwordInput).toHaveAttribute('type', 'password');
     });
 
-    // â”€â”€ Navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Navigation ────────────────────────────────────────────────────────────
 
     test('should navigate to Forgot Password page', async ({ page }) => {
         await page.getByText('Forgot Password?').click();
-        await expect(page).not.toHaveURL(URL);
+        await expect(page).not.toHaveURL(LOGIN_URL);
     });
 
     test('should navigate to Sign Up page', async ({ page }) => {
         await page.getByText('Sign Up').click();
-        await expect(page).not.toHaveURL(URL);
+        await expect(page).not.toHaveURL(LOGIN_URL);
     });
 
-    // ── OTP functionality ─────────────────────────────────────────────────────
+    // ── OTP popup functionality ───────────────────────────────────────────────
 
     test.describe('OTP popup functionality', () => {
-        const VALID_OTP   = '0000'; // static OTP for dev environment
-        const INVALID_OTP = '1111';
-
         test.beforeEach(async ({ page }) => {
             await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
             await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
@@ -218,7 +216,7 @@ test.describe('Login Functionality', () => {
         });
 
         test('should enable resend button after countdown expires and clear inputs on click', async ({ page }) => {
-            test.setTimeout(90000); // beforeEach (~15 s) + countdown (~30 s) + buffer
+            test.setTimeout(90000);
 
             const inputs = page.getByRole('textbox', { name: 'One time password input' });
             await inputs.nth(0).fill('1');
@@ -232,5 +230,4 @@ test.describe('Login Functionality', () => {
             await expect(inputs.nth(0)).toHaveValue('');
         });
     });
-
 });
