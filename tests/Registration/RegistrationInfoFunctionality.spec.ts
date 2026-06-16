@@ -1,4 +1,4 @@
-import { test, expect, Page, Browser } from '@playwright/test';
+import { test, expect, Page, Browser, chromium } from '@playwright/test';
 import {
     REGISTER_URL,
     VALID_EMAIL,
@@ -15,14 +15,16 @@ test.describe('Registration – Info Functionality', () => {
     let page: Page;
     let crn: string;
     let iqama: string;
-
-    test.beforeAll(async ({ browser }: { browser: Browser }) => {
+    let _browser: Browser;
+    let _context: any;
+    test.beforeAll(async () => {
         const asset = nextCitizenAsset();
         crn   = asset.crn;
         iqama = asset.nationalId;
-        const context = await browser.newContext();
-        await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
-        page = await context.newPage();
+        _browser = await chromium.launch();
+        _context = await _browser.newContext();
+        await _context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
+        page = await _context.newPage();
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(generateKSAMobile());
@@ -41,10 +43,12 @@ test.describe('Registration – Info Functionality', () => {
 
         await page.getByText('Tell us about your business')
             .waitFor({ state: 'visible', timeout: 20000 });
-    }, 120_000);
+    });
 
     test.afterAll(async () => {
         await page.close();
+        if (_context) await _context.close();
+        if (_browser) await _browser.close();
     });
 
     // ── CRN field ─────────────────────────────────────────────────────────────
