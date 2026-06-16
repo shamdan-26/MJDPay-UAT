@@ -287,7 +287,7 @@ test.describe('Registration – Info Page', () => {
         await verifyBtn.click();
 
         // Step 3 – wait for Registration Info form
-        await page.getByRole('heading', { name: /Registration Info|Business Info|Create Account/i })
+        await page.getByRole('heading', { name: Tell us about your business })
             .waitFor({ state: 'visible', timeout: 20000 });
     });
 
@@ -295,7 +295,7 @@ test.describe('Registration – Info Page', () => {
 
     test('should display the registration info form heading', async ({ page }) => {
         await expect(
-            page.getByRole('heading', { name: /Registration Info|Business Info|Create Account/i })
+            page.getByRole('heading', { name: Tell us about your business })
         ).toBeVisible();
     });
 
