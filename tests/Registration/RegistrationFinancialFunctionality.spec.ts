@@ -122,26 +122,26 @@ test.describe('Registration – Financial & Business Functionality', () => {
 
     // ── Back navigation ───────────────────────────────────────────────────────
 
-    test('should return to the Business Info tab when Back is clicked', async () => {
+    test('should return to the Business Info step when Back is clicked', async () => {
         await page.getByRole('button', { name: /back/i }).click();
-        await expect(page.getByRole('tab', { name: /business info/i }))
-            .toHaveAttribute('aria-selected', 'true', { timeout: 10000 });
+        await expect(page.getByRole('textbox', { name: /Email/i }))
+            .toBeVisible({ timeout: 10000 });
     });
 
     test('should preserve data on Business Info tab after navigating back', async () => {
         await expect(page.getByRole('textbox', { name: /Email/i })).toHaveValue(VALID_EMAIL);
     });
 
-    test('should allow re-advancing to Financial tab after going back to Info tab', async () => {
+    test('should allow re-advancing to Financial step after going back to Info step', async () => {
         await expect(page.getByRole('button', { name: /next/i })).toBeEnabled({ timeout: 5000 });
         await page.getByRole('button', { name: /next/i }).click();
-        await expect(page.getByRole('tab', { name: /financial/i }))
-            .toHaveAttribute('aria-selected', 'true', { timeout: 10000 });
+        await expect(page.getByRole('textbox', { name: /monthly expected number/i }))
+            .toBeVisible({ timeout: 10000 });
     });
 
     // ── Forward navigation to Verification ───────────────────────────────────
 
-    test('should advance to Verification & Uploads tab when Next is clicked with valid data', async () => {
+    test('should advance to Verification & Uploads step when Next is clicked with valid data', async () => {
         await page.getByRole('textbox', { name: /monthly expected number/i }).fill('1500');
         await page.getByRole('textbox', { name: /monthly expected sum/i }).fill('50000');
         await page.getByRole('textbox', { name: /monthly withdrawal/i }).fill('10000');
@@ -150,7 +150,7 @@ test.describe('Registration – Financial & Business Functionality', () => {
         await selectRandomOption(page, page.getByRole('combobox', { name: /industries/i }));
         await selectRandomOption(page, page.getByRole('combobox', { name: /annual income/i }));
         await page.getByRole('button', { name: /next/i }).click();
-        await expect(page.getByRole('tab', { name: /verification/i }))
-            .toHaveAttribute('aria-selected', 'true', { timeout: 10000 });
+        await expect(page.getByRole('textbox', { name: /iban/i }))
+            .toBeVisible({ timeout: 10000 });
     });
 });

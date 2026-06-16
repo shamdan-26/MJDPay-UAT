@@ -54,7 +54,8 @@ export async function goToFinancialStep(page: Page): Promise<void> {
     await page.getByRole('textbox', { name: /Email/i }).fill(VALID_EMAIL);
     await page.getByRole('button', { name: 'next' }).click();
     await page.waitForTimeout(2000);
-    await page.getByRole('tab', { name: /financial/i }).waitFor({ state: 'visible', timeout: 15000 });
+    await page.getByRole('textbox', { name: /monthly expected number/i })
+        .waitFor({ state: 'visible', timeout: 15000 });
 }
 
 export async function goToVerificationStep(page: Page): Promise<void> {
@@ -68,7 +69,8 @@ export async function goToVerificationStep(page: Page): Promise<void> {
     await selectRandomOption(page, page.getByRole('combobox', { name: /annual income/i }));
     await page.getByRole('button', { name: 'next' }).click();
     await page.waitForTimeout(2000);
-    await page.getByRole('tab', { name: /verification/i }).waitFor({ state: 'visible', timeout: 15000 });
+    await page.getByRole('textbox', { name: /iban/i })
+        .waitFor({ state: 'visible', timeout: 15000 });
 }
 
 export async function selectRandomOption(page: Page, dropdownLocator: any) {

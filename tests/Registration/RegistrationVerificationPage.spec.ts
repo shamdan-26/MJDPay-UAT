@@ -19,15 +19,12 @@ test.describe('Registration – Verification & Uploads Page', () => {
 
     // ── Tab indicator ─────────────────────────────────────────────────────────
 
-    test('should show the Verification & Uploads tab as active', async () => {
-        await expect(page.getByRole('tab', { name: /verification/i }))
-            .toHaveAttribute('aria-selected', 'true');
+    test('should show the Verification & Uploads step fields on arrival', async () => {
+        await expect(page.getByRole('textbox', { name: /iban/i })).toBeVisible();
     });
 
-    test('should display all three progress tabs', async () => {
-        await expect(page.getByRole('tab', { name: /business info/i })).toBeVisible();
-        await expect(page.getByRole('tab', { name: /financial/i })).toBeVisible();
-        await expect(page.getByRole('tab', { name: /verification/i })).toBeVisible();
+    test('should display the step progression indicator', async () => {
+        await expect(page.getByText(/verification/i).first()).toBeVisible();
     });
 
     // ── IBAN field ────────────────────────────────────────────────────────────

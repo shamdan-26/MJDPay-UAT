@@ -58,9 +58,8 @@ test.describe('Registration – Verification & Uploads Functionality', () => {
         await page.getByRole('button', { name: /sign up/i }).click({ force: true });
         const hasError = await page.locator('[class*="error"], [class*="invalid"], [role="alert"]')
             .first().isVisible().catch(() => false);
-        const stillOnTab = await page.getByRole('tab', { name: /verification/i })
-            .getAttribute('aria-selected').catch(() => 'false');
-        expect(hasError || stillOnTab === 'true').toBeTruthy();
+        const stillOnPage = await page.getByRole('textbox', { name: /iban/i }).isVisible().catch(() => false);
+        expect(hasError || stillOnPage).toBeTruthy();
     });
 
     // ── Sign Up button state ──────────────────────────────────────────────────
@@ -85,18 +84,18 @@ test.describe('Registration – Verification & Uploads Functionality', () => {
 
     // ── Back navigation ───────────────────────────────────────────────────────
 
-    test('should return to Financial & Business tab when Back is clicked', async () => {
+    test('should return to Financial & Business step when Back is clicked', async () => {
         await page.getByRole('button', { name: /back/i }).click();
-        await expect(page.getByRole('tab', { name: /financial/i }))
-            .toHaveAttribute('aria-selected', 'true', { timeout: 10000 });
+        await expect(page.getByRole('textbox', { name: /monthly expected number/i }))
+            .toBeVisible({ timeout: 10000 });
     });
 
-    test('should allow re-advancing to Verification tab after going back to Financial tab', async () => {
+    test('should allow re-advancing to Verification step after going back to Financial step', async () => {
         await selectRandomOption(page, page.getByRole('combobox', { name: /banks/i }));
         await selectRandomOption(page, page.getByRole('combobox', { name: /industries/i }));
         await selectRandomOption(page, page.getByRole('combobox', { name: /annual income/i }));
         await page.getByRole('button', { name: /next/i }).click();
-        await expect(page.getByRole('tab', { name: /verification/i }))
-            .toHaveAttribute('aria-selected', 'true', { timeout: 10000 });
+        await expect(page.getByRole('textbox', { name: /iban/i }))
+            .toBeVisible({ timeout: 10000 });
     });
 });
