@@ -34,10 +34,10 @@ const RESIDENT_ASSETS = [
     { crn: '1010627980', nationalId: '2218615066', mobile: '599000009' },
 ];
 
-// Primary defaults (first citizen row)
-export const VALID_CRN    = CITIZEN_ASSETS[0].crn;
-export const VALID_IQAMA  = CITIZEN_ASSETS[0].nationalId;
-export const VALID_MOBILE = CITIZEN_ASSETS[0].mobile;
+// Primary defaults — resident pool used for Business Info step
+export const VALID_CRN    = RESIDENT_ASSETS[0].crn;
+export const VALID_IQAMA  = RESIDENT_ASSETS[0].nationalId;
+export const VALID_MOBILE = RESIDENT_ASSETS[0].mobile;
 
 let _citizenIndex  = 0;
 let _residentIndex = 0;
@@ -86,7 +86,7 @@ export async function goToInfoStep(page: Page): Promise<void> {
 
 export async function goToFinancialStep(page: Page): Promise<void> {
     await goToInfoStep(page);
-    const asset = nextCitizenAsset();
+    const asset = nextResidentAsset();
     await page.getByRole('radiogroup', { name: 'Profile Type' }).getByRole('radio').first().click();
     await page.getByRole('textbox', { name: 'unified number' }).fill(asset.crn);
     await page.getByRole('textbox', { name: 'National ID/Iqama' }).fill(asset.nationalId);
