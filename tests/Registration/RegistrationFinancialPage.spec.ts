@@ -3,6 +3,7 @@ import { goToFinancialStep } from './helpers';
 
 test.describe('Registration – Financial & Business Page', () => {
     test.describe.configure({ mode: 'serial' });
+    test.setTimeout(120_000);
 
     let page: Page;
 
@@ -11,7 +12,7 @@ test.describe('Registration – Financial & Business Page', () => {
         await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
         page = await context.newPage();
         await goToFinancialStep(page);
-    }, 120_000);
+    });
 
     test.afterAll(async () => {
         await page.close();

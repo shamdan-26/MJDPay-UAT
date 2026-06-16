@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Page, Browser } from '@playwright/test';
 import {
     REGISTER_URL,
     generateKSAMobile,
@@ -10,7 +10,7 @@ test.describe('Registration – Info Page', () => {
 
     let page: Page;
 
-    test.beforeAll(async ({ browser }) => {
+    test.beforeAll(async ({ browser }: { browser: Browser }) => {
         const context = await browser.newContext();
         await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
         page = await context.newPage();

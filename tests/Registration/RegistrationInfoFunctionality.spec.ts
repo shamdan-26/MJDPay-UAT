@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Page, Browser } from '@playwright/test';
 import {
     REGISTER_URL,
     VALID_EMAIL,
@@ -16,7 +16,7 @@ test.describe('Registration – Info Functionality', () => {
     let crn: string;
     let iqama: string;
 
-    test.beforeAll(async ({ browser }) => {
+    test.beforeAll(async ({ browser }: { browser: Browser }) => {
         const asset = nextCitizenAsset();
         crn   = asset.crn;
         iqama = asset.nationalId;
