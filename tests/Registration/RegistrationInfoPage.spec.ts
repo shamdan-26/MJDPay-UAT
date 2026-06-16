@@ -1,41 +1,23 @@
-import { test, expect, Page, type Browser } from '@playwright/test';
-import {
-    REGISTER_URL,
-    generateKSAMobile,
-    fillOTP,
-} from './helpers';
+import { test, expect, Page, chromium, type Browser } from '@playwright/test';
+import { goToInfoStep } from './helpers';
 
 test.describe('Registration – Info Page', () => {
     test.describe.configure({ mode: 'serial' });
 
+    let browser: Browser;
     let page: Page;
 
-    test.beforeAll(async ({ browser }: { browser: Browser }) => {
+    test.beforeAll(async () => {
+        browser = await chromium.launch();
         const context = await browser.newContext();
         await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
         page = await context.newPage();
-        await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(generateKSAMobile());
-        await page.waitForTimeout(1000);
-        await page.getByRole('button', { name: 'next' }).click();
-
-        await page.waitForTimeout(5000);
-        await page.getByRole('heading', { name: 'Enter OTP' }).waitFor({ state: 'visible', timeout: 20000 });
-        await page.getByRole('textbox', { name: 'One time password input' }).first()
-            .waitFor({ state: 'visible', timeout: 10000 });
-        await fillOTP(page);
-        const verifyBtn = page.getByRole('button', { name: 'Verify' });
-        await expect(verifyBtn).toBeEnabled({ timeout: 10000 });
-        await verifyBtn.click();
-        await page.waitForTimeout(3000);
-
-        await page.getByText('Tell us about your business')
-            .waitFor({ state: 'visible', timeout: 20000 });
+        await goToInfoStep(page);
     }, 120_000);
 
     test.afterAll(async () => {
         await page.close();
+        await browser.close();
     });
 
     // ── Page content ──────────────────────────────────────────────────────────
