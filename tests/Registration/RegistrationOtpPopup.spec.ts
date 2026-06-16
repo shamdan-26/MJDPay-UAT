@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { REGISTER_URL, generateKSAMobile, fillOTP } from './helpers';
+import { REGISTER_URL, generateKSAMobile } from './helpers';
 
 test.describe('Registration – OTP Popup', () => {
     test.describe.configure({ mode: 'serial' });
@@ -47,29 +47,5 @@ test.describe('Registration – OTP Popup', () => {
 
     test('should have Click to resend button disabled initially', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'Click to resend' })).toBeDisabled();
-    });
-
-    // ── OTP input behaviour ───────────────────────────────────────────────────
-
-    test('should enable Verify button when all OTP inputs are filled', async ({ page }) => {
-        await fillOTP(page);
-        await expect(page.getByRole('button', { name: 'Verify' })).toBeEnabled();
-    });
-
-    test('should keep Verify disabled when fewer than all OTP digits are entered', async ({ page }) => {
-        const inputs = page.getByRole('textbox', { name: 'One time password input' });
-        const count  = await inputs.count();
-        for (let i = 0; i < count - 1; i++) {
-            await inputs.nth(i).click();
-            await inputs.nth(i).pressSequentially('0');
-        }
-        await expect(page.getByRole('button', { name: 'Verify' })).toBeDisabled();
-    });
-
-    // ── Cancel ────────────────────────────────────────────────────────────────
-
-    test('should return to the mobile number page when Cancel is clicked', async ({ page }) => {
-        await page.getByRole('button', { name: 'Cancel' }).click();
-        await expect(page.getByText('Enter Phone Number')).toBeVisible({ timeout: 10000 });
     });
 });

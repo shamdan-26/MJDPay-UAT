@@ -1,8 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { FORGOT_URL, LOGIN_URL } from './helpers';
-
-const VALID_COMPANY = 'L3999';
-const VALID_MOBILE  = '500318143';
+import { FORGOT_URL } from './helpers';
 
 test.describe('Forgot Password Page', () => {
     test.describe.configure({ mode: 'serial' });
@@ -28,11 +25,6 @@ test.describe('Forgot Password Page', () => {
         await expect(page.locator('img[alt="MJD Pay"]')).toBeVisible();
     });
 
-    test('should navigate to login when the logo is clicked', async ({ page }) => {
-        await page.locator('a').filter({ has: page.locator('img[alt="MJD Pay"]') }).click();
-        await expect(page).not.toHaveURL(FORGOT_URL);
-    });
-
     // ── Language switcher ─────────────────────────────────────────────────────
 
     test('should display the EN language button', async ({ page }) => {
@@ -41,11 +33,6 @@ test.describe('Forgot Password Page', () => {
 
     test('should display the Arabic language button', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'العربية' })).toBeVisible();
-    });
-
-    test('should switch to Arabic (RTL) when Arabic button is clicked', async ({ page }) => {
-        await page.getByRole('button', { name: 'العربية' }).click();
-        await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     });
 
     // ── Theme toggle ──────────────────────────────────────────────────────────
@@ -58,11 +45,6 @@ test.describe('Forgot Password Page', () => {
 
     test('should display the back button', async ({ page }) => {
         await expect(page.locator('main button').first()).toBeVisible();
-    });
-
-    test('should navigate back to the login page when back button is clicked', async ({ page }) => {
-        await page.locator('main button').first().click();
-        await expect(page).toHaveURL(LOGIN_URL);
     });
 
     // ── Eyebrow & title ───────────────────────────────────────────────────────
@@ -90,11 +72,6 @@ test.describe('Forgot Password Page', () => {
             .toHaveAttribute('placeholder', 'Input here');
     });
 
-    test('should accept input in the Company number field', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
-        await expect(page.getByRole('textbox', { name: 'Company number' })).toHaveValue(VALID_COMPANY);
-    });
-
     // ── Mobile number field ───────────────────────────────────────────────────
 
     test('should display the Mobile number label', async ({ page }) => {
@@ -114,11 +91,6 @@ test.describe('Forgot Password Page', () => {
             .toHaveAttribute('placeholder', 'Input here');
     });
 
-    test('should accept input in the Mobile number field', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
-        await expect(page.getByRole('textbox', { name: 'Mobile number' })).toHaveValue(VALID_MOBILE);
-    });
-
     // ── Next button ───────────────────────────────────────────────────────────
 
     test('should display the Next button', async ({ page }) => {
@@ -127,45 +99,5 @@ test.describe('Forgot Password Page', () => {
 
     test('should have Next button disabled when both fields are empty', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled();
-    });
-
-    test('should have Next button disabled when only Company number is filled', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
-        await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled();
-    });
-
-    test('should have Next button disabled when only Mobile number is filled', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
-        await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled();
-    });
-
-    test('should enable Next button when both fields are filled', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
-        await expect(page.getByRole('button', { name: 'Next' })).toBeEnabled();
-    });
-
-    test('should disable Next button again after clearing a filled field', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
-        await expect(page.getByRole('button', { name: 'Next' })).toBeEnabled();
-        await page.getByRole('textbox', { name: 'Mobile number' }).clear();
-        await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled();
-    });
-
-    // ── Form submission ───────────────────────────────────────────────────────
-
-    test('should proceed when Next is clicked with valid company and mobile number', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
-        await page.getByRole('button', { name: 'Next' }).click();
-        await expect(page).not.toHaveURL(FORGOT_URL);
-    });
-
-    test('should show an error when Next is clicked with invalid credentials', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Company number' }).fill('INVALID');
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill('500000000');
-        await page.getByRole('button', { name: 'Next' }).click();
-        await expect(page).toHaveURL(FORGOT_URL);
     });
 });

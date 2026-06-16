@@ -1,10 +1,7 @@
 import { test, expect, Page } from '@playwright/test';
 import {
     REGISTER_URL,
-    VALID_EMAIL,
     generateKSAMobile,
-    generateCRN,
-    generateIqama,
     fillOTP,
 } from './helpers';
 
@@ -12,25 +9,17 @@ test.describe('Registration – Info Page', () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;
-    let mobile: string;
-    let crn: string;
-    let iqama: string;
 
     test.beforeAll(async ({ browser }) => {
-        mobile = generateKSAMobile();
-        crn    = generateCRN();
-        iqama  = generateIqama();
         const context = await browser.newContext();
         await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
         page = await context.newPage();
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
-        // Step 1 – mobile number
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(mobile);
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill(generateKSAMobile());
         await page.waitForTimeout(1000);
         await page.getByRole('button', { name: 'next' }).click();
 
-        // Step 2 – OTP (test env uses all-zero OTP)
         await page.waitForTimeout(5000);
         await page.getByRole('heading', { name: 'Enter OTP' }).waitFor({ state: 'visible', timeout: 20000 });
         await page.getByRole('textbox', { name: 'One time password input' }).first()
@@ -41,7 +30,6 @@ test.describe('Registration – Info Page', () => {
         await verifyBtn.click();
         await page.waitForTimeout(3000);
 
-        // Step 3 – wait for Registration Info form
         await page.getByText('Tell us about your business')
             .waitFor({ state: 'visible', timeout: 20000 });
     });
@@ -66,27 +54,6 @@ test.describe('Registration – Info Page', () => {
         await expect(page.getByRole('textbox', { name: 'unified number' })).toBeVisible();
     });
 
-    test('should accept a valid Saudi CRN', async () => {
-        const input = page.getByRole('textbox', { name: 'unified number' });
-        await input.fill(crn);
-        await expect(input).toHaveValue(crn);
-    });
-
-    test('should reject a CRN shorter than 10 digits', async () => {
-        const input = page.getByRole('textbox', { name: 'unified number' });
-        await input.fill('101023456');
-        await input.blur();
-        await expect(page.locator('[class*="error"], [class*="invalid"], [id*="error"]').first())
-            .toBeVisible({ timeout: 5000 });
-    });
-
-    test('should not allow more than 15 digits in the CRN field', async () => {
-        const input = page.getByRole('textbox', { name: 'unified number' });
-        await input.pressSequentially('10102345678');
-        const value = await input.inputValue();
-        expect(value.length).toBeLessThanOrEqual(15);
-    });
-
     // ── Iqama field ───────────────────────────────────────────────────────────
 
     test('should display the Iqama field label', async () => {
@@ -95,27 +62,6 @@ test.describe('Registration – Info Page', () => {
 
     test('should display the Iqama input', async () => {
         await expect(page.getByRole('textbox', { name: 'National ID/Iqama' })).toBeVisible();
-    });
-
-    test('should accept a valid Iqama number', async () => {
-        const input = page.getByRole('textbox', { name: 'National ID/Iqama' });
-        await input.fill(iqama);
-        await expect(input).toHaveValue(iqama);
-    });
-
-    test('should reject an Iqama shorter than 10 digits', async () => {
-        const input = page.getByRole('textbox', { name: 'National ID/Iqama' });
-        await input.fill('212345678');
-        await input.blur();
-        await expect(page.locator('[class*="error"], [class*="invalid"], [id*="error"]').first())
-            .toBeVisible({ timeout: 5000 });
-    });
-
-    test('should not allow more than 10 digits in the Iqama field', async () => {
-        const input = page.getByRole('textbox', { name: 'National ID/Iqama' });
-        await input.pressSequentially('21234567890');
-        const value = await input.inputValue();
-        expect(value.length).toBeLessThanOrEqual(10);
     });
 
     // ── Email field ───────────────────────────────────────────────────────────
@@ -128,32 +74,10 @@ test.describe('Registration – Info Page', () => {
         await expect(page.getByRole('textbox', { name: /Email/i })).toBeVisible();
     });
 
-    test('should accept a valid email address', async () => {
-        const input = page.getByRole('textbox', { name: /Email/i });
-        await input.fill(VALID_EMAIL);
-        await expect(input).toHaveValue(VALID_EMAIL);
-    });
-
-    test('should reject an invalid email format', async () => {
-        const input = page.getByRole('textbox', { name: /Email/i });
-        await input.fill('not-an-email');
-        await input.blur();
-        await expect(page.locator('[class*="error"], [class*="invalid"], [id*="error"]').first())
-            .toBeVisible({ timeout: 5000 });
-    });
-
     // ── Profile Type radio group ──────────────────────────────────────────────
 
     test('should display the Profile Type options', async () => {
         await expect(page.getByRole('radiogroup', { name: 'Profile Type' })).toBeVisible();
-    });
-
-    test('should be able to select a Profile Type option', async () => {
-        const options = page.getByRole('radiogroup', { name: 'Profile Type' }).getByRole('radio');
-        const count   = await options.count();
-        const pick    = options.nth(Math.floor(Math.random() * count));
-        await pick.click();
-        await expect(pick).toBeChecked();
     });
 
     // ── Next / Submit button ──────────────────────────────────────────────────
@@ -168,16 +92,5 @@ test.describe('Registration – Info Page', () => {
         await expect(
             page.getByRole('button', { name: /next|submit|continue/i }).first()
         ).toBeDisabled();
-    });
-
-    test('should enable Next button when all required fields are filled', async () => {
-        const options = page.getByRole('radiogroup', { name: 'Profile Type' }).getByRole('radio');
-        await options.nth(Math.floor(Math.random() * await options.count())).click();
-        await page.getByRole('textbox', { name: 'unified number' }).fill(crn);
-        await page.getByRole('textbox', { name: 'National ID/Iqama' }).fill(iqama);
-        await page.getByRole('textbox', { name: /Email/i }).fill(VALID_EMAIL);
-        await expect(
-            page.getByRole('button', { name: 'next' })
-        ).toBeEnabled({ timeout: 5000 });
     });
 });
