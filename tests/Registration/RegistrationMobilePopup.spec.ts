@@ -6,6 +6,42 @@ const REGISTER_URL = 'https://dev.majdpay.com/business/auth/register';
 // KSA mobile: starts with 5, exactly 9 digits
 const VALID_KSA_MOBILE = '500318143';
 
+// Registration Info form test data
+// Saudi CRN: 10 digits, starts with 1
+const VALID_CRN   = '1010234567';
+// Iqama (Resident ID): 10 digits, starts with 2
+const VALID_IQAMA = '2123456789';
+const VALID_EMAIL  = 's.hamdan@dg-cash.com';
+
+// ── Shared helper: fill OTP with all-zero digit ───────────────────────────────
+
+async function fillOTP(page: any) {
+    const inputs = page.getByRole('textbox', { name: 'One time password input' });
+    const count  = await inputs.count();
+    for (let i = 0; i < count; i++) {
+        await inputs.nth(i).click();
+        await inputs.nth(i).pressSequentially('0');
+    }
+}
+
+// ── Shared helper: select a random option from any dropdown ───────────────────
+
+async function selectRandomOption(page: any, dropdownLocator: any) {
+    const tag = await dropdownLocator.evaluate((el: Element) => el.tagName.toLowerCase());
+    if (tag === 'select') {
+        const options   = await dropdownLocator.locator('option').all();
+        const selectable = options.slice(1); // skip empty placeholder
+        const pick      = selectable[Math.floor(Math.random() * selectable.length)];
+        await dropdownLocator.selectOption(await pick.getAttribute('value'));
+    } else {
+        await dropdownLocator.click();
+        const items = page.locator('[role="option"]:visible, .dropdown-item:visible, .ng-option:visible');
+        await items.first().waitFor({ state: 'visible', timeout: 5000 });
+        const count = await items.count();
+        await items.nth(Math.floor(Math.random() * count)).click();
+    }
+}
+
 test.describe('Registration – Mobile Number Page', () => {
     test.describe.configure({ mode: 'serial' });
 
@@ -125,9 +161,11 @@ test.describe('Registration – Mobile Number Page', () => {
         await expect(page.getByRole('button', { name: 'next' })).toBeDisabled();
     });
 
-    test('should reject a mobile number longer than 9 digits', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill('5003181430');
-        await expect(page.getByRole('button', { name: 'next' })).toBeDisabled();
+    test('should not allow more than 9 digits in the Mobile number field', async ({ page }) => {
+        const input = page.getByRole('textbox', { name: 'Mobile number' });
+        await input.pressSequentially('5003181430');
+        const value = await input.inputValue();
+        expect(value.length).toBeLessThanOrEqual(9);
     });
 
     // ── Log In link ───────────────────────────────────────────────────────────
@@ -206,17 +244,12 @@ test.describe('Registration – OTP Popup', () => {
 
 
     test('should enable Verify button when all OTP inputs are filled', async ({ page }) => {
-        const inputs = page.locator('[id^="ngx-otp-input"]');
-        const count = await inputs.count();
-        for (let i = 0; i < count; i++) {
-            await inputs.nth(i).click();
-            await inputs.nth(i).pressSequentially('0');
-        }
+        await fillOTP(page);
         await expect(page.getByRole('button', { name: 'Verify' })).toBeEnabled();
     });
 
     test('should keep Verify disabled when fewer than all OTP digits are entered', async ({ page }) => {
-        const inputs = page.locator('[id^="ngx-otp-input"]');
+        const inputs = page.getByRole('textbox', { name: 'One time password input' });
         const count = await inputs.count();
         for (let i = 0; i < count - 1; i++) {
             await inputs.nth(i).click();
@@ -230,5 +263,168 @@ test.describe('Registration – OTP Popup', () => {
     test('should return to the mobile number page when Cancel is clicked', async ({ page }) => {
         await page.getByRole('button', { name: 'Cancel' }).click();
         await expect(page.getByText('Enter Phone Number')).toBeVisible({ timeout: 10000 });
+    });
+});
+
+test.describe('Registration – Info Page', () => {
+    test.describe.configure({ mode: 'serial' });
+
+    test.beforeEach(async ({ page, context }) => {
+        await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
+        await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+
+        // Step 1 – mobile number
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_KSA_MOBILE);
+        await page.getByRole('button', { name: 'next' }).click();
+
+        // Step 2 – OTP (test env uses all-zero OTP)
+        await page.getByRole('heading', { name: 'Enter OTP' }).waitFor({ state: 'visible', timeout: 15000 });
+        await page.getByRole('textbox', { name: 'One time password input' }).first()
+            .waitFor({ state: 'visible', timeout: 10000 });
+        await fillOTP(page);
+        const verifyBtn = page.getByRole('button', { name: 'Verify' });
+        await expect(verifyBtn).toBeEnabled({ timeout: 10000 });
+        await verifyBtn.click();
+
+        // Step 3 – wait for Registration Info form
+        await page.getByRole('heading', { name: /Registration Info|Business Info|Create Account/i })
+            .waitFor({ state: 'visible', timeout: 20000 });
+    });
+
+    // ── Page content ──────────────────────────────────────────────────────────
+
+    test('should display the registration info form heading', async ({ page }) => {
+        await expect(
+            page.getByRole('heading', { name: /Registration Info|Business Info|Create Account/i })
+        ).toBeVisible();
+    });
+
+    // ── CRN field ─────────────────────────────────────────────────────────────
+
+    test('should display the CRN field label', async ({ page }) => {
+        await expect(page.getByText(/CRN|Commercial Registration/i).first()).toBeVisible();
+    });
+
+    test('should display the CRN input', async ({ page }) => {
+        await expect(page.getByRole('textbox', { name: /CRN|Commercial Registration/i })).toBeVisible();
+    });
+
+    test('should accept a valid Saudi CRN', async ({ page }) => {
+        const input = page.getByRole('textbox', { name: /CRN|Commercial Registration/i });
+        await input.fill(VALID_CRN);
+        await expect(input).toHaveValue(VALID_CRN);
+    });
+
+    test('should reject a CRN shorter than 10 digits', async ({ page }) => {
+        const input = page.getByRole('textbox', { name: /CRN|Commercial Registration/i });
+        await input.fill('101023456');
+        await input.blur();
+        await expect(page.locator('[class*="error"], [class*="invalid"], [id*="error"]').first())
+            .toBeVisible({ timeout: 5000 });
+    });
+
+    test('should not allow more than 10 digits in the CRN field', async ({ page }) => {
+        const input = page.getByRole('textbox', { name: /CRN|Commercial Registration/i });
+        await input.pressSequentially('10102345678');
+        const value = await input.inputValue();
+        expect(value.length).toBeLessThanOrEqual(10);
+    });
+
+    // ── Iqama field ───────────────────────────────────────────────────────────
+
+    test('should display the Iqama field label', async ({ page }) => {
+        await expect(page.getByText(/Iqama|Iqāma|Residence/i).first()).toBeVisible();
+    });
+
+    test('should display the Iqama input', async ({ page }) => {
+        await expect(page.getByRole('textbox', { name: /Iqama|Iqāma|Residence/i })).toBeVisible();
+    });
+
+    test('should accept a valid Iqama number', async ({ page }) => {
+        const input = page.getByRole('textbox', { name: /Iqama|Iqāma|Residence/i });
+        await input.fill(VALID_IQAMA);
+        await expect(input).toHaveValue(VALID_IQAMA);
+    });
+
+    test('should reject an Iqama shorter than 10 digits', async ({ page }) => {
+        const input = page.getByRole('textbox', { name: /Iqama|Iqāma|Residence/i });
+        await input.fill('212345678');
+        await input.blur();
+        await expect(page.locator('[class*="error"], [class*="invalid"], [id*="error"]').first())
+            .toBeVisible({ timeout: 5000 });
+    });
+
+    test('should not allow more than 10 digits in the Iqama field', async ({ page }) => {
+        const input = page.getByRole('textbox', { name: /Iqama|Iqāma|Residence/i });
+        await input.pressSequentially('21234567890');
+        const value = await input.inputValue();
+        expect(value.length).toBeLessThanOrEqual(10);
+    });
+
+    // ── Email field ───────────────────────────────────────────────────────────
+
+    test('should display the Email field label', async ({ page }) => {
+        await expect(page.getByText(/Email/i).first()).toBeVisible();
+    });
+
+    test('should display the Email input', async ({ page }) => {
+        await expect(page.getByRole('textbox', { name: /Email/i })).toBeVisible();
+    });
+
+    test('should accept a valid email address', async ({ page }) => {
+        const input = page.getByRole('textbox', { name: /Email/i });
+        await input.fill(VALID_EMAIL);
+        await expect(input).toHaveValue(VALID_EMAIL);
+    });
+
+    test('should reject an invalid email format', async ({ page }) => {
+        const input = page.getByRole('textbox', { name: /Email/i });
+        await input.fill('not-an-email');
+        await input.blur();
+        await expect(page.locator('[class*="error"], [class*="invalid"], [id*="error"]').first())
+            .toBeVisible({ timeout: 5000 });
+    });
+
+    // ── Profile Type dropdown ─────────────────────────────────────────────────
+
+    test('should display the Profile Type dropdown', async ({ page }) => {
+        await expect(
+            page.getByRole('combobox', { name: /Profile Type|Profile/i })
+                .or(page.locator('[id*="profile"], [name*="profile"], [placeholder*="profile" i]').first())
+        ).toBeVisible({ timeout: 5000 });
+    });
+
+    test('should be able to select a Profile Type option', async ({ page }) => {
+        const dropdown = page.getByRole('combobox', { name: /Profile Type|Profile/i })
+            .or(page.locator('[id*="profile"], [name*="profile"]').first());
+        await selectRandomOption(page, dropdown);
+        const value = await dropdown.inputValue().catch(() => dropdown.locator('..').innerText());
+        expect(value.trim().length).toBeGreaterThan(0);
+    });
+
+    // ── Next / Submit button ──────────────────────────────────────────────────
+
+    test('should display the Next button', async ({ page }) => {
+        await expect(
+            page.getByRole('button', { name: /next|submit|continue/i }).first()
+        ).toBeVisible();
+    });
+
+    test('should have the Next button disabled when required fields are empty', async ({ page }) => {
+        await expect(
+            page.getByRole('button', { name: /next|submit|continue/i }).first()
+        ).toBeDisabled();
+    });
+
+    test('should enable Next button when all required fields are filled', async ({ page }) => {
+        await page.getByRole('textbox', { name: /CRN|Commercial Registration/i }).fill(VALID_CRN);
+        await page.getByRole('textbox', { name: /Iqama|Iqāma|Residence/i }).fill(VALID_IQAMA);
+        await page.getByRole('textbox', { name: /Email/i }).fill(VALID_EMAIL);
+        const dropdown = page.getByRole('combobox', { name: /Profile Type|Profile/i })
+            .or(page.locator('[id*="profile"], [name*="profile"]').first());
+        await selectRandomOption(page, dropdown);
+        await expect(
+            page.getByRole('button', { name: /next|submit|continue/i }).first()
+        ).toBeEnabled({ timeout: 5000 });
     });
 });
