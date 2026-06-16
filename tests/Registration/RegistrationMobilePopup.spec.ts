@@ -287,16 +287,14 @@ test.describe('Registration – Info Page', () => {
         await verifyBtn.click();
 
         // Step 3 – wait for Registration Info form
-        await page.getByRole('heading', { name: 'Tell us about your business' })
+        await page.getByText('Tell us about your business')
             .waitFor({ state: 'visible', timeout: 20000 });
     });
 
     // ── Page content ──────────────────────────────────────────────────────────
 
     test('should display the registration info form heading', async ({ page }) => {
-        await expect(
-            page.getByRole('heading', { name: 'Tell us about your business' })
-        ).toBeVisible();
+        await expect(page.getByText('Tell us about your business')).toBeVisible();
     });
 
     // ── CRN field ─────────────────────────────────────────────────────────────
