@@ -92,11 +92,22 @@ export async function goToFinancialStep(page: Page): Promise<void> {
     await page.getByRole('textbox', { name: 'National ID/Iqama' }).fill(asset.nationalId);
     await page.getByRole('textbox', { name: /Email/i }).fill(VALID_EMAIL);
     await page.getByRole('button', { name: 'next' }).click();
-    // Wait for server-side CRN/Iqama validation to resolve before asserting the next step
+    // Wait for server-side validation round-trip to finish
     await page.getByRole('button', { name: 'Loading' })
-        .waitFor({ state: 'hidden', timeout: 20000 });
-    await page.getByRole('textbox', { name: /monthly expected number/i })
-        .waitFor({ state: 'visible', timeout: 15000 });
+        .waitFor({ state: 'hidden', timeout: 20000 })
+        .catch(() => {});
+    const advanced = await page.getByRole('textbox', { name: /monthly expected number/i })
+        .isVisible({ timeout: 3000 }).catch(() => false);
+    if (!advanced) {
+        const errorMsg = await page
+            .locator('[class*="error"], [role="alert"], [class*="toast"]')
+            .first().textContent().catch(() => '—');
+        throw new Error(
+            `Business Info step was rejected by the backend. ` +
+            `Error: "${errorMsg?.trim()}". CRN=${asset.crn}, ID=${asset.nationalId}. ` +
+            `Check that these values exist in the dev environment DB.`
+        );
+    }
 }
 
 export async function goToVerificationStep(page: Page): Promise<void> {
