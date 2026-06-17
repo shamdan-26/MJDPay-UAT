@@ -1,28 +1,23 @@
-﻿import { test, expect } from '@playwright/test';
-import { FORGOT_URL, SUBMIT_BUTTON } from './helpers';
+import { test, expect } from '@playwright/test';
+import {
+    SUBMIT_BUTTON,
+    mockOtpDisabled,
+    mockForgetPasswordSuccess,
+    gotoForgotPassword,
+    fillStep1AndProceed,
+} from './helpers';
 
-const VALID_COMPANY = 'L3999';
-const VALID_MOBILE  = '500318143';
-
-test.describe('Forgot Password â€“ Step 2 Page', () => {
+test.describe('Forgot Password – Step 2 Page', () => {
     test.describe.configure({ mode: 'serial' });
 
-    test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
-        await page.route('**/otp/otp-settings/**', route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ enabled: false }) })
-        );
-        await page.route('**/auth/passwords/forget', route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
-        );
-        await page.goto(FORGOT_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
-        await page.getByRole('button', { name: 'Next' }).click();
-        await page.getByRole('textbox', { name: 'New Password' }).waitFor({ state: 'visible', timeout: 15000 });
+    test.beforeEach(async ({ page }) => {
+        await mockOtpDisabled(page);
+        await mockForgetPasswordSuccess(page);
+        await gotoForgotPassword(page);
+        await fillStep1AndProceed(page);
     });
 
-    // â”€â”€ Page elements â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Page elements ─────────────────────────────────────────────────────────
 
     test('should display the New Password field', async ({ page }) => {
         await expect(page.getByRole('textbox', { name: 'New Password' })).toBeVisible();

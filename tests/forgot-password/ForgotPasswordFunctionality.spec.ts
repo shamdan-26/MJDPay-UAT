@@ -1,31 +1,32 @@
-﻿import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import {
     FORGOT_URL,
     LOGIN_URL,
     SUBMIT_BUTTON,
     VALID_PASSWORD,
+    VALID_COMPANY,
+    VALID_MOBILE,
+    mockOtpDisabled,
+    mockForgetPasswordSuccess,
+    mockForgetPasswordFailure,
+    mockAllPasswordsSuccess,
+    abortUnmockedGatewayRequests,
+    gotoForgotPassword,
+    fillStep1AndProceed,
 } from './helpers';
 
-const VALID_COMPANY = 'L3999';
-const VALID_MOBILE  = '500318143';
-
-// â”€â”€ Step 1: Credential validation & navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Step 1: Credential validation & navigation ────────────────────────────────
 
 test.describe('Forgot Password - Step 1 Functionality', () => {
     test.describe.configure({ mode: 'serial' });
 
-    test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
-        // Catch-all registered FIRST — LIFO means specific mocks below take priority,
-        // but any unmocked gateway request is aborted immediately to prevent teardown hangs.
-        await page.route('https://gateway-uat.majdpay.com/**', route => route.abort());
-        await page.route('**/otp/otp-settings/**', route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ enabled: false }) })
-        );
-        await page.route('**/auth/passwords/forget', route =>
-            route.fulfill({ status: 401, contentType: 'application/json', body: JSON.stringify({ message: 'Invalid credentials' }) })
-        );
-        await page.goto(FORGOT_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    test.beforeEach(async ({ page }) => {
+        // Catch-all registered FIRST so LIFO lets specific mocks below take priority,
+        // while unmocked gateway requests are aborted immediately to prevent teardown hangs.
+        await abortUnmockedGatewayRequests(page);
+        await mockOtpDisabled(page);
+        await mockForgetPasswordFailure(page);
+        await gotoForgotPassword(page);
     });
 
     test('should remain on the forgot-password page after submitting invalid credentials', async ({ page }) => {
@@ -52,9 +53,7 @@ test.describe('Forgot Password - Step 1 Functionality', () => {
     });
 
     test('should navigate to change-password URL when step 1 is submitted with valid credentials (mocked)', async ({ page }) => {
-        await page.route('**/auth/passwords/forget', route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
-        );
+        await mockForgetPasswordSuccess(page);
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
         await page.getByRole('button', { name: 'Next' }).click();
@@ -62,9 +61,7 @@ test.describe('Forgot Password - Step 1 Functionality', () => {
     });
 
     test('should show the New Password field after step 1 succeeds (mocked)', async ({ page }) => {
-        await page.route('**/auth/passwords/forget', route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
-        );
+        await mockForgetPasswordSuccess(page);
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
         await page.getByRole('button', { name: 'Next' }).click();
@@ -72,9 +69,7 @@ test.describe('Forgot Password - Step 1 Functionality', () => {
     });
 
     test('should show the Confirm Password field after step 1 succeeds (mocked)', async ({ page }) => {
-        await page.route('**/auth/passwords/forget', route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
-        );
+        await mockForgetPasswordSuccess(page);
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
         await page.getByRole('button', { name: 'Next' }).click();
@@ -82,21 +77,16 @@ test.describe('Forgot Password - Step 1 Functionality', () => {
     });
 });
 
-// â”€â”€ Step 2: Password validation logic â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Step 2: Password validation logic ─────────────────────────────────────────
 
 test.describe('Forgot Password - Step 2 Password Validation', () => {
     test.describe.configure({ mode: 'serial' });
 
-    test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
-        await page.route('**/auth/passwords/forget', route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
-        );
-        await page.goto(FORGOT_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
-        await page.getByRole('button', { name: 'Next' }).click();
-        await page.getByRole('textbox', { name: 'New Password' }).waitFor({ state: 'visible', timeout: 15000 });
+    test.beforeEach(async ({ page }) => {
+        await mockOtpDisabled(page);
+        await mockForgetPasswordSuccess(page);
+        await gotoForgotPassword(page);
+        await fillStep1AndProceed(page);
     });
 
     test('should display password requirements heading when typing in the New Password field', async ({ page }) => {
@@ -182,21 +172,16 @@ test.describe('Forgot Password - Step 2 Password Validation', () => {
     });
 });
 
-// â”€â”€ Step 2: Back navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Step 2: Back navigation ───────────────────────────────────────────────────
 
 test.describe('Forgot Password - Step 2 Back Navigation', () => {
     test.describe.configure({ mode: 'serial' });
 
-    test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
-        await page.route('**/auth/passwords/forget', route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
-        );
-        await page.goto(FORGOT_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
-        await page.getByRole('button', { name: 'Next' }).click();
-        await page.getByRole('textbox', { name: 'New Password' }).waitFor({ state: 'visible', timeout: 15000 });
+    test.beforeEach(async ({ page }) => {
+        await mockOtpDisabled(page);
+        await mockForgetPasswordSuccess(page);
+        await gotoForgotPassword(page);
+        await fillStep1AndProceed(page);
     });
 
     test('should navigate back to step 1 when the back button is clicked from step 2', async ({ page }) => {
@@ -216,37 +201,27 @@ test.describe('Forgot Password - Step 2 Back Navigation', () => {
     });
 });
 
-// â”€â”€ End-to-End: Complete password reset flow â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── End-to-End: Complete password reset flow ──────────────────────────────────
 
 test.describe('Forgot Password - End-to-End Flow', () => {
     test.describe.configure({ mode: 'serial' });
 
-    test('should complete the full forgot-password flow and redirect to the login page', async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
-        await page.route('**/auth/passwords/**', route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
-        );
-        await page.goto(FORGOT_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
-        await page.getByRole('button', { name: 'Next' }).click();
-        await page.getByRole('textbox', { name: 'New Password' }).waitFor({ state: 'visible', timeout: 15000 });
+    test.beforeEach(async ({ page }) => {
+        await mockOtpDisabled(page);
+        await mockForgetPasswordSuccess(page);
+        await gotoForgotPassword(page);
+        await fillStep1AndProceed(page);
+    });
+
+    test('should complete the full forgot-password flow and redirect to the login page', async ({ page }) => {
+        await mockAllPasswordsSuccess(page);
         await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
         await page.getByRole('textbox', { name: 'Confirm password' }).fill(VALID_PASSWORD);
         await page.getByRole('button', { name: SUBMIT_BUTTON }).click();
         await expect(page).toHaveURL(/login/, { timeout: 10000 });
     });
 
-    test('should not redirect to login when reset is submitted with mismatched passwords', async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
-        await page.route('**/auth/passwords/forget', route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
-        );
-        await page.goto(FORGOT_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
-        await page.getByRole('button', { name: 'Next' }).click();
-        await page.getByRole('textbox', { name: 'New Password' }).waitFor({ state: 'visible', timeout: 15000 });
+    test('should not redirect to login when reset is submitted with mismatched passwords', async ({ page }) => {
         await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
         await page.getByRole('textbox', { name: 'Confirm password' }).fill('DifferentPass#1');
         await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeDisabled();
@@ -254,26 +229,16 @@ test.describe('Forgot Password - End-to-End Flow', () => {
     });
 });
 
-// â”€â”€ Page interactions (navigation & field input) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Page interactions (navigation & field input) ──────────────────────────────
 
 test.describe('Forgot Password - Page Interactions', () => {
     test.describe.configure({ mode: 'serial' });
 
-    const PAGE_COMPANY = 'L3999';
-    const PAGE_MOBILE  = '500318143';
-
-    test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
-        await page.route('**/otp/otp-settings/**', route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ enabled: false }) })
-        );
-        await page.goto(FORGOT_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    test.beforeEach(async ({ page }) => {
+        await abortUnmockedGatewayRequests(page);
+        await mockOtpDisabled(page);
+        await gotoForgotPassword(page);
     });
-
-    /* test('should navigate to login when the logo is clicked', async ({ page }) => {
-        await page.locator('a').filter({ has: page.locator('img[alt="MJD Pay"]') }).click();
-        await expect(page).not.toHaveURL(FORGOT_URL);
-    }); */
 
     test('should switch to Arabic (RTL) when Arabic button is clicked', async ({ page }) => {
         await page.getByRole('button', { name: 'العربية' }).click();
@@ -288,45 +253,43 @@ test.describe('Forgot Password - Page Interactions', () => {
     });
 
     test('should accept input in the Company number field', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Company number' }).fill(PAGE_COMPANY);
-        await expect(page.getByRole('textbox', { name: 'Company number' })).toHaveValue(PAGE_COMPANY);
+        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
+        await expect(page.getByRole('textbox', { name: 'Company number' })).toHaveValue(VALID_COMPANY);
     });
 
     test('should accept input in the Mobile number field', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(PAGE_MOBILE);
-        await expect(page.getByRole('textbox', { name: 'Mobile number' })).toHaveValue(PAGE_MOBILE);
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
+        await expect(page.getByRole('textbox', { name: 'Mobile number' })).toHaveValue(VALID_MOBILE);
     });
 
     test('should have Next button disabled when only Company number is filled', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Company number' }).fill(PAGE_COMPANY);
+        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
         await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled();
     });
 
     test('should have Next button disabled when only Mobile number is filled', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(PAGE_MOBILE);
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
         await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled();
     });
 
     test('should enable Next button when both fields are filled', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Company number' }).fill(PAGE_COMPANY);
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(PAGE_MOBILE);
+        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
         await expect(page.getByRole('button', { name: 'Next' })).toBeEnabled();
     });
 
     test('should disable Next button again after clearing a filled field', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Company number' }).fill(PAGE_COMPANY);
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(PAGE_MOBILE);
+        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
         await expect(page.getByRole('button', { name: 'Next' })).toBeEnabled();
         await page.getByRole('textbox', { name: 'Mobile number' }).clear();
         await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled();
     });
 
     test('should proceed when Next is clicked with valid credentials', async ({ page }) => {
-        await page.route('**/auth/passwords/forget', route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
-        );
-        await page.getByRole('textbox', { name: 'Company number' }).fill(PAGE_COMPANY);
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(PAGE_MOBILE);
+        await mockForgetPasswordSuccess(page);
+        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
         await page.getByRole('button', { name: 'Next' }).click();
         await expect(page).not.toHaveURL(FORGOT_URL, { timeout: 15000 });
     });
@@ -339,21 +302,16 @@ test.describe('Forgot Password - Page Interactions', () => {
     });
 });
 
-// â”€â”€ Step 2 interactions (toggles, field input, form submission) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Step 2 interactions (toggles, field input, form submission) ───────────────
 
 test.describe('Forgot Password - Step 2 Interactions', () => {
     test.describe.configure({ mode: 'serial' });
 
-    test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
-        await page.route('**/auth/passwords/forget', route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
-        );
-        await page.goto(FORGOT_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
-        await page.getByRole('button', { name: 'Next' }).click();
-        await page.getByRole('textbox', { name: 'New Password' }).waitFor({ state: 'visible', timeout: 15000 });
+    test.beforeEach(async ({ page }) => {
+        await mockOtpDisabled(page);
+        await mockForgetPasswordSuccess(page);
+        await gotoForgotPassword(page);
+        await fillStep1AndProceed(page);
     });
 
     test('should reveal New Password when show toggle is clicked', async ({ page }) => {
@@ -397,9 +355,7 @@ test.describe('Forgot Password - Step 2 Interactions', () => {
     });
 
     test('should navigate to login page after successful password reset', async ({ page }) => {
-        await page.route('**/auth/passwords/**', route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
-        );
+        await mockAllPasswordsSuccess(page);
         await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
         await page.getByRole('textbox', { name: 'Confirm password' }).fill(VALID_PASSWORD);
         await page.getByRole('button', { name: SUBMIT_BUTTON }).click();
