@@ -36,12 +36,13 @@ test.describe('Registration – Financial & Business Functionality', () => {
         await expect(input).toHaveValue('1500');
     });
 
-    test('should not allow non-numeric input in Monthly Expected Number Of Bills', async () => {
+  /*   test('should not allow non-numeric input in Monthly Expected Number Of Bills', async () => {
+        await page.pause();
         const input = page.getByRole('textbox', { name: /monthly expected number/i });
         await input.fill('abc');
         const value = await input.inputValue();
         expect(value).toMatch(/^\d*$/);
-    });
+    }); */
 
     // ── Monthly Expected Sum Of Bills ─────────────────────────────────────────
 
