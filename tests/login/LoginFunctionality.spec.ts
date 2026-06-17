@@ -1,6 +1,7 @@
 ﻿import { test, expect } from '@playwright/test';
 import {
     LOGIN_URL,
+    SESSION_PATH,
     VALID_COMPANY,
     VALID_MOBILE,
     VALID_PASSWORD,
@@ -229,5 +230,21 @@ test.describe('Login Functionality', () => {
             await resendBtn.click();
             await expect(inputs.nth(0)).toHaveValue('');
         });
+    });
+});
+
+// ── Already authenticated (uses saved session) ────────────────────────────────
+
+test.describe('Login - Already Authenticated', () => {
+    test.use({ storageState: SESSION_PATH });
+
+    test('should redirect away from login page when already logged in', async ({ page }) => {
+        await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        await expect(page).not.toHaveURL(/auth\/login/, { timeout: 10000 });
+    });
+
+    test('should not display the Log In button when already logged in', async ({ page }) => {
+        await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        await expect(page.getByRole('button', { name: 'Log In' })).not.toBeVisible({ timeout: 10000 });
     });
 });
