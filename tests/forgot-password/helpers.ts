@@ -1,5 +1,5 @@
-export const FORGOT_URL  = 'https://dev.majdpay.com/business/auth/forgot-password';
-export const LOGIN_URL   = 'https://dev.majdpay.com/business/auth/login';
+﻿export const FORGOT_URL  = 'https://uat.majdpay.com/business/auth/forgot-password';
+export const LOGIN_URL   = 'https://uat.majdpay.com/business/auth/login';
 
 export const SUBMIT_BUTTON  = 'reset password';
 export const VALID_PASSWORD = 'Aa#1234567';

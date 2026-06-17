@@ -1,11 +1,11 @@
-import { test, expect } from '@playwright/test';
+﻿import { test, expect } from '@playwright/test';
 import { REGISTER_URL, generateKSAMobile, fillOTP } from './helpers';
 
-test.describe('Registration – OTP Functionality', () => {
+test.describe('Registration â€“ OTP Functionality', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
+        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(generateKSAMobile());
         await page.getByRole('button', { name: 'next' }).click();
@@ -13,7 +13,7 @@ test.describe('Registration – OTP Functionality', () => {
         await page.getByRole('heading', { name: 'Enter OTP' }).waitFor({ state: 'visible', timeout: 20000 });
     });
 
-    // ── OTP input behaviour ───────────────────────────────────────────────────
+    // â”€â”€ OTP input behaviour â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should enable Verify button when all OTP inputs are filled', async ({ page }) => {
         await fillOTP(page);
@@ -30,7 +30,7 @@ test.describe('Registration – OTP Functionality', () => {
         await expect(page.getByRole('button', { name: 'Verify' })).toBeDisabled();
     });
 
-    // ── Cancel ────────────────────────────────────────────────────────────────
+    // â”€â”€ Cancel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should return to the mobile number page when Cancel is clicked', async ({ page }) => {
         await page.getByRole('button', { name: 'Cancel' }).click();

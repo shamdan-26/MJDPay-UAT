@@ -1,14 +1,17 @@
-import { test, expect } from '@playwright/test';
+﻿import { test, expect } from '@playwright/test';
 import { FORGOT_URL, SUBMIT_BUTTON } from './helpers';
 
 const VALID_COMPANY = 'L3999';
 const VALID_MOBILE  = '500318143';
 
-test.describe('Forgot Password – Step 2 Page', () => {
+test.describe('Forgot Password â€“ Step 2 Page', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
+        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+        await page.route('**/otp/otp-settings/**', route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ enabled: false }) })
+        );
         await page.route('**/auth/passwords/forget', route =>
             route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
         );
@@ -19,7 +22,7 @@ test.describe('Forgot Password – Step 2 Page', () => {
         await page.getByRole('textbox', { name: 'New Password' }).waitFor({ state: 'visible', timeout: 15000 });
     });
 
-    // ── Page elements ─────────────────────────────────────────────────────────
+    // â”€â”€ Page elements â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the New Password field', async ({ page }) => {
         await expect(page.getByRole('textbox', { name: 'New Password' })).toBeVisible();

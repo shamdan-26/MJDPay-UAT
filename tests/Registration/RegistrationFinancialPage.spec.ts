@@ -1,7 +1,7 @@
-import { test, expect, Page } from '@playwright/test';
+﻿import { test, expect, Page } from '@playwright/test';
 import { goToFinancialStep } from './helpers';
 
-test.describe('Registration – Financial & Business Page', () => {
+test.describe('Registration â€“ Financial & Business Page', () => {
     test.describe.configure({ mode: 'serial' });
     test.setTimeout(120_000);
 
@@ -9,7 +9,7 @@ test.describe('Registration – Financial & Business Page', () => {
 
     test.beforeAll(async ({ browser }) => {
         const context = await browser.newContext();
-        await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
+        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
         page = await context.newPage();
         await goToFinancialStep(page, {
             mobile:      '508698531',
@@ -23,7 +23,7 @@ test.describe('Registration – Financial & Business Page', () => {
         await page.close();
     });
 
-    // ── Tab indicator ─────────────────────────────────────────────────────────
+    // â”€â”€ Tab indicator â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should show the Financial & Business step fields on arrival', async () => {
         await expect(page.getByRole('textbox', { name: /monthly expected number/i })).toBeVisible();
@@ -36,7 +36,7 @@ test.describe('Registration – Financial & Business Page', () => {
         await expect(page.getByText(/contract/i).first()).toBeVisible();
     });
 
-    // ── Monthly Expected Number Of Bills ──────────────────────────────────────
+    // â”€â”€ Monthly Expected Number Of Bills â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the Monthly Expected Number Of Bills label', async () => {
         await expect(page.getByText(/monthly expected number of bills/i).first()).toBeVisible();
@@ -51,7 +51,7 @@ test.describe('Registration – Financial & Business Page', () => {
             .toHaveAttribute('placeholder', /2000/i);
     });
 
-    // ── Monthly Expected Sum Of Bills ─────────────────────────────────────────
+    // â”€â”€ Monthly Expected Sum Of Bills â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the Monthly Expected Sum Of Bills label', async () => {
         await expect(page.getByText(/monthly expected sum of bills/i).first()).toBeVisible();
@@ -66,7 +66,7 @@ test.describe('Registration – Financial & Business Page', () => {
             .toHaveAttribute('placeholder', /2000/i);
     });
 
-    // ── Expected Monthly Withdrawal ───────────────────────────────────────────
+    // â”€â”€ Expected Monthly Withdrawal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the Expected Monthly Withdrawal label', async () => {
         await expect(page.getByText(/expected monthly withdrawal/i).first()).toBeVisible();
@@ -81,7 +81,7 @@ test.describe('Registration – Financial & Business Page', () => {
             .toHaveAttribute('placeholder', /2000/i);
     });
 
-    // ── Expected Monthly Deposit ──────────────────────────────────────────────
+    // â”€â”€ Expected Monthly Deposit â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the Expected Monthly Deposit label', async () => {
         await expect(page.getByText(/expected monthly deposit/i).first()).toBeVisible();
@@ -96,7 +96,7 @@ test.describe('Registration – Financial & Business Page', () => {
             .toHaveAttribute('placeholder', /2000/i);
     });
 
-    // ── Banks dropdown ────────────────────────────────────────────────────────
+    // â”€â”€ Banks dropdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the Banks dropdown label', async () => {
         await expect(page.getByText(/banks/i).first()).toBeVisible();
@@ -106,7 +106,7 @@ test.describe('Registration – Financial & Business Page', () => {
         await expect(page.getByRole('combobox', { name: /banks/i })).toBeVisible();
     }); */
 
-    // ── Industries dropdown ───────────────────────────────────────────────────
+    // â”€â”€ Industries dropdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the Industries dropdown label', async () => {
         await expect(page.getByText(/industries/i).first()).toBeVisible();
@@ -116,7 +116,7 @@ test.describe('Registration – Financial & Business Page', () => {
             await expect(page.getByRole('combobox', { name: /industries/i })).toBeVisible();
         }); */
 
-    // ── Annual Income dropdown ────────────────────────────────────────────────
+    // â”€â”€ Annual Income dropdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the Annual Income dropdown label', async () => {
         await expect(page.getByText(/annual income/i).first()).toBeVisible();
@@ -126,7 +126,7 @@ test.describe('Registration – Financial & Business Page', () => {
         await expect(page.getByRole('combobox', { name: /annual income/i })).toBeVisible();
     }); */
 
-    // ── Navigation buttons ────────────────────────────────────────────────────
+    // â”€â”€ Navigation buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the Back button', async () => {
         await expect(page.getByRole('button', { name: /back/i })).toBeVisible();

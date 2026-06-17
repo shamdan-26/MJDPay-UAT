@@ -1,4 +1,4 @@
-import { test, expect, Page, Browser, chromium } from '@playwright/test';
+﻿import { test, expect, Page, Browser, chromium } from '@playwright/test';
 import {
     REGISTER_URL,
     VALID_EMAIL,
@@ -9,7 +9,7 @@ import {
     nextCitizenAsset,
 } from './helpers';
 
-test.describe('Registration – Info Functionality', () => {
+test.describe('Registration â€“ Info Functionality', () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;
@@ -23,7 +23,7 @@ test.describe('Registration – Info Functionality', () => {
         iqama = asset.nationalId;
         _browser = await chromium.launch();
         _context = await _browser.newContext();
-        await _context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
+        await _context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
         page = await _context.newPage();
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
@@ -51,7 +51,7 @@ test.describe('Registration – Info Functionality', () => {
         if (_browser) await _browser.close();
     });
 
-    // ── CRN field ─────────────────────────────────────────────────────────────
+    // â”€â”€ CRN field â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should accept a valid Saudi CRN', async () => {
         const input = page.getByRole('textbox', { name: 'unified number' });
@@ -74,7 +74,7 @@ test.describe('Registration – Info Functionality', () => {
         expect(value.length).toBeLessThanOrEqual(15);
     });
 
-    // ── Iqama field ───────────────────────────────────────────────────────────
+    // â”€â”€ Iqama field â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should accept a valid Iqama number', async () => {
         const input = page.getByRole('textbox', { name: 'National ID/Iqama' });
@@ -97,7 +97,7 @@ test.describe('Registration – Info Functionality', () => {
         expect(value.length).toBeLessThanOrEqual(10);
     });
 
-    // ── Email field ───────────────────────────────────────────────────────────
+    // â”€â”€ Email field â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should accept a valid email address', async () => {
         const input = page.getByRole('textbox', { name: /Email/i });
@@ -113,7 +113,7 @@ test.describe('Registration – Info Functionality', () => {
             .toBeVisible({ timeout: 5000 });
     });
 
-    // ── Profile Type radio group ──────────────────────────────────────────────
+    // â”€â”€ Profile Type radio group â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should be able to select a Profile Type option', async () => {
         const options = page.getByRole('radiogroup', { name: 'Profile Type' }).getByRole('radio');
@@ -123,7 +123,7 @@ test.describe('Registration – Info Functionality', () => {
         await expect(pick).toBeChecked();
     });
 
-    // ── Next / Submit button ──────────────────────────────────────────────────
+    // â”€â”€ Next / Submit button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should enable Next button when all required fields are filled', async () => {
         const options = page.getByRole('radiogroup', { name: 'Profile Type' }).getByRole('radio');

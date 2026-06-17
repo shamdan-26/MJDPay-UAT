@@ -1,14 +1,14 @@
-import { test, expect, Page } from '@playwright/test';
+﻿import { test, expect, Page } from '@playwright/test';
 import { goToVerificationStep, selectRandomOption } from './helpers';
 
-test.describe('Registration – Verification & Uploads Functionality', () => {
+test.describe('Registration â€“ Verification & Uploads Functionality', () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;
 
     test.beforeAll(async ({ browser }) => {
         const context = await browser.newContext();
-        await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
+        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
         page = await context.newPage();
         await goToVerificationStep(page);
     }, 120_000);
@@ -17,7 +17,7 @@ test.describe('Registration – Verification & Uploads Functionality', () => {
         await page.close();
     });
 
-    // ── IBAN field ────────────────────────────────────────────────────────────
+    // â”€â”€ IBAN field â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should accept a valid 24-character SA IBAN', async () => {
         const input = page.getByRole('textbox', { name: /iban/i });
@@ -45,7 +45,7 @@ test.describe('Registration – Verification & Uploads Functionality', () => {
         expect(hasError || stillOnPage).toBeTruthy();
     });
 
-    // ── VAT Number field ──────────────────────────────────────────────────────
+    // â”€â”€ VAT Number field â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should accept a valid VAT number', async () => {
         const input = page.getByRole('textbox', { name: /vat number/i });
@@ -62,7 +62,7 @@ test.describe('Registration – Verification & Uploads Functionality', () => {
         expect(hasError || stillOnPage).toBeTruthy();
     });
 
-    // ── Sign Up button state ──────────────────────────────────────────────────
+    // â”€â”€ Sign Up button state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should keep Sign Up disabled when IBAN is missing', async () => {
         await page.getByRole('textbox', { name: /iban/i }).clear();
@@ -82,7 +82,7 @@ test.describe('Registration – Verification & Uploads Functionality', () => {
         await expect(page.getByRole('button', { name: /sign up/i })).toBeEnabled({ timeout: 5000 });
     });
 
-    // ── Back navigation ───────────────────────────────────────────────────────
+    // â”€â”€ Back navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should return to Financial & Business step when Back is clicked', async () => {
         await page.getByRole('button', { name: /back/i }).click();

@@ -1,11 +1,11 @@
-import { test, expect } from '@playwright/test';
+﻿import { test, expect } from '@playwright/test';
 import { REGISTER_URL, generateKSAMobile } from './helpers';
 
-test.describe('Registration – OTP Popup', () => {
+test.describe('Registration â€“ OTP Popup', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
+        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(generateKSAMobile());
         await page.getByRole('button', { name: 'next' }).click();
@@ -13,7 +13,7 @@ test.describe('Registration – OTP Popup', () => {
         await page.getByRole('heading', { name: 'Enter OTP' }).waitFor({ state: 'visible', timeout: 20000 });
     });
 
-    // ── OTP popup content ─────────────────────────────────────────────────────
+    // â”€â”€ OTP popup content â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the Enter OTP heading', async ({ page }) => {
         await expect(page.getByRole('heading', { name: 'Enter OTP' })).toBeVisible();
@@ -27,7 +27,7 @@ test.describe('Registration – OTP Popup', () => {
         await expect(page.getByText(/Code ends/)).toBeVisible();
     });
 
-    // ── Buttons ───────────────────────────────────────────────────────────────
+    // â”€â”€ Buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the Cancel button', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'Cancel' })).toBeVisible();

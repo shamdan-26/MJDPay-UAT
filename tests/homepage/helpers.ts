@@ -1,15 +1,15 @@
-import { Page } from '@playwright/test';
+﻿import { Page } from '@playwright/test';
 
-export const LOGIN_URL   = 'https://dev.majdpay.com/business/auth/login';
-export const HOME_URL    = 'https://dev.majdpay.com/business/home';
-export const BASE_ORIGIN = 'https://dev.majdpay.com';
+export const LOGIN_URL   = 'https://uat.majdpay.com/business/auth/login';
+export const HOME_URL    = 'https://uat.majdpay.com/business/home';
+export const BASE_ORIGIN = 'https://uat.majdpay.com';
 
 export const VALID_COMPANY  = 'A2316';
 export const VALID_MOBILE   = '500021788';
 export const VALID_PASSWORD = 'Aa#1234567';
 export const VALID_OTP      = '0000'; // static OTP for dev environment
 
-/** Full login flow: credentials → OTP → home page. */
+/** Full login flow: credentials â†’ OTP â†’ home page. */
 export async function loginAsMerchant(page: Page): Promise<void> {
     await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);

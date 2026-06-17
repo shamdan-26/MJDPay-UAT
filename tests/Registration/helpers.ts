@@ -1,7 +1,7 @@
-import { Page, expect } from '@playwright/test';
+﻿import { Page, expect } from '@playwright/test';
 
-export const LOGIN_URL    = 'https://dev.majdpay.com/business/auth/login';
-export const REGISTER_URL = 'https://dev.majdpay.com/business/auth/register';
+export const LOGIN_URL    = 'https://uat.majdpay.com/business/auth/login';
+export const REGISTER_URL = 'https://uat.majdpay.com/business/auth/register';
 
 export const VALID_EMAIL = 's.hamdan@dg-cash.com';
 
@@ -10,7 +10,7 @@ export function generateEmail(): string {
     return `test+${Date.now()}@dg-cash.com`;
 }
 
-// ── Pre-generated test assets (from Assets.xlsx) ──────────────────────────────
+// â”€â”€ Pre-generated test assets (from Assets.xlsx) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Citizen_IDs sheet: Saudi_CRN | Citizen_ID | Saudi_Mobile (strip leading 966)
 const CITIZEN_ASSETS = [
     { crn: '1010006068', nationalId: '1497430312', mobile: '500021788' },
@@ -39,7 +39,7 @@ const RESIDENT_ASSETS = [
     { crn: '1010627980', nationalId: '2218615066', mobile: '599000009' },
 ];
 
-// Primary defaults — resident pool used for Business Info step
+// Primary defaults â€” resident pool used for Business Info step
 export const VALID_CRN    = RESIDENT_ASSETS[0].crn;
 export const VALID_IQAMA  = RESIDENT_ASSETS[0].nationalId;
 export const VALID_MOBILE = RESIDENT_ASSETS[0].mobile;
@@ -127,7 +127,7 @@ export async function goToFinancialStep(page: Page, credentials?: FinancialStepC
     const advanced = await page.getByRole('textbox', { name: /monthly expected number/i })
         .isVisible({ timeout: 3000 }).catch(() => false);
     if (!advanced) {
-        const errorMsg = await page.evaluate(() => document.body.innerText).catch(() => '—');
+        const errorMsg = await page.evaluate(() => document.body.innerText).catch(() => 'â€”');
         throw new Error(
             `Business Info step was rejected by the backend.\n` +
             `CRN=${crn}, ID=${nationalId}, Mobile=${mobile}.\n` +

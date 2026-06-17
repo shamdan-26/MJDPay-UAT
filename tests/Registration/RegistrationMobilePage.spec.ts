@@ -1,15 +1,15 @@
-import { test, expect } from '@playwright/test';
+﻿import { test, expect } from '@playwright/test';
 import { REGISTER_URL } from './helpers';
 
-test.describe('Registration – Mobile Number Page', () => {
+test.describe('Registration â€“ Mobile Number Page', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
+        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     });
 
-    // ── Page load ─────────────────────────────────────────────────────────────
+    // â”€â”€ Page load â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should open the Registration URL', async ({ page }) => {
         await expect(page).toHaveURL(REGISTER_URL);
@@ -19,29 +19,29 @@ test.describe('Registration – Mobile Number Page', () => {
         await expect(page).toHaveTitle('EMI - Business');
     });
 
-    // ── Logo ──────────────────────────────────────────────────────────────────
+    // â”€â”€ Logo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the MJD Pay logo', async ({ page }) => {
         await expect(page.locator('img[alt="MJD Pay"]')).toBeVisible();
     });
 
-    // ── Language switcher ─────────────────────────────────────────────────────
+    // â”€â”€ Language switcher â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the EN language button', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'EN' })).toBeVisible();
     });
 
     test('should display the Arabic language button', async ({ page }) => {
-        await expect(page.getByRole('button', { name: 'العربية' })).toBeVisible();
+        await expect(page.getByRole('button', { name: 'Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©' })).toBeVisible();
     });
 
-    // ── Theme toggle ──────────────────────────────────────────────────────────
+    // â”€â”€ Theme toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the theme toggle button', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'Switch theme' })).toBeVisible();
     });
 
-    // ── Page content ──────────────────────────────────────────────────────────
+    // â”€â”€ Page content â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the "Create Account" eyebrow text', async ({ page }) => {
         await expect(page.getByText('Create Account')).toBeVisible();
@@ -55,7 +55,7 @@ test.describe('Registration – Mobile Number Page', () => {
         await expect(page.getByText('Start your business registration')).toBeVisible();
     });
 
-    // ── Mobile number field ───────────────────────────────────────────────────
+    // â”€â”€ Mobile number field â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the Mobile Number label', async ({ page }) => {
         await expect(page.getByText('Mobile number')).toBeVisible();
@@ -70,7 +70,7 @@ test.describe('Registration – Mobile Number Page', () => {
             .toHaveAttribute('placeholder', 'Eg. 522284484');
     });
 
-    // ── Next button ───────────────────────────────────────────────────────────
+    // â”€â”€ Next button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the Next button', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'next' })).toBeVisible();
@@ -80,7 +80,7 @@ test.describe('Registration – Mobile Number Page', () => {
         await expect(page.getByRole('button', { name: 'next' })).toBeDisabled();
     });
 
-    // ── Log In link ───────────────────────────────────────────────────────────
+    // â”€â”€ Log In link â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     test('should display the "Already have an account?" text', async ({ page }) => {
         await expect(page.getByText('Already have an account?')).toBeVisible();

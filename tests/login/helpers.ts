@@ -1,4 +1,4 @@
-export const LOGIN_URL = 'https://dev.majdpay.com/business/auth/login';
+﻿export const LOGIN_URL = 'https://uat.majdpay.com/business/auth/login';
 
 export const VALID_COMPANY  = 'A2316';
 export const VALID_MOBILE   = '500021788';
