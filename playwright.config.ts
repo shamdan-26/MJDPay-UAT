@@ -72,7 +72,13 @@ export default defineConfig({
     /* Test against branded browsers. */
      {
        name: 'Microsoft Edge',
-       use: { headless: false, ...devices['Desktop Edge'], channel: 'msedge' },
+       use: {
+         headless: false,
+         ...devices['Desktop Edge'],
+         channel: 'msedge',
+         launchOptions: { args: ['--start-maximized'] },
+         viewport: null,
+       },
     },
     // {
     //   name: 'Google Chrome',
