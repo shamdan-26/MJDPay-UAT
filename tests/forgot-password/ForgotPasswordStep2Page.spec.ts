@@ -19,6 +19,14 @@ test.describe('Forgot Password – Step 2 Page', () => {
 
     // ── Page elements ─────────────────────────────────────────────────────────
 
+    test('should display the "Forgot password" heading on step 2', async ({ page }) => {
+        await expect(page.getByText('Forgot password')).toBeVisible();
+    });
+
+    test('should display the back button on step 2', async ({ page }) => {
+        await expect(page.locator('main button').first()).toBeVisible();
+    });
+
     test('should display the New Password field', async ({ page }) => {
         await expect(page.getByRole('textbox', { name: 'New Password' })).toBeVisible();
     });

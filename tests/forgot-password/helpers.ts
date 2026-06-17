@@ -50,6 +50,7 @@ export async function abortUnmockedGatewayRequests(page: Page): Promise<void> {
 
 export async function gotoForgotPassword(page: Page): Promise<void> {
     await page.goto(FORGOT_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await page.pause();
 }
 
 export async function fillStep1AndProceed(page: Page): Promise<void> {

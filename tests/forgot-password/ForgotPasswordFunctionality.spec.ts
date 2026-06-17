@@ -52,6 +52,14 @@ test.describe('Forgot Password - Step 1 Functionality', () => {
         await expect(page.getByRole('textbox', { name: 'Company number' })).toHaveValue('INVALID');
     });
 
+    test('should keep Mobile number field value after failed submission', async ({ page }) => {
+        await page.getByRole('textbox', { name: 'Company number' }).fill('INVALID');
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill('500000000');
+        await page.getByRole('button', { name: 'Next' }).click();
+        await expect(page).toHaveURL(FORGOT_URL, { timeout: 10000 });
+        await expect(page.getByRole('textbox', { name: 'Mobile number' })).toHaveValue('500000000');
+    });
+
     test('should navigate to change-password URL when step 1 is submitted with valid credentials (mocked)', async ({ page }) => {
         await mockForgetPasswordSuccess(page);
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
@@ -140,6 +148,12 @@ test.describe('Forgot Password - Step 2 Password Validation', () => {
         await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeDisabled();
     });
 
+    test('should keep submit disabled when password contains spaces', async ({ page }) => {
+        await page.getByRole('textbox', { name: 'New Password' }).fill('Aa#1234 67');
+        await page.getByRole('textbox', { name: 'Confirm password' }).fill('Aa#1234 67');
+        await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeDisabled();
+    });
+
     test('should keep submit disabled when passwords do not match', async ({ page }) => {
         await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
         await page.getByRole('textbox', { name: 'Confirm password' }).fill('DifferentPass#1');
@@ -199,6 +213,12 @@ test.describe('Forgot Password - Step 2 Back Navigation', () => {
         await page.locator('main button').first().click();
         await expect(page.getByRole('button', { name: 'Next' })).toBeVisible({ timeout: 10000 });
     });
+
+    test('should preserve Company and Mobile number values when navigating back to step 1', async ({ page }) => {
+        await page.locator('main button').first().click();
+        await expect(page.getByRole('textbox', { name: 'Company number' })).toHaveValue(VALID_COMPANY, { timeout: 10000 });
+        await expect(page.getByRole('textbox', { name: 'Mobile number' })).toHaveValue(VALID_MOBILE, { timeout: 10000 });
+    });
 });
 
 // ── End-to-End: Complete password reset flow ──────────────────────────────────
@@ -227,6 +247,18 @@ test.describe('Forgot Password - End-to-End Flow', () => {
         await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeDisabled();
         await expect(page).not.toHaveURL(/login/);
     });
+
+    test('should display an error and remain on the page when the reset API fails', async ({ page }) => {
+        await page.route('**/auth/passwords/**', route =>
+            route.fulfill({ status: 500, contentType: 'application/json', body: JSON.stringify({ message: 'Server error' }) })
+        );
+        await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
+        await page.getByRole('textbox', { name: 'Confirm password' }).fill(VALID_PASSWORD);
+        await page.getByRole('button', { name: SUBMIT_BUTTON }).click();
+        await expect(page).not.toHaveURL(/login/, { timeout: 10000 });
+        const errorIndicator = page.locator('[role="alert"], [class*="error"], [class*="toast"], [class*="notification"]').first();
+        await expect(errorIndicator).toBeVisible({ timeout: 10000 });
+    });
 });
 
 // ── Page interactions (navigation & field input) ──────────────────────────────
@@ -245,6 +277,15 @@ test.describe('Forgot Password - Page Interactions', () => {
         await page.waitForLoadState('domcontentloaded');
         await page.getByRole('button', { name: 'العربية' }).waitFor({ state: 'visible', timeout: 15000 });
         await expect(page.getByRole('button', { name: 'العربية' })).toHaveAttribute('aria-pressed', 'true', { timeout: 10000 });
+    });
+
+    test('should switch back to English when EN button is clicked after Arabic', async ({ page }) => {
+        await page.getByRole('button', { name: 'العربية' }).click();
+        await page.getByRole('button', { name: 'العربية' }).waitFor({ state: 'visible', timeout: 15000 });
+        await expect(page.getByRole('button', { name: 'العربية' })).toHaveAttribute('aria-pressed', 'true', { timeout: 10000 });
+        await page.getByRole('button', { name: 'EN' }).click();
+        await page.getByRole('button', { name: 'EN' }).waitFor({ state: 'visible', timeout: 15000 });
+        await expect(page.getByRole('button', { name: 'EN' })).toHaveAttribute('aria-pressed', 'true', { timeout: 10000 });
     });
 
     test('should navigate back to the login page when back button is clicked', async ({ page }) => {
@@ -278,11 +319,19 @@ test.describe('Forgot Password - Page Interactions', () => {
         await expect(page.getByRole('button', { name: 'Next' })).toBeEnabled();
     });
 
-    test('should disable Next button again after clearing a filled field', async ({ page }) => {
+    test('should disable Next button again after clearing the Mobile number field', async ({ page }) => {
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
         await expect(page.getByRole('button', { name: 'Next' })).toBeEnabled();
         await page.getByRole('textbox', { name: 'Mobile number' }).clear();
+        await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled();
+    });
+
+    test('should disable Next button again after clearing the Company number field', async ({ page }) => {
+        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
+        await expect(page.getByRole('button', { name: 'Next' })).toBeEnabled();
+        await page.getByRole('textbox', { name: 'Company number' }).clear();
         await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled();
     });
 
@@ -321,11 +370,29 @@ test.describe('Forgot Password - Step 2 Interactions', () => {
         await expect(newPassInput).toHaveAttribute('type', 'text');
     });
 
+    test('should re-mask New Password when hide toggle is clicked after revealing', async ({ page }) => {
+        const newPassInput = page.getByRole('textbox', { name: 'New Password' });
+        await newPassInput.fill(VALID_PASSWORD);
+        await page.getByRole('button', { name: 'Show password' }).first().click();
+        await expect(newPassInput).toHaveAttribute('type', 'text');
+        await page.getByRole('button', { name: 'Hide password' }).first().click();
+        await expect(newPassInput).toHaveAttribute('type', 'password');
+    });
+
     test('should reveal Confirm Password when show toggle is clicked', async ({ page }) => {
         const confirmInput = page.getByRole('textbox', { name: 'Confirm password' });
         await confirmInput.fill(VALID_PASSWORD);
         await page.getByRole('button', { name: 'Show password' }).nth(1).click();
         await expect(confirmInput).toHaveAttribute('type', 'text');
+    });
+
+    test('should re-mask Confirm Password when hide toggle is clicked after revealing', async ({ page }) => {
+        const confirmInput = page.getByRole('textbox', { name: 'Confirm password' });
+        await confirmInput.fill(VALID_PASSWORD);
+        await page.getByRole('button', { name: 'Show password' }).nth(1).click();
+        await expect(confirmInput).toHaveAttribute('type', 'text');
+        await page.getByRole('button', { name: 'Hide password' }).nth(1).click();
+        await expect(confirmInput).toHaveAttribute('type', 'password');
     });
 
     test('should keep submit disabled when only New Password is filled', async ({ page }) => {

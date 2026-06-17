@@ -64,6 +64,13 @@ test.describe('Forgot Password - OTP Verification Flow', () => {
         await expect(input).toHaveValue('');
     });
 
+    test('should auto-advance focus to the next OTP input when a digit is entered', async ({ page }) => {
+        const inputs = page.locator(MODAL_SELECTOR).locator('input');
+        await inputs.nth(0).click();
+        await inputs.nth(0).press('1');
+        await expect(inputs.nth(1)).toBeFocused({ timeout: 3000 });
+    });
+
     // ── OTP submission ────────────────────────────────────────────────────────
 
     test('should remain on OTP dialog after submitting wrong OTP', async ({ page }) => {
@@ -71,6 +78,14 @@ test.describe('Forgot Password - OTP Verification Flow', () => {
         for (let i = 0; i < 4; i++) await inputs.nth(i).fill(INVALID_OTP[i]);
         await page.locator(MODAL_SELECTOR).getByRole('button', { name: 'Confirm' }).click();
         await expect(page.locator(MODAL_SELECTOR)).toBeVisible();
+    });
+
+    test('should display an error message after submitting wrong OTP', async ({ page }) => {
+        const inputs = page.locator(MODAL_SELECTOR).locator('input');
+        for (let i = 0; i < 4; i++) await inputs.nth(i).fill(INVALID_OTP[i]);
+        await page.locator(MODAL_SELECTOR).getByRole('button', { name: 'Confirm' }).click();
+        const errorIndicator = page.locator(MODAL_SELECTOR).locator('[role="alert"], [class*="error"], [class*="invalid"]').first();
+        await expect(errorIndicator).toBeVisible({ timeout: 5000 });
     });
 
     test('should reset password successfully with correct OTP and redirect to login', async ({ page }) => {
