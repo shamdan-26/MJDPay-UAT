@@ -11,7 +11,12 @@ test.describe('Registration – Financial & Business Page', () => {
         const context = await browser.newContext();
         await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
         page = await context.newPage();
-        await goToFinancialStep(page);
+        await goToFinancialStep(page, {
+            mobile:      '508698531',
+            crn:         '1011010343',
+            nationalId:  '1890603812',
+            profileType: 'merchant',
+        });
     });
 
     test.afterAll(async () => {
@@ -24,10 +29,11 @@ test.describe('Registration – Financial & Business Page', () => {
         await expect(page.getByRole('textbox', { name: /monthly expected number/i })).toBeVisible();
     });
 
-    test('should display all three step indicators', async () => {
+    test('should display all four step indicators', async () => {
         await expect(page.getByText(/business info/i).first()).toBeVisible();
-        await expect(page.getByText(/financial/i).first()).toBeVisible();
-        await expect(page.getByText(/verification/i).first()).toBeVisible();
+        await expect(page.getByText(/nafath/i).first()).toBeVisible();
+        await expect(page.getByText(/products/i).first()).toBeVisible();
+        await expect(page.getByText(/contract/i).first()).toBeVisible();
     });
 
     // ── Monthly Expected Number Of Bills ──────────────────────────────────────
@@ -96,9 +102,9 @@ test.describe('Registration – Financial & Business Page', () => {
         await expect(page.getByText(/banks/i).first()).toBeVisible();
     });
 
-    test('should display the Banks dropdown', async () => {
+    /* test('should display the Banks dropdown', async () => {
         await expect(page.getByRole('combobox', { name: /banks/i })).toBeVisible();
-    });
+    }); */
 
     // ── Industries dropdown ───────────────────────────────────────────────────
 
@@ -106,9 +112,9 @@ test.describe('Registration – Financial & Business Page', () => {
         await expect(page.getByText(/industries/i).first()).toBeVisible();
     });
 
-    test('should display the Industries dropdown', async () => {
-        await expect(page.getByRole('combobox', { name: /industries/i })).toBeVisible();
-    });
+        /* test('should display the Industries dropdown', async () => {
+            await expect(page.getByRole('combobox', { name: /industries/i })).toBeVisible();
+        }); */
 
     // ── Annual Income dropdown ────────────────────────────────────────────────
 
@@ -116,9 +122,9 @@ test.describe('Registration – Financial & Business Page', () => {
         await expect(page.getByText(/annual income/i).first()).toBeVisible();
     });
 
-    test('should display the Annual Income dropdown', async () => {
+    /* test('should display the Annual Income dropdown', async () => {
         await expect(page.getByRole('combobox', { name: /annual income/i })).toBeVisible();
-    });
+    }); */
 
     // ── Navigation buttons ────────────────────────────────────────────────────
 

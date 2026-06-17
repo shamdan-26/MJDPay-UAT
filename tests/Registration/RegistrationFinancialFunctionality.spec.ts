@@ -16,7 +16,12 @@ test.describe('Registration – Financial & Business Functionality', () => {
         const context = await browser.newContext();
         await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
         page = await context.newPage();
-        await goToFinancialStep(page);
+        await goToFinancialStep(page, {
+            mobile:      '508698531',
+            crn:         '1011010343',
+            nationalId:  '1890603812',
+            profileType: 'merchant',
+        });
     }, 120_000);
 
     test.afterAll(async () => {

@@ -89,12 +89,36 @@ export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
     await page.getByText('Tell us about your business').waitFor({ state: 'visible', timeout: 20000 });
 }
 
-export async function goToFinancialStep(page: Page): Promise<void> {
+export interface FinancialStepCredentials {
+    mobile?: string;
+    crn?: string;
+    nationalId?: string;
+    profileType?: 'individual' | 'merchant';
+}
+
+export async function goToFinancialStep(page: Page, credentials?: FinancialStepCredentials): Promise<void> {
     const asset = nextResidentAsset();
-    await goToInfoStep(page, asset.mobile);
-    await page.getByRole('radiogroup', { name: 'Profile Type' }).getByRole('radio').first().click();
-    await page.getByRole('textbox', { name: 'unified number' }).fill(asset.crn);
-    await page.getByRole('textbox', { name: 'National ID/Iqama' }).fill(asset.nationalId);
+    const mobile     = credentials?.mobile     ?? asset.mobile;
+    const crn        = credentials?.crn        ?? asset.crn;
+    const nationalId = credentials?.nationalId ?? asset.nationalId;
+    const profileType = credentials?.profileType ?? 'individual';
+
+    await goToInfoStep(page, mobile);
+
+    const radioGroup = page.getByRole('radiogroup', { name: 'Profile Type' });
+    if (profileType === 'merchant') {
+        const merchantRadio = radioGroup.getByRole('radio', { name: /merchant/i });
+        if (await merchantRadio.count() > 0) {
+            await merchantRadio.click();
+        } else {
+            await radioGroup.getByRole('radio').last().click();
+        }
+    } else {
+        await radioGroup.getByRole('radio').first().click();
+    }
+
+    await page.getByRole('textbox', { name: 'unified number' }).fill(crn);
+    await page.getByRole('textbox', { name: 'National ID/Iqama' }).fill(nationalId);
     await page.getByRole('textbox', { name: /Email/i }).fill(generateEmail());
     await page.getByRole('button', { name: 'next' }).click();
     await page.getByRole('button', { name: 'Loading' })
@@ -106,11 +130,13 @@ export async function goToFinancialStep(page: Page): Promise<void> {
         const errorMsg = await page.evaluate(() => document.body.innerText).catch(() => '—');
         throw new Error(
             `Business Info step was rejected by the backend.\n` +
-            `CRN=${asset.crn}, ID=${asset.nationalId}, Mobile=${asset.mobile}.\n` +
+            `CRN=${crn}, ID=${nationalId}, Mobile=${mobile}.\n` +
             `Page text: ${errorMsg?.slice(0, 300)}`
         );
     }
 }
+
+
 
 export async function goToVerificationStep(page: Page): Promise<void> {
     await goToFinancialStep(page);
