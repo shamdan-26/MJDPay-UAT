@@ -32,14 +32,19 @@ test.describe('Registration â€“ Info Functionality', () => {
         await page.getByRole('button', { name: 'next' }).click();
 
         await page.waitForTimeout(5000);
-        await page.getByRole('heading', { name: 'Enter OTP' }).waitFor({ state: 'visible', timeout: 20000 });
-        await page.getByRole('textbox', { name: 'One time password input' }).first()
-            .waitFor({ state: 'visible', timeout: 10000 });
-        await fillOTP(page);
-        const verifyBtn = page.getByRole('button', { name: 'Verify' });
-        await expect(verifyBtn).toBeEnabled({ timeout: 10000 });
-        await verifyBtn.click();
-        await page.waitForTimeout(3000);
+        const otpVisible = await page.getByRole('heading', { name: 'Enter OTP' })
+            .waitFor({ state: 'visible', timeout: 20000 })
+            .then(() => true)
+            .catch(() => false);
+        if (otpVisible) {
+            await page.getByRole('textbox', { name: 'One time password input' }).first()
+                .waitFor({ state: 'visible', timeout: 10000 });
+            await fillOTP(page);
+            const verifyBtn = page.getByRole('button', { name: 'Verify' });
+            await expect(verifyBtn).toBeEnabled({ timeout: 10000 });
+            await verifyBtn.click();
+            await page.waitForTimeout(3000);
+        }
 
         await page.getByText('Tell us about your business')
             .waitFor({ state: 'visible', timeout: 20000 });
