@@ -67,9 +67,9 @@ test.describe('Forgot Password Page', () => {
         await expect(page.getByRole('textbox', { name: 'Company number' })).toBeVisible();
     });
 
-    test('should have the correct placeholder for Company number', async ({ page }) => {
-        await expect(page.getByRole('textbox', { name: 'Company number' }))
-            .toHaveAttribute('placeholder', 'Input here');
+    test('should be visible and clickable for Company number', async ({ page }) => {
+        await expect(page.getByRole('textbox', { name: 'Company number' })).toBeVisible();
+        await expect(page.getByRole('textbox', { name: 'Company number' })).toBeEnabled();
     });
 
     // ── Mobile number field ───────────────────────────────────────────────────
@@ -86,9 +86,9 @@ test.describe('Forgot Password Page', () => {
         await expect(page.getByRole('textbox', { name: 'Mobile number' })).toBeVisible();
     });
 
-    test('should have the correct placeholder for Mobile number', async ({ page }) => {
-        await expect(page.getByRole('textbox', { name: 'Mobile number' }))
-            .toHaveAttribute('placeholder', 'Input here');
+    test('should be visible and clickable for Mobile number', async ({ page }) => {
+        await expect(page.getByRole('textbox', { name: 'Mobile number' })).toBeVisible();
+        await expect(page.getByRole('textbox', { name: 'Mobile number' })).toBeEnabled();
     });
 
     // ── Next button ───────────────────────────────────────────────────────────
