@@ -1,34 +1,36 @@
 import { test, expect } from '@playwright/test';
-import { LOGIN_URL } from './helpers';
+import { LOGIN_URL, gotoLogin } from './helpers';
 
-test.describe('Verify Login page', () => {
+test.describe('Login Page', () => {
+    test.describe.configure({ mode: 'serial' });
+
     test.beforeEach(async ({ page }) => {
-        await page.goto(LOGIN_URL);
+        await gotoLogin(page);
     });
 
     // ── Page load ─────────────────────────────────────────────────────────────
 
-    test('should be able to open the URL', async ({ page }) => {
+    test('should open the login URL', async ({ page }) => {
         await expect(page).toHaveURL(LOGIN_URL);
     });
 
-    test('should have the correct title', async ({ page }) => {
+    test('should have the correct page title', async ({ page }) => {
         await expect(page).toHaveTitle('EMI - Business');
     });
 
-    test('should have the login form', async ({ page }) => {
+    test('should display the login form container', async ({ page }) => {
         await expect(page.locator('#login-form-box')).toBeVisible();
     });
 
-    test('should have the correct login form eyebrow text', async ({ page }) => {
+    test('should display the Login eyebrow text', async ({ page }) => {
         await expect(page.locator('#login-form-eyebrow')).toHaveText('Login');
     });
 
-    test('should have the correct login form title', async ({ page }) => {
+    test('should display the Welcome heading', async ({ page }) => {
         await expect(page.locator('#login-form-title')).toHaveText(' Welcome to MJD Pay');
     });
 
-    test('should have the correct login form description', async ({ page }) => {
+    test('should display the tagline description', async ({ page }) => {
         await expect(page.getByText(/Seamless transactions.*get started/)).toBeVisible();
     });
 
@@ -38,8 +40,13 @@ test.describe('Verify Login page', () => {
         await expect(page.locator('img[alt="MJD Pay"]')).toBeVisible();
     });
 
-    test('should display the MJD Pay logo as a link', async ({ page }) => {
+    test('should display the MJD Pay logo as a clickable link', async ({ page }) => {
         await expect(page.locator('a:has(img[alt="MJD Pay"])')).toBeVisible();
+    });
+
+    test('should navigate to a valid page when the logo link is clicked', async ({ page }) => {
+        await page.locator('a:has(img[alt="MJD Pay"])').click();
+        await expect(page).toHaveURL(/majdpay\.com/, { timeout: 10000 });
     });
 
     // ── Language switcher ─────────────────────────────────────────────────────
@@ -56,10 +63,33 @@ test.describe('Verify Login page', () => {
         await expect(page.getByRole('button', { name: 'العربية' })).toBeVisible();
     });
 
+    test('should not have Arabic as the active language by default', async ({ page }) => {
+        await expect(page.getByRole('button', { name: 'العربية' })).not.toHaveAttribute('aria-pressed', 'true');
+    });
+
+    test('should activate the Arabic button when clicked', async ({ page }) => {
+        await page.getByRole('button', { name: 'العربية' }).click();
+        await expect(page.getByRole('button', { name: 'العربية' })).toHaveAttribute('aria-pressed', 'true');
+    });
+
+    test('should switch back to EN when EN button is clicked after Arabic', async ({ page }) => {
+        await page.getByRole('button', { name: 'العربية' }).click();
+        await page.getByRole('button', { name: 'EN' }).click();
+        await expect(page.getByRole('button', { name: 'EN' })).toHaveAttribute('aria-pressed', 'true');
+    });
+
     // ── Theme toggle ──────────────────────────────────────────────────────────
 
     test('should display the theme toggle button', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'Switch theme' })).toBeVisible();
+    });
+
+    test('should change the theme when the toggle is clicked', async ({ page }) => {
+        const html = page.locator('html');
+        const before = await html.getAttribute('class');
+        await page.getByRole('button', { name: 'Switch theme' }).click();
+        const after = await html.getAttribute('class');
+        expect(after).not.toEqual(before);
     });
 
     // ── QA Login Tools ────────────────────────────────────────────────────────
@@ -74,10 +104,14 @@ test.describe('Verify Login page', () => {
         await expect(page.getByText('Company number')).toBeVisible();
     });
 
-    test('should display the Company number input with correct placeholder', async ({ page }) => {
-        const input = page.getByRole('textbox', { name: 'Company number' });
-        await expect(input).toBeVisible();
-        await expect(input).toHaveAttribute('placeholder', 'Eg. 153165659');
+    test('should display the Company number input as visible and enabled', async ({ page }) => {
+        await expect(page.getByRole('textbox', { name: 'Company number' })).toBeVisible();
+        await expect(page.getByRole('textbox', { name: 'Company number' })).toBeEnabled();
+    });
+
+    test('should display the Company number input with the correct placeholder', async ({ page }) => {
+        await expect(page.getByRole('textbox', { name: 'Company number' }))
+            .toHaveAttribute('placeholder', 'Eg. 153165659');
     });
 
     // ── Mobile number field ───────────────────────────────────────────────────
@@ -90,8 +124,9 @@ test.describe('Verify Login page', () => {
         await expect(page.locator('.floating-prefix')).toContainText('(+966)');
     });
 
-    test('should display the Mobile number input', async ({ page }) => {
+    test('should display the Mobile number input as visible and enabled', async ({ page }) => {
         await expect(page.getByRole('textbox', { name: 'Mobile number' })).toBeVisible();
+        await expect(page.getByRole('textbox', { name: 'Mobile number' })).toBeEnabled();
     });
 
     // ── Password field ────────────────────────────────────────────────────────
@@ -101,14 +136,12 @@ test.describe('Verify Login page', () => {
     });
 
     test('should display the Password input masked by default', async ({ page }) => {
-        const input = page.getByRole('textbox', { name: 'Password' });
+        const input = page.locator('input[aria-label="Password"]');
         await expect(input).toBeVisible();
         await expect(input).toHaveAttribute('type', 'password');
     });
 
-    // ── Show/hide password button ─────────────────────────────────────────────
-
-    test('should display the Show password button', async ({ page }) => {
+    test('should display the Show password toggle button', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'Show password' })).toBeVisible();
     });
 
@@ -122,6 +155,10 @@ test.describe('Verify Login page', () => {
 
     test('should display the Log In button', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'Log In' })).toBeVisible();
+    });
+
+    test('should have the Log In button disabled on page load', async ({ page }) => {
+        await expect(page.getByRole('button', { name: 'Log In' })).toBeDisabled();
     });
 
     // ── Sign Up ───────────────────────────────────────────────────────────────
