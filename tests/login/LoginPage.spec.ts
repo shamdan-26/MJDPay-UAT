@@ -85,10 +85,10 @@ test.describe('Login Page', () => {
     });
 
     test('should change the theme when the toggle is clicked', async ({ page }) => {
-        const html = page.locator('html');
-        const before = await html.getAttribute('class');
+        const body = page.locator('body');
+        const before = await body.getAttribute('class');
         await page.getByRole('button', { name: 'Switch theme' }).click();
-        const after = await html.getAttribute('class');
+        const after = await body.getAttribute('class');
         expect(after).not.toEqual(before);
     });
 

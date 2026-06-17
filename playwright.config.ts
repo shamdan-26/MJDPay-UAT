@@ -19,6 +19,7 @@ declare const process: {
 
 export default defineConfig({
   globalSetup: './support/global-setup.ts',
+  globalTeardown: './support/global-teardown.ts',
   testDir: './tests',
   timeout: 60000,
   /* Run tests in files in parallel */
