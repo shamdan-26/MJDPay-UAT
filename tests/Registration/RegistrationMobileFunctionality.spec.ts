@@ -76,7 +76,7 @@ test.describe('Registration â€“ Mobile Number Functionality', () => {
 
     test('should open the registration page when Sign Up is clicked on the login page', async ({ page }) => {
         await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-        await page.locator("//div//span[@class='text-primary fw-bold link']").click();
+        await page.getByText('Sign Up').click();
         await expect(page).toHaveURL(REGISTER_URL, { timeout: 15000 });
     });
 });

@@ -78,14 +78,19 @@ export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
     await page.waitForTimeout(1000);
     await page.getByRole('button', { name: 'next' }).click();
     await page.waitForTimeout(5000);
-    await page.getByRole('heading', { name: 'Enter OTP' }).waitFor({ state: 'visible', timeout: 20000 });
-    await page.getByRole('textbox', { name: 'One time password input' }).first()
-        .waitFor({ state: 'visible', timeout: 10000 });
-    await fillOTP(page);
-    const verifyBtn = page.getByRole('button', { name: 'Verify' });
-    await expect(verifyBtn).toBeEnabled({ timeout: 10000 });
-    await verifyBtn.click();
-    await page.waitForTimeout(3000);
+    const otpVisible = await page.getByRole('heading', { name: 'Enter OTP' })
+        .waitFor({ state: 'visible', timeout: 20000 })
+        .then(() => true)
+        .catch(() => false);
+    if (otpVisible) {
+        await page.getByRole('textbox', { name: 'One time password input' }).first()
+            .waitFor({ state: 'visible', timeout: 10000 });
+        await fillOTP(page);
+        const verifyBtn = page.getByRole('button', { name: 'Verify' });
+        await expect(verifyBtn).toBeEnabled({ timeout: 10000 });
+        await verifyBtn.click();
+        await page.waitForTimeout(3000);
+    }
     await page.getByText('Tell us about your business').waitFor({ state: 'visible', timeout: 20000 });
 }
 
@@ -94,6 +99,7 @@ export interface FinancialStepCredentials {
     crn?: string;
     nationalId?: string;
     profileType?: 'individual' | 'merchant';
+    email?: string;
 }
 
 export async function goToFinancialStep(page: Page, credentials?: FinancialStepCredentials): Promise<void> {
@@ -119,7 +125,7 @@ export async function goToFinancialStep(page: Page, credentials?: FinancialStepC
 
     await page.getByRole('textbox', { name: 'unified number' }).fill(crn);
     await page.getByRole('textbox', { name: 'National ID/Iqama' }).fill(nationalId);
-    await page.getByRole('textbox', { name: /Email/i }).fill(generateEmail());
+    await page.getByRole('textbox', { name: /Email/i }).fill(credentials?.email ?? generateEmail());
     await page.getByRole('button', { name: 'next' }).click();
     await page.getByRole('button', { name: 'Loading' })
         .waitFor({ state: 'hidden', timeout: 20000 })

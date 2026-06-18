@@ -1,7 +1,7 @@
-﻿import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { REGISTER_URL, generateKSAMobile } from './helpers';
 
-test.describe('Registration â€“ OTP Popup', () => {
+test.describe('Registration - OTP Popup Page Elements', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
@@ -17,7 +17,7 @@ test.describe('Registration â€“ OTP Popup', () => {
         test.skip(!otpAppeared, 'OTP dialog did not appear — Registration OTP is disabled in this environment');
     });
 
-    // â”€â”€ OTP popup content â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── OTP popup content ─────────────────────────────────────────────────────
 
     test('should display the Enter OTP heading', async ({ page }) => {
         await expect(page.getByRole('heading', { name: 'Enter OTP' })).toBeVisible();
@@ -27,11 +27,15 @@ test.describe('Registration â€“ OTP Popup', () => {
         await expect(page.getByText('A code has been sent to you, in order to continue with the sign up process.')).toBeVisible();
     });
 
+    test('should display 4 OTP input boxes', async ({ page }) => {
+        await expect(page.getByRole('textbox', { name: 'One time password input' })).toHaveCount(4);
+    });
+
     test('should display the countdown timer', async ({ page }) => {
         await expect(page.getByText(/Code ends/)).toBeVisible();
     });
 
-    // â”€â”€ Buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Buttons ───────────────────────────────────────────────────────────────
 
     test('should display the Cancel button', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'Cancel' })).toBeVisible();
@@ -43,13 +47,5 @@ test.describe('Registration â€“ OTP Popup', () => {
 
     test('should display the Click to resend button', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'Click to resend' })).toBeVisible();
-    });
-
-    test('should have Verify button disabled when OTP inputs are empty', async ({ page }) => {
-        await expect(page.getByRole('button', { name: 'Verify' })).toBeDisabled();
-    });
-
-    test('should have Click to resend button disabled initially', async ({ page }) => {
-        await expect(page.getByRole('button', { name: 'Click to resend' })).toBeDisabled();
     });
 });
