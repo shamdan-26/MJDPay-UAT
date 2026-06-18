@@ -63,11 +63,14 @@ export function generateKSAMobile(): string {
     return all[Math.floor(Math.random() * all.length)].mobile;
 }
 
-/** Generates a random valid KSA mobile (5XXXXXXXX) not tied to any pre-registered account.
- *  Use this for OTP flow tests where only a valid format is needed, not a real account. */
+/** Generates a random valid-format Saudi mobile (9 digits).
+ *  Prefixes follow CITC operator allocation: 50x-51x, 53x-59x (52x is unallocated).
+ *  Use for OTP flow tests — not tied to any pre-registered account. */
 export function generateFreshKSAMobile(): string {
-    const suffix = Math.floor(10_000_000 + Math.random() * 89_999_999);
-    return `5${suffix}`;
+    const validPrefixes = ['50', '51', '53', '54', '55', '56', '57', '58', '59'];
+    const prefix = validPrefixes[Math.floor(Math.random() * validPrefixes.length)];
+    const suffix  = String(Math.floor(Math.random() * 10_000_000)).padStart(7, '0');
+    return `${prefix}${suffix}`;
 }
 
 export async function fillOTP(page: Page) {
