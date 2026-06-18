@@ -63,6 +63,13 @@ export function generateKSAMobile(): string {
     return all[Math.floor(Math.random() * all.length)].mobile;
 }
 
+/** Generates a random valid KSA mobile (5XXXXXXXX) not tied to any pre-registered account.
+ *  Use this for OTP flow tests where only a valid format is needed, not a real account. */
+export function generateFreshKSAMobile(): string {
+    const suffix = Math.floor(10_000_000 + Math.random() * 89_999_999);
+    return `5${suffix}`;
+}
+
 export async function fillOTP(page: Page) {
     const inputs = page.getByRole('textbox', { name: 'One time password input' });
     const count  = await inputs.count();

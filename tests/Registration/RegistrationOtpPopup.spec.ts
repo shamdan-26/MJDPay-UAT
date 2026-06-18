@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { REGISTER_URL, generateKSAMobile } from './helpers';
+import { REGISTER_URL, generateFreshKSAMobile } from './helpers';
 
 test.describe('Registration - OTP Popup Page Elements', () => {
     test.describe.configure({ mode: 'serial' });
@@ -7,7 +7,7 @@ test.describe('Registration - OTP Popup Page Elements', () => {
     test.beforeEach(async ({ page, context }) => {
         await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(generateKSAMobile());
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill(generateFreshKSAMobile());
         await page.getByRole('button', { name: 'next' }).click();
         await page.waitForTimeout(5000);
         const otpAppeared = await page.getByRole('heading', { name: 'Enter OTP' })

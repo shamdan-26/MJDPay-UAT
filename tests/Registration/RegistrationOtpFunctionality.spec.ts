@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { REGISTER_URL, generateKSAMobile, fillOTP } from './helpers';
+import { REGISTER_URL, generateFreshKSAMobile, fillOTP } from './helpers';
 
 test.describe('Registration - OTP Functionality', () => {
     test.describe.configure({ mode: 'serial' });
@@ -7,7 +7,7 @@ test.describe('Registration - OTP Functionality', () => {
     test.beforeEach(async ({ page, context }) => {
         await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(generateKSAMobile());
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill(generateFreshKSAMobile());
         await page.getByRole('button', { name: 'next' }).click();
 
         const otpAppeared = await page.getByRole('heading', { name: 'Enter OTP' })
