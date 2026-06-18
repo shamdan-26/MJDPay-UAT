@@ -1,4 +1,5 @@
 ﻿import { Page, expect } from '@playwright/test';
+import { MongoClient } from 'mongodb';
 
 export const LOGIN_URL    = 'https://uat.majdpay.com/business/auth/login';
 export const REGISTER_URL = 'https://uat.majdpay.com/business/auth/register';
@@ -93,17 +94,42 @@ export function generateFreshKSAMobile(): string {
     return UAT_OTP_ASSETS[Math.floor(Math.random() * UAT_OTP_ASSETS.length)].mobile;
 }
 
-export async function fillOTP(page: Page) {
+const MONGO_URI = 'mongodb://emiuat:EMI%40uat2024@10.243.127.24:27017/notification-log';
+const MONGO_DB  = 'notification-log';
+
+export async function getOtpFromDb(mobile: string): Promise<string> {
+    const client = new MongoClient(MONGO_URI);
+    try {
+        await client.connect();
+        const col = client.db(MONGO_DB).collection('notifications');
+        const doc = await col.findOne(
+            {
+                recipient: { $in: [mobile, `966${mobile}`, `+966${mobile}`, `0${mobile}`] },
+                message: { $regex: /Use this OTP/i },
+            },
+            { sort: { createdAt: -1 } }
+        );
+        if (!doc) throw new Error(`No OTP notification found for mobile ${mobile}`);
+        const match = (doc.message as string).match(/Use this OTP\s*:\s*(\d+)/i);
+        if (!match) throw new Error(`Could not extract OTP from message: ${doc.message}`);
+        return match[1];
+    } finally {
+        await client.close();
+    }
+}
+
+export async function fillOTP(page: Page, otp?: string) {
     const inputs = page.getByRole('textbox', { name: 'One time password input' });
     const count  = await inputs.count();
     for (let i = 0; i < count; i++) {
-        await inputs.nth(i).fill('0');
+        await inputs.nth(i).pressSequentially(otp?.[i] ?? '0', { delay: 50 });
     }
 }
 
 export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
+    const usedMobile = mobile ?? generateKSAMobile();
     await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-    await page.getByRole('textbox', { name: 'Mobile number' }).fill(mobile ?? generateKSAMobile());
+    await page.getByRole('textbox', { name: 'Mobile number' }).fill(usedMobile);
     await page.waitForTimeout(1000);
     await page.getByRole('button', { name: 'next' }).click();
     await page.waitForTimeout(5000);
@@ -114,12 +140,15 @@ export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
     if (otpVisible) {
         await page.getByRole('textbox', { name: 'One time password input' }).first()
             .waitFor({ state: 'visible', timeout: 10000 });
-        await fillOTP(page);
+        const otp = await getOtpFromDb(usedMobile);
+        await fillOTP(page, otp);
         const verifyBtn = page.getByRole('button', { name: 'Verify' });
-        await expect(verifyBtn).toBeEnabled({ timeout: 10000 });
-        await verifyBtn.click();
-        await page.getByRole('heading', { name: 'Enter OTP' })
-            .waitFor({ state: 'hidden', timeout: 30000 });
+        // App may auto-submit after last OTP digit; click only if the button is still present
+        await verifyBtn.click({ timeout: 5000 }).catch(() => {});
+        await Promise.race([
+            page.getByRole('heading', { name: 'Enter OTP' }).waitFor({ state: 'hidden', timeout: 30000 }),
+            page.getByText('Tell us about your business').waitFor({ state: 'visible', timeout: 30000 }),
+        ]);
     }
     await page.getByText('Tell us about your business').waitFor({ state: 'visible', timeout: 30000 });
 }

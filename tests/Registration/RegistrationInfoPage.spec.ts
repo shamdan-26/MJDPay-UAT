@@ -33,7 +33,7 @@ test.describe('Registration - Info Page', () => {
     });
 
     test('should display the CRN input', async () => {
-        await expect(page.getByRole('textbox', { name: 'unified number' })).toBeVisible();
+        await expect(page.getByPlaceholder('Eg. 1023456789')).toBeVisible();
     });
 
     // ── Iqama field ───────────────────────────────────────────────────────────
@@ -43,7 +43,7 @@ test.describe('Registration - Info Page', () => {
     });
 
     test('should display the Iqama input', async () => {
-        await expect(page.getByRole('textbox', { name: 'National ID/Iqama' })).toBeVisible();
+        await expect(page.getByPlaceholder('Eg. 1012345678')).toBeVisible();
     });
 
     // ── Email field ───────────────────────────────────────────────────────────
