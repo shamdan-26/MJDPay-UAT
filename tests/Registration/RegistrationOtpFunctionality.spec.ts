@@ -36,8 +36,7 @@ test.describe('Registration - OTP Functionality', () => {
     test('should keep Verify disabled when fewer than all OTP digits are entered', async ({ page }) => {
         const inputs = page.getByRole('textbox', { name: 'One time password input' });
         const count  = await inputs.count();
-        await inputs.first().click();
-        await page.keyboard.type('0'.repeat(count - 1));
+        await inputs.first().pressSequentially('0'.repeat(count - 1), { delay: 100 });
         await expect(page.getByRole('button', { name: 'Verify' })).toBeDisabled();
     });
 
@@ -76,8 +75,7 @@ test.describe('Registration - OTP Functionality', () => {
 
         const inputs = page.getByRole('textbox', { name: 'One time password input' });
         const count  = await inputs.count();
-        await inputs.first().click();
-        await page.keyboard.type('0'.repeat(count));
+        await inputs.first().pressSequentially('0'.repeat(count), { delay: 100 });
 
         const resendBtn = page.getByRole('button', { name: 'Click to resend' });
         await expect(resendBtn).toBeEnabled({ timeout: (seconds + 5) * 1000 });
@@ -90,8 +88,8 @@ test.describe('Registration - OTP Functionality', () => {
     test('should remain on OTP popup after submitting wrong OTP', async ({ page }) => {
         const inputs = page.getByRole('textbox', { name: 'One time password input' });
         const count  = await inputs.count();
-        await inputs.first().click();
-        await page.keyboard.type('1'.repeat(count));
+        await inputs.first().pressSequentially('1'.repeat(count), { delay: 100 });
+        await expect(page.getByRole('button', { name: 'Verify' })).toBeEnabled({ timeout: 5000 });
         await page.getByRole('button', { name: 'Verify' }).click();
         await expect(page.getByRole('heading', { name: 'Enter OTP' })).toBeVisible();
     });
