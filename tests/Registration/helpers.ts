@@ -63,14 +63,34 @@ export function generateKSAMobile(): string {
     return all[Math.floor(Math.random() * all.length)].mobile;
 }
 
-/** Generates a random valid-format Saudi mobile (9 digits).
- *  Prefixes follow CITC operator allocation: 50x-51x, 53x-59x (52x is unallocated).
- *  Use for OTP flow tests — not tied to any pre-registered account. */
+// UAT test accounts from phone numbers.xlsx — Sheet1, uat-flagged rows
+const UAT_OTP_ASSETS = [
+    { id: '1000000008', crn: '1100000008', mobile: '510203001' },
+    { id: '1000000016', crn: '1200000016', mobile: '510203002' },
+    { id: '1000000032', crn: '1400000032', mobile: '510203004' },
+    { id: '1000000040', crn: '1500000040', mobile: '510203005' },
+    { id: '1000000057', crn: '1600000057', mobile: '510203006' },
+    { id: '1000000065', crn: '1700000065', mobile: '510203007' },
+    { id: '1000000073', crn: '1800000073', mobile: '510203008' },
+    { id: '1000000081', crn: '1900000081', mobile: '510203009' },
+    { id: '1000000230', crn: '1240000230', mobile: '510203024' },
+    { id: '2000000048', crn: '1300000048', mobile: '510203030' },
+    { id: '2000000154', crn: '1410000154', mobile: '510203041' },
+    { id: '2000000162', crn: '1420000162', mobile: '510203042' },
+    { id: '2000000238', crn: '1490000238', mobile: '510203049' },
+    { id: '2000000246', crn: '1500000246', mobile: '510203050' },
+];
+
+let _uatOtpIndex = 0;
+
+/** Returns the next UAT OTP test account in round-robin order (phone numbers.xlsx). */
+export function nextUatOtpAsset() {
+    return UAT_OTP_ASSETS[_uatOtpIndex++ % UAT_OTP_ASSETS.length];
+}
+
+/** Picks a UAT OTP test mobile from phone numbers.xlsx. */
 export function generateFreshKSAMobile(): string {
-    const validPrefixes = ['50', '51', '53', '54', '55', '56', '57', '58', '59'];
-    const prefix = validPrefixes[Math.floor(Math.random() * validPrefixes.length)];
-    const suffix  = String(Math.floor(Math.random() * 10_000_000)).padStart(7, '0');
-    return `${prefix}${suffix}`;
+    return UAT_OTP_ASSETS[Math.floor(Math.random() * UAT_OTP_ASSETS.length)].mobile;
 }
 
 export async function fillOTP(page: Page) {
