@@ -9,12 +9,21 @@ test.describe('Registration - OTP Functionality', () => {
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(generateKSAMobile());
         await page.getByRole('button', { name: 'next' }).click();
-        await page.waitForTimeout(5000);
+
         const otpAppeared = await page.getByRole('heading', { name: 'Enter OTP' })
             .waitFor({ state: 'visible', timeout: 20000 })
             .then(() => true)
             .catch(() => false);
-        test.skip(!otpAppeared, 'OTP dialog did not appear — Registration OTP is disabled in this environment');
+
+        if (!otpAppeared) {
+            const errorEl = page.locator('[class*="error"], [class*="alert"], [role="alert"]').first();
+            const errorVisible = await errorEl.isVisible().catch(() => false);
+            if (errorVisible) {
+                const errorText = await errorEl.textContent().catch(() => '');
+                throw new Error(`Phone submission failed with error: "${errorText?.trim()}"`);
+            }
+            test.skip(true, 'OTP dialog did not appear — Registration OTP is disabled in this environment');
+        }
     });
 
     // ── Verify button state ───────────────────────────────────────────────────
