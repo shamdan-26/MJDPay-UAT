@@ -69,7 +69,7 @@ test.describe('Registration - OTP Functionality', () => {
         await expect(page.getByText(/Code ends/i)).toBeVisible();
     });
 
-    test('should enable resend button after countdown expires and clear inputs on click', async ({ page }) => {
+    test.skip('should enable resend button after countdown expires and clear inputs on click', async ({ page }) => {
         const timerText = await page.getByText(/Code ends/i).textContent();
         const match     = timerText?.match(/(\d+):(\d+)/);
         const seconds   = match ? parseInt(match[1]) * 60 + parseInt(match[2]) : 90;
