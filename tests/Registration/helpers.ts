@@ -96,10 +96,8 @@ export function generateFreshKSAMobile(): string {
 export async function fillOTP(page: Page) {
     const inputs = page.getByRole('textbox', { name: 'One time password input' });
     const count  = await inputs.count();
-    for (let i = 0; i < count; i++) {
-        await inputs.nth(i).click();
-        await inputs.nth(i).pressSequentially('0');
-    }
+    await inputs.first().click();
+    await page.keyboard.type('0'.repeat(count));
 }
 
 export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {

@@ -7,6 +7,7 @@ test.describe('Registration - OTP Functionality', () => {
     test.beforeEach(async ({ page, context }) => {
         await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(generateFreshKSAMobile());
         await page.getByRole('button', { name: 'next' }).click();
 
@@ -35,10 +36,8 @@ test.describe('Registration - OTP Functionality', () => {
     test('should keep Verify disabled when fewer than all OTP digits are entered', async ({ page }) => {
         const inputs = page.getByRole('textbox', { name: 'One time password input' });
         const count  = await inputs.count();
-        for (let i = 0; i < count - 1; i++) {
-            await inputs.nth(i).click();
-            await inputs.nth(i).pressSequentially('0');
-        }
+        await inputs.first().click();
+        await page.keyboard.type('0'.repeat(count - 1));
         await expect(page.getByRole('button', { name: 'Verify' })).toBeDisabled();
     });
 
@@ -77,10 +76,8 @@ test.describe('Registration - OTP Functionality', () => {
 
         const inputs = page.getByRole('textbox', { name: 'One time password input' });
         const count  = await inputs.count();
-        for (let i = 0; i < count; i++) {
-            await inputs.nth(i).click();
-            await inputs.nth(i).pressSequentially('0');
-        }
+        await inputs.first().click();
+        await page.keyboard.type('0'.repeat(count));
 
         const resendBtn = page.getByRole('button', { name: 'Click to resend' });
         await expect(resendBtn).toBeEnabled({ timeout: (seconds + 5) * 1000 });
@@ -93,10 +90,8 @@ test.describe('Registration - OTP Functionality', () => {
     test('should remain on OTP popup after submitting wrong OTP', async ({ page }) => {
         const inputs = page.getByRole('textbox', { name: 'One time password input' });
         const count  = await inputs.count();
-        for (let i = 0; i < count; i++) {
-            await inputs.nth(i).click();
-            await inputs.nth(i).pressSequentially('1');
-        }
+        await inputs.first().click();
+        await page.keyboard.type('1'.repeat(count));
         await page.getByRole('button', { name: 'Verify' }).click();
         await expect(page.getByRole('heading', { name: 'Enter OTP' })).toBeVisible();
     });
