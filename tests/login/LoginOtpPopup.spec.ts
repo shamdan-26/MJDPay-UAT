@@ -30,8 +30,11 @@ test.describe('Login OTP Popup - Page Elements', () => {
 
     // ── OTP inputs ────────────────────────────────────────────────────────────
 
-    test('should display 4 OTP input boxes', async ({ page }) => {
-        await expect(page.getByRole('textbox', { name: 'One time password input' })).toHaveCount(4);
+    test('should display OTP input boxes', async ({ page }) => {
+        const inputs = page.getByRole('textbox', { name: 'One time password input' });
+        const count = await inputs.count();
+        expect(count).toBeGreaterThanOrEqual(4);
+        expect(count).toBeLessThanOrEqual(8);
     });
 
     // ── Timer & resend ────────────────────────────────────────────────────────

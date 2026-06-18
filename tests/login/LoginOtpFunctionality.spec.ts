@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import {
-    LOGIN_URL,
     VALID_OTP,
     INVALID_OTP,
     gotoLogin,
@@ -40,12 +39,10 @@ test.describe('Login OTP Functionality', () => {
         await expect(page.getByRole('button', { name: 'Verify' })).toBeDisabled();
     });
 
-    test('should enable Verify button when all 4 OTP inputs are filled', async ({ page }) => {
+    test('should enable Verify button when all OTP inputs are filled', async ({ page }) => {
         const inputs = page.getByRole('textbox', { name: 'One time password input' });
-        await inputs.nth(0).fill('1');
-        await inputs.nth(1).fill('2');
-        await inputs.nth(2).fill('3');
-        await inputs.nth(3).fill('4');
+        const count = await inputs.count();
+        for (let i = 0; i < count; i++) await inputs.nth(i).fill(String(i + 1));
         await expect(page.getByRole('button', { name: 'Verify' })).toBeEnabled();
     });
 
@@ -75,10 +72,8 @@ test.describe('Login OTP Functionality', () => {
         test.setTimeout(90000);
 
         const inputs = page.getByRole('textbox', { name: 'One time password input' });
-        await inputs.nth(0).fill('1');
-        await inputs.nth(1).fill('2');
-        await inputs.nth(2).fill('3');
-        await inputs.nth(3).fill('4');
+        const count = await inputs.count();
+        for (let i = 0; i < count; i++) await inputs.nth(i).fill(String(i + 1));
 
         const resendBtn = page.getByRole('button', { name: 'Click to resend' });
         await expect(resendBtn).toBeEnabled({ timeout: 60000 });
@@ -102,14 +97,16 @@ test.describe('Login OTP Functionality', () => {
 
     test('should remain on OTP popup after submitting a wrong OTP', async ({ page }) => {
         const inputs = page.getByRole('textbox', { name: 'One time password input' });
-        for (let i = 0; i < 4; i++) await inputs.nth(i).fill(INVALID_OTP[i]);
+        const count = await inputs.count();
+        for (let i = 0; i < count; i++) await inputs.nth(i).fill(INVALID_OTP[i] ?? '1');
         await page.getByRole('button', { name: 'Verify' }).click();
         await expect(page.getByRole('heading', { name: 'Enter OTP' })).toBeVisible();
     });
 
     test('should log in successfully and redirect with a correct OTP', async ({ page }) => {
         const inputs = page.getByRole('textbox', { name: 'One time password input' });
-        for (let i = 0; i < 4; i++) await inputs.nth(i).fill(VALID_OTP[i]);
+        const count = await inputs.count();
+        for (let i = 0; i < count; i++) await inputs.nth(i).fill(VALID_OTP[i] ?? '0');
         await page.getByRole('button', { name: 'Verify' }).click();
         await expect(page).not.toHaveURL(/auth\/login/, { timeout: 15000 });
     });

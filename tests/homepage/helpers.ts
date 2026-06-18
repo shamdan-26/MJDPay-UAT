@@ -7,7 +7,7 @@ export const BASE_ORIGIN = 'https://uat.majdpay.com';
 export const VALID_COMPANY  = 'A2316';
 export const VALID_MOBILE   = '500021788';
 export const VALID_PASSWORD = 'Aa#1234567';
-export const VALID_OTP      = '0000'; // static OTP for dev environment
+export const VALID_OTP      = '00000000'; // static OTP for dev environment
 
 /** Full login flow: credentials â†’ OTP â†’ home page. */
 export async function loginAsMerchant(page: Page): Promise<void> {
@@ -19,8 +19,9 @@ export async function loginAsMerchant(page: Page): Promise<void> {
 
     await page.getByRole('heading', { name: 'Enter OTP' }).waitFor({ state: 'visible', timeout: 15000 });
     const inputs = page.getByRole('textbox', { name: 'One time password input' });
-    for (let i = 0; i < 4; i++) {
-        await inputs.nth(i).fill(VALID_OTP[i]);
+    const otpCount = await inputs.count();
+    for (let i = 0; i < otpCount; i++) {
+        await inputs.nth(i).fill(VALID_OTP[i] ?? '0');
     }
     await page.getByRole('button', { name: 'Verify' }).click();
     await page.waitForURL(/\/business\/main\/home/, { timeout: 20000 });

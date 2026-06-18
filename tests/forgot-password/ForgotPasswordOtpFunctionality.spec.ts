@@ -47,12 +47,10 @@ test.describe('Forgot Password - OTP Verification Flow', () => {
         await expect(page.locator(MODAL_SELECTOR).getByRole('button', { name: 'Confirm' })).toBeDisabled();
     });
 
-    test('should enable Confirm button when all 4 OTP inputs are filled', async ({ page }) => {
+    test('should enable Confirm button when all OTP inputs are filled', async ({ page }) => {
         const inputs = page.locator(MODAL_SELECTOR).locator('input');
-        await inputs.nth(0).fill('1');
-        await inputs.nth(1).fill('2');
-        await inputs.nth(2).fill('3');
-        await inputs.nth(3).fill('4');
+        const count = await inputs.count();
+        for (let i = 0; i < count; i++) await inputs.nth(i).fill(String(i + 1));
         await expect(page.locator(MODAL_SELECTOR).getByRole('button', { name: 'Confirm' })).toBeEnabled();
     });
 
@@ -75,14 +73,16 @@ test.describe('Forgot Password - OTP Verification Flow', () => {
 
     test('should remain on OTP dialog after submitting wrong OTP', async ({ page }) => {
         const inputs = page.locator(MODAL_SELECTOR).locator('input');
-        for (let i = 0; i < 4; i++) await inputs.nth(i).fill(INVALID_OTP[i]);
+        const count = await inputs.count();
+        for (let i = 0; i < count; i++) await inputs.nth(i).fill(INVALID_OTP[i] ?? '1');
         await page.locator(MODAL_SELECTOR).getByRole('button', { name: 'Confirm' }).click();
         await expect(page.locator(MODAL_SELECTOR)).toBeVisible();
     });
 
     test('should display an error message after submitting wrong OTP', async ({ page }) => {
         const inputs = page.locator(MODAL_SELECTOR).locator('input');
-        for (let i = 0; i < 4; i++) await inputs.nth(i).fill(INVALID_OTP[i]);
+        const count = await inputs.count();
+        for (let i = 0; i < count; i++) await inputs.nth(i).fill(INVALID_OTP[i] ?? '1');
         await page.locator(MODAL_SELECTOR).getByRole('button', { name: 'Confirm' }).click();
         const errorIndicator = page.locator(MODAL_SELECTOR).locator('[role="alert"], [class*="error"], [class*="invalid"]').first();
         await expect(errorIndicator).toBeVisible({ timeout: 5000 });
@@ -90,7 +90,8 @@ test.describe('Forgot Password - OTP Verification Flow', () => {
 
     test('should reset password successfully with correct OTP and redirect to login', async ({ page }) => {
         const inputs = page.locator(MODAL_SELECTOR).locator('input');
-        for (let i = 0; i < 4; i++) await inputs.nth(i).fill(VALID_OTP[i]);
+        const count = await inputs.count();
+        for (let i = 0; i < count; i++) await inputs.nth(i).fill(VALID_OTP[i] ?? '0');
         await page.locator(MODAL_SELECTOR).getByRole('button', { name: 'Confirm' }).click();
         await expect(page).toHaveURL(/login/, { timeout: 15000 });
     });
@@ -106,7 +107,8 @@ test.describe('Forgot Password - OTP Verification Flow', () => {
         test.setTimeout(90000);
 
         const inputs = page.locator(MODAL_SELECTOR).locator('input');
-        for (let i = 0; i < 4; i++) await inputs.nth(i).fill(String(i + 1));
+        const count = await inputs.count();
+        for (let i = 0; i < count; i++) await inputs.nth(i).fill(String(i + 1));
 
         const resendBtn = page.locator(MODAL_SELECTOR).getByRole('button', { name: 'Click to resend' });
         await expect(resendBtn).toBeEnabled({ timeout: 60000 });

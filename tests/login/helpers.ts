@@ -7,8 +7,8 @@ export const VALID_COMPANY  = 'L3999';
 export const VALID_MOBILE   = '500318143';
 export const VALID_PASSWORD = 'Aa#1234567';
 
-export const VALID_OTP   = '0000';
-export const INVALID_OTP = '1111';
+export const VALID_OTP   = '00000000';
+export const INVALID_OTP = '11111111';
 
 export async function gotoLogin(page: Page): Promise<void> {
     await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
