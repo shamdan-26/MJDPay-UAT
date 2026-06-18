@@ -40,7 +40,7 @@ test.describe('Login OTP Popup - Page Elements', () => {
     // ── Timer & resend ────────────────────────────────────────────────────────
 
     test('should display the countdown timer', async ({ page }) => {
-        await expect(page.getByText(/Code ends/)).toBeVisible();
+        await expect(page.getByText(/Code ends/i)).toBeVisible();
     });
 
     test('should display the Click to resend button', async ({ page }) => {

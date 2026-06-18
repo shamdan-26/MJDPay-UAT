@@ -35,7 +35,7 @@ test.describe('Registration - OTP Popup Page Elements', () => {
     });
 
     test('should display the countdown timer', async ({ page }) => {
-        await expect(page.getByText(/Code ends/)).toBeVisible();
+        await expect(page.getByText(/Code ends/i)).toBeVisible();
     });
 
     // ── Buttons ───────────────────────────────────────────────────────────────

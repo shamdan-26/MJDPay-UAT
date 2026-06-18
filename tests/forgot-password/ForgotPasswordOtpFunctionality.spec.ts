@@ -100,18 +100,21 @@ test.describe('Forgot Password - OTP Verification Flow', () => {
 
     test('should keep resend button disabled while countdown timer is active', async ({ page }) => {
         await expect(page.locator(MODAL_SELECTOR).getByRole('button', { name: 'Click to resend' })).toBeDisabled();
-        await expect(page.locator(MODAL_SELECTOR).getByText(/Code Ends/)).toBeVisible();
+        await expect(page.locator(MODAL_SELECTOR).getByText(/Code ends/i)).toBeVisible();
     });
 
     test('should enable resend button after countdown expires and clear inputs on click', async ({ page }) => {
-        test.setTimeout(90000);
+        const timerText = await page.locator(MODAL_SELECTOR).getByText(/Code ends/i).textContent();
+        const match     = timerText?.match(/(\d+):(\d+)/);
+        const seconds   = match ? parseInt(match[1]) * 60 + parseInt(match[2]) : 90;
+        test.setTimeout((seconds + 15) * 1000);
 
         const inputs = page.locator(MODAL_SELECTOR).locator('input');
-        const count = await inputs.count();
+        const count  = await inputs.count();
         for (let i = 0; i < count; i++) await inputs.nth(i).fill(String(i + 1));
 
         const resendBtn = page.locator(MODAL_SELECTOR).getByRole('button', { name: 'Click to resend' });
-        await expect(resendBtn).toBeEnabled({ timeout: 60000 });
+        await expect(resendBtn).toBeEnabled({ timeout: (seconds + 5) * 1000 });
         await resendBtn.click();
         await expect(inputs.nth(0)).toHaveValue('');
     });

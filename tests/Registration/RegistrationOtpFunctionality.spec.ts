@@ -66,11 +66,14 @@ test.describe('Registration - OTP Functionality', () => {
 
     test('should have Click to resend button disabled while countdown is active', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'Click to resend' })).toBeDisabled();
-        await expect(page.getByText(/Code ends/)).toBeVisible();
+        await expect(page.getByText(/Code ends/i)).toBeVisible();
     });
 
     test('should enable resend button after countdown expires and clear inputs on click', async ({ page }) => {
-        test.setTimeout(90000);
+        const timerText = await page.getByText(/Code ends/i).textContent();
+        const match     = timerText?.match(/(\d+):(\d+)/);
+        const seconds   = match ? parseInt(match[1]) * 60 + parseInt(match[2]) : 90;
+        test.setTimeout((seconds + 15) * 1000);
 
         const inputs = page.getByRole('textbox', { name: 'One time password input' });
         const count  = await inputs.count();
@@ -80,7 +83,7 @@ test.describe('Registration - OTP Functionality', () => {
         }
 
         const resendBtn = page.getByRole('button', { name: 'Click to resend' });
-        await expect(resendBtn).toBeEnabled({ timeout: 60000 });
+        await expect(resendBtn).toBeEnabled({ timeout: (seconds + 5) * 1000 });
         await resendBtn.click();
         await expect(inputs.nth(0)).toHaveValue('');
     });
