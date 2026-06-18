@@ -118,9 +118,10 @@ export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
         const verifyBtn = page.getByRole('button', { name: 'Verify' });
         await expect(verifyBtn).toBeEnabled({ timeout: 10000 });
         await verifyBtn.click();
-        await page.waitForTimeout(3000);
+        await page.getByRole('heading', { name: 'Enter OTP' })
+            .waitFor({ state: 'hidden', timeout: 30000 });
     }
-    await page.getByText('Tell us about your business').waitFor({ state: 'visible', timeout: 20000 });
+    await page.getByText('Tell us about your business').waitFor({ state: 'visible', timeout: 30000 });
 }
 
 export interface FinancialStepCredentials {
