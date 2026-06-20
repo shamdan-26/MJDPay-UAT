@@ -211,9 +211,9 @@ export async function goToVerificationStep(page: Page): Promise<void> {
     await page.getByRole('textbox', { name: /monthly expected sum/i }).fill('50000');
     await page.getByRole('textbox', { name: /monthly withdrawal/i }).fill('10000');
     await page.getByRole('textbox', { name: /monthly deposit/i }).fill('20000');
-    await selectRandomOption(page, page.getByRole('combobox', { name: /banks/i }));
-    await selectRandomOption(page, page.getByRole('combobox', { name: /industries/i }));
-    await selectRandomOption(page, page.getByRole('combobox', { name: /annual income/i }));
+    await selectRandomOption(page, page.locator('#mat-select-value-0'));
+    await selectRandomOption(page, page.locator('#mat-select-value-1'));
+    await selectRandomOption(page, page.locator('#mat-select-value-2'));
     await page.getByRole('button', { name: 'next' }).click();
     await page.getByRole('button', { name: 'Loading' })
         .waitFor({ state: 'hidden', timeout: 20000 });
@@ -226,9 +226,9 @@ export async function fillFinancialForm(page: Page): Promise<void> {
     await page.getByRole('textbox', { name: /monthly expected sum/i }).fill('50000');
     await page.getByRole('textbox', { name: /monthly withdrawal/i }).fill('10000');
     await page.getByRole('textbox', { name: /monthly deposit/i }).fill('20000');
-    await selectRandomOption(page, page.getByRole('combobox', { name: /banks/i }));
-    await selectRandomOption(page, page.getByRole('combobox', { name: /industries/i }));
-    await selectRandomOption(page, page.getByRole('combobox', { name: /annual income/i }));
+    await selectRandomOption(page, page.locator('#mat-select-value-0'));
+    await selectRandomOption(page, page.locator('#mat-select-value-1'));
+    await selectRandomOption(page, page.locator('#mat-select-value-2'));
 }
 
 export async function selectRandomOption(page: Page, dropdownLocator: Locator) {

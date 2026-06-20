@@ -91,9 +91,9 @@ test.describe('Registration â€“ Verification & Uploads Functionality', () =
     });
 
     test('should allow re-advancing to Verification step after going back to Financial step', async () => {
-        await selectRandomOption(page, page.getByRole('combobox', { name: /banks/i }));
-        await selectRandomOption(page, page.getByRole('combobox', { name: /industries/i }));
-        await selectRandomOption(page, page.getByRole('combobox', { name: /annual income/i }));
+        await selectRandomOption(page, page.locator('#mat-select-value-0'));
+        await selectRandomOption(page, page.locator('#mat-select-value-1'));
+        await selectRandomOption(page, page.locator('#mat-select-value-2'));
         await page.getByRole('button', { name: /next/i }).click();
         await expect(page.getByRole('textbox', { name: /iban/i }))
             .toBeVisible({ timeout: 10000 });

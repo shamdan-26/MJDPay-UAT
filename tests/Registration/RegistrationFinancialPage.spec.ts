@@ -99,7 +99,7 @@ test.describe('Registration - Financial & Business Page', () => {
     });
 
     test('should display the Banks dropdown', async () => {
-        await expect(page.getByRole('combobox', { name: /banks/i })).toBeVisible();
+        await expect(page.locator('#mat-select-value-0')).toBeVisible();
     });
 
     // ── Industries dropdown ───────────────────────────────────────────────────
@@ -109,7 +109,7 @@ test.describe('Registration - Financial & Business Page', () => {
     });
 
     test('should display the Industries dropdown', async () => {
-        await expect(page.getByRole('combobox', { name: /industries/i })).toBeVisible();
+        await expect(page.locator('#mat-select-value-1')).toBeVisible();
     });
 
     // ── Annual Income dropdown ────────────────────────────────────────────────
@@ -119,7 +119,7 @@ test.describe('Registration - Financial & Business Page', () => {
     });
 
     test('should display the Annual Income dropdown', async () => {
-        await expect(page.getByRole('combobox', { name: /annual income/i })).toBeVisible();
+        await expect(page.locator('#mat-select-value-2')).toBeVisible();
     });
 
     // ── Navigation buttons ────────────────────────────────────────────────────

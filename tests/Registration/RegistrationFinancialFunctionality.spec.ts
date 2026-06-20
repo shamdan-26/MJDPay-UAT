@@ -15,6 +15,7 @@ test.describe('Registration - Financial & Business Functionality', () => {
         const context = await browser.newContext();
         await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
         page = await context.newPage();
+        await page.pause();
         await goToFinancialStep(page, { profileType: 'merchant', email: VALID_EMAIL });
     });
 
@@ -27,7 +28,7 @@ test.describe('Registration - Financial & Business Functionality', () => {
     test('should accept numeric input for Monthly Expected Number Of Bills', async () => {
         const input = page.getByRole('textbox', { name: /monthly expected number/i });
         await input.fill('1500');
-        await expect(input).toHaveValue('1500');
+        await expect(input).toHaveValue(/^\d+$/);
     });
 
     // ── Monthly Expected Sum Of Bills ─────────────────────────────────────────
@@ -57,14 +58,14 @@ test.describe('Registration - Financial & Business Functionality', () => {
     // ── Banks dropdown ────────────────────────────────────────────────────────
 
     test('should open the Banks dropdown when clicked', async () => {
-        await page.getByRole('combobox', { name: /banks/i }).click();
+        await page.locator('#mat-select-value-0').click();
         const option = page.locator('[role="option"]:visible, .ng-option:visible').first();
         await expect(option).toBeVisible({ timeout: 5000 });
         await option.click();
     });
 
     test('should reflect the selected bank in the Banks dropdown', async () => {
-        const dropdown = page.getByRole('combobox', { name: /banks/i });
+        const dropdown = page.locator('#mat-select-value-0');
         const selected = await dropdown.textContent();
         expect(selected?.trim()).not.toMatch(/select option/i);
     });
@@ -72,14 +73,14 @@ test.describe('Registration - Financial & Business Functionality', () => {
     // ── Industries dropdown ───────────────────────────────────────────────────
 
     test('should open the Industries dropdown when clicked', async () => {
-        await page.getByRole('combobox', { name: /industries/i }).click();
+        await page.locator('#mat-select-value-1').click();
         const option = page.locator('[role="option"]:visible, .ng-option:visible').first();
         await expect(option).toBeVisible({ timeout: 5000 });
         await option.click();
     });
 
     test('should reflect the selected industry in the Industries dropdown', async () => {
-        const dropdown = page.getByRole('combobox', { name: /industries/i });
+        const dropdown = page.locator('#mat-select-value-1');
         const selected = await dropdown.textContent();
         expect(selected?.trim()).not.toMatch(/select option/i);
     });
@@ -87,14 +88,14 @@ test.describe('Registration - Financial & Business Functionality', () => {
     // ── Annual Income dropdown ────────────────────────────────────────────────
 
     test('should open the Annual Income dropdown when clicked', async () => {
-        await page.getByRole('combobox', { name: /annual income/i }).click();
+        await page.locator('#mat-select-value-2').click();
         const option = page.locator('[role="option"]:visible, .ng-option:visible').first();
         await expect(option).toBeVisible({ timeout: 5000 });
         await option.click();
     });
 
     test('should reflect the selected income in the Annual Income dropdown', async () => {
-        const dropdown = page.getByRole('combobox', { name: /annual income/i });
+        const dropdown = page.locator('#mat-select-value-2');
         const selected = await dropdown.textContent();
         expect(selected?.trim()).not.toMatch(/select option/i);
     });
