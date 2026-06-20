@@ -1,4 +1,4 @@
-﻿import { Page, expect } from '@playwright/test';
+﻿import { Page, Locator, expect } from '@playwright/test';
 import { MongoClient } from 'mongodb';
 
 export const LOGIN_URL    = 'https://uat.majdpay.com/business/auth/login';
@@ -97,22 +97,26 @@ export function generateFreshKSAMobile(): string {
 const MONGO_URI = 'mongodb://emiuat:EMI%40uat2024@10.243.127.24:27017/notification-log';
 const MONGO_DB  = 'notification-log';
 
-export async function getOtpFromDb(mobile: string): Promise<string> {
+export async function getOtpFromDb(mobile: string, maxAttempts = 10, delayMs = 2000): Promise<string> {
     const client = new MongoClient(MONGO_URI);
     try {
         await client.connect();
         const col = client.db(MONGO_DB).collection('notifications');
-        const doc = await col.findOne(
-            {
-                recipient: { $in: [mobile, `966${mobile}`, `+966${mobile}`, `0${mobile}`] },
-                message: { $regex: /Use this OTP/i },
-            },
-            { sort: { createdAt: -1 } }
-        );
-        if (!doc) throw new Error(`No OTP notification found for mobile ${mobile}`);
-        const match = (doc.message as string).match(/Use this OTP\s*:\s*(\d+)/i);
-        if (!match) throw new Error(`Could not extract OTP from message: ${doc.message}`);
-        return match[1];
+        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+            const doc = await col.findOne(
+                {
+                    recipient: { $in: [mobile, `966${mobile}`, `+966${mobile}`, `0${mobile}`] },
+                    message: { $regex: /Use this OTP/i },
+                },
+                { sort: { createdAt: -1 } }
+            );
+            if (doc) {
+                const match = (doc.message as string).match(/Use this OTP\s*:\s*(\d+)/i);
+                if (match) return match[1];
+            }
+            if (attempt < maxAttempts) await new Promise(r => setTimeout(r, delayMs));
+        }
+        throw new Error(`No OTP notification found for mobile ${mobile} after ${maxAttempts} attempts`);
     } finally {
         await client.close();
     }
@@ -130,9 +134,7 @@ export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
     const usedMobile = mobile ?? generateKSAMobile();
     await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await page.getByRole('textbox', { name: 'Mobile number' }).fill(usedMobile);
-    await page.waitForTimeout(1000);
     await page.getByRole('button', { name: 'next' }).click();
-    await page.waitForTimeout(5000);
     const otpVisible = await page.getByRole('heading', { name: 'Enter OTP' })
         .waitFor({ state: 'visible', timeout: 20000 })
         .then(() => true)
@@ -142,15 +144,15 @@ export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
             .waitFor({ state: 'visible', timeout: 10000 });
         const otp = await getOtpFromDb(usedMobile);
         await fillOTP(page, otp);
+        // App may auto-submit after last OTP digit; only click Verify if it is still
+        // visible — clicking during an active navigation corrupts page state even with .catch().
         const verifyBtn = page.getByRole('button', { name: 'Verify' });
-        // App may auto-submit after last OTP digit; click only if the button is still present
-        await verifyBtn.click({ timeout: 5000 }).catch(() => {});
-        await Promise.race([
-            page.getByRole('heading', { name: 'Enter OTP' }).waitFor({ state: 'hidden', timeout: 30000 }),
-            page.getByText('Tell us about your business').waitFor({ state: 'visible', timeout: 30000 }),
-        ]);
+        const verifyVisible = await verifyBtn.isVisible().catch(() => false);
+        if (verifyVisible) {
+            await verifyBtn.click({ timeout: 5000 }).catch(() => {});
+        }
     }
-    await page.getByText('Tell us about your business').waitFor({ state: 'visible', timeout: 30000 });
+    await page.getByText('Tell us about your business').waitFor({ state: 'visible', timeout: 60000 });
 }
 
 export interface FinancialStepCredentials {
@@ -182,8 +184,8 @@ export async function goToFinancialStep(page: Page, credentials?: FinancialStepC
         await radioGroup.getByRole('radio').first().click();
     }
 
-    await page.getByRole('textbox', { name: 'unified number' }).fill(crn);
-    await page.getByRole('textbox', { name: 'National ID/Iqama' }).fill(nationalId);
+    await page.locator('#floating-text-field-2').fill(crn);
+    await page.locator('#floating-text-field-3').fill(nationalId);
     await page.getByRole('textbox', { name: /Email/i }).fill(credentials?.email ?? generateEmail());
     await page.getByRole('button', { name: 'next' }).click();
     await page.getByRole('button', { name: 'Loading' })
@@ -192,7 +194,7 @@ export async function goToFinancialStep(page: Page, credentials?: FinancialStepC
     const advanced = await page.getByRole('textbox', { name: /monthly expected number/i })
         .isVisible({ timeout: 3000 }).catch(() => false);
     if (!advanced) {
-        const errorMsg = await page.evaluate(() => document.body.innerText).catch(() => 'â€”');
+        const errorMsg = await page.evaluate(() => document.body.innerText).catch(() => '(unknown)');
         throw new Error(
             `Business Info step was rejected by the backend.\n` +
             `CRN=${crn}, ID=${nationalId}, Mobile=${mobile}.\n` +
@@ -219,7 +221,17 @@ export async function goToVerificationStep(page: Page): Promise<void> {
         .waitFor({ state: 'visible', timeout: 15000 });
 }
 
-export async function selectRandomOption(page: Page, dropdownLocator: any) {
+export async function fillFinancialForm(page: Page): Promise<void> {
+    await page.getByRole('textbox', { name: /monthly expected number/i }).fill('1500');
+    await page.getByRole('textbox', { name: /monthly expected sum/i }).fill('50000');
+    await page.getByRole('textbox', { name: /monthly withdrawal/i }).fill('10000');
+    await page.getByRole('textbox', { name: /monthly deposit/i }).fill('20000');
+    await selectRandomOption(page, page.getByRole('combobox', { name: /banks/i }));
+    await selectRandomOption(page, page.getByRole('combobox', { name: /industries/i }));
+    await selectRandomOption(page, page.getByRole('combobox', { name: /annual income/i }));
+}
+
+export async function selectRandomOption(page: Page, dropdownLocator: Locator) {
     const tag = await dropdownLocator.evaluate((el: Element) => el.tagName.toLowerCase());
     if (tag === 'select') {
         const options    = await dropdownLocator.locator('option').all();

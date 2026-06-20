@@ -2,7 +2,7 @@ import { test, expect, Page } from '@playwright/test';
 import {
     VALID_EMAIL,
     goToFinancialStep,
-    selectRandomOption,
+    fillFinancialForm,
 } from './helpers';
 
 test.describe('Registration - Financial & Business Functionality', () => {
@@ -15,13 +15,7 @@ test.describe('Registration - Financial & Business Functionality', () => {
         const context = await browser.newContext();
         await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
         page = await context.newPage();
-        await goToFinancialStep(page, {
-            mobile:      '508698531',
-            crn:         '1011010343',
-            nationalId:  '1890603812',
-            profileType: 'merchant',
-            email:       VALID_EMAIL,
-        });
+        await goToFinancialStep(page, { profileType: 'merchant', email: VALID_EMAIL });
     });
 
     test.afterAll(async () => {
@@ -108,13 +102,7 @@ test.describe('Registration - Financial & Business Functionality', () => {
     // ── Next button state ─────────────────────────────────────────────────────
 
     test('should enable Next when all required fields and dropdowns are filled', async () => {
-        await page.getByRole('textbox', { name: /monthly expected number/i }).fill('1500');
-        await page.getByRole('textbox', { name: /monthly expected sum/i }).fill('50000');
-        await page.getByRole('textbox', { name: /monthly withdrawal/i }).fill('10000');
-        await page.getByRole('textbox', { name: /monthly deposit/i }).fill('20000');
-        await selectRandomOption(page, page.getByRole('combobox', { name: /banks/i }));
-        await selectRandomOption(page, page.getByRole('combobox', { name: /industries/i }));
-        await selectRandomOption(page, page.getByRole('combobox', { name: /annual income/i }));
+        await fillFinancialForm(page);
         await expect(page.getByRole('button', { name: /next/i })).toBeEnabled({ timeout: 5000 });
     });
 
@@ -140,13 +128,7 @@ test.describe('Registration - Financial & Business Functionality', () => {
     // ── Forward navigation to Verification ───────────────────────────────────
 
     test('should advance to Verification & Uploads step when Next is clicked with valid data', async () => {
-        await page.getByRole('textbox', { name: /monthly expected number/i }).fill('1500');
-        await page.getByRole('textbox', { name: /monthly expected sum/i }).fill('50000');
-        await page.getByRole('textbox', { name: /monthly withdrawal/i }).fill('10000');
-        await page.getByRole('textbox', { name: /monthly deposit/i }).fill('20000');
-        await selectRandomOption(page, page.getByRole('combobox', { name: /banks/i }));
-        await selectRandomOption(page, page.getByRole('combobox', { name: /industries/i }));
-        await selectRandomOption(page, page.getByRole('combobox', { name: /annual income/i }));
+        await fillFinancialForm(page);
         await page.getByRole('button', { name: /next/i }).click();
         await expect(page.getByRole('textbox', { name: /iban/i }))
             .toBeVisible({ timeout: 10000 });

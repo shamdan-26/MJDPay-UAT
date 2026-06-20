@@ -11,12 +11,8 @@ test.describe('Registration - Financial & Business Page', () => {
         const context = await browser.newContext();
         await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
         page = await context.newPage();
-        await goToFinancialStep(page, {
-            mobile:      '508698531',
-            crn:         '1011010343',
-            nationalId:  '1890603812',
-            profileType: 'merchant',
-        });
+        await goToFinancialStep(page, { profileType: 'merchant' });
+
     });
 
     test.afterAll(async () => {
