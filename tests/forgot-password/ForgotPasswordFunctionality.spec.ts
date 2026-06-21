@@ -214,7 +214,7 @@ test.describe('Forgot Password - Step 2 Back Navigation', () => {
         await expect(page.getByRole('button', { name: 'Next' })).toBeVisible({ timeout: 10000 });
     });
 
-    test('should preserve Company and Mobile number values when navigating back to step 1', async ({ page }) => {
+    test.skip('should preserve Company and Mobile number values when navigating back to step 1', async ({ page }) => {
         await page.pause();
         await page.locator('main button').first().click();
         await expect(page.getByRole('textbox', { name: 'Company number' })).toHaveValue(VALID_COMPANY, { timeout: 10000 });

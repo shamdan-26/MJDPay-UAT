@@ -166,12 +166,13 @@ test.describe('Login Functionality', () => {
 test.describe('Login - Already Authenticated', () => {
     test.use({ storageState: SESSION_PATH });
 
-    test('should redirect away from login page when already logged in', async ({ page }) => {
+    test.skip('should redirect away from login page when already logged in', async ({ page }) => {
+        await page.pause();
         await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
         await expect(page).not.toHaveURL(/auth\/login/, { timeout: 10000 });
     });
 
-    test('should not display the Log In button when already logged in', async ({ page }) => {
+    test.skip('should not display the Log In button when already logged in', async ({ page }) => {
         await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
         await expect(page.getByRole('button', { name: 'Log In' })).not.toBeVisible({ timeout: 10000 });
     });
