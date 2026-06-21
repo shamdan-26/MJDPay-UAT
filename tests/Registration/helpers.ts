@@ -1,8 +1,11 @@
-﻿import { Page, Locator, expect } from '@playwright/test';
+﻿import { Page, Locator } from '@playwright/test';
+
+declare const process: { env: Record<string, string | undefined> };
 import { MongoClient } from 'mongodb';
 
-export const LOGIN_URL    = 'https://uat.majdpay.com/business/auth/login';
-export const REGISTER_URL = 'https://uat.majdpay.com/business/auth/register';
+const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
+export const LOGIN_URL    = `${BASE_URL}/business/auth/login`;
+export const REGISTER_URL = `${BASE_URL}/business/auth/register`;
 
 export const VALID_EMAIL = 's.hamdan@dg-cash.com';
 

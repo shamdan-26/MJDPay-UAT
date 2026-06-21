@@ -2,7 +2,9 @@ import { defineConfig } from '@playwright/test';
 
 import dotenv from 'dotenv';
 import path from 'path';
-dotenv.config({ path: path.resolve(__dirname, '.env') });
+
+const env = process.env['ENV'] ?? 'uat';
+dotenv.config({ path: path.resolve(__dirname, `.env.${env}`) });
 
 export default defineConfig({
   globalSetup: './support/global-setup.ts',

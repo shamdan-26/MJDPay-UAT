@@ -4,3 +4,4 @@ test-results/
 session.json
 bug-report-assets/
 .env
+.env.*

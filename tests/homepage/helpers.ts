@@ -1,10 +1,11 @@
 import { Page } from '@playwright/test';
 import { getOtpFromDb, fillOTP } from '../Registration/helpers';
 
-export const LOGIN_URL        = 'https://uat.majdpay.com/business/auth/login';
-export const HOME_URL         = 'https://uat.majdpay.com/business/main/home';
+const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
+export const LOGIN_URL        = `${BASE_URL}/business/auth/login`;
+export const HOME_URL         = `${BASE_URL}/business/main/home`;
 export const HOME_URL_PATTERN = /\/business\/main\/home/;
-export const BASE_ORIGIN      = 'https://uat.majdpay.com';
+export const BASE_ORIGIN      = BASE_URL;
 
 export const VALID_COMPANY  = 'S2301';
 export const VALID_MOBILE   = '500021788';
