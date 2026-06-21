@@ -1,10 +1,10 @@
 import { chromium } from '@playwright/test';
+import { getOtpFromDb, fillOTP } from '../tests/Registration/helpers';
 
-const LOGIN_URL     = 'https://uat.majdpay.com/business/auth/login';
-const VALID_COMPANY  = 'L3999';
-const VALID_MOBILE   = '500318143';
-const VALID_PASSWORD = 'Aa#1234567';
-const VALID_OTP      = '0000';
+const LOGIN_URL      = 'https://uat.majdpay.com/business/auth/login';
+const VALID_COMPANY  = process.env['UAT_SETUP_COMPANY']  ?? (() => { throw new Error('UAT_SETUP_COMPANY env var is not set'); })();
+const VALID_MOBILE   = process.env['UAT_SETUP_MOBILE']   ?? (() => { throw new Error('UAT_SETUP_MOBILE env var is not set'); })();
+const VALID_PASSWORD = process.env['UAT_SETUP_PASSWORD'] ?? (() => { throw new Error('UAT_SETUP_PASSWORD env var is not set'); })();
 
 async function globalSetup() {
     const browser = await chromium.launch();
@@ -24,9 +24,14 @@ async function globalSetup() {
         .catch(() => false);
 
     if (otpVisible) {
-        const inputs = page.getByRole('textbox', { name: 'One time password input' });
-        for (let i = 0; i < 4; i++) await inputs.nth(i).fill(VALID_OTP[i]);
-        await page.getByRole('button', { name: 'Verify' }).click();
+        await page.getByRole('textbox', { name: 'One time password input' }).first()
+            .waitFor({ state: 'visible', timeout: 10000 });
+        const otp = await getOtpFromDb(VALID_MOBILE);
+        await fillOTP(page, otp);
+        const verifyBtn = page.getByRole('button', { name: 'Verify' });
+        if (await verifyBtn.isVisible().catch(() => false)) {
+            await verifyBtn.click();
+        }
         await page.waitForURL(url => !url.pathname.includes('/auth/'), { timeout: 30000 });
     }
 

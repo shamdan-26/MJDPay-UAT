@@ -6,9 +6,9 @@ export const HOME_URL         = 'https://uat.majdpay.com/business/main/home';
 export const HOME_URL_PATTERN = /\/business\/main\/home/;
 export const BASE_ORIGIN      = 'https://uat.majdpay.com';
 
-export const VALID_COMPANY  = 'S2301';
-export const VALID_MOBILE   = '500021788';
-export const VALID_PASSWORD = 'Aa#1234567';
+export const VALID_COMPANY  = process.env['UAT_COMPANY']  ?? (() => { throw new Error('UAT_COMPANY env var is not set'); })();
+export const VALID_MOBILE   = process.env['UAT_MOBILE']   ?? (() => { throw new Error('UAT_MOBILE env var is not set'); })();
+export const VALID_PASSWORD = process.env['UAT_PASSWORD'] ?? (() => { throw new Error('UAT_PASSWORD env var is not set'); })();
 
 /** Full login flow: credentials → OTP (fetched from MongoDB) → home page. */
 export async function loginAsMerchant(page: Page): Promise<void> {

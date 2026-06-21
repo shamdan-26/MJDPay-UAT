@@ -12,6 +12,7 @@
     "@faker-js/faker": "^10.5.0",
     "@playwright/test": "^1.60.0",
     "@types/node": "^25.9.1",
+    "dotenv": "^17.4.2",
     "mongodb": "^7.3.0"
   }
 }

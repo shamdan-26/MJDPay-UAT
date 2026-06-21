@@ -94,7 +94,7 @@ export function generateFreshKSAMobile(): string {
     return UAT_OTP_ASSETS[Math.floor(Math.random() * UAT_OTP_ASSETS.length)].mobile;
 }
 
-const MONGO_URI = 'mongodb://emiuat:EMI%40uat2024@10.243.127.24:27017/notification-log';
+const MONGO_URI = process.env['MONGO_URI'] ?? (() => { throw new Error('MONGO_URI env var is not set'); })();
 const MONGO_DB  = 'notification-log';
 
 export async function getOtpFromDb(mobile: string, maxAttempts = 10, delayMs = 2000): Promise<string> {
