@@ -12,23 +12,48 @@ export class HomePage {
     readonly Transactions_NavButton: Locator;
     readonly transferButton: Locator;
     readonly W2WTransferButton: Locator;
+    readonly Home_NavButton: Locator;
     readonly currentBalance: Locator;
 
     constructor(page: Page) {
         this.page = page;
 
-        // Locators mapped from Java FindBy elements
-        this.profileIcon = page.locator("//*[@id='ddl_profile']/img");
-        this.logoutButton = page.locator("#btn_profile_logout");
-        this.TopupButton = page.locator("#btn_top_up");
-        this.ManageUsers_NavButton = page.locator("(//span[@class='icon'])[4]");
-        this.Bills_NavButton = page.locator("(//span[@class='icon'])[5]");
-        this.BillPayment_NavButton = page.locator("(//span[@class='mdc-list-item__content'])[11]");
-        this.BillReport_NavButton = page.locator("(//span[@class='mdc-list-item__content'])[12]");
-        this.Transactions_NavButton = page.locator("(//span[@class='mdc-list-item__content'])[2]");
+        this.Home_NavButton = page.locator('#sideNav-menu-item-0');
+
+        // Locators mapped from Java FindBy elements - updated to handle release/v6.0.0 layout changes
+        this.profileIcon = page.locator("button#userSettings-image-container")
+            .or(page.locator("#userSettings-image-container"))
+            .or(page.locator("//*[@id='ddl_profile']/img"));
+
+        this.logoutButton = page.locator("button#logout")
+            .or(page.locator("#btn_profile_logout"));
+
+        this.TopupButton = page.locator("#quick-topup")
+            .or(page.locator("#btn_top_up"))
+            .or(page.getByRole('link', { name: /top up/i }))
+            .or(page.getByText(/top up/i));
+
+        this.ManageUsers_NavButton = page.getByRole('button', { name: /manage accounts/i })
+            .or(page.getByText(/manage accounts/i))
+            .or(page.locator("(//span[@class='icon'])[4]"));
+
+        this.Bills_NavButton = page.getByRole('button', { name: /^bills$/i })
+            .or(page.getByText(/^bills$/i))
+            .or(page.locator("(//span[@class='icon'])[5]"));
+
+        this.BillPayment_NavButton = page.getByRole('link', { name: /bill payment/i })
+            .or(page.getByText(/bill payment/i))
+            .or(page.locator("(//span[@class='mdc-list-item__content'])[11]"));
+
+        this.BillReport_NavButton = page.getByRole('link', { name: /bill reports?/i })
+            .or(page.getByText(/bill reports?/i))
+            .or(page.locator("(//span[@class='mdc-list-item__content'])[12]"));
+
+        this.Transactions_NavButton = page.locator('#sideNav-menu-item-1');
+
         this.transferButton = page.locator("#balance-transfer-text");
         this.W2WTransferButton = page.locator("#btn_wallet_transfer");
-        this.currentBalance = page.locator("//div[@class='price']//span[@id='balance-amount']");
+        this.currentBalance = page.locator(".mp-bal-amount").or(page.locator("//div[@class='price']//span[@id='balance-amount']"));
     }
 
     // ---------- Actions ----------
@@ -76,6 +101,12 @@ export class HomePage {
         await expect(this.Transactions_NavButton).toBeVisible({ timeout: 30000 });
         await expect(this.Transactions_NavButton).toBeEnabled({ timeout: 30000 });
         await this.Transactions_NavButton.click();
+    }
+
+    async clickHome_NavButton() {
+        await expect(this.Home_NavButton).toBeVisible({ timeout: 30000 });
+        await expect(this.Home_NavButton).toBeEnabled({ timeout: 30000 });
+        await this.Home_NavButton.click();
     }
 
     async getWalletBalance(): Promise<number> {

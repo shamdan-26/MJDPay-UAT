@@ -139,7 +139,7 @@ export class BankTransferPage {
 
     // ---------- Balance Checks ----------
     async getBalanceBeforeBankTransfer(): Promise<number> {
-        const balanceLocator = this.page.locator('#balance-amount');
+        const balanceLocator = this.page.locator('.mp-bal-amount').or(this.page.locator('#balance-amount'));
         await expect(balanceLocator).toBeVisible({ timeout: 15000 });
 
         // Wait for the balance text to be populated (non-empty containing a digit)
@@ -159,7 +159,7 @@ export class BankTransferPage {
     }
 
     async actual_BalanceAfter(): Promise<number> {
-        const balanceLocator = this.page.locator("//div//span[@id='balance-amount']");
+        const balanceLocator = this.page.locator('.mp-bal-amount').or(this.page.locator("//div//span[@id='balance-amount']"));
         await expect(balanceLocator).toBeVisible({ timeout: 15000 });
 
         const balanceText = (await balanceLocator.textContent())?.trim() ?? "";
