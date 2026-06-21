@@ -43,6 +43,7 @@ test.describe('Registration - OTP Functionality', () => {
     });
 
     test('should enable Verify button when all OTP inputs are filled', async ({ page }) => {
+        await page.pause();
         await fillOTP(page);
         await expect(page.getByRole('button', { name: 'Verify' })).toBeEnabled();
     });
