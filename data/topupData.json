@@ -148,5 +148,111 @@
     "otpCode": "0000",
     "returnCode": "3",
     "expectedStatus": "PENDING"
+  },
+  {
+    "testName": "Topup_verifyAmountField_PreventsInvalidInput",
+    "execute": true,
+    "companyNumber": "F2147",
+    "mobileNumber": "510203012",
+    "password": "Aa#1234567",
+    "paymentMethod": "VISA",
+    "amountInput": "-10.00",
+    "expectedValue": "10.00",
+    "isNegativeFlow": true
+  },
+  {
+    "testName": "Topup_verifyAmountField_PreventsZeroAmount",
+    "execute": true,
+    "companyNumber": "F2147",
+    "mobileNumber": "510203012",
+    "password": "Aa#1234567",
+    "paymentMethod": "VISA",
+    "amountInput": "0",
+    "expectedValue": "",
+    "isButtonDisabled": true
+  },
+  {
+    "testName": "Topup_verifyAmountField_PreventsInvalidChars",
+    "execute": true,
+    "companyNumber": "F2147",
+    "mobileNumber": "510203012",
+    "password": "Aa#1234567",
+    "paymentMethod": "VISA",
+    "amountInput": "abc!@#",
+    "expectedValue": "",
+    "isButtonDisabled": true
+  },
+  {
+    "testName": "Topup_AmountValidation_ValidFloat_2_Decimals",
+    "execute": true,
+    "companyNumber": "F2147",
+    "mobileNumber": "510203012",
+    "password": "Aa#1234567",
+    "paymentMethod": "VISA",
+    "amountInput": "10.55",
+    "expectedValue": "10.55"
+  },
+  {
+    "testName": "Topup_AmountValidation_ValidFloat_1_Decimal",
+    "execute": true,
+    "companyNumber": "F2147",
+    "mobileNumber": "510203012",
+    "password": "Aa#1234567",
+    "paymentMethod": "VISA",
+    "amountInput": "10.5",
+    "expectedValue": "10.5"
+  },
+  {
+    "testName": "Topup_AmountValidation_InvalidFloat_3_Decimals",
+    "execute": true,
+    "companyNumber": "F2147",
+    "mobileNumber": "510203012",
+    "password": "Aa#1234567",
+    "paymentMethod": "VISA",
+    "amountInput": "10.555",
+    "expectedValue": "10.55"
+  },
+  {
+    "testName": "Topup_AmountValidation_CopyPaste_Valid",
+    "execute": true,
+    "companyNumber": "F2147",
+    "mobileNumber": "510203012",
+    "password": "Aa#1234567",
+    "paymentMethod": "VISA",
+    "amountInput": "25.00",
+    "isClipboardTest": true,
+    "expectedValue": "25.00"
+  },
+  {
+    "testName": "Topup_AmountValidation_CopyPaste_Invalid",
+    "execute": true,
+    "companyNumber": "F2147",
+    "mobileNumber": "510203012",
+    "password": "Aa#1234567",
+    "paymentMethod": "VISA",
+    "amountInput": "invalid_text",
+    "isClipboardTest": true,
+    "expectedValue": "",
+    "isButtonDisabled": true
+  },
+  {
+    "testName": "Topup_CancelTransaction_PageRefresh",
+    "execute": true,
+    "companyNumber": "F2147",
+    "mobileNumber": "510203012",
+    "password": "Aa#1234567",
+    "paymentMethod": "VISA",
+    "amountInput": "10.00",
+    "cancelType": "REFRESH"
+  },
+  {
+    "testName": "Topup_CancelTransaction_SummaryCancelButton",
+    "execute": true,
+    "companyNumber": "F2147",
+    "mobileNumber": "510203012",
+    "password": "Aa#1234567",
+    "paymentMethod": "VISA",
+    "amountInput": "10.00",
+    "cancelType": "CANCEL_BUTTON"
   }
 ]
