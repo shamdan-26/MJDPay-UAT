@@ -1,14 +1,17 @@
 import { test, expect } from '@playwright/test';
-import { REGISTER_URL, generateFreshKSAMobile, fillOTP } from './helpers';
+import { REGISTER_URL, generateFreshKSAMobile, fillOTP, getOtpFromDb } from './helpers';
 
 test.describe('Registration - OTP Functionality', () => {
     test.describe.configure({ mode: 'serial' });
 
+    let currentMobile: string;
+
     test.beforeEach(async ({ page, context }) => {
+        currentMobile = generateFreshKSAMobile();
         await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-        
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill(generateFreshKSAMobile());
+
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill(currentMobile);
         await page.getByRole('button', { name: 'next' }).click();
 
         const otpAppeared = await page.getByRole('heading', { name: 'Enter OTP' })
@@ -43,7 +46,6 @@ test.describe('Registration - OTP Functionality', () => {
     });
 
     test('should enable Verify button when all OTP inputs are filled', async ({ page }) => {
-        await page.pause();
         await fillOTP(page);
         await expect(page.getByRole('button', { name: 'Verify' })).toBeEnabled();
     });
@@ -99,6 +101,18 @@ test.describe('Registration - OTP Functionality', () => {
         await expect(page.getByRole('button', { name: 'Verify' })).toBeEnabled({ timeout: 5000 });
         await page.getByRole('button', { name: 'Verify' }).click();
         await expect(page.getByRole('heading', { name: 'Enter OTP' })).toBeVisible();
+    });
+
+    // ── OTP success ───────────────────────────────────────────────────────────
+
+    test('should advance to the Business Info step after entering the correct OTP', async ({ page }) => {
+        const otp = await getOtpFromDb(currentMobile);
+        await fillOTP(page, otp);
+        const verifyBtn = page.getByRole('button', { name: 'Verify' });
+        if (await verifyBtn.isVisible().catch(() => false)) {
+            await verifyBtn.click({ timeout: 5000 }).catch(() => {});
+        }
+        await expect(page.getByText('Tell us about your business')).toBeVisible({ timeout: 30000 });
     });
 
     // ── Cancel ────────────────────────────────────────────────────────────────

@@ -88,6 +88,24 @@ test.describe('Homepage – Page Elements', () => {
         expect(visible, 'A balance or account overview element should be visible').toBe(true);
     });
 
+    test('should display the wallet balance amount in SAR', async ({ page }) => {
+        const sarText = page.getByText(/SAR|ر\.س/i).first();
+        await expect(sarText).toBeVisible({ timeout: 10000 });
+    });
+
+    test('should display the Last Login date and time', async ({ page }) => {
+        const lastLogin = page.getByText(/last.?login/i).first();
+        await expect(lastLogin).toBeVisible({ timeout: 10000 });
+    });
+
+    test('should display at most 10 rows in the last transactions table', async ({ page }) => {
+        const container = page.locator('#last-transactions-container');
+        await expect(container).toBeVisible({ timeout: 10000 });
+        const rows = container.locator('tbody tr');
+        const count = await rows.count();
+        expect(count, 'Transaction table should show at most 10 rows').toBeLessThanOrEqual(10);
+    });
+
     test('should display a transactions section heading', async ({ page }) => {
         const heading = page.getByRole('heading', { name: /transactions?/i });
         const label   = page.locator('[id*="transaction"] [class*="title"], [id*="transaction"] [class*="header"]').first();

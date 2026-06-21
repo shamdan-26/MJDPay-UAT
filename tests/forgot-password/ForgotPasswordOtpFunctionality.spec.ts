@@ -2,13 +2,14 @@ import { test, expect } from '@playwright/test';
 import {
     SUBMIT_BUTTON,
     VALID_PASSWORD,
-    VALID_OTP,
+    VALID_MOBILE,
     INVALID_OTP,
     MODAL_SELECTOR,
     mockForgetPasswordSuccess,
     gotoForgotPassword,
     fillStep1AndProceed,
 } from './helpers';
+import { getOtpFromDb } from '../login/helpers';
 
 // ── OTP Verification: Dialog functionality after step 2 submit ────────────────
 
@@ -88,12 +89,21 @@ test.describe('Forgot Password - OTP Verification Flow', () => {
         await expect(errorIndicator).toBeVisible({ timeout: 5000 });
     });
 
-    test('should reset password successfully with correct OTP and redirect to login', async ({ page }) => {
+    test('should reset password successfully with correct OTP, redirect to login, and show a success message', async ({ page }) => {
+        // Password-reset SMS uses a different template; use /Use this/i to match either format.
+        const otp    = await getOtpFromDb(VALID_MOBILE, 10, 2000, /Use this/i);
         const inputs = page.locator(MODAL_SELECTOR).locator('input');
-        const count = await inputs.count();
-        for (let i = 0; i < count; i++) await inputs.nth(i).fill(VALID_OTP[i] ?? '0');
-        await page.locator(MODAL_SELECTOR).getByRole('button', { name: 'Confirm' }).click();
+        const count  = await inputs.count();
+        for (let i = 0; i < count; i++) {
+            await inputs.nth(i).pressSequentially(otp[i] ?? '0', { delay: 50 });
+        }
+        const confirmBtn = page.locator(MODAL_SELECTOR).getByRole('button', { name: 'Confirm' });
+        if (await confirmBtn.isVisible().catch(() => false)) {
+            await confirmBtn.click({ timeout: 5000 }).catch(() => {});
+        }
         await expect(page).toHaveURL(/login/, { timeout: 15000 });
+        const successMsg = page.locator('[role="alert"], [role="status"], [class*="success"], [class*="toast"], .notification').first();
+        await expect(successMsg).toBeVisible({ timeout: 5000 });
     });
 
     // ── Resend ────────────────────────────────────────────────────────────────

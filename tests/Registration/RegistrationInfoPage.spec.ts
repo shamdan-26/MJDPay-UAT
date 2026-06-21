@@ -1,24 +1,24 @@
 import { test, expect, Page, Browser, chromium } from '@playwright/test';
 import { goToInfoStep } from './helpers';
 
+let browser: Browser;
+let page: Page;
+
+test.beforeAll(async (): Promise<void> => {
+    browser = await chromium.launch();
+    const context = await browser.newContext();
+    await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+    page = await context.newPage();
+    await goToInfoStep(page);
+}, 120_000);
+
+test.afterAll(async (): Promise<void> => {
+    await page.close();
+    await browser.close();
+});
+
 test.describe('Registration - Info Page', () => {
     test.describe.configure({ mode: 'serial' });
-
-    let browser: Browser;
-    let page: Page;
-
-    test.beforeAll(async () => {
-        browser = await chromium.launch();
-        const context = await browser.newContext();
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
-        page = await context.newPage();
-        await goToInfoStep(page);
-    }, 120_000);
-
-    test.afterAll(async () => {
-        await page.close();
-        await browser.close();
-    });
 
     // ── Page content ──────────────────────────────────────────────────────────
 

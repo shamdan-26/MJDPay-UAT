@@ -15,7 +15,6 @@ test.describe('Registration - Financial & Business Functionality', () => {
         const context = await browser.newContext();
         await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
         page = await context.newPage();
-        await page.pause();
         await goToFinancialStep(page, { profileType: 'merchant', email: VALID_EMAIL });
     });
 
@@ -53,6 +52,22 @@ test.describe('Registration - Financial & Business Functionality', () => {
         const input = page.getByRole('textbox', { name: /monthly deposit/i });
         await input.fill('20000');
         await expect(input).toHaveValue('20000');
+    });
+
+    // ── Input validation ──────────────────────────────────────────────────────
+
+    test('should not accept alphabetic characters in the Monthly Expected Number field', async () => {
+        const input = page.getByRole('textbox', { name: /monthly expected number/i });
+        await input.clear();
+        await input.pressSequentially('abc');
+        await expect(input).toHaveValue('');
+    });
+
+    test('should not accept special characters in the Monthly Expected Sum field', async () => {
+        const input = page.getByRole('textbox', { name: /monthly expected sum/i });
+        await input.clear();
+        await input.pressSequentially('!@#');
+        await expect(input).toHaveValue('');
     });
 
     // ── Banks dropdown ────────────────────────────────────────────────────────

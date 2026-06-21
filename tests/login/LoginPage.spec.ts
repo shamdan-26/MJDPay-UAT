@@ -155,6 +155,11 @@ test.describe('Login Page', () => {
         await expect(page.getByText('Forgot Password?')).toBeVisible();
     });
 
+    test('should navigate to the Forgot Password page when the link is clicked', async ({ page }) => {
+        await page.getByText('Forgot Password?').click();
+        await expect(page).toHaveURL(/forgot-password/, { timeout: 10000 });
+    });
+
     // ── Log In button ─────────────────────────────────────────────────────────
 
     test('should display the Log In button', async ({ page }) => {
@@ -175,8 +180,4 @@ test.describe('Login Page', () => {
         await expect(page.getByText('Sign Up')).toBeVisible();
     });
 
-    test.afterAll(async ({ browser }) => {
-        const page = await browser.newPage();
-        await page.pause();
-    });
 });

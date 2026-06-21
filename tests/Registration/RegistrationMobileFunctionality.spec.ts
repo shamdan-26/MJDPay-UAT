@@ -33,6 +33,20 @@ test.describe('Registration - Mobile Number Functionality', () => {
         await expect(page.getByRole('textbox', { name: 'Mobile number' })).toHaveValue(mobile);
     });
 
+    // ── Character filtering ───────────────────────────────────────────────────
+
+    test('should not accept alphabetic characters in the mobile field', async ({ page }) => {
+        const mobileInput = page.getByRole('textbox', { name: 'Mobile number' });
+        await mobileInput.pressSequentially('abc');
+        await expect(mobileInput).toHaveValue('');
+    });
+
+    test('should not accept special characters in the mobile field', async ({ page }) => {
+        const mobileInput = page.getByRole('textbox', { name: 'Mobile number' });
+        await mobileInput.pressSequentially('!@#');
+        await expect(mobileInput).toHaveValue('');
+    });
+
     // ── Next button state ─────────────────────────────────────────────────────
 
     test('should enable Next button when a valid KSA mobile number is filled', async ({ page }) => {

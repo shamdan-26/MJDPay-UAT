@@ -1,9 +1,11 @@
 import { test, expect } from '@playwright/test';
 import {
-    VALID_OTP,
+    VALID_MOBILE,
     INVALID_OTP,
     gotoLogin,
     fillAndSubmitLogin,
+    getOtpFromDb,
+    fillOtpInputs,
 } from './helpers';
 
 test.describe('Login OTP Functionality', () => {
@@ -107,10 +109,12 @@ test.describe('Login OTP Functionality', () => {
     });
 
     test('should log in successfully and redirect with a correct OTP', async ({ page }) => {
-        const inputs = page.getByRole('textbox', { name: 'One time password input' });
-        const count = await inputs.count();
-        await page.pause(); 
-        for (let i = 0; i < count; i++) await inputs.nth(i).fill(VALID_OTP[i] ?? '0');
+        const otp = await getOtpFromDb(VALID_MOBILE);
+        await fillOtpInputs(page, otp);
+        const verifyBtn = page.getByRole('button', { name: 'Verify' });
+        if (await verifyBtn.isVisible().catch(() => false)) {
+            await verifyBtn.click({ timeout: 5000 }).catch(() => {});
+        }
         await expect(page).not.toHaveURL(/auth\/login/, { timeout: 15000 });
     });
 });
