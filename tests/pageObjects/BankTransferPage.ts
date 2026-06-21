@@ -23,11 +23,15 @@ export class BankTransferPage {
         // Locators mapped from Java elements
         this.bankTransferButton = page.locator('#balance-transfer-text');
         this.inputAmount = page.locator('#input_set_amount');
-        this.proceedButton = page.locator('#sa_button button');
-        this.proceedButtonInSummary = page.locator('button.btn-primary.custom-btn', { hasText: 'Next' });
-        this.summaryCancelButton = page.locator('button.btn.btn-outline-primary.custom-btn', { hasText: 'Cancel' });
+        this.proceedButton = page.locator('button.mp-btn-cta')
+            .or(page.locator('#sa_button button'));
+        this.proceedButtonInSummary = page.locator('button.btn-primary:has-text("Next")')
+            .or(page.locator('button.btn-primary.custom-btn', { hasText: 'Next' }));
+        this.summaryCancelButton = page.locator('button.btn-outline-primary:has-text("Cancel")')
+            .or(page.locator('button.btn.btn-outline-primary.custom-btn', { hasText: 'Cancel' }));
         this.summaryCloseIcon = page.locator('mat-icon.mat-icon.material-icons', { hasText: 'close' });
-        this.Successful_OkButton = page.locator('button#submit_btn_info', { hasText: 'Ok' }); this.useFullBalanceToggle = page.locator('#use-full-balance-toggle');
+        this.Successful_OkButton = page.locator('button.mp-btn-wide:has-text("Ok")')
+            .or(page.locator('button#submit_btn_info', { hasText: 'Ok' })); this.useFullBalanceToggle = page.locator('#use-full-balance-toggle');
 
         // Instantiate TransactionsPage just like `TransactionsPage tnxp = new TransactionsPage(driver);`
         this.tnxp = new TransactionsPage(page);
