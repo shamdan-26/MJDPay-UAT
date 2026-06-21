@@ -101,6 +101,7 @@ const MONGO_URI = process.env['MONGO_URI'] ?? (() => { throw new Error('MONGO_UR
 const MONGO_DB  = 'notification-log';
 
 export async function getOtpFromDb(mobile: string, maxAttempts = 10, delayMs = 2000): Promise<string> {
+    if ((process.env['ENV'] ?? 'uat') === 'dev') return '00000000';
     const client = new MongoClient(MONGO_URI);
     try {
         await client.connect();

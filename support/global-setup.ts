@@ -1,7 +1,9 @@
 import { chromium } from '@playwright/test';
 import { getOtpFromDb, fillOTP } from '../tests/Registration/helpers';
 
-const LOGIN_URL      = 'https://uat.majdpay.com/business/auth/login';
+const env            = process.env['ENV'] ?? 'uat';
+const BASE_URL       = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
+const LOGIN_URL      = `${BASE_URL}/business/auth/login`;
 const VALID_COMPANY  = process.env['UAT_SETUP_COMPANY']  ?? (() => { throw new Error('UAT_SETUP_COMPANY env var is not set'); })();
 const VALID_MOBILE   = process.env['UAT_SETUP_MOBILE']   ?? (() => { throw new Error('UAT_SETUP_MOBILE env var is not set'); })();
 const VALID_PASSWORD = process.env['UAT_SETUP_PASSWORD'] ?? (() => { throw new Error('UAT_SETUP_PASSWORD env var is not set'); })();
@@ -15,7 +17,11 @@ async function globalSetup() {
     await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
     await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
     await page.locator('input[aria-label="Password"]').fill(VALID_PASSWORD);
-    await page.getByRole('button', { name: 'Log In' }).click();
+    if (env === 'dev') {
+        await page.locator('#btn_login').click();
+    } else {
+        await page.getByRole('button', { name: 'Log In' }).click();
+    }
 
     // Handle OTP if the environment has it enabled
     const otpVisible = await page.getByRole('heading', { name: 'Enter OTP' })

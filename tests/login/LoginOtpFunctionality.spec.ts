@@ -109,8 +109,8 @@ test.describe('Login OTP Functionality', () => {
     test('should log in successfully and redirect with a correct OTP', async ({ page }) => {
         const inputs = page.getByRole('textbox', { name: 'One time password input' });
         const count = await inputs.count();
+        await page.pause(); 
         for (let i = 0; i < count; i++) await inputs.nth(i).fill(VALID_OTP[i] ?? '0');
-        await page.getByRole('button', { name: 'Verify' }).click();
         await expect(page).not.toHaveURL(/auth\/login/, { timeout: 15000 });
     });
 });

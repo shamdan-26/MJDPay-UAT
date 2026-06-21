@@ -1,5 +1,9 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import { LOGIN_URL, gotoLogin } from './helpers';
+
+const env = process.env['ENV'] ?? 'uat';
+const loginBtn = (page: Page) =>
+    env === 'dev' ? page.locator('#btn_login') : page.getByRole('button', { name: 'Log In' });
 
 test.describe('Login Page', () => {
     test.describe.configure({ mode: 'serial' });
@@ -154,11 +158,11 @@ test.describe('Login Page', () => {
     // ── Log In button ─────────────────────────────────────────────────────────
 
     test('should display the Log In button', async ({ page }) => {
-        await expect(page.getByRole('button', { name: 'Log In' })).toBeVisible();
+        await expect(loginBtn(page)).toBeVisible();
     });
 
     test('should have the Log In button disabled on page load', async ({ page }) => {
-        await expect(page.getByRole('button', { name: 'Log In' })).toBeDisabled();
+        await expect(loginBtn(page)).toBeDisabled();
     });
 
     // ── Sign Up ───────────────────────────────────────────────────────────────
@@ -169,5 +173,10 @@ test.describe('Login Page', () => {
 
     test('should display the Sign Up link', async ({ page }) => {
         await expect(page.getByText('Sign Up')).toBeVisible();
+    });
+
+    test.afterAll(async ({ browser }) => {
+        const page = await browser.newPage();
+        await page.pause();
     });
 });

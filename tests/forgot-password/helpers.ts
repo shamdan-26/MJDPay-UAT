@@ -1,10 +1,11 @@
 import type { Page } from '@playwright/test';
 
-export const FORGOT_URL     = 'https://uat.majdpay.com/business/auth/forgot-password';
-export const LOGIN_URL      = 'https://uat.majdpay.com/business/auth/login';
+const BASE_URL              = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
+export const FORGOT_URL     = `${BASE_URL}/business/auth/forgot-password`;
+export const LOGIN_URL      = `${BASE_URL}/business/auth/login`;
 
-export const VALID_COMPANY  = 'L3999';
-export const VALID_MOBILE   = '500318143';
+export const VALID_COMPANY  = process.env['UAT_COMPANY'] ?? 'L3999';
+export const VALID_MOBILE   = process.env['UAT_MOBILE']  ?? '500318143';
 
 export const SUBMIT_BUTTON  = 'reset password';
 export const VALID_PASSWORD = 'Aa#1234567';
