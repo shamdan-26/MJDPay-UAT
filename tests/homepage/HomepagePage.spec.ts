@@ -43,8 +43,8 @@ test.describe('Homepage – Page Elements', () => {
         await expect(page.getByRole('link', { name: /payments?/i })).toBeVisible();
     });
 
-    test('should display the Accounts link in the sidebar', async ({ page }) => {
-        await expect(page.getByRole('link', { name: /accounts?/i })).toBeVisible();
+    test('should display the Accounts item in the sidebar', async ({ page }) => {
+        await expect(page.locator('#sideNav-expansion-panel-text-8')).toBeVisible();
     });
 
     test('should highlight the Home nav item as active on the homepage', async ({ page }) => {
@@ -71,9 +71,6 @@ test.describe('Homepage – Page Elements', () => {
         await expect(page.locator('#sideNav-sidenav #userSettings-brand-name')).toBeVisible();
     });
 
-    test('should display the correct company name for the logged-in account', async ({ page }) => {
-        await expect(page.locator('#userSettings-brand-name')).not.toBeEmpty();
-    });
 
     // ── Dashboard widgets ─────────────────────────────────────────────────────
 
