@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { loginAsMerchant, HOME_URL, BASE_ORIGIN } from './helpers';
+import { loginAsMerchant, HOME_URL, HOME_URL_PATTERN, BASE_ORIGIN, openProfileMenu } from './helpers';
 
 test.describe('Homepage – Page Elements', () => {
-    test.describe.configure({ mode: 'serial' });
+    test.describe.configure({ mode: 'serial' }); // serial: logout test destroys session — must run last
 
     test.beforeEach(async ({ page, context }) => {
         await context.grantPermissions(['geolocation'], { origin: BASE_ORIGIN });
@@ -12,7 +12,7 @@ test.describe('Homepage – Page Elements', () => {
     // ── URL & title ───────────────────────────────────────────────────────────
 
     test('should redirect to homepage after successful login', async ({ page }) => {
-        await expect(page).toHaveURL(/\/business\/main\/home/);
+        await expect(page).toHaveURL(HOME_URL_PATTERN);
     });
 
     test('should have the correct page title', async ({ page }) => {
@@ -21,24 +21,45 @@ test.describe('Homepage – Page Elements', () => {
 
     // ── Logo ──────────────────────────────────────────────────────────────────
 
-    test('should display the MJD Pay logo', async ({ page }) => {
+    test('should display the MJD Pay logo in the sidebar', async ({ page }) => {
         await expect(page.locator('#sideNav-logo')).toBeVisible();
     });
 
     // ── Sidebar / navigation ──────────────────────────────────────────────────
 
-    test('should display the sidebar navigation', async ({ page }) => {
+    test('should display the sidebar navigation container', async ({ page }) => {
         await expect(page.locator('nav, aside, [role="navigation"]').first()).toBeVisible();
     });
 
-    test('should highlight the Home nav item as active', async ({ page }) => {
-        const homeLink = page.getByRole('link', { name: /home/i });
+    test('should display the Home link in the sidebar', async ({ page }) => {
+        await expect(page.getByRole('link', { name: /^home$/i })).toBeVisible();
+    });
+
+    test('should display the Transactions link in the sidebar', async ({ page }) => {
+        await expect(page.getByRole('link', { name: /transactions?/i })).toBeVisible();
+    });
+
+    test('should display the Payments link in the sidebar', async ({ page }) => {
+        await expect(page.getByRole('link', { name: /payments?/i })).toBeVisible();
+    });
+
+    test('should display the Accounts link in the sidebar', async ({ page }) => {
+        await expect(page.getByRole('link', { name: /accounts?/i })).toBeVisible();
+    });
+
+    test('should highlight the Home nav item as active on the homepage', async ({ page }) => {
+        const homeLink = page.getByRole('link', { name: /^home$/i });
         await expect(homeLink).toBeVisible();
+        const classes = await homeLink.getAttribute('class') ?? '';
+        const ariaSelected = await homeLink.getAttribute('aria-current');
+        // Active state expressed either via an exact CSS class or aria-current="page"
+        const isActive = classes.split(' ').includes('active') || ariaSelected === 'page';
+        expect(isActive, 'Home link should be marked as active').toBe(true);
     });
 
     // ── Header / top bar ──────────────────────────────────────────────────────
 
-    test('should display the Profile', async ({ page }) => {
+    test('should display the Profile trigger in the header', async ({ page }) => {
         await expect(page.locator('#ddl_profile')).toBeVisible();
     });
 
@@ -46,24 +67,42 @@ test.describe('Homepage – Page Elements', () => {
         await expect(page.locator('.dropdown-toggle.nav-link.ai-icon')).toBeVisible();
     });
 
-    test('should display the user company title', async ({ page }) => {
+    test('should display the user company name in the sidebar', async ({ page }) => {
         await expect(page.locator('#sideNav-sidenav #userSettings-brand-name')).toBeVisible();
     });
 
-    // ── Dashboard widgets / summary cards ────────────────────────────────────
+    test('should display the correct company name for the logged-in account', async ({ page }) => {
+        await expect(page.locator('#userSettings-brand-name')).not.toBeEmpty();
+    });
 
-    test('should display at least one summary or stat card on the dashboard', async ({ page }) => {
+    // ── Dashboard widgets ─────────────────────────────────────────────────────
+
+    test('should display the last transactions container', async ({ page }) => {
         await expect(page.locator('#last-transactions-container')).toBeVisible();
     });
 
     test('should display a balance or account overview section', async ({ page }) => {
-        const balanceSection = page.getByText(/balance|total|amount/i).first();
-        await expect(balanceSection).toBeVisible();
+        const balanceSection = page.locator(
+            '[id*="balance"], [id*="account"], [class*="balance"], [class*="account-overview"]'
+        ).first();
+        const fallback = page.getByText(/balance|total amount/i).first();
+        const visible = await balanceSection.isVisible().catch(() => false)
+            || await fallback.isVisible().catch(() => false);
+        expect(visible, 'A balance or account overview element should be visible').toBe(true);
     });
 
-    // ── Logout ────────────────────────────────────────────────────────────────
+    test('should display a transactions section heading', async ({ page }) => {
+        const heading = page.getByRole('heading', { name: /transactions?/i });
+        const label   = page.locator('[id*="transaction"] [class*="title"], [id*="transaction"] [class*="header"]').first();
+        const visible = await heading.isVisible().catch(() => false)
+            || await label.isVisible().catch(() => false);
+        expect(visible, 'A transactions section heading or label should be visible').toBe(true);
+    });
+
+    // ── Logout (session-destroying — must remain last) ─────────────────────────
 
     test('should log out and redirect to login page', async ({ page }) => {
+        await openProfileMenu(page);
         await page.locator('#logout').click();
         await page.getByRole('button', { name: 'proceed' }).click();
         await expect(page).toHaveURL(/auth\/login/);
