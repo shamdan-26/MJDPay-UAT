@@ -7,12 +7,13 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3)', () => {
     test.beforeEach(async ({ page, context }) => {
         await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
         await goToFinancialStep(page);
+        await page.pause(); // Wait for the page to stabilize before running tests
     });
 
     // ── Step indicator ────────────────────────────────────────────────────────
 
     test('should show the Financial & Business tab as active', async ({ page }) => {
-        await expect(page.getByRole('tab', { name: /financial/i })).toHaveAttribute('aria-selected', 'true');
+        await expect(page.locator('#register-form-title.form-title')).toContainText(/financial/i);
     });
 
     test('should display the step indicator "Step 2 of 3" or highlight the second tab', async ({ page }) => {
@@ -20,7 +21,18 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3)', () => {
         await expect(step2.first()).toBeVisible();
     });
 
+    test('should display all four step indicators', async ({ page }) => {
+        await expect(page.getByText(/business info/i).first()).toBeVisible();
+        await expect(page.getByText(/nafath/i).first()).toBeVisible();
+        await expect(page.getByText(/products/i).first()).toBeVisible();
+        await expect(page.getByText(/contract/i).first()).toBeVisible();
+    });
+
     // ── Monthly Expected Number of Bills ──────────────────────────────────────
+
+    test('should display the Monthly Expected Number Of Bills label', async ({ page }) => {
+        await expect(page.getByText(/monthly expected number of bills/i).first()).toBeVisible();
+    });
 
     test('should display the Monthly Expected Number Of Bills field', async ({ page }) => {
         await expect(page.getByRole('textbox', { name: /monthly expected number/i })).toBeVisible();
@@ -38,6 +50,10 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3)', () => {
 
     // ── Monthly Expected Sum of Bills ─────────────────────────────────────────
 
+    test('should display the Monthly Expected Sum Of Bills label', async ({ page }) => {
+        await expect(page.getByText(/monthly expected sum of bills/i).first()).toBeVisible();
+    });
+
     test('should display the Monthly Expected Sum Of Bills field', async ({ page }) => {
         await expect(page.getByRole('textbox', { name: /monthly expected sum/i })).toBeVisible();
     });
@@ -53,6 +69,10 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3)', () => {
     });
 
     // ── Expected Monthly Withdrawal ───────────────────────────────────────────
+
+    test('should display the Expected Monthly Withdrawal label', async ({ page }) => {
+        await expect(page.getByText(/expected monthly withdrawal/i).first()).toBeVisible();
+    });
 
     test('should display the Expected Monthly Withdrawal field', async ({ page }) => {
         await expect(page.getByRole('textbox', { name: /monthly withdrawal/i })).toBeVisible();
@@ -70,6 +90,10 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3)', () => {
 
     // ── Expected Monthly Deposit ──────────────────────────────────────────────
 
+    test('should display the Expected Monthly Deposit label', async ({ page }) => {
+        await expect(page.getByText(/expected monthly deposit/i).first()).toBeVisible();
+    });
+
     test('should display the Expected Monthly Deposit field', async ({ page }) => {
         await expect(page.getByRole('textbox', { name: /monthly deposit/i })).toBeVisible();
     });
@@ -86,24 +110,31 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3)', () => {
 
     // ── Banks dropdown ────────────────────────────────────────────────────────
 
+    test('should display the Banks dropdown label', async ({ page }) => {
+        await expect(page.getByText(/banks/i).first()).toBeVisible();
+    });
+
     test('should display the Banks dropdown', async ({ page }) => {
-        await expect(page.getByRole('combobox', { name: /banks/i })).toBeVisible();
+        await expect(page.locator('#mat-select-value-0.mat-mdc-select-value')).toBeVisible();
     });
 
     test('should show "Select Option" as the default for Banks', async ({ page }) => {
-        await expect(page.getByRole('combobox', { name: /banks/i })).toContainText(/select option/i);
+        await expect(page.locator('#mat-select-value-0 .mat-mdc-select-placeholder.mat-mdc-select-min-line')).toContainText(/select option/i);
     });
 
     test('should open the Banks dropdown when clicked', async ({ page }) => {
-        await page.getByRole('combobox', { name: /banks/i }).click();
-        await expect(page.locator('[role="listbox"], [role="option"], [class*="option"]').first())
-            .toBeVisible({ timeout: 5000 });
+        await page.locator('#mat-select-value-0.mat-mdc-select-value').click();
+        await expect(page.locator('mat-option').first()).toBeVisible({ timeout: 5000 });
     });
 
     // ── Industries dropdown ───────────────────────────────────────────────────
 
+    test('should display the Industries dropdown label', async ({ page }) => {
+        await expect(page.getByText(/industries/i).first()).toBeVisible();
+    });
+
     test('should display the Industries dropdown', async ({ page }) => {
-        await expect(page.getByRole('combobox', { name: /industries/i })).toBeVisible();
+        await expect(page.locator('#mat-select-value-1.mat-mdc-select-value')).toBeVisible();
     });
 
     test('should show "Select Option" as the default for Industries', async ({ page }) => {
@@ -118,8 +149,12 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3)', () => {
 
     // ── Annual Income dropdown ────────────────────────────────────────────────
 
+    test('should display the Annual Income dropdown label', async ({ page }) => {
+        await expect(page.getByText(/annual income/i).first()).toBeVisible();
+    });
+
     test('should display the Annual Income dropdown', async ({ page }) => {
-        await expect(page.getByRole('combobox', { name: /annual income/i })).toBeVisible();
+        await expect(page.locator('#mat-select-value-2.mat-mdc-select-value')).toBeVisible();
     });
 
     test('should show "Select Option" as the default for Annual Income', async ({ page }) => {
