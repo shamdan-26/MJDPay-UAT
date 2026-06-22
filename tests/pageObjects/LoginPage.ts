@@ -24,16 +24,13 @@ export class LoginPage {
         this.page = page;
 
         // Smart Locators leveraging IDs and Accessible Roles
-        this.companyNumberInput = page.getByRole('textbox', { name: /company number/i })
-            .or(page.getByRole('textbox', { name: /رقم الشركة/i }));
-        this.mobileNumberInput = page.getByRole('textbox', { name: /mobile number/i })
-            .or(page.getByRole('textbox', { name: /رقم الجوال/i }));
+        this.companyNumberInput = page.locator('input[id*="company-number"], input[id*="company_number"]');
+        this.mobileNumberInput = page.locator('input[id*="mobile-number"], input[id*="mobile_number"]');
 
-        this.passwordInput = page.getByRole('textbox', { name: /^password$/i })
-            .or(page.getByRole('textbox', { name: /كلمة المرور/i }));
+        this.passwordInput = page.locator('input[id*="password-3"], input[id*="password"]');
 
         // UI now labels submit as "Log In"; keep a flexible matcher for future copy changes
-        this.submitLoginAction = page.getByRole('button', { name: /^(log in|sign in)$/i });
+        this.submitLoginAction = page.getByRole('button', { name: /^(log in|sign in|تسجيل الدخول)$/i });
         this.verifyButton = page.locator('#btn_otp_submit');
         this.otpCancelButton = page.locator('#btn_otp_cancel');
         this.validationMessages = page.locator('[role=\"alert\"], .error, .invalid-feedback, .mat-error, .text-danger');
@@ -119,11 +116,13 @@ export class LoginPage {
     async selectEnglish() {
         await this.languageDropdown.click();
         await this.englishButton.click();
+        await this.page.waitForTimeout(2000); // Allow localized layout elements to fully attach
     }
 
     async selectArabic() {
         await this.languageDropdown.click();
         await this.arabicButton.click();
+        await this.page.waitForTimeout(2000); // Allow localized layout elements to fully attach
     }
 
     async isLanguageActive(button: Locator): Promise<boolean> {
