@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test';
+import { REGISTER_URL } from './helpers';
 
-const LOGIN_URL = 'https://uat.majdpay.com/business/auth/login';
-const REGISTER_URL = 'https://uat.majdpay.com/business/auth/register';
 const VALID_KSA_MOBILE = '500318143';
 
 async function goToOTPStep(page: any, context: any) {
@@ -9,7 +8,6 @@ async function goToOTPStep(page: any, context: any) {
     await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await page.getByRole('textbox', { name: /mobile number/i }).fill(VALID_KSA_MOBILE);
     await page.getByRole('button', { name: /next/i }).click();
-    await page.waitForTimeout(3000);
     await page.getByRole('heading', { name: /enter otp/i }).waitFor({ state: 'visible', timeout: 15000 });
 }
 

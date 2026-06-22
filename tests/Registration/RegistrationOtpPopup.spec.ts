@@ -9,7 +9,6 @@ test.describe('Registration - OTP Popup Page Elements', () => {
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(generateFreshKSAMobile());
         await page.getByRole('button', { name: 'next' }).click();
-        await page.waitForTimeout(5000);
         const otpAppeared = await page.getByRole('heading', { name: 'Enter OTP' })
             .waitFor({ state: 'visible', timeout: 20000 })
             .then(() => true)

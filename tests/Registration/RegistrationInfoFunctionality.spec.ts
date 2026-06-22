@@ -1,37 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { generateFreshKSAMobile, fillOTP, getOtpFromDb, REGISTER_URL } from './helpers';
-
-const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
+import { goToInfoStep } from './helpers';
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
-
-async function fillMobileAndOTP(page: any, context: any) {
-    await context.grantPermissions(['geolocation'], { origin: BASE_URL });
-    await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-
-    const mobileInput = page.getByRole('textbox', { name: /mobile number/i });
-    await mobileInput.waitFor({ state: 'visible', timeout: 10000 });
-    const freshMobile = generateFreshKSAMobile();
-    await mobileInput.fill(freshMobile);
-    await page.getByRole('button', { name: /next/i }).click();
-    await page.waitForTimeout(3000);
-
-    // OTP is optional based on system configuration
-    const otpVisible = await page.getByRole('heading', { name: /enter otp/i })
-        .waitFor({ state: 'visible', timeout: 15000 })
-        .then(() => true)
-        .catch(() => false);
-    if (otpVisible) {
-        await page.getByRole('textbox', { name: /one time password input/i }).first().waitFor({ state: 'visible', timeout: 10000 });
-        const otp = await getOtpFromDb(freshMobile);
-        await fillOTP(page, otp);
-        const verifyBtn = page.getByRole('button', { name: 'Verify' });
-        if (await verifyBtn.isVisible().catch(() => false)) {
-            await verifyBtn.click();
-        }
-    }
-    await page.getByRole('textbox', { name: /email/i }).waitFor({ state: 'visible', timeout: 15000 });
-}
 
 async function fillBusinessInfoAndClickNext(page: any) {
     await page.getByRole('radio').filter({ hasText: /merchant/i }).click();
@@ -40,15 +10,6 @@ async function fillBusinessInfoAndClickNext(page: any) {
     await page.getByRole('textbox', { name: /email/i }).fill('test@example.com');
     await page.getByRole('button', { name: /next/i }).click();
     await page.getByRole('textbox', { name: /monthly expected number/i }).waitFor({ state: 'visible', timeout: 15000 });
-}
-
-async function goToBusinessInfoStep(page: any, context: any) {
-    await fillMobileAndOTP(page, context);
-}
-
-async function goToFinancialStep(page: any, context: any) {
-    await fillMobileAndOTP(page, context);
-    await fillBusinessInfoAndClickNext(page);
 }
 
 // ─── tests ───────────────────────────────────────────────────────────────────
@@ -61,7 +22,8 @@ test.describe('Registration – Business Info Form Functionality', () => {
     test.describe('After clicking Next on Business Info (Tab 1 → Tab 2)', () => {
 
         test.beforeEach(async ({ page, context }) => {
-            await goToBusinessInfoStep(page, context);
+            await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+            await goToInfoStep(page);
         });
 
         test('should activate the Financial & Business tab after clicking Next with valid data', async ({ page }) => {
@@ -107,7 +69,9 @@ test.describe('Registration – Business Info Form Functionality', () => {
     test.describe('Back navigation from Financial & Business to Business Info', () => {
 
         test.beforeEach(async ({ page, context }) => {
-            await goToFinancialStep(page, context);
+            await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+            await goToInfoStep(page);
+            await fillBusinessInfoAndClickNext(page);
         });
 
         test('should return to Business Info tab when Back is clicked from Tab 2', async ({ page }) => {
@@ -147,7 +111,8 @@ test.describe('Registration – Business Info Form Functionality', () => {
     test.describe('Business Info field validation before Next', () => {
 
         test.beforeEach(async ({ page, context }) => {
-            await goToBusinessInfoStep(page, context);
+            await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+            await goToInfoStep(page);
         });
 
         test('should keep Next disabled when only Profile Type is selected', async ({ page }) => {
@@ -211,7 +176,8 @@ test.describe('Registration – Business Info Form Functionality', () => {
     test.describe('Profile Type radio button switching', () => {
 
         test.beforeEach(async ({ page, context }) => {
-            await goToBusinessInfoStep(page, context);
+            await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+            await goToInfoStep(page);
         });
 
         test('should switch from Merchant to Biller and reflect the change', async ({ page }) => {
@@ -243,7 +209,8 @@ test.describe('Registration – Business Info Form Functionality', () => {
     test.describe('Step / tab indicator progression', () => {
 
         test.beforeEach(async ({ page, context }) => {
-            await goToBusinessInfoStep(page, context);
+            await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+            await goToInfoStep(page);
         });
 
         test('should show Business Info tab as active on arrival', async ({ page }) => {

@@ -1,52 +1,12 @@
 import { test, expect } from '@playwright/test';
-import { generateFreshKSAMobile, fillOTP, getOtpFromDb, REGISTER_URL } from './helpers';
-
-const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
-
-async function goToFinancialStep(page: any, context: any) {
-    await context.grantPermissions(['geolocation'], { origin: BASE_URL });
-    await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-
-    // Mobile number
-    const mobileInput = page.getByRole('textbox', { name: /mobile number/i });
-    await mobileInput.waitFor({ state: 'visible', timeout: 10000 });
-    const freshMobile = generateFreshKSAMobile();
-    await mobileInput.fill(freshMobile);
-    await page.getByRole('button', { name: /next/i }).click();
-    await page.waitForTimeout(3000);
-
-    // OTP is optional based on system configuration
-    const otpVisible = await page.getByRole('heading', { name: /enter otp/i })
-        .waitFor({ state: 'visible', timeout: 15000 })
-        .then(() => true)
-        .catch(() => false);
-    if (otpVisible) {
-        await page.getByRole('textbox', { name: /one time password input/i }).first().waitFor({ state: 'visible', timeout: 10000 });
-        const otp = await getOtpFromDb(freshMobile);
-        await fillOTP(page, otp);
-        const verifyBtn = page.getByRole('button', { name: 'Verify' });
-        if (await verifyBtn.isVisible().catch(() => false)) {
-            await verifyBtn.click();
-        }
-    }
-
-    // Business Info (Tab 1) – fill all required fields and click Next
-    await page.getByRole('textbox', { name: /email/i }).waitFor({ state: 'visible', timeout: 15000 });
-    await page.getByRole('radio').filter({ hasText: /merchant/i }).click();
-    await page.getByRole('textbox', { name: /unified number/i }).fill('1023456789');
-    await page.getByRole('textbox', { name: /national id|iqama/i }).fill('1012345678');
-    await page.getByRole('textbox', { name: /email/i }).fill('test@example.com');
-    await page.getByRole('button', { name: /next/i }).click();
-
-    // Wait for Financial & Business tab to become active
-    await page.getByRole('textbox', { name: /monthly expected number/i }).waitFor({ state: 'visible', timeout: 15000 });
-}
+import { goToFinancialStep } from './helpers';
 
 test.describe('Registration – Financial & Business Step (Tab 2 of 3)', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
-        await goToFinancialStep(page, context);
+        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+        await goToFinancialStep(page);
     });
 
     // ── Step indicator ────────────────────────────────────────────────────────

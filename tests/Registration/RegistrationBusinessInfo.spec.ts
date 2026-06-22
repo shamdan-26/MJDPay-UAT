@@ -1,45 +1,13 @@
 import { test, expect } from '@playwright/test';
-import { generateFreshKSAMobile, fillOTP, getOtpFromDb, REGISTER_URL } from './helpers';
-
-const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
-
-async function goToBusinessInfoStep(page: any, context: any) {
-    await context.grantPermissions(['geolocation'], { origin: BASE_URL });
-    await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-
-    // Step 1 – enter a fresh mobile number not previously registered
-    const mobileInput = page.locator('input[aria-label="Mobile number"]');
-    await mobileInput.waitFor({ state: 'visible', timeout: 10000 });
-    const freshMobile = generateFreshKSAMobile();
-    await mobileInput.fill(freshMobile);
-    await page.getByRole('button', { name: /next/i }).click();
-    await page.waitForTimeout(3000);
-
-    // Step 2 – OTP is optional based on system configuration
-    const otpVisible = await page.getByRole('heading', { name: /enter otp/i })
-        .waitFor({ state: 'visible', timeout: 15000 })
-        .then(() => true)
-        .catch(() => false);
-
-    if (otpVisible) {
-        await page.getByRole('textbox', { name: /one time password input/i }).first().waitFor({ state: 'visible', timeout: 10000 });
-        const otp = await getOtpFromDb(freshMobile);
-        await fillOTP(page, otp);
-        const verifyBtn = page.getByRole('button', { name: 'Verify' });
-        if (await verifyBtn.isVisible().catch(() => false)) {
-            await verifyBtn.click();
-        }
-    }
-
-    // Wait for Business Info step
-    await page.locator('input[type="email"][aria-label="Email"]').waitFor({ state: 'visible', timeout: 15000 });
-}
+import { goToInfoStep } from './helpers';
 
 test.describe('Registration – Business Info Step (Tab 1 of 3)', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
-        await goToBusinessInfoStep(page, context);
+        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+        await goToInfoStep(page);
+        await page.locator('input[type="email"][aria-label="Email"]').waitFor({ state: 'visible', timeout: 15000 });
     });
 
     // ── Step header ───────────────────────────────────────────────────────────
@@ -238,7 +206,6 @@ test.describe('Registration – Business Info Step (Tab 1 of 3)', () => {
         await page.locator('#register-unifiedNumber-group input[type="text"]').fill('1023456789');
         await page.locator('#register-id-group input[type="text"]').fill('2959795515');
         await page.locator('input[type="email"][aria-label="Email"]').fill('test@example.com');
-        await page.pause(); // Wait for the Next button to become enabled
         await page.locator('#register-next-button').click();
         await expect(page.locator('#register-form-title.form-title')).toContainText(/financial/i, { timeout: 10000 });
     });
