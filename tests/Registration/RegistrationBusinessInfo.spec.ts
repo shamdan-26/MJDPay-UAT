@@ -8,7 +8,7 @@ async function goToBusinessInfoStep(page: any, context: any) {
     await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
     // Step 1 – enter a fresh mobile number not previously registered
-    const mobileInput = page.getByRole('textbox', { name: /mobile number/i });
+    const mobileInput = page.locator('input[aria-label="Mobile number"]');
     await mobileInput.waitFor({ state: 'visible', timeout: 10000 });
     const freshMobile = generateFreshKSAMobile();
     await mobileInput.fill(freshMobile);
@@ -32,7 +32,7 @@ async function goToBusinessInfoStep(page: any, context: any) {
     }
 
     // Wait for Business Info step
-    await page.locator('#floating-email-email-10').waitFor({ state: 'visible', timeout: 15000 });
+    await page.locator('input[type="email"][aria-label="Email"]').waitFor({ state: 'visible', timeout: 15000 });
 }
 
 test.describe('Registration – Business Info Step (Tab 1 of 3)', () => {
@@ -152,12 +152,12 @@ test.describe('Registration – Business Info Step (Tab 1 of 3)', () => {
     });
 
     test('should show the correct placeholder for Unified Number', async ({ page }) => {
-        await expect(page.locator('#floating-text-field-8')).toHaveAttribute('placeholder', 'Eg. 1023456789');
+        await expect(page.locator('#register-unifiedNumber-group input[type="text"]')).toHaveAttribute('placeholder', 'Eg. 1023456789');
     });
 
     test('should accept input in the Unified Number field', async ({ page }) => {
-        await page.locator('#floating-text-field-8').fill('1023456789');
-        await expect(page.locator('#floating-text-field-8')).toHaveValue('1023456789');
+        await page.locator('#register-unifiedNumber-group input[type="text"]').fill('1023456789');
+        await expect(page.locator('#register-unifiedNumber-group input[type="text"]')).toHaveValue('1023456789');
     });
 
     // ── National ID / Iqama ───────────────────────────────────────────────────
@@ -168,28 +168,28 @@ test.describe('Registration – Business Info Step (Tab 1 of 3)', () => {
     });
 
     test('should show the correct placeholder for National ID/Iqama', async ({ page }) => {
-        await expect(page.locator('#floating-text-field-9')).toHaveAttribute('placeholder', 'Eg. 1012345678');
+        await expect(page.locator('#register-id-group input[type="text"]')).toHaveAttribute('placeholder', 'Eg. 1012345678');
     });
 
     test('should accept input in the National ID/Iqama field', async ({ page }) => {
-        await page.locator('#floating-text-field-9').fill('1012345678');
-        await expect(page.locator('#floating-text-field-9')).toHaveValue('1012345678');
+        await page.locator('#register-id-group input[type="text"]').fill('2959795515');
+        await expect(page.locator('#register-id-group input[type="text"]')).toHaveValue('2959795515');
     });
 
     // ── Email ─────────────────────────────────────────────────────────────────
 
     test('should display the Email field', async ({ page }) => {
         await expect(page.locator('#register-email-group')).toBeVisible();
-        await expect(page.locator('label[for="floating-email-email-10"]')).toContainText('Email');
+        await expect(page.locator('#register-email-group label')).toContainText('Email');
     });
 
     test('should show the correct placeholder for Email', async ({ page }) => {
-        await expect(page.locator('#floating-email-email-10')).toHaveAttribute('placeholder', 'Eg. example@email.com');
+        await expect(page.locator('input[type="email"][aria-label="Email"]')).toHaveAttribute('placeholder', 'Eg. example@email.com');
     });
 
     test('should accept input in the Email field', async ({ page }) => {
-        await page.locator('#floating-email-email-10').fill('test@example.com');
-        await expect(page.locator('#floating-email-email-10')).toHaveValue('test@example.com');
+        await page.locator('input[type="email"][aria-label="Email"]').fill('test@example.com');
+        await expect(page.locator('input[type="email"][aria-label="Email"]')).toHaveValue('test@example.com');
     });
 
     // ── Next button ───────────────────────────────────────────────────────────
@@ -205,9 +205,9 @@ test.describe('Registration – Business Info Step (Tab 1 of 3)', () => {
 
     test('should enable the Next button when all fields are filled with valid data', async ({ page }) => {
         await page.locator('#register-profile-card-MERCHANT').click();
-        await page.locator('#floating-text-field-8').fill('1023456789');
-        await page.locator('#floating-text-field-9').fill('1012345678');
-        await page.locator('#floating-email-email-10').fill('test@example.com');
+        await page.locator('#register-unifiedNumber-group input[type="text"]').fill('1023456789');
+        await page.locator('#register-id-group input[type="text"]').fill('2959795515');
+        await page.locator('input[type="email"][aria-label="Email"]').fill('test@example.com');
         await expect(page.locator('#register-next-button')).toBeEnabled();
     });
 
@@ -235,10 +235,11 @@ test.describe('Registration – Business Info Step (Tab 1 of 3)', () => {
 
     test('should proceed to the Financial & Business step when Next is clicked with valid data', async ({ page }) => {
         await page.locator('#register-profile-card-MERCHANT').click();
-        await page.locator('#floating-text-field-8').fill('1023456789');
-        await page.locator('#floating-text-field-9').fill('1012345678');
-        await page.locator('#floating-email-email-10').fill('test@example.com');
+        await page.locator('#register-unifiedNumber-group input[type="text"]').fill('1023456789');
+        await page.locator('#register-id-group input[type="text"]').fill('2959795515');
+        await page.locator('input[type="email"][aria-label="Email"]').fill('test@example.com');
+        await page.pause(); // Wait for the Next button to become enabled
         await page.locator('#register-next-button').click();
-        await expect(page.getByRole('tab', { name: /financial/i })).toHaveAttribute('aria-selected', 'true', { timeout: 10000 });
+        await expect(page.locator('#register-form-title.form-title')).toContainText(/financial/i, { timeout: 10000 });
     });
 });
