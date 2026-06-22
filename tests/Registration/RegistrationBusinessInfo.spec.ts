@@ -1,30 +1,33 @@
 import { test, expect } from '@playwright/test';
+import { generateFreshKSAMobile, fillOTP, REGISTER_URL } from './helpers';
 
-const REGISTER_URL = 'https://dev.majdpay.com/business/auth/register';
-const LOGIN_URL    = 'https://dev.majdpay.com/business/auth/login';
-const VALID_MOBILE = '500021788';
-const VALID_OTP    = '0000';
+const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 
 async function goToBusinessInfoStep(page: any, context: any) {
-    await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
+    await context.grantPermissions(['geolocation'], { origin: BASE_URL });
     await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
-    // Step 1 – enter mobile number
+    // Step 1 – enter a fresh mobile number not previously registered
     const mobileInput = page.getByRole('textbox', { name: /mobile number/i });
     await mobileInput.waitFor({ state: 'visible', timeout: 10000 });
-    await mobileInput.fill(VALID_MOBILE);
+    await mobileInput.fill(generateFreshKSAMobile());
     await page.getByRole('button', { name: /next/i }).click();
+    await page.waitForTimeout(3000);
 
-    // Step 2 – enter OTP
-    const otpInputs = page.locator('label[aria-label*="one time" i] input, input[maxlength="1"], [class*="otp"] input').or(
-        page.locator('input').filter({ hasText: '' })
-    );
-    await page.locator('input[type="text"]').first().waitFor({ state: 'visible', timeout: 15000 });
-    const inputs = await page.locator('input[type="text"]').all();
-    for (let i = 0; i < inputs.length && i < VALID_OTP.length; i++) {
-        await inputs[i].fill(VALID_OTP[i]);
+    // Step 2 – OTP is optional based on system configuration
+    const otpVisible = await page.getByRole('heading', { name: /enter otp/i })
+        .waitFor({ state: 'visible', timeout: 15000 })
+        .then(() => true)
+        .catch(() => false);
+
+    if (otpVisible) {
+        await page.getByRole('textbox', { name: /one time password input/i }).first().waitFor({ state: 'visible', timeout: 10000 });
+        await fillOTP(page, '000000');
+        const verifyBtn = page.getByRole('button', { name: 'Verify' });
+        if (await verifyBtn.isVisible().catch(() => false)) {
+            await verifyBtn.click();
+        }
     }
-    await page.getByRole('button', { name: /verify/i }).click();
 
     // Wait for Business Info step
     await page.getByRole('textbox', { name: /email/i }).waitFor({ state: 'visible', timeout: 15000 });

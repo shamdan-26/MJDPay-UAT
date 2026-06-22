@@ -101,7 +101,7 @@ const MONGO_URI = process.env['MONGO_URI'] ?? (() => { throw new Error('MONGO_UR
 const MONGO_DB  = 'notification-log';
 
 export async function getOtpFromDb(mobile: string, maxAttempts = 10, delayMs = 2000): Promise<string> {
-    if ((process.env['ENV'] ?? 'uat') === 'dev') return '00000000';
+    if ((process.env['ENV'] ?? 'uat') === 'dev') return '000000';
     const client = new MongoClient(MONGO_URI);
     try {
         await client.connect();
@@ -148,12 +148,9 @@ export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
             .waitFor({ state: 'visible', timeout: 10000 });
         const otp = await getOtpFromDb(usedMobile);
         await fillOTP(page, otp);
-        // App may auto-submit after last OTP digit; only click Verify if it is still
-        // visible — clicking during an active navigation corrupts page state even with .catch().
         const verifyBtn = page.getByRole('button', { name: 'Verify' });
-        const verifyVisible = await verifyBtn.isVisible().catch(() => false);
-        if (verifyVisible) {
-            await verifyBtn.click({ timeout: 5000 }).catch(() => {});
+        if (await verifyBtn.isVisible().catch(() => false)) {
+            await verifyBtn.click();
         }
     }
     await page.getByText('Tell us about your business').waitFor({ state: 'visible', timeout: 60000 });

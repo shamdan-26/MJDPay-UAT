@@ -13,6 +13,7 @@ test.describe('Registration - OTP Functionality', () => {
 
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(currentMobile);
         await page.getByRole('button', { name: 'next' }).click();
+        await page.waitForTimeout(3000);
 
         const otpAppeared = await page.getByRole('heading', { name: 'Enter OTP' })
             .waitFor({ state: 'visible', timeout: 20000 })

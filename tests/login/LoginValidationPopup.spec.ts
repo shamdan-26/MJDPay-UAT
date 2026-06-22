@@ -1,22 +1,31 @@
 import { test, expect, Page } from '@playwright/test';
 
-const URL = 'https://dev.majdpay.com/business/auth/login';
-const VALID_COMPANY  = 'L3999';
-const VALID_MOBILE   = '500318143';
-const VALID_PASSWORD = 'Aa#1234567';
+const env            = process.env['ENV'] ?? 'uat';
+const BASE_URL       = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
+const URL            = `${BASE_URL}/business/auth/login`;
+const VALID_COMPANY  = process.env['UAT_COMPANY'] ?? 'L3999';
+const VALID_MOBILE   = process.env['UAT_MOBILE']  ?? '500318143';
+const VALID_PASSWORD = process.env['UAT_PASSWORD'] ?? 'Aa#1234567';
 
 async function fillAndSubmitLogin(page: Page) {
     await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
     await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
-    await page.locator('input[aria-label="Password"]').fill(VALID_PASSWORD);
-    await page.getByRole('button', { name: 'Log In' }).click();
+    await page.locator('input[aria-label="Password"]').click();
+    await page.locator('input[aria-label="Password"]').pressSequentially(VALID_PASSWORD, { delay: 50 });
+    if (env === 'dev') {
+        await page.locator('#btn_login').click();
+    } else {
+        await page.getByRole('button', { name: 'Log In' }).click();
+    }
+
+    await page.pause();
 }
 
 test.describe('Login Validation Popup', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://dev.majdpay.com' });
+        await context.grantPermissions(['geolocation'], { origin: BASE_URL });
         await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     });
 

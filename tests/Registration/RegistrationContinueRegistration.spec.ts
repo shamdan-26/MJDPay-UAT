@@ -21,6 +21,7 @@ test.describe('Registration - Continue Interrupted Registration', () => {
     test('should send an OTP when re-entering a mobile with an in-progress registration', async ({ page }) => {
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(CONTINUE_REG_MOBILE);
         await page.getByRole('button', { name: 'next' }).click();
+        await page.waitForTimeout(3000);
         await expect(page.getByRole('heading', { name: 'Enter OTP' })).toBeVisible({ timeout: 20000 });
     });
 
@@ -29,14 +30,11 @@ test.describe('Registration - Continue Interrupted Registration', () => {
     test('should resume from the last saved step after OTP is verified, not restart from mobile entry', async ({ page }) => {
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(CONTINUE_REG_MOBILE);
         await page.getByRole('button', { name: 'next' }).click();
+        await page.waitForTimeout(3000);
         await page.getByRole('heading', { name: 'Enter OTP' }).waitFor({ state: 'visible', timeout: 20000 });
 
         const otp = await getOtpFromDb(CONTINUE_REG_MOBILE);
         await fillOTP(page, otp);
-        const verifyBtn = page.getByRole('button', { name: 'Verify' });
-        if (await verifyBtn.isVisible().catch(() => false)) {
-            await verifyBtn.click({ timeout: 5000 }).catch(() => {});
-        }
 
         // The mobile entry screen must NOT reappear — that would indicate starting over.
         await expect(page.getByText('Enter Phone Number')).not.toBeVisible({ timeout: 30000 });

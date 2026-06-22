@@ -9,8 +9,8 @@ async function goToOTPStep(page: any, context: any) {
     await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await page.getByRole('textbox', { name: /mobile number/i }).fill(VALID_KSA_MOBILE);
     await page.getByRole('button', { name: /next/i }).click();
-    // Wait for OTP step to appear
-    await page.waitForURL(/otp|verify|confirm/i, { timeout: 15000 }).catch(() => {});
+    await page.waitForTimeout(3000);
+    await page.getByRole('heading', { name: /enter otp/i }).waitFor({ state: 'visible', timeout: 15000 });
 }
 
 test.describe('Registration – OTP Verification Step', () => {
