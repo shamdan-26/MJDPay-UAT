@@ -56,10 +56,31 @@ test.describe('Registration – Business Info Step (Tab 1 of 3)', () => {
         await expect(page.getByText(/step 1 of 3/i)).toBeVisible();
     });
 
-    test('should display the progress tabs: Business Info, Financial & Business, Verification & Uploads', async ({ page }) => {
-        await expect(page.locator('.mp-step-meta', { hasText: /business info/i })).toBeVisible();
-        await expect(page.locator('.mp-step-meta', { hasText: /financial/i })).toBeVisible();
-        await expect(page.locator('.mp-step-meta', { hasText: /verification/i })).toBeVisible();
+    test('should display the progress tabs: Business Info, NAFATH, Products, Contract', async ({ page }) => {
+        // The visual stepper wrapper
+        const stepBar = page.locator('.mp-stepbar.mp-stepbar-global.mp-stepbar-inline');
+        await expect(stepBar).toBeVisible();
+
+        // Step 1 – Business Info (active by default)
+        const step1 = stepBar.locator('.mp-step').nth(0);
+        await expect(step1).toBeVisible();
+        await expect(step1).toHaveClass(/is-active/);
+        await expect(step1.locator('.mp-step-meta')).toContainText('Business Info');
+
+        // Step 2 – NAFATH
+        const step2 = stepBar.locator('.mp-step').nth(1);
+        await expect(step2).toBeVisible();
+        await expect(step2.locator('.mp-step-meta')).toContainText('NAFATH');
+
+        // Step 3 – Products
+        const step3 = stepBar.locator('.mp-step').nth(2);
+        await expect(step3).toBeVisible();
+        await expect(step3.locator('.mp-step-meta')).toContainText('Products');
+
+        // Step 4 – Contract
+        const step4 = stepBar.locator('.mp-step').nth(3);
+        await expect(step4).toBeVisible();
+        await expect(step4.locator('.mp-step-meta')).toContainText('Contract');
     });
 
     // ── Profile Type ──────────────────────────────────────────────────────────
