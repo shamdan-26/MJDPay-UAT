@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { generateFreshKSAMobile, fillOTP, REGISTER_URL } from './helpers';
+import { generateFreshKSAMobile, fillOTP, getOtpFromDb, REGISTER_URL } from './helpers';
 
 const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 
@@ -10,7 +10,8 @@ async function goToBusinessInfoStep(page: any, context: any) {
     // Step 1 – enter a fresh mobile number not previously registered
     const mobileInput = page.getByRole('textbox', { name: /mobile number/i });
     await mobileInput.waitFor({ state: 'visible', timeout: 10000 });
-    await mobileInput.fill(generateFreshKSAMobile());
+    const freshMobile = generateFreshKSAMobile();
+    await mobileInput.fill(freshMobile);
     await page.getByRole('button', { name: /next/i }).click();
     await page.waitForTimeout(3000);
 
@@ -22,7 +23,8 @@ async function goToBusinessInfoStep(page: any, context: any) {
 
     if (otpVisible) {
         await page.getByRole('textbox', { name: /one time password input/i }).first().waitFor({ state: 'visible', timeout: 10000 });
-        await fillOTP(page, '000000');
+        const otp = await getOtpFromDb(freshMobile);
+        await fillOTP(page, otp);
         const verifyBtn = page.getByRole('button', { name: 'Verify' });
         if (await verifyBtn.isVisible().catch(() => false)) {
             await verifyBtn.click();
@@ -55,9 +57,9 @@ test.describe('Registration – Business Info Step (Tab 1 of 3)', () => {
     });
 
     test('should display the progress tabs: Business Info, Financial & Business, Verification & Uploads', async ({ page }) => {
-        await expect(page.getByRole('tab', { name: /business info/i })).toBeVisible();
-        await expect(page.getByRole('tab', { name: /financial/i })).toBeVisible();
-        await expect(page.getByRole('tab', { name: /verification/i })).toBeVisible();
+        await expect(page.locator('.mp-step-meta', { hasText: /business info/i })).toBeVisible();
+        await expect(page.locator('.mp-step-meta', { hasText: /financial/i })).toBeVisible();
+        await expect(page.locator('.mp-step-meta', { hasText: /verification/i })).toBeVisible();
     });
 
     // ── Profile Type ──────────────────────────────────────────────────────────

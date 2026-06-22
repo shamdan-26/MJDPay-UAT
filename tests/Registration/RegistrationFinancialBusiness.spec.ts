@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { generateFreshKSAMobile, fillOTP, REGISTER_URL } from './helpers';
+import { generateFreshKSAMobile, fillOTP, getOtpFromDb, REGISTER_URL } from './helpers';
 
 const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 
@@ -10,7 +10,8 @@ async function goToFinancialStep(page: any, context: any) {
     // Mobile number
     const mobileInput = page.getByRole('textbox', { name: /mobile number/i });
     await mobileInput.waitFor({ state: 'visible', timeout: 10000 });
-    await mobileInput.fill(generateFreshKSAMobile());
+    const freshMobile = generateFreshKSAMobile();
+    await mobileInput.fill(freshMobile);
     await page.getByRole('button', { name: /next/i }).click();
     await page.waitForTimeout(3000);
 
@@ -21,7 +22,8 @@ async function goToFinancialStep(page: any, context: any) {
         .catch(() => false);
     if (otpVisible) {
         await page.getByRole('textbox', { name: /one time password input/i }).first().waitFor({ state: 'visible', timeout: 10000 });
-        await fillOTP(page, '000000');
+        const otp = await getOtpFromDb(freshMobile);
+        await fillOTP(page, otp);
         const verifyBtn = page.getByRole('button', { name: 'Verify' });
         if (await verifyBtn.isVisible().catch(() => false)) {
             await verifyBtn.click();
