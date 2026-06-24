@@ -52,7 +52,9 @@ export class HomePage {
         this.Transactions_NavButton = page.locator('#sideNav-menu-item-1');
 
         this.transferButton = page.locator("#quick-bank");
-        this.W2WTransferButton = page.locator("#btn_wallet_transfer");
+        this.W2WTransferButton = page.locator('#quick-transfer')
+            .or(page.getByRole('button', { name: /wallet transfer/i }));
+
         this.currentBalance = page.locator(".mp-bal-amount").or(page.locator("//div[@class='price']//span[@id='balance-amount']"));
     }
 
