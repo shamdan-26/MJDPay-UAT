@@ -390,6 +390,36 @@ export class W2WTransferPage {
     }
 
     /**
+     * Selects a specific option from the Purpose of Transfer dropdown.
+     */
+    async selectSpecificPurposeOfTransfer(purpose: string) {
+        await this.openPurposeOfTransferDropdown();
+        console.log(`   PurposeOfTransfer dropdown opened. Targeting: "${purpose}"`);
+
+        const optionsLocator = this.page.locator(
+            '[id*="floating-dropdown-purpose-of-transfer"][id*="panel"] [role="option"],' +
+            ' [id*="purpose-of-transfer-panel"] [role="option"],' +
+            ' mat-option'
+        );
+
+        await expect(optionsLocator.first()).toBeVisible({ timeout: 10000 });
+
+        const targetOption = optionsLocator.filter({ hasText: new RegExp(`^\\s*${purpose}\\s*$`, 'i') }).first();
+        await targetOption.scrollIntoViewIfNeeded();
+        await this.page.waitForTimeout(300);
+
+        try {
+            await targetOption.click({ timeout: 5000 });
+        } catch {
+            console.log('   Standard click intercepted — attempting force click via JS');
+            await targetOption.evaluate((el: HTMLElement) => el.click());
+        }
+
+        const selectedText = (await targetOption.textContent())?.trim() ?? '';
+        console.log(`   Selected Purpose of Transfer: "${selectedText}"`);
+    }
+
+    /**
      * Clicks the amount input to trigger any blur/focus validation events.
      * Mirrored from Java: clickAmountInput()
      */

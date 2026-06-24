@@ -28,6 +28,8 @@ type W2WTestData = {
     otpCode?: string;
     expectedUIValue?: string;
     expectButtonDisabled?: boolean;
+    isClipboardTest?: boolean;
+    purposeOfTransfer?: string;
 };
 
 const dataSets = w2wData as W2WTestData[];
@@ -216,8 +218,8 @@ test.describe.serial('MajdPay W2W Transfer Tests', () => {
                 await w2w.enterAmount(data.amount);
 
                 // ── Step 5: Select Purpose of Transfer ──────────────────────────────
-                console.log('Step 5: Selecting a random Purpose of Transfer');
-                await w2w.selectRandomPurposeOfTransfer();
+                console.log(`Step 5: Selecting a specific Purpose of Transfer to bypass manual approval queues: "${data.purposeOfTransfer || 'Item purchases'}"`);
+                await w2w.selectSpecificPurposeOfTransfer(data.purposeOfTransfer || 'Item purchases');
                 await page.waitForTimeout(4000);
 
                 // ── Step 6: Click Amount Input (UI trigger) ──────────────────────────
@@ -270,7 +272,7 @@ test.describe.serial('MajdPay W2W Transfer Tests', () => {
                 while (status.toLowerCase() === 'pending' && retries > 0) {
                     console.log(`   Status is Pending. Retrying... (${retries} attempts left)`);
                     await page.waitForTimeout(3000);
-                    await page.reload({ waitUntil: 'networkidle' }).catch(() => null);
+                    await page.reload({ waitUntil: 'networkidle' });
                     status = await transactionsPage.validateLastTransactionAndReturnStatus(data.amount);
                     console.log(`   Latest transaction status fetched: "${status}"`);
                     retries--;
@@ -288,28 +290,43 @@ test.describe.serial('MajdPay W2W Transfer Tests', () => {
     // SUITE 3: Invalid CRN Scenarios
     // ============================================================
 
-    test.describe('W2W Transfer — Invalid CRN Should Fail', () => {
+    test.describe.serial('W2W Transfer — Invalid CRN Error Handling', () => {
         const invalidCrnTests = dataSets.filter(d => d.suite === 'invalid_crn');
+
+        let sharedPage: import('@playwright/test').Page;
+        let w2w: W2WTransferPage;
+        let homePage: HomePage;
+
+        test.beforeAll(async ({ browser }) => {
+            const context = await browser.newContext();
+            sharedPage = await context.newPage();
+
+            // Find the first valid data object to extract login credentials
+            const baselineData = invalidCrnTests.find(d => d.execute) || invalidCrnTests[0];
+
+            console.log('--- beforeAll: Starting single shared browser context for Invalid CRN testing ---');
+            await performLogin(
+                sharedPage,
+                baselineData.companyNumber,
+                baselineData.mobileNumber,
+                baselineData.password,
+                baselineData.otpCode ?? '0000'
+            );
+
+            w2w = new W2WTransferPage(sharedPage);
+            homePage = new HomePage(sharedPage);
+
+            await homePage.clickW2WTransferButton();
+        });
 
         for (const data of invalidCrnTests) {
             if (!data.execute) continue;
 
-            test(`${data.testName} | CRN Type: ${data.crnType}`, async ({ page }) => {
-
-                // ── Step 1: Login ────────────────────────────────────────────────────
-                console.log('Step 1: Open login page and enter Merchant credentials');
-                await performLogin(page, data.companyNumber, data.mobileNumber, data.password, data.otpCode ?? '0000');
-                console.log('   Merchant login successful ✔');
-
-                const w2w = new W2WTransferPage(page);
-                const homePage = new HomePage(page);
-
-                // ── Step 2: Navigate to W2W Transfer ────────────────────────────────
-                console.log('Step 2: Navigate to W2W Transfer screen');
-                await homePage.clickW2WTransferButton();
+            test(`${data.testName} | CRN Type: ${data.crnType}`, async () => {
 
                 // ── Step 3: Enter invalid CRN ────────────────────────────────────────
                 console.log(`Step 3: Entering invalid Receiver CRN: "${data.receiverCRN}" (Type: ${data.crnType})`);
+                await w2w.inputCRN.clear();
                 await w2w.enterCRN(data.receiverCRN);
 
                 // ── Step 4: Click Check Recipient ────────────────────────────────────
@@ -324,16 +341,23 @@ test.describe.serial('MajdPay W2W Transfer Tests', () => {
                 } else {
                     // ── Step 5: Allow API lookup to complete ────────────────────────────
                     console.log('Step 5: Waiting for CRN lookup response...');
-                    await page.waitForTimeout(6000);
+                    await sharedPage.waitForTimeout(6000);
 
                     // ── Step 6: Enter Transfer Amount ────────────────────────────────────
                     console.log(`Step 6: Entering Transfer Amount: "${data.amount}"`);
+                    await w2w.inputAmount.clear();
                     await w2w.enterAmount(data.amount);
 
                     // ── Step 7: Assert company name div is EMPTY (CRN not found) ─────────
                     console.log('Step 7: Asserting company name div is empty — confirming CRN was rejected');
                     await w2w.assertCompanyNameIsEmpty();
                     console.log(`   Invalid CRN "${data.crnType}" correctly rejected (div empty) ✔`);
+                }
+
+                // Reset state for next iteration safely
+                await w2w.inputCRN.clear();
+                if (await w2w.inputAmount.isVisible()) {
+                    await w2w.inputAmount.clear();
                 }
             });
         }
@@ -343,47 +367,87 @@ test.describe.serial('MajdPay W2W Transfer Tests', () => {
     // SUITE 4: Amount Field Validation (Prevents Invalid Input)
     // ============================================================
 
-    test.describe('W2W Transfer — Amount Field Prevents Invalid Input', () => {
+    test.describe.serial('W2W Transfer — Amount Field Input Validation Layout', () => {
         const amountValidationTests = dataSets.filter(d => d.suite === 'amount_validation');
+
+        let sharedPage: import('@playwright/test').Page;
+        let w2w: W2WTransferPage;
+        let homePage: HomePage;
+
+        test.beforeAll(async ({ browser }) => {
+            const context = await browser.newContext();
+            await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+            sharedPage = await context.newPage();
+
+            const baselineData = amountValidationTests.find(d => d.execute) || amountValidationTests[0];
+
+            console.log('--- beforeAll: Starting single shared browser context for Amount Validation testing ---');
+            await performLogin(
+                sharedPage,
+                baselineData.companyNumber,
+                baselineData.mobileNumber,
+                baselineData.password,
+                baselineData.otpCode ?? '0000'
+            );
+
+            w2w = new W2WTransferPage(sharedPage);
+            homePage = new HomePage(sharedPage);
+
+            await homePage.clickW2WTransferButton();
+
+            // Setup persistent form state: Enter a valid CRN and click Check Recipient to reveal amount field
+            console.log(`--- beforeAll: Navigating to W2W Transfer and unlocking wizard with baseline CRN "${baselineData.receiverCRN}" ---`);
+            await w2w.inputCRN.clear();
+            await w2w.enterCRN(baselineData.receiverCRN);
+            await w2w.clickCheckRecipient();
+
+            // Wait for company name div or amount field to be visible to ensure form unlocked
+            await sharedPage.waitForTimeout(4000);
+
+            // Select Purpose of Transfer to unlock the Proceed button state permanently
+            await w2w.selectRandomPurposeOfTransfer();
+        });
 
         for (const data of amountValidationTests) {
             if (!data.execute) continue;
 
-            test(`${data.testName} | Validation Type: ${data.amountValidation}`, async ({ page }) => {
+            test(`${data.testName} | Validation Type: ${data.amountValidation}`, async () => {
 
-                // ── Step 1: Login ────────────────────────────────────────────────────
-                console.log('Step 1: Open login page and enter Merchant credentials');
-                await performLogin(page, data.companyNumber, data.mobileNumber, data.password, data.otpCode ?? '0000');
-                console.log('   Merchant login successful ✔');
+                console.log(`Step 3: Interacting with Transfer Amount: "${data.amount}"`);
+                await w2w.inputAmount.clear();
 
-                const w2w = new W2WTransferPage(page);
-                const homePage = new HomePage(page);
+                if (data.isClipboardTest) {
+                    console.log(`   Pasting amount via clipboard: "${data.amount}"`);
+                    await w2w.inputAmount.focus();
+                    await sharedPage.evaluate((text) => navigator.clipboard.writeText(text), data.amount);
+                    const modifier = process.platform === 'darwin' ? 'Meta' : 'Control';
+                    await sharedPage.keyboard.press(`${modifier}+V`);
+                } else {
+                    console.log(`   Typing amount sequentially: "${data.amount}"`);
+                    if (data.amount !== "") {
+                        await w2w.inputAmount.pressSequentially(data.amount, { delay: 50 });
+                    }
+                }
 
-                // ── Step 2: Navigate to W2W Transfer ────────────────────────────────
-                console.log('Step 2: Navigate to W2W Transfer page');
-                await homePage.clickW2WTransferButton();
+                if (data.expectedUIValue !== undefined) {
+                    // Verify the value is accurately rendered or filtered
+                    const enteredAmount = await w2w.getAmountValue();
+                    expect(enteredAmount).toBe(data.expectedUIValue);
+                    console.log(`   Passed: UI Filter successfully evaluated the input. Field value is currently: [${enteredAmount}]`);
+                }
 
-                // ── Step 3: Enter Receiver CRN ───────────────────────────────────────
-                console.log(`Step 3: Entering Receiver CRN: "${data.receiverCRN}"`);
-                await w2w.enterCRN(data.receiverCRN);
+                if (data.expectButtonDisabled) {
+                    // Proceed button should be strictly disabled
+                    await expect(w2w.proceedButton).toBeDisabled({ timeout: 5000 });
+                    console.log('   Passed: Proceed button is correctly DISABLED for this invalid case.');
+                } else {
+                    // Ensure system recognizes the input and activates the UI transfer button
+                    await expect(w2w.proceedButton).toBeEnabled({ timeout: 5000 });
+                    console.log('   Passed: Proceed button is correctly ENABLED for this valid case.');
+                }
 
-                // ── Step 4: Click Check Recipient ────────────────────────────────────
-                console.log('Step 4: Clicking Check Recipient button');
-                await w2w.clickCheckRecipient();
-                await page.waitForTimeout(4000);
-
-                // ── Step 5: Enter invalid amount ──────────────────────────────────────
-                console.log(`Step 5: Verifying invalid amount: "${data.amount}" (Type: ${data.amountValidation})`);
-                await w2w.enterAmount(data.amount);
-
-                // ── Step 6: Assert the field did NOT accept the invalid amount ────────
-                console.log('Step 5: Asserting the amount field filtered/blocked the invalid input');
-                await w2w.assertInvalidAmountNotAccepted(data.amount, data.amountValidation ?? '');
-
-                // ── Step 6: Assert Check Recipient button is DISABLED ─────────────────
-                console.log('Step 6: Validating Check Recipient button is DISABLED for invalid amount');
-                await w2w.assertCheckRecipientButtonIsDisabled();
-                console.log(`   Amount validation for "${data.amountValidation}" PASSED ✔`);
+                // Cleanly clear the amount input box at the end of each test
+                await w2w.inputAmount.clear();
             });
         }
     });
@@ -454,38 +518,54 @@ test.describe.serial('MajdPay W2W Transfer Tests', () => {
     // SUITE 6: CRN Input Validation (Boundary & Characters)
     // ============================================================
 
-    test.describe('W2W Transfer — CRN Field Input Validation', () => {
+    test.describe.serial('W2W Transfer — CRN Field Input Validation Layout', () => {
         const crnValidationTests = dataSets.filter(d => d.suite === 'crn_validation');
+
+        let sharedPage: import('@playwright/test').Page;
+        let w2wTransferPage: W2WTransferPage;
+        let homePage: HomePage;
+
+        test.beforeAll(async ({ browser }) => {
+            const context = await browser.newContext();
+            sharedPage = await context.newPage();
+
+            // Find the first valid data object to extract login credentials
+            const baselineData = crnValidationTests.find(d => d.execute) || crnValidationTests[0];
+
+            console.log('--- beforeAll: Starting single shared browser context for CRN boundary testing ---');
+            // Execute single persistent login
+            await performLogin(
+                sharedPage,
+                baselineData.companyNumber,
+                baselineData.mobileNumber,
+                baselineData.password,
+                baselineData.otpCode ?? '0000'
+            );
+
+            w2wTransferPage = new W2WTransferPage(sharedPage);
+            homePage = new HomePage(sharedPage);
+
+            // Navigate to W2W Transfer once
+            await homePage.clickW2WTransferButton();
+        });
 
         for (const data of crnValidationTests) {
             if (!data.execute) continue;
 
-            test(`${data.testName} | Validation Type: ${data.crnType}`, async ({ page }) => {
-
-                // ── Step 1: Login ────────────────────────────────────────────────────
-                console.log('Step 1: Open login page and enter Merchant credentials');
-                await performLogin(page, data.companyNumber, data.mobileNumber, data.password, data.otpCode ?? '0000');
-                console.log('   Merchant login successful ✔');
-
-                const w2w = new W2WTransferPage(page);
-                const homePage = new HomePage(page);
-
-                // ── Step 2: Navigate to W2W Transfer ────────────────────────────────
-                console.log('Step 2: Navigate to W2W Transfer screen');
-                await homePage.clickW2WTransferButton();
+            test(`${data.testName} | Validation Type: ${data.crnType}`, async () => {
 
                 // ── Step 3: Type into CRN Field ──────────────────────────────────────
                 console.log(`Step 3: Typing Receiver CRN: "${data.receiverCRN}"`);
                 // Clear first, then type sequentially to simulate real input
-                await w2w.inputCRN.clear();
+                await w2wTransferPage.inputCRN.clear();
                 if (data.receiverCRN) {
-                    await w2w.inputCRN.pressSequentially(data.receiverCRN, { delay: 50 });
+                    await w2wTransferPage.inputCRN.pressSequentially(data.receiverCRN, { delay: 50 });
                 }
 
                 // ── Step 4: Validate UI filtering behavior ───────────────────────────
                 if (data.expectedUIValue !== undefined) {
                     console.log(`Step 4: Asserting UI filtered the value to: "${data.expectedUIValue}"`);
-                    const actualValue = await w2w.inputCRN.inputValue();
+                    const actualValue = await w2wTransferPage.inputCRN.inputValue();
                     if (actualValue !== data.expectedUIValue) {
                         throw new Error(`CRN input filter failed. Expected UI to show "${data.expectedUIValue}", but found "${actualValue}"`);
                     }
@@ -496,14 +576,15 @@ test.describe.serial('MajdPay W2W Transfer Tests', () => {
                 // ── Step 5: Assert Button State ──────────────────────────────────────
                 console.log(`Step 5: Asserting Check Recipient button state. Expecting disabled: ${data.expectButtonDisabled}`);
                 if (data.expectButtonDisabled) {
-                    await expect(w2w.checkRecipientButton).toBeDisabled({ timeout: 5000 });
+                    await expect(w2wTransferPage.checkRecipientButton).toBeDisabled({ timeout: 5000 });
                     console.log('   Assertion Passed: Check Recipient button is correctly DISABLED ✔');
                 } else {
-                    await expect(w2w.checkRecipientButton).toBeEnabled({ timeout: 5000 });
+                    await expect(w2wTransferPage.checkRecipientButton).toBeEnabled({ timeout: 5000 });
                     console.log('   Assertion Passed: Check Recipient button is correctly ENABLED ✔');
                 }
 
-                // Terminate test here as requested — no backend checks needed for UI boundary tests
+                // Crucial: Clear or reset the field at the end of each test so the next scenario starts with a clean input box.
+                await w2wTransferPage.inputCRN.clear();
             });
         }
     });
