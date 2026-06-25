@@ -14,6 +14,12 @@ test.describe('Registration - OTP Popup Page Elements', () => {
             .then(() => true)
             .catch(() => false);
         test.skip(!otpAppeared, 'OTP dialog did not appear — Registration OTP is disabled in this environment');
+
+        // OTP inputs render asynchronously after the heading; wait for the first
+        // one before any test in this suite runs to avoid a count() of 0.
+        await page.getByRole('textbox', { name: 'One time password input' })
+            .first()
+            .waitFor({ state: 'visible', timeout: 10000 });
     });
 
     // ── OTP popup content ─────────────────────────────────────────────────────

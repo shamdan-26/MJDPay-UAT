@@ -129,6 +129,7 @@ export async function getOtpFromDb(mobile: string, maxAttempts = 10, delayMs = 2
 
 export async function fillOTP(page: Page, otp?: string) {
     const inputs = page.getByRole('textbox', { name: 'One time password input' });
+    await inputs.first().waitFor({ state: 'visible', timeout: 10000 });
     const count  = await inputs.count();
     for (let i = 0; i < count; i++) {
         await inputs.nth(i).pressSequentially(otp?.[i] ?? '0', { delay: 50 });
