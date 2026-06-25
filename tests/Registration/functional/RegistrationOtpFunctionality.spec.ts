@@ -115,6 +115,12 @@ test.describe('Registration - OTP Functionality', () => {
         await expect(page.getByText('Tell us about your business')).toBeVisible({ timeout: 30000 });
     });
 
+    // ── Mobile number display ─────────────────────────────────────────────────
+
+    test('should display the submitted mobile number on the OTP step', async ({ page }) => {
+        await expect(page.getByText(currentMobile)).toBeVisible({ timeout: 10000 });
+    });
+
     // ── Cancel ────────────────────────────────────────────────────────────────
 
     test('should close the OTP popup when Cancel is clicked', async ({ page }) => {
@@ -125,5 +131,13 @@ test.describe('Registration - OTP Functionality', () => {
     test('should return to the mobile number page when Cancel is clicked', async ({ page }) => {
         await page.getByRole('button', { name: 'Cancel' }).click();
         await expect(page.getByText('Enter Phone Number')).toBeVisible({ timeout: 10000 });
+    });
+
+    // ── Back navigation ───────────────────────────────────────────────────────
+
+    test('should pre-fill the mobile number when returning via Back', async ({ page }) => {
+        await page.getByRole('button', { name: /back/i }).click();
+        await expect(page.getByRole('textbox', { name: /mobile number/i }))
+            .toHaveValue(currentMobile, { timeout: 10000 });
     });
 });
