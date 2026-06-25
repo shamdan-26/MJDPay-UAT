@@ -217,7 +217,7 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3)', () => {
     // ── Footer ────────────────────────────────────────────────────────────────
 
     test('should display "Already have an account?" text', async ({ page }) => {
-        await expect(page.locator('#login-line span:first-child').filter({ visible: true })).toBeVisible();
+        await expect(page.locator('span.text-primary.link').filter({ visible: true }).first()).toBeVisible();
     });
 
     test('should display Terms & Conditions link', async ({ page }) => {

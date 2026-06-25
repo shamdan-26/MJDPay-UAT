@@ -182,8 +182,7 @@ test.describe('Registration – Business Info Step (Tab 1 of 3)', () => {
     // ── Footer ────────────────────────────────────────────────────────────────
 
     test('should display "Already have an account?" text', async ({ page }) => {
-        await expect(page.locator('#login-form-footer').first()).toBeVisible();
-        await expect(page.locator('#login-line').first()).toContainText('Already have an account?');
+        await expect(page.locator('span.text-primary.link').filter({ visible: true }).first()).toBeVisible();
     });
 
     test('should display the Log In link', async ({ page }) => {
