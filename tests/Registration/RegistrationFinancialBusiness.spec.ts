@@ -217,14 +217,14 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3)', () => {
     // ── Footer ────────────────────────────────────────────────────────────────
 
     test('should display "Already have an account?" text', async ({ page }) => {
-        await expect(page.locator('span.text-primary.link').filter({ visible: true }).first()).toBeVisible();
+        await expect(page.locator('#login-line.new-user span').filter({ visible: true }).first()).toBeVisible();
     });
 
     test('should display Terms & Conditions link', async ({ page }) => {
-        await expect(page.getByText(/terms & conditions/i)).toBeVisible();
+        await expect(page.locator('span.text-primary.link').filter({ hasText: /terms & conditions/i }).filter({ visible: true }).first()).toBeVisible();
     });
 
     test('should display Privacy Policy link', async ({ page }) => {
-        await expect(page.getByText(/privacy policy/i)).toBeVisible();
+        await expect(page.locator('span.text-primary.link').filter({ hasText: /privacy policy/i }).filter({ visible: true }).first()).toBeVisible();
     });
 });
