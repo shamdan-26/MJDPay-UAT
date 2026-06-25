@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { goToInfoStep } from './helpers';
+﻿import { test, expect } from '@playwright/test';
+import { goToInfoStep } from '../helpers';
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 

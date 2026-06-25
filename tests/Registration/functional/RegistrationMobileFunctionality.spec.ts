@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { LOGIN_URL, REGISTER_URL, generateKSAMobile } from './helpers';
+﻿import { test, expect } from '@playwright/test';
+import { LOGIN_URL, REGISTER_URL, generateKSAMobile } from '../helpers';
 
 test.describe('Registration - Mobile Number Functionality', () => {
     test.describe.configure({ mode: 'serial' });

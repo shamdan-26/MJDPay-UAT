@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { LOGIN_URL, REGISTER_URL } from './helpers';
+﻿import { test, expect } from '@playwright/test';
+import { LOGIN_URL, REGISTER_URL } from '../helpers';
 
 // KSA mobile numbers start with 5 and are 9 digits (e.g. 5XXXXXXXX)
 const VALID_KSA_MOBILE = '500318143';

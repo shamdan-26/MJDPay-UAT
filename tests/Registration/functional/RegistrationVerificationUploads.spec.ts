@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { goToVerificationStep } from './helpers';
+﻿import { test, expect } from '@playwright/test';
+import { goToVerificationStep } from '../helpers';
 
 test.describe('Registration – Verification & Uploads Step (Tab 3 of 3)', () => {
     test.describe.configure({ mode: 'serial' });

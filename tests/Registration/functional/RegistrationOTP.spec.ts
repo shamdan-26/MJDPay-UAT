@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { REGISTER_URL } from './helpers';
+﻿import { test, expect } from '@playwright/test';
+import { REGISTER_URL } from '../helpers';
 
 const VALID_KSA_MOBILE = '500318143';
 

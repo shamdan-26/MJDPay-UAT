@@ -1,5 +1,5 @@
-import { test, expect, Page } from '@playwright/test';
-import { goToInfoStep, nextCitizenAsset, generateEmail } from './helpers';
+﻿import { test, expect, Page } from '@playwright/test';
+import { goToInfoStep, nextCitizenAsset, generateEmail } from '../helpers';
 
 test.describe('Registration - Nafath Verification', () => {
     test.describe.configure({ mode: 'serial' });
