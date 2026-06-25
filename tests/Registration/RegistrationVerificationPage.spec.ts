@@ -1,7 +1,7 @@
-﻿import { test, expect, Page } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
 import { goToVerificationStep } from './helpers';
 
-test.describe('Registration â€“ Verification & Uploads Page', () => {
+test.describe('Registration – Verification & Uploads Page', () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;
@@ -17,7 +17,7 @@ test.describe('Registration â€“ Verification & Uploads Page', () => {
         await page.close();
     });
 
-    // â”€â”€ Tab indicator â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Tab indicator ─────────────────────────────────────────────────────────
 
     test('should show the Verification & Uploads step fields on arrival', async () => {
         await expect(page.getByRole('textbox', { name: /iban/i })).toBeVisible();
@@ -27,7 +27,7 @@ test.describe('Registration â€“ Verification & Uploads Page', () => {
         await expect(page.getByText(/verification/i).first()).toBeVisible();
     });
 
-    // â”€â”€ IBAN field â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── IBAN field ────────────────────────────────────────────────────────────
 
     test('should display the IBAN field label', async () => {
         await expect(page.getByText(/iban/i).first()).toBeVisible();
@@ -46,7 +46,7 @@ test.describe('Registration â€“ Verification & Uploads Page', () => {
         await expect(page.getByText(/24 characters starting with SA/i)).toBeVisible();
     });
 
-    // â”€â”€ IBAN Proof upload â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── IBAN Proof upload ─────────────────────────────────────────────────────
 
     test('should display the IBAN Proof upload area', async () => {
         await expect(page.getByText(/iban proof/i)).toBeVisible();
@@ -64,7 +64,7 @@ test.describe('Registration â€“ Verification & Uploads Page', () => {
         await expect(page.getByText(/5\s*mb/i).first()).toBeVisible();
     });
 
-    // â”€â”€ VAT Number field â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── VAT Number field ──────────────────────────────────────────────────────
 
     test('should display the VAT Number field label', async () => {
         await expect(page.getByText(/vat number/i).first()).toBeVisible();
@@ -83,7 +83,7 @@ test.describe('Registration â€“ Verification & Uploads Page', () => {
         await expect(page.getByText(/zatca/i).first()).toBeVisible();
     });
 
-    // â”€â”€ VAT Certificate upload â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── VAT Certificate upload ────────────────────────────────────────────────
 
     test('should display the VAT Certificate upload area', async () => {
         await expect(page.getByText(/vat certificate/i)).toBeVisible();
@@ -93,7 +93,7 @@ test.describe('Registration â€“ Verification & Uploads Page', () => {
         await expect(page.getByText(/click to upload/i).first()).toBeVisible();
     });
 
-    // â”€â”€ Navigation buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Navigation buttons ────────────────────────────────────────────────────
 
     test('should display the Back button', async () => {
         await expect(page.getByRole('button', { name: /back/i })).toBeVisible();
@@ -107,7 +107,7 @@ test.describe('Registration â€“ Verification & Uploads Page', () => {
         await expect(page.getByRole('button', { name: /sign up/i })).toBeDisabled();
     });
 
-    // â”€â”€ Footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Footer ────────────────────────────────────────────────────────────────
 
     test('should display "Already have an account?" text', async () => {
         await expect(page.getByText(/already have an account/i)).toBeVisible();

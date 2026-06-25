@@ -14,7 +14,7 @@ export function generateEmail(): string {
     return `test+${Date.now()}@dg-cash.com`;
 }
 
-// â”€â”€ Pre-generated test assets (from Assets.xlsx) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Pre-generated test assets (from Assets.xlsx)
 // Citizen_IDs sheet: Saudi_CRN | Citizen_ID | Saudi_Mobile (strip leading 966)
 const CITIZEN_ASSETS = [
     { crn: '1010006068', nationalId: '1497430312', mobile: '500021788' },
@@ -43,7 +43,7 @@ const RESIDENT_ASSETS = [
     { crn: '1010627980', nationalId: '2218615066', mobile: '599000009' },
 ];
 
-// Primary defaults â€” resident pool used for Business Info step
+// Primary defaults resident pool used for Business Info step
 export const VALID_CRN    = RESIDENT_ASSETS[0].crn;
 export const VALID_IQAMA  = RESIDENT_ASSETS[0].nationalId;
 export const VALID_MOBILE = RESIDENT_ASSETS[0].mobile;
@@ -68,7 +68,7 @@ export function generateKSAMobile(): string {
 }
 
 // UAT test accounts from phone numbers.xlsx — Sheet1, uat-flagged rows
-const UAT_OTP_ASSETS = [
+export const UAT_OTP_ASSETS = [
     { id: '1000000008', crn: '1100000008', mobile: '510203001' },
     { id: '1000000016', crn: '1200000016', mobile: '510203002' },
     { id: '1000000032', crn: '1400000032', mobile: '510203004' },
