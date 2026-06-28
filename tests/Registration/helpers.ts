@@ -30,7 +30,7 @@ const CITIZEN_ASSETS = [
 ];
 
 // Resident_IDs sheet: Resident_ID | CRN | Mobile (strip leading 966)
-const RESIDENT_ASSETS = [
+export const RESIDENT_ASSETS = [
     { crn: '1000659746', nationalId: '2959795515', mobile: '599000000' },
     { crn: '1002382941', nationalId: '2258981709', mobile: '599000001' },
     { crn: '1005135478', nationalId: '2447227568', mobile: '599000002' },

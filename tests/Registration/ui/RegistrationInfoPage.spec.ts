@@ -1,22 +1,23 @@
 import { test, expect, Page, Browser } from '@playwright/test';
-import { goToInfoStep, goToVerificationStep, nextResidentAsset, generateEmail } from '../helpers';
+import { goToInfoStep, goToVerificationStep, RESIDENT_ASSETS, generateEmail } from '../helpers';
 
 // Navigates to the Business Info form using a resident asset that bypasses NAFATH in UAT
-async function navigateToInfoStep(browser: Browser): Promise<Page> {
+async function navigateToInfoStep(browser: Browser, workerIndex: number): Promise<Page> {
     const context = await browser.newContext();
     await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
     const page: Page = await context.newPage();
-    await goToInfoStep(page);
+    const asset = RESIDENT_ASSETS[workerIndex % RESIDENT_ASSETS.length];
+    await goToInfoStep(page, asset.mobile);
     await page.locator('input[type="email"][aria-label="Email"]').waitFor({ state: 'visible', timeout: 15000 });
     return page;
 }
 
 // Navigates to Tab 2 (Financial & Business) using a resident asset that bypasses NAFATH in UAT
-async function navigateToFinancialTab(browser: Browser): Promise<Page> {
+async function navigateToFinancialTab(browser: Browser, workerIndex: number): Promise<Page> {
     const context = await browser.newContext();
     await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
     const page: Page = await context.newPage();
-    const asset = nextResidentAsset();
+    const asset = RESIDENT_ASSETS[workerIndex % RESIDENT_ASSETS.length];
     await goToInfoStep(page, asset.mobile);
     const radios = page.getByRole('radio');
     await radios.first().waitFor({ state: 'visible', timeout: 10000 });
@@ -44,9 +45,9 @@ test.describe('Registration - Info Page', () => {
 
         let page: Page;
 
-        test.beforeAll(async ({ browser }) => {
+        test.beforeAll(async ({ browser }, workerInfo) => {
             test.setTimeout(120_000);
-            page = await navigateToInfoStep(browser);
+            page = await navigateToInfoStep(browser, workerInfo.workerIndex);
         });
 
         test('should display the MJD Pay logo [ref_3]', async () => {
@@ -88,9 +89,9 @@ test.describe('Registration - Info Page', () => {
 
         let page: Page;
 
-        test.beforeAll(async ({ browser }) => {
+        test.beforeAll(async ({ browser }, workerInfo) => {
             test.setTimeout(120_000);
-            page = await navigateToInfoStep(browser);
+            page = await navigateToInfoStep(browser, workerInfo.workerIndex);
         });
 
         test('should display the main page container [ref_8]', async () => {
@@ -140,9 +141,9 @@ test.describe('Registration - Info Page', () => {
 
         let page: Page;
 
-        test.beforeAll(async ({ browser }) => {
+        test.beforeAll(async ({ browser }, workerInfo) => {
             test.setTimeout(120_000);
-            page = await navigateToInfoStep(browser);
+            page = await navigateToInfoStep(browser, workerInfo.workerIndex);
         });
 
         test('should display the step bar [ref_16]', async () => {
@@ -179,9 +180,9 @@ test.describe('Registration - Info Page', () => {
 
             let page: Page;
 
-            test.beforeAll(async ({ browser }) => {
+            test.beforeAll(async ({ browser }, workerInfo) => {
                 test.setTimeout(120_000);
-                page = await navigateToInfoStep(browser);
+                page = await navigateToInfoStep(browser, workerInfo.workerIndex);
             });
 
             test('should display the tab panel container [ref_24]', async () => {
@@ -340,11 +341,11 @@ test.describe('Registration - Info Page', () => {
 
         test.describe('Field Interactions', () => {
 
-            let currentAsset: ReturnType<typeof nextResidentAsset>;
+            let currentAsset: typeof RESIDENT_ASSETS[number];
 
-            test.beforeEach(async ({ page, context }) => {
+            test.beforeEach(async ({ page, context }, testInfo) => {
                 test.setTimeout(120_000);
-                currentAsset = nextResidentAsset();
+                currentAsset = RESIDENT_ASSETS[testInfo.workerIndex % RESIDENT_ASSETS.length];
                 await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
                 await goToInfoStep(page, currentAsset.mobile);
                 await page.locator('input[type="email"][aria-label="Email"]').waitFor({ state: 'visible', timeout: 15000 });
@@ -403,14 +404,12 @@ test.describe('Registration - Info Page', () => {
             });
 
             test('should accept input in the Email field [ref_51]', async ({ page }) => {
-                await page.pause();
                 await page.locator('input[type="email"][aria-label="Email"]').fill('test@example.com');
                 await expect(page.locator('input[type="email"][aria-label="Email"]'))
                     .toHaveValue('test@example.com');
             });
 
             test('should have the Next button disabled when form is incomplete [ref_53]', async ({ page }) => {
-                await page.pause();
                 await expect(page.locator('#register-next-button')).toBeDisabled();
             });
 
