@@ -75,6 +75,13 @@ export async function fillOtpInputs(page: Page, otp: string): Promise<void> {
 
 export async function gotoLogin(page: Page): Promise<void> {
     await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    // Wait for Angular to render the form before tests start interacting
+    await page.locator('#login-form-box').waitFor({ state: 'visible', timeout: 15000 });
+    // Let any transient error toast from background page-init API calls auto-dismiss
+    await page.locator('[class*="snack"], [class*="toast"], mat-snack-bar-container')
+        .first()
+        .waitFor({ state: 'hidden', timeout: 8000 })
+        .catch(() => {});
 }
 
 export async function fillAndSubmitLogin(page: Page): Promise<void> {
