@@ -837,7 +837,7 @@ test.describe('Registration – Theme Toggle', () => {
         await themeBtn.click();
         await themeBtn.click();
         const restored = await page.locator('body').getAttribute('class');
-        expect(restored).toEqual(original);
+        expect(restored ?? '').toEqual(original ?? '');
     });
 });
 
