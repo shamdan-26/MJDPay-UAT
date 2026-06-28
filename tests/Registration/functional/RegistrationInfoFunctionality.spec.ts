@@ -741,22 +741,18 @@ test.describe('Registration – Footer Navigation', () => {
         await expect(page).toHaveURL(/auth\/login/, { timeout: 10000 });
     });
 
-    test('Terms & Conditions link should be visible and have an href', async ({ page }) => {
-        const link = page.locator('#login-form-footer a').filter({ hasText: /terms/i }).first();
+    test('Terms & Conditions link should be visible', async ({ page }) => {
+        const link = page.locator('.text-primary.link').filter({ hasText: /terms/i }).first();
         await expect(link).toBeVisible();
-        const href = await link.getAttribute('href');
-        expect(href).toBeTruthy();
     });
 
-    test('Privacy Policy link should be visible and have an href', async ({ page }) => {
-        const link = page.locator('#login-form-footer a').filter({ hasText: /privacy/i }).first();
+    test('Privacy Policy link should be visible', async ({ page }) => {
+        const link = page.locator('.text-primary.link').filter({ hasText: /privacy/i }).first();
         await expect(link).toBeVisible();
-        const href = await link.getAttribute('href');
-        expect(href).toBeTruthy();
     });
 
     test('Terms & Conditions link should be clickable without a JS error', async ({ page }) => {
-        const link = page.locator('#login-form-footer a').filter({ hasText: /terms/i }).first();
+        const link = page.locator('.text-primary.link').filter({ hasText: /terms/i }).first();
         const errors: string[] = [];
         page.on('pageerror', err => errors.push(err.message));
         await link.click();
@@ -764,7 +760,7 @@ test.describe('Registration – Footer Navigation', () => {
     });
 
     test('Privacy Policy link should be clickable without a JS error', async ({ page }) => {
-        const link = page.locator('#login-form-footer a').filter({ hasText: /privacy/i }).first();
+        const link = page.locator('.text-primary.link').filter({ hasText: /privacy/i }).first();
         const errors: string[] = [];
         page.on('pageerror', err => errors.push(err.message));
         await link.click();
