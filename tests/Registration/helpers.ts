@@ -150,7 +150,11 @@ export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
             .waitFor({ state: 'visible', timeout: 10000 });
         // dev/UAT test accounts always accept all-zero OTP; no mongo needed
         await fillOTP(page);
-        // verify button auto-submits once all OTP digits (up to 8) are filled
+        // click Verify in case auto-submit doesn't fire
+        const verifyBtn = page.getByRole('button', { name: 'Verify' });
+        if (await verifyBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+            await verifyBtn.click();
+        }
     }
     await page.getByText('Tell us about your business').waitFor({ state: 'visible', timeout: 60000 });
 }
