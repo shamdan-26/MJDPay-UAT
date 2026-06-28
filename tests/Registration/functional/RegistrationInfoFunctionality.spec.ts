@@ -1,4 +1,4 @@
-import { test, expect, Page, BrowserContext } from '@playwright/test';
+﻿import { test, expect, Page, BrowserContext } from '@playwright/test';
 import { goToInfoStep, RESIDENT_ASSETS, generateEmail } from '../helpers';
 
 // ── Selectors ─────────────────────────────────────────────────────────────────
@@ -824,16 +824,18 @@ test.describe('Registration – Theme Toggle', () => {
     });
 
     test('should change the body class when Switch theme is clicked', async ({ page }) => {
+        const themeBtn = page.locator('button.mode-btn.header-icon-btn');
         const before = await page.locator('body').getAttribute('class');
-        await page.getByRole('button', { name: 'Switch theme' }).click();
+        await themeBtn.click();
         const after = await page.locator('body').getAttribute('class');
         expect(after).not.toEqual(before);
     });
 
     test('should return to the original theme class when toggled twice', async ({ page }) => {
+        const themeBtn = page.locator('button.mode-btn.header-icon-btn');
         const original = await page.locator('body').getAttribute('class');
-        await page.getByRole('button', { name: 'Switch theme' }).click();
-        await page.getByRole('button', { name: 'Switch theme' }).click();
+        await themeBtn.click();
+        await themeBtn.click();
         const restored = await page.locator('body').getAttribute('class');
         expect(restored).toEqual(original);
     });
