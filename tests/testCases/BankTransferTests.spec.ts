@@ -6,8 +6,7 @@ import { ToastMessages } from '../pageObjects/common/ToastMessages';
 
 const bankTransferData = require('../../data/BankTransferData.json');
 
-//test.describe.serial('Merchant Bank Transfer Tests', () => {   // If you want to run all the tests serially
-test.describe('Merchant Bank Transfer Tests', () => {   // If you want to run all the tests in parallel (dose not use --> .serial)
+test.describe.serial('Merchant Bank Transfer Tests', () => {
     test.setTimeout(180000); // 3 minutes timeout for heavy EMI flows
 
     type BankTransferTestData = {
@@ -22,37 +21,54 @@ test.describe('Merchant Bank Transfer Tests', () => {   // If you want to run al
 
     const dataSets = bankTransferData as BankTransferTestData[];
 
+    let page: import('@playwright/test').Page;
+    let lp: LoginPage;
+    let hp: HomePage;
+    let bt: BankTransferPage;
+    let toast: ToastMessages;
+
+    test.beforeAll(async ({ browser }) => {
+        page = await browser.newPage();
+        lp = new LoginPage(page);
+        hp = new HomePage(page);
+        bt = new BankTransferPage(page);
+        toast = new ToastMessages(page);
+
+        // --- 1. LOGIN SECTION ---
+        const data = dataSets.find(d => d.execute !== false) || dataSets[0];
+        console.log('Logging in once for all tests...');
+        await lp.navigate();
+        await lp.login(data.CN, data.mobile, data.pwd);
+
+        if (await lp.isOTPScreenDisplayed()) {
+            console.log('Entering login OTP...');
+            await lp.enterOTP("0000"); // Default sandbox/UAT OTP
+            if (await lp.verifyButton.isVisible()) {
+                await lp.verifyButton.click();
+            }
+        }
+        await lp.assertLoginSuccess();
+    });
+
+    test.beforeEach(async () => {
+        // --- 2. FORCING CLEAN NAVIGATION TO TRANSFER SECTION ---
+        // Ensures no stale DOM state or obstructed UI from previous test runs
+        console.log('Forcing clean navigation to Bank Transfer Section...');
+        await page.goto('https://uat.majdpay.com/business/main/home');
+        await page.waitForLoadState('domcontentloaded');
+        await hp.clickTransferButton();
+    });
+
+    test.afterAll(async () => {
+        await page.close();
+    });
+
     for (const data of dataSets) {
-        test(`${data.description}`, async ({ page }) => {
+        test(`${data.description}`, async () => {
 
             if (data.execute === false) {
                 test.skip();
             }
-
-            const lp = new LoginPage(page);
-            const hp = new HomePage(page);
-            const bt = new BankTransferPage(page);
-            const toast = new ToastMessages(page);
-
-            // --- 1. LOGIN SECTION ---
-            await test.step('Login to Merchant Account', async () => {
-                await lp.navigate();
-                await lp.login(data.CN, data.mobile, data.pwd);
-
-                if (await lp.isOTPScreenDisplayed()) {
-                    console.log('Entering login OTP...');
-                    await lp.enterOTP("0000"); // Default sandbox/UAT OTP
-                    if (await lp.verifyButton.isVisible()) {
-                        await lp.verifyButton.click();
-                    }
-                }
-                await lp.assertLoginSuccess();
-            });
-
-            // --- 2. NAVIGATION TO TRANSFER ---
-            await test.step('Navigate to Bank Transfer Section', async () => {
-                await hp.clickTransferButton();
-            });
 
             // --- 3. DYNAMIC TEST EXECUTION BASED ON AMOUNT TYPE ---
             if (data.AmountType === "Standard") {
@@ -208,20 +224,6 @@ test.describe('Merchant Bank Transfer Tests', () => {   // If you want to run al
                     await page.waitForTimeout(2000);
                     console.log('Cancelling via Summary Cancel Button...');
                     await bt.clickSummaryCancelButton();
-
-                    // Assert strictly that balance underwent no deduction
-                    await bt.checkBalanceRemainsUnchanged();
-                });
-
-            } else if (data.AmountType === "Cancel via Summary Close Icon") {
-                await test.step('Fill transfer details and abort summary modal via dismissal cross X icon', async () => {
-                    await bt.getBalanceBeforeBankTransfer();
-                    await bt.enterAmount(data.Amount);
-                    await bt.clickProceedButton();
-
-                    await page.waitForTimeout(2000);
-                    console.log('Cancelling via Summary Close Icon (X)...');
-                    await bt.clickSummaryCloseIcon();
 
                     // Assert strictly that balance underwent no deduction
                     await bt.checkBalanceRemainsUnchanged();

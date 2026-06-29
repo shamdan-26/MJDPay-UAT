@@ -110,5 +110,13 @@
     "mobileNumber": "510203012",
     "password": "Aa#1234567",
     "otpCode": "0000"
+  },
+  {
+    "type": "negative",
+    "execute": true,
+    "description": "Login in Arabic Language",
+    "companyNumber": "",
+    "mobileNumber": "",
+    "password": ""
   }
 ]

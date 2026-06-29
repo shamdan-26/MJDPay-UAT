@@ -35,6 +35,10 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    //trace: 'retain-on-failure',
+    screenshot: 'only-on-failure',
+    video: 'off',
+    //video: 'retain-on-failure',
     permissions: ['geolocation'],
     geolocation: { latitude: 31.9454, longitude: 35.9284 },
   },
@@ -44,7 +48,7 @@ export default defineConfig({
 
 
     {
-      name: 'chromium',
+      name: 'EMI | Environment: UAT | QA Engineer: Hiba Rimawi | Sprint: 70 | Browser: chromium',
       use: {
         ...devices['Desktop Chrome']
         // Add permissions here if needed (e.g., 'geolocation', 'notifications')

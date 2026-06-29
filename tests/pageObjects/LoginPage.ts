@@ -16,6 +16,7 @@ export class LoginPage {
     readonly languageDropdown: Locator;
     readonly englishButton: Locator;
     readonly arabicButton: Locator;
+    readonly landingPageTitle: Locator;
 
     // Password visibility locator
     readonly passwordToggleButton: Locator;
@@ -41,6 +42,7 @@ export class LoginPage {
         this.languageDropdown = page.locator('#text_langDropdown');
         this.englishButton = page.locator('button#text_languageItem:has-text("EN")');
         this.arabicButton = page.locator('button#text_languageItem:has-text("العربية")');
+        this.landingPageTitle = page.locator('#login-form-title.form-title');
 
         // Password visibility toggle (assuming eye icon button)
         this.passwordToggleButton = page.locator('button[aria-label*="Show password" i], button[aria-label*="Hide password" i], .password-toggle, .eye-icon, [data-testid*="password-toggle"]')
@@ -51,7 +53,7 @@ export class LoginPage {
         await this.page.goto('https://uat.majdpay.com/business/auth/login');
     }
 
-    async login(cn: string, mobile: string, pass: string, options?: { useSequentialTyping?: boolean }) {
+    async login(cn: string, mobile: string, pass: string, options?: { useSequentialTyping?: boolean, skipSubmit?: boolean }) {
         await this.companyNumberInput.fill(cn);
         if (options?.useSequentialTyping) {
             await this.mobileNumberInput.click();
@@ -60,6 +62,10 @@ export class LoginPage {
             await this.mobileNumberInput.fill(mobile);
         }
         await this.passwordInput.fill(pass);
+
+        if (options?.skipSubmit) {
+            return;
+        }
 
         if (await this.submitLoginAction.isEnabled()) {
             await this.submitLoginAction.click();
@@ -72,10 +78,23 @@ export class LoginPage {
     }
 
     async enterOTP(otpCode: string) {
+        // Explicitly wait for the first OTP input to be fully attached and visible
+        const firstOtpInput = this.page.locator('#ngx-otp-input-0');
+        await expect(firstOtpInput).toBeVisible({ timeout: 15000 });
+
+        // Small delay to allow Angular's reactive form model to initialize and bind events
+        await this.page.waitForTimeout(500);
+
         for (let i = 0; i < otpCode.length; i++) {
-            // Input each OTP digit into its respective dynamic box
-            await this.page.locator(`#ngx-otp-input-${i}`).fill(otpCode[i]);
+            const otpInput = this.page.locator(`#ngx-otp-input-${i}`);
+            await expect(otpInput).toBeVisible();
+            // Use click and pressSequentially to simulate native keystrokes for the Angular model
+            await otpInput.click();
+            await otpInput.pressSequentially(otpCode[i], { delay: 100 });
         }
+
+        // Brief pause after all digits are entered to ensure the 'Verify' button state updates
+        await this.page.waitForTimeout(500);
     }
 
     async isOTPScreenDisplayed(): Promise<boolean> {
@@ -130,6 +149,12 @@ export class LoginPage {
         if (ariaPressed === 'true') return true;
         const classList = await button.getAttribute('class') ?? '';
         return classList.includes('is-active');
+    }
+
+    async assertArabicTitleVisible() {
+        console.log('Asserting Arabic title is strictly visible with exact text');
+        await expect(this.landingPageTitle).toBeVisible();
+        await expect(this.landingPageTitle).toHaveText('مرحباً بك في MJD Pay');
     }
 
     // ---------- Password Visibility Actions ----------

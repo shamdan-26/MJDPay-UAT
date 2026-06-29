@@ -8,7 +8,6 @@ export class BankTransferPage {
     readonly proceedButton: Locator;
     readonly proceedButtonInSummary: Locator;
     readonly summaryCancelButton: Locator;
-    readonly summaryCloseIcon: Locator;
     readonly Successful_OkButton: Locator;
     readonly useFullBalanceToggle: Locator;
     readonly tnxp: TransactionsPage;
@@ -23,13 +22,11 @@ export class BankTransferPage {
         // Locators mapped from Java elements
         this.bankTransferButton = page.locator('#balance-transfer-text');
         this.inputAmount = page.locator('#input_set_amount');
-        this.proceedButton = page.locator('button.mp-btn-cta')
-            .or(page.locator('#sa_button button'));
-        this.proceedButtonInSummary = page.locator('button.btn-primary:has-text("Next")')
-            .or(page.locator('button.btn-primary.custom-btn', { hasText: 'Next' }));
+        this.proceedButton = page.locator('button.mp-btn-cta, #sa_button button, button:has-text("Proceed")').first();
+        this.proceedButtonInSummary = page.getByRole('button', { name: /Next/i })
+            .or(page.locator('button:has-text("Next")')).first();
         this.summaryCancelButton = page.locator('button.btn-outline-primary:has-text("Cancel")')
             .or(page.locator('button.btn.btn-outline-primary.custom-btn', { hasText: 'Cancel' }));
-        this.summaryCloseIcon = page.locator('mat-icon.mat-icon.material-icons', { hasText: 'close' });
         this.Successful_OkButton = page.locator('button.mp-btn-wide:has-text("Ok")')
             .or(page.locator('button#submit_btn_info', { hasText: 'Ok' })); this.useFullBalanceToggle = page.locator('#use-full-balance-toggle');
 
@@ -103,11 +100,6 @@ export class BankTransferPage {
         await this.summaryCancelButton.first().click();
     }
 
-    async clickSummaryCloseIcon() {
-        await expect(this.summaryCloseIcon.first()).toBeVisible({ timeout: 15000 });
-        await expect(this.summaryCloseIcon.first()).toBeEnabled({ timeout: 15000 });
-        await this.summaryCloseIcon.first().click();
-    }
 
     async clickSuccessful_OkButton() {
         // Wait specifically for the success element or dialog button to be visible

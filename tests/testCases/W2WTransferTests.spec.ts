@@ -49,6 +49,15 @@ async function performLogin(
     password: string,
     otpCode: string
 ) {
+    // Isolate context to prevent cross-suite contamination when running sequentially
+    await page.context().clearCookies();
+    // Navigate to base URL to allow localStorage access for cleanup
+    await page.goto('https://uat.majdpay.com/business/auth/login');
+    await page.evaluate(() => {
+        localStorage.clear();
+        sessionStorage.clear();
+    });
+
     const loginPage = new LoginPage(page);
     await loginPage.navigate();
     await loginPage.login(companyNumber, mobileNumber, password);

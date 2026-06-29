@@ -381,8 +381,8 @@ export class W2WTransferPage {
         try {
             await chosen.click({ timeout: 5000 });
         } catch {
-            console.log('   Standard click intercepted — attempting force click via JS');
-            await chosen.evaluate((el: HTMLElement) => el.click());
+            console.log('   Standard click intercepted — attempting force click via Playwright');
+            await chosen.click({ force: true });
         }
 
         const selectedText = (await chosen.textContent())?.trim() ?? '';
@@ -411,8 +411,8 @@ export class W2WTransferPage {
         try {
             await targetOption.click({ timeout: 5000 });
         } catch {
-            console.log('   Standard click intercepted — attempting force click via JS');
-            await targetOption.evaluate((el: HTMLElement) => el.click());
+            console.log('   Standard click intercepted — attempting force click via Playwright');
+            await targetOption.click({ force: true });
         }
 
         const selectedText = (await targetOption.textContent())?.trim() ?? '';

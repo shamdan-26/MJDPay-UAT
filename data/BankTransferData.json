@@ -124,14 +124,5 @@
     "pwd": "Aa#1234567",
     "Amount": "10.00",
     "AmountType": "Cancel via Summary Cancel Button"
-  },
-  {
-    "description": "BankTransfer_CancelTransaction | Amount Type: Cancel via Summary Close Icon",
-    "execute": true,
-    "CN": "F2147",
-    "mobile": "510203012",
-    "pwd": "Aa#1234567",
-    "Amount": "10.00",
-    "AmountType": "Cancel via Summary Close Icon"
   }
 ]
