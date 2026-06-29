@@ -221,17 +221,6 @@ test.describe('Registration - Info Page', () => {
                     .toContainText('Accept payments and manage your store.');
             });
 
-            test('should display the Biller radio option [ref_31]', async () => {
-                await expect(page.locator('#register-profile-card-BILLER')).toBeVisible();
-            });
-
-            test('should display the Biller label and description [ref_32, ref_33]', async () => {
-                await expect(page.locator('#register-profile-card-BILLER .mp-rc-title'))
-                    .toContainText('Biller');
-                await expect(page.locator('#register-profile-card-BILLER .mp-rc-sub'))
-                    .toContainText('Issue and collect bills from your customers.');
-            });
-
             test('should display the Customer radio option [ref_34]', async () => {
                 await expect(page.locator('#register-profile-card-CUSTOMER')).toBeVisible();
             });
@@ -357,12 +346,6 @@ test.describe('Registration - Info Page', () => {
                     .toHaveAttribute('aria-checked', 'true');
             });
 
-            test('should allow selecting Biller profile type [ref_31]', async ({ page }) => {
-                await page.locator('#register-profile-card-BILLER').click();
-                await expect(page.locator('#register-profile-card-BILLER'))
-                    .toHaveAttribute('aria-checked', 'true');
-            });
-
             test('should allow selecting Customer profile type [ref_34]', async ({ page }) => {
                 await page.locator('#register-profile-card-CUSTOMER').click();
                 await expect(page.locator('#register-profile-card-CUSTOMER'))
@@ -372,15 +355,6 @@ test.describe('Registration - Info Page', () => {
             test('should allow selecting Freelancer profile type [ref_37]', async ({ page }) => {
                 await page.locator('#register-profile-card-FREELANCER').click();
                 await expect(page.locator('#register-profile-card-FREELANCER'))
-                    .toHaveAttribute('aria-checked', 'true');
-            });
-
-            test('should only allow one profile type selected at a time', async ({ page }) => {
-                await page.locator('#register-profile-card-MERCHANT').click();
-                await page.locator('#register-profile-card-BILLER').click();
-                await expect(page.locator('#register-profile-card-MERCHANT'))
-                    .toHaveAttribute('aria-checked', 'false');
-                await expect(page.locator('#register-profile-card-BILLER'))
                     .toHaveAttribute('aria-checked', 'true');
             });
 

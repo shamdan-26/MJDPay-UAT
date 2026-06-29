@@ -18,7 +18,6 @@ async function fillAndSubmitLogin(page: Page) {
         await page.getByRole('button', { name: 'Log In' }).click();
     }
 
-    await page.pause();
 }
 
 test.describe('Login Validation Popup', () => {

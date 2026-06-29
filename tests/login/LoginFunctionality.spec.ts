@@ -13,7 +13,8 @@ test.describe('Login Functionality', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+        const origin = new URL(LOGIN_URL).origin;
+        await context.grantPermissions(['geolocation'], { origin });
         await gotoLogin(page);
     });
 
@@ -167,7 +168,6 @@ test.describe('Login - Already Authenticated', () => {
     test.use({ storageState: SESSION_PATH });
 
     test.skip('should redirect away from login page when already logged in', async ({ page }) => {
-        await page.pause();
         await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
         await expect(page).not.toHaveURL(/auth\/login/, { timeout: 10000 });
     });

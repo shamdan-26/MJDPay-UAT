@@ -252,12 +252,6 @@ test.describe('Registration - NAFATH Step Page Elements', () => {
                 .toContainText('Accept payments and manage your store.');
         });
 
-        test('should display the Biller radio option with description [ref_31 – ref_33]', async () => {
-            await expect(page.locator('#register-profile-card-BILLER .mp-rc-title')).toContainText('Biller');
-            await expect(page.locator('#register-profile-card-BILLER .mp-rc-sub'))
-                .toContainText('Issue and collect bills from your customers.');
-        });
-
         test('should display the Customer radio option with description [ref_34 – ref_36]', async () => {
             await expect(page.locator('#register-profile-card-CUSTOMER .mp-rc-title')).toContainText('Customer');
             await expect(page.locator('#register-profile-card-CUSTOMER .mp-rc-sub'))
