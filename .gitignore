@@ -1,4 +1,3 @@
-
 # Playwright
 node_modules/
 /test-results/
@@ -6,6 +5,12 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+playwright-report/
+test-results/
+session.json
+bug-report-assets/
+.env
+.env.*
 
 # temp only
 tests/tempTest.spec.ts
@@ -15,4 +20,4 @@ tests/pageObjects/TopupPageConvertedSeleniumCode.ts
 tests/testCases/TopupTestsConvertedSeleniumCode.spec.ts
 tests/testCases/TopupTests.spec.ts
 tests/testCases/PayBill.spec.ts
-tests/testCases/LoginValidationTests.spec.ts   
+tests/testCases/LoginValidationTests.spec.ts

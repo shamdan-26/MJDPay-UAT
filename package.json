@@ -1,15 +1,24 @@
 {
-  "name": "majdpay-automation-playwright-testing",
+  "name": "mjdpay-automation-playwright-testing",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test:uat": "cross-env ENV=uat npx playwright test",
+    "test:dev": "cross-env ENV=dev npx playwright test",
+    "test:preprod": "cross-env ENV=preprod npx playwright test"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "type": "commonjs",
   "devDependencies": {
-    "@playwright/test": "^1.59.1",
-    "@types/node": "^25.5.2",
+    "@faker-js/faker": "^10.5.0",
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.1",
+    "cross-env": "^10.1.0",
+    "dotenv": "^17.4.2",
+    "mongodb": "^7.3.0",
     "typescript": "^6.0.3"
   }
 }
