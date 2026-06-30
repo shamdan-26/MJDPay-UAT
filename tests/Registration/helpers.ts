@@ -3,6 +3,10 @@
 declare const process: { env: Record<string, string | undefined> };
 import { MongoClient } from 'mongodb';
 import { waitForToastClear } from '../shared';
+import { RegistrationMobilePage } from '../pages/registration/RegistrationMobilePage';
+import { RegistrationInfoPage } from '../pages/registration/RegistrationInfoPage';
+import { RegistrationFinancialPage } from '../pages/registration/RegistrationFinancialPage';
+import { RegistrationVerificationPage } from '../pages/registration/RegistrationVerificationPage';
 
 const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 export const LOGIN_URL    = `${BASE_URL}/business/auth/login`;
@@ -139,9 +143,10 @@ export async function fillOTP(page: Page, otp?: string) {
 
 export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
     const usedMobile = mobile ?? generateKSAMobile();
-    await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-    await page.getByRole('textbox', { name: 'Mobile number' }).fill(usedMobile);
-    await page.getByRole('button', { name: 'next' }).click();
+    const mobilePage = new RegistrationMobilePage(page);
+    await mobilePage.goto(REGISTER_URL);
+    await mobilePage.fillMobile(usedMobile);
+    await mobilePage.submitMobile();
     const otpVisible = await page.getByRole('heading', { name: 'Enter OTP' })
         .waitFor({ state: 'visible', timeout: 20000 })
         .then(() => true)
@@ -151,7 +156,6 @@ export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
             .waitFor({ state: 'visible', timeout: 10000 });
         // dev/UAT test accounts always accept all-zero OTP; no mongo needed
         await fillOTP(page);
-        // click Verify in case auto-submit doesn't fire
         const verifyBtn = page.getByRole('button', { name: 'Verify' });
         if (await verifyBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
             await verifyBtn.click();
@@ -178,6 +182,7 @@ export async function goToFinancialStep(page: Page, credentials?: FinancialStepC
 
     await goToInfoStep(page, mobile);
 
+    const infoPage = new RegistrationInfoPage(page);
     const radioGroup = page.getByRole('radiogroup', { name: 'Profile Type' });
     if (profileType === 'merchant') {
         const merchantRadio = radioGroup.getByRole('radio', { name: /merchant/i });
@@ -190,15 +195,14 @@ export async function goToFinancialStep(page: Page, credentials?: FinancialStepC
         await radioGroup.getByRole('radio').first().click();
     }
 
-    await page.locator('#floating-text-field-2').fill(crn);
-    await page.locator('#floating-text-field-3').fill(nationalId);
-    await page.getByRole('textbox', { name: /Email/i }).fill(credentials?.email ?? generateEmail());
-    await page.getByRole('button', { name: 'next' }).click();
-    await page.getByRole('button', { name: 'Loading' })
-        .waitFor({ state: 'hidden', timeout: 20000 })
-        .catch(() => {});
-    const advanced = await page.getByRole('textbox', { name: /monthly expected number/i })
-        .isVisible({ timeout: 3000 }).catch(() => false);
+    await infoPage.crnInput.fill(crn);
+    await infoPage.idInput.fill(nationalId);
+    await infoPage.emailInput.fill(credentials?.email ?? generateEmail());
+    await infoPage.nextButton.click();
+
+    const financialPage = new RegistrationFinancialPage(page);
+    await financialPage.loadingButton.waitFor({ state: 'hidden', timeout: 20000 }).catch(() => {});
+    const advanced = await financialPage.monthlyBillsInput.isVisible({ timeout: 3000 }).catch(() => false);
     if (!advanced) {
         const errorMsg = await page.evaluate(() => document.body.innerText).catch(() => '(unknown)');
         throw new Error(
@@ -213,25 +217,19 @@ export async function goToFinancialStep(page: Page, credentials?: FinancialStepC
 
 export async function goToVerificationStep(page: Page): Promise<void> {
     await goToFinancialStep(page);
-    await page.getByRole('textbox', { name: /monthly expected number/i }).fill('1500');
-    await page.getByRole('textbox', { name: /monthly expected sum/i }).fill('50000');
-    await page.getByRole('textbox', { name: /monthly withdrawal/i }).fill('10000');
-    await page.getByRole('textbox', { name: /monthly deposit/i }).fill('20000');
+    const financialPage = new RegistrationFinancialPage(page);
+    await financialPage.fill('1500', '50000', '10000', '20000');
     await selectRandomOption(page, page.locator('#mat-select-value-0'));
     await selectRandomOption(page, page.locator('#mat-select-value-1'));
     await selectRandomOption(page, page.locator('#mat-select-value-2'));
-    await page.getByRole('button', { name: 'next' }).click();
-    await page.getByRole('button', { name: 'Loading' })
-        .waitFor({ state: 'hidden', timeout: 20000 });
-    await page.getByRole('textbox', { name: /iban/i })
-        .waitFor({ state: 'visible', timeout: 15000 });
+    await financialPage.next();
+    const verificationPage = new RegistrationVerificationPage(page);
+    await verificationPage.waitForLoad();
 }
 
 export async function fillFinancialForm(page: Page): Promise<void> {
-    await page.getByRole('textbox', { name: /monthly expected number/i }).fill('1500');
-    await page.getByRole('textbox', { name: /monthly expected sum/i }).fill('50000');
-    await page.getByRole('textbox', { name: /monthly withdrawal/i }).fill('10000');
-    await page.getByRole('textbox', { name: /monthly deposit/i }).fill('20000');
+    const financialPage = new RegistrationFinancialPage(page);
+    await financialPage.fill('1500', '50000', '10000', '20000');
     await selectRandomOption(page, page.locator('#mat-select-value-0'));
     await selectRandomOption(page, page.locator('#mat-select-value-1'));
     await selectRandomOption(page, page.locator('#mat-select-value-2'));

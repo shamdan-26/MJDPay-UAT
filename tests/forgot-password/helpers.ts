@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import { waitForToastClear } from '../shared';
+import { ForgotPasswordPage } from '../pages/ForgotPasswordPage';
 
 const BASE_URL              = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 export const FORGOT_URL     = `${BASE_URL}/business/auth/forgot-password`;
@@ -51,13 +51,12 @@ export async function abortUnmockedGatewayRequests(page: Page): Promise<void> {
 // ── Navigation helpers ────────────────────────────────────────────────────────
 
 export async function gotoForgotPassword(page: Page): Promise<void> {
-    await page.goto(FORGOT_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-    await waitForToastClear(page);
+    const fp = new ForgotPasswordPage(page);
+    await fp.goto(FORGOT_URL);
 }
 
 export async function fillStep1AndProceed(page: Page): Promise<void> {
-    await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
-    await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
-    await page.getByRole('button', { name: 'Next' }).click();
-    await page.getByRole('textbox', { name: 'New Password' }).waitFor({ state: 'visible', timeout: 15000 });
+    const fp = new ForgotPasswordPage(page);
+    await fp.fillStep1(VALID_COMPANY, VALID_MOBILE);
+    await fp.submitStep1();
 }

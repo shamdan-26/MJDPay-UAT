@@ -1,12 +1,16 @@
 import { test, expect } from '@playwright/test';
-import { loginAsMerchant, HOME_URL, HOME_URL_PATTERN, BASE_ORIGIN, openProfileMenu } from './helpers';
+import { loginAsMerchant, HOME_URL_PATTERN, BASE_ORIGIN } from './helpers';
+import { DashboardPage } from '../pages/DashboardPage';
 
 test.describe('Homepage – Page Elements', () => {
     test.describe.configure({ mode: 'serial' }); // serial: logout test destroys session — must run last
 
+    let dashboard: DashboardPage;
+
     test.beforeEach(async ({ page, context }) => {
         await context.grantPermissions(['geolocation'], { origin: BASE_ORIGIN });
         await loginAsMerchant(page);
+        dashboard = new DashboardPage(page);
     });
 
     // ── URL & title ───────────────────────────────────────────────────────────
@@ -21,61 +25,58 @@ test.describe('Homepage – Page Elements', () => {
 
     // ── Logo ──────────────────────────────────────────────────────────────────
 
-    test('should display the MJD Pay logo in the sidebar', async ({ page }) => {
-        await expect(page.locator('#sideNav-logo')).toBeVisible();
+    test('should display the MJD Pay logo in the sidebar', async () => {
+        await expect(dashboard.logo).toBeVisible();
     });
 
     // ── Sidebar / navigation ──────────────────────────────────────────────────
 
-    test('should display the sidebar navigation container', async ({ page }) => {
-        await expect(page.locator('nav, aside, [role="navigation"]').first()).toBeVisible();
+    test('should display the sidebar navigation container', async () => {
+        await expect(dashboard.navigation).toBeVisible();
     });
 
-    test('should display the Home link in the sidebar', async ({ page }) => {
-        await expect(page.getByRole('link', { name: /^home$/i })).toBeVisible();
+    test('should display the Home link in the sidebar', async () => {
+        await expect(dashboard.homeLink).toBeVisible();
     });
 
-    test('should display the Transactions link in the sidebar', async ({ page }) => {
-        await expect(page.getByRole('link', { name: /transactions?/i })).toBeVisible();
+    test('should display the Transactions link in the sidebar', async () => {
+        await expect(dashboard.transactionsLink).toBeVisible();
     });
 
-    test('should display the Payments link in the sidebar', async ({ page }) => {
-        await expect(page.getByRole('link', { name: /payments?/i })).toBeVisible();
+    test('should display the Payments link in the sidebar', async () => {
+        await expect(dashboard.paymentsLink).toBeVisible();
     });
 
-    test('should display the Accounts item in the sidebar', async ({ page }) => {
-        await expect(page.locator('#sideNav-expansion-panel-text-8')).toBeVisible();
+    test('should display the Accounts item in the sidebar', async () => {
+        await expect(dashboard.accountsPanel).toBeVisible();
     });
 
-    test('should highlight the Home nav item as active on the homepage', async ({ page }) => {
-        const homeLink = page.getByRole('link', { name: /^home$/i });
-        await expect(homeLink).toBeVisible();
-        const classes = await homeLink.getAttribute('class') ?? '';
-        const ariaSelected = await homeLink.getAttribute('aria-current');
-        // Active state expressed either via an exact CSS class or aria-current="page"
+    test('should highlight the Home nav item as active on the homepage', async () => {
+        await expect(dashboard.homeLink).toBeVisible();
+        const classes = await dashboard.homeLink.getAttribute('class') ?? '';
+        const ariaSelected = await dashboard.homeLink.getAttribute('aria-current');
         const isActive = classes.split(' ').includes('active') || ariaSelected === 'page';
         expect(isActive, 'Home link should be marked as active').toBe(true);
     });
 
     // ── Header / top bar ──────────────────────────────────────────────────────
 
-    test('should display the Profile trigger in the header', async ({ page }) => {
-        await expect(page.locator('#ddl_profile')).toBeVisible();
+    test('should display the Profile trigger in the header', async () => {
+        await expect(dashboard.profileTrigger).toBeVisible();
     });
 
-    test('should display a notifications icon in the header', async ({ page }) => {
-        await expect(page.locator('.dropdown-toggle.nav-link.ai-icon')).toBeVisible();
+    test('should display a notifications icon in the header', async () => {
+        await expect(dashboard.notificationsIcon).toBeVisible();
     });
 
-    test('should display the user company name in the sidebar', async ({ page }) => {
-        await expect(page.locator('#sideNav-sidenav #userSettings-brand-name')).toBeVisible();
+    test('should display the user company name in the sidebar', async () => {
+        await expect(dashboard.brandName).toBeVisible();
     });
-
 
     // ── Dashboard widgets ─────────────────────────────────────────────────────
 
-    test('should display the last transactions container', async ({ page }) => {
-        await expect(page.locator('#last-transactions-container')).toBeVisible();
+    test('should display the last transactions container', async () => {
+        await expect(dashboard.lastTransactionsContainer).toBeVisible();
     });
 
     test('should display a balance or account overview section', async ({ page }) => {
@@ -88,20 +89,17 @@ test.describe('Homepage – Page Elements', () => {
         expect(visible, 'A balance or account overview element should be visible').toBe(true);
     });
 
-    test('should display the wallet balance amount in SAR', async ({ page }) => {
-        const sarText = page.getByText(/SAR|ر\.س/i).first();
-        await expect(sarText).toBeVisible({ timeout: 10000 });
+    test('should display the wallet balance amount in SAR', async () => {
+        await expect(dashboard.walletBalanceSar).toBeVisible({ timeout: 10000 });
     });
 
-    test('should display the Last Login date and time', async ({ page }) => {
-        const lastLogin = page.getByText(/last.?login/i).first();
-        await expect(lastLogin).toBeVisible({ timeout: 10000 });
+    test('should display the Last Login date and time', async () => {
+        await expect(dashboard.lastLoginText).toBeVisible({ timeout: 10000 });
     });
 
-    test('should display at most 10 rows in the last transactions table', async ({ page }) => {
-        const container = page.locator('#last-transactions-container');
-        await expect(container).toBeVisible({ timeout: 10000 });
-        const rows = container.locator('tbody tr');
+    test('should display at most 10 rows in the last transactions table', async () => {
+        await expect(dashboard.lastTransactionsContainer).toBeVisible({ timeout: 10000 });
+        const rows = dashboard.lastTransactionsContainer.locator('tbody tr');
         const count = await rows.count();
         expect(count, 'Transaction table should show at most 10 rows').toBeLessThanOrEqual(10);
     });
@@ -117,9 +115,7 @@ test.describe('Homepage – Page Elements', () => {
     // ── Logout (session-destroying — must remain last) ─────────────────────────
 
     test('should log out and redirect to login page', async ({ page }) => {
-        await openProfileMenu(page);
-        await page.locator('#logout').click();
-        await page.getByRole('button', { name: 'proceed' }).click();
+        await dashboard.logout();
         await expect(page).toHaveURL(/auth\/login/);
     });
 });

@@ -1,6 +1,7 @@
 import { Page } from '@playwright/test';
 import { getOtpFromDb, fillOTP } from '../Registration/helpers';
 import { waitForToastClear } from '../shared';
+import { DashboardPage } from '../pages/DashboardPage';
 
 const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 export const LOGIN_URL        = `${BASE_URL}/business/auth/login`;
@@ -91,6 +92,6 @@ export async function loginAsMerchant(page: Page): Promise<void> {
 
 /** Opens the profile dropdown and waits for the logout item to be visible. */
 export async function openProfileMenu(page: Page): Promise<void> {
-    await page.locator('#ddl_profile').click();
-    await page.locator('#logout').waitFor({ state: 'visible' });
+    const dashboard = new DashboardPage(page);
+    await dashboard.openProfileMenu();
 }

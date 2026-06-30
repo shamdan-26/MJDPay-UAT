@@ -1,6 +1,7 @@
 import type { Page } from '@playwright/test';
 import { MongoClient } from 'mongodb';
 import { waitForToastClear } from '../shared';
+import { LoginPage } from '../pages/LoginPage';
 
 export const LOGIN_URL    = `${process.env['BASE_URL'] ?? 'https://uat.majdpay.com'}/business/auth/login`;
 export const SESSION_PATH = 'session.json';
@@ -75,21 +76,11 @@ export async function fillOtpInputs(page: Page, otp: string): Promise<void> {
 }
 
 export async function gotoLogin(page: Page): Promise<void> {
-    await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-    // Wait for Angular to render the form before tests start interacting
-    await page.locator('#login-form-box').waitFor({ state: 'visible', timeout: 15000 });
-    // Let any transient error toast from background page-init API calls auto-dismiss
-    await waitForToastClear(page);
+    const loginPage = new LoginPage(page);
+    await loginPage.goto(LOGIN_URL);
 }
 
 export async function fillAndSubmitLogin(page: Page): Promise<void> {
-    await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
-    await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
-    await page.locator('input[aria-label="Password"]').fill(VALID_PASSWORD);
-    const env = process.env['ENV'] ?? 'uat';
-    if (env === 'dev') {
-        await page.locator('#btn_login').click();
-    } else {
-        await page.getByRole('button', { name: 'Log In' }).click();
-    }
+    const loginPage = new LoginPage(page);
+    await loginPage.fillAndSubmit(VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD);
 }
