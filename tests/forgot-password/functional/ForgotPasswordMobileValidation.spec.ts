@@ -1,11 +1,11 @@
 import { test, expect } from '@playwright/test';
-import { VALID_COMPANY, gotoForgotPassword } from '../../pageObjects/ForgotPasswordHelper';
+import { VALID_COMPANY, FORGOT_URL, gotoForgotPassword } from '../../pageObjects/ForgotPasswordHelper';
 
 test.describe('Forgot Password Mobile Number Validation', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+        await context.grantPermissions(['geolocation'], { origin: new URL(FORGOT_URL).origin });
         await gotoForgotPassword(page);
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
     });

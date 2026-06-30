@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { assertToast } from '../shared';
 import {
     LOGIN_URL,
     SESSION_PATH,
@@ -61,9 +62,7 @@ test.describe('Login Functionality', () => {
     test('should display an error message after submitting wrong credentials', async ({ page }) => {
         await loginPage.fill('WRONG123', '500000000', 'WrongPass@99');
         await loginPage.submit();
-        await expect(
-            page.locator('[role="alert"], [class*="error"], [class*="invalid"], .toast, .notification').first()
-        ).toBeVisible({ timeout: 10000 });
+        await assertToast(page);
     });
 
     // ── Log In button state ───────────────────────────────────────────────────

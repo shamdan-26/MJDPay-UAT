@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import {
     VALID_MOBILE,
     INVALID_OTP,
+    LOGIN_URL,
     gotoLogin,
     fillAndSubmitLogin,
     getOtpFromDb,
@@ -12,7 +13,7 @@ test.describe('Login OTP Functionality', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
-        await context.grantPermissions(['geolocation'], { origin: 'https://uat.majdpay.com' });
+        await context.grantPermissions(['geolocation'], { origin: new URL(LOGIN_URL).origin });
         await gotoLogin(page);
         await fillAndSubmitLogin(page);
         const otpAppeared = await page.getByRole('heading', { name: 'Enter OTP' })

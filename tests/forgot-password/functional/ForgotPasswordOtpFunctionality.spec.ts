@@ -10,6 +10,7 @@ import {
     fillStep1AndProceed,
 } from '../../pageObjects/ForgotPasswordHelper';
 import { getOtpFromDb } from '../../login/helpers';
+import { assertToast } from '../../shared';
 
 // ── OTP Verification: Dialog functionality after step 2 submit ────────────────
 
@@ -102,8 +103,7 @@ test.describe('Forgot Password - OTP Verification Flow', () => {
             await confirmBtn.click({ timeout: 5000 }).catch(() => {});
         }
         await expect(page).toHaveURL(/login/, { timeout: 15000 });
-        const successMsg = page.locator('[role="alert"], [role="status"], [class*="success"], [class*="toast"], .notification').first();
-        await expect(successMsg).toBeVisible({ timeout: 5000 });
+        await assertToast(page);
     });
 
     // ── Resend ────────────────────────────────────────────────────────────────

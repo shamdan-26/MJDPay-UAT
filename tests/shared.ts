@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import { type Page, expect } from '@playwright/test';
 
 /**
  * Waits up to `appearTimeout` ms for an API-triggered error toast/snackbar to
@@ -18,5 +18,26 @@ export async function waitForToastClear(
     await toast.waitFor({ state: 'visible', timeout: appearTimeout }).catch(() => null);
     if (await toast.isVisible().catch(() => false)) {
         await toast.waitFor({ state: 'hidden', timeout: clearTimeout }).catch(() => {});
+    }
+}
+
+/**
+ * Asserts that the Angular toast snackbar is visible and optionally contains
+ * the expected message text. Use this in every negative-scenario test that
+ * expects an error/warning toast from the API.
+ *
+ * @param page - Playwright Page
+ * @param expectedText - optional substring the toast detail must contain
+ * @param timeout - ms to wait for the toast to appear (default 10 000)
+ */
+export async function assertToast(
+    page: Page,
+    expectedText?: string,
+    timeout = 10000,
+): Promise<void> {
+    const detail = page.locator('.toast-snackbar__detail');
+    await expect(detail).toBeVisible({ timeout });
+    if (expectedText) {
+        await expect(detail).toContainText(expectedText, { ignoreCase: true });
     }
 }
