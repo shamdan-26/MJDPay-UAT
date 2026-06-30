@@ -1,5 +1,6 @@
 import { Page } from '@playwright/test';
 import { getOtpFromDb, fillOTP } from '../Registration/helpers';
+import { waitForToastClear } from '../shared';
 
 const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 export const LOGIN_URL        = `${BASE_URL}/business/auth/login`;
@@ -50,6 +51,7 @@ export async function loginAsBiller(page: Page): Promise<void> {
         }
         await page.waitForURL(HOME_URL_PATTERN, { timeout: 30000 });
     }
+    await waitForToastClear(page);
 }
 
 /** Full login flow: credentials → OTP (fetched from MongoDB) → home page. */
@@ -84,6 +86,7 @@ export async function loginAsMerchant(page: Page): Promise<void> {
         }
         await page.waitForURL(HOME_URL_PATTERN, { timeout: 30000 });
     }
+    await waitForToastClear(page);
 }
 
 /** Opens the profile dropdown and waits for the logout item to be visible. */

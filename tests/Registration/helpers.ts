@@ -2,6 +2,7 @@
 
 declare const process: { env: Record<string, string | undefined> };
 import { MongoClient } from 'mongodb';
+import { waitForToastClear } from '../shared';
 
 const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 export const LOGIN_URL    = `${BASE_URL}/business/auth/login`;
@@ -157,6 +158,7 @@ export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
         }
     }
     await page.getByText('Tell us about your business').waitFor({ state: 'visible', timeout: 60000 });
+    await waitForToastClear(page);
 }
 
 export interface FinancialStepCredentials {

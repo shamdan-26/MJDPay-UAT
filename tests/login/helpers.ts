@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test';
 import { MongoClient } from 'mongodb';
+import { waitForToastClear } from '../shared';
 
 export const LOGIN_URL    = `${process.env['BASE_URL'] ?? 'https://uat.majdpay.com'}/business/auth/login`;
 export const SESSION_PATH = 'session.json';
@@ -78,10 +79,7 @@ export async function gotoLogin(page: Page): Promise<void> {
     // Wait for Angular to render the form before tests start interacting
     await page.locator('#login-form-box').waitFor({ state: 'visible', timeout: 15000 });
     // Let any transient error toast from background page-init API calls auto-dismiss
-    await page.locator('[class*="snack"], [class*="toast"], mat-snack-bar-container')
-        .first()
-        .waitFor({ state: 'hidden', timeout: 8000 })
-        .catch(() => {});
+    await waitForToastClear(page);
 }
 
 export async function fillAndSubmitLogin(page: Page): Promise<void> {
