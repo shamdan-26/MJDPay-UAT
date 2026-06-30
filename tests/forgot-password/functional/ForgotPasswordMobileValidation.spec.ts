@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { VALID_COMPANY, gotoForgotPassword } from './helpers';
+import { VALID_COMPANY, gotoForgotPassword } from '../../pageObjects/ForgotPasswordHelper';
 
 test.describe('Forgot Password Mobile Number Validation', () => {
     test.describe.configure({ mode: 'serial' });

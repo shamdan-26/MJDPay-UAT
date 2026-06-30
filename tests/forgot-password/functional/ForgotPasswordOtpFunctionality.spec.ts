@@ -8,8 +8,8 @@ import {
     mockForgetPasswordSuccess,
     gotoForgotPassword,
     fillStep1AndProceed,
-} from './helpers';
-import { getOtpFromDb } from '../login/helpers';
+} from '../../pageObjects/ForgotPasswordHelper';
+import { getOtpFromDb } from '../../login/helpers';
 
 // ── OTP Verification: Dialog functionality after step 2 submit ────────────────
 

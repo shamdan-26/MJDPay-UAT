@@ -31,7 +31,6 @@ export function generateUnregisteredMobile(): string {
     return `5${random}`;
 }
 
-const MONGO_URI = process.env['MONGO_URI'] ?? (() => { throw new Error('MONGO_URI env var is not set'); })();
 const MONGO_DB  = 'notification-log';
 
 export async function getOtpFromDb(
@@ -40,7 +39,8 @@ export async function getOtpFromDb(
     delayMs = 2000,
     messageFilter: RegExp = /Use this OTP/i
 ): Promise<string> {
-    if ((process.env['ENV'] ?? 'uat') === 'dev') return VALID_OTP;
+    if ((process.env['ENV'] ?? 'dev') === 'dev') return VALID_OTP;
+    const MONGO_URI = process.env['MONGO_URI'] ?? (() => { throw new Error('MONGO_URI env var is not set'); })();
     const client = new MongoClient(MONGO_URI);
     try {
         await client.connect();

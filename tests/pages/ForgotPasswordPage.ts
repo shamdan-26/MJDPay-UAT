@@ -10,7 +10,7 @@ export class ForgotPasswordPage {
     readonly backButton: Locator;
     readonly companyInput: Locator;
     readonly mobileInput: Locator;
-    readonly submitButton: Locator;
+    readonly nextButton: Locator;
     readonly loginLink: Locator;
 
     // Step 2 — set new password
@@ -19,6 +19,7 @@ export class ForgotPasswordPage {
     readonly showNewPasswordToggle: Locator;
     readonly showConfirmPasswordToggle: Locator;
     readonly saveButton: Locator;
+    readonly resetPasswordButton: Locator;
 
     // Shared header elements
     readonly enButton: Locator;
@@ -34,7 +35,7 @@ export class ForgotPasswordPage {
 
         this.companyInput = page.getByRole('textbox', { name: 'Company number' });
         this.mobileInput  = page.getByRole('textbox', { name: 'Mobile number' });
-        this.submitButton = page.getByRole('button', { name: /reset password/i });
+        this.nextButton   = page.getByRole('button', { name: 'Next' });
         this.loginLink    = page.getByRole('link', { name: /log.?in/i });
 
         this.newPasswordInput     = page.getByRole('textbox', { name: 'New Password' });
@@ -42,6 +43,7 @@ export class ForgotPasswordPage {
         this.showNewPasswordToggle     = page.locator('button.floating-password-toggle').first();
         this.showConfirmPasswordToggle = page.locator('button.floating-password-toggle').last();
         this.saveButton = page.getByRole('button', { name: /save|confirm/i });
+        this.resetPasswordButton = page.getByRole('button', { name: /reset password/i });
 
         this.enButton     = page.getByRole('button', { name: 'EN' });
         this.arabicButton = page.getByRole('button', { name: 'العربية' });
@@ -59,7 +61,7 @@ export class ForgotPasswordPage {
     }
 
     async submitStep1(): Promise<void> {
-        await this.submitButton.click();
+        await this.nextButton.click();
         await this.newPasswordInput.waitFor({ state: 'visible', timeout: 15000 });
     }
 

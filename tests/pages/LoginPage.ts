@@ -52,7 +52,7 @@ export class LoginPage {
         this.passwordLabel     = page.locator('label.floating-field-label', { hasText: 'Password' });
         this.showPasswordToggle = page.locator('button.floating-password-toggle');
 
-        const env = process.env['ENV'] ?? 'uat';
+        const env = process.env['ENV'] ?? 'dev';
         this.loginButton = env === 'dev'
             ? page.locator('#btn_login')
             : page.getByRole('button', { name: 'Log In' });

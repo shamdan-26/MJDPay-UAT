@@ -1,14 +1,19 @@
 import { chromium } from '@playwright/test';
 import { getOtpFromDb, fillOTP } from '../tests/Registration/helpers';
 
-const env            = process.env['ENV'] ?? 'uat';
+const env            = process.env['ENV'] ?? 'dev';
 const BASE_URL       = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 const LOGIN_URL      = `${BASE_URL}/business/auth/login`;
-const VALID_COMPANY  = process.env['UAT_SETUP_COMPANY']  ?? (() => { throw new Error('UAT_SETUP_COMPANY env var is not set'); })();
-const VALID_MOBILE   = process.env['UAT_SETUP_MOBILE']   ?? (() => { throw new Error('UAT_SETUP_MOBILE env var is not set'); })();
-const VALID_PASSWORD = process.env['UAT_SETUP_PASSWORD'] ?? (() => { throw new Error('UAT_SETUP_PASSWORD env var is not set'); })();
+const VALID_COMPANY  = process.env['UAT_SETUP_COMPANY'];
+const VALID_MOBILE   = process.env['UAT_SETUP_MOBILE'];
+const VALID_PASSWORD = process.env['UAT_SETUP_PASSWORD'];
 
 async function globalSetup() {
+    if (!VALID_COMPANY || !VALID_MOBILE || !VALID_PASSWORD) {
+        console.warn('[global-setup] UAT_SETUP_COMPANY / UAT_SETUP_MOBILE / UAT_SETUP_PASSWORD not set — skipping session creation. Tests using storageState will be skipped or fail.');
+        return;
+    }
+
     const browser = await chromium.launch();
     const context = await browser.newContext();
     const page    = await context.newPage();

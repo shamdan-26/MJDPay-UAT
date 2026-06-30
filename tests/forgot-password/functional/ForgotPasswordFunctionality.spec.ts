@@ -1,4 +1,4 @@
-﻿import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import {
     FORGOT_URL,
     LOGIN_URL,
@@ -13,7 +13,7 @@ import {
     abortUnmockedGatewayRequests,
     gotoForgotPassword,
     fillStep1AndProceed,
-} from './helpers';
+} from '../../pageObjects/ForgotPasswordHelper';
 
 // ── Step 1: Credential validation & navigation ────────────────────────────────
 
@@ -429,5 +429,203 @@ test.describe('Forgot Password - Step 2 Interactions', () => {
         await page.getByRole('textbox', { name: 'Confirm password' }).fill(VALID_PASSWORD);
         await page.getByRole('button', { name: SUBMIT_BUTTON }).click();
         await expect(page).toHaveURL(/login/, { timeout: 10000 });
+    });
+});
+
+// ── Step 1: Edge cases & input boundaries ──────────────────────────────────────
+
+test.describe('Forgot Password - Step 1 Edge Cases', () => {
+    test.describe.configure({ mode: 'serial' });
+
+    test.beforeEach(async ({ page }) => {
+        await abortUnmockedGatewayRequests(page);
+        await mockOtpDisabled(page);
+        await gotoForgotPassword(page);
+    });
+
+    test('should keep Next button disabled when Company number contains only spaces', async ({ page }) => {
+        await page.getByRole('textbox', { name: 'Company number' }).fill('   ');
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
+        await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled();
+    });
+
+    test('should strip non-digit formatting characters (spaces/dashes) from the Mobile number field', async ({ page }) => {
+        const mobileInput = page.getByRole('textbox', { name: 'Mobile number' });
+        await mobileInput.pressSequentially('500-318-143');
+        const value = await mobileInput.inputValue();
+        expect(value).not.toContain('-');
+        expect(value).not.toContain(' ');
+    });
+
+    test('should not crash the page when Company number is an extremely long string', async ({ page }) => {
+        await page.getByRole('textbox', { name: 'Company number' }).fill('1'.repeat(200));
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
+        await expect(page.getByRole('button', { name: 'Next' })).toBeVisible();
+    });
+
+    test('should submit step 1 when Enter is pressed after filling valid credentials', async ({ page }) => {
+        await mockForgetPasswordSuccess(page);
+        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
+        const mobileInput = page.getByRole('textbox', { name: 'Mobile number' });
+        await mobileInput.fill(VALID_MOBILE);
+        await mobileInput.press('Enter');
+        await expect(page).toHaveURL(/change-password/, { timeout: 15000 });
+    });
+
+    test('should not send duplicate credential-check requests when Next is double-clicked', async ({ page }) => {
+        let requestCount = 0;
+        await page.route('**/auth/passwords/forget', async route => {
+            requestCount++;
+            await new Promise(r => setTimeout(r, 300));
+            await route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+        });
+        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
+        const nextBtn = page.getByRole('button', { name: 'Next' });
+        await nextBtn.click();
+        await nextBtn.click({ force: true }).catch(() => {});
+        await expect(page.getByRole('textbox', { name: 'New Password' })).toBeVisible({ timeout: 15000 });
+        expect(requestCount).toBeLessThanOrEqual(1);
+    });
+
+    test('should disable the Next button while the credential-check request is in flight', async ({ page }) => {
+        await page.route('**/auth/passwords/forget', async route => {
+            await new Promise(r => setTimeout(r, 1000));
+            await route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+        });
+        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
+        const nextBtn = page.getByRole('button', { name: 'Next' });
+        await nextBtn.click();
+        await expect(nextBtn).toBeDisabled();
+    });
+});
+
+// ── Step 1: Security ────────────────────────────────────────────────────────────
+
+test.describe('Forgot Password - Step 1 Security', () => {
+    test.describe.configure({ mode: 'serial' });
+
+    test.beforeEach(async ({ page }) => {
+        await abortUnmockedGatewayRequests(page);
+        await mockOtpDisabled(page);
+        await mockForgetPasswordFailure(page);
+        await gotoForgotPassword(page);
+    });
+
+    test('should not execute a script payload entered in the Company number field', async ({ page }) => {
+        let dialogTriggered = false;
+        page.on('dialog', async dialog => { dialogTriggered = true; await dialog.dismiss(); });
+        await page.getByRole('textbox', { name: 'Company number' }).fill('<script>alert(1)</script>');
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill('500000000');
+        await page.getByRole('button', { name: 'Next' }).click();
+        await page.waitForTimeout(1000);
+        expect(dialogTriggered).toBe(false);
+    });
+
+    test('should treat SQL-injection-style Company number input as an invalid credential, not crash the page', async ({ page }) => {
+        await page.getByRole('textbox', { name: 'Company number' }).fill("' OR '1'='1");
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill('500000000');
+        await page.getByRole('button', { name: 'Next' }).click();
+        await expect(page).toHaveURL(FORGOT_URL, { timeout: 10000 });
+        const errorIndicator = page.locator('[role="alert"], [class*="error"], [class*="toast"], [class*="notification"]').first();
+        await expect(errorIndicator).toBeVisible({ timeout: 10000 });
+    });
+
+    test('should not expose the New Password form when the change-password URL is opened directly without completing step 1', async ({ page }) => {
+        await page.goto(FORGOT_URL.replace('forgot-password', 'change-password'), { waitUntil: 'domcontentloaded', timeout: 60000 });
+        await expect(page.getByRole('textbox', { name: 'New Password' })).not.toBeVisible({ timeout: 10000 });
+    });
+});
+
+// ── Step 2: Edge cases & input boundaries ──────────────────────────────────────
+
+test.describe('Forgot Password - Step 2 Edge Cases', () => {
+    test.describe.configure({ mode: 'serial' });
+
+    test.beforeEach(async ({ page }) => {
+        await mockOtpDisabled(page);
+        await mockForgetPasswordSuccess(page);
+        await gotoForgotPassword(page);
+        await fillStep1AndProceed(page);
+    });
+
+    test('should flag passwords with swapped letter case as a mismatch (case-sensitive comparison)', async ({ page }) => {
+        await page.getByRole('textbox', { name: 'New Password' }).fill('Aa#1234567');
+        await page.getByRole('textbox', { name: 'Confirm password' }).fill('aA#1234567');
+        await expect(page.getByText('New password and Confirm password are not matched')).toBeVisible();
+        await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeDisabled();
+    });
+
+    test('should accept a long but otherwise valid password', async ({ page }) => {
+        const longPassword = VALID_PASSWORD + 'Xx1#'.repeat(20);
+        await page.getByRole('textbox', { name: 'New Password' }).fill(longPassword);
+        await page.getByRole('textbox', { name: 'Confirm password' }).fill(longPassword);
+        await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeEnabled();
+    });
+
+    test('should submit step 2 when Enter is pressed after filling matching valid passwords', async ({ page }) => {
+        await mockAllPasswordsSuccess(page);
+        await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
+        const confirmInput = page.getByRole('textbox', { name: 'Confirm password' });
+        await confirmInput.fill(VALID_PASSWORD);
+        await confirmInput.press('Enter');
+        await expect(page).toHaveURL(/login/, { timeout: 10000 });
+    });
+
+    test('should not send duplicate reset-password requests when submit is double-clicked', async ({ page }) => {
+        let requestCount = 0;
+        await page.route('**/auth/passwords/**', async route => {
+            requestCount++;
+            await new Promise(r => setTimeout(r, 300));
+            await route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+        });
+        await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
+        await page.getByRole('textbox', { name: 'Confirm password' }).fill(VALID_PASSWORD);
+        const submitBtn = page.getByRole('button', { name: SUBMIT_BUTTON });
+        await submitBtn.click();
+        await submitBtn.click({ force: true }).catch(() => {});
+        await expect(page).toHaveURL(/login/, { timeout: 15000 });
+        expect(requestCount).toBeLessThanOrEqual(1);
+    });
+});
+
+// ── Step 2: Security ─────────────────────────────────────────────────────────────
+
+test.describe('Forgot Password - Step 2 Security', () => {
+    test.describe.configure({ mode: 'serial' });
+
+    test.beforeEach(async ({ page }) => {
+        await mockOtpDisabled(page);
+        await mockForgetPasswordSuccess(page);
+        await gotoForgotPassword(page);
+        await fillStep1AndProceed(page);
+    });
+
+    test('should send the reset-password request as POST with the password only in the request body, not the URL', async ({ page }) => {
+        let capturedUrl = '';
+        let capturedMethod = '';
+        page.on('request', req => {
+            if (req.url().includes('/auth/passwords/')) {
+                capturedUrl = req.url();
+                capturedMethod = req.method();
+            }
+        });
+        await mockAllPasswordsSuccess(page);
+        await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
+        await page.getByRole('textbox', { name: 'Confirm password' }).fill(VALID_PASSWORD);
+        await page.getByRole('button', { name: SUBMIT_BUTTON }).click();
+        await expect(page).toHaveURL(/login/, { timeout: 10000 });
+        expect(capturedMethod).toBe('POST');
+        expect(capturedUrl).not.toContain(VALID_PASSWORD);
+    });
+
+    test('should not execute a script payload entered in the New Password field', async ({ page }) => {
+        let dialogTriggered = false;
+        page.on('dialog', async dialog => { dialogTriggered = true; await dialog.dismiss(); });
+        await page.getByRole('textbox', { name: 'New Password' }).fill('<script>alert(1)</script>');
+        await page.getByRole('textbox', { name: 'Confirm password' }).fill('<script>alert(1)</script>');
+        await page.waitForTimeout(1000);
+        expect(dialogTriggered).toBe(false);
     });
 });

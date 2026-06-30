@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { FORGOT_URL, LOGIN_URL, mockOtpDisabled, gotoForgotPassword } from './helpers';
+import { FORGOT_URL, LOGIN_URL, mockOtpDisabled, gotoForgotPassword } from '../../pageObjects/ForgotPasswordHelper';
 
 test.describe('Forgot Password Page', () => {
     test.describe.configure({ mode: 'serial' });
@@ -89,10 +89,18 @@ test.describe('Forgot Password Page', () => {
         await expect(page.getByRole('textbox', { name: 'Company number' })).toBeEnabled();
     });
 
+    test('should display "Input here" placeholder in the Company number field', async ({ page }) => {
+        await expect(page.getByRole('textbox', { name: 'Company number' })).toHaveAttribute('placeholder', 'Input here');
+    });
+
     // ── Mobile number field ───────────────────────────────────────────────────
 
     test('should display the Mobile number label', async ({ page }) => {
         await expect(page.getByText('Mobile number')).toBeVisible();
+    });
+
+    test('should display the Saudi flag icon in the mobile field', async ({ page }) => {
+        await expect(page.locator('.floating-prefix img, .floating-prefix .flag, [class*="flag"]').first()).toBeVisible();
     });
 
     test('should display the country code (+966)', async ({ page }) => {
@@ -102,6 +110,10 @@ test.describe('Forgot Password Page', () => {
     test('should have the Mobile number input visible and enabled', async ({ page }) => {
         await expect(page.getByRole('textbox', { name: 'Mobile number' })).toBeVisible();
         await expect(page.getByRole('textbox', { name: 'Mobile number' })).toBeEnabled();
+    });
+
+    test('should display "Input here" placeholder in the Mobile number field', async ({ page }) => {
+        await expect(page.getByRole('textbox', { name: 'Mobile number' })).toHaveAttribute('placeholder', 'Input here');
     });
 
     // ── Next button ───────────────────────────────────────────────────────────

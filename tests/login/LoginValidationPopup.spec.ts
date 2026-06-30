@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 
-const env            = process.env['ENV'] ?? 'uat';
+const env            = process.env['ENV'] ?? 'dev';
 const BASE_URL       = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 const URL            = `${BASE_URL}/business/auth/login`;
 const VALID_COMPANY  = process.env['UAT_COMPANY'] ?? 'L3999';
