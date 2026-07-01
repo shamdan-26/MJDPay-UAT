@@ -220,6 +220,7 @@ test.describe('Forgot Password - Step 2 Interactions', () => {
     });
 
     test('should navigate to login page after successful password reset', async ({ page }) => {
+        await page.pause();
         await mockAllPasswordsSuccess(page);
         await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
         await page.getByRole('textbox', { name: 'Confirm password' }).fill(VALID_PASSWORD);
