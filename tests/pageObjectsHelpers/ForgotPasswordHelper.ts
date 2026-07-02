@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test';
 import { ForgotPasswordPage } from '../pages/ForgotPasswordPage';
+import { LoginPage } from '../pages/LoginPage';
 
 const BASE_URL              = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 export const FORGOT_URL     = `${BASE_URL}/business/auth/forgot-password`;
@@ -14,7 +15,7 @@ export const VALID_PASSWORD = 'Aa#1234567';
 export const VALID_OTP      = '00000000';
 export const INVALID_OTP    = '11111111';
 
-export const MODAL_SELECTOR = "//div[@class='my-modal-container']";
+export const MODAL_SELECTOR = "div.my-modal-container";
 
 // ── Route mocking helpers ─────────────────────────────────────────────────────
 
@@ -51,8 +52,11 @@ export async function abortUnmockedGatewayRequests(page: Page): Promise<void> {
 // ── Navigation helpers ────────────────────────────────────────────────────────
 
 export async function gotoForgotPassword(page: Page): Promise<void> {
+    const loginPage = new LoginPage(page);
+    await loginPage.goto(LOGIN_URL);
+    await loginPage.forgotPasswordLink.click();
     const fp = new ForgotPasswordPage(page);
-    await fp.goto(FORGOT_URL);
+    await fp.companyInput.waitFor({ state: 'visible', timeout: 15000 });
 }
 
 export async function fillStep1AndProceed(page: Page): Promise<void> {

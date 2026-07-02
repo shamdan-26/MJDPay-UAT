@@ -62,7 +62,7 @@ export class ForgotPasswordPage {
 
     async submitStep1(): Promise<void> {
         await this.nextButton.click();
-        await this.newPasswordInput.waitFor({ state: 'visible', timeout: 15000 });
+        await this.newPasswordInput.waitFor({ state: 'visible', timeout: 30000 });
     }
 
     async fillStep2(newPassword: string, confirmPassword: string): Promise<void> {

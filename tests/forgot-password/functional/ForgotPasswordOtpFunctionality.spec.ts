@@ -1,42 +1,44 @@
 import { test, expect } from '@playwright/test';
+import { assertToast } from '../../shared';
 import {
     SUBMIT_BUTTON,
     VALID_PASSWORD,
     VALID_MOBILE,
     INVALID_OTP,
     MODAL_SELECTOR,
-    mockForgetPasswordSuccess,
     gotoForgotPassword,
     fillStep1AndProceed,
 } from '../../pageObjectsHelpers/ForgotPasswordHelper';
 import { getOtpFromDb } from '../../pageObjectsHelpers/LoginHelper';
-import { assertToast } from '../../shared';
 
-// ── OTP Verification: Dialog functionality after step 2 submit ────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// OTP VERIFICATION FLOW
+// ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('Forgot Password - OTP Verification Flow', () => {
+test.describe('Forgot Password — OTP Verification Flow', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page }) => {
-        await mockForgetPasswordSuccess(page);
+        // Step 1 must call the real API — mocking it with {} prevents the backend
+        // from creating a session, and step 2 then has no token to trigger OTP.
         await gotoForgotPassword(page);
         await fillStep1AndProceed(page);
         await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
         await page.getByRole('textbox', { name: 'Confirm password' }).fill(VALID_PASSWORD);
         await page.getByRole('button', { name: SUBMIT_BUTTON }).click();
-        const otpAppeared = await page.locator(MODAL_SELECTOR).waitFor({ state: 'visible', timeout: 15000 })
+        const otpAppeared = await page.locator(MODAL_SELECTOR).waitFor({ state: 'visible', timeout: 20000 })
             .then(() => true)
             .catch(() => false);
         test.skip(!otpAppeared, 'OTP dialog did not appear — FORGET_PASSWORD OTP is disabled in this environment');
     });
 
-    // ── Dialog presence ───────────────────────────────────────────────────────
+    // Dialog presence
 
     test('should display the OTP dialog after submitting new password', async ({ page }) => {
         await expect(page.locator(MODAL_SELECTOR)).toBeVisible();
     });
 
-    // ── Confirm button state ──────────────────────────────────────────────────
+    // Confirm button state
 
     test('should keep Confirm button disabled when OTP inputs are empty', async ({ page }) => {
         await expect(page.locator(MODAL_SELECTOR).getByRole('button', { name: 'Confirm' })).toBeDisabled();
@@ -51,12 +53,12 @@ test.describe('Forgot Password - OTP Verification Flow', () => {
 
     test('should enable Confirm button when all OTP inputs are filled', async ({ page }) => {
         const inputs = page.locator(MODAL_SELECTOR).locator('input');
-        const count = await inputs.count();
+        const count  = await inputs.count();
         for (let i = 0; i < count; i++) await inputs.nth(i).fill(String(i + 1));
         await expect(page.locator(MODAL_SELECTOR).getByRole('button', { name: 'Confirm' })).toBeEnabled();
     });
 
-    // ── Input validation ──────────────────────────────────────────────────────
+    // Input validation
 
     test('should not accept non-numeric characters in OTP inputs', async ({ page }) => {
         const input = page.locator(MODAL_SELECTOR).locator('input').first();
@@ -71,11 +73,11 @@ test.describe('Forgot Password - OTP Verification Flow', () => {
         await expect(inputs.nth(1)).toBeFocused({ timeout: 3000 });
     });
 
-    // ── OTP submission ────────────────────────────────────────────────────────
+    // OTP submission
 
     test('should remain on OTP dialog after submitting wrong OTP', async ({ page }) => {
         const inputs = page.locator(MODAL_SELECTOR).locator('input');
-        const count = await inputs.count();
+        const count  = await inputs.count();
         for (let i = 0; i < count; i++) await inputs.nth(i).fill(INVALID_OTP[i] ?? '1');
         await page.locator(MODAL_SELECTOR).getByRole('button', { name: 'Confirm' }).click();
         await expect(page.locator(MODAL_SELECTOR)).toBeVisible();
@@ -83,15 +85,14 @@ test.describe('Forgot Password - OTP Verification Flow', () => {
 
     test('should display an error message after submitting wrong OTP', async ({ page }) => {
         const inputs = page.locator(MODAL_SELECTOR).locator('input');
-        const count = await inputs.count();
+        const count  = await inputs.count();
         for (let i = 0; i < count; i++) await inputs.nth(i).fill(INVALID_OTP[i] ?? '1');
         await page.locator(MODAL_SELECTOR).getByRole('button', { name: 'Confirm' }).click();
         const errorIndicator = page.locator(MODAL_SELECTOR).locator('[role="alert"], [class*="error"], [class*="invalid"]').first();
         await expect(errorIndicator).toBeVisible({ timeout: 5000 });
     });
 
-    test('should reset password successfully with correct OTP, redirect to login, and show a success message', async ({ page }) => {
-        // Password-reset SMS uses a different template; use /Use this/i to match either format.
+    test('should reset password successfully with correct OTP, redirect to login, and show a success toast', async ({ page }) => {
         const otp    = await getOtpFromDb(VALID_MOBILE, 10, 2000, /Use this/i);
         const inputs = page.locator(MODAL_SELECTOR).locator('input');
         const count  = await inputs.count();
@@ -106,7 +107,7 @@ test.describe('Forgot Password - OTP Verification Flow', () => {
         await assertToast(page);
     });
 
-    // ── Resend ────────────────────────────────────────────────────────────────
+    // Resend
 
     test('should keep resend button disabled while countdown timer is active', async ({ page }) => {
         await expect(page.locator(MODAL_SELECTOR).getByRole('button', { name: 'Click to resend' })).toBeDisabled();
@@ -129,7 +130,7 @@ test.describe('Forgot Password - OTP Verification Flow', () => {
         await expect(inputs.nth(0)).toHaveValue('');
     });
 
-    // ── Cancel / dismiss ──────────────────────────────────────────────────────
+    // Cancel / dismiss
 
     test('should close the OTP dialog when Cancel is clicked', async ({ page }) => {
         await page.locator(MODAL_SELECTOR).getByRole('button', { name: 'Cancel' }).click();

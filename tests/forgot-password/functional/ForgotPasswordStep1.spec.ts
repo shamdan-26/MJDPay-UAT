@@ -12,9 +12,11 @@ import {
     gotoForgotPassword,
 } from '../../pageObjectsHelpers/ForgotPasswordHelper';
 
-// ── Happy Path ────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// STEP 1: HAPPY PATH
+// ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('Forgot Password Step 1 — Happy Path', () => {
+test.describe('Forgot Password — Step 1: Happy Path', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page }) => {
@@ -94,7 +96,7 @@ test.describe('Forgot Password Step 1 — Happy Path', () => {
         await expect(page.getByText('Welcome to MJD Pay')).toBeVisible();
     });
 
-    // Company number field
+    // Fields
 
     test('should have the Company number field visible and enabled', async ({ page }) => {
         await expect(page.getByRole('textbox', { name: 'Company number' })).toBeVisible();
@@ -105,8 +107,6 @@ test.describe('Forgot Password Step 1 — Happy Path', () => {
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
         await expect(page.getByRole('textbox', { name: 'Company number' })).toHaveValue(VALID_COMPANY);
     });
-
-    // Mobile number field
 
     test('should display the +966 country code prefix on the Mobile number field', async ({ page }) => {
         await expect(page.locator('.floating-prefix')).toContainText('(+966)');
@@ -126,15 +126,13 @@ test.describe('Forgot Password Step 1 — Happy Path', () => {
         await expect(page.getByRole('textbox', { name: 'Mobile number' })).toHaveValue(VALID_MOBILE);
     });
 
-    // Next button enabled state
+    // Next button & submission
 
     test('should enable the Next button when both Company and Mobile fields are filled', async ({ page }) => {
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
         await expect(page.getByRole('button', { name: 'Next' })).toBeEnabled();
     });
-
-    // Successful submission
 
     test('should navigate to the change-password URL after submitting valid credentials', async ({ page }) => {
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
@@ -167,9 +165,58 @@ test.describe('Forgot Password Step 1 — Happy Path', () => {
     });
 });
 
-// ── Negative Scenarios ────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// STEP 1: MOBILE NUMBER VALIDATION
+// ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('Forgot Password Step 1 — Negative Scenarios', () => {
+test.describe('Forgot Password — Step 1: Mobile Number Validation', () => {
+    test.describe.configure({ mode: 'serial' });
+
+    test.beforeEach(async ({ page, context }) => {
+        await context.grantPermissions(['geolocation'], { origin: new URL(FORGOT_URL).origin });
+        await gotoForgotPassword(page);
+        await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
+    });
+
+    // Format blocking
+
+    test('should keep Next button disabled when mobile is too short', async ({ page }) => {
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill('5123');
+        await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled();
+    });
+
+    test('should keep Next button disabled when mobile has a leading zero', async ({ page }) => {
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill('0500021788');
+        await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled();
+    });
+
+    // Character filtering
+
+    test('should not accept alphabetic characters in the mobile field', async ({ page }) => {
+        const mobileInput = page.getByRole('textbox', { name: 'Mobile number' });
+        await mobileInput.pressSequentially('abc');
+        await expect(mobileInput).toHaveValue('');
+    });
+
+    test('should not accept special characters in the mobile field', async ({ page }) => {
+        const mobileInput = page.getByRole('textbox', { name: 'Mobile number' });
+        await mobileInput.pressSequentially('!@#');
+        await expect(mobileInput).toHaveValue('');
+    });
+
+    // Valid format
+
+    test('should enable Next button with a valid 9-digit mobile starting with 5', async ({ page }) => {
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill('500021788');
+        await expect(page.getByRole('button', { name: 'Next' })).toBeEnabled();
+    });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STEP 1: NEGATIVE SCENARIOS
+// ─────────────────────────────────────────────────────────────────────────────
+
+test.describe('Forgot Password — Step 1: Negative Scenarios', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page }) => {
@@ -179,7 +226,7 @@ test.describe('Forgot Password Step 1 — Negative Scenarios', () => {
         await gotoForgotPassword(page);
     });
 
-    // Next button disabled states
+    // Button disabled states
 
     test('should have the Next button disabled when both fields are empty', async ({ page }) => {
         await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled();
@@ -269,9 +316,11 @@ test.describe('Forgot Password Step 1 — Negative Scenarios', () => {
     });
 });
 
-// ── Edge Cases ────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// STEP 1: EDGE CASES
+// ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('Forgot Password Step 1 — Edge Cases', () => {
+test.describe('Forgot Password — Step 1: Edge Cases', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page }) => {
@@ -357,9 +406,11 @@ test.describe('Forgot Password Step 1 — Edge Cases', () => {
     });
 });
 
-// ── Security ──────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// STEP 1: SECURITY
+// ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('Forgot Password Step 1 — Security', () => {
+test.describe('Forgot Password — Step 1: Security', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page }) => {
@@ -382,7 +433,6 @@ test.describe('Forgot Password Step 1 — Security', () => {
     test('should not execute a script payload entered in the Mobile number field', async ({ page }) => {
         let dialogTriggered = false;
         page.on('dialog', async dialog => { dialogTriggered = true; await dialog.dismiss(); });
-        // Mobile field only accepts digits, so the XSS will be filtered; the test verifies no dialog fires
         await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
         await page.getByRole('textbox', { name: 'Mobile number' }).pressSequentially('<script>alert(1)</script>');
         expect(dialogTriggered).toBe(false);
@@ -437,7 +487,6 @@ test.describe('Forgot Password Step 1 — Security', () => {
         const detail = page.locator('.toast-snackbar__detail');
         await expect(detail).toBeVisible({ timeout: 10000 });
         const text = await detail.textContent() ?? '';
-        // The error should be generic — it must not name the specific invalid field
         expect(text).not.toMatch(/company number (is )?(invalid|not found|does not exist)/i);
         expect(text).not.toMatch(/mobile (number )?(is )?(invalid|not found|does not exist)/i);
     });

@@ -11,9 +11,11 @@ import {
     fillStep1AndProceed,
 } from '../../pageObjectsHelpers/ForgotPasswordHelper';
 
-// ── Step 2: Password validation logic ─────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// STEP 2: PASSWORD VALIDATION
+// ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('Forgot Password - Step 2 Password Validation', () => {
+test.describe('Forgot Password — Step 2: Password Validation', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page }) => {
@@ -112,9 +114,11 @@ test.describe('Forgot Password - Step 2 Password Validation', () => {
     });
 });
 
-// ── Step 2: Back navigation ───────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// STEP 2: BACK NAVIGATION
+// ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('Forgot Password - Step 2 Back Navigation', () => {
+test.describe('Forgot Password — Step 2: Back Navigation', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page }) => {
@@ -147,9 +151,11 @@ test.describe('Forgot Password - Step 2 Back Navigation', () => {
     });
 });
 
-// ── Step 2: Interactions (toggles, field input, form submission) ──────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// STEP 2: INTERACTIONS
+// ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('Forgot Password - Step 2 Interactions', () => {
+test.describe('Forgot Password — Step 2: Interactions', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page }) => {
@@ -203,7 +209,7 @@ test.describe('Forgot Password - Step 2 Interactions', () => {
         await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeDisabled();
     });
 
-    test('should enable submit when both passwords match', async ({ page }) => {
+    test('should enable submit when both passwords match and meet requirements', async ({ page }) => {
         await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
         await page.getByRole('textbox', { name: 'Confirm password' }).fill(VALID_PASSWORD);
         await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeEnabled();
@@ -220,11 +226,106 @@ test.describe('Forgot Password - Step 2 Interactions', () => {
     });
 
     test('should navigate to login page after successful password reset', async ({ page }) => {
-        await page.pause();
         await mockAllPasswordsSuccess(page);
         await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
         await page.getByRole('textbox', { name: 'Confirm password' }).fill(VALID_PASSWORD);
         await page.getByRole('button', { name: SUBMIT_BUTTON }).click();
         await expect(page).toHaveURL(/login/, { timeout: 10000 });
+    });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STEP 2: EDGE CASES
+// ─────────────────────────────────────────────────────────────────────────────
+
+test.describe('Forgot Password — Step 2: Edge Cases', () => {
+    test.describe.configure({ mode: 'serial' });
+
+    test.beforeEach(async ({ page }) => {
+        await mockOtpDisabled(page);
+        await mockForgetPasswordSuccess(page);
+        await gotoForgotPassword(page);
+        await fillStep1AndProceed(page);
+    });
+
+    test('should flag passwords with swapped letter case as a mismatch (case-sensitive comparison)', async ({ page }) => {
+        await page.getByRole('textbox', { name: 'New Password' }).fill('Aa#1234567');
+        await page.getByRole('textbox', { name: 'Confirm password' }).fill('aA#1234567');
+        await expect(page.getByText('New password and Confirm password are not matched')).toBeVisible();
+        await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeDisabled();
+    });
+
+    test('should accept a long but otherwise valid password', async ({ page }) => {
+        const longPassword = VALID_PASSWORD + 'Xx1#'.repeat(20);
+        await page.getByRole('textbox', { name: 'New Password' }).fill(longPassword);
+        await page.getByRole('textbox', { name: 'Confirm password' }).fill(longPassword);
+        await expect(page.getByRole('button', { name: SUBMIT_BUTTON })).toBeEnabled();
+    });
+
+    test('should submit step 2 when Enter is pressed after filling matching valid passwords', async ({ page }) => {
+        await mockAllPasswordsSuccess(page);
+        await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
+        const confirmInput = page.getByRole('textbox', { name: 'Confirm password' });
+        await confirmInput.fill(VALID_PASSWORD);
+        await confirmInput.press('Enter');
+        await expect(page).toHaveURL(/login/, { timeout: 10000 });
+    });
+
+    test('should show a loading spinner on the submit button and prevent duplicate submissions', async ({ page }) => {
+        let requestCount = 0;
+        await page.route('**/auth/passwords/**', async route => {
+            requestCount++;
+            await new Promise(r => setTimeout(r, 2000));
+            await route.fulfill({ status: 200, contentType: 'application/json', body: '{}' }).catch(() => {});
+        });
+        await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
+        await page.getByRole('textbox', { name: 'Confirm password' }).fill(VALID_PASSWORD);
+        await page.getByRole('button', { name: SUBMIT_BUTTON }).click();
+        await expect(
+            page.locator('mat-spinner, .mat-progress-spinner, [class*="spinner"], [class*="loading"]').first()
+        ).toBeVisible({ timeout: 3000 });
+        await page.waitForURL(/login/, { timeout: 15000 });
+        expect(requestCount).toBe(1);
+    });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STEP 2: SECURITY
+// ─────────────────────────────────────────────────────────────────────────────
+
+test.describe('Forgot Password — Step 2: Security', () => {
+    test.describe.configure({ mode: 'serial' });
+
+    test.beforeEach(async ({ page }) => {
+        await mockOtpDisabled(page);
+        await mockForgetPasswordSuccess(page);
+        await gotoForgotPassword(page);
+        await fillStep1AndProceed(page);
+    });
+
+    test('should send the reset-password request as POST with the password only in the body, not the URL', async ({ page }) => {
+        let capturedUrl    = '';
+        let capturedMethod = '';
+        page.on('request', req => {
+            if (req.url().includes('/auth/passwords/')) {
+                capturedUrl    = req.url();
+                capturedMethod = req.method();
+            }
+        });
+        await mockAllPasswordsSuccess(page);
+        await page.getByRole('textbox', { name: 'New Password' }).fill(VALID_PASSWORD);
+        await page.getByRole('textbox', { name: 'Confirm password' }).fill(VALID_PASSWORD);
+        await page.getByRole('button', { name: SUBMIT_BUTTON }).click();
+        await expect(page).toHaveURL(/login/, { timeout: 10000 });
+        expect(capturedMethod).toBe('POST');
+        expect(capturedUrl).not.toContain(VALID_PASSWORD);
+    });
+
+    test('should not execute a script payload entered in the New Password field', async ({ page }) => {
+        let dialogTriggered = false;
+        page.on('dialog', async dialog => { dialogTriggered = true; await dialog.dismiss(); });
+        await page.getByRole('textbox', { name: 'New Password' }).fill('<script>alert(1)</script>');
+        await page.getByRole('textbox', { name: 'Confirm password' }).fill('<script>alert(1)</script>');
+        expect(dialogTriggered).toBe(false);
     });
 });
