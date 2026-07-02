@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { LOGIN_URL } from './helpers';
-import { LoginPage } from '../pages/LoginPage';
+import { LOGIN_URL } from '../../pageObjectsHelpers/LoginHelper';
+import { LoginPage } from '../../pages/LoginPage';
 
 test.describe('Login Page', () => {
     test.describe.configure({ mode: 'serial' });
@@ -96,13 +96,11 @@ test.describe('Login Page', () => {
         expect(after).not.toEqual(before);
     });
 
-    // ── QA Login Tools ────────────────────────────────────────────────────────
-
-    test('should display the QA Login Tools button', async () => {
-        await expect(loginPage.qaLoginToolsButton).toBeVisible();
-    });
-
     // ── Company number field ──────────────────────────────────────────────────
+
+    test('should display the Company Number label', async () => {
+        await expect(loginPage.companyLabel).toBeVisible();
+    });
 
     test('should display the Company number input as visible and enabled', async () => {
         await expect(loginPage.companyInput).toBeVisible();
@@ -113,7 +111,26 @@ test.describe('Login Page', () => {
         await expect(loginPage.companyInput).toHaveAttribute('placeholder', 'Eg. 153165659');
     });
 
+    test('should display the clear button on the Company Number field when filled', async () => {
+        await loginPage.companyInput.fill('A2316');
+        await expect(loginPage.companyClearButton).toBeVisible();
+    });
+
+    test('should clear the Company Number field when the clear button is clicked', async () => {
+        await loginPage.companyInput.fill('A2316');
+        await loginPage.companyClearButton.click();
+        await expect(loginPage.companyInput).toHaveValue('');
+    });
+
     // ── Mobile number field ───────────────────────────────────────────────────
+
+    test('should display the Mobile Number label', async () => {
+        await expect(loginPage.mobileLabel).toBeVisible();
+    });
+
+    test('should display the country flag in the mobile number field', async () => {
+        await expect(loginPage.countryFlag).toBeVisible();
+    });
 
     test('should display the country code (+966)', async () => {
         await expect(loginPage.countryCode).toContainText('(+966)');

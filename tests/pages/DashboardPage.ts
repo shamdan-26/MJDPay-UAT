@@ -46,7 +46,7 @@ export class DashboardPage {
         this.notificationsIcon = page.locator('.dropdown-toggle.nav-link.ai-icon');
 
         this.lastTransactionsContainer = page.locator('#last-transactions-container');
-        this.walletBalanceSar = page.getByText(/SAR|ر\.س/i).first();
+        this.walletBalanceSar = page.locator('#balance-container');
         this.lastLoginText    = page.getByText(/last.?login/i).first();
 
         this.logoutItem = page.locator('#logout');

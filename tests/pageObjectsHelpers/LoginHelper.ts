@@ -6,8 +6,14 @@ import { LoginPage } from '../pages/LoginPage';
 export const LOGIN_URL    = `${process.env['BASE_URL'] ?? 'https://uat.majdpay.com'}/business/auth/login`;
 export const SESSION_PATH = 'session.json';
 
-export const VALID_COMPANY  = process.env['UAT_COMPANY'] ?? 'L3999';
-export const VALID_MOBILE   = process.env['UAT_MOBILE']  ?? '500318143';
+// Account used for wrong-password / invalid-credential tests.
+export const VALID_COMPANY  = process.env['UAT_COMPANY'] ?? 'A2316';
+export const VALID_MOBILE   = process.env['UAT_MOBILE']  ?? '500021788';
+
+// Account used for successful-login tests (happy path, OTP flow, validation card).
+export const LOGIN_COMPANY  = process.env['UAT_LOGIN_COMPANY'] ?? 'T9446';
+export const LOGIN_MOBILE   = process.env['UAT_LOGIN_MOBILE']  ?? '502310965';
+
 export const VALID_PASSWORD = 'Aa#1234567';
 
 // DEV-only OTP bypass — in UAT use getOtpFromDb() instead.
@@ -82,5 +88,5 @@ export async function gotoLogin(page: Page): Promise<void> {
 
 export async function fillAndSubmitLogin(page: Page): Promise<void> {
     const loginPage = new LoginPage(page);
-    await loginPage.fillAndSubmit(VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD);
+    await loginPage.fillAndSubmit(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
 }

@@ -8,8 +8,8 @@ import {
     mockForgetPasswordSuccess,
     gotoForgotPassword,
     fillStep1AndProceed,
-} from '../../pageObjects/ForgotPasswordHelper';
-import { getOtpFromDb } from '../../login/helpers';
+} from '../../pageObjectsHelpers/ForgotPasswordHelper';
+import { getOtpFromDb } from '../../pageObjectsHelpers/LoginHelper';
 import { assertToast } from '../../shared';
 
 // ── OTP Verification: Dialog functionality after step 2 submit ────────────────
