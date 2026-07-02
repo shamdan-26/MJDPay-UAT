@@ -5,7 +5,7 @@ import {
     mockForgetPasswordSuccess,
     gotoForgotPassword,
     fillStep1AndProceed,
-} from '../../pageObjects/ForgotPasswordHelper';
+} from '../../pageObjectsHelpers/ForgotPasswordHelper';
 
 test.describe('Forgot Password – Step 2 Page', () => {
     test.describe.configure({ mode: 'serial' });

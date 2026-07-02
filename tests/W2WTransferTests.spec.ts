@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { type Page } from '@playwright/test';
-import { LoginPage } from './pageObjects/LoginPage';
-import { HomePage } from './pageObjects/HomePage';
-import { W2WTransferPage } from './pageObjects/W2WTransferPage';
-import { TransactionsPage } from './pageObjects/TransactionsPage';
+import { LoginPage } from './pageObjectsHelpers/LoginPage';
+import { HomePage } from './pageObjectsHelpers/HomePage';
+import { W2WTransferPage } from './pageObjectsHelpers/W2WTransferPage';
+import { TransactionsPage } from './pageObjectsHelpers/TransactionsPage';
 import w2wData from '../data/w2wTransferData.json';
 
 type W2WTestData = {

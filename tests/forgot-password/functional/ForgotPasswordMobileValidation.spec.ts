@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { VALID_COMPANY, FORGOT_URL, gotoForgotPassword } from '../../pageObjects/ForgotPasswordHelper';
+import { VALID_COMPANY, FORGOT_URL, gotoForgotPassword } from '../../pageObjectsHelpers/ForgotPasswordHelper';
 
 test.describe('Forgot Password Mobile Number Validation', () => {
     test.describe.configure({ mode: 'serial' });
@@ -18,7 +18,7 @@ test.describe('Forgot Password Mobile Number Validation', () => {
     });
 
     test('should keep Next button disabled when mobile has a leading zero', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill('0500318143');
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill('0500021788');
         await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled();
     });
 
@@ -39,7 +39,7 @@ test.describe('Forgot Password Mobile Number Validation', () => {
     // ── Valid format ──────────────────────────────────────────────────────────
 
     test('should enable Next button with a valid 9-digit mobile starting with 5', async ({ page }) => {
-        await page.getByRole('textbox', { name: 'Mobile number' }).fill('500318143');
+        await page.getByRole('textbox', { name: 'Mobile number' }).fill('500021788');
         await expect(page.getByRole('button', { name: 'Next' })).toBeEnabled();
     });
 });

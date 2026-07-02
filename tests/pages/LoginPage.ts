@@ -16,11 +16,20 @@ export class LoginPage {
 
     // Fields
     readonly companyInput: Locator;
+    readonly companyLabel: Locator;
+    readonly companyClearButton: Locator;
     readonly mobileInput: Locator;
+    readonly mobileLabel: Locator;
+    readonly mobileClearButton: Locator;
     readonly countryCode: Locator;
+    readonly countryFlag: Locator;
     readonly passwordInput: Locator;
     readonly passwordLabel: Locator;
     readonly showPasswordToggle: Locator;
+
+    // Merchant / Biller tab switcher
+    readonly merchantTab: Locator;
+    readonly billerTab: Locator;
 
     // Actions / links
     readonly loginButton: Locator;
@@ -46,11 +55,19 @@ export class LoginPage {
         this.logoLink  = page.locator('a:has(img[alt="MJD Pay"])');
 
         this.companyInput      = page.getByRole('textbox', { name: 'Company number' });
+        this.companyLabel      = page.locator('label.floating-field-label', { hasText: 'Company' });
+        this.companyClearButton = page.locator('.floating-field-clear, [class*="clear-btn"], [aria-label*="lear" i]').first();
         this.mobileInput       = page.getByRole('textbox', { name: 'Mobile number' });
+        this.mobileLabel       = page.locator('label.floating-field-label', { hasText: 'Mobile' });
+        this.mobileClearButton  = page.locator('.floating-field-clear, [class*="clear-btn"], [aria-label*="lear" i]').nth(1);
         this.countryCode       = page.locator('.floating-prefix');
+        this.countryFlag       = page.locator('.floating-prefix img, .floating-prefix [class*="flag"]').first();
         this.passwordInput     = page.locator('input[aria-label="Password"]');
         this.passwordLabel     = page.locator('label.floating-field-label', { hasText: 'Password' });
         this.showPasswordToggle = page.locator('button.floating-password-toggle');
+
+        this.merchantTab        = page.getByRole('button', { name: 'Merchant' });
+        this.billerTab          = page.getByRole('button', { name: 'Biller' });
 
         const env = process.env['ENV'] ?? 'dev';
         this.loginButton = env === 'dev'

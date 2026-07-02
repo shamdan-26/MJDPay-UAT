@@ -9,7 +9,7 @@ import {
     mockAllPasswordsSuccess,
     gotoForgotPassword,
     fillStep1AndProceed,
-} from '../../pageObjects/ForgotPasswordHelper';
+} from '../../pageObjectsHelpers/ForgotPasswordHelper';
 
 // ── Step 2: Password validation logic ─────────────────────────────────────────
 

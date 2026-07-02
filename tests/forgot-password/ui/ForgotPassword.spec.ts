@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { FORGOT_URL, LOGIN_URL, mockOtpDisabled, gotoForgotPassword } from '../../pageObjects/ForgotPasswordHelper';
+import { FORGOT_URL, LOGIN_URL, mockOtpDisabled, gotoForgotPassword } from '../../pageObjectsHelpers/ForgotPasswordHelper';
 
 test.describe('Forgot Password Page', () => {
     test.describe.configure({ mode: 'serial' });

@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pageObjects/LoginPage';
-import { HomePage } from '../pageObjects/HomePage';
-import { BankTransferPage } from '../pageObjects/BankTransferPage';
-import { ToastMessages } from '../pageObjects/common/ToastMessages';
+import { LoginPage } from '../pageObjectsHelpers/LoginPage';
+import { HomePage } from '../pageObjectsHelpers/HomePage';
+import { BankTransferPage } from '../pageObjectsHelpers/BankTransferPage';
+import { ToastMessages } from '../pageObjectsHelpers/common/ToastMessages';
 
 const bankTransferData = require('../../data/BankTransferData.json');
 

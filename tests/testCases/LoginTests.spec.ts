@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pageObjects/LoginPage';
+import { LoginPage } from '../pageObjectsHelpers/LoginPage';
 // Note: MongoDB utility import will be needed here later
 // import { getLatestOtp } from '../utilities/OtpUtils'; 
 const loginData = require('../../data/LoginTests.json');

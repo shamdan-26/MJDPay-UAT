@@ -10,7 +10,7 @@ import {
     mockForgetPasswordFailure,
     abortUnmockedGatewayRequests,
     gotoForgotPassword,
-} from '../../pageObjects/ForgotPasswordHelper';
+} from '../../pageObjectsHelpers/ForgotPasswordHelper';
 
 // ── Happy Path ────────────────────────────────────────────────────────────────
 

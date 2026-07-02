@@ -3,7 +3,7 @@ import {
     MODAL_SELECTOR,
     VALID_PASSWORD,
     gotoForgotPassword,
-} from '../../pageObjects/ForgotPasswordHelper';
+} from '../../pageObjectsHelpers/ForgotPasswordHelper';
 
 const COMPANY = 'A2316';
 const MOBILE  = '500021788';

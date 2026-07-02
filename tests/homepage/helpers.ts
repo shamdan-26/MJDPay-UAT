@@ -9,7 +9,7 @@ export const HOME_URL         = `${BASE_URL}/business/main/home`;
 export const HOME_URL_PATTERN = /\/business\/main\/home/;
 export const BASE_ORIGIN      = BASE_URL;
 
-export const VALID_COMPANY  = process.env['UAT_COMPANY'] ?? 'S2301';
+export const VALID_COMPANY  = process.env['UAT_COMPANY'] ?? 'A2316';
 export const VALID_MOBILE   = process.env['UAT_MOBILE']  ?? '500021788';
 export const VALID_PASSWORD = 'Aa#1234567';
 

@@ -9,7 +9,7 @@ import {
     mockAllPasswordsSuccess,
     gotoForgotPassword,
     fillStep1AndProceed,
-} from '../../pageObjects/ForgotPasswordHelper';
+} from '../../pageObjectsHelpers/ForgotPasswordHelper';
 
 // ── End-to-End: Complete password reset flow ──────────────────────────────────
 

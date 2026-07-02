@@ -3,7 +3,15 @@
     "allow": [
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(Remove-Item \"c:\\\\Users\\\\SondosHamdan\\\\OneDrive - Digital Cash\\\\Desktop\\\\ai-autimation\\\\tests\\\\login\\\\functional\\\\LoginFunctionality.spec.ts\")",
+      "Bash(git -C \"c:/Users/SondosHamdan/OneDrive - Digital Cash/Desktop/ai-autimation\" remote -v)",
+      "Bash(git -C \"c:/Users/SondosHamdan/OneDrive - Digital Cash/Desktop/ai-autimation\" status)",
+      "Bash(git -C \"c:/Users/SondosHamdan/OneDrive - Digital Cash/Desktop/ai-autimation\" log --oneline -5)",
+      "Bash(git -C \"c:/Users/SondosHamdan/OneDrive - Digital Cash/Desktop/ai-autimation\" ls-remote origin sondos Sondos)",
+      "Bash(git -C \"c:/Users/SondosHamdan/OneDrive - Digital Cash/Desktop/ai-autimation\" add tests/login/ui/LoginValidationPopup.spec.ts)",
+      "Bash(git -C \"c:/Users/SondosHamdan/OneDrive - Digital Cash/Desktop/ai-autimation\" status --short)",
+      "Bash(git -C \"c:/Users/SondosHamdan/OneDrive - Digital Cash/Desktop/ai-autimation\" diff --stat HEAD)"
     ]
   }
 }
