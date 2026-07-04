@@ -45,14 +45,12 @@ test.describe('Homepage – Sidebar navigation', () => {
 
     test('should expand the Transfer submenu and reveal Cashout link', async () => {
         await dashboard.transferSidebarItem.click();
-        const cashoutLink = page.locator('#sideNav-sidenav').getByRole('link', { name: /^cashout$/i });
-        await expect(cashoutLink).toBeVisible({ timeout: 5000 });
+        await expect(dashboard.cashoutSidebarLink).toBeVisible({ timeout: 5000 });
     });
 
     test('should show Wallet Transfer sub-link when Transfer submenu is expanded', async () => {
         await dashboard.transferSidebarItem.click();
-        const walletTransferLink = page.locator('#sideNav-sidenav').getByRole('link', { name: /wallet\s*transfer/i });
-        await expect(walletTransferLink).toBeVisible({ timeout: 5000 });
+        await expect(dashboard.walletTransferSidebarLink).toBeVisible({ timeout: 5000 });
     });
 
     test('should navigate to Bills page when the Bills sidebar link is clicked', async () => {

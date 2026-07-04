@@ -14,7 +14,6 @@ test.describe('Forgot Password OTP Popup — UI', () => {
     test.beforeEach(async ({ page }) => {
         await gotoForgotPassword(page);
 
-        await page.pause();
         const companyInput = page.getByPlaceholder('Input here').first();
         await companyInput.click();
         await companyInput.fill(COMPANY);

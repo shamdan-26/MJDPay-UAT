@@ -3,7 +3,7 @@ import {
     VALID_EMAIL,
     goToFinancialStep,
     fillFinancialForm,
-} from './helpers';
+} from '../helpers';
 
 test.describe('Registration - Financial & Business Functionality', () => {
     test.describe.configure({ mode: 'serial' });

@@ -107,7 +107,6 @@ test.describe('Login — Happy Path (End-to-End)', () => {
     });
 
     test('should display the wallet balance widget on the dashboard', async ({ page }) => {
-        await page.pause();
         await loginPage.fillAndSubmit(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
         await handleOtpIfPresent(page);
         await expect(page).not.toHaveURL(/auth\/login/, { timeout: 30000 });

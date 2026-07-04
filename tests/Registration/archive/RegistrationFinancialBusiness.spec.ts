@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { REGISTER_URL, generateFreshKSAMobile, fillOTP, getOtpFromDb, goToFinancialStep } from './helpers';
+import { REGISTER_URL, generateFreshKSAMobile, fillOTP, getOtpFromDb, goToFinancialStep } from '../helpers';
 
 test.describe('Registration – Financial & Business Step (Tab 2 of 3)', () => {
     test.describe.configure({ mode: 'serial' });

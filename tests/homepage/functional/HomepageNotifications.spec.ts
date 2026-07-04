@@ -27,7 +27,6 @@ test.describe('Homepage – Notifications panel', () => {
     });
 
     test('should open notifications panel when notifications icon is clicked', async () => {
-        await page.pause();
         await dashboard.notificationsIcon.click();
         const panel = page.locator('[class*="notif"], [role="dialog"], [aria-label*="notif" i]').first();
         await expect(panel).toBeVisible();
