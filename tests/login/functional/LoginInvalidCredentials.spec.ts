@@ -10,7 +10,7 @@ import {
 
 const STATUS_COMPANY = 'A2316';
 const STATUS_MOBILE  = '500021788';
-import { LoginPage } from '../../pages/LoginPage';
+import { LoginPage } from '../../pageElements/LoginPage';
 
 const WRONG_PASSWORD = 'WrongPass@99';
 

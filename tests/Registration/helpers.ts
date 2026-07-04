@@ -3,10 +3,10 @@
 declare const process: { env: Record<string, string | undefined> };
 import { MongoClient } from 'mongodb';
 import { waitForToastClear } from '../shared';
-import { RegistrationMobilePage } from '../pages/registration/RegistrationMobilePage';
-import { RegistrationInfoPage } from '../pages/registration/RegistrationInfoPage';
-import { RegistrationFinancialPage } from '../pages/registration/RegistrationFinancialPage';
-import { RegistrationVerificationPage } from '../pages/registration/RegistrationVerificationPage';
+import { RegistrationMobilePage } from '../pageElements/registration/RegistrationMobilePage';
+import { RegistrationInfoPage } from '../pageElements/registration/RegistrationInfoPage';
+import { RegistrationFinancialPage } from '../pageElements/registration/RegistrationFinancialPage';
+import { RegistrationVerificationPage } from '../pageElements/registration/RegistrationVerificationPage';
 
 const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 export const LOGIN_URL    = `${BASE_URL}/business/auth/login`;

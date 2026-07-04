@@ -1,6 +1,6 @@
 import { test, expect, Page, Browser } from '@playwright/test';
 import { goToInfoStep, RESIDENT_ASSETS, generateEmail } from '../helpers';
-import { RegistrationInfoPage } from '../../pages/registration/RegistrationInfoPage';
+import { RegistrationInfoPage } from '../../pageElements/registration/RegistrationInfoPage';
 
 interface InfoNav { page: Page; infoPage: RegistrationInfoPage }
 

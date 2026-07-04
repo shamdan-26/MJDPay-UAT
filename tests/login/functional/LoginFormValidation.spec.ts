@@ -5,7 +5,7 @@ import {
     VALID_MOBILE,
     VALID_PASSWORD,
 } from '../../pageObjectsHelpers/LoginHelper';
-import { LoginPage } from '../../pages/LoginPage';
+import { LoginPage } from '../../pageElements/LoginPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // BUTTON STATE

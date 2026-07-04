@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { REGISTER_URL } from '../helpers';
-import { RegistrationMobilePage } from '../../pages/registration/RegistrationMobilePage';
+import { RegistrationMobilePage } from '../../pageElements/registration/RegistrationMobilePage';
 
 test.describe('Registration - Mobile Number Page', () => {
     test.describe.configure({ mode: 'serial' });

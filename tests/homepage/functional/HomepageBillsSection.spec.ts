@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import { HOME_URL, HOME_URL_PATTERN, BASE_ORIGIN, ACCOUNT_2_STORAGE_STATE } from '../../pageObjectsHelpers/HomePageHelper';
-import { DashboardPage } from '../../pages/DashboardPage';
+import { DashboardPage } from '../../pageElements/DashboardPage';
 import { waitForToastClear } from '../../shared';
 
 test.describe('Homepage – Bills section interactions', () => {

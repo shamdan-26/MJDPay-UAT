@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { LOGIN_URL } from '../../pageObjectsHelpers/LoginHelper';
-import { LoginPage } from '../../pages/LoginPage';
+import { LoginPage } from '../../pageElements/LoginPage';
 
 test.describe('Login Page', () => {
     test.describe.configure({ mode: 'serial' });

@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test';
-import { ForgotPasswordPage } from '../pages/ForgotPasswordPage';
-import { LoginPage } from '../pages/LoginPage';
+import { ForgotPasswordPage } from '../pageElements/ForgotPasswordPage';
+import { LoginPage } from '../pageElements/LoginPage';
 
 const BASE_URL              = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 export const FORGOT_URL     = `${BASE_URL}/business/auth/forgot-password`;

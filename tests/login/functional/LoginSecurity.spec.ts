@@ -9,7 +9,7 @@ import {
     LOCKOUT_MOBILE,
     LOCKOUT_PASSWORD,
 } from '../../pageObjectsHelpers/LoginHelper';
-import { LoginPage } from '../../pages/LoginPage';
+import { LoginPage } from '../../pageElements/LoginPage';
 
 const WRONG_PASSWORD = 'WrongPass@99';
 

@@ -7,8 +7,8 @@ import {
     getOtpFromDb,
     fillOtpInputs,
 } from '../../pageObjectsHelpers/LoginHelper';
-import { LoginPage } from '../../pages/LoginPage';
-import { DashboardPage } from '../../pages/DashboardPage';
+import { LoginPage } from '../../pageElements/LoginPage';
+import { DashboardPage } from '../../pageElements/DashboardPage';
 
 test.describe('Login — Happy Path (End-to-End)', () => {
     test.describe.configure({ mode: 'serial' });

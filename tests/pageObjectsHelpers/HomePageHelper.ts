@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test';
 import { getOtpFromDb, fillOTP } from '../Registration/helpers';
 import { waitForToastClear } from '../shared';
-import { DashboardPage } from '../pages/DashboardPage';
+import { DashboardPage } from '../pageElements/DashboardPage';
 
 const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 export const LOGIN_URL        = `${BASE_URL}/business/auth/login`;
