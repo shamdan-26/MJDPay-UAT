@@ -27,16 +27,11 @@ export class LoginPage {
     readonly passwordLabel: Locator;
     readonly showPasswordToggle: Locator;
 
-    // Merchant / Biller tab switcher
-    readonly merchantTab: Locator;
-    readonly billerTab: Locator;
-
     // Actions / links
     readonly loginButton: Locator;
     readonly forgotPasswordLink: Locator;
     readonly signUpLink: Locator;
     readonly newToMjdText: Locator;
-    readonly qaLoginToolsButton: Locator;
 
     // Language / theme
     readonly enButton: Locator;
@@ -66,9 +61,6 @@ export class LoginPage {
         this.passwordLabel     = page.locator('label.floating-field-label', { hasText: 'Password' });
         this.showPasswordToggle = page.locator('button.floating-password-toggle');
 
-        this.merchantTab        = page.getByRole('button', { name: 'Merchant' });
-        this.billerTab          = page.getByRole('button', { name: 'Biller' });
-
         const env = process.env['ENV'] ?? 'dev';
         this.loginButton = env === 'dev'
             ? page.locator('#btn_login')
@@ -77,7 +69,6 @@ export class LoginPage {
         this.forgotPasswordLink  = page.getByText('Forgot Password?');
         this.signUpLink          = page.getByText('Sign Up');
         this.newToMjdText        = page.getByText('New to MJD PAY?');
-        this.qaLoginToolsButton  = page.getByRole('button', { name: 'QA Login Tools' });
 
         this.enButton     = page.getByRole('button', { name: 'EN' });
         this.arabicButton = page.getByRole('button', { name: 'العربية' });

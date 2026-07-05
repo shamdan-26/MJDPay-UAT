@@ -1,27 +1,38 @@
-import { Page } from '@playwright/test';
+import { Browser, Page } from '@playwright/test';
 import { getOtpFromDb, fillOTP } from '../Registration/helpers';
 import { waitForToastClear } from '../shared';
 import { DashboardPage } from '../pageElements/DashboardPage';
+import { HomepageSidebarPage } from '../pageElements/homepage/HomepageSidebarPage';
+import { HomepageHeaderPage } from '../pageElements/homepage/HomepageHeaderPage';
+import { HomepageGreetingPage } from '../pageElements/homepage/HomepageGreetingPage';
+import { HomepageBalanceCardPage } from '../pageElements/homepage/HomepageBalanceCardPage';
+import { HomepageQuickActionsPage } from '../pageElements/homepage/HomepageQuickActionsPage';
+import { HomepageBillsOverviewPage } from '../pageElements/homepage/HomepageBillsOverviewPage';
+import { HomepageSubWalletsPage } from '../pageElements/homepage/HomepageSubWalletsPage';
+import { HomepageTransactionsPage } from '../pageElements/homepage/HomepageTransactionsPage';
 
-const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
+export const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 export const LOGIN_URL        = `${BASE_URL}/business/auth/login`;
 export const HOME_URL         = `${BASE_URL}/business/main/home`;
 export const HOME_URL_PATTERN = /\/business\/main\/home/;
 export const BASE_ORIGIN      = BASE_URL;
 
+/** Shared fallback password for all UAT test accounts below. */
+const DEFAULT_TEST_PASSWORD = 'Aa#1234567';
+
 export const VALID_COMPANY  = process.env['UAT_COMPANY'] ?? 'A2316';
 export const VALID_MOBILE   = process.env['UAT_MOBILE']  ?? '500021788';
-export const VALID_PASSWORD = 'Aa#1234567';
+export const VALID_PASSWORD = DEFAULT_TEST_PASSWORD;
 
 /** Second merchant account — used to spread homepage spec files across two
  *  sessions so parallel workers don't collide on the same account. */
 export const VALID_COMPANY_2  = process.env['UAT_COMPANY_2'] ?? 'T9446';
 export const VALID_MOBILE_2   = process.env['UAT_MOBILE_2']  ?? '502310965';
-export const VALID_PASSWORD_2 = process.env['UAT_PASSWORD_2'] ?? 'Aa#1234567';
+export const VALID_PASSWORD_2 = process.env['UAT_PASSWORD_2'] ?? DEFAULT_TEST_PASSWORD;
 
 export const VALID_BILLER_COMPANY  = process.env['UAT_BILLER_COMPANY'] ?? 'L3999';
 export const VALID_BILLER_MOBILE   = process.env['UAT_BILLER_MOBILE']  ?? '500318143';
-export const VALID_BILLER_PASSWORD = process.env['UAT_BILLER_PASSWORD'] ?? 'Aa#1234567';
+export const VALID_BILLER_PASSWORD = process.env['UAT_BILLER_PASSWORD'] ?? DEFAULT_TEST_PASSWORD;
 
 /** Pre-authenticated storage states for the two homepage merchant accounts,
  *  generated once by support/global-setup.ts. Spec files restore these via
@@ -30,10 +41,30 @@ export const VALID_BILLER_PASSWORD = process.env['UAT_BILLER_PASSWORD'] ?? 'Aa#1
 export const ACCOUNT_1_STORAGE_STATE = 'playwright/.auth/homepage-account1.json';
 export const ACCOUNT_2_STORAGE_STATE = 'playwright/.auth/homepage-account2.json';
 
+/** Shared timing constants for homepage specs — keep every spec's post-navigation
+ *  settle/toast-clear/assertion waits in sync instead of hardcoding them per call site. */
+export const POST_NAV_SETTLE_MS    = 2500;
+export const TOAST_APPEAR_TIMEOUT_MS = 800;
+export const TOAST_CLEAR_TIMEOUT_MS  = 5000;
+export const ASSERTION_TIMEOUT_MS    = 10000;
+
 export interface MerchantCredentials {
     company:  string;
     mobile:   string;
     password: string;
+}
+
+export interface HomepageSession {
+    page: Page;
+    dashboard: DashboardPage;
+    sidebar: HomepageSidebarPage;
+    header: HomepageHeaderPage;
+    greeting: HomepageGreetingPage;
+    balanceCard: HomepageBalanceCardPage;
+    quickActions: HomepageQuickActionsPage;
+    billsOverview: HomepageBillsOverviewPage;
+    subWallets: HomepageSubWalletsPage;
+    transactions: HomepageTransactionsPage;
 }
 
 /** Full login flow for a biller: credentials → OTP (fetched from MongoDB) → home page.
@@ -134,4 +165,39 @@ export async function loginAsMerchant(page: Page, creds?: MerchantCredentials): 
 export async function openProfileMenu(page: Page): Promise<void> {
     const dashboard = new DashboardPage(page);
     await dashboard.openProfileMenu();
+}
+
+/** Restores a pre-authenticated homepage session and instantiates every
+ *  homepage page object against it, so spec files get a one-line replacement
+ *  for the browser.newContext → grantPermissions → newPage boilerplate that
+ *  used to be copy-pasted into every file's beforeAll. */
+export async function createHomepageSession(
+    browser: Browser,
+    account: 'ACCOUNT_1' | 'ACCOUNT_2' = 'ACCOUNT_1'
+): Promise<HomepageSession> {
+    const storageState = account === 'ACCOUNT_1' ? ACCOUNT_1_STORAGE_STATE : ACCOUNT_2_STORAGE_STATE;
+    const context = await browser.newContext({ storageState });
+    await context.grantPermissions(['geolocation'], { origin: BASE_ORIGIN });
+    const page = await context.newPage();
+
+    return {
+        page,
+        dashboard: new DashboardPage(page),
+        sidebar: new HomepageSidebarPage(page),
+        header: new HomepageHeaderPage(page),
+        greeting: new HomepageGreetingPage(page),
+        balanceCard: new HomepageBalanceCardPage(page),
+        quickActions: new HomepageQuickActionsPage(page),
+        billsOverview: new HomepageBillsOverviewPage(page),
+        subWallets: new HomepageSubWalletsPage(page),
+        transactions: new HomepageTransactionsPage(page),
+    };
+}
+
+/** Re-navigates to the homepage and waits for the post-navigation settle +
+ *  transient toast to clear — the standard beforeEach for homepage specs. */
+export async function refreshHomepage(page: Page): Promise<void> {
+    await page.goto(HOME_URL, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(POST_NAV_SETTLE_MS);
+    await waitForToastClear(page, TOAST_APPEAR_TIMEOUT_MS, TOAST_CLEAR_TIMEOUT_MS);
 }

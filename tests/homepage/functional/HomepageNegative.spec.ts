@@ -1,6 +1,12 @@
 import { test, expect } from '@playwright/test';
-import { HOME_URL, HOME_URL_PATTERN, BASE_ORIGIN, ACCOUNT_1_STORAGE_STATE } from '../../pageObjectsHelpers/HomePageHelper';
+import {
+    HOME_URL, HOME_URL_PATTERN, BASE_ORIGIN, ACCOUNT_1_STORAGE_STATE,
+    POST_NAV_SETTLE_MS, TOAST_APPEAR_TIMEOUT_MS, TOAST_CLEAR_TIMEOUT_MS, ASSERTION_TIMEOUT_MS,
+} from '../HomePageHelper';
 import { DashboardPage } from '../../pageElements/DashboardPage';
+import { HomepageGreetingPage } from '../../pageElements/homepage/HomepageGreetingPage';
+import { HomepageBillsOverviewPage } from '../../pageElements/homepage/HomepageBillsOverviewPage';
+import { HomepageSubWalletsPage } from '../../pageElements/homepage/HomepageSubWalletsPage';
 import { waitForToastClear } from '../../shared';
 
 test.describe('Homepage – Negative Scenarios', () => {
@@ -8,12 +14,19 @@ test.describe('Homepage – Negative Scenarios', () => {
     test.use({ storageState: ACCOUNT_1_STORAGE_STATE });
 
     let dashboard: DashboardPage;
+    let greeting: HomepageGreetingPage;
+    let billsOverview: HomepageBillsOverviewPage;
+    let subWallets: HomepageSubWalletsPage;
 
     test.beforeEach(async ({ page, context }) => {
         await context.grantPermissions(['geolocation'], { origin: BASE_ORIGIN });
         await page.goto(HOME_URL, { waitUntil: 'domcontentloaded' });
-        await waitForToastClear(page, 800, 5000);
-        dashboard = new DashboardPage(page);
+        await page.waitForTimeout(POST_NAV_SETTLE_MS);
+        await waitForToastClear(page, TOAST_APPEAR_TIMEOUT_MS, TOAST_CLEAR_TIMEOUT_MS);
+        dashboard      = new DashboardPage(page);
+        greeting       = new HomepageGreetingPage(page);
+        billsOverview  = new HomepageBillsOverviewPage(page);
+        subWallets     = new HomepageSubWalletsPage(page);
     });
 
     // ── API failure handling ──────────────────────────────────────────────────
@@ -35,7 +48,7 @@ test.describe('Homepage – Negative Scenarios', () => {
         await page.reload({ waitUntil: 'domcontentloaded' });
         await waitForToastClear(page);
         await expect(page).toHaveURL(HOME_URL_PATTERN);
-        await expect(dashboard.billsOverviewHeading).toBeVisible();
+        await expect(billsOverview.billsOverviewHeading).toBeVisible();
     });
 
     test('should remain on the homepage and not crash when the sub-wallets API fails', async ({ page }) => {
@@ -45,7 +58,7 @@ test.describe('Homepage – Negative Scenarios', () => {
         await page.reload({ waitUntil: 'domcontentloaded' });
         await waitForToastClear(page);
         await expect(page).toHaveURL(HOME_URL_PATTERN);
-        await expect(dashboard.subWalletsHeading).toBeVisible();
+        await expect(subWallets.subWalletsHeading).toBeVisible();
     });
 
     test('should remain on the homepage and not crash when the wallet balance API fails', async ({ page }) => {
@@ -68,16 +81,16 @@ test.describe('Homepage – Negative Scenarios', () => {
         await page.reload({ waitUntil: 'domcontentloaded' });
         await waitForToastClear(page);
         await expect(page).toHaveURL(HOME_URL_PATTERN);
-        await expect(dashboard.greetingText).toBeVisible();
+        await expect(greeting.greetingText).toBeVisible();
     });
 
     test('should show the empty sub-wallets message when no sub-wallets exist', async () => {
-        await expect(dashboard.subWalletsEmptyMessage).toBeVisible();
+        await expect(subWallets.subWalletsEmptyMessage).toBeVisible();
     });
 
     test('should show 0 bills in the Paid category when there are no paid bills', async () => {
-        await expect(dashboard.billsPaidLabel).toBeVisible({ timeout: 10000 });
-        const paidText = await dashboard.billsPaidLabel
+        await expect(billsOverview.billsPaidLabel).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
+        const paidText = await billsOverview.billsPaidLabel
             .locator('xpath=ancestor::*[1]')
             .textContent()
             .catch(() => '');
@@ -85,7 +98,7 @@ test.describe('Homepage – Negative Scenarios', () => {
     });
 
     test('should show 0 bills in the Unpaid category when there are no unpaid bills', async () => {
-        await expect(dashboard.billsUnpaidLabel).toBeVisible({ timeout: 10000 });
+        await expect(billsOverview.billsUnpaidLabel).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
     });
 
     // ── Invalid navigation ────────────────────────────────────────────────────

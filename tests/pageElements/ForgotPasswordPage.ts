@@ -31,7 +31,7 @@ export class ForgotPasswordPage {
 
         this.logoImage  = page.locator('img[alt="MJD Pay"]');
         this.logoLink   = page.locator('a').filter({ has: page.locator('img[alt="MJD Pay"]') });
-        this.backButton = page.getByRole('button', { name: /back/i });
+        this.backButton = page.locator('main button').first();
 
         this.companyInput = page.getByRole('textbox', { name: 'Company number' });
         this.mobileInput  = page.getByRole('textbox', { name: 'Mobile number' });
@@ -40,8 +40,8 @@ export class ForgotPasswordPage {
 
         this.newPasswordInput     = page.getByRole('textbox', { name: 'New Password' });
         this.confirmPasswordInput = page.getByRole('textbox', { name: /confirm/i });
-        this.showNewPasswordToggle     = page.locator('button.floating-password-toggle').first();
-        this.showConfirmPasswordToggle = page.locator('button.floating-password-toggle').last();
+        this.showNewPasswordToggle     = page.getByRole('button', { name: 'Show password' }).first();
+        this.showConfirmPasswordToggle = page.getByRole('button', { name: 'Show password' }).nth(1);
         this.saveButton = page.getByRole('button', { name: /save|confirm/i });
         this.resetPasswordButton = page.getByRole('button', { name: /reset password/i });
 

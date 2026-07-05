@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { VALID_MOBILE, VALID_PASSWORD as HELPER_VALID_PASSWORD, VALID_COMPANY, VALID_OTP, INVALID_OTP } from '../LoginHelper';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Login – API Flow
@@ -19,9 +20,9 @@ import { test, expect } from '@playwright/test';
 
 const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev.majdpay.com';
 
-const VALID_USERNAME = '+966500021788';
-const VALID_PASSWORD = 'Aa#1234567';
-const VALID_TENANT   = 'A2316';
+const VALID_USERNAME = `+966${VALID_MOBILE}`;
+const VALID_PASSWORD = HELPER_VALID_PASSWORD;
+const VALID_TENANT   = VALID_COMPANY;
 
 const DEVICE_ID          = '97775405aa6144fc2e034bebc258bdf2';
 const DEVICE_FINGERPRINT = 'test-fingerprint-hash-api-testing';
@@ -405,7 +406,7 @@ test.describe('Login – API 4: POST /auth/verify/otp', () => {
         test.skip(!accessToken, 'Sign-in did not return an accessToken — skipping OTP verification');
 
         const res = await request.post(`${API_BASE}/auth/verify/otp`, {
-            data: { otp: '00000000' },
+            data: { otp: VALID_OTP },
             headers: {
                 ...commonHeaders(),
                 Authorization: `Bearer ${accessToken}`,
@@ -419,7 +420,7 @@ test.describe('Login – API 4: POST /auth/verify/otp', () => {
         test.skip(!accessToken, 'Sign-in did not return an accessToken — skipping OTP verification');
 
         const res = await request.post(`${API_BASE}/auth/verify/otp`, {
-            data: { otp: '11111111' },
+            data: { otp: INVALID_OTP },
             headers: {
                 ...commonHeaders(),
                 Authorization: `Bearer ${accessToken}`,
@@ -445,7 +446,7 @@ test.describe('Login – API 4: POST /auth/verify/otp', () => {
 
     test('API-N13: should return 401 when Authorization header is missing', async ({ request }) => {
         const res = await request.post(`${API_BASE}/auth/verify/otp`, {
-            data:    { otp: '00000000' },
+            data:    { otp: VALID_OTP },
             headers: commonHeaders(),
         });
 

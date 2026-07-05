@@ -8,11 +8,10 @@ import {
     VALID_PASSWORD_2,
     ACCOUNT_1_STORAGE_STATE,
     ACCOUNT_2_STORAGE_STATE,
-} from '../tests/pageObjectsHelpers/HomePageHelper';
+    LOGIN_URL,
+} from '../tests/homepage/HomePageHelper';
 
 const env            = process.env['ENV'] ?? 'dev';
-const BASE_URL       = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
-const LOGIN_URL      = `${BASE_URL}/business/auth/login`;
 const VALID_COMPANY  = process.env['UAT_SETUP_COMPANY'];
 const VALID_MOBILE   = process.env['UAT_SETUP_MOBILE'];
 const VALID_PASSWORD = process.env['UAT_SETUP_PASSWORD'];
@@ -64,10 +63,10 @@ async function globalSetup() {
     // each logging in live (faster, and avoids concurrent same-account
     // login collisions between parallel workers).
     mkdirSync('playwright/.auth', { recursive: true });
-    await createHomepageSession(ACCOUNT_1_STORAGE_STATE);
-    await createHomepageSession(ACCOUNT_2_STORAGE_STATE, { company: VALID_COMPANY_2, mobile: VALID_MOBILE_2, password: VALID_PASSWORD_2 });
+    await saveAuthenticatedStorageState(ACCOUNT_1_STORAGE_STATE);
+    await saveAuthenticatedStorageState(ACCOUNT_2_STORAGE_STATE, { company: VALID_COMPANY_2, mobile: VALID_MOBILE_2, password: VALID_PASSWORD_2 });
 
-    async function createHomepageSession(storagePath: string, creds?: { company: string; mobile: string; password: string }) {
+    async function saveAuthenticatedStorageState(storagePath: string, creds?: { company: string; mobile: string; password: string }) {
         const context = await browser.newContext();
         const page    = await context.newPage();
         await loginAsMerchant(page, creds);

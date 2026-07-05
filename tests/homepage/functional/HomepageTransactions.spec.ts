@@ -1,21 +1,19 @@
 import { test, expect, Page } from '@playwright/test';
-import { HOME_URL, BASE_ORIGIN, ACCOUNT_1_STORAGE_STATE } from '../../pageObjectsHelpers/HomePageHelper';
-import { DashboardPage } from '../../pageElements/DashboardPage';
-import { waitForToastClear } from '../../shared';
+import { createHomepageSession, refreshHomepage } from '../HomePageHelper';
+import { HomepageTransactionsPage } from '../../pageElements/homepage/HomepageTransactionsPage';
 
+// Visibility-only assertions for this widget (container, total count) live in
+// ui/HomepageTransactionsPage.spec.ts — this file owns interaction/behavior only.
 test.describe('Homepage – Transactions section', () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;
-    let dashboard: DashboardPage;
+    let transactions: HomepageTransactionsPage;
 
     test.beforeAll(async ({ browser }) => {
         // Uses account 1's storage state: it has real transaction
         // history, unlike the secondary test account.
-        const context = await browser.newContext({ storageState: ACCOUNT_1_STORAGE_STATE });
-        await context.grantPermissions(['geolocation'], { origin: BASE_ORIGIN });
-        page = await context.newPage();
-        dashboard = new DashboardPage(page);
+        ({ page, transactions } = await createHomepageSession(browser, 'ACCOUNT_1'));
     });
 
     test.afterAll(async () => {
@@ -23,22 +21,12 @@ test.describe('Homepage – Transactions section', () => {
     });
 
     test.beforeEach(async () => {
-        await page.goto(HOME_URL, { waitUntil: 'domcontentloaded' });
-        await page.waitForTimeout(2500);
-        await waitForToastClear(page, 800, 5000);
-    });
-
-    test('should display the last transactions container with content', async () => {
-        await expect(dashboard.lastTransactionsContainer).toBeVisible();
+        await refreshHomepage(page);
     });
 
     test('should navigate to Transactions when the View All link in transactions is clicked', async () => {
-        await expect(dashboard.transactionViewAllLink).toBeVisible({ timeout: 10000 });
-        await dashboard.transactionViewAllLink.click();
+        await expect(transactions.transactionViewAllLink).toBeVisible({ timeout: 10000 });
+        await transactions.transactionViewAllLink.click();
         await expect(page).toHaveURL(/\/business\/main\/transactions/, { timeout: 10000 });
-    });
-
-    test('should display the total transaction count in the transactions section', async () => {
-        await expect(dashboard.transactionTotalText).toBeVisible({ timeout: 10000 });
     });
 });

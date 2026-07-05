@@ -1,19 +1,17 @@
 import { test, expect, Page } from '@playwright/test';
-import { HOME_URL, BASE_ORIGIN, ACCOUNT_1_STORAGE_STATE } from '../../pageObjectsHelpers/HomePageHelper';
+import { ASSERTION_TIMEOUT_MS, createHomepageSession, refreshHomepage } from '../HomePageHelper';
 import { DashboardPage } from '../../pageElements/DashboardPage';
-import { waitForToastClear } from '../../shared';
+import { HomepageGreetingPage } from '../../pageElements/homepage/HomepageGreetingPage';
 
 test.describe('Homepage – Page Elements – Greeting section', () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;
     let dashboard: DashboardPage;
+    let greeting: HomepageGreetingPage;
 
     test.beforeAll(async ({ browser }) => {
-        const context = await browser.newContext({ storageState: ACCOUNT_1_STORAGE_STATE });
-        await context.grantPermissions(['geolocation'], { origin: BASE_ORIGIN });
-        page = await context.newPage();
-        dashboard = new DashboardPage(page);
+        ({ page, dashboard, greeting } = await createHomepageSession(browser, 'ACCOUNT_1'));
     });
 
     test.afterAll(async () => {
@@ -21,24 +19,22 @@ test.describe('Homepage – Page Elements – Greeting section', () => {
     });
 
     test.beforeEach(async () => {
-        await page.goto(HOME_URL, { waitUntil: 'domcontentloaded' });
-        await page.waitForTimeout(2500);
-        await waitForToastClear(page, 800, 5000);
+        await refreshHomepage(page);
     });
 
     test('should display the "Home" page heading', async () => {
-        await expect(dashboard.pageHeading).toBeVisible({ timeout: 10000 });
+        await expect(greeting.pageHeading).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
     });
 
     test('should display a time-based greeting message', async () => {
-        await expect(dashboard.greetingText).toBeVisible({ timeout: 10000 });
+        await expect(greeting.greetingText).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
     });
 
     test('should display the wallet status subtitle under the greeting', async () => {
-        await expect(dashboard.greetingSubtitle).toBeVisible({ timeout: 10000 });
+        await expect(greeting.greetingSubtitle).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
     });
 
     test('should display the Last Login date and time', async () => {
-        await expect(dashboard.lastLoginText).toBeVisible({ timeout: 10000 });
+        await expect(dashboard.lastLoginText).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
     });
 });

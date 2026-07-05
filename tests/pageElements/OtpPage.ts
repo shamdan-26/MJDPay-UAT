@@ -11,16 +11,28 @@ export class OtpPage {
     readonly verifyButton: Locator;
     readonly cancelButton: Locator;
 
+    // Only present when OTP entry is shown inside the forgot-password
+    // "my-modal-container" popup rather than login's full-screen OTP step.
+    readonly modalContainer: Locator;
+    readonly closeButton: Locator;
+
     constructor(page: Page) {
         this.page = page;
 
         this.heading         = page.getByRole('heading', { name: 'Enter OTP' });
-        this.instructionText = page.getByText(/A code has been sent to you/);
-        this.inputs          = page.getByRole('textbox', { name: 'One time password input' });
-        this.countdownTimer  = page.getByText(/Code ends/i);
-        this.resendButton    = page.getByRole('button', { name: 'Click to resend' });
-        this.verifyButton    = page.getByRole('button', { name: 'Verify' });
-        this.cancelButton    = page.getByRole('button', { name: /cancel/i });
+        this.instructionText = page.getByText(/A code has been sent to you/i);
+        // Login's OTP screen exposes an accessible name; the forgot-password
+        // modal's inputs don't, so match either shape.
+        this.inputs = page.getByRole('textbox', { name: 'One time password input' })
+            .or(page.locator('div.my-modal-container input'));
+        this.countdownTimer = page.getByText(/Code ends/i);
+        this.resendButton   = page.getByRole('button', { name: 'Click to resend' });
+        // Login's screen labels this "Verify"; the forgot-password modal labels it "Confirm".
+        this.verifyButton = page.getByRole('button', { name: /^(verify|confirm)$/i });
+        this.cancelButton = page.getByRole('button', { name: /cancel/i });
+
+        this.modalContainer = page.locator('div.my-modal-container');
+        this.closeButton    = this.modalContainer.getByRole('button', { name: /close/i });
     }
 
     async isVisible(): Promise<boolean> {
@@ -46,5 +58,13 @@ export class OtpPage {
     async fillAndVerify(otp: string): Promise<void> {
         await this.fill(otp);
         await this.verify();
+    }
+
+    /** Parses the "Code ends in MM:SS" countdown text into remaining seconds. */
+    async getRemainingSeconds(): Promise<number> {
+        const text = await this.countdownTimer.textContent() ?? '';
+        const match = text.match(/(\d+):(\d+)/);
+        if (!match) return 0;
+        return Number(match[1]) * 60 + Number(match[2]);
     }
 }

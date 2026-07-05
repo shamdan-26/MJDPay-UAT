@@ -1,19 +1,17 @@
 import { test, expect, Page } from '@playwright/test';
-import { HOME_URL, HOME_URL_PATTERN, BASE_ORIGIN, ACCOUNT_1_STORAGE_STATE } from '../../pageObjectsHelpers/HomePageHelper';
+import { createHomepageSession, refreshHomepage } from '../HomePageHelper';
 import { DashboardPage } from '../../pageElements/DashboardPage';
-import { waitForToastClear } from '../../shared';
+import { HomepageSidebarPage } from '../../pageElements/homepage/HomepageSidebarPage';
 
 test.describe('Homepage – Sidebar navigation', () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;
     let dashboard: DashboardPage;
+    let sidebar: HomepageSidebarPage;
 
     test.beforeAll(async ({ browser }) => {
-        const context = await browser.newContext({ storageState: ACCOUNT_1_STORAGE_STATE });
-        await context.grantPermissions(['geolocation'], { origin: BASE_ORIGIN });
-        page = await context.newPage();
-        dashboard = new DashboardPage(page);
+        ({ page, dashboard, sidebar } = await createHomepageSession(browser, 'ACCOUNT_1'));
     });
 
     test.afterAll(async () => {
@@ -21,9 +19,7 @@ test.describe('Homepage – Sidebar navigation', () => {
     });
 
     test.beforeEach(async () => {
-        await page.goto(HOME_URL, { waitUntil: 'domcontentloaded' });
-        await page.waitForTimeout(2500);
-        await waitForToastClear(page, 800, 5000);
+        await refreshHomepage(page);
     });
 
     test('should navigate to Transactions page when the Transactions link is clicked', async () => {
@@ -35,57 +31,65 @@ test.describe('Homepage – Sidebar navigation', () => {
         await dashboard.transactionsLink.click();
         await expect(page).toHaveURL(/\/business\/main\/transactions/);
         await dashboard.homeLink.click();
-        await expect(page).toHaveURL(HOME_URL_PATTERN);
+        await expect(page).toHaveURL(/\/business\/main\/home/);
+    });
+
+    test('should highlight the Home nav item as active on the homepage', async () => {
+        await expect(dashboard.homeLink).toBeVisible({ timeout: 10000 });
+        const classes     = await dashboard.homeLink.getAttribute('class') ?? '';
+        const ariaCurrent = await dashboard.homeLink.getAttribute('aria-current');
+        const isActive    = classes.split(' ').includes('active') || ariaCurrent === 'page';
+        expect(isActive, 'Home link should be marked as active').toBe(true);
     });
 
     test('should navigate to Topup page when the Topup sidebar link is clicked', async () => {
-        await dashboard.topupSidebarLink.click();
+        await sidebar.topupSidebarLink.click();
         await expect(page).toHaveURL(/top-up/i, { timeout: 10000 });
     });
 
     test('should expand the Transfer submenu and reveal Cashout link', async () => {
-        await dashboard.transferSidebarItem.click();
-        await expect(dashboard.cashoutSidebarLink).toBeVisible({ timeout: 5000 });
+        await sidebar.transferSidebarItem.click();
+        await expect(sidebar.cashoutSidebarLink).toBeVisible({ timeout: 5000 });
     });
 
     test('should show Wallet Transfer sub-link when Transfer submenu is expanded', async () => {
-        await dashboard.transferSidebarItem.click();
-        await expect(dashboard.walletTransferSidebarLink).toBeVisible({ timeout: 5000 });
+        await sidebar.transferSidebarItem.click();
+        await expect(sidebar.walletTransferSidebarLink).toBeVisible({ timeout: 5000 });
     });
 
     test('should navigate to Bills page when the Bills sidebar link is clicked', async () => {
-        await dashboard.billsSidebarLink.click();
+        await sidebar.billsSidebarLink.click();
         await expect(page).toHaveURL(/bills/i, { timeout: 10000 });
     });
 
     test('should navigate to Payment Links page when the sidebar link is clicked', async () => {
-        await dashboard.paymentLinksLink.click();
+        await sidebar.paymentLinksLink.click();
         await expect(page).toHaveURL(/payment.?links/i, { timeout: 10000 });
     });
 
     test('should navigate to Sub-Wallets page when the sidebar link is clicked', async () => {
-        await dashboard.subWalletsSidebarLink.click();
+        await sidebar.subWalletsSidebarLink.click();
         await expect(page).toHaveURL(/sub.wallets?/i, { timeout: 10000 });
     });
 
     test('should expand the Manage Accounts submenu when clicked', async () => {
-        await expect(dashboard.accountsPanel).toBeVisible();
-        await dashboard.accountsPanel.click();
-        await expect(dashboard.accountsSubmenu).toBeVisible({ timeout: 5000 });
+        await expect(sidebar.accountsPanel).toBeVisible();
+        await sidebar.accountsPanel.click();
+        await expect(sidebar.accountsSubmenu).toBeVisible({ timeout: 5000 });
     });
 
     test('should navigate to Manage Products page when the sidebar link is clicked', async () => {
-        await dashboard.manageProductsLink.click();
+        await sidebar.manageProductsLink.click();
         await expect(page).toHaveURL(/products-management/i, { timeout: 10000 });
     });
 
     test('should navigate to Groups & Roles page when the sidebar link is clicked', async () => {
-        await dashboard.groupsRolesLink.click();
+        await sidebar.groupsRolesLink.click();
         await expect(page).toHaveURL(/group|role/i, { timeout: 10000 });
     });
 
     test('should navigate to Card Management page when the sidebar link is clicked', async () => {
-        await dashboard.cardManagementLink.click();
+        await sidebar.cardManagementLink.click();
         await expect(page).toHaveURL(/card/i, { timeout: 10000 });
     });
 });

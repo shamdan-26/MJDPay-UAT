@@ -1,6 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { HOME_URL, HOME_URL_PATTERN, BASE_ORIGIN, ACCOUNT_1_STORAGE_STATE } from '../../pageObjectsHelpers/HomePageHelper';
-import { waitForToastClear } from '../../shared';
+import { HOME_URL, HOME_URL_PATTERN, createHomepageSession, refreshHomepage } from '../HomePageHelper';
 
 test.describe('Homepage – Session persistence', () => {
     test.describe.configure({ mode: 'serial' });
@@ -8,9 +7,7 @@ test.describe('Homepage – Session persistence', () => {
     let page: Page;
 
     test.beforeAll(async ({ browser }) => {
-        const context = await browser.newContext({ storageState: ACCOUNT_1_STORAGE_STATE });
-        await context.grantPermissions(['geolocation'], { origin: BASE_ORIGIN });
-        page = await context.newPage();
+        ({ page } = await createHomepageSession(browser, 'ACCOUNT_1'));
     });
 
     test.afterAll(async () => {
@@ -18,9 +15,7 @@ test.describe('Homepage – Session persistence', () => {
     });
 
     test.beforeEach(async () => {
-        await page.goto(HOME_URL, { waitUntil: 'domcontentloaded' });
-        await page.waitForTimeout(2500);
-        await waitForToastClear(page, 800, 5000);
+        await refreshHomepage(page);
     });
 
     test('should stay on homepage when page is refreshed', async () => {

@@ -1,19 +1,15 @@
 import { test, expect, Page } from '@playwright/test';
-import { HOME_URL, BASE_ORIGIN, ACCOUNT_1_STORAGE_STATE } from '../../pageObjectsHelpers/HomePageHelper';
-import { DashboardPage } from '../../pageElements/DashboardPage';
-import { waitForToastClear } from '../../shared';
+import { createHomepageSession, refreshHomepage } from '../HomePageHelper';
+import { HomepageSubWalletsPage } from '../../pageElements/homepage/HomepageSubWalletsPage';
 
 test.describe('Homepage – Sub-wallets panel', () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;
-    let dashboard: DashboardPage;
+    let subWallets: HomepageSubWalletsPage;
 
     test.beforeAll(async ({ browser }) => {
-        const context = await browser.newContext({ storageState: ACCOUNT_1_STORAGE_STATE });
-        await context.grantPermissions(['geolocation'], { origin: BASE_ORIGIN });
-        page = await context.newPage();
-        dashboard = new DashboardPage(page);
+        ({ page, subWallets } = await createHomepageSession(browser, 'ACCOUNT_1'));
     });
 
     test.afterAll(async () => {
@@ -21,13 +17,11 @@ test.describe('Homepage – Sub-wallets panel', () => {
     });
 
     test.beforeEach(async () => {
-        await page.goto(HOME_URL, { waitUntil: 'domcontentloaded' });
-        await page.waitForTimeout(2500);
-        await waitForToastClear(page, 800, 5000);
+        await refreshHomepage(page);
     });
 
     test('should navigate to Sub-wallets management when the Manage link is clicked', async () => {
-        await dashboard.subWalletsManageLink.click();
+        await subWallets.subWalletsManageLink.click();
         await expect(page).toHaveURL(/sub-wallets?/i, { timeout: 10000 });
     });
 });

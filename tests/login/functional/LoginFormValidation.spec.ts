@@ -4,7 +4,7 @@ import {
     VALID_COMPANY,
     VALID_MOBILE,
     VALID_PASSWORD,
-} from '../../pageObjectsHelpers/LoginHelper';
+} from '../LoginHelper';
 import { LoginPage } from '../../pageElements/LoginPage';
 
 // ─────────────────────────────────────────────────────────────────────────────

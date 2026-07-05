@@ -5,13 +5,12 @@ import {
     VALID_COMPANY,
     VALID_MOBILE,
     VALID_PASSWORD,
+    WRONG_PASSWORD,
     LOCKOUT_COMPANY,
     LOCKOUT_MOBILE,
     LOCKOUT_PASSWORD,
-} from '../../pageObjectsHelpers/LoginHelper';
+} from '../LoginHelper';
 import { LoginPage } from '../../pageElements/LoginPage';
-
-const WRONG_PASSWORD = 'WrongPass@99';
 
 test.describe('Login — Security', () => {
     test.describe.configure({ mode: 'serial' });

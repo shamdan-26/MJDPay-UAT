@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import {
     LOGIN_URL,
     SESSION_PATH,
-} from '../../pageObjectsHelpers/LoginHelper';
+} from '../LoginHelper';
 import { LoginPage } from '../../pageElements/LoginPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -28,6 +28,19 @@ test.describe('Login — Navigation', () => {
     test('should navigate to the Sign Up page when the link is clicked', async ({ page }) => {
         await loginPage.signUpLink.click();
         await expect(page).not.toHaveURL(LOGIN_URL);
+    });
+
+    test('should navigate to a valid page when the logo link is clicked', async ({ page }) => {
+        await loginPage.logoLink.click();
+        await expect(page).toHaveURL(/majdpay\.com/, { timeout: 10000 });
+    });
+
+    test('should change the theme when the toggle is clicked', async ({ page }) => {
+        const body = page.locator('body');
+        const before = await body.getAttribute('class');
+        await loginPage.themeToggle.click();
+        const after = await body.getAttribute('class');
+        expect(after).not.toEqual(before);
     });
 });
 

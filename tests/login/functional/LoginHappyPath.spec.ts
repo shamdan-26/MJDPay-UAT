@@ -1,14 +1,12 @@
 import { test, expect } from '@playwright/test';
-import {
-    LOGIN_URL,
-    LOGIN_COMPANY,
-    LOGIN_MOBILE,
-    VALID_PASSWORD,
-    getOtpFromDb,
-    fillOtpInputs,
-} from '../../pageObjectsHelpers/LoginHelper';
+import { LOGIN_URL, LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../LoginHelper';
 import { LoginPage } from '../../pageElements/LoginPage';
 import { DashboardPage } from '../../pageElements/DashboardPage';
+import { OtpPage } from '../../pageElements/OtpPage';
+
+// The validation card's 3-step display and the post-card OTP dialog appearing
+// are owned by ui/LoginValidationPopup.spec.ts — this file owns only what's
+// unique to the happy path: form state, dashboard landing, and logout.
 
 test.describe('Login — Happy Path (End-to-End)', () => {
     test.describe.configure({ mode: 'serial' });
@@ -40,39 +38,12 @@ test.describe('Login — Happy Path (End-to-End)', () => {
 
     // ── Step 2: Validation card ───────────────────────────────────────────────
 
-    test('should show the validation card immediately after submitting valid credentials', async ({ page }) => {
-        const loginBtn = loginPage.loginButton;
-        await loginPage.fill(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
-        await Promise.all([
-            loginBtn.click(),
-            page.getByText('Just a moment...'),
-        ]);
-        await expect(page.getByText('Just a moment...'));
-        await expect(page.getByText('Verifying your credentials')).toBeVisible();
-        await expect(page.getByText('Preparing this device')).toBeVisible();
-        await expect(page.getByText('Securing your session')).toBeVisible();
-    });
-
     test('should dismiss the validation card after all steps complete', async ({ page }) => {
         await loginPage.fillAndSubmit(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
         await expect(page.getByText('Just a moment...')).not.toBeVisible({ timeout: 30000 });
     });
 
-    // ── Step 3: OTP (conditional — skipped when OTP is disabled) ─────────────
-
-    test('should show the OTP dialog after the validation card (when OTP is enabled)', async ({ page }) => {
-        await loginPage.fillAndSubmit(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
-        await expect(page.getByText('Just a moment...')).not.toBeVisible({ timeout: 30000 });
-        const otpAppeared = await page.getByRole('heading', { name: 'Enter OTP' })
-            .waitFor({ state: 'visible', timeout: 10000 })
-            .then(() => true).catch(() => false);
-        test.skip(!otpAppeared, 'OTP is disabled in this environment');
-        await expect(page.getByRole('heading', { name: 'Enter OTP' })).toBeVisible();
-        await expect(page.getByRole('button', { name: 'Verify' })).toBeDisabled();
-        await expect(page.getByRole('button', { name: 'Cancel' })).toBeVisible();
-    });
-
-    // ── Step 4: Dashboard ─────────────────────────────────────────────────────
+    // ── Step 3: Dashboard ─────────────────────────────────────────────────────
 
     test('should redirect away from the login page after submitting valid credentials', async ({ page }) => {
         await loginPage.fillAndSubmit(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
@@ -127,7 +98,7 @@ test.describe('Login — Happy Path (End-to-End)', () => {
         await expect(dashboard.lastLoginText).toBeVisible({ timeout: 15000 });
     });
 
-    // ── Step 5: Logout ────────────────────────────────────────────────────────
+    // ── Step 4: Logout ────────────────────────────────────────────────────────
 
     test('should log out successfully and return to the login page', async ({ page }) => {
         await loginPage.fillAndSubmit(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
@@ -142,14 +113,8 @@ test.describe('Login — Happy Path (End-to-End)', () => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 async function handleOtpIfPresent(page: import('@playwright/test').Page): Promise<void> {
-    const otpAppeared = await page.getByRole('heading', { name: 'Enter OTP' })
-        .waitFor({ state: 'visible', timeout: 30000 })
-        .then(() => true).catch(() => false);
-    if (!otpAppeared) return;
-    const otp = await getOtpFromDb(LOGIN_MOBILE);
-    await fillOtpInputs(page, otp);
-    const verifyBtn = page.getByRole('button', { name: 'Verify' });
-    if (await verifyBtn.isVisible().catch(() => false)) {
-        await verifyBtn.click({ timeout: 5000 }).catch(() => {});
-    }
+    const otp = new OtpPage(page);
+    if (!(await otp.isVisible())) return;
+    const otpCode = await getOtpFromDb(LOGIN_MOBILE);
+    await otp.fillAndVerify(otpCode);
 }

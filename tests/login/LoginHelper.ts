@@ -15,6 +15,7 @@ export const LOGIN_COMPANY  = process.env['UAT_LOGIN_COMPANY'] ?? 'T9446';
 export const LOGIN_MOBILE   = process.env['UAT_LOGIN_MOBILE']  ?? '502310965';
 
 export const VALID_PASSWORD = 'Aa#1234567';
+export const WRONG_PASSWORD = 'WrongPass@99';
 
 // DEV-only OTP bypass — in UAT use getOtpFromDb() instead.
 export const VALID_OTP   = '00000000';

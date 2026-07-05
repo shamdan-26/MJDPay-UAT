@@ -1,19 +1,15 @@
 import { test, expect, Page } from '@playwright/test';
-import { HOME_URL, BASE_ORIGIN, ACCOUNT_2_STORAGE_STATE } from '../../pageObjectsHelpers/HomePageHelper';
-import { DashboardPage } from '../../pageElements/DashboardPage';
-import { waitForToastClear } from '../../shared';
+import { ASSERTION_TIMEOUT_MS, createHomepageSession, refreshHomepage } from '../HomePageHelper';
+import { HomepageSubWalletsPage } from '../../pageElements/homepage/HomepageSubWalletsPage';
 
 test.describe('Homepage – Page Elements – Sub-wallets panel', () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;
-    let dashboard: DashboardPage;
+    let subWallets: HomepageSubWalletsPage;
 
     test.beforeAll(async ({ browser }) => {
-        const context = await browser.newContext({ storageState: ACCOUNT_2_STORAGE_STATE });
-        await context.grantPermissions(['geolocation'], { origin: BASE_ORIGIN });
-        page = await context.newPage();
-        dashboard = new DashboardPage(page);
+        ({ page, subWallets } = await createHomepageSession(browser, 'ACCOUNT_2'));
     });
 
     test.afterAll(async () => {
@@ -21,20 +17,18 @@ test.describe('Homepage – Page Elements – Sub-wallets panel', () => {
     });
 
     test.beforeEach(async () => {
-        await page.goto(HOME_URL, { waitUntil: 'domcontentloaded' });
-        await page.waitForTimeout(2500);
-        await waitForToastClear(page, 800, 5000);
+        await refreshHomepage(page);
     });
 
     test('should display the Sub-wallets panel heading', async () => {
-        await expect(dashboard.subWalletsHeading).toBeVisible({ timeout: 10000 });
+        await expect(subWallets.subWalletsHeading).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
     });
 
     test('should display the Sub-wallets Manage link', async () => {
-        await expect(dashboard.subWalletsManageLink).toBeVisible({ timeout: 10000 });
+        await expect(subWallets.subWalletsManageLink).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
     });
 
     test('should display the empty state message when there are no sub-wallets', async () => {
-        await expect(dashboard.subWalletsEmptyMessage).toBeVisible({ timeout: 10000 });
+        await expect(subWallets.subWalletsEmptyMessage).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
     });
 });

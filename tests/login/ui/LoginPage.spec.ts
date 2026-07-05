@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { LOGIN_URL } from '../../pageObjectsHelpers/LoginHelper';
+import { LOGIN_URL } from '../LoginHelper';
 import { LoginPage } from '../../pageElements/LoginPage';
 
 test.describe('Login Page', () => {
@@ -48,11 +48,6 @@ test.describe('Login Page', () => {
         await expect(loginPage.logoLink).toBeVisible();
     });
 
-    test('should navigate to a valid page when the logo link is clicked', async ({ page }) => {
-        await loginPage.logoLink.click();
-        await expect(page).toHaveURL(/majdpay\.com/, { timeout: 10000 });
-    });
-
     // ── Language switcher ─────────────────────────────────────────────────────
 
     test('should display the EN language button', async () => {
@@ -86,14 +81,6 @@ test.describe('Login Page', () => {
 
     test('should display the theme toggle button', async () => {
         await expect(loginPage.themeToggle).toBeVisible();
-    });
-
-    test('should change the theme when the toggle is clicked', async ({ page }) => {
-        const body = page.locator('body');
-        const before = await body.getAttribute('class');
-        await loginPage.themeToggle.click();
-        const after = await body.getAttribute('class');
-        expect(after).not.toEqual(before);
     });
 
     // ── Company number field ──────────────────────────────────────────────────
@@ -160,11 +147,6 @@ test.describe('Login Page', () => {
 
     test('should display the Forgot Password link', async () => {
         await expect(loginPage.forgotPasswordLink).toBeVisible();
-    });
-
-    test('should navigate to the Forgot Password page when the link is clicked', async ({ page }) => {
-        await loginPage.forgotPasswordLink.click();
-        await expect(page).toHaveURL(/forgot-password/, { timeout: 10000 });
     });
 
     // ── Log In button ─────────────────────────────────────────────────────────

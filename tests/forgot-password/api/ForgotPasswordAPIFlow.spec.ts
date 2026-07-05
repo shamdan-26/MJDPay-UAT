@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { VALID_COMPANY, VALID_MOBILE } from '../../pageObjectsHelpers/ForgotPasswordHelper';
+import { VALID_COMPANY, VALID_MOBILE } from '../ForgotPasswordHelper';
 
 declare const process: { env: Record<string, string | undefined> };
 

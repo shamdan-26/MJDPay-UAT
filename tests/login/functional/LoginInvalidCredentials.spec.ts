@@ -5,14 +5,10 @@ import {
     VALID_COMPANY,
     VALID_MOBILE,
     VALID_PASSWORD,
+    WRONG_PASSWORD,
     generateUnregisteredMobile,
-} from '../../pageObjectsHelpers/LoginHelper';
-
-const STATUS_COMPANY = 'A2316';
-const STATUS_MOBILE  = '500021788';
+} from '../LoginHelper';
 import { LoginPage } from '../../pageElements/LoginPage';
-
-const WRONG_PASSWORD = 'WrongPass@99';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // INVALID CREDENTIALS
@@ -91,28 +87,28 @@ test.describe('Login — Account Status Errors', () => {
     });
 
     test('should display an error and not show OTP for a locked account', async ({ page }) => {
-        await loginPage.fill(STATUS_COMPANY, STATUS_MOBILE, VALID_PASSWORD);
+        await loginPage.fill(VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD);
         await loginPage.submit();
         await assertToast(page);
         await expect(page.getByRole('heading', { name: 'Enter OTP' })).not.toBeVisible();
     });
 
     test('should display an error and not show OTP for a deactivated account', async ({ page }) => {
-        await loginPage.fill(STATUS_COMPANY, STATUS_MOBILE, VALID_PASSWORD);
+        await loginPage.fill(VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD);
         await loginPage.submit();
         await assertToast(page);
         await expect(page.getByRole('heading', { name: 'Enter OTP' })).not.toBeVisible();
     });
 
     test('should display a generic rejection for an AML-blocked account', async ({ page }) => {
-        await loginPage.fill(STATUS_COMPANY, STATUS_MOBILE, VALID_PASSWORD);
+        await loginPage.fill(VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD);
         await loginPage.submit();
         await assertToast(page);
         await expect(page.getByRole('heading', { name: 'Enter OTP' })).not.toBeVisible();
     });
 
     test('should not expose AML or compliance details in the error message', async ({ page }) => {
-        await loginPage.fill(STATUS_COMPANY, STATUS_MOBILE, VALID_PASSWORD);
+        await loginPage.fill(VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD);
         await loginPage.submit();
         const detail = page.locator('.toast-snackbar__detail');
         await expect(detail).toBeVisible({ timeout: 10000 });
