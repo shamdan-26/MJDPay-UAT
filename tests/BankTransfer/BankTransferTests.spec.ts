@@ -1,60 +1,56 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage } from '../Helpers/LoginPage';
+import { type Page } from '@playwright/test';
+import { LoginPage } from '../pageElements/LoginPage';
+import { OtpPage } from '../pageElements/OtpPage';
 import { HomePage } from '../Helpers/HomePage';
 import { BankTransferPage } from '../Helpers/BankTransferPage';
 import { ToastMessages } from '../Helpers/common/ToastMessages';
+import { LOGIN_URL, HOME_URL } from './BankTransferHelper';
+import bankTransferData from '../../data/BankTransferData.json';
 
-const bankTransferData = require('../../data/BankTransferData.json');
+type BankTransferTestData = {
+    description: string;
+    execute: boolean;
+    CN: string;
+    mobile: string;
+    pwd: string;
+    Amount: string;
+    AmountType: string;
+};
 
-test.describe.serial('Merchant Bank Transfer Tests', () => {
-    test.setTimeout(180000); // 3 minutes timeout for heavy EMI flows
+const dataSets = bankTransferData as BankTransferTestData[];
 
-    type BankTransferTestData = {
-        description: string;
-        execute: boolean;
-        CN: string;
-        mobile: string;
-        pwd: string;
-        Amount: string;
-        AmountType: string;
-    };
+test.describe('Merchant Bank Transfer Tests', () => {
+    test.describe.configure({ mode: 'serial' });
+    test.setTimeout(180000);
 
-    const dataSets = bankTransferData as BankTransferTestData[];
-
-    let page: import('@playwright/test').Page;
-    let lp: LoginPage;
+    let page: Page;
+    let loginPage: LoginPage;
+    let otp: OtpPage;
     let hp: HomePage;
     let bt: BankTransferPage;
     let toast: ToastMessages;
 
     test.beforeAll(async ({ browser }) => {
         page = await browser.newPage();
-        lp = new LoginPage(page);
+        loginPage = new LoginPage(page);
+        otp = new OtpPage(page);
         hp = new HomePage(page);
         bt = new BankTransferPage(page);
         toast = new ToastMessages(page);
 
-        // --- 1. LOGIN SECTION ---
         const data = dataSets.find(d => d.execute !== false) || dataSets[0];
-        console.log('Logging in once for all tests...');
-        await lp.navigate();
-        await lp.login(data.CN, data.mobile, data.pwd);
+        await loginPage.goto(LOGIN_URL);
+        await loginPage.fillAndSubmit(data.CN, data.mobile, data.pwd);
 
-        if (await lp.isOTPScreenDisplayed()) {
-            console.log('Entering login OTP...');
-            await lp.enterOTP("0000"); // Default sandbox/UAT OTP
-            if (await lp.verifyButton.isVisible()) {
-                await lp.verifyButton.click();
-            }
+        if (await otp.isVisible()) {
+            await otp.fillAndVerify('0000');
         }
-        await lp.assertLoginSuccess();
+        await expect(page).toHaveURL(/\/business\/main\/home/i, { timeout: 10000 });
     });
 
     test.beforeEach(async () => {
-        // --- 2. FORCING CLEAN NAVIGATION TO TRANSFER SECTION ---
-        // Ensures no stale DOM state or obstructed UI from previous test runs
-        console.log('Forcing clean navigation to Bank Transfer Section...');
-        await page.goto('https://uat.majdpay.com/business/main/home');
+        await page.goto(HOME_URL);
         await page.waitForLoadState('domcontentloaded');
         await hp.clickTransferButton();
     });
@@ -65,103 +61,81 @@ test.describe.serial('Merchant Bank Transfer Tests', () => {
 
     for (const data of dataSets) {
         test(`${data.description}`, async () => {
+            test.skip(!data.execute, 'disabled in test data');
 
-            if (data.execute === false) {
-                test.skip();
-            }
-
-            // --- 3. DYNAMIC TEST EXECUTION BASED ON AMOUNT TYPE ---
-            if (data.AmountType === "Standard") {
+            if (data.AmountType === 'Standard') {
                 await test.step('Execute Standard Bank Transfer with custom amount', async () => {
                     await bt.getBalanceBeforeBankTransfer();
                     await bt.enterAmount(data.Amount);
                     await bt.clickProceedButton();
                     await bt.clickProceedButtonInSummary();
 
-                    if (await lp.isOTPScreenDisplayed()) {
-                        console.log('Entering Bank Transfer Authorization OTP...');
-                        await lp.enterOTP("0000");
-                        if (await lp.verifyButton.isVisible()) {
-                            await lp.verifyButton.click();
-                        }
+                    if (await otp.isVisible()) {
+                        await otp.fillAndVerify('0000');
                     }
 
                     await bt.clickSuccessful_OkButton();
                     await page.reload();
-                    // Auto-waiting balance check
                     await bt.checkBalanceAfterBankTransfer(data.Amount);
                 });
 
-            } else if (data.AmountType === "Predefined") {
+            } else if (data.AmountType === 'Predefined') {
                 await test.step('Execute Bank Transfer with random Predefined Amount selector', async () => {
                     await bt.getBalanceBeforeBankTransfer();
                     await bt.selectRandomPredefinedAmount();
                     await bt.clickProceedButton();
                     await bt.clickProceedButtonInSummary();
 
-                    if (await lp.isOTPScreenDisplayed()) {
-                        console.log('Entering Bank Transfer Authorization OTP...');
-                        await lp.enterOTP("0000");
-                        if (await lp.verifyButton.isVisible()) {
-                            await lp.verifyButton.click();
-                        }
+                    if (await otp.isVisible()) {
+                        await otp.fillAndVerify('0000');
                     }
 
                     await bt.clickSuccessful_OkButton();
                     await page.reload();
-                    // Predefined amount calculation check
                     await bt.checkBalanceAfterBankTransferBySelectAmount();
                 });
 
-            } else if (data.AmountType === "Failure Flow Invalid OTP") {
+            } else if (data.AmountType === 'Failure Flow Invalid OTP') {
                 await test.step('Execute Bank Transfer with Invalid OTP and Verify Failure', async () => {
                     await bt.getBalanceBeforeBankTransfer();
                     await bt.enterAmount(data.Amount);
                     await bt.clickProceedButton();
                     await bt.clickProceedButtonInSummary();
 
-                    if (await lp.isOTPScreenDisplayed()) {
-                        console.log('Entering INVALID Authorization OTP...');
-                        await lp.enterOTP("9999"); // Invalid OTP
-                        await lp.verifyButton.click();
-
-                        console.log('Cancelling OTP authorization prompt...');
-                        await lp.otpCancelButton.click();
+                    if (await otp.isVisible()) {
+                        await otp.fill('9999');
+                        await otp.verifyButton.click();
+                        await otp.cancelButton.click();
                     }
 
-                    console.log('Navigating to Transactions dashboard to verify ledger status...');
                     await hp.clicTransactions_NavButton();
                     await bt.verifyLastTransactionFailed();
                 });
 
-            } else if (data.AmountType === "Negative Flow") {
+            } else if (data.AmountType === 'Negative Flow') {
                 await test.step('Assert negative/invalid input validation on amount field', async () => {
                     await bt.assertInvalidAmountNotAccepted(data.Amount, data.AmountType);
                 });
 
-            } else if (data.AmountType === "Zero Amount Test") {
+            } else if (data.AmountType === 'Zero Amount Test') {
                 await test.step('Verify system behavior when entering 0 as transfer amount', async () => {
                     await bt.assertInvalidAmountNotAccepted(data.Amount, data.AmountType);
                 });
 
-            } else if (data.AmountType === "Invalid Characters Test") {
+            } else if (data.AmountType === 'Invalid Characters Test') {
                 await test.step('Verify system behavior when entering alphabetic characters or special symbols', async () => {
                     await bt.assertInvalidAmountNotAccepted(data.Amount, data.AmountType);
                 });
 
-            } else if (data.AmountType === "Valid Float with 2 Decimals" || data.AmountType === "Valid Float with 1 Decimal") {
+            } else if (data.AmountType === 'Valid Float with 2 Decimals' || data.AmountType === 'Valid Float with 1 Decimal') {
                 await test.step(`Execute Bank Transfer for ${data.AmountType} ensuring decimal BVA passes`, async () => {
                     await bt.getBalanceBeforeBankTransfer();
                     await bt.enterAmount(data.Amount);
                     await bt.clickProceedButton();
                     await bt.clickProceedButtonInSummary();
 
-                    if (await lp.isOTPScreenDisplayed()) {
-                        console.log('Entering Bank Transfer Authorization OTP...');
-                        await lp.enterOTP("0000");
-                        if (await lp.verifyButton.isVisible()) {
-                            await lp.verifyButton.click();
-                        }
+                    if (await otp.isVisible()) {
+                        await otp.fillAndVerify('0000');
                     }
 
                     await bt.clickSuccessful_OkButton();
@@ -169,75 +143,51 @@ test.describe.serial('Merchant Bank Transfer Tests', () => {
                     await bt.checkBalanceAfterBankTransfer(data.Amount);
                 });
 
-            } else if (data.AmountType === "Invalid Float with 3 Decimals") {
+            } else if (data.AmountType === 'Invalid Float with 3 Decimals') {
                 await test.step('Verify system truncates or rejects invalid floats with 3 decimals (Negative BVA)', async () => {
                     await bt.assertInvalidAmountNotAccepted(data.Amount, data.AmountType);
                 });
 
-            } else if (data.AmountType === "Copy and Paste Amount") {
+            } else if (data.AmountType === 'Copy and Paste Amount') {
                 await test.step('Simulate copying and pasting amount directly to check validation triggers', async () => {
                     await bt.pasteAmount(data.Amount);
-
-                    // Verify the pasted value is accurately rendered
-                    const enteredAmount = await bt.getAmountValue();
-                    expect(enteredAmount).toBe(data.Amount);
-
-                    // Ensure system recognizes the paste and activates the UI transfer button
+                    expect(await bt.getAmountValue()).toBe(data.Amount);
                     await expect(bt.proceedButton).toBeEnabled({ timeout: 5000 });
                 });
 
-            } else if (data.AmountType === "Copy and Paste Invalid Amount") {
+            } else if (data.AmountType === 'Copy and Paste Invalid Amount') {
                 await test.step('Simulate pasting invalid amount to check negative validation triggers', async () => {
                     await bt.pasteAmount(data.Amount);
-
-                    // Verify the field rejects / clears the invalid pasted content, leaving it empty
-                    const enteredAmount = await bt.getAmountValue();
-                    expect(enteredAmount).toBe(""); // Assuming the page strips all entirely invalid inputs
-
-                    // Proceed button should be strictly disabled
+                    expect(await bt.getAmountValue()).toBe('');
                     await expect(bt.proceedButton).toBeDisabled({ timeout: 5000 });
                 });
 
-            } else if (data.AmountType === "Cancel via Page Refresh") {
+            } else if (data.AmountType === 'Cancel via Page Refresh') {
                 await test.step('Fill transfer details and abort transaction by refreshing page', async () => {
                     await bt.getBalanceBeforeBankTransfer();
                     await bt.enterAmount(data.Amount);
                     await bt.clickProceedButton();
-
-                    // Wait until summary modal properly displays before abandoning
                     await page.waitForTimeout(2000);
                     await expect(bt.proceedButtonInSummary).toBeVisible({ timeout: 15000 });
-
-                    console.log('Simulating abandonment via browser page reload...');
                     await page.reload();
-
-                    // Assert strictly that balance underwent no deduction
                     await bt.checkBalanceRemainsUnchanged();
                 });
 
-            } else if (data.AmountType === "Cancel via Summary Cancel Button") {
+            } else if (data.AmountType === 'Cancel via Summary Cancel Button') {
                 await test.step('Fill transfer details and logically cancel via explicit Cancel button', async () => {
                     await bt.getBalanceBeforeBankTransfer();
                     await bt.enterAmount(data.Amount);
                     await bt.clickProceedButton();
-
                     await page.waitForTimeout(2000);
-                    console.log('Cancelling via Summary Cancel Button...');
                     await bt.clickSummaryCancelButton();
-
-                    // Assert strictly that balance underwent no deduction
                     await bt.checkBalanceRemainsUnchanged();
                 });
 
-            } else if (data.AmountType === "Insufficient Balance Check") {
+            } else if (data.AmountType === 'Insufficient Balance Check') {
                 await test.step('Execute Insufficient Balance cash out check', async () => {
                     const walletBalance = await bt.getBalanceBeforeBankTransfer();
-                    const transferAmount = walletBalance + 10;
-
-                    console.log(`Wallet Balance is: ${walletBalance}. Trying to transfer: ${transferAmount}`);
-                    await bt.enterAmount(String(transferAmount));
+                    await bt.enterAmount(String(walletBalance + 10));
                     await bt.clickProceedButton();
-
                     await toast.verifyInsufficientFundMessageDisplayed();
                 });
             }

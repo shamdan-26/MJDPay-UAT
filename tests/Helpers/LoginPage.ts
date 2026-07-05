@@ -73,11 +73,11 @@ export class LoginPage {
     }
 
     async enterOTP(otpCode: string): Promise<void> {
-        const firstOtpInput = this.page.locator('#ngx-otp-input-0');
-        await expect(firstOtpInput).toBeVisible({ timeout: 15000 });
+        const otpInputs = this.page.getByRole('textbox', { name: 'One time password input' });
+        await expect(otpInputs.first()).toBeVisible({ timeout: 15000 });
 
         for (let i = 0; i < otpCode.length; i++) {
-            const otpInput = this.page.locator(`#ngx-otp-input-${i}`);
+            const otpInput = otpInputs.nth(i);
             await expect(otpInput).toBeVisible();
             await otpInput.click();
             await otpInput.pressSequentially(otpCode[i], { delay: 100 });
@@ -85,7 +85,7 @@ export class LoginPage {
     }
 
     async isOTPScreenDisplayed(): Promise<boolean> {
-        return this.page.locator('#ngx-otp-input-0').isVisible();
+        return this.page.getByRole('textbox', { name: 'One time password input' }).first().isVisible();
     }
 
     async assertLoginSuccess(): Promise<void> {
