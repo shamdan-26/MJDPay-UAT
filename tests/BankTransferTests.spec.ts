@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { type Page } from '@playwright/test';
-import { LoginPage } from './pageObjectsHelpers/LoginPage';
-import { HomePage } from './pageObjectsHelpers/HomePage';
-import { BankTransferPage } from './pageObjectsHelpers/BankTransferPage';
-import { ToastMessages } from './pageObjectsHelpers/common/ToastMessages';
+import { LoginPage } from './Helpers/LoginPage';
+import { HomePage } from './Helpers/HomePage';
+import { BankTransferPage } from './Helpers/BankTransferPage';
+import { ToastMessages } from './Helpers/common/ToastMessages';
 import bankTransferData from '../data/BankTransferData.json';
 
 type BankTransferTestData = {

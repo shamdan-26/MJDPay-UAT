@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pageObjectsHelpers/LoginPage';
-import { HomePage } from '../pageObjectsHelpers/HomePage';
-import { W2WTransferPage } from '../pageObjectsHelpers/W2WTransferPage';
-import { TransactionsPage } from '../pageObjectsHelpers/TransactionsPage';
+import { LoginPage } from '../Helpers/LoginPage';
+import { HomePage } from '../Helpers/HomePage';
+import { W2WTransferPage } from '../Helpers/W2WTransferPage';
+import { TransactionsPage } from '../Helpers/TransactionsPage';
 
 const w2wData = require('../../data/w2wTransferData.json');
 
