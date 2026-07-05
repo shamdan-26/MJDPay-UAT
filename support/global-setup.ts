@@ -3,11 +3,7 @@ import { mkdirSync } from 'fs';
 import { getOtpFromDb, fillOTP } from '../tests/Registration/helpers';
 import {
     loginAsMerchant,
-    VALID_COMPANY_2,
-    VALID_MOBILE_2,
-    VALID_PASSWORD_2,
-    ACCOUNT_1_STORAGE_STATE,
-    ACCOUNT_2_STORAGE_STATE,
+    homepageAccountPool,
     LOGIN_URL,
 } from '../tests/homepage/HomePageHelper';
 
@@ -62,20 +58,24 @@ async function globalSetup() {
         }
     }
 
-    // Homepage suite: pre-authenticate both merchant accounts once here, so
-    // individual homepage spec files restore via storageState instead of
-    // each logging in live (faster, and avoids concurrent same-account
-    // login collisions between parallel workers).
+    // Homepage suite: pre-authenticate every account in the pool once here, so
+    // individual homepage spec files restore via storageState instead of each
+    // logging in live (faster, and — since createHomepageSession() picks an
+    // account by worker index — avoids concurrent same-account login
+    // collisions between parallel workers). The pool has 2 accounts today;
+    // add more via UAT_COMPANY_3/UAT_MOBILE_3/UAT_PASSWORD_3 (etc.) and they're
+    // authenticated here automatically, no changes needed in this file.
     //
     // Non-fatal: these accounts are only consumed by the homepage suite, but
     // globalSetup runs before every test file. If browser automation here
     // crashes or times out (e.g. a flaky Chromium launch), swallow it instead
     // of failing every other suite's ability to run at all.
     mkdirSync('playwright/.auth', { recursive: true });
-    await saveAuthenticatedStorageState(ACCOUNT_1_STORAGE_STATE);
-    await saveAuthenticatedStorageState(ACCOUNT_2_STORAGE_STATE, { company: VALID_COMPANY_2, mobile: VALID_MOBILE_2, password: VALID_PASSWORD_2 });
+    for (const account of homepageAccountPool) {
+        await saveAuthenticatedStorageState(account.storageState, account.creds);
+    }
 
-    async function saveAuthenticatedStorageState(storagePath: string, creds?: { company: string; mobile: string; password: string }) {
+    async function saveAuthenticatedStorageState(storagePath: string, creds: { company: string; mobile: string; password: string }) {
         try {
             const context = await browser.newContext();
             const page    = await context.newPage();

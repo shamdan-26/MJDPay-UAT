@@ -7,7 +7,7 @@ test.describe('Homepage – Page Elements – URL & title', () => {
     let page: Page;
 
     test.beforeAll(async ({ browser }) => {
-        ({ page } = await createHomepageSession(browser, 'ACCOUNT_1'));
+        ({ page } = await createHomepageSession(browser));
     });
 
     test.afterAll(async () => {

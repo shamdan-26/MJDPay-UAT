@@ -11,7 +11,7 @@ test.describe('Homepage – Sidebar navigation', () => {
     let sidebar: HomepageSidebarPage;
 
     test.beforeAll(async ({ browser }) => {
-        ({ page, dashboard, sidebar } = await createHomepageSession(browser, 'ACCOUNT_1'));
+        ({ page, dashboard, sidebar } = await createHomepageSession(browser));
     });
 
     test.afterAll(async () => {

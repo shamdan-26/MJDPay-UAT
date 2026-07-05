@@ -11,7 +11,7 @@ test.describe('Homepage – Page Elements – Balance card', () => {
     let balanceCard: HomepageBalanceCardPage;
 
     test.beforeAll(async ({ browser }) => {
-        ({ page, dashboard, balanceCard } = await createHomepageSession(browser, 'ACCOUNT_2'));
+        ({ page, dashboard, balanceCard } = await createHomepageSession(browser));
     });
 
     test.afterAll(async () => {

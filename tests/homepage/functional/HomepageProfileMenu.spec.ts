@@ -11,7 +11,7 @@ test.describe('Homepage – Profile menu', () => {
     let header: HomepageHeaderPage;
 
     test.beforeAll(async ({ browser }) => {
-        ({ page, dashboard, header } = await createHomepageSession(browser, 'ACCOUNT_2'));
+        ({ page, dashboard, header } = await createHomepageSession(browser));
     });
 
     test.afterAll(async () => {

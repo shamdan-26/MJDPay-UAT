@@ -9,7 +9,7 @@ test.describe('Homepage – Sub-wallets panel', () => {
     let subWallets: HomepageSubWalletsPage;
 
     test.beforeAll(async ({ browser }) => {
-        ({ page, subWallets } = await createHomepageSession(browser, 'ACCOUNT_1'));
+        ({ page, subWallets } = await createHomepageSession(browser));
     });
 
     test.afterAll(async () => {

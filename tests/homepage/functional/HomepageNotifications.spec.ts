@@ -11,7 +11,7 @@ test.describe('Homepage – Notifications panel', () => {
     let header: HomepageHeaderPage;
 
     test.beforeAll(async ({ browser }) => {
-        ({ page, dashboard, header } = await createHomepageSession(browser, 'ACCOUNT_1'));
+        ({ page, dashboard, header } = await createHomepageSession(browser));
     });
 
     test.afterAll(async () => {

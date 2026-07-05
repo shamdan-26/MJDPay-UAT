@@ -9,7 +9,7 @@ test.describe('Homepage – Bills section interactions', () => {
     let billsOverview: HomepageBillsOverviewPage;
 
     test.beforeAll(async ({ browser }) => {
-        ({ page, billsOverview } = await createHomepageSession(browser, 'ACCOUNT_2'));
+        ({ page, billsOverview } = await createHomepageSession(browser));
     });
 
     test.afterAll(async () => {

@@ -9,7 +9,7 @@ test.describe('Homepage – Balance card interactions', () => {
     let balanceCard: HomepageBalanceCardPage;
 
     test.beforeAll(async ({ browser }) => {
-        ({ page, balanceCard } = await createHomepageSession(browser, 'ACCOUNT_2'));
+        ({ page, balanceCard } = await createHomepageSession(browser));
     });
 
     test.afterAll(async () => {

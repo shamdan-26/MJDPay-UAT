@@ -11,7 +11,7 @@ test.describe('Homepage – Page Elements – Greeting section', () => {
     let greeting: HomepageGreetingPage;
 
     test.beforeAll(async ({ browser }) => {
-        ({ page, dashboard, greeting } = await createHomepageSession(browser, 'ACCOUNT_1'));
+        ({ page, dashboard, greeting } = await createHomepageSession(browser));
     });
 
     test.afterAll(async () => {

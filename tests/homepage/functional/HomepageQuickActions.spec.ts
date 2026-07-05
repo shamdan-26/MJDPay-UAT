@@ -9,7 +9,7 @@ test.describe('Homepage – Quick actions navigation', () => {
     let quickActions: HomepageQuickActionsPage;
 
     test.beforeAll(async ({ browser }) => {
-        ({ page, quickActions } = await createHomepageSession(browser, 'ACCOUNT_1'));
+        ({ page, quickActions } = await createHomepageSession(browser));
     });
 
     test.afterAll(async () => {

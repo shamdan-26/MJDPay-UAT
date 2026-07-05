@@ -1,4 +1,4 @@
-import { Browser, Page } from '@playwright/test';
+import { Browser, Page, test } from '@playwright/test';
 import { getOtpFromDb, fillOTP } from '../Registration/helpers';
 import { waitForToastClear } from '../shared';
 import { DashboardPage } from '../pageElements/homepage/DashboardPage';
@@ -40,6 +40,43 @@ export const VALID_BILLER_PASSWORD = process.env['UAT_BILLER_PASSWORD'] ?? DEFAU
  *  no OTP round-trip, and no risk of concurrent same-account login collisions. */
 export const ACCOUNT_1_STORAGE_STATE = 'playwright/.auth/homepage-account1.json';
 export const ACCOUNT_2_STORAGE_STATE = 'playwright/.auth/homepage-account2.json';
+
+/** Pool of accounts homepage tests can be spread across, keyed so each parallel
+ *  worker sticks to exactly one account for its whole run (no two workers ever
+ *  share a session). Accounts 1 and 2 are always present; add a 3rd/4th/etc.
+ *  by setting UAT_COMPANY_3/UAT_MOBILE_3/UAT_PASSWORD_3 (and so on) — the pool
+ *  picks them up automatically, no code changes needed. Match playwright.config.ts's
+ *  worker count with the number of accounts you provide to eliminate collisions
+ *  entirely; with fewer accounts than workers, some sharing still happens but
+ *  is now deterministic (same worker/account pairing every run) rather than
+ *  the previous ad-hoc per-file assignment. */
+export interface HomepageAccount {
+    key: string;
+    storageState: string;
+    creds: MerchantCredentials;
+}
+
+export const homepageAccountPool: HomepageAccount[] = [
+    { key: 'ACCOUNT_1', storageState: ACCOUNT_1_STORAGE_STATE, creds: { company: VALID_COMPANY, mobile: VALID_MOBILE, password: VALID_PASSWORD } },
+    { key: 'ACCOUNT_2', storageState: ACCOUNT_2_STORAGE_STATE, creds: { company: VALID_COMPANY_2, mobile: VALID_MOBILE_2, password: VALID_PASSWORD_2 } },
+];
+
+for (let n = 3; ; n++) {
+    const company = process.env[`UAT_COMPANY_${n}`];
+    const mobile  = process.env[`UAT_MOBILE_${n}`];
+    if (!company || !mobile) break;
+    homepageAccountPool.push({
+        key: `ACCOUNT_${n}`,
+        storageState: `playwright/.auth/homepage-account${n}.json`,
+        creds: { company, mobile, password: process.env[`UAT_PASSWORD_${n}`] ?? DEFAULT_TEST_PASSWORD },
+    });
+}
+
+/** Deterministically maps a Playwright worker index to one pool account, so
+ *  the same worker always uses the same account across a run. */
+export function homepageAccountForWorker(workerIndex: number): HomepageAccount {
+    return homepageAccountPool[workerIndex % homepageAccountPool.length];
+}
 
 /** Shared timing constants for homepage specs — keep every spec's post-navigation
  *  settle/toast-clear/assertion waits in sync instead of hardcoding them per call site. */
@@ -170,13 +207,24 @@ export async function openProfileMenu(page: Page): Promise<void> {
 /** Restores a pre-authenticated homepage session and instantiates every
  *  homepage page object against it, so spec files get a one-line replacement
  *  for the browser.newContext → grantPermissions → newPage boilerplate that
- *  used to be copy-pasted into every file's beforeAll. */
+ *  used to be copy-pasted into every file's beforeAll.
+ *
+ *  Omit `account` (recommended) to auto-select by worker index via
+ *  homepageAccountForWorker() — this is what actually prevents parallel
+ *  workers from colliding on the same account, since it guarantees the same
+ *  worker always gets the same account for its entire run rather than
+ *  depending on each spec file having manually picked a non-conflicting one.
+ *  Pass an explicit key (e.g. 'ACCOUNT_1') only when a spec has a specific
+ *  reason to require that exact account's data/state. */
 export async function createHomepageSession(
     browser: Browser,
-    account: 'ACCOUNT_1' | 'ACCOUNT_2' = 'ACCOUNT_1'
+    account?: string
 ): Promise<HomepageSession> {
-    const storageState = account === 'ACCOUNT_1' ? ACCOUNT_1_STORAGE_STATE : ACCOUNT_2_STORAGE_STATE;
-    const context = await browser.newContext({ storageState });
+    const chosen = account
+        ? homepageAccountPool.find(a => a.key === account) ?? homepageAccountPool[0]
+        : homepageAccountForWorker(test.info().parallelIndex);
+
+    const context = await browser.newContext({ storageState: chosen.storageState });
     await context.grantPermissions(['geolocation'], { origin: BASE_ORIGIN });
     const page = await context.newPage();
 

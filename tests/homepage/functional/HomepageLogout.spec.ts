@@ -9,7 +9,7 @@ test.describe('Homepage – Logout', () => {
     let dashboard: DashboardPage;
 
     test.beforeAll(async ({ browser }) => {
-        ({ page, dashboard } = await createHomepageSession(browser, 'ACCOUNT_1'));
+        ({ page, dashboard } = await createHomepageSession(browser));
     });
 
     test.afterAll(async () => {
