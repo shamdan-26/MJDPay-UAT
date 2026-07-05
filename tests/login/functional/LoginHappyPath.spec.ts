@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { LOGIN_URL, LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../LoginHelper';
 import { LoginPage } from '../../pageElements/LoginPage';
-import { DashboardPage } from '../../pageElements/DashboardPage';
+import { DashboardPage } from '../../pageElements/homepage/DashboardPage';
 import { OtpPage } from '../../pageElements/OtpPage';
 
 // The validation card's 3-step display and the post-card OTP dialog appearing

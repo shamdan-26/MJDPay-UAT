@@ -1,7 +1,7 @@
 import { Browser, Page } from '@playwright/test';
 import { getOtpFromDb, fillOTP } from '../Registration/helpers';
 import { waitForToastClear } from '../shared';
-import { DashboardPage } from '../pageElements/DashboardPage';
+import { DashboardPage } from '../pageElements/homepage/DashboardPage';
 import { HomepageSidebarPage } from '../pageElements/homepage/HomepageSidebarPage';
 import { HomepageHeaderPage } from '../pageElements/homepage/HomepageHeaderPage';
 import { HomepageGreetingPage } from '../pageElements/homepage/HomepageGreetingPage';

@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import { HOME_URL_PATTERN, createHomepageSession, refreshHomepage } from '../HomePageHelper';
-import { DashboardPage } from '../../pageElements/DashboardPage';
+import { DashboardPage } from '../../pageElements/homepage/DashboardPage';
 
 test.describe('Homepage – Logo', () => {
     test.describe.configure({ mode: 'serial' });

@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import { ASSERTION_TIMEOUT_MS, createHomepageSession, refreshHomepage } from '../HomePageHelper';
-import { DashboardPage } from '../../pageElements/DashboardPage';
+import { DashboardPage } from '../../pageElements/homepage/DashboardPage';
 import { HomepageBalanceCardPage } from '../../pageElements/homepage/HomepageBalanceCardPage';
 
 test.describe('Homepage – Page Elements – Balance card', () => {

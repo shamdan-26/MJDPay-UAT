@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import { createHomepageSession, refreshHomepage } from '../HomePageHelper';
-import { DashboardPage } from '../../pageElements/DashboardPage';
+import { DashboardPage } from '../../pageElements/homepage/DashboardPage';
 import { HomepageHeaderPage } from '../../pageElements/homepage/HomepageHeaderPage';
 
 test.describe('Homepage – Notifications panel', () => {

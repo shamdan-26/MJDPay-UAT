@@ -3,7 +3,7 @@ import {
     HOME_URL, HOME_URL_PATTERN, BASE_ORIGIN, ACCOUNT_1_STORAGE_STATE,
     POST_NAV_SETTLE_MS, TOAST_APPEAR_TIMEOUT_MS, TOAST_CLEAR_TIMEOUT_MS, ASSERTION_TIMEOUT_MS,
 } from '../HomePageHelper';
-import { DashboardPage } from '../../pageElements/DashboardPage';
+import { DashboardPage } from '../../pageElements/homepage/DashboardPage';
 import { HomepageGreetingPage } from '../../pageElements/homepage/HomepageGreetingPage';
 import { HomepageBillsOverviewPage } from '../../pageElements/homepage/HomepageBillsOverviewPage';
 import { HomepageSubWalletsPage } from '../../pageElements/homepage/HomepageSubWalletsPage';
