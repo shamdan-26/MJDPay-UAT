@@ -87,4 +87,9 @@ test.describe('BankTransfer – Page Elements – Confirmation summary', () => {
         await expect.soft(bt.getSummaryMoney('VAT')).resolves.not.toBeNaN();
         await expect.soft(bt.getSummaryMoney('Total amount to be sent')).resolves.not.toBeNaN();
     });
+
+    test('should display the Confirmation heading and subtitle', async () => {
+        await expect.soft(bt.pageTitle).toHaveText('Confirmation');
+        await expect.soft(bt.pageSubtitle).toHaveText(/send funds to a saudi iban/i);
+    });
 });

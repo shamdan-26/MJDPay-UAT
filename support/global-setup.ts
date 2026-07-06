@@ -1,11 +1,11 @@
 import { chromium } from '@playwright/test';
 import { mkdirSync } from 'fs';
-import { getOtpFromDb, fillOTP } from '../tests/Registration/helpers';
+import { getOtpFromDb, fillOTP } from '../BusinessTests/Registration/helpers';
 import {
     loginAsMerchant,
     homepageAccountPool,
     LOGIN_URL,
-} from '../tests/homepage/HomePageHelper';
+} from '../BusinessTests/homepage/HomePageHelper';
 
 const env            = process.env['ENV'] ?? 'dev';
 const VALID_COMPANY  = process.env['UAT_SETUP_COMPANY'];

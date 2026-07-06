@@ -89,4 +89,19 @@ test.describe('BankTransfer – Page Elements – OTP step', () => {
 
         await otp.cancelButton.click();
     });
+
+    test('should display the Confirmation heading, subtitle, resend link, and Verify button', async () => {
+        await bt.enterAmount('10');
+        await proceedToConfirmation(page, bt);
+        await bt.waitForSummaryToSettle();
+        await bt.clickProceedButtonInSummary();
+        await expect(otp.inputs.first()).toBeVisible({ timeout: 15000 });
+
+        await expect.soft(bt.pageTitle).toHaveText('Confirmation');
+        await expect.soft(bt.pageSubtitle).toHaveText(/a code has been sent to you/i);
+        await expect.soft(otp.resendButton).toBeVisible();
+        await expect.soft(otp.verifyButton).toBeVisible();
+
+        await otp.cancelButton.click();
+    });
 });

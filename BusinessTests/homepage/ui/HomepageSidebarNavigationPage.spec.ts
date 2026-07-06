@@ -42,6 +42,18 @@ test.describe('Homepage – Page Elements – Sidebar navigation', () => {
         await expect(sidebar.transferSidebarItem).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
     });
 
+    test('should display the Cashout and Wallet Transfer sub-links when Transfer is expanded', async () => {
+        await sidebar.transferSidebarItem.click();
+        await expect(sidebar.cashoutSidebarLink).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
+        await expect(sidebar.walletTransferSidebarLink).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
+    });
+
+    test('should display the International Transfer sub-link marked "Soon" when Transfer is expanded', async () => {
+        await sidebar.transferSidebarItem.click();
+        await expect(sidebar.internationalTransferSidebarLink).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
+        await expect(sidebar.internationalTransferSidebarLink).toContainText(/soon/i);
+    });
+
     test('should display the Bills link in the sidebar', async () => {
         await expect(sidebar.billsSidebarLink).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
     });
@@ -54,8 +66,20 @@ test.describe('Homepage – Page Elements – Sidebar navigation', () => {
         await expect(sidebar.subWalletsSidebarLink).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
     });
 
+    test('should display the SADAD item in the sidebar marked "Soon"', async () => {
+        await expect(sidebar.sadadSidebarLink).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
+        await expect(sidebar.sadadSidebarLink).toContainText(/soon/i);
+    });
+
     test('should display the Manage Accounts item in the sidebar', async () => {
         await expect(sidebar.accountsPanel).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
+    });
+
+    test('should display the Manage Users and Manage Beneficiary sub-links when Manage Accounts is expanded', async () => {
+        await sidebar.accountsPanel.click();
+        await expect(sidebar.accountsSubmenu).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
+        await expect(sidebar.manageUsersSidebarLink).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
+        await expect(sidebar.manageBeneficiarySidebarLink).toBeVisible({ timeout: ASSERTION_TIMEOUT_MS });
     });
 
     test('should display the Manage Products link in the sidebar', async () => {

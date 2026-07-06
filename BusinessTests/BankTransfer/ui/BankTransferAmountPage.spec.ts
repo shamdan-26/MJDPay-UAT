@@ -99,6 +99,10 @@ test.describe('BankTransfer – Page Elements – Amount step', () => {
         await expect(bt.amountCurrencyIcon).toBeVisible();
     });
 
+    test('should display the "0.00" placeholder in the amount input', async () => {
+        await expect(bt.inputAmount).toHaveAttribute('placeholder', '0.00');
+    });
+
     test('should display the "Use full balance" toggle with its label', async () => {
         await expect(bt.useFullBalanceToggle).toBeVisible();
         await expect(bt.fullBalanceToggleLabel).toHaveText(/use full balance/i);

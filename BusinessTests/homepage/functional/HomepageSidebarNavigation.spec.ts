@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { createHomepageSession, refreshHomepage } from '../HomePageHelper';
+import { createHomepageSession, refreshHomepage, HOME_URL_PATTERN } from '../HomePageHelper';
 import { DashboardPage } from '../../pageElements/homepage/DashboardPage';
 import { HomepageSidebarPage } from '../../pageElements/homepage/HomepageSidebarPage';
 
@@ -57,6 +57,13 @@ test.describe('Homepage – Sidebar navigation', () => {
         await expect(sidebar.walletTransferSidebarLink).toBeVisible({ timeout: 5000 });
     });
 
+    test('should not navigate away when the "Soon" International Transfer sub-link is clicked', async () => {
+        await sidebar.transferSidebarItem.click();
+        await expect(sidebar.internationalTransferSidebarLink).toBeVisible({ timeout: 5000 });
+        await sidebar.internationalTransferSidebarLink.click({ force: true }).catch(() => {});
+        await expect(page).toHaveURL(HOME_URL_PATTERN, { timeout: 5000 });
+    });
+
     test('should navigate to Bills page when the Bills sidebar link is clicked', async () => {
         await sidebar.billsSidebarLink.click();
         await expect(page).toHaveURL(/bills/i, { timeout: 10000 });
@@ -72,10 +79,28 @@ test.describe('Homepage – Sidebar navigation', () => {
         await expect(page).toHaveURL(/sub.wallets?/i, { timeout: 10000 });
     });
 
+    test('should not navigate away when the "Soon" SADAD item is clicked', async () => {
+        await expect(sidebar.sadadSidebarLink).toBeVisible();
+        await sidebar.sadadSidebarLink.click({ force: true }).catch(() => {});
+        await expect(page).toHaveURL(HOME_URL_PATTERN, { timeout: 5000 });
+    });
+
     test('should expand the Manage Accounts submenu when clicked', async () => {
         await expect(sidebar.accountsPanel).toBeVisible();
         await sidebar.accountsPanel.click();
         await expect(sidebar.accountsSubmenu).toBeVisible({ timeout: 5000 });
+    });
+
+    test('should navigate to Manage Users page when the sidebar sub-link is clicked', async () => {
+        await sidebar.accountsPanel.click();
+        await sidebar.manageUsersSidebarLink.click();
+        await expect(page).toHaveURL(/users/i, { timeout: 10000 });
+    });
+
+    test('should navigate to Manage Beneficiary page when the sidebar sub-link is clicked', async () => {
+        await sidebar.accountsPanel.click();
+        await sidebar.manageBeneficiarySidebarLink.click();
+        await expect(page).toHaveURL(/beneficiar/i, { timeout: 10000 });
     });
 
     test('should navigate to Manage Products page when the sidebar link is clicked', async () => {
