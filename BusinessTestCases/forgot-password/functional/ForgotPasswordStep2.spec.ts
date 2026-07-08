@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { assertToast } from '../../shared';
 import {
     SUBMIT_BUTTON,
     VALID_PASSWORD,
@@ -7,6 +8,7 @@ import {
     mockOtpDisabled,
     mockForgetPasswordSuccess,
     mockAllPasswordsSuccess,
+    mockPasswordResetFailure,
     gotoForgotPassword,
     fillStep1AndProceed,
 } from '../ForgotPasswordHelper';
@@ -274,6 +276,68 @@ test.describe('Forgot Password — Step 2: Edge Cases', () => {
         ).toBeVisible({ timeout: 3000 });
         await page.waitForURL(/login/, { timeout: 15000 });
         expect(requestCount).toBe(1);
+    });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STEP 2: FAILED SUBMISSION
+// ─────────────────────────────────────────────────────────────────────────────
+//
+// Every other Step 2 spec mocks the reset-password call as a success — this
+// block is the only place that exercises the reset submission itself failing
+// (e.g. expired session, backend rejection), distinct from Step 1's identity
+// check failing.
+
+test.describe('Forgot Password — Step 2: Failed Submission', () => {
+    test.describe.configure({ mode: 'serial' });
+
+    let forgotPassword: ForgotPasswordPage;
+
+    test.beforeEach(async ({ page }) => {
+        await mockOtpDisabled(page);
+        await mockForgetPasswordSuccess(page);
+        await gotoForgotPassword(page);
+        await fillStep1AndProceed(page);
+        await mockPasswordResetFailure(page);
+        forgotPassword = new ForgotPasswordPage(page);
+    });
+
+    test('should display an error toast when the reset-password submission fails', async ({ page }) => {
+        await forgotPassword.fillStep2(VALID_PASSWORD, VALID_PASSWORD);
+        await forgotPassword.resetPasswordButton.click();
+        await assertToast(page);
+    });
+
+    test('should remain on the change-password page after a failed reset submission', async ({ page }) => {
+        await forgotPassword.fillStep2(VALID_PASSWORD, VALID_PASSWORD);
+        await forgotPassword.resetPasswordButton.click();
+        await assertToast(page);
+        await expect(page).toHaveURL(/change-password/);
+        await expect(page).not.toHaveURL(/login/);
+    });
+
+    test('should keep the New Password and Confirm Password fields visible after a failed submission', async ({ page }) => {
+        await forgotPassword.fillStep2(VALID_PASSWORD, VALID_PASSWORD);
+        await forgotPassword.resetPasswordButton.click();
+        await assertToast(page);
+        await expect(forgotPassword.newPasswordInput).toBeVisible();
+        await expect(forgotPassword.confirmPasswordInput).toBeVisible();
+    });
+
+    test('should re-enable the submit button after a failed submission so the user can retry', async ({ page }) => {
+        await forgotPassword.fillStep2(VALID_PASSWORD, VALID_PASSWORD);
+        await forgotPassword.resetPasswordButton.click();
+        await assertToast(page);
+        await expect(forgotPassword.resetPasswordButton).toBeEnabled({ timeout: 10000 });
+    });
+
+    test('should not expose technical details (stack trace, SQL, DB errors) in the failure toast', async ({ page }) => {
+        await forgotPassword.fillStep2(VALID_PASSWORD, VALID_PASSWORD);
+        await forgotPassword.resetPasswordButton.click();
+        const detail = page.locator('.toast-snackbar__detail');
+        await expect(detail).toBeVisible({ timeout: 10000 });
+        const text = await detail.textContent() ?? '';
+        expect(text).not.toMatch(/stack|exception|sql|database|null pointer|traceback|internal server error/i);
     });
 });
 

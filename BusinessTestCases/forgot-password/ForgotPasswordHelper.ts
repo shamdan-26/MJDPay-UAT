@@ -42,6 +42,26 @@ export async function mockAllPasswordsSuccess(page: Page): Promise<void> {
     );
 }
 
+/**
+ * Lets the step-1 identity check (`/auth/passwords/forget`) succeed so the flow
+ * can reach step 2, but fails the final reset-password submission — for testing
+ * error display when the reset itself is rejected (e.g. expired session, backend
+ * error) rather than when the initial company/mobile lookup fails.
+ */
+export async function mockPasswordResetFailure(page: Page): Promise<void> {
+    await page.route('**/auth/passwords/**', async route => {
+        if (route.request().url().includes('/forget')) {
+            await route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+        } else {
+            await route.fulfill({
+                status: 400,
+                contentType: 'application/json',
+                body: JSON.stringify({ message: 'Unable to reset password' }),
+            });
+        }
+    });
+}
+
 // Register a catch-all abort BEFORE specific mocks so LIFO ordering lets
 // targeted mocks take priority while preventing teardown hangs from unmocked requests.
 export async function abortUnmockedGatewayRequests(page: Page): Promise<void> {

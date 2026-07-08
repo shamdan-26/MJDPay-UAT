@@ -71,6 +71,27 @@ test.describe('Forgot Password — OTP Verification Flow', () => {
         await expect(errorIndicator).toBeVisible({ timeout: 5000 });
     });
 
+    test('should not expose technical details in the wrong-OTP error message', async () => {
+        const count = await otp.inputs.count();
+        for (let i = 0; i < count; i++) await otp.inputs.nth(i).fill(INVALID_OTP[i] ?? '1');
+        await otp.verifyButton.click();
+        const errorIndicator = otp.modalContainer.locator('[role="alert"], [class*="error"], [class*="invalid"]').first();
+        await expect(errorIndicator).toBeVisible({ timeout: 5000 });
+        const text = await errorIndicator.textContent() ?? '';
+        expect(text).not.toMatch(/stack|exception|sql|database|null pointer|traceback|internal server error/i);
+    });
+
+    test('should clear the wrong-OTP error indicator once the inputs are corrected and resubmitted', async () => {
+        const count = await otp.inputs.count();
+        for (let i = 0; i < count; i++) await otp.inputs.nth(i).fill(INVALID_OTP[i] ?? '1');
+        await otp.verifyButton.click();
+        const errorIndicator = otp.modalContainer.locator('[role="alert"], [class*="error"], [class*="invalid"]').first();
+        await expect(errorIndicator).toBeVisible({ timeout: 5000 });
+
+        for (let i = 0; i < count; i++) await otp.inputs.nth(i).fill('9');
+        await expect(otp.modalContainer).toBeVisible();
+    });
+
     test('should reset password successfully with correct OTP, redirect to login, and show a success toast', async ({ page }) => {
         const otpCode = await getOtpFromDb(VALID_MOBILE, 10, 2000, /Use this/i);
         await otp.fill(otpCode);
