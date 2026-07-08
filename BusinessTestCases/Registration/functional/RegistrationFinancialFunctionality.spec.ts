@@ -55,7 +55,7 @@ test.describe('Registration - Financial & Business Functionality', () => {
         await expect(input).toHaveValue('20000');
     });
 
-    // ── Input validation ──────────────────────────────────────────────────────
+    // ── Input validation – character filtering (all four fields) ─────────────
 
     test('should not accept alphabetic characters in the Monthly Expected Number field', async () => {
         const input = page.getByRole('textbox', { name: /monthly expected number/i });
@@ -69,6 +69,110 @@ test.describe('Registration - Financial & Business Functionality', () => {
         await input.clear();
         await input.pressSequentially('!@#');
         await expect(input).toHaveValue('');
+    });
+
+    test('should not accept alphabetic characters in the Expected Monthly Withdrawal field', async () => {
+        const input = page.getByRole('textbox', { name: /monthly withdrawal/i });
+        await input.clear();
+        await input.pressSequentially('xyz');
+        await expect(input).toHaveValue('');
+    });
+
+    test('should not accept special characters in the Expected Monthly Deposit field', async () => {
+        const input = page.getByRole('textbox', { name: /monthly deposit/i });
+        await input.clear();
+        await input.pressSequentially('$%^');
+        await expect(input).toHaveValue('');
+    });
+
+    // ── Boundary values ────────────────────────────────────────────────────────
+
+    test('should not retain a negative number in the Monthly Expected Number field', async () => {
+        const input = page.getByRole('textbox', { name: /monthly expected number/i });
+        await input.clear();
+        await input.pressSequentially('-500');
+        const value = await input.inputValue();
+        expect(/^-/.test(value)).toBe(false);
+    });
+
+    test('should not retain a decimal point in the Monthly Expected Sum field', async () => {
+        const input = page.getByRole('textbox', { name: /monthly expected sum/i });
+        await input.clear();
+        await input.pressSequentially('12.5');
+        const value = await input.inputValue();
+        expect(value).not.toContain('.');
+    });
+
+    test('should handle a very large value (15 digits) in the Expected Monthly Withdrawal field without crashing', async () => {
+        const input = page.getByRole('textbox', { name: /monthly withdrawal/i });
+        await input.clear();
+        await input.fill('999999999999999');
+        await expect(input).toBeVisible();
+    });
+
+    test('should treat a zero value in the Expected Monthly Deposit field as valid input', async () => {
+        const input = page.getByRole('textbox', { name: /monthly deposit/i });
+        await input.fill('0');
+        await expect(input).toHaveValue('0');
+    });
+
+    // ── Security ───────────────────────────────────────────────────────────────
+
+    test('should not execute an XSS payload entered in the Monthly Expected Number field', async () => {
+        let alertFired = false;
+        page.once('dialog', dialog => { alertFired = true; dialog.dismiss(); });
+        const input = page.getByRole('textbox', { name: /monthly expected number/i });
+        await input.fill('<script>alert("xss")</script>');
+        await page.waitForTimeout(500);
+        expect(alertFired).toBe(false);
+    });
+
+    test('should not execute an XSS payload entered in the Monthly Expected Sum field', async () => {
+        let alertFired = false;
+        page.once('dialog', dialog => { alertFired = true; dialog.dismiss(); });
+        const input = page.getByRole('textbox', { name: /monthly expected sum/i });
+        await input.fill('<img src=x onerror=alert(1)>');
+        await page.waitForTimeout(500);
+        expect(alertFired).toBe(false);
+    });
+
+    test('should not accept a SQL injection pattern in the Expected Monthly Withdrawal field', async () => {
+        const input = page.getByRole('textbox', { name: /monthly withdrawal/i });
+        await input.clear();
+        await input.pressSequentially("1' OR '1'='1");
+        const value = await input.inputValue();
+        expect(/[^0-9]/.test(value)).toBe(false);
+    });
+
+    test('should not accept a SQL injection pattern in the Expected Monthly Deposit field', async () => {
+        const input = page.getByRole('textbox', { name: /monthly deposit/i });
+        await input.clear();
+        await input.pressSequentially("1; DROP TABLE users;--");
+        const value = await input.inputValue();
+        expect(/[^0-9]/.test(value)).toBe(false);
+    });
+
+    // Documented spec (EMI Validation confluence page): "Expected number of bills" and
+    // "Expected sum of bills" must be > 0 and must not start with 0.
+    test('should keep Next disabled when Monthly Expected Number Of Bills is 0', async () => {
+        await fillFinancialForm(page);
+        await page.getByRole('textbox', { name: /monthly expected number/i }).fill('0');
+        await expect(page.getByRole('button', { name: /next/i })).toBeDisabled({ timeout: 5000 });
+    });
+
+    test('should keep Next disabled when Monthly Expected Sum Of Bills has a leading zero', async () => {
+        await fillFinancialForm(page);
+        await page.getByRole('textbox', { name: /monthly expected sum/i }).fill('0500');
+        await expect(page.getByRole('button', { name: /next/i })).toBeDisabled({ timeout: 5000 });
+    });
+
+    // Restore valid values before continuing with dropdown / navigation tests
+    test('should restore valid values to all four fields after boundary/security probing', async () => {
+        await page.getByRole('textbox', { name: /monthly expected number/i }).fill('1500');
+        await page.getByRole('textbox', { name: /monthly expected sum/i }).fill('50000');
+        await page.getByRole('textbox', { name: /monthly withdrawal/i }).fill('10000');
+        await page.getByRole('textbox', { name: /monthly deposit/i }).fill('20000');
+        await expect(page.getByRole('textbox', { name: /monthly deposit/i })).toHaveValue('20000');
     });
 
     // ── Banks dropdown ────────────────────────────────────────────────────────
@@ -116,7 +220,20 @@ test.describe('Registration - Financial & Business Functionality', () => {
         expect(selected?.trim()).not.toMatch(/select option/i);
     });
 
-    // ── Next button state ─────────────────────────────────────────────────────
+    // ── Next button state — partial completion ────────────────────────────────
+
+    test('should keep Next disabled when only the numeric fields are filled and no dropdown is selected', async ({ browser }) => {
+        const context = await browser.newContext();
+        await context.grantPermissions(['geolocation'], { origin: new URL(REGISTER_URL).origin });
+        const freshPage = await context.newPage();
+        await goToFinancialStep(freshPage, { profileType: 'merchant' });
+        await freshPage.getByRole('textbox', { name: /monthly expected number/i }).fill('1500');
+        await freshPage.getByRole('textbox', { name: /monthly expected sum/i }).fill('50000');
+        await freshPage.getByRole('textbox', { name: /monthly withdrawal/i }).fill('10000');
+        await freshPage.getByRole('textbox', { name: /monthly deposit/i }).fill('20000');
+        await expect(freshPage.getByRole('button', { name: /next/i })).toBeDisabled();
+        await context.close();
+    });
 
     test('should enable Next when all required fields and dropdowns are filled', async () => {
         await fillFinancialForm(page);

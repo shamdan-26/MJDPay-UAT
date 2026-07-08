@@ -81,6 +81,25 @@ test.describe('Registration - Mobile Number Functionality', () => {
         expect(value.length).toBeLessThanOrEqual(9);
     });
 
+    // ── Security ──────────────────────────────────────────────────────────────
+
+    test('should not execute an XSS payload entered in the Mobile number field', async ({ page }) => {
+        let alertFired = false;
+        page.once('dialog', dialog => { alertFired = true; dialog.dismiss(); });
+        const input = page.getByRole('textbox', { name: 'Mobile number' });
+        await input.fill('<script>alert("xss")</script>');
+        await page.waitForTimeout(500);
+        expect(alertFired).toBe(false);
+        await expect(page.getByRole('button', { name: 'next' })).toBeDisabled();
+    });
+
+    test('should not accept a SQL injection pattern in the Mobile number field', async ({ page }) => {
+        const input = page.getByRole('textbox', { name: 'Mobile number' });
+        await input.pressSequentially("' OR '1'='1");
+        const value = await input.inputValue();
+        expect(/[^0-9]/.test(value)).toBe(false);
+    });
+
     // ── Navigation ────────────────────────────────────────────────────────────
 
     test('should navigate to the login page when Log In is clicked', async ({ page }) => {

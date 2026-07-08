@@ -3,6 +3,9 @@ import {
   UAT_OTP_ASSETS,
   getOtpFromDb,
   generateEmail,
+  VALID_IBAN,
+  VALID_VAT_NUMBER,
+  TEST_FILE_BUFFER,
 } from '../helpers';
 
 declare const process: { env: Record<string, string | undefined> };
@@ -160,35 +163,75 @@ test.describe('Registration – API Flow', () => {
   });
 
   // ── 5. Set Profile Registration Type ──────────────────────────────────────
+  // This is the identity-establishing step for the full happy-path E2E chain
+  // (API-06 onward reuse whichever asset succeeds here). A 409/duplicate
+  // response means selectedAsset's CRN was already registered by a prior E2E
+  // run against the shared UAT_OTP_ASSETS pool — a valid, expected outcome,
+  // not a bug — so we cycle to the next asset (redoing its OTP send/verify)
+  // until we find a genuinely unregistered identity or exhaust the pool.
 
-  test('API-05: POST /register/profile-registration-type should return 201', async ({ request }) => {
-    const res = await request.post(
-      `${API_BASE}/emi-profile/api/v1/register/profile-registration-type`,
-      {
-        data: {
-          profileType:   'MERCHANT',
-          unifiedNumber: selectedAsset.crn,
-          nationalId:    selectedAsset.id,
-          email,
-        },
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization:  `Bearer ${sessionToken}`,
-        },
+  test('API-05: POST /register/profile-registration-type should return 201 for a fresh identity', async ({ request }) => {
+    const startIndex = UAT_OTP_ASSETS.indexOf(selectedAsset);
+    let res;
+    let body: Record<string, unknown> = {};
+
+    for (let i = 0; i < UAT_OTP_ASSETS.length; i++) {
+      res = await request.post(
+        `${API_BASE}/emi-profile/api/v1/register/profile-registration-type`,
+        {
+          data: {
+            profileType:   'MERCHANT',
+            unifiedNumber: selectedAsset.crn,
+            nationalId:    selectedAsset.id,
+            email,
+          },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization:  `Bearer ${sessionToken}`,
+          },
+        }
+      );
+
+      if (res.status() === 201) break;
+
+      body = await res.json().catch(() => ({}));
+      const alreadyRegistered = res.status() === 409
+        || /already\s*(registered|exists)|duplicate/i.test(JSON.stringify(body));
+      if (!alreadyRegistered || i === UAT_OTP_ASSETS.length - 1) break;
+
+      // Move to the next candidate identity and re-establish its session.
+      selectedAsset = UAT_OTP_ASSETS[(startIndex + i + 1) % UAT_OTP_ASSETS.length];
+      mobileNumber  = `+966${selectedAsset.mobile}`;
+
+      const otpRes  = await request.post(`${API_BASE}/emi-profile/api/v1/register/mobile/otp`, {
+        data: { mobileNumber },
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const otpBody = await otpRes.json().catch(() => ({}));
+      otpRequired = otpBody.otpRequired === true;
+      if (otpBody.sessionToken) sessionToken = otpBody.sessionToken;
+
+      if (otpRequired) {
+        const rawOtp   = await getOtpFromDb(selectedAsset.mobile);
+        const otp      = rawOtp || '0'.repeat(otpLength ?? 6);
+        const verifyRes = await request.post(`${API_BASE}/emi-profile/api/v1/register/verify/otp`, {
+          data: { mobileNumber, otp },
+          headers: { 'Content-Type': 'application/json' },
+        });
+        const verifyBody = await verifyRes.json().catch(() => ({}));
+        if (verifyBody.sessionToken) sessionToken = verifyBody.sessionToken;
       }
-    );
+    }
 
-    expect(res.status()).toBe(201);
+    expect(
+      res!.status(),
+      `Exhausted all ${UAT_OTP_ASSETS.length} UAT test identities — all already registered. Last response: ${JSON.stringify(body)}`
+    ).toBe(201);
   });
 
   // ── 6. Upload IBAN Proof ───────────────────────────────────────────────────
 
   test('API-06: POST /file/attachment/upload?fileType=iban should return 200 with fileId', async ({ request }) => {
-    const minimalPng = Buffer.from(
-      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
-      'base64'
-    );
-
     const res = await request.post(
       `${API_BASE}/file/attachment/upload?unifiedNumber=${selectedAsset.crn}&fileType=iban`,
       {
@@ -196,7 +239,7 @@ test.describe('Registration – API Flow', () => {
           file: {
             name:     'iban_proof.png',
             mimeType: 'image/png',
-            buffer:   minimalPng,
+            buffer:   TEST_FILE_BUFFER,
           },
         },
         headers: { Authorization: `Bearer ${sessionToken}` },
@@ -212,11 +255,6 @@ test.describe('Registration – API Flow', () => {
   // ── 7. Upload VAT Certificate ──────────────────────────────────────────────
 
   test('API-07: POST /file/attachment/upload?fileType=vat should return 200 with fileId', async ({ request }) => {
-    const minimalPng = Buffer.from(
-      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
-      'base64'
-    );
-
     const res = await request.post(
       `${API_BASE}/file/attachment/upload?unifiedNumber=${selectedAsset.crn}&fileType=vat`,
       {
@@ -224,7 +262,7 @@ test.describe('Registration – API Flow', () => {
           file: {
             name:     'vat_certificate.png',
             mimeType: 'image/png',
-            buffer:   minimalPng,
+            buffer:   TEST_FILE_BUFFER,
           },
         },
         headers: { Authorization: `Bearer ${sessionToken}` },
@@ -253,8 +291,8 @@ test.describe('Registration – API Flow', () => {
         bankCode:                     'AL_INMA_BANK',
         industry:                     'HEALTHCARE',
         annualIncome:                 '0-1000',
-        iban:                         'SA0380000001234567891234',
-        vatNumber:                    '300123456700003',
+        iban:                         VALID_IBAN,
+        vatNumber:                    VALID_VAT_NUMBER,
         ibanFileId,
         vatFileId,
       },
@@ -372,6 +410,26 @@ test.describe('Registration – API Flow', () => {
     expect(res.status()).toBe(200);
   });
 
+  // ── 15. E2E completeness check — the account is not yet active ────────────
+  // Per EMI-122, completing contract/accept only creates a "Pending Manual KYB"
+  // profile: a wallet, Company Number, and login credentials are issued only
+  // after an admin reviews and activates the account (separate admin-portal
+  // flow, out of scope here). This closes the loop on the happy-path E2E chain
+  // by proving the freshly-registered identity genuinely cannot authenticate
+  // yet — not just that the registration calls returned 200.
+
+  test('API-15: the just-registered account cannot sign in yet (Pending Manual KYB)', async ({ request }) => {
+    const res = await request.post(`${API_BASE}/auth/signin`, {
+      data: {
+        username:     mobileNumber,
+        password:     'not-yet-issued',
+        tenantNumber: 'PENDING',
+      },
+      headers: { 'Content-Type': 'application/json' },
+    });
+    expect(res.status()).not.toBe(200);
+  });
+
   // ── Negative / Edge-case tests ─────────────────────────────────────────────
 
   test('API-N1: POST /register/mobile/otp with invalid number format should return 400', async ({ request }) => {
@@ -442,6 +500,65 @@ test.describe('Registration – API Flow', () => {
   test('API-N5: GET /products without token should return 401', async ({ request }) => {
     const res = await request.get(`${API_BASE}/emi-profile/api/v1/products`);
     expect(res.status()).toBe(401);
+  });
+
+  // EMI-5751: session-token authorization is required on every protected business
+  // registration/contract endpoint. Only profile-registration-type and GET /products
+  // were covered above — this extends the same 401-without-token check across the
+  // remaining endpoints the ticket lists as protected.
+
+  test('API-N6: POST /register without token should return 401', async ({ request }) => {
+    const res = await request.post(`${API_BASE}/emi-profile/api/v1/register`, {
+      data: { unifiedNumber: '0000000000', nationalId: '0000000000', email: 'unauth@test.com' },
+      headers: { 'Content-Type': 'application/json' },
+    });
+    expect(res.status()).toBe(401);
+  });
+
+  test('API-N7: POST /register/uri/status (NAFATH) without token should return 401', async ({ request }) => {
+    const res = await request.post(`${API_BASE}/emi-profile/api/v1/register/uri/status`, {
+      data: {},
+      headers: { 'Content-Type': 'application/json' },
+    });
+    expect(res.status()).toBe(401);
+  });
+
+  test('API-N8: POST /register/products without token should return 401', async ({ request }) => {
+    const res = await request.post(`${API_BASE}/emi-profile/api/v1/register/products`, {
+      data: { productIds: [1] },
+      headers: { 'Content-Type': 'application/json' },
+    });
+    expect(res.status()).toBe(401);
+  });
+
+  test('API-N9: GET /contracts/preview without token should return 401', async ({ request }) => {
+    const res = await request.get(`${API_BASE}/emi-profile/api/v1/contracts/preview?profileCode=TEST-0001`);
+    expect(res.status()).toBe(401);
+  });
+
+  test('API-N10: GET /contracts/generate-file without token should return 401', async ({ request }) => {
+    const res = await request.get(`${API_BASE}/emi-profile/api/v1/contracts/generate-file?profileCode=TEST-0001`);
+    expect(res.status()).toBe(401);
+  });
+
+  test('API-N11: POST /register/contract/accept without token should return 401', async ({ request }) => {
+    const res = await request.post(`${API_BASE}/emi-profile/api/v1/register/contract/accept`, {
+      data: { productIds: [1], contractAccepted: true },
+      headers: { 'Content-Type': 'application/json' },
+    });
+    expect(res.status()).toBe(401);
+  });
+
+  // Negative-control: the OTP-stage endpoints must keep working WITHOUT a session
+  // token (EMI-5751 explicitly says not to send one here) — i.e. they must not
+  // themselves start requiring auth.
+
+  test('API-N12: POST /register/mobile/otp should not require a session token', async ({ request }) => {
+    const res = await request.post(`${API_BASE}/emi-profile/api/v1/register/mobile/otp`, {
+      data: { mobileNumber: `+966${UAT_OTP_ASSETS[0].mobile}` },
+      headers: { 'Content-Type': 'application/json' },
+    });
+    expect(res.status()).not.toBe(401);
   });
 });
 

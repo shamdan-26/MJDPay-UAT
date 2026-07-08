@@ -14,6 +14,16 @@ export const REGISTER_URL = `${BASE_URL}/business/auth/register`;
 
 export const VALID_EMAIL = 's.hamdan@dg-cash.com';
 
+// Verification & Uploads step (Tab 3) — shared valid test data
+export const VALID_IBAN       = 'SA0380000001234567891234';
+export const VALID_VAT_NUMBER = '300123456700003';
+
+/** Minimal 1x1 PNG used as a stand-in upload file across registration file-upload tests. */
+export const TEST_FILE_BUFFER = Buffer.from(
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+    'base64'
+);
+
 /** Generates a unique email for each test run to avoid duplicate-registration rejections. */
 export function generateEmail(): string {
     return `test+${Date.now()}@dg-cash.com`;
@@ -174,40 +184,67 @@ export interface FinancialStepCredentials {
     email?: string;
 }
 
+/**
+ * True when the page shows a "this identity is already registered" style
+ * rejection. The CRN/National ID pools in this file are shared and reused
+ * (round-robin) across every test run, so an asset ending up already
+ * registered — because a prior run completed a full sign-up with it — is
+ * expected steady-state, not a failure.
+ */
+export function isAlreadyRegisteredMessage(text: string | null | undefined): boolean {
+    if (!text) return false;
+    return /already\s*(registered|exists|have an account|in use|associated)|duplicate\s*(registration|account|profile)?/i.test(text);
+}
+
 export async function goToFinancialStep(page: Page, credentials?: FinancialStepCredentials): Promise<void> {
-    const asset = nextResidentAsset();
-    const mobile     = credentials?.mobile     ?? asset.mobile;
-    const crn        = credentials?.crn        ?? asset.crn;
-    const nationalId = credentials?.nationalId ?? asset.nationalId;
-    const profileType = credentials?.profileType ?? 'individual';
+    // Only the default round-robin pool is safe to retry across — an explicit
+    // crn/nationalId means the caller is deliberately testing a specific
+    // (often intentionally invalid) identity and must not be silently swapped.
+    const usingDefaultIdentity = !credentials?.crn && !credentials?.nationalId;
+    const maxAttempts = usingDefaultIdentity ? RESIDENT_ASSETS.length : 1;
 
-    await goToInfoStep(page, mobile);
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        const asset = nextResidentAsset();
+        const mobile     = credentials?.mobile     ?? asset.mobile;
+        const crn        = credentials?.crn        ?? asset.crn;
+        const nationalId = credentials?.nationalId ?? asset.nationalId;
+        const profileType = credentials?.profileType ?? 'individual';
 
-    const infoPage = new RegistrationInfoPage(page);
-    const radioGroup = page.getByRole('radiogroup', { name: 'Profile Type' });
-    if (profileType === 'merchant') {
-        const merchantRadio = radioGroup.getByRole('radio', { name: /merchant/i });
-        if (await merchantRadio.count() > 0) {
-            await merchantRadio.click();
+        await goToInfoStep(page, mobile);
+
+        const infoPage = new RegistrationInfoPage(page);
+        const radioGroup = page.getByRole('radiogroup', { name: 'Profile Type' });
+        if (profileType === 'merchant') {
+            const merchantRadio = radioGroup.getByRole('radio', { name: /merchant/i });
+            if (await merchantRadio.count() > 0) {
+                await merchantRadio.click();
+            } else {
+                await radioGroup.getByRole('radio').last().click();
+            }
         } else {
-            await radioGroup.getByRole('radio').last().click();
+            await radioGroup.getByRole('radio').first().click();
         }
-    } else {
-        await radioGroup.getByRole('radio').first().click();
-    }
 
-    await infoPage.crnInput.fill(crn);
-    await infoPage.idInput.fill(nationalId);
-    await infoPage.emailInput.fill(credentials?.email ?? generateEmail());
-    await infoPage.nextButton.click();
+        await infoPage.crnInput.fill(crn);
+        await infoPage.idInput.fill(nationalId);
+        await infoPage.emailInput.fill(credentials?.email ?? generateEmail());
+        await infoPage.nextButton.click();
 
-    const financialPage = new RegistrationFinancialPage(page);
-    await financialPage.loadingButton.waitFor({ state: 'hidden', timeout: 20000 }).catch(() => {});
-    const advanced = await financialPage.monthlyBillsInput.isVisible({ timeout: 3000 }).catch(() => false);
-    if (!advanced) {
+        const financialPage = new RegistrationFinancialPage(page);
+        await financialPage.loadingButton.waitFor({ state: 'hidden', timeout: 20000 }).catch(() => {});
+        const advanced = await financialPage.monthlyBillsInput.isVisible({ timeout: 3000 }).catch(() => false);
+        if (advanced) return;
+
         const errorMsg = await page.evaluate(() => document.body.innerText).catch(() => '(unknown)');
+
+        if (usingDefaultIdentity && isAlreadyRegisteredMessage(errorMsg) && attempt < maxAttempts) {
+            // Valid, expected outcome for a shared/reused pool asset — try the next one.
+            continue;
+        }
+
         throw new Error(
-            `Business Info step was rejected by the backend.\n` +
+            `Business Info step was rejected by the backend` +
+            (usingDefaultIdentity ? ` after ${attempt} attempt(s)` : '') + `.\n` +
             `CRN=${crn}, ID=${nationalId}, Mobile=${mobile}.\n` +
             `Page text: ${errorMsg?.slice(0, 300)}`
         );

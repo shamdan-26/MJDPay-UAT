@@ -102,8 +102,9 @@ test.describe('Registration - Info Page', () => {
             await expect(infoPage.formTitle).toContainText('Tell us about your business');
         });
 
-        test('should display the "Step 1 of 3" description [ref_11]', async () => {
-            await expect(infoPage.formSubTitle).toContainText('Step 1 of 3');
+        test('should display "1" as the active step number [ref_11]', async () => {
+            const activeStep = infoPage.outerStepBar.nth(0);
+            await expect(activeStep.locator('.mp-step-meta .mp-step-num')).toContainText('1');
         });
 
         test('should display "Business Info" as the active outer step [ref_12]', async () => {
@@ -317,9 +318,12 @@ test.describe('Registration - Info Page', () => {
                 await expect(infoPage.merchantCard).toHaveAttribute('aria-checked', 'true');
             });
 
-            test('should allow selecting Freelancer profile type [ref_37]', async () => {
-                await infoPage.freelancerCard.click();
-                await expect(infoPage.freelancerCard).toHaveAttribute('aria-checked', 'true');
+            test('should not allow selecting Freelancer profile type — disabled as "Coming Soon" [ref_37]', async () => {
+                // The card is genuinely disabled, so a plain click() would hang on
+                // Playwright's actionability check; force it through and confirm
+                // the click was a no-op.
+                await infoPage.freelancerCard.click({ force: true });
+                await expect(infoPage.freelancerCard).not.toHaveAttribute('aria-checked', 'true');
             });
 
             test('should accept input in the Unified Number field [ref_43]', async () => {

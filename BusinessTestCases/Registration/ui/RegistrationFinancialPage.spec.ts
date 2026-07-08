@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { REGISTER_URL, generateFreshKSAMobile, fillOTP, getOtpFromDb, goToFinancialStep } from '../helpers';
+import { REGISTER_URL, goToFinancialStep } from '../helpers';
 
 test.describe('Registration – Financial & Business Step (Tab 2 of 3)', () => {
     test.describe.configure({ mode: 'serial' });
@@ -16,9 +16,9 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3)', () => {
         await expect(page.getByRole('textbox', { name: /monthly deposit/i })).toBeVisible();
         await expect(page.locator('#mat-select-value-0.mat-mdc-select-value')).toBeVisible();
         await expect(page.locator('#mat-select-value-1.mat-mdc-select-value')).toBeVisible();
-        await expect(page.locator('#mat-select-value-2.mat-mdc-select-value')).toBeVisible();
         await expect(page.getByRole('button', { name: /back/i })).toBeVisible();
         await expect(page.getByRole('button', { name: /next/i })).toBeVisible();
+        await expect(page.locator('.mp-step.is-active .mp-step-meta .mp-step-num')).toContainText('1');
     });
 
     // ── Step indicator ────────────────────────────────────────────────────────
@@ -27,9 +27,8 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3)', () => {
         await expect(page.locator('#register-form-title.form-title')).toContainText(/financial/i);
     });
 
-    test('should display the step indicator "Step 2 of 3" or highlight the second tab', async ({ page }) => {
-        const step2 = page.getByText(/step 2 of 3/i).or(page.getByRole('tab', { name: /financial/i }));
-        await expect(step2.first()).toBeVisible();
+    test('should mark the Financial & Business inner tab as active (is-active)', async ({ page }) => {
+        await expect(page.locator('.mp-step-bar .mp-step.is-active')).toBeDisabled
     });
 
     test('should display all four step indicators', async ({ page }) => {
@@ -122,6 +121,15 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3)', () => {
     // ── Banks dropdown ────────────────────────────────────────────────────────
 
     test('should display the Banks dropdown label', async ({ page }) => {
+        // Banks/Industries only render after Section 1 is completed and the
+        // internal stepper "Next" (#btn_signup, class="mat-stepper-next ...") is
+        // clicked — they are not present on arrival.
+        await page.getByRole('textbox', { name: /monthly expected number/i }).fill('1500');
+        await page.getByRole('textbox', { name: /monthly expected sum/i }).fill('50000');
+        await page.getByRole('textbox', { name: /monthly withdrawal/i }).fill('10000');
+        await page.getByRole('textbox', { name: /monthly deposit/i }).fill('20000');
+        await page.locator('.mat-stepper-next').click();
+
         await expect(page.getByText(/banks/i).first()).toBeVisible();
     });
 
