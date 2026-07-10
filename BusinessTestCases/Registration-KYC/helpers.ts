@@ -257,9 +257,12 @@ export async function goToVerificationStep(page: Page): Promise<void> {
     await goToFinancialStep(page);
     const financialPage = new RegistrationFinancialPage(page);
     await financialPage.fill('1500', '50000', '10000', '20000');
+
+    // Only Industries (index 0) and Annual Income (index 1) render on this
+    // step — there is no separate Banks select to fill.
     await selectRandomOption(page, page.locator('#mat-select-value-0'));
     await selectRandomOption(page, page.locator('#mat-select-value-1'));
-    await selectRandomOption(page, page.locator('#mat-select-value-2'));
+
     await financialPage.next();
     const verificationPage = new RegistrationVerificationPage(page);
     await verificationPage.waitForLoad();
@@ -268,9 +271,11 @@ export async function goToVerificationStep(page: Page): Promise<void> {
 export async function fillFinancialForm(page: Page): Promise<void> {
     const financialPage = new RegistrationFinancialPage(page);
     await financialPage.fill('1500', '50000', '10000', '20000');
+
+    // Only Industries (index 0) and Annual Income (index 1) render on this
+    // step — there is no separate Banks select to fill.
     await selectRandomOption(page, page.locator('#mat-select-value-0'));
     await selectRandomOption(page, page.locator('#mat-select-value-1'));
-    await selectRandomOption(page, page.locator('#mat-select-value-2'));
 }
 
 export async function selectRandomOption(page: Page, dropdownLocator: Locator) {
