@@ -1,5 +1,5 @@
-import { Browser, Page, test } from '@playwright/test';
-import { getOtpFromDb, fillOTP } from '../Registration/helpers';
+import { Browser, Locator, Page, test } from '@playwright/test';
+import { getOtpFromDb, fillOTP } from '../Registration-KYC/helpers';
 import { waitForToastClear } from '../shared';
 import { DashboardPage } from '../pageElements/homepage/DashboardPage';
 import { HomepageSidebarPage } from '../pageElements/homepage/HomepageSidebarPage';
@@ -19,6 +19,15 @@ export const BASE_ORIGIN      = BASE_URL;
 
 /** Shared fallback password for all UAT test accounts below. */
 const DEFAULT_TEST_PASSWORD = 'Aa#1234567';
+
+/** In ENV=dev the login button has no accessible "Log In" role name — same
+ *  env split already established in pageElements/LoginPage.ts. */
+function loginButton(page: Page): Locator {
+    const env = process.env['ENV'] ?? 'dev';
+    return env === 'dev'
+        ? page.locator('#btn_login')
+        : page.getByRole('button', { name: 'Log In' });
+}
 
 export const VALID_COMPANY  = process.env['UAT_COMPANY'] ?? 'A2316';
 export const VALID_MOBILE   = process.env['UAT_MOBILE']  ?? '500021788';
@@ -113,7 +122,7 @@ export async function loginAsBiller(page: Page): Promise<void> {
     await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_BILLER_COMPANY);
     await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_BILLER_MOBILE);
     await page.locator('input[aria-label="Password"]').fill(VALID_BILLER_PASSWORD);
-    await page.getByRole('button', { name: 'Log In' }).click();
+    await loginButton(page).click();
 
     const otpHeading = page.getByRole('heading', { name: 'Enter OTP' });
     let landed: 'home' | 'otp';
@@ -160,7 +169,7 @@ export async function loginAsMerchant(page: Page, creds?: MerchantCredentials): 
         await page.getByRole('textbox', { name: 'Company number' }).fill(company);
         await page.getByRole('textbox', { name: 'Mobile number' }).fill(mobile);
         await page.locator('input[aria-label="Password"]').fill(password);
-        await page.getByRole('button', { name: 'Log In' }).click();
+        await loginButton(page).click();
 
         const otpHeading = page.getByRole('heading', { name: 'Enter OTP' });
         let landed: 'home' | 'otp';
