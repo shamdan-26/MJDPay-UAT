@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { REGISTER_URL, goToFinancialStep, selectRandomOption } from '../helpers';
+import { REGISTER_URL, goToFinancialStep, selectRandomOption } from '../RegistrationHelper';
 
 test.describe('Registration – Financial & Business Step (Tab 2 of 3)', () => {
     test.describe.configure({ mode: 'serial' });

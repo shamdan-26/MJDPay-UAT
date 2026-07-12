@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { REGISTER_URL } from '../helpers';
+import { REGISTER_URL } from '../RegistrationHelper';
 import { RegistrationMobilePage } from '../../pageElements/registration/RegistrationMobilePage';
 
 test.describe('Registration - Mobile Number Page', () => {

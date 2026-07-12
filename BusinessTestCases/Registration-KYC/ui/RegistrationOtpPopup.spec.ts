@@ -1,5 +1,5 @@
 ﻿import { test, expect } from '@playwright/test';
-import { REGISTER_URL, generateFreshKSAMobile } from '../helpers';
+import { REGISTER_URL, generateFreshKSAMobile } from '../RegistrationHelper';
 
 test.describe('Registration - OTP Popup Page Elements', () => {
     test.describe.configure({ mode: 'serial' });

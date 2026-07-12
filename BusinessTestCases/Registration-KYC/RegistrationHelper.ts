@@ -278,6 +278,39 @@ export async function fillFinancialForm(page: Page): Promise<void> {
     await selectRandomOption(page, page.locator('#mat-select-value-1'));
 }
 
+/**
+ * Route-mocking helpers for the Sprint 71 registration items (section 13 of
+ * the test-case doc): auto-approval/auto-activation (EMI-5748), fixed-Merchant
+ * sign-up mode (EMI-5768), and activation email (EMI-5777).
+ *
+ * None of these endpoints are given verbatim in the ticket text (unlike the
+ * PoS section), so the paths below are best-effort guesses following this
+ * app's existing `/emi-profile/api/v1/...` convention — reconcile against the
+ * real network tab on first live run, same caveat as RegistrationProductsPage.ts.
+ */
+
+/** Toggles the EMI-5768 fixed-Merchant sign-up mode config the registration
+ *  wizard is expected to read before rendering the profile-type step. */
+export async function mockFixedMerchantMode(page: Page, enabled: boolean): Promise<void> {
+    await page.route('**/*registration*settings*', route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ fixedMerchantMode: enabled }) })
+    );
+}
+
+/** Mocks the final registration submission so the response reflects
+ *  auto-approval + auto-activation (EMI-5748) instead of a "pending review"
+ *  status, and includes an activation-email-sent flag (EMI-5777). */
+export async function mockAutoApprovedRegistration(page: Page): Promise<void> {
+    await page.route('**/emi-profile/api/v1/register/**', route => {
+        if (route.request().method() !== 'POST') return route.continue();
+        return route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({ status: 'ACTIVE', approvalStatus: 'APPROVED', activationEmailSent: true }),
+        });
+    });
+}
+
 export async function selectRandomOption(page: Page, dropdownLocator: Locator) {
     const tag = await dropdownLocator.evaluate((el: Element) => el.tagName.toLowerCase());
     if (tag === 'select') {
