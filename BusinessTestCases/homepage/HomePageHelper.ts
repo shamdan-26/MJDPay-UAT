@@ -10,6 +10,7 @@ import { HomepageQuickActionsPage } from '../pageElements/homepage/HomepageQuick
 import { HomepageBillsOverviewPage } from '../pageElements/homepage/HomepageBillsOverviewPage';
 import { HomepageSubWalletsPage } from '../pageElements/homepage/HomepageSubWalletsPage';
 import { HomepageTransactionsPage } from '../pageElements/homepage/HomepageTransactionsPage';
+import testAccounts from '../../data/testAccounts.json';
 
 export const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 export const LOGIN_URL        = `${BASE_URL}/business/auth/login`;
@@ -18,7 +19,7 @@ export const HOME_URL_PATTERN = /\/business\/main\/home/;
 export const BASE_ORIGIN      = BASE_URL;
 
 /** Shared fallback password for all UAT test accounts below. */
-const DEFAULT_TEST_PASSWORD = 'Aa#1234567';
+const DEFAULT_TEST_PASSWORD = testAccounts.defaultPassword;
 
 /** In ENV=dev the login button has no accessible "Log In" role name — same
  *  env split already established in pageElements/LoginPage.ts. */
@@ -29,18 +30,18 @@ function loginButton(page: Page): Locator {
         : page.getByRole('button', { name: 'Log In' });
 }
 
-export const VALID_COMPANY  = process.env['UAT_COMPANY'] ?? 'A2316';
-export const VALID_MOBILE   = process.env['UAT_MOBILE']  ?? '500021788';
+export const VALID_COMPANY  = process.env['UAT_COMPANY'] ?? testAccounts.merchant.company;
+export const VALID_MOBILE   = process.env['UAT_MOBILE']  ?? testAccounts.merchant.mobile;
 export const VALID_PASSWORD = DEFAULT_TEST_PASSWORD;
 
 /** Second merchant account — used to spread homepage spec files across two
  *  sessions so parallel workers don't collide on the same account. */
-export const VALID_COMPANY_2  = process.env['UAT_COMPANY_2'] ?? 'T9446';
-export const VALID_MOBILE_2   = process.env['UAT_MOBILE_2']  ?? '502310965';
+export const VALID_COMPANY_2  = process.env['UAT_COMPANY_2'] ?? testAccounts.merchant2.company;
+export const VALID_MOBILE_2   = process.env['UAT_MOBILE_2']  ?? testAccounts.merchant2.mobile;
 export const VALID_PASSWORD_2 = process.env['UAT_PASSWORD_2'] ?? DEFAULT_TEST_PASSWORD;
 
-export const VALID_BILLER_COMPANY  = process.env['UAT_BILLER_COMPANY'] ?? 'L3999';
-export const VALID_BILLER_MOBILE   = process.env['UAT_BILLER_MOBILE']  ?? '500318143';
+export const VALID_BILLER_COMPANY  = process.env['UAT_BILLER_COMPANY'] ?? testAccounts.biller.company;
+export const VALID_BILLER_MOBILE   = process.env['UAT_BILLER_MOBILE']  ?? testAccounts.biller.mobile;
 export const VALID_BILLER_PASSWORD = process.env['UAT_BILLER_PASSWORD'] ?? DEFAULT_TEST_PASSWORD;
 
 /** Pre-authenticated storage states for the two homepage merchant accounts,

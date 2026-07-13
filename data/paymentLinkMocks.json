@@ -1,0 +1,7 @@
+{
+  "validBillToken": "mock-valid-bill-token",
+  "validWalletToken": "mock-valid-wallet-token",
+  "expiredToken": "mock-expired-token",
+  "defaultBillSummary": { "type": "BILL", "amount": 250, "ownerProfileComplete": true },
+  "defaultWalletSummary": { "type": "WALLET", "minAmount": 10, "maxAmount": 5000, "ownerProfileComplete": true }
+}

@@ -33,6 +33,18 @@ export class ProductsManagementPage {
     readonly addProductsSubmitButton: Locator;
     readonly notImplementedError: Locator;
 
+    // New PoS order request (from Orders tab)
+    readonly newPosOrderDialog: Locator;
+    readonly deviceCountInput: Locator;
+    readonly walletPicker: Locator;
+    readonly mainWalletNote: Locator;
+    readonly deliveryAddressField: Locator;
+    readonly submitOrderButton: Locator;
+
+    // Error / retry state
+    readonly errorMessage: Locator;
+    readonly retryButton: Locator;
+
     constructor(page: Page) {
         this.page = page;
 
@@ -55,6 +67,20 @@ export class ProductsManagementPage {
         this.addProductsList         = page.locator('[class*="product-list"], [class*="products-list"], [role="list"]').first();
         this.addProductsSubmitButton = page.getByRole('button', { name: /^(submit|add|confirm)$/i });
         this.notImplementedError     = page.getByText(/not implemented|not yet available|coming soon/i).first();
+
+        this.newPosOrderDialog = page.getByRole('dialog').filter({ hasText: /device/i })
+            .or(page.locator('[class*="new-order"], [class*="order-dialog"]')).first();
+        this.deviceCountInput  = page.getByRole('spinbutton', { name: /number of devices|device count/i })
+            .or(page.getByRole('textbox', { name: /number of devices|device count/i }));
+        this.walletPicker = page.getByRole('combobox', { name: /wallet/i })
+            .or(page.getByRole('listbox', { name: /wallet/i }));
+        this.mainWalletNote = page.getByText(/main wallet/i).first();
+        this.deliveryAddressField = page.getByRole('textbox', { name: /address/i })
+            .or(page.getByText(/national address|custom (map )?pin/i)).first();
+        this.submitOrderButton = page.getByRole('button', { name: /^submit( request)?$/i });
+
+        this.errorMessage = page.getByText(/something went wrong|failed to load|error occurred/i).first();
+        this.retryButton  = page.getByRole('button', { name: /retry|try again/i });
     }
 
     productItem(name: string): Locator {

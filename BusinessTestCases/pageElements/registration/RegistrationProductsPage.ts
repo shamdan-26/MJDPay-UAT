@@ -84,9 +84,6 @@ export class RegistrationProductsPage {
     }
 
     productCard(name: string): Locator {
-        return this.page
-            .locator('article, li, [class*="product-card"], [class*="mp-product"], [class*="product"]')
-            .filter({ hasText: name })
-            .first();
+        return this.page.locator('.mp-product-card').filter({ hasText: name }).first();
     }
 }

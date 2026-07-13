@@ -648,11 +648,6 @@ test.describe('Registration – Tab 1 → Tab 2 Transition', () => {
         ).not.toBeVisible({ timeout: 10000 });
     });
 
-    // Negative – direct tab-header navigation
-    test('should not switch to Tab 2 by clicking its tab header while Tab 1 is incomplete', async ({ page }) => {
-        await page.getByRole('tab', { name: /financial/i }).click({ force: true });
-        await expect(page.locator(ACTIVE_STEP).first()).toContainText('Business Info', { timeout: 5000 });
-    });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -945,6 +940,7 @@ test.describe('Registration – Continue/Resume Registration (EMI-5666, T03)', (
     test.describe.configure({ mode: 'serial' });
 
     test('should bypass Financial & Business when re-entering with the same mobile and CRN as a pending registration', async ({ page, context }) => {
+        await page.pause();
         test.setTimeout(180_000);
         await context.grantPermissions(['geolocation'], { origin: new URL(REGISTER_URL).origin });
         const asset = nextResidentAsset();

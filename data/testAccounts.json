@@ -1,0 +1,10 @@
+{
+  "defaultPassword": "Aa#1234567",
+  "wrongPassword": "WrongPass@99",
+  "validOtp": "00000000",
+  "invalidOtp": "11111111",
+  "merchant": { "company": "A2316", "mobile": "500021788" },
+  "loginHappyPath": { "company": "T9446", "mobile": "502310965" },
+  "merchant2": { "company": "T9446", "mobile": "502310965" },
+  "biller": { "company": "L3999", "mobile": "500318143" }
+}

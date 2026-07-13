@@ -25,6 +25,10 @@ export class RegistrationInfoPage {
     readonly billerCard: Locator;
     readonly customerCard: Locator;
     readonly freelancerCard: Locator;
+    /** EMI-5768 fixed-Merchant sign-up mode: static label + supporting text shown
+     *  in place of the profile-type selector when the mode is enabled. Not yet
+     *  verified against a live build — best-effort text match. */
+    readonly fixedMerchantLabel: Locator;
 
     // CRN (Unified Number)
     readonly crnLabel: Locator;
@@ -73,6 +77,7 @@ export class RegistrationInfoPage {
         this.billerCard     = page.locator('#register-profile-card-BILLER');
         this.customerCard   = page.locator('#register-profile-card-CUSTOMER');
         this.freelancerCard = page.locator('#register-profile-card-FREELANCER');
+        this.fixedMerchantLabel = page.getByText(/signing up as merchant/i).first();
 
         this.crnLabel         = page.locator('label[for="register-unifiedNumber-input"]');
         this.crnInput         = page.locator('#register-unifiedNumber-group input[type="text"]');

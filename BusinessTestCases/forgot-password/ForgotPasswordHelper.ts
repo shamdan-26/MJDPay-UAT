@@ -3,16 +3,17 @@ import { ForgotPasswordPage } from '../pageElements/ForgotPasswordPage';
 import { LoginPage } from '../pageElements/LoginPage';
 import { OtpPage } from '../pageElements/OtpPage';
 import { LOGIN_URL, VALID_OTP, INVALID_OTP } from '../login/LoginHelper';
+import testAccounts from '../../data/testAccounts.json';
 
 const BASE_URL              = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 export const FORGOT_URL     = `${BASE_URL}/business/auth/forgot-password`;
 export { LOGIN_URL, VALID_OTP, INVALID_OTP };
 
-export const VALID_COMPANY  = process.env['UAT_COMPANY'] ?? 'A2316';
-export const VALID_MOBILE   = process.env['UAT_MOBILE']  ?? '500021788';
+export const VALID_COMPANY  = process.env['UAT_COMPANY'] ?? testAccounts.merchant.company;
+export const VALID_MOBILE   = process.env['UAT_MOBILE']  ?? testAccounts.merchant.mobile;
 
 export const SUBMIT_BUTTON  = 'reset password';
-export const VALID_PASSWORD = 'Aa#1234567';
+export const VALID_PASSWORD = testAccounts.defaultPassword;
 
 export const MODAL_SELECTOR = "div.my-modal-container";
 

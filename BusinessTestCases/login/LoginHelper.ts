@@ -2,24 +2,25 @@ import type { Page } from '@playwright/test';
 import { MongoClient } from 'mongodb';
 import { waitForToastClear } from '../shared';
 import { LoginPage } from '../pageElements/LoginPage';
+import testAccounts from '../../data/testAccounts.json';
 
 export const LOGIN_URL    = `${process.env['BASE_URL'] ?? 'https://uat.majdpay.com'}/business/auth/login`;
 export const SESSION_PATH = 'session.json';
 
 // Account used for wrong-password / invalid-credential tests.
-export const VALID_COMPANY  = process.env['UAT_COMPANY'] ?? 'A2316';
-export const VALID_MOBILE   = process.env['UAT_MOBILE']  ?? '500021788';
+export const VALID_COMPANY  = process.env['UAT_COMPANY'] ?? testAccounts.merchant.company;
+export const VALID_MOBILE   = process.env['UAT_MOBILE']  ?? testAccounts.merchant.mobile;
 
 // Account used for successful-login tests (happy path, OTP flow, validation card).
-export const LOGIN_COMPANY  = process.env['UAT_LOGIN_COMPANY'] ?? 'T9446';
-export const LOGIN_MOBILE   = process.env['UAT_LOGIN_MOBILE']  ?? '502310965';
+export const LOGIN_COMPANY  = process.env['UAT_LOGIN_COMPANY'] ?? testAccounts.loginHappyPath.company;
+export const LOGIN_MOBILE   = process.env['UAT_LOGIN_MOBILE']  ?? testAccounts.loginHappyPath.mobile;
 
-export const VALID_PASSWORD = 'Aa#1234567';
-export const WRONG_PASSWORD = 'WrongPass@99';
+export const VALID_PASSWORD = testAccounts.defaultPassword;
+export const WRONG_PASSWORD = testAccounts.wrongPassword;
 
 // DEV-only OTP bypass — in UAT use getOtpFromDb() instead.
-export const VALID_OTP   = '00000000';
-export const INVALID_OTP = '11111111';
+export const VALID_OTP   = testAccounts.validOtp;
+export const INVALID_OTP = testAccounts.invalidOtp;
 
 // Dedicated accounts for account-status and lockout tests (set via env vars).
 export const LOCKED_COMPANY      = process.env['LOCKED_COMPANY']      ?? '';

@@ -203,6 +203,49 @@ test.describe('Registration - Financial & Business Functionality', () => {
         expect(selected?.trim()).not.toMatch(/select option/i);
     });
 
+    // ── Dropdown search filtering ─────────────────────────────────────────────
+    // The mat-select panel embeds a search box (#floating-select-search-input)
+    // inside a disabled placeholder option (id="floating-select-search-option",
+    // aria-disabled="true" — see the exclusion filter in RegistrationHelper.ts's
+    // selectRandomOption()). Angular re-enables pointer-events on the nested
+    // input via CSS so a real user can still type there, but Playwright's
+    // actionability check propagates the ancestor's aria-disabled and treats
+    // the input as not enabled — hence { force: true } to bypass that check.
+
+    test('should filter the Industries options when typing in the dropdown search field', async () => {
+        await page.locator('#mat-select-value-0').click();
+        const searchInput = page.locator('#floating-select-search-input');
+        await expect(searchInput).toBeVisible({ timeout: 5000 });
+
+        const options = page.locator('[role="option"]:visible:not([aria-disabled="true"]):not([disabled])');
+        await expect(options.first()).toBeVisible({ timeout: 5000 });
+        const fullText = (await options.first().textContent())?.trim() ?? '';
+        const query = fullText.slice(0, 3);
+
+        await searchInput.fill(query, { force: true });
+        await expect(options.first()).toBeVisible({ timeout: 5000 });
+        expect((await options.first().textContent())?.toLowerCase()).toContain(query.toLowerCase());
+
+        await options.first().click();
+    });
+
+    test('should filter the Annual Income options when typing in the dropdown search field', async () => {
+        await page.locator('#mat-select-value-1').click();
+        const searchInput = page.locator('#floating-select-search-input');
+        await expect(searchInput).toBeVisible({ timeout: 5000 });
+
+        const options = page.locator('[role="option"]:visible:not([aria-disabled="true"]):not([disabled])');
+        await expect(options.first()).toBeVisible({ timeout: 5000 });
+        const fullText = (await options.first().textContent())?.trim() ?? '';
+        const query = fullText.slice(0, 3);
+
+        await searchInput.fill(query, { force: true });
+        await expect(options.first()).toBeVisible({ timeout: 5000 });
+        expect((await options.first().textContent())?.toLowerCase()).toContain(query.toLowerCase());
+
+        await options.first().click();
+    });
+
     // ── Next button state — partial completion ────────────────────────────────
 
     test('should keep Next disabled when only the numeric fields are filled and no dropdown is selected', async ({ browser }) => {

@@ -1,0 +1,29 @@
+{
+  "defaultMockProducts": [
+    { "id": "p-wallet", "name": "Wallet", "typeCode": "WALLET" },
+    { "id": "p-pos", "name": "PoS Terminal", "typeCode": "POS" }
+  ],
+  "defaultMockOrders": [
+    {
+      "id": "order-1",
+      "status": "Active",
+      "timeline": [
+        { "status": "Requesting", "at": "2026-06-01T00:00:00Z" },
+        { "status": "Active", "at": "2026-06-05T00:00:00Z" }
+      ],
+      "auditTrail": [
+        { "actor": "system", "action": "created", "at": "2026-06-01T00:00:00Z" }
+      ]
+    }
+  ],
+  "defaultMockDevices": [
+    {
+      "tid": "TID-0001",
+      "sourceOrder": "order-1",
+      "location": "Riyadh HQ",
+      "wallet": "Main Wallet",
+      "activatedDate": "2026-06-05",
+      "status": "Active"
+    }
+  ]
+}

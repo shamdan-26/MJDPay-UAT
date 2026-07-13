@@ -7,56 +7,33 @@ import { RegistrationMobilePage } from '../pageElements/registration/Registratio
 import { RegistrationInfoPage } from '../pageElements/registration/RegistrationInfoPage';
 import { RegistrationFinancialPage } from '../pageElements/registration/RegistrationFinancialPage';
 import { RegistrationVerificationPage } from '../pageElements/registration/RegistrationVerificationPage';
+import registrationDefaults from '../../data/registrationDefaults.json';
+import registrationAssets from '../../data/registrationAssets.json';
 
 const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 export const LOGIN_URL    = `${BASE_URL}/business/auth/login`;
 export const REGISTER_URL = `${BASE_URL}/business/auth/register`;
 
-export const VALID_EMAIL = 's.hamdan@dg-cash.com';
+export const VALID_EMAIL = registrationDefaults.validEmail;
 
 // Verification & Uploads step (Tab 3) — shared valid test data
-export const VALID_IBAN       = 'SA0380000001234567891234';
-export const VALID_VAT_NUMBER = '300123456700003';
+export const VALID_IBAN       = registrationDefaults.validIban;
+export const VALID_VAT_NUMBER = registrationDefaults.validVatNumber;
 
 /** Minimal 1x1 PNG used as a stand-in upload file across registration file-upload tests. */
-export const TEST_FILE_BUFFER = Buffer.from(
-    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
-    'base64'
-);
+export const TEST_FILE_BUFFER = Buffer.from(registrationDefaults.testFileBase64, 'base64');
 
 /** Generates a unique email for each test run to avoid duplicate-registration rejections. */
 export function generateEmail(): string {
     return `test+${Date.now()}@dg-cash.com`;
 }
 
-// Pre-generated test assets (from Assets.xlsx)
+// Pre-generated test assets (from Assets.xlsx) — see data/registrationAssets.json
 // Citizen_IDs sheet: Saudi_CRN | Citizen_ID | Saudi_Mobile (strip leading 966)
-const CITIZEN_ASSETS = [
-    { crn: '1010006068', nationalId: '1497430312', mobile: '500021788' },
-    { crn: '1010016097', nationalId: '1418257208', mobile: '500062901' },
-    { crn: '1010036467', nationalId: '1167272762', mobile: '500064975' },
-    { crn: '1010051690', nationalId: '1618667578', mobile: '500083440' },
-    { crn: '1010077719', nationalId: '1982507954', mobile: '500318143' },
-    { crn: '1010091086', nationalId: '1480826062', mobile: '500474285' },
-    { crn: '1010094219', nationalId: '1687726933', mobile: '500528763' },
-    { crn: '1010108246', nationalId: '1754664454', mobile: '500622883' },
-    { crn: '1010117673', nationalId: '1237547706', mobile: '500664869' },
-    { crn: '1010121708', nationalId: '1572609475', mobile: '500802581' },
-];
+const CITIZEN_ASSETS = registrationAssets.citizenAssets;
 
 // Resident_IDs sheet: Resident_ID | CRN | Mobile (strip leading 966)
-export const RESIDENT_ASSETS = [
-    { crn: '1000659746', nationalId: '2959795515', mobile: '599000000' },
-    { crn: '1002382941', nationalId: '2258981709', mobile: '599000001' },
-    { crn: '1005135478', nationalId: '2447227568', mobile: '599000002' },
-    { crn: '1005720915', nationalId: '2012260838', mobile: '599000003' },
-    { crn: '1006122426', nationalId: '2874935543', mobile: '599000004' },
-    { crn: '1006666281', nationalId: '2191277199', mobile: '599000005' },
-    { crn: '1007027103', nationalId: '2521396180', mobile: '599000006' },
-    { crn: '1008274647', nationalId: '2452854447', mobile: '599000007' },
-    { crn: '1010265815', nationalId: '2355079696', mobile: '599000008' },
-    { crn: '1010627980', nationalId: '2218615066', mobile: '599000009' },
-];
+export const RESIDENT_ASSETS = registrationAssets.residentAssets;
 
 // Primary defaults resident pool used for Business Info step
 export const VALID_CRN    = RESIDENT_ASSETS[0].crn;
@@ -82,23 +59,8 @@ export function generateKSAMobile(): string {
     return all[Math.floor(Math.random() * all.length)].mobile;
 }
 
-// UAT test accounts from phone numbers.xlsx — Sheet1, uat-flagged rows
-export const UAT_OTP_ASSETS = [
-    { id: '1000000008', crn: '1100000008', mobile: '510203001' },
-    { id: '1000000016', crn: '1200000016', mobile: '510203002' },
-    { id: '1000000032', crn: '1400000032', mobile: '510203004' },
-    { id: '1000000040', crn: '1500000040', mobile: '510203005' },
-    { id: '1000000057', crn: '1600000057', mobile: '510203006' },
-    { id: '1000000065', crn: '1700000065', mobile: '510203007' },
-    { id: '1000000073', crn: '1800000073', mobile: '510203008' },
-    { id: '1000000081', crn: '1900000081', mobile: '510203009' },
-    { id: '1000000230', crn: '1240000230', mobile: '510203024' },
-    { id: '2000000048', crn: '1300000048', mobile: '510203030' },
-    { id: '2000000154', crn: '1410000154', mobile: '510203041' },
-    { id: '2000000162', crn: '1420000162', mobile: '510203042' },
-    { id: '2000000238', crn: '1490000238', mobile: '510203049' },
-    { id: '2000000246', crn: '1500000246', mobile: '510203050' },
-];
+// UAT test accounts from phone numbers.xlsx — Sheet1, uat-flagged rows — see data/registrationAssets.json
+export const UAT_OTP_ASSETS = registrationAssets.uatOtpAssets;
 
 let _uatOtpIndex = 0;
 
@@ -165,8 +127,11 @@ export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
     if (otpVisible) {
         await page.getByRole('textbox', { name: 'One time password input' }).first()
             .waitFor({ state: 'visible', timeout: 10000 });
-        // dev/UAT test accounts always accept all-zero OTP; no mongo needed
-        await fillOTP(page);
+        // Only the dedicated UAT_OTP_ASSETS pool always accepts an all-zero OTP;
+        // CITIZEN_ASSETS/RESIDENT_ASSETS mobiles (used here by default) require
+        // the real code — getOtpFromDb() returns '' in dev, where zeros do work.
+        const otp = await getOtpFromDb(usedMobile);
+        await fillOTP(page, otp);
         const verifyBtn = page.getByRole('button', { name: 'Verify' });
         if (await verifyBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
             await verifyBtn.click();
