@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { assertToast } from '../../shared';
+import { assertToast } from '../../toastMessages';
 import {
     FORGOT_URL,
     VALID_COMPANY,

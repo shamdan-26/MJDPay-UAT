@@ -7,7 +7,7 @@ import { DashboardPage } from '../../pageElements/homepage/DashboardPage';
 import { HomepageGreetingPage } from '../../pageElements/homepage/HomepageGreetingPage';
 import { HomepageBillsOverviewPage } from '../../pageElements/homepage/HomepageBillsOverviewPage';
 import { HomepageSubWalletsPage } from '../../pageElements/homepage/HomepageSubWalletsPage';
-import { waitForToastClear } from '../../shared';
+import { waitForToastClear } from '../../toastMessages';
 
 test.describe('Homepage – Negative Scenarios', () => {
     test.describe.configure({ mode: 'serial' });

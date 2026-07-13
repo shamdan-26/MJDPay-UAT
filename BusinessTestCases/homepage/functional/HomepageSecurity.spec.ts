@@ -5,7 +5,7 @@ import {
 } from '../HomePageHelper';
 import { DashboardPage } from '../../pageElements/homepage/DashboardPage';
 import { HomepageBalanceCardPage } from '../../pageElements/homepage/HomepageBalanceCardPage';
-import { waitForToastClear } from '../../shared';
+import { waitForToastClear } from '../../toastMessages';
 
 // True security/edge-case checks only. UI-presence assertions (greeting
 // format, last-login text, brand name) live in ui/HomepageGreetingPage.spec.ts

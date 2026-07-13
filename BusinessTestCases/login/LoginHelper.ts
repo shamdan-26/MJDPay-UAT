@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test';
 import { MongoClient } from 'mongodb';
-import { waitForToastClear } from '../shared';
+import { waitForToastClear } from '../toastMessages';
 import { LoginPage } from '../pageElements/LoginPage';
 import testAccounts from '../../data/testAccounts.json';
 

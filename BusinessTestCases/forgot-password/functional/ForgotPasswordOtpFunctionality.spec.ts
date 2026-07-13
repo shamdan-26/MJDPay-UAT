@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { assertToast } from '../../shared';
+import { assertToast } from '../../toastMessages';
 import { VALID_MOBILE, INVALID_OTP, gotoOtpModal } from '../ForgotPasswordHelper';
 import { getOtpFromDb } from '../../login/LoginHelper';
 import { OtpPage } from '../../pageElements/OtpPage';
