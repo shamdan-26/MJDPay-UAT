@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import { waitForToastClear } from '../shared';
+import { waitForToastClear } from '../toastMessages';
 import paymentLinkMocks from '../../data/paymentLinkMocks.json';
 
 /**

@@ -2,7 +2,7 @@
 
 declare const process: { env: Record<string, string | undefined> };
 import { MongoClient } from 'mongodb';
-import { waitForToastClear } from '../shared';
+import { waitForToastClear } from '../toastMessages';
 import { RegistrationMobilePage } from '../pageElements/registration/RegistrationMobilePage';
 import { RegistrationInfoPage } from '../pageElements/registration/RegistrationInfoPage';
 import { RegistrationFinancialPage } from '../pageElements/registration/RegistrationFinancialPage';

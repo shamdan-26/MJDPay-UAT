@@ -13,11 +13,4 @@ bug-report-assets/
 .env.*
 
 # temp only
-tests/tempTest.spec.ts
-tests/pageObjects/BillsPage.ts
-tests/pageObjects/TopupPage.ts
-tests/pageObjects/TopupPageConvertedSeleniumCode.ts
-tests/testCases/TopupTestsConvertedSeleniumCode.spec.ts
-tests/testCases/TopupTests.spec.ts
-tests/testCases/PayBill.spec.ts
-tests/testCases/LoginValidationTests.spec.ts
+
