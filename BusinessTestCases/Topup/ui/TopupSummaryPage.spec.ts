@@ -1,12 +1,12 @@
 import { test, expect, type Page } from '@playwright/test';
 import { LoginPage } from '../../pageElements/LoginPage';
 import { OtpPage } from '../../pageElements/OtpPage';
-import { HomepageQuickActionsPage } from '../../pageElements/homepage/HomepageQuickActionsPage';
-import { HomepageSidebarPage } from '../../pageElements/homepage/HomepageSidebarPage';
-import { DashboardPage } from '../../pageElements/homepage/DashboardPage';
-import { TopupPage } from '../../Helpers/TopupPage';
+import { HomepageQuickActionsPage } from '../../pageElements/HomepageQuickActionsPage';
+import { HomepageSidebarPage } from '../../pageElements/HomepageSidebarPage';
+import { DashboardPage } from '../../pageElements/DashboardPage';
+import { TopupPage } from '../../pageElements/TopupPage';
 import { HOME_URL } from '../TopupHelper';
-import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../login/LoginHelper';
+import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/LoginHelper';
 
 // Element-presence assertions for the Topup "Summary" step — the screen shown
 // after Proceed is clicked on the amount page (mp-page-hero "Top Up Summary").
@@ -49,7 +49,6 @@ test.describe('Topup – Page Elements – Summary step', () => {
     test.beforeAll(async ({ browser }) => {
         test.setTimeout(150000);
         page = await browser.newPage();
-        await page.context().grantPermissions(['geolocation'], { origin: new URL(LOGIN_URL).origin });
 
         loginPage = new LoginPage(page);
         otp = new OtpPage(page);

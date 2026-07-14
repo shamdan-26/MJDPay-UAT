@@ -1,11 +1,11 @@
 import { chromium } from '@playwright/test';
 import { mkdirSync } from 'fs';
-import { getOtpFromDb, fillOTP } from '../BusinessTestCases/Registration-KYC/RegistrationHelper';
+import { getOtpFromDb, fillOTP } from '../BusinessTestCases/Registration/RegistrationHelper';
 import {
     loginAsMerchant,
     homepageAccountPool,
     LOGIN_URL,
-} from '../BusinessTestCases/homepage/HomePageHelper';
+} from '../BusinessTestCases/Homepage/HomePageHelper';
 
 const env            = process.env['ENV'] ?? 'dev';
 const VALID_COMPANY  = process.env['UAT_SETUP_COMPANY'];
@@ -23,9 +23,9 @@ async function globalSetup() {
             const page    = await context.newPage();
 
             await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-            await page.getByRole('textbox', { name: 'Company number' }).fill(VALID_COMPANY);
-            await page.getByRole('textbox', { name: 'Mobile number' }).fill(VALID_MOBILE);
-            await page.locator('input[aria-label="Password"]').fill(VALID_PASSWORD);
+            await page.getByRole('textbox', { name: /Company number|رقم الشركة/ }).fill(VALID_COMPANY);
+            await page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ }).fill(VALID_MOBILE);
+            await page.locator('input[aria-label="Password"], input[aria-label="كلمة المرور"]').fill(VALID_PASSWORD);
             if (env === 'dev') {
                 await page.locator('#btn_login').click();
             } else {

@@ -12,13 +12,13 @@ npm run test:uat
 npm run test:preprod
 
 # Run a single spec file
-npx playwright test tests/login/LoginPage.spec.ts
+npx playwright test BusinessTestCases/Login/ui/LoginPage.spec.ts
 
 # Run a single test by title (substring match)
 npx playwright test --grep "should display the login form"
 
-# Run tests in a specific folder
-npx playwright test tests/login/
+# Run tests in a specific feature folder
+npx playwright test BusinessTestCases/Login/
 
 # Open the HTML report after a run
 npx playwright show-report
@@ -33,92 +33,112 @@ The `ENV` variable selects the environment config (`.env.uat`, `.env.preprod`, `
 
 ### Environment & configuration
 
-`playwright.config.ts` loads `.env.<ENV>` via `dotenv` before test discovery. Required env vars:
+`playwright.config.ts` loads `.env.<ENV>` via `dotenv` before test discovery, and is the **only** Playwright config in the repo (`testDir: './BusinessTestCases'`). Required env vars:
 
 | Variable | Used by |
 |---|---|
-| `BASE_URL` | all helpers |
+| `BASE_URL` | every helper/page object |
 | `MONGO_URI` | OTP fetching from MongoDB |
-| `UAT_COMPANY`, `UAT_MOBILE` | homepage / login helpers |
+| `UAT_COMPANY`, `UAT_MOBILE` | primary shared test account (homepage, bank transfer, login) |
+| `UAT_COMPANY_2`, `UAT_MOBILE_2`, ... `_3`, `_4` | additional homepage test accounts — the pool auto-extends as these are added, no code changes needed (see `Homepage/HomePageHelper.ts`) |
 | `UAT_SETUP_COMPANY/MOBILE/PASSWORD` | `support/global-setup.ts` |
 
-`support/global-setup.ts` runs once before the suite: it logs in, then saves `session.json` (cookies + localStorage). `support/global-teardown.ts` wipes `session.json` afterwards. Tests that need a pre-authenticated session use `test.use({ storageState: 'session.json' })`.
+`support/global-setup.ts` runs once before the suite: it logs in and saves `session.json` (cookies + localStorage), then separately pre-authenticates every account in the homepage account pool into `playwright/.auth/homepage-account<N>.json`. `support/global-teardown.ts` wipes `session.json` afterwards. Tests that need a pre-authenticated session use `test.use({ storageState: 'session.json' })` or `test.use({ storageState: ACCOUNT_1_STORAGE_STATE })`.
 
 ### OTP handling
 
-All real-OTP flows query MongoDB directly (`notification-log` / `notifications` collection, sorted by `createdAt` desc, regex-matched on `recipient` and `Use this OTP` in the message). The `getOtpFromDb` helpers in both `tests/Registration/helpers.ts` and `tests/login/helpers.ts` implement this with retry logic. In `ENV=dev` the OTP is always `00000000` and MongoDB is skipped.
+All real-OTP flows query MongoDB directly (`notification-log` / `notifications` collection, sorted by `createdAt` desc, regex-matched on `recipient` and `Use this OTP` in the message). `getOtpFromDb` is implemented in `Registration/RegistrationHelper.ts` and `Login/LoginHelper.ts` with retry logic. In `ENV=dev` the OTP is always `00000000` and MongoDB is skipped.
 
 ### Toast / snackbar guard
 
-Every landing-page navigation calls `waitForToastClear` (from `tests/shared.ts`) immediately after the page settles. This waits up to 3 s for a `mat-snack-bar-container` / `[class*="snack"]` / `[class*="toast"]` to appear, then up to 8 s for it to clear. It is a no-op when no toast appears. This is necessary because Angular fires background API calls on load that can produce transient error banners in the UAT environment.
+`waitForToastClear` and `assertToast` live in `BusinessTestCases/toastMessages.ts`. `waitForToastClear` is called after every landing-page navigation immediately once the page settles — it waits up to 3 s for a `mat-snack-bar-container` / `[class*="snack"]` / `[class*="toast"]` to appear, then up to 8 s for it to clear, and is a no-op when no toast appears. `assertToast` asserts a toast is visible and optionally contains expected text — used in negative-scenario tests that expect an error/warning toast. This exists because Angular fires background API calls on load that can produce transient error banners in the UAT environment.
 
 ### Page Object Model
 
-All UI interactions are encapsulated in page objects under `tests/pages/`. Tests import and instantiate them; raw `page.locator()` calls belong in page objects, not in spec files.
-
-```
-tests/pages/
-  LoginPage.ts               ← login form locators + fill/submit actions
-  OtpPage.ts                 ← OTP popup shared across login, registration, forgot-password
-  ForgotPasswordPage.ts      ← forgot-password steps 1 & 2
-  DashboardPage.ts           ← post-login dashboard (sidebar, widgets, profile menu)
-  registration/
-    RegistrationMobilePage.ts   ← mobile-entry step
-    RegistrationInfoPage.ts     ← Business Info form (Tab 1)
-    RegistrationFinancialPage.ts ← Financial form (Tab 2)
-    RegistrationNafathPage.ts   ← NAFATH step
-    RegistrationVerificationPage.ts ← IBAN / document uploads
-```
+All UI interactions are encapsulated in page objects under `BusinessTestCases/pageElements/` — one flat folder, 25 files, no subfolders. Tests never call raw `page.locator()`; that belongs in a page object.
 
 **Conventions:**
-- Locators are `readonly` Locator properties set in the constructor — never re-queried per-test.
+- Locators are `readonly` Locator properties set once in the constructor — never re-queried per-test.
+- Every page object's constructor takes a single `page: Page` argument.
 - Action methods (`fill`, `submit`, `next`, `waitForLoad`) hide Playwright implementation details from spec files.
-- When a `beforeAll` creates its own browser context (registration tests), the helper returns `{ page, <PageObject> }` so both are available in the block.
-- Spec files that use Playwright `page` fixtures instantiate the page object in `beforeEach`:
-  ```typescript
-  let loginPage: LoginPage;
-  test.beforeEach(async ({ page }) => { loginPage = new LoginPage(page); await loginPage.goto(LOGIN_URL); });
-  ```
+
+### Fixtures — how page objects get into tests
+
+The suite has **two session lifecycles**, and each has its own fixtures file extending `@playwright/test`'s `test`/`expect`:
+
+1. **`BusinessTestCases/fixtures.ts`** — for specs that get a fresh `page` per test (the common case). Defines one lazy fixture per page object (all 25 classes), keyed by name (`loginPage`, `dashboard`, `otp`, `homepageBalanceCard`, `registrationInfo`, etc. — see the file for the full list). It also re-exports everything else from `@playwright/test` (`Page`, `Browser`, `expect`, ...), so a spec file only has to change its import source, not add a second import line for types:
+   ```typescript
+   import { test, expect, type Page } from '../../fixtures'; // was '@playwright/test'
+
+   let loginPage: LoginPage;
+   test.beforeEach(async ({ page, loginPage: lp }) => {
+       loginPage = lp;
+       await loginPage.goto(LOGIN_URL);
+   });
+   ```
+   Fixtures are lazy — only the ones a test actually destructures get constructed, so bundling all 25 in one file costs nothing per-test.
+
+2. **`Homepage/HomepageFixtures.ts`** — for the Homepage suite, which shares one authenticated session across every test file a given worker runs (cheaper than re-logging-in per file). This is a **worker-scoped** fixture (`{ scope: 'worker' }`), Playwright's documented pattern for expensive shared setup, built on top of `createHomepageSession`/`refreshHomepage` in `Homepage/HomePageHelper.ts`:
+   ```typescript
+   import { test, expect, Page } from '../HomepageFixtures'; // was '@playwright/test'
+
+   let page: Page;
+   let dashboard: DashboardPage;
+   test.beforeEach(async ({ homepagePage, dashboard: d }) => {
+       page = homepagePage;
+       dashboard = d;
+       await refreshHomepage(page);
+   });
+   ```
+   **Exception**: three Homepage files need a *specific* account rather than whichever one the worker was assigned (transaction-history / empty-state fixtures) — `ui/HomepageTransactionsPage.spec.ts`, `functional/HomepageTransactions.spec.ts`, `functional/HomepageTransactionsEmptyState.spec.ts`. These still call `createHomepageSession(browser, 'ACCOUNT_1' | 'ACCOUNT_2')` directly in their own `beforeAll`/`afterAll`, importing straight from `@playwright/test`. Don't migrate them to the worker fixture — that would silently swap their pinned account for whatever the worker's default is.
+
+When adding a new page object, add its fixture to `fixtures.ts` (or `HomepageFixtures.ts` if it's a Homepage widget) rather than instantiating it manually in a spec file.
 
 ### Test organisation
 
 ```
-tests/
-  shared.ts                  ← waitForToastClear utility
-  login/                     ← Login flow
-    helpers.ts               ← gotoLogin, fillAndSubmitLogin, test data
-    LoginPage.spec.ts        ← UI/element assertions
-    LoginFunctionality.spec.ts
-    LoginOtpPopup.spec.ts
-    LoginOtpFunctionality.spec.ts
-    LoginMobileValidation.spec.ts
-    LoginAccountStatus.spec.ts
-    LoginLockout.spec.ts
-    LoginValidationPopup.spec.ts
-  forgot-password/           ← Forgot-password flow (mocks API routes)
-    helpers.ts               ← mockOtpDisabled, mockForgetPasswordSuccess/Failure, gotoForgotPassword
-    ForgotPasswordPage.spec.ts
-    ForgotPasswordStep2Page.spec.ts
-    ForgotPasswordFunctionality.spec.ts
-    ForgotPasswordOtpFunctionality.spec.ts
-    ForgotPasswordMobileValidation.spec.ts
-  homepage/                  ← Post-login dashboard
-    helpers.ts               ← loginAsMerchant, loginAsBiller, openProfileMenu
-    HomepagePage.spec.ts
-    HomepageFunctionality.spec.ts
-    archive/                 ← Biller-specific specs (disabled / archived)
+BusinessTestCases/
+  fixtures.ts                 ← shared per-test page-object fixtures (see above)
+  toastMessages.ts            ← waitForToastClear, assertToast
+  pageElements/                ← all 25 page-object classes, flat
+  Login/
+    LoginHelper.ts             ← credentials, OTP helpers, shared constants
+    api/ · functional/ · ui/
+  Homepage/
+    HomePageHelper.ts          ← account pool, createHomepageSession, refreshHomepage
+    HomepageFixtures.ts        ← worker-scoped fixtures (see above)
+    functional/ · ui/
+  ForgotPassword/
+    ForgotPasswordHelper.ts    ← mockOtpDisabled, mockForgetPasswordSuccess/Failure, gotoForgotPassword
+    api/ · functional/ · ui/
   Registration/
-    helpers.ts               ← goToInfoStep, goToFinancialStep, goToVerificationStep, asset pools
-    ui/                      ← Element/visual assertions per step
-    functional/              ← Business-logic and form-validation assertions
-    api/                     ← API-level registration flow
-    archive/                 ← Retired biller-specific specs
+    RegistrationHelper.ts      ← asset pools, step-navigation helpers (goToInfoStep, etc.)
+    api/ · functional/ · ui/ · archive/
+  BankTransfer/
+    BankTransferHelper.ts
+    functional/ · ui/
+  PaymentLinks/
+    PaymentLinkHelper.ts
+    functional/
+  Products/
+    ProductsPoSHelper.ts
+    functional/ · ui/
+  Topup/
+    TopupHelper.ts
+    ui/
+  W2WTransfer/
+    W2WTransferHelper.ts
+    functional/
 ```
+
+Every feature folder is PascalCase and holds one `<Feature>Helper.ts` plus a subset of `api/`, `functional/`, `ui/`, `archive/`.
 
 ### Key conventions
 
 - **Serial mode** — every `test.describe` block uses `test.describe.configure({ mode: 'serial' })` because tests within a file often share session state or have a prescribed order (logout must be last, etc.).
-- **Registration asset pools** — `CITIZEN_ASSETS` and `RESIDENT_ASSETS` in `Registration/helpers.ts` are fixed CRN/National-ID/mobile tuples from `Assets.xlsx`. Round-robin helpers (`nextCitizenAsset`, `nextResidentAsset`) cycle through them to avoid duplicate-registration rejections.
-- **UAT OTP assets** — `UAT_OTP_ASSETS` (from `phone numbers.xlsx`) are dedicated test mobiles that always accept `00000000`. Use `nextUatOtpAsset()` for registration flows that need an OTP; use `getOtpFromDb()` for login flows against real accounts.
+- **`functional/` vs `ui/`** — `functional/` covers business logic, interactions, and outcomes; `ui/` covers element/text presence only. The same flow is often exercised in both, deliberately kept separate.
+- **Registration asset pools** — `CITIZEN_ASSETS` and `RESIDENT_ASSETS` in `Registration/RegistrationHelper.ts` are fixed CRN/National-ID/mobile tuples. Round-robin helpers (`nextCitizenAsset`, `nextResidentAsset`) cycle through them to avoid duplicate-registration rejections.
+- **BankTransfer, Products, and some Registration files** log in once via their own `test.beforeAll`/`browser.newPage()` (not the fixtures above) because each encodes bespoke multi-step login/OTP business logic inline. This is intentional — don't force these onto `fixtures.ts`, which assumes the default per-test `page`.
 - **Forgot-password tests use route mocking** — `abortUnmockedGatewayRequests` is registered first (LIFO ensures targeted mocks take priority) so tests don't hang on unmocked gateway traffic.
 - **Archive folder** — specs moved to `*/archive/` are retired but kept for reference. They are still discovered by Playwright; add `test.skip()` at the describe level if they should not run.
+- **Failure artifacts** — `playwright.config.ts` captures `trace: 'retain-on-failure'`, `screenshot: 'only-on-failure'`, and `video: 'retain-on-failure'`; `npx playwright show-report` surfaces all three for a failed run.

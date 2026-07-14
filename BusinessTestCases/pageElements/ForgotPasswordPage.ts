@@ -33,17 +33,17 @@ export class ForgotPasswordPage {
         this.logoLink   = page.locator('a').filter({ has: page.locator('img[alt="MJD Pay"]') });
         this.backButton = page.locator('main button').first();
 
-        this.companyInput = page.getByRole('textbox', { name: 'Company number' });
-        this.mobileInput  = page.getByRole('textbox', { name: 'Mobile number' });
-        this.nextButton   = page.getByRole('button', { name: 'Next' });
+        this.companyInput = page.getByRole('textbox', { name: /Company number|رقم الشركة/ });
+        this.mobileInput  = page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ });
+        this.nextButton   = page.getByRole('button', { name: /Next|التالي/ });
         this.loginLink    = page.getByRole('link', { name: /log.?in/i });
 
-        this.newPasswordInput     = page.getByRole('textbox', { name: 'New Password' });
-        this.confirmPasswordInput = page.getByRole('textbox', { name: /confirm/i });
+        this.newPasswordInput     = page.getByRole('textbox', { name: /New Password|كلمة المرور الجديدة/ });
+        this.confirmPasswordInput = page.getByRole('textbox', { name: /confirm|تأكيد كلمة المرور/i });
         this.showNewPasswordToggle     = page.getByRole('button', { name: 'Show password' }).first();
         this.showConfirmPasswordToggle = page.getByRole('button', { name: 'Show password' }).nth(1);
         this.saveButton = page.getByRole('button', { name: /save|confirm/i });
-        this.resetPasswordButton = page.getByRole('button', { name: /reset password/i });
+        this.resetPasswordButton = page.getByRole('button', { name: /reset password|إعادة تعيين كلمة المرور/i });
 
         this.enButton     = page.getByRole('button', { name: 'EN' });
         this.arabicButton = page.getByRole('button', { name: 'العربية' });

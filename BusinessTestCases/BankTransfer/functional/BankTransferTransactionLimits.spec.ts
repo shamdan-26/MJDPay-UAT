@@ -1,10 +1,10 @@
 import { test, expect, type Page } from '@playwright/test';
 import { LoginPage } from '../../pageElements/LoginPage';
 import { OtpPage } from '../../pageElements/OtpPage';
-import { HomepageQuickActionsPage } from '../../pageElements/homepage/HomepageQuickActionsPage';
-import { BankTransferPage } from '../../Helpers/BankTransferPage';
+import { HomepageQuickActionsPage } from '../../pageElements/HomepageQuickActionsPage';
+import { BankTransferPage } from '../../pageElements/BankTransferPage';
 import { HOME_URL } from '../BankTransferHelper';
-import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../login/LoginHelper';
+import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/LoginHelper';
 
 // Hourly/daily/monthly/yearly transaction-limit enforcement, both by cumulative
 // amount and by transaction count (EMI-180, Admin Portal → Manage Limits →
@@ -28,7 +28,6 @@ test.describe('BankTransfer – Transaction Limits', () => {
 
     test.beforeAll(async ({ browser }) => {
         page = await browser.newPage();
-        await page.context().grantPermissions(['geolocation'], { origin: new URL(LOGIN_URL).origin });
 
         loginPage = new LoginPage(page);
         otp = new OtpPage(page);

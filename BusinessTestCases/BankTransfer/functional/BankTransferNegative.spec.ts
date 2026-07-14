@@ -1,12 +1,12 @@
 import { test, expect, type Page } from '@playwright/test';
 import { LoginPage } from '../../pageElements/LoginPage';
 import { OtpPage } from '../../pageElements/OtpPage';
-import { HomepageQuickActionsPage } from '../../pageElements/homepage/HomepageQuickActionsPage';
-import { DashboardPage } from '../../pageElements/homepage/DashboardPage';
-import { BankTransferPage } from '../../Helpers/BankTransferPage';
-import { ToastMessages } from '../../Helpers/common/ToastMessages';
+import { HomepageQuickActionsPage } from '../../pageElements/HomepageQuickActionsPage';
+import { DashboardPage } from '../../pageElements/DashboardPage';
+import { BankTransferPage } from '../../pageElements/BankTransferPage';
+import { assertToast } from '../../toastMessages';
 import { HOME_URL } from '../BankTransferHelper';
-import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../login/LoginHelper';
+import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/LoginHelper';
 
 // Invalid-input rejection and failure handling. Happy-path completion lives in
 // BankTransferHappyPath.spec.ts; the boundary between "3 decimals rejected"
@@ -23,18 +23,15 @@ test.describe('BankTransfer – Negative Scenarios', () => {
     let quickActions: HomepageQuickActionsPage;
     let dashboard: DashboardPage;
     let bt: BankTransferPage;
-    let toast: ToastMessages;
 
     test.beforeAll(async ({ browser }) => {
         page = await browser.newPage();
-        await page.context().grantPermissions(['geolocation'], { origin: new URL(LOGIN_URL).origin });
 
         loginPage = new LoginPage(page);
         otp = new OtpPage(page);
         quickActions = new HomepageQuickActionsPage(page);
         dashboard = new DashboardPage(page);
         bt = new BankTransferPage(page);
-        toast = new ToastMessages(page);
 
         await loginPage.goto(LOGIN_URL);
         await loginPage.fillAndSubmit(VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD);
@@ -81,7 +78,7 @@ test.describe('BankTransfer – Negative Scenarios', () => {
         const walletBalance = await bt.getBalanceBeforeBankTransfer();
         await bt.enterAmount(String(walletBalance + 10));
         await bt.clickProceedButton();
-        await toast.verifyInsufficientFundMessageDisplayed();
+        await assertToast(page, 'insufficient funds', 40000);
     });
 
     test('should fail the transaction when an incorrect OTP is submitted', async () => {

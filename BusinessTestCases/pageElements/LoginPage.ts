@@ -49,15 +49,15 @@ export class LoginPage {
         this.logoImage = page.locator('img[alt="MJD Pay"]');
         this.logoLink  = page.locator('a:has(img[alt="MJD Pay"])');
 
-        this.companyInput      = page.getByRole('textbox', { name: 'Company number' });
+        this.companyInput      = page.getByRole('textbox', { name: /Company number|رقم الشركة/ });
         this.companyLabel      = page.locator('label.floating-field-label', { hasText: 'Company' });
         this.companyClearButton = page.locator('.floating-field-clear, [class*="clear-btn"], [aria-label*="lear" i]').first();
-        this.mobileInput       = page.getByRole('textbox', { name: 'Mobile number' });
+        this.mobileInput       = page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ });
         this.mobileLabel       = page.locator('label.floating-field-label', { hasText: 'Mobile' });
         this.mobileClearButton  = page.locator('.floating-field-clear, [class*="clear-btn"], [aria-label*="lear" i]').nth(1);
         this.countryCode       = page.locator('.floating-prefix');
         this.countryFlag       = page.locator('.floating-prefix img, .floating-prefix [class*="flag"]').first();
-        this.passwordInput     = page.locator('input[aria-label="Password"]');
+        this.passwordInput     = page.locator('input[aria-label="Password"], input[aria-label="كلمة المرور"]');
         this.passwordLabel     = page.locator('label.floating-field-label', { hasText: 'Password' });
         this.showPasswordToggle = page.locator('button.floating-password-toggle');
 
@@ -66,7 +66,7 @@ export class LoginPage {
             ? page.locator('#btn_login')
             : page.getByRole('button', { name: 'Log In' });
 
-        this.forgotPasswordLink  = page.getByText('Forgot Password?');
+        this.forgotPasswordLink  = page.getByText(/Forgot Password\?|نسيت كلمة المرور؟/);
         this.signUpLink          = page.getByText('Sign Up');
         this.newToMjdText        = page.getByText('New to MJD PAY?');
 

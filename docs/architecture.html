@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MJD Pay Automation — Architecture</title>
+<style>
+  :root {
+    --bg: #f6f8f6;
+    --surface: #ffffff;
+    --surface-2: #eef2ef;
+    --ink: #16211d;
+    --muted: #566259;
+    --faint: #8b968e;
+    --border: #dde3de;
+    --accent: #0e6b57;
+    --accent-ink: #ffffff;
+    --accent-soft: #e2f1ec;
+    --warn: #a3661a;
+    --warn-soft: #f6ecdc;
+    --danger: #a23b3b;
+    --code-bg: #101917;
+    --code-ink: #d9ede6;
+    --code-accent: #6fe0be;
+    --code-muted: #7f9690;
+    --shadow: 0 1px 2px rgba(20, 30, 25, 0.04), 0 8px 24px -12px rgba(20, 30, 25, 0.12);
+  }
+  :root[data-theme="dark"] {
+    --bg: #101513;
+    --surface: #161d1a;
+    --surface-2: #1c2420;
+    --ink: #e7ede9;
+    --muted: #a1ada5;
+    --faint: #667169;
+    --border: #2a332e;
+    --accent: #57d9b6;
+    --accent-ink: #0b1d17;
+    --accent-soft: #17332a;
+    --warn: #e0ac5f;
+    --warn-soft: #2c2417;
+    --danger: #e08080;
+    --code-bg: #0a0f0d;
+    --code-ink: #d9ede6;
+    --code-accent: #6fe0be;
+    --code-muted: #63776f;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #101513;
+      --surface: #161d1a;
+      --surface-2: #1c2420;
+      --ink: #e7ede9;
+      --muted: #a1ada5;
+      --faint: #667169;
+      --border: #2a332e;
+      --accent: #57d9b6;
+      --accent-ink: #0b1d17;
+      --accent-soft: #17332a;
+      --warn: #e0ac5f;
+      --warn-soft: #2c2417;
+      --danger: #e08080;
+      --code-bg: #0a0f0d;
+      --code-ink: #d9ede6;
+      --code-accent: #6fe0be;
+      --code-muted: #63776f;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Charter, "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent-soft); color: var(--ink); }
+
+  .mono {
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, "Liberation Mono", monospace;
+  }
+
+  a { color: var(--accent); }
+
+  /* ---------- Shell ---------- */
+  .shell {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 56px) 96px;
+  }
+
+  /* ---------- Masthead ---------- */
+  .masthead {
+    padding: clamp(40px, 7vw, 72px) 0 40px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .eyebrow {
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 1px;
+    background: var(--accent);
+    display: inline-block;
+    transform: rotate(45deg);
+  }
+  h1 {
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+    font-size: clamp(30px, 4.4vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    margin: 0;
+    text-wrap: balance;
+    font-weight: 600;
+  }
+  .dek {
+    max-width: 62ch;
+    color: var(--muted);
+    font-size: 18px;
+    margin: 0;
+  }
+  .path-line {
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+    font-size: 13.5px;
+    color: var(--faint);
+  }
+
+  /* ---------- Stat strip ---------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 36px;
+  }
+  .stat {
+    background: var(--surface);
+    padding: 18px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .stat b {
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+    font-size: 26px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .stat span {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+  }
+
+  /* ---------- Sections ---------- */
+  section { padding: 56px 0; border-bottom: 1px solid var(--border); }
+  section:last-of-type { border-bottom: none; }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .section-num {
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+    font-size: 13px;
+    color: var(--faint);
+  }
+  h2 {
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+    font-size: clamp(22px, 2.6vw, 27px);
+    margin: 0;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .section-intro {
+    max-width: 68ch;
+    color: var(--muted);
+    margin: 14px 0 32px;
+  }
+  h3 {
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin: 0 0 14px;
+    font-weight: 600;
+  }
+
+  /* ---------- Tree ---------- */
+  .tree {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 26px 28px;
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+    font-size: 13.5px;
+    line-height: 1.85;
+    overflow-x: auto;
+  }
+  .tree .dir { color: var(--accent); }
+  .tree .file { color: var(--ink); }
+  .tree .note { color: var(--faint); }
+  .tree .indent1 { padding-left: 1.6em; }
+  .tree .indent2 { padding-left: 3.2em; }
+
+  /* ---------- Feature grid ---------- */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .feature-card .name {
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+    font-size: 14.5px;
+    font-weight: 600;
+  }
+  .feature-card .sub {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+  .tag {
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    padding: 2px 7px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: var(--surface-2);
+  }
+  .tag.fixture { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+  .tag.bespoke { color: var(--warn); border-color: var(--warn); background: var(--warn-soft); }
+
+  /* ---------- Lifecycle comparison ---------- */
+  .lifecycles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 760px) { .lifecycles { grid-template-columns: 1fr; } }
+  .lc-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+  }
+  .lc-head {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .lc-head .scope-pill {
+    display: inline-block;
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    padding: 3px 8px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .lc-head h4 {
+    margin: 0 0 6px;
+    font-size: 17px;
+    font-family: Charter, Georgia, serif;
+  }
+  .lc-head p { margin: 0; color: var(--muted); font-size: 14px; }
+  .lc-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 14px; }
+  .lc-count { font-size: 13.5px; color: var(--muted); }
+  .lc-count b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  pre.code {
+    margin: 0;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    padding: 16px 18px;
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+    font-size: 12.5px;
+    line-height: 1.65;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+  }
+  pre.code .kw { color: var(--code-accent); }
+  pre.code .cm { color: var(--code-muted); font-style: italic; }
+
+  /* ---------- Before / after ---------- */
+  .diff {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 18px;
+  }
+  @media (max-width: 760px) { .diff { grid-template-columns: 1fr; } }
+  .diff-col { display: flex; flex-direction: column; gap: 8px; }
+  .diff-label {
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .diff-label.before { color: var(--danger); }
+  .diff-label.after { color: var(--accent); }
+
+  /* ---------- Checklist ---------- */
+  .checklist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .checklist li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    color: var(--ink);
+  }
+  .checklist li::before {
+    content: "";
+    flex: none;
+    width: 14px;
+    height: 14px;
+    margin-top: 5px;
+    background: var(--accent);
+    -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M6.2 12.1 2.5 8.4l1.1-1.1 2.6 2.6 6-6 1.1 1.1z"/></svg>') no-repeat center / contain;
+    mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M6.2 12.1 2.5 8.4l1.1-1.1 2.6 2.6 6-6 1.1 1.1z"/></svg>') no-repeat center / contain;
+  }
+  .checklist span { color: var(--muted); }
+  .checklist b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    padding-top: 40px;
+    color: var(--faint);
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  footer .mono { color: var(--faint); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .stat, .feature-card, .lc-card { transition: transform .18s ease, box-shadow .18s ease; }
+  }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <header class="masthead">
+    <div class="eyebrow">QA Architecture Note</div>
+    <h1>MJD Pay Playwright Suite — Structure &amp; Fixtures</h1>
+    <p class="dek">A record of how the automation repo is organized after this pass: consistent feature-folder naming, a flat page-object layer, and two Playwright fixture lifecycles doing the setup work that used to be copy-pasted into every spec file.</p>
+    <p class="path-line">BusinessTestCases/ · playwright.config.ts · TypeScript + @playwright/test</p>
+
+    <div class="stats">
+      <div class="stat"><b>9</b><span>feature folders</span></div>
+      <div class="stat"><b>25</b><span>page objects</span></div>
+      <div class="stat"><b>2</b><span>fixture lifecycles</span></div>
+      <div class="stat"><b>36</b><span>spec files on fixtures</span></div>
+      <div class="stat"><b>42</b><span>dead grantPermissions() removed</span></div>
+      <div class="stat"><b>3</b><span>files deliberately excluded</span></div>
+    </div>
+  </header>
+
+  <section id="folders">
+    <div class="section-head"><span class="section-num">01</span><h2>Folder structure</h2></div>
+    <p class="section-intro">Every feature folder is now PascalCase and follows the same internal shape: one <span class="mono">&lt;Feature&gt;Helper.ts</span>, plus whichever of <span class="mono">api/</span>, <span class="mono">functional/</span>, <span class="mono">ui/</span>, <span class="mono">archive/</span> the flow actually needs.</p>
+
+    <div class="tree">
+<div><span class="dir">BusinessTestCases/</span></div>
+<div class="indent1"><span class="file">fixtures.ts</span> <span class="note">— shared per-test page-object fixtures</span></div>
+<div class="indent1"><span class="file">toastMessages.ts</span> <span class="note">— waitForToastClear, assertToast</span></div>
+<div class="indent1"><span class="dir">pageElements/</span> <span class="note">— 25 page-object classes, flat, no subfolders</span></div>
+<div class="indent1"><span class="dir">Login/</span> <span class="dir">Homepage/</span> <span class="dir">ForgotPassword/</span> <span class="dir">Registration/</span></div>
+<div class="indent1"><span class="dir">BankTransfer/</span> <span class="dir">PaymentLinks/</span> <span class="dir">Products/</span> <span class="dir">Topup/</span> <span class="dir">W2WTransfer/</span></div>
+<div class="indent2"><span class="file">&lt;Feature&gt;Helper.ts</span> <span class="note">— constants, session/OTP helpers, mocks</span></div>
+<div class="indent2"><span class="file">api/</span> <span class="file">functional/</span> <span class="file">ui/</span> <span class="file">archive/</span> <span class="note">— present where relevant</span></div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="section-head"><span class="section-num">02</span><h2>The nine feature suites</h2></div>
+    <p class="section-intro">Naming was previously mixed — <span class="mono">homepage</span>, <span class="mono">Registration-KYC</span>, <span class="mono">BankTransfer</span> — three different conventions across nine folders. All nine now read the same way at a glance.</p>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="name">Login</div>
+        <div class="sub">Credentials, OTP flow, validation card, lockout</div>
+        <div class="tags"><span class="tag fixture">fixtures.ts</span></div>
+      </div>
+      <div class="feature-card">
+        <div class="name">Homepage</div>
+        <div class="sub">Dashboard widgets — balance, bills, sidebar, notifications</div>
+        <div class="tags"><span class="tag fixture">worker fixture</span> <span class="tag bespoke">3 pinned</span></div>
+      </div>
+      <div class="feature-card">
+        <div class="name">ForgotPassword</div>
+        <div class="sub">Two-step reset, route-mocked gateway responses</div>
+        <div class="tags"><span class="tag fixture">fixtures.ts</span></div>
+      </div>
+      <div class="feature-card">
+        <div class="name">Registration</div>
+        <div class="sub">Multi-step KYC onboarding, asset pools, NAFATH</div>
+        <div class="tags"><span class="tag fixture">fixtures.ts</span> <span class="tag bespoke">bespoke steps</span></div>
+      </div>
+      <div class="feature-card">
+        <div class="name">BankTransfer</div>
+        <div class="sub">Cashout flow — commission, limits, OTP requirement</div>
+        <div class="tags"><span class="tag bespoke">inline beforeAll</span></div>
+      </div>
+      <div class="feature-card">
+        <div class="name">PaymentLinks</div>
+        <div class="sub">Bill/wallet link resolution &amp; payer info</div>
+        <div class="tags"><span class="tag bespoke">mock-only</span></div>
+      </div>
+      <div class="feature-card">
+        <div class="name">Products</div>
+        <div class="sub">PoS product management &amp; ordering</div>
+        <div class="tags"><span class="tag bespoke">inline beforeAll</span></div>
+      </div>
+      <div class="feature-card">
+        <div class="name">Topup</div>
+        <div class="sub">Wallet top-up amount &amp; summary</div>
+        <div class="tags"><span class="tag bespoke">inline beforeAll</span></div>
+      </div>
+      <div class="feature-card">
+        <div class="name">W2WTransfer</div>
+        <div class="sub">Wallet-to-wallet transfer between merchants</div>
+        <div class="tags"><span class="tag bespoke">inline beforeAll</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="lifecycles">
+    <div class="section-head"><span class="section-num">03</span><h2>Two fixture lifecycles</h2></div>
+    <p class="section-intro">Not every suite wants the same session shape, so there are two fixture files rather than one that fights half the codebase.</p>
+
+    <div class="lifecycles">
+      <div class="lc-card">
+        <div class="lc-head">
+          <span class="scope-pill">scope: test</span>
+          <h4>fixtures.ts</h4>
+          <p>A fresh <span class="mono">page</span> per test. One lazy fixture per page object — 25 in total, only the ones a test destructures get built.</p>
+        </div>
+        <div class="lc-body">
+          <div class="lc-count"><b>17</b> spec files retrofitted</div>
+          <pre class="code"><span class="cm">// beforeEach, before → after</span>
+loginPage = <span class="kw">new</span> LoginPage(page);
+<span class="cm">// —</span>
+test.beforeEach(<span class="kw">async</span> ({ page, loginPage: lp }) =&gt; {
+  loginPage = lp;
+  <span class="kw">await</span> loginPage.goto(LOGIN_URL);
+});</pre>
+        </div>
+      </div>
+
+      <div class="lc-card">
+        <div class="lc-head">
+          <span class="scope-pill">scope: worker</span>
+          <h4>Homepage/HomepageFixtures.ts</h4>
+          <p>One authenticated session per <em>worker</em>, reused across every Homepage file that worker runs — instead of logging in again per file.</p>
+        </div>
+        <div class="lc-body">
+          <div class="lc-count"><b>19</b> spec files retrofitted · <b>3</b> excluded</div>
+          <pre class="code"><span class="cm">// worker-scoped, built once, closed once</span>
+homepagePage: [<span class="kw">async</span> ({ browser }, use, workerInfo) =&gt; {
+  <span class="kw">const</span> s = <span class="kw">await</span> createHomepageSession(
+    browser, <span class="kw">undefined</span>, workerInfo.parallelIndex);
+  <span class="kw">await</span> use(s.page);
+  <span class="kw">await</span> s.page.close();
+}, { scope: <span class="kw">'worker'</span> }]</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="excluded">
+    <div class="section-head"><span class="section-num">04</span><h2>What deliberately stayed manual</h2></div>
+    <p class="section-intro">Three Homepage specs pin a <em>specific</em> account rather than whichever one the worker was assigned — folding them into the shared worker session would silently swap their fixture data.</p>
+
+    <div class="diff">
+      <div class="diff-col">
+        <span class="diff-label before">would break</span>
+        <pre class="code">worker fixture picks account
+<span class="kw">by worker index</span> — not by
+which transaction history
+the test actually needs.</pre>
+      </div>
+      <div class="diff-col">
+        <span class="diff-label after">kept as-is</span>
+        <pre class="code">HomepageTransactions.spec.ts
+  → <span class="kw">'ACCOUNT_1'</span>  <span class="cm">// has history</span>
+HomepageTransactionsEmptyState
+  → <span class="kw">'ACCOUNT_2'</span>  <span class="cm">// no history</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="conventions">
+    <div class="section-head"><span class="section-num">05</span><h2>Standing conventions</h2></div>
+    <ul class="checklist">
+      <li><b>Serial mode everywhere.</b> <span>Every <span class="mono">describe</span> block runs <span class="mono">{ mode: 'serial' }</span> — specs share session state or need ordering (logout last, etc.).</span></li>
+      <li><b>functional/ vs ui/.</b> <span><span class="mono">functional/</span> owns business logic and outcomes; <span class="mono">ui/</span> owns element/text presence only. Same flow, deliberately split.</span></li>
+      <li><b>Toast guard.</b> <span><span class="mono">waitForToastClear</span> absorbs transient background-API error banners after every landing-page navigation, before any assertion.</span></li>
+      <li><b>Archive is discovered, not deleted.</b> <span>Specs under <span class="mono">*/archive/</span> are retired but still run unless <span class="mono">test.skip()</span> is set at the describe level.</span></li>
+      <li><b>Failure artifacts on by default.</b> <span><span class="mono">playwright.config.ts</span> now retains trace, screenshot, and video on failure — not just trace.</span></li>
+    </ul>
+  </section>
+
+  <footer>
+    <span class="mono">BusinessTestCases/ · playwright.config.ts</span>
+    <span>Internal reference — MJD Pay QA automation</span>
+  </footer>
+
+</div>
+</body>
+</html>

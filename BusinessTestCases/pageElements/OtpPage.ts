@@ -19,17 +19,17 @@ export class OtpPage {
     constructor(page: Page) {
         this.page = page;
 
-        this.heading         = page.getByRole('heading', { name: 'Enter OTP' });
-        this.instructionText = page.getByText(/A code has been sent to you/i);
+        this.heading         = page.getByRole('heading', { name: /Enter OTP|أدخل رمز التحقق/i });
+        this.instructionText = page.getByText(/A code has been sent to you|تم إرسال رمز التحقق/i);
         // Login's OTP screen exposes an accessible name; the forgot-password
         // modal's inputs don't, so match either shape.
         this.inputs = page.getByRole('textbox', { name: 'One time password input' })
             .or(page.locator('div.my-modal-container input'));
-        this.countdownTimer = page.getByText(/Code ends/i);
-        this.resendButton   = page.getByRole('button', { name: 'Click to resend' });
+        this.countdownTimer = page.getByText(/Code ends|ينتهي الرمز/i);
+        this.resendButton   = page.getByRole('button', { name: /Click to resend|انقر لإعادة الإرسال/i });
         // Login's screen labels this "Verify"; the forgot-password modal labels it "Confirm".
-        this.verifyButton = page.getByRole('button', { name: /^(verify|confirm)$/i });
-        this.cancelButton = page.getByRole('button', { name: /cancel/i });
+        this.verifyButton = page.getByRole('button', { name: /^(verify|confirm|تحقق)$/i });
+        this.cancelButton = page.getByRole('button', { name: /cancel|إلغاء/i });
 
         this.modalContainer = page.locator('div.my-modal-container');
         this.closeButton    = this.modalContainer.getByRole('button', { name: /close/i });

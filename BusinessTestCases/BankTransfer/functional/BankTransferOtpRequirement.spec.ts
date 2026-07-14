@@ -1,10 +1,10 @@
 import { test, expect, type Page } from '@playwright/test';
 import { LoginPage } from '../../pageElements/LoginPage';
 import { OtpPage } from '../../pageElements/OtpPage';
-import { HomepageQuickActionsPage } from '../../pageElements/homepage/HomepageQuickActionsPage';
-import { BankTransferPage } from '../../Helpers/BankTransferPage';
+import { HomepageQuickActionsPage } from '../../pageElements/HomepageQuickActionsPage';
+import { BankTransferPage } from '../../pageElements/BankTransferPage';
 import { HOME_URL } from '../BankTransferHelper';
-import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../login/LoginHelper';
+import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/LoginHelper';
 
 // Whether a Merchant transfer requires OTP at all is controlled by an Admin
 // Portal toggle (EMI-180, Configuration Settings → Transaction → activate/
@@ -30,7 +30,6 @@ test.describe('BankTransfer – Merchant OTP Requirement Toggle', () => {
 
     test.beforeAll(async ({ browser }) => {
         page = await browser.newPage();
-        await page.context().grantPermissions(['geolocation'], { origin: new URL(LOGIN_URL).origin });
 
         loginPage = new LoginPage(page);
         otp = new OtpPage(page);

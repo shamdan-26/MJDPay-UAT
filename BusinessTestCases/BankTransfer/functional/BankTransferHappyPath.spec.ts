@@ -1,10 +1,10 @@
 import { test, expect, type Page } from '@playwright/test';
 import { LoginPage } from '../../pageElements/LoginPage';
 import { OtpPage } from '../../pageElements/OtpPage';
-import { HomepageQuickActionsPage } from '../../pageElements/homepage/HomepageQuickActionsPage';
-import { BankTransferPage } from '../../Helpers/BankTransferPage';
+import { HomepageQuickActionsPage } from '../../pageElements/HomepageQuickActionsPage';
+import { BankTransferPage } from '../../pageElements/BankTransferPage';
 import { HOME_URL } from '../BankTransferHelper';
-import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, VALID_OTP, getOtpFromDb } from '../../login/LoginHelper';
+import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, VALID_OTP, getOtpFromDb } from '../../Login/LoginHelper';
 
 // Full successful Cashout flows and the Confirmation-summary math. Element
 // presence (IBAN card, summary rows, OTP boxes) lives in ui/BankTransferAmountPage.spec.ts,
@@ -51,7 +51,6 @@ test.describe('BankTransfer – Happy Path', () => {
 
     test.beforeAll(async ({ browser }) => {
         page = await browser.newPage();
-        await page.context().grantPermissions(['geolocation'], { origin: new URL(LOGIN_URL).origin });
 
         loginPage = new LoginPage(page);
         otp = new OtpPage(page);
