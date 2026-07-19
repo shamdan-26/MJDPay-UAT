@@ -9,8 +9,17 @@ const BASE_URL              = process.env['BASE_URL'] ?? 'https://uat.majdpay.co
 export const FORGOT_URL     = `${BASE_URL}/business/auth/forgot-password`;
 export { LOGIN_URL, VALID_OTP, INVALID_OTP };
 
-export const VALID_COMPANY  = process.env['UAT_COMPANY'] ?? testAccounts.merchant.company;
-export const VALID_MOBILE   = process.env['UAT_MOBILE']  ?? testAccounts.merchant.mobile;
+// Dedicated ForgotPassword identities (not the shared UAT_COMPANY/UAT_MOBILE
+// pool used elsewhere) — kept separate so repeated forgot-password runs can't
+// accidentally lock out an account other suites depend on.
+export const VALID_COMPANY  = 'V7204';
+export const VALID_MOBILE   = '599995846';
+
+// Reserved for negative scenarios involving a blocked/locked account (or a
+// flow that deliberately drives an account into that state) — never used on
+// the happy path, so it doesn't get burned by unrelated test runs.
+export const BLOCKED_COMPANY = 'A3713';
+export const BLOCKED_MOBILE  = '599834420';
 
 export const SUBMIT_BUTTON  = 'reset password';
 export const VALID_PASSWORD = testAccounts.defaultPassword;
@@ -83,6 +92,32 @@ export async function fillStep1AndProceed(page: Page): Promise<void> {
     const fp = new ForgotPasswordPage(page);
     await fp.fillStep1(VALID_COMPANY, VALID_MOBILE);
     await fp.submitStep1();
+}
+
+/** Submits step 1 with the given identity against the real (unmocked) backend
+ *  and reports back the /auth/passwords/forget response plus the page text
+ *  afterward — for negative-scenario specs asserting how a specific identity
+ *  (e.g. BLOCKED_COMPANY/BLOCKED_MOBILE) is actually treated, rather than
+ *  guessing at status codes/copy up front. */
+export async function submitStep1AndGetResult(
+    page: Page,
+    company: string,
+    mobile: string
+): Promise<{ status: number | null; body: string; pageText: string }> {
+    await gotoForgotPassword(page);
+    const fp = new ForgotPasswordPage(page);
+    await fp.fillStep1(company, mobile);
+    // Click directly rather than fp.submitStep1() — that hard-waits on step 2
+    // appearing, which throws for identities the backend rejects (exactly the
+    // case this helper exists to observe).
+    const [resp] = await Promise.all([
+        page.waitForResponse(r => r.url().includes('/auth/passwords/forget'), { timeout: 15000 }).catch(() => null),
+        fp.nextButton.click(),
+    ]);
+    const body = resp ? await resp.text().catch(() => '') : '';
+    await page.waitForTimeout(1000);
+    const pageText = await page.evaluate(() => document.body.innerText);
+    return { status: resp ? resp.status() : null, body, pageText };
 }
 
 /** Drives the full step1 → step2 → submit flow up to the OTP modal, for specs

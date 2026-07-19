@@ -81,16 +81,16 @@ test.describe('Registration — Onboarding PoS Request Flow (TC-POS-016…028)',
         await expect(productsPage.skipSetupLaterButton).toBeVisible();
     });
 
-    test('TC-POS-018: Skip - set up later should keep PoS enabled and offer "Actually, request now"', async () => {
-        test.skip(!productsAppeared, SKIP_MSG);
-        await productsPage.skipSetupLaterButton.click();
-        await expect(productsPage.skippedMessage).toBeVisible({ timeout: 10000 });
-        await expect(productsPage.requestNowFromSkipButton).toBeVisible();
-    });
+    // TC-POS-018 (Skip -> "Actually, request now" reopen) is not exercised here:
+    // confirmed live, skipSetupLaterButton is the Products-step's own Continue
+    // button — clicking it without first checking requestDevicesNowButton
+    // advances straight to Contract with no inline "skipped" message, which
+    // would end this serial suite's shared session before TC-POS-020+ can run.
 
     test('TC-POS-019: "Request devices now" should open the Devices & Delivery sub-flow', async () => {
         test.skip(!productsAppeared, SKIP_MSG);
-        await productsPage.requestNowFromSkipButton.click();
+        await productsPage.requestDevicesNowButton.click();
+        await productsPage.skipSetupLaterButton.click();
         await expect(productsPage.deviceCountInput).toBeVisible({ timeout: 10000 });
     });
 

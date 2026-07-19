@@ -1,12 +1,16 @@
 ﻿import { Page, Locator } from '@playwright/test';
 
 declare const process: { env: Record<string, string | undefined> };
+import * as fs from 'fs';
+import * as path from 'path';
 import { MongoClient } from 'mongodb';
 import { waitForToastClear } from '../toastMessages';
 import { RegistrationMobilePage } from '../pageElements/RegistrationMobilePage';
 import { RegistrationInfoPage } from '../pageElements/RegistrationInfoPage';
 import { RegistrationFinancialPage } from '../pageElements/RegistrationFinancialPage';
 import { RegistrationVerificationPage } from '../pageElements/RegistrationVerificationPage';
+import { RegistrationProductsPage } from '../pageElements/RegistrationProductsPage';
+import { RegistrationNafathPage } from '../pageElements/RegistrationNafathPage';
 import registrationDefaults from '../../data/registrationDefaults.json';
 import registrationAssets from '../../data/registrationAssets.json';
 
@@ -28,12 +32,12 @@ export function generateEmail(): string {
     return `test+${Date.now()}@dg-cash.com`;
 }
 
-// Pre-generated test assets (from Assets.xlsx) — see data/registrationAssets.json
-// Citizen_IDs sheet: Saudi_CRN | Citizen_ID | Saudi_Mobile (strip leading 966)
-const CITIZEN_ASSETS = registrationAssets.citizenAssets;
-
-// Resident_IDs sheet: Resident_ID | CRN | Mobile (strip leading 966)
-export const RESIDENT_ASSETS = registrationAssets.residentAssets;
+// Pre-generated test assets (from National_IDs_Generated) — see data/registrationAssets.json.
+// One merged `assets` pool tagged with `type: "citizen" | "resident"` (National ID prefix
+// 1 = citizen, 2 = resident) rather than two separate arrays, so both round-robin helpers
+// below share a single growing dataset.
+const CITIZEN_ASSETS = registrationAssets.assets.filter(a => a.type === 'citizen');
+export const RESIDENT_ASSETS = registrationAssets.assets.filter(a => a.type === 'resident');
 
 // Primary defaults resident pool used for Business Info step
 export const VALID_CRN    = RESIDENT_ASSETS[0].crn;
@@ -43,9 +47,49 @@ export const VALID_MOBILE = RESIDENT_ASSETS[0].mobile;
 let _citizenIndex  = 0;
 let _residentIndex = 0;
 
-/** Returns the next citizen asset (CRN + National ID + mobile) in round-robin order. */
-export function nextCitizenAsset() {
-    return CITIZEN_ASSETS[_citizenIndex++ % CITIZEN_ASSETS.length];
+const REGISTRATION_ASSETS_PATH = path.resolve(__dirname, '../../data/registrationAssets.json');
+
+/** Where a citizen asset ended up when it was spent by goToProductsStep. */
+export type CitizenAssetOutcome = 'products' | 'contract' | 'nafath' | 'already-registered';
+
+/**
+ * Marks a citizen asset as used — tagged with the page it landed on
+ * (`products`, `contract`, `nafath`, or `already-registered`) rather than a
+ * bare boolean — and persists the flag to data/registrationAssets.json. On
+ * UAT these outcomes are permanent dead ends for goToProductsStep — see the
+ * project_citizen_asset_pool_exhausted memory — so persisting `used` means
+ * later runs skip straight past assets that already cost ~30-45s to
+ * discover, instead of rediscovering them from asset #0 every time
+ * _citizenIndex resets.
+ */
+export function markCitizenAssetUsed(mobile: string, page: CitizenAssetOutcome): void {
+    const asset = CITIZEN_ASSETS.find(a => a.mobile === mobile);
+    if (asset) (asset as { used?: boolean | CitizenAssetOutcome }).used = page;
+    try {
+        fs.writeFileSync(REGISTRATION_ASSETS_PATH, JSON.stringify(registrationAssets, null, 2) + '\n');
+    } catch (err) {
+        console.warn(`[RegistrationHelper] Failed to persist used-flag for ${mobile}: ${err}`);
+    }
+}
+
+/** Returns the next citizen asset (CRN + National ID + mobile) in round-robin
+ *  order. With no `wantOutcome`, skips any asset already flagged `used`
+ *  (original behaviour — e.g. NAFATH-step tests want a fresh identity, not
+ *  one that already resolved elsewhere). Pass `wantOutcome` when the caller's
+ *  goal is a specific landing page (e.g. `goToProductsStep` passes
+ *  `'products'`): an asset previously spent landing on that same page resumes
+ *  straight back to it, so it's included alongside unused ones — while an
+ *  asset flagged for a *different* outcome (e.g. `contract`-flagged when the
+ *  goal is `products`) is still skipped, since it would resume to the wrong
+ *  page. Falls back to the full pool (ignoring the flag) once nothing
+ *  matches, so callers never hard-fail — just lose the time-saving skip. */
+export function nextCitizenAsset(wantOutcome?: CitizenAssetOutcome) {
+    const available = CITIZEN_ASSETS.filter(a => !a.used || (wantOutcome && a.used === wantOutcome));
+    if (available.length === 0) {
+        console.warn('[RegistrationHelper] All citizen assets are flagged used — cycling the full pool again.');
+        return CITIZEN_ASSETS[_citizenIndex++ % CITIZEN_ASSETS.length];
+    }
+    return available[_citizenIndex++ % available.length];
 }
 
 /** Returns the next resident asset (CRN + Iqama + mobile) in round-robin order. */
@@ -158,7 +202,10 @@ export interface FinancialStepCredentials {
  */
 export function isAlreadyRegisteredMessage(text: string | null | undefined): boolean {
     if (!text) return false;
-    return /already\s*(registered|exists|have an account|in use|associated)|duplicate\s*(registration|account|profile)?/i.test(text);
+    // The app defaults to Arabic, so the rejection is usually seen as e.g.
+    // "الملف الشخصي موجود بالفعل." (profile already exists) rather than English.
+    return /already\s*(registered|exists|have an account|in use|associated)|duplicate\s*(registration|account|profile)?/i.test(text)
+        || /موجود\s*بالفعل|مسجل\s*(مسبقا|مسبقاً|بالفعل)|مكرر/.test(text);
 }
 
 export async function goToFinancialStep(page: Page, credentials?: FinancialStepCredentials): Promise<void> {
@@ -265,6 +312,143 @@ export async function fillVerificationForm(page: Page): Promise<void> {
             .setInputFiles({ name: `doc${i}.pdf`, mimeType: 'application/pdf', buffer: TEST_FILE_BUFFER })
             .catch(() => {});
     }
+}
+
+/**
+ * Drives the registration wizard forward until it lands on the outer Products
+ * step (step 3 of 4), cycling to a new CITIZEN_ASSETS mobile whenever the
+ * current one resumes past Products instead — onto Contract. CITIZEN_ASSETS is
+ * a shared, reused pool, so a mobile resuming mid-flow is expected steady-state,
+ * not a failure: Financial & Business and Verification & Uploads are filled
+ * through with fillFinancialForm()/fillVerificationForm() whenever they appear
+ * along the way, in case a given mobile pauses there instead of at
+ * Products/Contract/NAFATH.
+ *
+ * Races Products/Contract/NAFATH in one bounded wait per attempt rather than
+ * waiting on Products alone first — a mobile that resumes straight to Contract
+ * would otherwise burn a long Products-only timeout before anyone noticed it
+ * wasn't going to appear.
+ *
+ * Hitting the real NAFATH panel is not a dead end: its Verify button starts
+ * disabled and enables once the ~20s redirect countdown expires (EMI-4895/
+ * EMI-4937), so we wait that out and click it — the happy path in this
+ * environment — before checking whether Products (or Contract) followed.
+ *
+ * Returns true once Products is reached, false if maxAttempts is exhausted
+ * without landing there.
+ */
+export async function goToProductsStep(page: Page, maxAttempts = 10): Promise<boolean> {
+    const products = new RegistrationProductsPage(page);
+    const productsHeading = page.getByText(/Choose the products for your business\.|اختر المنتجات المناسبة لنشاطك التجاري\./i);
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        const asset = nextCitizenAsset('products');
+        await goToInfoStep(page, asset.mobile);
+
+        const infoPage = new RegistrationInfoPage(page);
+        await infoPage.profileTypeGroup.getByRole('radio').first().click();
+        await infoPage.crnInput.fill(asset.crn);
+        await infoPage.idInput.fill(asset.nationalId);
+        await infoPage.emailInput.fill(generateEmail());
+        await infoPage.nextButton.click();
+        await page.getByRole('button', { name: /Loading|جاري التحميل/i })
+            .waitFor({ state: 'hidden', timeout: 20000 })
+            .catch(() => {});
+
+        // Check for an "already registered" rejection right away — it renders as a
+        // toast that auto-dismisses within seconds, so it must be read before sinking
+        // ~50s into the Financial/Verification/Contract/NAFATH waits below, by which
+        // point it would have already disappeared from document.body.innerText.
+        const infoStepText = await page.evaluate(() => document.body.innerText).catch(() => '');
+        if (isAlreadyRegisteredMessage(infoStepText)) {
+            markCitizenAssetUsed(asset.mobile, 'already-registered');
+            continue;
+        }
+
+        const financialPage = new RegistrationFinancialPage(page);
+        const reachedFinancial = await financialPage.monthlyBillsInput
+            .waitFor({ state: 'visible', timeout: 15000 })
+            .then(() => true)
+            .catch(() => false);
+
+        if (reachedFinancial) {
+            await fillFinancialForm(page);
+            await financialPage.next();
+        }
+
+        const verificationPage = new RegistrationVerificationPage(page);
+        const reachedVerification = await verificationPage.ibanInput
+            .waitFor({ state: 'visible', timeout: 15000 })
+            .then(() => true)
+            .catch(() => false);
+
+        if (reachedVerification) {
+            await fillVerificationForm(page);
+            await verificationPage.signUpButton.click();
+            await page.getByRole('button', { name: /Loading|جاري التحميل/i })
+                .waitFor({ state: 'hidden', timeout: 20000 })
+                .catch(() => {});
+        }
+
+        const contractStep = products.activeStep.filter({ hasText: 'العقد' });
+        const nafathPage = new RegistrationNafathPage(page);
+
+        const landedOn = await Promise.race([
+            productsHeading.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'products' as const),
+            contractStep.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'contract' as const),
+            nafathPage.nafathHeading.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'nafath' as const),
+        ]).catch(() => 'neither' as const);
+
+        if (landedOn === 'products') {
+            markCitizenAssetUsed(asset.mobile, 'products');
+            return true;
+        }
+        if (landedOn === 'contract') {
+            markCitizenAssetUsed(asset.mobile, 'contract');
+            continue;
+        }
+
+        if (landedOn === 'nafath') {
+            // Reaching real NAFATH is itself a dead end for automation (it requires
+            // biometric verification), so this identity is spent for future runs
+            // regardless of what the click below does — mark it now.
+            markCitizenAssetUsed(asset.mobile, 'nafath');
+
+            // Happy path: the Verify button starts disabled and only enables once
+            // the ~20s redirect countdown expires (EMI-4895, duration fixed by
+            // EMI-4937 — see RegistrationNafathFunctionality.spec.ts). Playwright's
+            // click() already waits for the target to become enabled as part of its
+            // actionability checks, so no manual polling of the countdown is needed.
+            const verified = await nafathPage.verifyButton.click({ timeout: 30000 }).then(() => true).catch(() => false);
+            if (!verified) continue;
+
+            const postNafathLandedOn = await Promise.race([
+                productsHeading.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'products' as const),
+                contractStep.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'contract' as const),
+            ]).catch(() => 'neither' as const);
+
+            if (postNafathLandedOn === 'products') return true;
+            if (postNafathLandedOn === 'contract') continue;
+
+            // Neither Products nor Contract appeared after a successful NAFATH
+            // verify — most likely an "already registered" rejection with no
+            // recognizable panel, same as the outer 'neither' check below. Only
+            // cycle when that's confirmed; otherwise this is a genuine
+            // post-NAFATH regression, so fail fast instead of burning the rest
+            // of maxAttempts retrying blindly.
+            const postNafathText = await page.evaluate(() => document.body.innerText).catch(() => '');
+            if (!isAlreadyRegisteredMessage(postNafathText)) return false;
+            continue;
+        }
+
+        // Neither Products, Contract, nor NAFATH appeared — most likely an
+        // "already registered" rejection with no recognizable panel. Cycle to
+        // the next asset instead of treating it as an unexpected failure.
+        const pageText = await page.evaluate(() => document.body.innerText).catch(() => '');
+        if (!isAlreadyRegisteredMessage(pageText)) return false;
+        markCitizenAssetUsed(asset.mobile, 'already-registered');
+    }
+    return false;
 }
 
 /**

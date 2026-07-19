@@ -1,0 +1,128 @@
+[
+  {
+    "description": "BankTransfer_with_Enter_Amount | Amount Type: Standard",
+    "execute": true,
+    "CN": "F2147",
+    "mobile": "510203012",
+    "pwd": "Aa#1234567",
+    "Amount": "10.00",
+    "AmountType": "Standard"
+  },
+  {
+    "description": "BankTransfer_with_Select_Amount | Amount Type: Predefined",
+    "execute": true,
+    "CN": "F2147",
+    "mobile": "510203012",
+    "pwd": "Aa#1234567",
+    "Amount": "20.00",
+    "AmountType": "Predefined"
+  },
+  {
+    "description": "BankTransfer_with_Invalid_OTP_Fails | Amount Type: Failure Flow Invalid OTP",
+    "execute": false,
+    "CN": "F2147",
+    "mobile": "510203012",
+    "pwd": "Aa#1234567",
+    "Amount": "15.00",
+    "AmountType": "Failure Flow Invalid OTP"
+  },
+  {
+    "description": "BankTransfer_verifyAmountField_PreventsInvalidInput | Amount Type: Negative Flow",
+    "execute": true,
+    "CN": "F2147",
+    "mobile": "510203012",
+    "pwd": "Aa#1234567",
+    "Amount": "-10.00",
+    "AmountType": "Negative Flow"
+  },
+  {
+    "description": "BankTransfer_Insufficient_Fund | Amount Type: Insufficient Balance Check",
+    "execute": true,
+    "CN": "F2147",
+    "mobile": "510203012",
+    "pwd": "Aa#1234567",
+    "Amount": "999999.00",
+    "AmountType": "Insufficient Balance Check"
+  },
+  {
+    "description": "BankTransfer_verifyAmountField_PreventsZeroAmount | Amount Type: Zero Amount Test",
+    "execute": true,
+    "CN": "F2147",
+    "mobile": "510203012",
+    "pwd": "Aa#1234567",
+    "Amount": "0",
+    "AmountType": "Zero Amount Test"
+  },
+  {
+    "description": "BankTransfer_verifyAmountField_PreventsInvalidChars | Amount Type: Invalid Characters Test",
+    "execute": true,
+    "CN": "F2147",
+    "mobile": "510203012",
+    "pwd": "Aa#1234567",
+    "Amount": "abc!@#",
+    "AmountType": "Invalid Characters Test"
+  },
+  {
+    "description": "BankTransfer_AmountValidation | Amount Type: Valid Float 2 Decimals",
+    "execute": true,
+    "CN": "F2147",
+    "mobile": "510203012",
+    "pwd": "Aa#1234567",
+    "Amount": "15.75",
+    "AmountType": "Valid Float with 2 Decimals"
+  },
+  {
+    "description": "BankTransfer_AmountValidation | Amount Type: Valid Float 1 Decimal",
+    "execute": true,
+    "CN": "F2147",
+    "mobile": "510203012",
+    "pwd": "Aa#1234567",
+    "Amount": "20.5",
+    "AmountType": "Valid Float with 1 Decimal"
+  },
+  {
+    "description": "BankTransfer_AmountValidation | Amount Type: Invalid Float 3 Decimals",
+    "execute": true,
+    "CN": "F2147",
+    "mobile": "510203012",
+    "pwd": "Aa#1234567",
+    "Amount": "10.555",
+    "AmountType": "Invalid Float with 3 Decimals"
+  },
+  {
+    "description": "BankTransfer_AmountValidation | Amount Type: Copy and Paste Amount",
+    "execute": true,
+    "CN": "F2147",
+    "mobile": "510203012",
+    "pwd": "Aa#1234567",
+    "Amount": "50.00",
+    "AmountType": "Copy and Paste Amount"
+  },
+  {
+    "description": "BankTransfer_AmountValidation | Amount Type: Copy and Paste Invalid Amount",
+    "execute": true,
+    "CN": "F2147",
+    "mobile": "510203012",
+    "pwd": "Aa#1234567",
+    "Amount": "abc",
+    "AmountType": "Copy and Paste Invalid Amount"
+  },
+  {
+    "description": "BankTransfer_CancelTransaction | Amount Type: Cancel via Page Refresh",
+    "execute": true,
+    "CN": "F2147",
+    "mobile": "510203012",
+    "pwd": "Aa#1234567",
+    "Amount": "10.00",
+    "AmountType": "Cancel via Page Refresh"
+  },
+  {
+    "description": "BankTransfer_CancelTransaction | Amount Type: Cancel via Summary Cancel Button",
+    "execute": true,
+    "CN": "F2147",
+    "mobile": "510203012",
+    "pwd": "Aa#1234567",
+    "Amount": "10.00",
+    "AmountType": "Cancel via Summary Cancel Button"
+  }
+]

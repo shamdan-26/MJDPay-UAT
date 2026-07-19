@@ -79,17 +79,17 @@ test.describe('Forgot Password Page', () => {
     // ── Eyebrow & title ───────────────────────────────────────────────────────
 
     test('should display the "Forgot password" eyebrow text', async ({ page }) => {
-        await expect(page.getByText('Forgot password')).toBeVisible();
+        await expect(page.getByText(' نسيت كلمة المرور ')).toBeVisible();
     });
 
     test('should display the "Welcome to MJD Pay" heading', async ({ page }) => {
-        await expect(page.getByText('Welcome to MJD Pay')).toBeVisible();
+        await expect(page.getByText(' مرحباً بك في MJD Pay ')).toBeVisible();
     });
 
     // ── Company number field ──────────────────────────────────────────────────
 
     test('should display the Company number label', async ({ page }) => {
-        await expect(page.getByText('Company number')).toBeVisible();
+        await expect(page.getByText(' رقم الشركة ')).toBeVisible();
     });
 
     test('should have the Company number input visible and enabled', async () => {
@@ -98,13 +98,13 @@ test.describe('Forgot Password Page', () => {
     });
 
     test('should display "Input here" placeholder in the Company number field', async () => {
-        await expect(forgotPassword.companyInput).toHaveAttribute('placeholder', 'Input here');
+        await expect(forgotPassword.companyInput).toHaveAttribute('placeholder', 'أدخل هنا');
     });
 
     // ── Mobile number field ───────────────────────────────────────────────────
 
     test('should display the Mobile number label', async ({ page }) => {
-        await expect(page.getByText('Mobile number')).toBeVisible();
+        await expect(page.getByText(' رقم الجوال ')).toBeVisible();
     });
 
     test('should display the Saudi flag icon in the mobile field', async ({ page }) => {
@@ -121,7 +121,7 @@ test.describe('Forgot Password Page', () => {
     });
 
     test('should display "Input here" placeholder in the Mobile number field', async () => {
-        await expect(forgotPassword.mobileInput).toHaveAttribute('placeholder', 'Input here');
+        await expect(forgotPassword.mobileInput).toHaveAttribute('placeholder', 'أدخل هنا');
     });
 
     // ── Next button ───────────────────────────────────────────────────────────

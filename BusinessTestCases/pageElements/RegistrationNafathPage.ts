@@ -49,14 +49,16 @@ export class RegistrationNafathPage {
         this.outerStepBar = page.locator('.mp-stepbar .mp-step');
 
         // The app defaults to Arabic; the Nafath panel itself is bypassed in dev
-        // (see waitForNafathPanel), so these English-only patterns are unverified
-        // against a live Arabic render — reconcile against UAT on first real run.
-        this.nafathHeading   = page.getByRole('heading', { name: /verify with nafath/i });
-        this.instructionText = page.getByText(/choose the number that appears in front of you/i).first();
-        this.step1Text = page.getByText(/open nafath app and sign in/i);
-        this.step2Text = page.getByText(/select the number shown/i);
-        this.step3Text = page.getByText(/^approve$/i);
-        this.redirectNote   = page.getByText(/return to this page/i).first();
+        // (see waitForNafathPanel). Confirmed live against UAT: the heading reads
+        // "التحقق عبر نَفاذ" (Verify via Nafath) — "نَفاذ" renders with a combining
+        // Fatha diacritic (U+064E) that a plain "نفاذ" substring won't match, hence
+        // the [ً-ْ]? (Arabic diacritics range) between ن and فاذ below.
+        this.nafathHeading   = page.getByRole('heading', { name: /verify with nafath|التحقق عبر ن[ً-ْ]?فاذ/i });
+        this.instructionText = page.getByText(/choose the number that appears in front of you|اختر الرقم الظاهر/i).first();
+        this.step1Text = page.getByText(/open nafath app and sign in|افتح تطبيق ن[ً-ْ]?فاذ/i);
+        this.step2Text = page.getByText(/select the number shown|اختر الرقم الظاهر/i);
+        this.step3Text = page.getByText(/^approve$|موافقة/i);
+        this.redirectNote   = page.getByText(/return to this page|العودة إلى هذه الصفحة/i).first();
         this.countdownTimer = page.getByText(/\d{1,2}:\d{2}s/).first();
         this.verifyButton   = page.getByRole('button', { name: /^(verify|تحقق)$/i });
         this.resendButton   = page.getByRole('button', { name: /resend/i });
