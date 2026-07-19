@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { goToProductsStep } from '../RegistrationHelper';
+import { goToProductsStep, expandPosCard } from '../RegistrationHelper';
 import { RegistrationProductsPage } from '../../pageElements/RegistrationProductsPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -61,20 +61,7 @@ test.describe('Registration - Products Step: PoS Onboarding Setup (EMI-5783)', (
         // checkbox — but a citizen asset that already completed Products/PoS in a
         // prior run (shared pool) silently advances straight to Contract instead
         // of expanding. That's expected steady-state for this pool, not a failure.
-        const posCard = products.productCard('POS');
-        const posCardFound = await posCard
-            .waitFor({ state: 'visible', timeout: 10000 })
-            .then(() => true)
-            .catch(() => false);
-
-        if (posCardFound) {
-            await posCard.click({ timeout: 10000 });
-            const contractStep = products.activeStep.filter({ hasText: 'العقد' });
-            posFlowAvailable = await Promise.race([
-                products.requestDevicesNowButton.waitFor({ state: 'visible', timeout: 8000 }).then(() => true),
-                contractStep.waitFor({ state: 'visible', timeout: 8000 }).then(() => false),
-            ]).catch(() => false);
-        }
+        posFlowAvailable = await expandPosCard(page);
     });
 
     test.afterAll(async () => { await page.close(); });
@@ -234,15 +221,13 @@ test.describe('Registration - Products Step: PoS Onboarding Setup (EMI-5783)', (
             await products.skipSetupLaterButton.click();
         }
         await products.deviceCountInput.fill('2');
-        // Confirmed live: earlier tests in this serial suite already leave Wathiq
-        // selected *and* resolved (green confirmation box with the address). Its
-        // tab label is only reliably clickable to switch selection — once already
-        // active/resolved, the "pos-source-tabs" strip container obstructs the
-        // same coordinates and the click hangs. Only click when a switch is needed.
-        const alreadyResolved = await products.updateWathiqAddressButton.isVisible().catch(() => false);
-        if (!alreadyResolved) {
-            await products.wathiqAddressOption.click();
-        }
+        // Confirmed live via probe: Wathiq is checked by default, so it never
+        // needs a click — but the panel's submit button silently no-ops instead
+        // of advancing to Review if clicked while the address is still
+        // resolving (updateWathiqAddressButton only renders once that fetch
+        // completes), so wait for it rather than assuming an earlier test in
+        // this serial suite already left it resolved.
+        await products.updateWathiqAddressButton.waitFor({ state: 'visible', timeout: 20000 });
         await products.contactNameInput.fill('Test Contact');
         await products.contactMobileInput.fill('512345678');
         await products.devicesDeliveryNextButton.click();

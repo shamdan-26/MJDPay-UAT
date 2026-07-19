@@ -101,35 +101,40 @@ export class RegistrationProductsPage {
         this.skippedMessage           = page.getByText(/set up later|skipped/i).first();
         this.requestNowFromSkipButton = page.getByRole('button', { name: /actually,?\s*request now/i });
 
-        this.deviceCountInput   = page.getByRole('spinbutton', { name: /number of devices|device count|total devices|إجمالي الأجهزة/i })
-            .or(page.getByRole('textbox', { name: /number of devices|device count|total devices|إجمالي الأجهزة/i }));
-        this.decreaseDeviceCountButton = page.getByRole('button', { name: /decrease|إنقاص/i });
-        this.increaseDeviceCountButton = page.getByRole('button', { name: /increase|زيادة/i });
+        // Devices & Delivery panel locators below are confirmed live via
+        // data-testid, discovered through a live DOM probe — QA-DATA-TESTID-HANDOFF.md
+        // section 5 lists "My Products / POS" as not-yet-tagged, but these ids
+        // exist in the live app regardless; the handoff doc is stale for this
+        // flow. Prefer these over text/role locators per the handoff's guidance.
+        this.deviceCountInput   = page.getByTestId('pos-delivery-editor-total-devices-input');
+        this.decreaseDeviceCountButton = page.getByTestId('pos-delivery-editor-decrement-total-btn');
+        this.increaseDeviceCountButton = page.getByTestId('pos-delivery-editor-increment-total-btn');
         this.deliveryModeToggle = page.getByRole('radiogroup', { name: /delivery mode|التوصيل/i })
             .or(page.getByRole('group', { name: /delivery mode|التوصيل/i }));
-        this.singleLocationDeliveryOption = page.getByText(/single location|موقع واحد/i).first();
-        this.splitByDeviceDeliveryOption  = page.getByText(/split by device|تقسيم حسب الأجهزة/i).first();
+        this.singleLocationDeliveryOption = page.getByTestId('pos-delivery-editor-mode-single-radio');
+        this.splitByDeviceDeliveryOption  = page.getByTestId('pos-delivery-editor-mode-split-radio');
         this.deliveryGroupOneLabel = page.getByText(/group 1|المجموعة 1/i).first();
-        this.wathiqAddressOption     = page.getByText(/national.*wathi?q|العنوان الوطني.*واثق/i).first();
-        this.customPinAddressOption  = page.getByText(/custom.*map location|موقع مخصص على الخريطة/i).first();
-        this.updateWathiqAddressButton = page.getByRole('button', { name: /update wathi?q address|تحديث عنوان واثق/i });
-        this.contactNameInput  = page.getByRole('textbox', { name: /contact name|اسم جهة الاتصال/i })
-            .or(page.getByPlaceholder(/recipient.*full name|الاسم الكامل للمستلم/i));
-        this.contactMobileInput = page.getByRole('textbox', { name: /contact.*mobile|رقم جوال جهة الاتصال/i })
-            .or(page.getByPlaceholder(/0512345678/i));
+        // Trailing "-0" indexes the first delivery group — the only one present
+        // in single-location mode, which is what this suite otherwise assumes.
+        this.wathiqAddressOption     = page.getByTestId('pos-delivery-editor-source-wathiq-radio-0');
+        this.customPinAddressOption  = page.getByTestId('pos-delivery-editor-source-pin-radio-0');
+        this.updateWathiqAddressButton = page.getByTestId('pos-delivery-editor-wathiq-refresh-btn-0');
+        this.contactNameInput  = page.getByTestId('pos-delivery-editor-contact-name-input-0');
+        // The contact-number field's data-testid sits on the app-floating-label-input
+        // wrapper (a custom element), not a raw <input> — Playwright's fill()
+        // needs the actual editable control, so scope down to the inner textbox.
+        this.contactMobileInput = page.getByTestId('pos-delivery-editor-contact-number-input-0').getByRole('textbox');
         this.addLocationGroupButton    = page.getByRole('button', { name: /add.*(location|group)/i });
         this.removeLocationGroupButton = page.getByRole('button', { name: /remove.*(location|group)/i }).first();
         this.walletPicker = page.getByRole('combobox', { name: /wallet/i })
             .or(page.getByRole('listbox', { name: /wallet/i }));
-        // The Devices & Delivery sub-panel's own footer button shares the exact
-        // same "Continue"/"متابعة" text as the outer Products-step continueButton
-        // — when both are mounted at once this locator's underlying query
-        // resolves to 2 elements. .last() prefers the panel-local button, which
-        // Angular typically renders after the outer step chrome in DOM order;
-        // reconcile with a proper container-scoped selector once the real DOM
-        // structure for this panel is confirmed.
-        this.devicesDeliveryNextButton = page.getByRole('button', { name: /^next$|^continue$|متابعة/i }).last();
-        this.devicesDeliveryBackButton = page.getByRole('button', { name: /^back$|رجوع/i }).last();
+        // register-pos-delivery-submit-btn/back-btn are the panel's own footer
+        // buttons — distinct from the outer Products-step's continue button
+        // (register-products-continue-btn), which shares the same visible
+        // "متابعة" text and previously made the old role/text-based locator
+        // ambiguous (resolved with .last(), never confirmed correct until now).
+        this.devicesDeliveryNextButton = page.getByTestId('register-pos-delivery-submit-btn');
+        this.devicesDeliveryBackButton = page.getByTestId('register-pos-delivery-back-btn');
 
         this.reviewTotalDevices      = page.getByText(/total devices?/i).first();
         this.reviewDeliveryBreakdown = page.getByText(/delivery (group|breakdown)/i).first();
