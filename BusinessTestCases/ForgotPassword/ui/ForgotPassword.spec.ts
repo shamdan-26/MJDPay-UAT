@@ -40,12 +40,16 @@ test.describe('Forgot Password Page', () => {
         await expect(forgotPassword.enButton).toBeVisible();
     });
 
-    test('should have EN button active by default', async () => {
-        await expect(forgotPassword.enButton).toHaveAttribute('aria-pressed', 'true');
+    test('should not have EN button active by default', async () => {
+        await expect(forgotPassword.enButton).not.toHaveAttribute('aria-pressed', 'true');
     });
 
     test('should display the Arabic language button', async () => {
         await expect(forgotPassword.arabicButton).toBeVisible();
+    });
+
+    test('should have Arabic button active by default', async () => {
+        await expect(forgotPassword.arabicButton).toHaveAttribute('aria-pressed', 'true');
     });
 
     // ── Theme toggle ──────────────────────────────────────────────────────────

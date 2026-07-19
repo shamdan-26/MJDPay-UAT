@@ -16,8 +16,8 @@ Context: during web registration, on the Products step, selecting the PoS Termin
 
 | ID | Title | Steps | Expected Result | Priority |
 |---|---|---|---|---|
-| WPS-01 | Wallet shown as required | Reach the registration Products step in a browser | Wallet is shown and cannot be deselected (required product) | P1 |
-| WPS-02 | PoS Terminals shown as optional | Reach the Products step | PoS Terminals, Bill Payment, Payouts are shown as optional, deselectable | P2 |
+| WPS-01 | Wallet shown as required | Fill Business Info (بيانات النشاط التجاري — profile type, CRN, National ID, email) and continue to reach the registration Products step in a browser | Wallet is shown and cannot be deselected (required product) | P1 |
+| WPS-02 | PoS Terminals shown as optional | Fill Business Info (بيانات النشاط التجاري) and continue to reach the Products step | PoS Terminals, Bill Payment, Payouts are shown as optional, deselectable | P2 |
 | WPS-03 | Selecting PoS Terminals expands inline | Click the PoS Terminals card | The card expands in place on the same page; no full navigation/URL change occurs | P1 |
 | WPS-04 | Expanded card shows both choices | Expand the PoS Terminals card | "Request devices now" and "Skip - set up later" are both visible | P1 |
 | WPS-05 | Collapsing without choosing | Expand the card, then click it again without picking an option | Card collapses; selection state (Wallet/PoS enabled) is unaffected — confirm actual behavior matches design intent | P3 |

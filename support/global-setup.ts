@@ -5,6 +5,8 @@ import {
     loginAsMerchant,
     homepageAccountPool,
     LOGIN_URL,
+    watchAuthGatewayFailure,
+    formatGatewayNote,
 } from '../BusinessTestCases/Homepage/HomePageHelper';
 
 const env            = process.env['ENV'] ?? 'dev';
@@ -26,6 +28,7 @@ async function globalSetup() {
             await page.getByRole('textbox', { name: /Company number|رقم الشركة/ }).fill(VALID_COMPANY);
             await page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ }).fill(VALID_MOBILE);
             await page.locator('input[aria-label="Password"], input[aria-label="كلمة المرور"]').fill(VALID_PASSWORD);
+            const stopWatchingGateway = watchAuthGatewayFailure(page);
             if (env === 'dev') {
                 await page.locator('#btn_login').click();
             } else {
@@ -37,6 +40,18 @@ async function globalSetup() {
                 .waitFor({ state: 'visible', timeout: 15000 })
                 .then(() => true)
                 .catch(() => false);
+
+            if (!otpVisible) {
+                const gatewayStatus = stopWatchingGateway();
+                // No OTP screen and still on the login page means the login never
+                // actually succeeded — surface why instead of silently saving an
+                // unauthenticated session.json.
+                if (page.url() === LOGIN_URL) {
+                    throw new Error(`Login did not reach OTP or home screen. Current URL: ${page.url()}.${formatGatewayNote(gatewayStatus)}`);
+                }
+            } else {
+                stopWatchingGateway();
+            }
 
             if (otpVisible) {
                 await page.getByRole('textbox', { name: 'One time password input' }).first()

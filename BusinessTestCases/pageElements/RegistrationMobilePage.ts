@@ -31,19 +31,19 @@ export class RegistrationMobilePage {
         this.logoImage = page.locator('img[alt="MJD Pay"]');
         this.logoLink  = page.locator('a:has(img[alt="MJD Pay"])');
 
-        this.enButton     = page.getByRole('button', { name: 'EN' });
+        this.enButton     = page.getByTestId('lang-en');
         this.arabicButton = page.getByRole('button', { name: 'العربية' });
         this.themeToggle  = page.getByRole('button', { name: 'Switch theme' });
 
-        this.createAccountEyebrow        = page.getByText('Create Account');
-        this.enterPhoneHeading           = page.getByText('Enter Phone Number');
-        this.startRegistrationDescription = page.getByText('Start your business registration');
+        this.createAccountEyebrow        = page.locator('.form-eyebrow');
+        this.enterPhoneHeading           = page.locator('label.floating-field-label[for="floating-text-mobilenumber-1"]', { hasText: 'رقم الجوال' });
+        this.startRegistrationDescription = page.locator('.form-sub-title.mt-2', { hasText: 'ابدأ تسجيل نشاطك التجاري' });
 
         this.mobileInput = page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ });
         this.countryCode = page.locator('.floating-prefix');
         this.nextButton  = page.getByRole('button', { name: /next|التالي/i });
-        this.alreadyHaveAccountText = page.getByText('Already have an account?');
-        this.loginLink   = page.getByRole('link', { name: /log.?in/i });
+        this.alreadyHaveAccountText = page.getByText(/Already have an account\?|لديك حساب؟/);
+        this.loginLink   = page.getByTestId('register-login-link');
         this.termsText   = page.getByText(/Terms/i).first();
         this.privacyText = page.getByText(/Privacy/i).first();
     }

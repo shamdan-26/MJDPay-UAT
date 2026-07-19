@@ -245,6 +245,28 @@ export async function fillFinancialForm(page: Page): Promise<void> {
     await selectRandomOption(page, page.locator('#mat-select-value-1'));
 }
 
+/** Fills the Verification & Uploads step (Tab 3): bank, IBAN, VAT number, and
+ *  every file-upload input on the panel. Does not submit — callers click
+ *  signUpButton themselves once the form is filled. */
+export async function fillVerificationForm(page: Page): Promise<void> {
+    const verificationPage = new RegistrationVerificationPage(page);
+    await verificationPage.waitForLoad();
+
+    if (await verificationPage.bankDropdown.count() > 0) {
+        await selectRandomOption(page, verificationPage.bankDropdown.first());
+    }
+    await verificationPage.ibanInput.fill(VALID_IBAN);
+    await verificationPage.vatInput.fill(VALID_VAT_NUMBER);
+
+    const fileInputs = page.locator('input[type="file"]');
+    const fileInputCount = await fileInputs.count();
+    for (let i = 0; i < fileInputCount; i++) {
+        await fileInputs.nth(i)
+            .setInputFiles({ name: `doc${i}.pdf`, mimeType: 'application/pdf', buffer: TEST_FILE_BUFFER })
+            .catch(() => {});
+    }
+}
+
 /**
  * Route-mocking helpers for the Sprint 71 registration items (section 13 of
  * the test-case doc): auto-approval/auto-activation (EMI-5748), fixed-Merchant

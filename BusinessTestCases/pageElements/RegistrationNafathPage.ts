@@ -25,11 +25,9 @@ export class RegistrationNafathPage {
     readonly redirectNote: Locator;
     readonly countdownTimer: Locator;
     readonly verifyButton: Locator;
+    readonly resendButton: Locator;
 
-    // Financial tab fields (Tab 2 — visible before NAFATH step)
-    readonly monthlyBillsInput: Locator;
-    readonly industriesDropdown: Locator;
-    readonly annualIncomeDropdown: Locator;
+    // Step navigation (shared across registration steps)
     readonly nextButton: Locator;
     readonly backButton: Locator;
     readonly loadingButton: Locator;
@@ -42,7 +40,8 @@ export class RegistrationNafathPage {
 
         this.enButton     = page.getByRole('group', { name: /change language/i }).getByRole('button', { name: 'EN' });
         this.arabicButton = page.getByRole('group', { name: /change language/i }).getByRole('button', { name: 'العربية' });
-        this.themeToggle  = page.getByRole('button', { name: 'Switch theme' });
+        // Same post-mobile-step header as RegistrationInfoPage — match its locator strategy.
+        this.themeToggle  = page.locator('button.mode-btn.header-icon-btn');
 
         this.formEyebrow = page.locator('#register-form-eyebrow');
         this.formTitle   = page.locator('#register-form-title');
@@ -60,10 +59,8 @@ export class RegistrationNafathPage {
         this.redirectNote   = page.getByText(/return to this page/i).first();
         this.countdownTimer = page.getByText(/\d{1,2}:\d{2}s/).first();
         this.verifyButton   = page.getByRole('button', { name: /^(verify|تحقق)$/i });
+        this.resendButton   = page.getByRole('button', { name: /resend/i });
 
-        this.monthlyBillsInput  = page.getByRole('textbox', { name: /monthly expected number|العدد الشهري المتوقع للفواتير/i });
-        this.industriesDropdown = page.locator('[id^="floating-dropdown-industries"], [id^="floating-dropdown-القطاعات"]');
-        this.annualIncomeDropdown = page.locator('[id^="floating-dropdown-annual-income"], [id^="floating-dropdown-الدخل-السنوي"]');
         this.nextButton    = page.getByRole('button', { name: /next|التالي/i });
         this.backButton    = page.getByRole('button', { name: /back|رجوع/i });
         this.loadingButton = page.getByRole('button', { name: /Loading|جاري التحميل/i });
@@ -76,10 +73,5 @@ export class RegistrationNafathPage {
             .waitFor({ state: 'visible', timeout: 20000 })
             .then(() => true)
             .catch(() => false);
-    }
-
-    async waitForFinancialTab(): Promise<void> {
-        await this.loadingButton.waitFor({ state: 'hidden', timeout: 20000 }).catch(() => {});
-        await this.monthlyBillsInput.waitFor({ state: 'visible', timeout: 30000 });
     }
 }

@@ -61,22 +61,22 @@ test.describe('Registration — Verification & Documents', () => {
     // ── Progress / step indicators ───────────────────────────────────────────
 
     test('should display the "Create Account" title', async () => {
-        await expect(verification.formEyebrow).toContainText('Create Account');
+        await expect(verification.formEyebrow).toContainText(' إنشاء حساب ');
     });
 
     test('should display the "Verification & documents" subheading', async () => {
-        await expect(verification.formTitle).toContainText(/verification\s*&\s*documents/i);
+        await expect(verification.formTitle).toContainText(" التحقق والمستندات ");
     });
 
     test('should display the "Step 3 of 3" description', async () => {
-        await expect(verification.formSubTitle).toContainText(/step 3 of 3/i);
+        await expect(verification.formSubTitle).toContainText(/الخطوة 3 من 3،/i);
     });
 
     test('should display all four outer step labels: Business Info, NAFATH, Products, Contract', async () => {
-        await expect(verification.outerStepBar.filter({ hasText: /business info/i })).toBeVisible();
-        await expect(verification.outerStepBar.filter({ hasText: /nafath/i })).toBeVisible();
-        await expect(verification.outerStepBar.filter({ hasText: /products/i })).toBeVisible();
-        await expect(verification.outerStepBar.filter({ hasText: /contract/i })).toBeVisible();
+        await expect(verification.outerStepBar.filter({ hasText: " بيانات النشاط التجاري " })).toBeVisible();
+        await expect(verification.outerStepBar.filter({ hasText: " نَفاذ " })).toBeVisible();
+        await expect(verification.outerStepBar.filter({ hasText: " المنتجات " })).toBeVisible();
+        await expect(verification.outerStepBar.filter({ hasText: " العقد " })).toBeVisible();
     });
 
     // ── Panel 3: Verification & Uploads (active) ─────────────────────────────
@@ -105,7 +105,7 @@ test.describe('Registration — Verification & Documents', () => {
     });
 
     test('should display the max file size for IBAN proof (5MB)', async () => {
-        await expect(page.getByText(/5\s*mb/i).first()).toBeVisible();
+        await expect(page.getByText(/5\s*(mb|ميجابايت)/i).first()).toBeVisible();
     });
 
     test('should display the VAT number field with the correct placeholder', async () => {
@@ -143,11 +143,11 @@ test.describe('Registration — Verification & Documents', () => {
 
     test('should display "Already have an account? Log In"', async () => {
         await expect(verification.loginLine).toBeVisible();
-        await expect(verification.loginLink).toContainText(" Log In ");
+        await expect(verification.loginLink).toContainText(" تسجيل الدخول ");
     });
 
     test('should display Terms & Conditions and Privacy Policy references', async () => {
-        await expect(verification.footer).toContainText('Terms & Conditions');
-        await expect(verification.footer).toContainText('Privacy Policy');
+        await expect(verification.footer).toContainText(' الشروط والأحكام ');
+        await expect(verification.footer).toContainText(' سياسة الخصوصية ');
     });
 });

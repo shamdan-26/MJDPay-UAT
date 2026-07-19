@@ -939,7 +939,6 @@ test.describe('Registration – Continue/Resume Registration (EMI-5666, T03)', (
     test.describe.configure({ mode: 'serial' });
 
     test('should bypass Financial & Business when re-entering with the same mobile and CRN as a pending registration', async ({ page, context }) => {
-        await page.pause();
         test.setTimeout(180_000);
         const asset = nextResidentAsset();
 

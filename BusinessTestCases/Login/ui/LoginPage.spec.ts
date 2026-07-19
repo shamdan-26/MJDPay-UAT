@@ -54,16 +54,16 @@ test.describe('Login Page', () => {
         await expect(loginPage.enButton).toBeVisible();
     });
 
-    test('should have EN as the active language by default', async () => {
-        await expect(loginPage.enButton).toHaveAttribute('aria-pressed', 'true');
+    test('should not have EN as the active language by default', async () => {
+        await expect(loginPage.enButton).not.toHaveAttribute('aria-pressed', 'true');
     });
 
     test('should display the Arabic language button', async () => {
         await expect(loginPage.arabicButton).toBeVisible();
     });
 
-    test('should not have Arabic as the active language by default', async () => {
-        await expect(loginPage.arabicButton).not.toHaveAttribute('aria-pressed', 'true');
+    test('should have Arabic as the active language by default', async () => {
+        await expect(loginPage.arabicButton).toHaveAttribute('aria-pressed', 'true');
     });
 
     test('should activate the Arabic button when clicked', async () => {

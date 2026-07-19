@@ -1,38 +1,85 @@
 import { test, expect, Page } from '@playwright/test';
-import { goToInfoStep, nextCitizenAsset, generateEmail, REGISTER_URL } from '../RegistrationHelper';
+import {
+    goToInfoStep, nextCitizenAsset, generateEmail, isAlreadyRegisteredMessage,
+    selectRandomOption,
+} from '../RegistrationHelper';
 import { RegistrationNafathPage } from '../../pageElements/RegistrationNafathPage';
-
-const SKIP_MSG = 'Nafath panel did not appear — Nafath may be bypassed for this test account in this environment';
+import { RegistrationInfoPage } from '../../pageElements/RegistrationInfoPage';
+import { RegistrationFinancialPage } from '../../pageElements/RegistrationFinancialPage';
 
 test.describe('Registration - NAFATH Step Page Elements', () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;
     let nafathPage: RegistrationNafathPage;
-    let nafathAppeared = false;
 
     test.beforeAll(async ({ browser }) => {
-        test.setTimeout(120_000);
+        test.setTimeout(180_000);
         const context = await browser.newContext();
         page = await context.newPage();
         nafathPage = new RegistrationNafathPage(page);
+        const infoPage = new RegistrationInfoPage(page);
 
         // Citizen assets (unlike resident assets) go through the real NAFATH
         // verification step instead of bypassing straight to the Financial tab.
-        const asset = nextCitizenAsset();
-        await goToInfoStep(page, asset.mobile);
+        // CITIZEN_ASSETS is a shared, reused pool — an identity already registered
+        // by a prior run is expected steady-state (see isAlreadyRegisteredMessage),
+        // so cycle to the next asset rather than getting stuck on Business Info.
+        const maxAttempts = 10;
+        let advanced = false;
+        let lastAsset = nextCitizenAsset();
+        let lastPageText = '';
 
-        const radioGroup = page.getByRole('radiogroup', { name: /Profile Type|نوع الملف التجاري/i });
-        await radioGroup.getByRole('radio').first().click();
-        await page.locator('#floating-text-field-2').fill(asset.crn);
-        await page.locator('#floating-text-field-3').fill(asset.nationalId);
-        await page.locator('input[type="email"]').fill(generateEmail());
-        await page.getByRole('button', { name: /next|التالي/i }).click();
-        await page.getByRole('button', { name: /Loading|جاري التحميل/i })
-            .waitFor({ state: 'hidden', timeout: 20000 })
-            .catch(() => {});
+        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+            const asset = attempt === 1 ? lastAsset : (lastAsset = nextCitizenAsset());
+            await goToInfoStep(page, asset.mobile);
 
-        nafathAppeared = await nafathPage.waitForNafathPanel();
+            await infoPage.merchantButton.click();
+            await infoPage.crnInput.fill(asset.crn);
+            await infoPage.idInput.fill(asset.nationalId);
+            await infoPage.emailInput.fill(generateEmail());
+            await infoPage.nextButton.click();
+            await nafathPage.loadingButton.waitFor({ state: 'hidden', timeout: 20000 }).catch(() => {});
+
+            // Business Info is followed by an inline Financial sub-step (still under
+            // outer step 1) — it must be filled and submitted too before the wizard
+            // advances to the NAFATH outer step.
+            const financialPage = new RegistrationFinancialPage(page);
+            const financialLoaded = await financialPage.monthlyBillsInput
+                .waitFor({ state: 'visible', timeout: 20000 })
+                .then(() => true)
+                .catch(() => false);
+
+            if (financialLoaded) {
+                await financialPage.fill('1500', '50000', '10000', '20000');
+                await selectRandomOption(page, financialPage.industriesDropdown);
+                await selectRandomOption(page, financialPage.annualIncomeDropdown);
+                await financialPage.next();
+            }
+
+            advanced = await Promise.race([
+                nafathPage.nafathHeading.waitFor({ state: 'visible', timeout: 20000 }).then(() => true),
+                nafathPage.activeStep.filter({ hasText: /NAFATH|نَفاذ|نفاذ/i }).first()
+                    .waitFor({ state: 'visible', timeout: 20000 }).then(() => true),
+            ]).catch(() => false);
+
+            if (advanced) break;
+
+            lastPageText = await page.evaluate(() => document.body.innerText).catch(() => '');
+            if (isAlreadyRegisteredMessage(lastPageText) && attempt < maxAttempts) continue;
+            break;
+        }
+
+        if (!advanced) {
+            throw new Error(
+                `Registration never reached the NAFATH step (neither the verification panel nor an ` +
+                `active "NAFATH" outer step appeared) — either stuck on Business Info or NAFATH was ` +
+                `bypassed straight to a later step.\n` +
+                `Mobile=${lastAsset.mobile}, CRN=${lastAsset.crn}, ID=${lastAsset.nationalId}.\n` +
+                `Current URL: ${page.url()}\n` +
+                `Page text: ${lastPageText?.slice(0, 300)}`
+            );
+        }
     });
 
     test.afterAll(async () => { await page.close(); });
@@ -40,6 +87,7 @@ test.describe('Registration - NAFATH Step Page Elements', () => {
     // ── Header / Banner ───────────────────────────────────────────────────
 
     test('should display the MJD Pay logo', async () => {
+        await page.pause();
         await expect(nafathPage.logoImage).toBeVisible();
     });
 
@@ -72,6 +120,10 @@ test.describe('Registration - NAFATH Step Page Elements', () => {
     });
 
     test('should display "NAFATH" as the active outer step', async () => {
+        // Wait for the Info step's transition to finish landing on NAFATH before asserting,
+        // rather than relying on the default assertion-retry window to cover the navigation.
+        await nafathPage.activeStep.filter({ hasText: /NAFATH|نَفاذ|نفاذ/i }).first()
+            .waitFor({ state: 'visible', timeout: 20000 });
         await expect(nafathPage.activeStep.first()).toContainText(/NAFATH|نَفاذ|نفاذ/i);
     });
 
@@ -86,32 +138,26 @@ test.describe('Registration - NAFATH Step Page Elements', () => {
     // ── Nafath verification panel ───────────────────────────────────────
 
     test('should display the "Verify with Nafath" heading', async () => {
-        test.skip(!nafathAppeared, SKIP_MSG);
         await expect(nafathPage.nafathHeading).toBeVisible();
     });
 
     test('should display the verification instruction text', async () => {
-        test.skip(!nafathAppeared, SKIP_MSG);
         await expect(nafathPage.instructionText).toBeVisible();
     });
 
     test('should display step 1 "Open Nafath app and sign in"', async () => {
-        test.skip(!nafathAppeared, SKIP_MSG);
         await expect(nafathPage.step1Text).toBeVisible();
     });
 
     test('should display step 2 "Select the number shown"', async () => {
-        test.skip(!nafathAppeared, SKIP_MSG);
         await expect(nafathPage.step2Text).toBeVisible();
     });
 
     test('should display step 3 "Approve"', async () => {
-        test.skip(!nafathAppeared, SKIP_MSG);
         await expect(nafathPage.step3Text).toBeVisible();
     });
 
     test('should display the redirect note with a countdown timer', async () => {
-        test.skip(!nafathAppeared, SKIP_MSG);
         await expect(nafathPage.redirectNote).toContainText(/return to this page/i);
         await expect(nafathPage.countdownTimer).toBeVisible();
     });
@@ -119,14 +165,12 @@ test.describe('Registration - NAFATH Step Page Elements', () => {
     // Per EMI-4895: Verify button must start disabled and only enable once the
     // redirect countdown expires (fixed to 20s in EMI-4937, previously 30s).
     test('should display the "Verify" button as initially disabled while the countdown is active [EMI-4895]', async () => {
-        test.skip(!nafathAppeared, SKIP_MSG);
         await expect(nafathPage.verifyButton).toBeVisible();
         await expect(nafathPage.verifyButton).toBeDisabled();
     });
 
     // Per EMI-4895 acceptance criteria: "remove resend section".
     test('should not display a resend option in the Nafath panel [EMI-4895]', async () => {
-        test.skip(!nafathAppeared, SKIP_MSG);
-        await expect(page.getByRole('button', { name: /resend/i })).toHaveCount(0);
+        await expect(nafathPage.resendButton).toHaveCount(0);
     });
 });

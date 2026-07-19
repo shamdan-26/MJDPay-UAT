@@ -101,6 +101,37 @@ export interface MerchantCredentials {
     password: string;
 }
 
+/** Watches for a failing response on the auth gateway's sign-in call while a
+ *  login attempt is in flight, so a login timeout can be attributed to a
+ *  backend/env outage instead of looking like a flaky UI wait. Call the
+ *  returned function once the attempt is done (success or failure) to detach
+ *  the listener and read back the captured status, if any. */
+export function watchAuthGatewayFailure(page: Page): () => number | undefined {
+    let failedStatus: number | undefined;
+    const onResponse = (res: import('@playwright/test').Response) => {
+        if (res.url().includes('/auth/signin') && res.status() >= 400) {
+            failedStatus = res.status();
+        }
+    };
+    page.on('response', onResponse);
+    return () => {
+        page.off('response', onResponse);
+        return failedStatus;
+    };
+}
+
+/** Formats an annotation naming the auth gateway's failing status, when
+ *  watchAuthGatewayFailure() caught one — empty string otherwise. */
+export function formatGatewayNote(gatewayStatus: number | undefined): string {
+    return gatewayStatus
+        ? ` Auth gateway returned ${gatewayStatus} for /auth/signin — likely a backend/env outage, not a test issue.`
+        : '';
+}
+
+function describeLoginTimeout(page: Page, gatewayStatus: number | undefined, err: unknown, prefix = ''): string {
+    return `${prefix}login did not reach home or OTP screen within 20 s. Current URL: ${page.url()}.${formatGatewayNote(gatewayStatus)}\nCause: ${err}`;
+}
+
 export interface HomepageSession {
     page: Page;
     dashboard: DashboardPage;
@@ -123,6 +154,7 @@ export async function loginAsBiller(page: Page): Promise<void> {
     await page.getByRole('textbox', { name: /Company number|رقم الشركة/ }).fill(VALID_BILLER_COMPANY);
     await page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ }).fill(VALID_BILLER_MOBILE);
     await page.locator('input[aria-label="Password"], input[aria-label="كلمة المرور"]').fill(VALID_BILLER_PASSWORD);
+    const stopWatchingGateway = watchAuthGatewayFailure(page);
     await loginButton(page).click();
 
     const otpHeading = page.getByRole('heading', { name: /Enter OTP|أدخل رمز التحقق/i });
@@ -133,10 +165,9 @@ export async function loginAsBiller(page: Page): Promise<void> {
             otpHeading.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'otp' as const),
         ]);
     } catch (err) {
-        throw new Error(
-            `Biller login did not reach home or OTP screen within 20 s. Current URL: ${page.url()}\nCause: ${err}`
-        );
+        throw new Error(describeLoginTimeout(page, stopWatchingGateway(), err, 'Biller '));
     }
+    stopWatchingGateway();
 
     if (landed === 'otp') {
         await page.getByRole('textbox', { name: 'One time password input' }).first()
@@ -170,6 +201,7 @@ export async function loginAsMerchant(page: Page, creds?: MerchantCredentials): 
         await page.getByRole('textbox', { name: /Company number|رقم الشركة/ }).fill(company);
         await page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ }).fill(mobile);
         await page.locator('input[aria-label="Password"], input[aria-label="كلمة المرور"]').fill(password);
+        const stopWatchingGateway = watchAuthGatewayFailure(page);
         await loginButton(page).click();
 
         const otpHeading = page.getByRole('heading', { name: /Enter OTP|أدخل رمز التحقق/i });
@@ -180,10 +212,9 @@ export async function loginAsMerchant(page: Page, creds?: MerchantCredentials): 
                 otpHeading.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'otp' as const),
             ]);
         } catch (err) {
-            throw new Error(
-                `Login did not reach home or OTP screen within 20 s. Current URL: ${page.url()}\nCause: ${err}`
-            );
+            throw new Error(describeLoginTimeout(page, stopWatchingGateway(), err));
         }
+        stopWatchingGateway();
 
         if (landed === 'otp') {
             await page.getByRole('textbox', { name: 'One time password input' }).first()

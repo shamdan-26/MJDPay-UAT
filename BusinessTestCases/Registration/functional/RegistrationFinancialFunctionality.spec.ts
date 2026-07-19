@@ -155,7 +155,6 @@ test.describe('Registration - Financial & Business Functionality', () => {
     // Documented spec (EMI Validation confluence page): "Expected number of bills" and
     // "Expected sum of bills" must be > 0 and must not start with 0.
     test.skip('should keep Next disabled when Monthly Expected Number Of Bills is 0', async () => {
-        await page.pause();
         await fillFinancialForm(page);
         await page.getByRole('textbox', { name: /monthly expected number/i }).fill('0');
         await expect(page.getByRole('button', { name: /next/i })).toBeDisabled({ timeout: 5000 });

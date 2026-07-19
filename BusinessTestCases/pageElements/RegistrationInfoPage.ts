@@ -21,7 +21,7 @@ export class RegistrationInfoPage {
     // Profile type
     readonly profileTypeLabel: Locator;
     readonly profileTypeGroup: Locator;
-    readonly merchantCard: Locator;
+    readonly merchantButton: Locator;
     readonly billerCard: Locator;
     readonly customerCard: Locator;
     readonly freelancerCard: Locator;
@@ -73,25 +73,25 @@ export class RegistrationInfoPage {
 
         this.profileTypeLabel = page.locator('#register-profile-types .mp-field-label');
         this.profileTypeGroup = page.getByRole('radiogroup', { name: /Profile Type|نوع الملف التجاري/i });
-        this.merchantCard   = page.locator('#register-profile-card-MERCHANT');
+        this.merchantButton = page.locator('#register-profile-card-MERCHANT');
         this.billerCard     = page.locator('#register-profile-card-BILLER');
         this.customerCard   = page.locator('#register-profile-card-CUSTOMER');
         this.freelancerCard = page.locator('#register-profile-card-FREELANCER');
         this.fixedMerchantLabel = page.getByText(/signing up as merchant/i).first();
 
-        this.crnLabel         = page.locator('label[for="register-unifiedNumber-input"]');
+        this.crnLabel         = page.locator('#register-unifiedNumber-group .field-hint-label__text');
         this.crnInput         = page.locator('#register-unifiedNumber-group input[type="text"]');
         this.crnGroup         = page.locator('#register-unifiedNumber-group');
         this.crnTooltipButton = page.getByRole('button', { name: /Unified Number|الرقم الموحد/i });
         this.crnClearButton   = page.locator('#register-unifiedNumber-group').getByRole('button', { name: /Clear|مسح/i });
 
-        this.idLabel         = page.locator('label[for="register-id-input"]');
+        this.idLabel         = page.locator('#register-id-group .field-hint-label__text');
         this.idInput         = page.locator('#register-id-group input[type="text"]');
         this.idGroup         = page.locator('#register-id-group');
         this.idTooltipButton = page.getByRole('button', { name: /National ID.*Iqama|Iqama|رقم الهوية الوطنية/i });
         this.idClearButton   = page.locator('#register-id-group').getByRole('button', { name: /Clear|مسح/i });
 
-        this.emailLabel = page.locator('#register-email-group label');
+        this.emailLabel = page.locator('#register-email-group .floating-field-label');
         this.emailInput = page.locator('input[type="email"]');
         this.emailError = page.locator('#error_email.text-danger');
 

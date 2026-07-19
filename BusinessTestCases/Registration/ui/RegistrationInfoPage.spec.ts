@@ -93,11 +93,11 @@ test.describe('Registration - Info Page', () => {
         });
 
         test('should display the "Create Account" eyebrow text [ref_9]', async () => {
-            await expect(infoPage.formEyebrow).toContainText('Create Account');
+            await expect(infoPage.formEyebrow).toContainText(' إنشاء حساب');
         });
 
         test('should display the "Tell us about your business" heading [ref_10]', async () => {
-            await expect(infoPage.formTitle).toContainText('Tell us about your business');
+            await expect(infoPage.formTitle).toContainText(' أخبرنا عن نشاطك التجاري ');
         });
 
         test('should display "1" as the active step number [ref_11]', async () => {
@@ -108,19 +108,19 @@ test.describe('Registration - Info Page', () => {
         test('should display "Business Info" as the active outer step [ref_12]', async () => {
             const step = infoPage.outerStepBar.nth(0);
             await expect(step).toHaveClass(/is-active/);
-            await expect(step.locator('.mp-step-meta')).toContainText('Business Info');
+            await expect(step.locator('.mp-step-meta')).toContainText('1  بيانات النشاط التجاري');
         });
 
         test('should display "NAFATH" as the second outer step [ref_13]', async () => {
-            await expect(infoPage.outerStepBar.nth(1).locator('.mp-step-meta')).toContainText('NAFATH');
+            await expect(infoPage.outerStepBar.nth(1).locator('.mp-step-meta')).toContainText(' نَفاذ ');
         });
 
         test('should display "Products" as the third outer step [ref_14]', async () => {
-            await expect(infoPage.outerStepBar.nth(2).locator('.mp-step-meta')).toContainText('Products');
+            await expect(infoPage.outerStepBar.nth(2).locator('.mp-step-meta')).toContainText(' المنتجات ');
         });
 
         test('should display "Contract" as the fourth outer step [ref_15]', async () => {
-            await expect(infoPage.outerStepBar.nth(3).locator('.mp-step-meta')).toContainText('Contract');
+            await expect(infoPage.outerStepBar.nth(3).locator('.mp-step-meta')).toContainText(' العقد ');
         });
     });
 
@@ -143,19 +143,19 @@ test.describe('Registration - Info Page', () => {
         });
 
         test('should display Tab 1 — Business Info [ref_17, ref_19]', async () => {
-            await expect(infoPage.page.locator('.mp-step.is-active', { hasText: 'Business Info' }).first()).toBeVisible();
+            await expect(infoPage.page.locator('.mp-step.is-active', { hasText: ' بيانات النشاط التجاري ' }).first()).toBeVisible();
         });
 
         test('should display Tab 2 — Financial & Business [ref_20, ref_21]', async () => {
-            await expect(infoPage.page.locator('.mp-step.ng-star-inserted', { hasText: 'NAFATH' }).first()).toBeVisible();
+            await expect(infoPage.page.locator('.mp-step.ng-star-inserted', { hasText: 'نَفاذ' }).first()).toBeVisible();
         });
 
         test('should display Tab 3 — Products [ref_22, ref_23]', async () => {
-            await expect(infoPage.page.locator('.mp-step.ng-star-inserted', { hasText: 'Products' }).first()).toBeVisible();
+            await expect(infoPage.page.locator('.mp-step.ng-star-inserted', { hasText: ' المنتجات ' }).first()).toBeVisible();
         });
 
         test('should display Tab 4 — Contract [ref_24, ref_25]', async () => {
-            await expect(infoPage.page.locator('.mp-step.ng-star-inserted', { hasText: 'Contract' }).first()).toBeVisible();
+            await expect(infoPage.page.locator('.mp-step.ng-star-inserted', { hasText: ' العقد' }).first()).toBeVisible();
         });
     });
 
@@ -188,7 +188,7 @@ test.describe('Registration - Info Page', () => {
             // ── Profile Type [ref_26 – ref_39] ───────────────────────────────
 
             test('should display the Profile Type label [ref_26]', async () => {
-                await expect(infoPage.profileTypeLabel).toContainText('Profile Type');
+                await expect(infoPage.profileTypeLabel).toContainText(' نوع الملف التجاري ');
             });
 
             test('should display the Profile Type radiogroup [ref_27]', async () => {
@@ -200,12 +200,12 @@ test.describe('Registration - Info Page', () => {
             });
 
             test('should display the Merchant radio option [ref_28]', async () => {
-                await expect(infoPage.merchantCard).toBeVisible();
+                await expect(infoPage.merchantButton).toBeVisible();
             });
 
             test('should display the Merchant label and description [ref_29, ref_30]', async () => {
-                await expect(infoPage.merchantCard.locator('.mp-rc-title')).toContainText('Merchant');
-                await expect(infoPage.merchantCard.locator('.mp-rc-sub')).toContainText('Accept payments and manage your store.');
+                await expect(infoPage.merchantButton.locator('.mp-rc-title')).toContainText(' تاجر ');
+                await expect(infoPage.merchantButton.locator('.mp-rc-sub')).toContainText('استقبل المدفوعات وأدر متجرك.');
             });
 
             test('should display the Freelancer radio option [ref_37]', async () => {
@@ -213,14 +213,14 @@ test.describe('Registration - Info Page', () => {
             });
 
             test('should display the Freelancer label and description [ref_38, ref_39]', async () => {
-                await expect(infoPage.freelancerCard.locator('.mp-rc-title')).toContainText('Freelancer');
-                await expect(infoPage.freelancerCard.locator('.mp-rc-sub')).toContainText('Coming soon for individual professionals.');
+                await expect(infoPage.freelancerCard.locator('.mp-rc-title')).toContainText(' مستقل ');
+                await expect(infoPage.freelancerCard.locator('.mp-rc-sub')).toContainText(' قريباً للمهنيين الأفراد. ');
             });
 
             // ── Unified Number / CRN [ref_40 – ref_43] ───────────────────────
 
             test('should display the Unified Number label [ref_40]', async () => {
-                await expect(infoPage.crnLabel).toContainText('unified number');
+                await expect(infoPage.crnLabel).toContainText('الرقم الموحد للشركة');
             });
 
             test('should display the Unified Number tooltip button [ref_41]', async () => {
@@ -232,13 +232,13 @@ test.describe('Registration - Info Page', () => {
             });
 
             test('should display the Unified Number textbox with correct placeholder [ref_43]', async () => {
-                await expect(infoPage.crnInput).toHaveAttribute('placeholder', 'Eg. 7001234567');
+                await expect(infoPage.crnInput).toHaveAttribute('placeholder', 'مثال: 7001234567');
             });
 
             // ── National ID / Iqama [ref_45 – ref_48] ────────────────────────
 
             test('should display the National ID/Iqama label [ref_45]', async () => {
-                await expect(infoPage.idLabel).toContainText('National ID/Iqama');
+                await expect(infoPage.idLabel).toContainText('رقم الهوية الوطنية / الإقامة');
             });
 
             test('should display the National ID/Iqama tooltip button [ref_46]', async () => {
@@ -250,48 +250,48 @@ test.describe('Registration - Info Page', () => {
             });
 
             test('should display the National ID/Iqama textbox with correct placeholder [ref_48]', async () => {
-                await expect(infoPage.idInput).toHaveAttribute('placeholder', 'Eg. 1012345678');
+                await expect(infoPage.idInput).toHaveAttribute('placeholder', 'مثال: 1012345678');
             });
 
             // ── Email [ref_50 – ref_51] ───────────────────────────────────────
 
             test('should display the Email label [ref_50]', async () => {
-                await expect(infoPage.emailLabel).toContainText('Email');
+                await expect(infoPage.emailLabel).toContainText('البريد الإلكتروني');
             });
 
             test('should display the Email textbox with correct placeholder [ref_51]', async () => {
-                await expect(infoPage.emailInput).toHaveAttribute('placeholder', 'Eg. example@email.com');
+                await expect(infoPage.emailInput).toHaveAttribute('placeholder', 'مثال: example@email.com');
             });
 
             // ── Next button [ref_53] ──────────────────────────────────────────
 
             test('should display the Next button [ref_53]', async () => {
                 await expect(infoPage.nextButton).toBeVisible();
-                await expect(infoPage.nextButton).toContainText('next');
+                await expect(infoPage.nextButton).toContainText('التالي');
             });
 
             // ── Footer [ref_54 – ref_58] ──────────────────────────────────────
 
             test('should display "Already have an account?" text [ref_54]', async () => {
-                await expect(infoPage.page.getByText('Already have an account?').first()).toBeVisible();
+                await expect(infoPage.page.getByText(' لديك حساب؟ ').first()).toBeVisible();
             });
 
             test('should display the Log In link [ref_55]', async () => {
-                await expect(infoPage.loginLink).toContainText('Log In');
+                await expect(infoPage.loginLink).toContainText('تسجيل الدخول');
             });
 
             test('should display "By continuing, you agree to our" text [ref_56]', async () => {
                 await expect(
-                    infoPage.page.locator('#login-line span', { hasText: 'By continuing, you agree to our' }).first()
+                    infoPage.page.locator('#login-line span', { hasText: ' بالمتابعة، فإنك توافق على ' }).first()
                 ).toBeVisible();
             });
 
             test('should display Terms & Conditions reference [ref_57]', async () => {
-                await expect(infoPage.footer).toContainText('Terms & Conditions');
+                await expect(infoPage.footer).toContainText(' الشروط والأحكام ');
             });
 
             test('should display Privacy Policy reference [ref_58]', async () => {
-                await expect(infoPage.footer).toContainText('Privacy Policy');
+                await expect(infoPage.footer).toContainText(' سياسة الخصوصية ');
             });
         });
 
@@ -314,8 +314,8 @@ test.describe('Registration - Info Page', () => {
             });
 
             test('should allow selecting Merchant profile type [ref_28]', async () => {
-                await infoPage.merchantCard.click();
-                await expect(infoPage.merchantCard).toHaveAttribute('aria-checked', 'true');
+                await infoPage.merchantButton.click();
+                await expect(infoPage.merchantButton).toHaveAttribute('aria-checked', 'true');
             });
 
             test('should not allow selecting Freelancer profile type — disabled as "Coming Soon" [ref_37]', async () => {
@@ -351,7 +351,7 @@ test.describe('Registration - Info Page', () => {
             });
 
             test('should enable the Next button when all fields are filled with valid data [ref_53]', async () => {
-                await infoPage.fill(infoPage.merchantCard, currentAsset.crn, currentAsset.nationalId, generateEmail());
+                await infoPage.fill(infoPage.merchantButton, currentAsset.crn, currentAsset.nationalId, generateEmail());
                 await expect(infoPage.nextButton).toBeEnabled();
             });
         });

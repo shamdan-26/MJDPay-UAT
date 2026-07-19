@@ -88,7 +88,7 @@ export class RegistrationVerificationPage {
         this.verificationTab = page.getByRole('tab', { name: /verification & uploads|التحقق والمستندات/i });
 
         this.bankDropdown = page.getByRole('combobox', { name: /^bank$/i })
-            .or(page.locator('[id^="floating-dropdown-bank"], [id^="floating-dropdown-البنك"]'));
+            .or(page.locator('[id^="floating-dropdown-bic"], [id^="floating-dropdown-bank"], [id^="floating-dropdown-البنك"]'));
 
         this.ibanInput      = page.getByRole('textbox', { name: /iban|رقم الآيبان/i });
         this.ibanHint       = page.getByText(/24 characters starting with SA|24 خانة تبدأ بـ SA/i);

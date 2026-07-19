@@ -44,16 +44,16 @@ test.describe('Registration - Mobile Number Page', () => {
         await expect(regPage.enButton).toBeVisible();
     });
 
-    test('should have EN as the active language by default', async () => {
-        await expect(regPage.enButton).toHaveAttribute('aria-pressed', 'true');
+    test('should not have EN as the active language by default', async () => {
+        await expect(regPage.enButton).not.toHaveAttribute('aria-pressed', 'true');
     });
 
     test('should display the Arabic language button', async () => {
         await expect(regPage.arabicButton).toBeVisible();
     });
 
-    test('should not have Arabic as the active language by default', async () => {
-        await expect(regPage.arabicButton).not.toHaveAttribute('aria-pressed', 'true');
+    test('should have Arabic as the active language by default', async () => {
+        await expect(regPage.arabicButton).toHaveAttribute('aria-pressed', 'true');
     });
 
     // ── Theme toggle ──────────────────────────────────────────────────────────
@@ -91,7 +91,7 @@ test.describe('Registration - Mobile Number Page', () => {
     });
 
     test('should have the correct placeholder for Mobile number', async () => {
-        await expect(regPage.mobileInput).toHaveAttribute('placeholder', 'Eg. 522284484');
+        await expect(regPage.mobileInput).toHaveAttribute('placeholder', 'مثال: 522284484');
     });
 
     // ── Next button ───────────────────────────────────────────────────────────
@@ -112,5 +112,6 @@ test.describe('Registration - Mobile Number Page', () => {
 
     test('should display the Log In link', async () => {
         await expect(regPage.loginLink).toBeVisible();
+        await expect(regPage.loginLink).toHaveText('تسجيل الدخول');
     });
 });

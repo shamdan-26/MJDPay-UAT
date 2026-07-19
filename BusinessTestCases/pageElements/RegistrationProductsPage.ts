@@ -54,8 +54,8 @@ export class RegistrationProductsPage {
         this.cancelButton    = page.getByRole('button', { name: /cancel/i });
         this.selectedCounter = page.getByText(/^\d+\s+Selected$/i).first();
 
-        this.requestDevicesNowButton  = page.getByRole('button', { name: /request devices now/i });
-        this.skipSetupLaterButton     = page.getByRole('button', { name: /skip.*set up later/i });
+        this.requestDevicesNowButton  = page.getByTestId('register-pos-request-now-checkbox');
+        this.skipSetupLaterButton     = page.getByTestId('register-products-continue-btn');
         this.skippedMessage           = page.getByText(/set up later|skipped/i).first();
         this.requestNowFromSkipButton = page.getByRole('button', { name: /actually,?\s*request now/i });
 
@@ -84,6 +84,8 @@ export class RegistrationProductsPage {
     }
 
     productCard(name: string): Locator {
-        return this.page.locator('.mp-product-card').filter({ hasText: name }).first();
+        return this.page.locator('button')
+            .filter({ has: this.page.locator('.mp-product-card__desc', { hasText: name }) })
+            .first();
     }
 }
