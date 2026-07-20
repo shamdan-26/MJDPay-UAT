@@ -1,6 +1,7 @@
 import { test as base, expect } from '@playwright/test';
 
 import { BankTransferPage } from './pageElements/BankTransferPage';
+import { BillsPage } from './pageElements/BillsPage';
 import { DashboardPage } from './pageElements/DashboardPage';
 import { ForgotPasswordPage } from './pageElements/ForgotPasswordPage';
 import { HomePage } from './pageElements/HomePage';
@@ -37,6 +38,7 @@ import { W2WTransferPage } from './pageElements/W2WTransferPage';
  */
 type PageObjectFixtures = {
     bankTransfer: BankTransferPage;
+    bills: BillsPage;
     dashboard: DashboardPage;
     forgotPassword: ForgotPasswordPage;
     homePage: HomePage;
@@ -65,6 +67,7 @@ type PageObjectFixtures = {
 
 export const test = base.extend<PageObjectFixtures>({
     bankTransfer: async ({ page }, use) => { await use(new BankTransferPage(page)); },
+    bills: async ({ page }, use) => { await use(new BillsPage(page)); },
     dashboard: async ({ page }, use) => { await use(new DashboardPage(page)); },
     forgotPassword: async ({ page }, use) => { await use(new ForgotPasswordPage(page)); },
     homePage: async ({ page }, use) => { await use(new HomePage(page)); },
