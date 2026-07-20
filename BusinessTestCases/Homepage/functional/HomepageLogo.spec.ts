@@ -1,6 +1,6 @@
 import { test, expect, Page } from '../HomepageFixtures';
 import { HOME_URL_PATTERN, refreshHomepage } from '../HomePageHelper';
-import { DashboardPage } from '../../pageElements/DashboardPage';
+import { DashboardPage } from '../../pageElements/Shared/DashboardPage';
 
 test.describe('Homepage – Logo', () => {
     test.describe.configure({ mode: 'serial' });

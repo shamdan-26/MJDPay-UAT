@@ -1,7 +1,7 @@
 import { test, expect, Page } from '../HomepageFixtures';
 import { refreshHomepage, HOME_URL_PATTERN } from '../HomePageHelper';
-import { DashboardPage } from '../../pageElements/DashboardPage';
-import { HomepageSidebarPage } from '../../pageElements/HomepageSidebarPage';
+import { DashboardPage } from '../../pageElements/Shared/DashboardPage';
+import { HomepageSidebarPage } from '../../pageElements/Homepage/HomepageSidebarPage';
 
 test.describe('Homepage – Sidebar navigation', () => {
     test.describe.configure({ mode: 'serial' });

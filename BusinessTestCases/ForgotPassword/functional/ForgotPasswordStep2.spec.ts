@@ -11,7 +11,7 @@ import {
     gotoForgotPassword,
     fillStep1AndProceed,
 } from '../ForgotPasswordHelper';
-import { ForgotPasswordPage } from '../../pageElements/ForgotPasswordPage';
+import { ForgotPasswordPage } from '../../pageElements/ForgotPassword/ForgotPasswordPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // STEP 2: PASSWORD VALIDATION

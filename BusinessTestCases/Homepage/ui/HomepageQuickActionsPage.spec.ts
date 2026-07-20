@@ -1,6 +1,6 @@
 import { test, expect, Page } from '../HomepageFixtures';
 import { ASSERTION_TIMEOUT_MS, refreshHomepage } from '../HomePageHelper';
-import { HomepageQuickActionsPage } from '../../pageElements/HomepageQuickActionsPage';
+import { HomepageQuickActionsPage } from '../../pageElements/Homepage/HomepageQuickActionsPage';
 
 test.describe('Homepage – Page Elements – Quick actions', () => {
     test.describe.configure({ mode: 'serial' });

@@ -1,7 +1,7 @@
 import { test, expect, Page } from '../HomepageFixtures';
 import { ASSERTION_TIMEOUT_MS, refreshHomepage } from '../HomePageHelper';
-import { DashboardPage } from '../../pageElements/DashboardPage';
-import { HomepageGreetingPage } from '../../pageElements/HomepageGreetingPage';
+import { DashboardPage } from '../../pageElements/Shared/DashboardPage';
+import { HomepageGreetingPage } from '../../pageElements/Homepage/HomepageGreetingPage';
 
 test.describe('Homepage – Page Elements – Greeting section', () => {
     test.describe.configure({ mode: 'serial' });

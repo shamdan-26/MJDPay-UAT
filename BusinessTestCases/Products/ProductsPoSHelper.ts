@@ -1,7 +1,7 @@
 import type { Browser, Page } from '@playwright/test';
 import { createHomepageSession } from '../Homepage/HomePageHelper';
-import { HomepageSidebarPage } from '../pageElements/HomepageSidebarPage';
-import { ProductsManagementPage } from '../pageElements/ProductsManagementPage';
+import { HomepageSidebarPage } from '../pageElements/Homepage/HomepageSidebarPage';
+import { ProductsManagementPage } from '../pageElements/Products/ProductsManagementPage';
 import productsPosMocks from '../../data/productsPosMocks.json';
 
 /**

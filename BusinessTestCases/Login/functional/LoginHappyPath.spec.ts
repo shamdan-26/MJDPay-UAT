@@ -1,8 +1,8 @@
 import { test, expect } from '../../fixtures';
 import { LOGIN_URL, LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../LoginHelper';
-import { LoginPage } from '../../pageElements/LoginPage';
-import { DashboardPage } from '../../pageElements/DashboardPage';
-import { OtpPage } from '../../pageElements/OtpPage';
+import { LoginPage } from '../../pageElements/Login/LoginPage';
+import { DashboardPage } from '../../pageElements/Shared/DashboardPage';
+import { OtpPage } from '../../pageElements/Shared/OtpPage';
 
 // The validation card's 3-step display and the post-card OTP dialog appearing
 // are owned by ui/LoginValidationPopup.spec.ts — this file owns only what's

@@ -1,8 +1,8 @@
 import { test, expect, Page } from '@playwright/test';
 import { goToVerificationStep, REGISTER_URL } from '../RegistrationHelper';
-import { RegistrationVerificationPage } from '../../pageElements/RegistrationVerificationPage';
-import { RegistrationInfoPage } from '../../pageElements/RegistrationInfoPage';
-import { RegistrationFinancialPage } from '../../pageElements/RegistrationFinancialPage';
+import { RegistrationVerificationPage } from '../../pageElements/Registration/RegistrationVerificationPage';
+import { RegistrationInfoPage } from '../../pageElements/Registration/RegistrationInfoPage';
+import { RegistrationFinancialPage } from '../../pageElements/Registration/RegistrationFinancialPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Registration — Verification & Documents (Tab 3 of 3: "Verification & Uploads")

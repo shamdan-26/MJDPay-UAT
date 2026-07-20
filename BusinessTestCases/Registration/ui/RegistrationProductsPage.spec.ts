@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import { goToProductsStep } from '../RegistrationHelper';
-import { RegistrationProductsPage } from '../../pageElements/RegistrationProductsPage';
+import { RegistrationProductsPage } from '../../pageElements/Registration/RegistrationProductsPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Products Step UI (step 3 of 4) — element/text presence only, per a live DOM

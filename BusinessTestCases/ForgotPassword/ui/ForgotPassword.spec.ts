@@ -1,6 +1,6 @@
 import { test, expect } from '../../fixtures';
 import { FORGOT_URL, LOGIN_URL, mockOtpDisabled, gotoForgotPassword } from '../ForgotPasswordHelper';
-import { ForgotPasswordPage } from '../../pageElements/ForgotPasswordPage';
+import { ForgotPasswordPage } from '../../pageElements/ForgotPassword/ForgotPasswordPage';
 
 test.describe('Forgot Password Page', () => {
     test.describe.configure({ mode: 'serial' });

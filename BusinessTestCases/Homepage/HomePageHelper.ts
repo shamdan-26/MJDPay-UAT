@@ -1,15 +1,15 @@
 import { Browser, Locator, Page, test } from '@playwright/test';
 import { getOtpFromDb, fillOTP } from '../Registration/RegistrationHelper';
 import { waitForToastClear } from '../toastMessages';
-import { DashboardPage } from '../pageElements/DashboardPage';
-import { HomepageSidebarPage } from '../pageElements/HomepageSidebarPage';
-import { HomepageHeaderPage } from '../pageElements/HomepageHeaderPage';
-import { HomepageGreetingPage } from '../pageElements/HomepageGreetingPage';
-import { HomepageBalanceCardPage } from '../pageElements/HomepageBalanceCardPage';
-import { HomepageQuickActionsPage } from '../pageElements/HomepageQuickActionsPage';
-import { HomepageBillsOverviewPage } from '../pageElements/HomepageBillsOverviewPage';
-import { HomepageSubWalletsPage } from '../pageElements/HomepageSubWalletsPage';
-import { HomepageTransactionsPage } from '../pageElements/HomepageTransactionsPage';
+import { DashboardPage } from '../pageElements/Shared/DashboardPage';
+import { HomepageSidebarPage } from '../pageElements/Homepage/HomepageSidebarPage';
+import { HomepageHeaderPage } from '../pageElements/Homepage/HomepageHeaderPage';
+import { HomepageGreetingPage } from '../pageElements/Homepage/HomepageGreetingPage';
+import { HomepageBalanceCardPage } from '../pageElements/Homepage/HomepageBalanceCardPage';
+import { HomepageQuickActionsPage } from '../pageElements/Homepage/HomepageQuickActionsPage';
+import { HomepageBillsOverviewPage } from '../pageElements/Homepage/HomepageBillsOverviewPage';
+import { HomepageSubWalletsPage } from '../pageElements/Homepage/HomepageSubWalletsPage';
+import { HomepageTransactionsPage } from '../pageElements/Homepage/HomepageTransactionsPage';
 import testAccounts from '../../data/testAccounts.json';
 
 export const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
@@ -22,7 +22,7 @@ export const BASE_ORIGIN      = BASE_URL;
 const DEFAULT_TEST_PASSWORD = testAccounts.defaultPassword;
 
 /** In ENV=dev the login button has no accessible "Log In" role name — same
- *  env split already established in pageElements/LoginPage.ts. */
+ *  env split already established in pageElements/Login/LoginPage.ts. */
 function loginButton(page: Page): Locator {
     const env = process.env['ENV'] ?? 'dev';
     return env === 'dev'

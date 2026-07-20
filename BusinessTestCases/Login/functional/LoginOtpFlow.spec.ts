@@ -12,8 +12,8 @@ import {
     fillAndSubmitLogin,
     getOtpFromDb,
 } from '../LoginHelper';
-import { LoginPage } from '../../pageElements/LoginPage';
-import { OtpPage } from '../../pageElements/OtpPage';
+import { LoginPage } from '../../pageElements/Login/LoginPage';
+import { OtpPage } from '../../pageElements/Shared/OtpPage';
 
 // Uses pressSequentially on the password field to reliably trigger Angular reactive form validation.
 async function submitWithSequentialPassword(page: Page, loginPage: LoginPage): Promise<void> {

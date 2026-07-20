@@ -10,7 +10,7 @@ import {
     LOCKOUT_MOBILE,
     LOCKOUT_PASSWORD,
 } from '../LoginHelper';
-import { LoginPage } from '../../pageElements/LoginPage';
+import { LoginPage } from '../../pageElements/Login/LoginPage';
 
 test.describe('Login — Security', () => {
     test.describe.configure({ mode: 'serial' });

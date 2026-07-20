@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import { goToContractStep } from '../RegistrationHelper';
-import { RegistrationContractPage } from '../../pageElements/RegistrationContractPage';
+import { RegistrationContractPage } from '../../pageElements/Registration/RegistrationContractPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Registration — Contract Review (Tab 4 of 4: "العقد")

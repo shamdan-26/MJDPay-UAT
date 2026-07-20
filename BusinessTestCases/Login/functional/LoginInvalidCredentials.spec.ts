@@ -8,7 +8,7 @@ import {
     WRONG_PASSWORD,
     generateUnregisteredMobile,
 } from '../LoginHelper';
-import { LoginPage } from '../../pageElements/LoginPage';
+import { LoginPage } from '../../pageElements/Login/LoginPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // INVALID CREDENTIALS

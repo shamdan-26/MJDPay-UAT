@@ -1,8 +1,8 @@
 import { test, expect } from '../../fixtures';
 import { VALID_MOBILE, INVALID_OTP, gotoOtpModal } from '../ForgotPasswordHelper';
 import { getOtpFromDb } from '../../Login/LoginHelper';
-import { OtpPage } from '../../pageElements/OtpPage';
-import { ForgotPasswordPage } from '../../pageElements/ForgotPasswordPage';
+import { OtpPage } from '../../pageElements/Shared/OtpPage';
+import { ForgotPasswordPage } from '../../pageElements/ForgotPassword/ForgotPasswordPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // OTP VERIFICATION FLOW

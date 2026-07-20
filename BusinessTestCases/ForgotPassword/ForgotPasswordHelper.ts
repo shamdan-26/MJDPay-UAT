@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test';
-import { ForgotPasswordPage } from '../pageElements/ForgotPasswordPage';
-import { LoginPage } from '../pageElements/LoginPage';
-import { OtpPage } from '../pageElements/OtpPage';
+import { ForgotPasswordPage } from '../pageElements/ForgotPassword/ForgotPasswordPage';
+import { LoginPage } from '../pageElements/Login/LoginPage';
+import { OtpPage } from '../pageElements/Shared/OtpPage';
 import { LOGIN_URL, VALID_OTP, INVALID_OTP } from '../Login/LoginHelper';
 import testAccounts from '../../data/testAccounts.json';
 

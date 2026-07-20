@@ -1,10 +1,10 @@
 import { test, expect, type Page } from '@playwright/test';
-import { LoginPage } from '../../pageElements/LoginPage';
-import { OtpPage } from '../../pageElements/OtpPage';
-import { HomepageQuickActionsPage } from '../../pageElements/HomepageQuickActionsPage';
-import { HomepageSidebarPage } from '../../pageElements/HomepageSidebarPage';
-import { DashboardPage } from '../../pageElements/DashboardPage';
-import { TopupPage } from '../../pageElements/TopupPage';
+import { LoginPage } from '../../pageElements/Login/LoginPage';
+import { OtpPage } from '../../pageElements/Shared/OtpPage';
+import { HomepageQuickActionsPage } from '../../pageElements/Homepage/HomepageQuickActionsPage';
+import { HomepageSidebarPage } from '../../pageElements/Homepage/HomepageSidebarPage';
+import { DashboardPage } from '../../pageElements/Shared/DashboardPage';
+import { TopupPage } from '../../pageElements/Topup/TopupPage';
 import { HOME_URL } from '../TopupHelper';
 import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/LoginHelper';
 

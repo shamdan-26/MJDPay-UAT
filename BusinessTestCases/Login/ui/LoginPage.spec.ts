@@ -1,6 +1,6 @@
 import { test, expect } from '../../fixtures';
 import { LOGIN_URL } from '../LoginHelper';
-import { LoginPage } from '../../pageElements/LoginPage';
+import { LoginPage } from '../../pageElements/Login/LoginPage';
 
 test.describe('Login Page', () => {
     test.describe.configure({ mode: 'serial' });

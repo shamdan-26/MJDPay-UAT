@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import { goToProductsStep, expandPosCard } from '../RegistrationHelper';
-import { RegistrationProductsPage } from '../../pageElements/RegistrationProductsPage';
+import { RegistrationProductsPage } from '../../pageElements/Registration/RegistrationProductsPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Onboarding PoS Request Flow — web UI (EMI-5783)

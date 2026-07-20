@@ -1,6 +1,6 @@
 import { test, expect, Page } from '../HomepageFixtures';
 import { ASSERTION_TIMEOUT_MS, refreshHomepage } from '../HomePageHelper';
-import { HomepageBillsOverviewPage } from '../../pageElements/HomepageBillsOverviewPage';
+import { HomepageBillsOverviewPage } from '../../pageElements/Homepage/HomepageBillsOverviewPage';
 
 test.describe('Homepage – Page Elements – Bills overview', () => {
     test.describe.configure({ mode: 'serial' });

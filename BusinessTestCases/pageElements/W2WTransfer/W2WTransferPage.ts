@@ -1,6 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
-import { HomePage } from './HomePage';
-import { TransactionsPage } from './TransactionsPage';
+import { HomePage } from '../Shared/HomePage';
+import { TransactionsPage } from '../Shared/TransactionsPage';
 
 export class W2WTransferPage {
     readonly page: Page;

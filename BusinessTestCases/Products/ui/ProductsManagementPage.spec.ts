@@ -1,7 +1,7 @@
 import { test, expect, Page } from '@playwright/test';
 import { createHomepageSession } from '../../Homepage/HomePageHelper';
-import { HomepageSidebarPage } from '../../pageElements/HomepageSidebarPage';
-import { ProductsManagementPage } from '../../pageElements/ProductsManagementPage';
+import { HomepageSidebarPage } from '../../pageElements/Homepage/HomepageSidebarPage';
+import { ProductsManagementPage } from '../../pageElements/Products/ProductsManagementPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Products Navigation & In-App PoS Request Flow — web UI (EMI-5782)

@@ -1,6 +1,6 @@
 import { test, expect, Page } from '../HomepageFixtures';
 import { refreshHomepage } from '../HomePageHelper';
-import { HomepageSubWalletsPage } from '../../pageElements/HomepageSubWalletsPage';
+import { HomepageSubWalletsPage } from '../../pageElements/Homepage/HomepageSubWalletsPage';
 
 test.describe('Homepage – Sub-wallets panel', () => {
     test.describe.configure({ mode: 'serial' });

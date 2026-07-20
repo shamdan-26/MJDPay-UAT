@@ -1,6 +1,6 @@
 import { test, expect } from '../../fixtures';
 import { REGISTER_URL } from '../RegistrationHelper';
-import { RegistrationMobilePage } from '../../pageElements/RegistrationMobilePage';
+import { RegistrationMobilePage } from '../../pageElements/Registration/RegistrationMobilePage';
 
 test.describe('Registration - Mobile Number Page', () => {
     test.describe.configure({ mode: 'serial' });

@@ -9,8 +9,8 @@ import {
     abortUnmockedGatewayRequests,
     gotoForgotPassword,
 } from '../ForgotPasswordHelper';
-import { ForgotPasswordPage } from '../../pageElements/ForgotPasswordPage';
-import { OtpPage } from '../../pageElements/OtpPage';
+import { ForgotPasswordPage } from '../../pageElements/ForgotPassword/ForgotPasswordPage';
+import { OtpPage } from '../../pageElements/Shared/OtpPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // STEP 1: HAPPY PATH

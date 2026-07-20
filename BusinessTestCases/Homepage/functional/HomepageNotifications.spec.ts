@@ -1,7 +1,7 @@
 import { test, expect, Page } from '../HomepageFixtures';
 import { refreshHomepage } from '../HomePageHelper';
-import { DashboardPage } from '../../pageElements/DashboardPage';
-import { HomepageHeaderPage } from '../../pageElements/HomepageHeaderPage';
+import { DashboardPage } from '../../pageElements/Shared/DashboardPage';
+import { HomepageHeaderPage } from '../../pageElements/Homepage/HomepageHeaderPage';
 
 test.describe('Homepage – Notifications panel', () => {
     test.describe.configure({ mode: 'serial' });

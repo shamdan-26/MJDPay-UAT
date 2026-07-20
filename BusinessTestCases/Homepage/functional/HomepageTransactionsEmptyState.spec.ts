@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import { createHomepageSession, refreshHomepage } from '../HomePageHelper';
-import { HomepageTransactionsPage } from '../../pageElements/HomepageTransactionsPage';
+import { HomepageTransactionsPage } from '../../pageElements/Homepage/HomepageTransactionsPage';
 
 test.describe('Homepage – Transactions empty state', () => {
     test.describe.configure({ mode: 'serial' });

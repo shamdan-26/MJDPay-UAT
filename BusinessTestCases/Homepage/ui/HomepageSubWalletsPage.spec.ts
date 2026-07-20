@@ -1,6 +1,6 @@
 import { test, expect, Page } from '../HomepageFixtures';
 import { ASSERTION_TIMEOUT_MS, refreshHomepage } from '../HomePageHelper';
-import { HomepageSubWalletsPage } from '../../pageElements/HomepageSubWalletsPage';
+import { HomepageSubWalletsPage } from '../../pageElements/Homepage/HomepageSubWalletsPage';
 
 test.describe('Homepage – Page Elements – Sub-wallets panel', () => {
     test.describe.configure({ mode: 'serial' });

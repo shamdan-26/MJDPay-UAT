@@ -1,9 +1,9 @@
 import { test, expect, type Page } from '@playwright/test';
-import { LoginPage } from '../../pageElements/LoginPage';
-import { OtpPage } from '../../pageElements/OtpPage';
-import { HomePage } from '../../pageElements/HomePage';
-import { HomepageQuickActionsPage } from '../../pageElements/HomepageQuickActionsPage';
-import { TopupPage } from '../../pageElements/TopupPage';
+import { LoginPage } from '../../pageElements/Login/LoginPage';
+import { OtpPage } from '../../pageElements/Shared/OtpPage';
+import { HomePage } from '../../pageElements/Shared/HomePage';
+import { HomepageQuickActionsPage } from '../../pageElements/Homepage/HomepageQuickActionsPage';
+import { TopupPage } from '../../pageElements/Topup/TopupPage';
 import { HOME_URL } from '../TopupHelper';
 import { LOGIN_URL, getOtpFromDb } from '../../Login/LoginHelper';
 import topupData from '../../../data/topupData.json';

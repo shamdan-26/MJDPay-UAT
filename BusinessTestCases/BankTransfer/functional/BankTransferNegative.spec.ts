@@ -1,9 +1,9 @@
 import { test, expect, type Page } from '@playwright/test';
-import { LoginPage } from '../../pageElements/LoginPage';
-import { OtpPage } from '../../pageElements/OtpPage';
-import { HomepageQuickActionsPage } from '../../pageElements/HomepageQuickActionsPage';
-import { DashboardPage } from '../../pageElements/DashboardPage';
-import { BankTransferPage } from '../../pageElements/BankTransferPage';
+import { LoginPage } from '../../pageElements/Login/LoginPage';
+import { OtpPage } from '../../pageElements/Shared/OtpPage';
+import { HomepageQuickActionsPage } from '../../pageElements/Homepage/HomepageQuickActionsPage';
+import { DashboardPage } from '../../pageElements/Shared/DashboardPage';
+import { BankTransferPage } from '../../pageElements/BankTransfer/BankTransferPage';
 import { assertToast } from '../../toastMessages';
 import { HOME_URL } from '../BankTransferHelper';
 import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/LoginHelper';

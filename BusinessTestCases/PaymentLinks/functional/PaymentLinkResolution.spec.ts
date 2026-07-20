@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { PaymentLinkPage } from '../../pageElements/PaymentLinkPage';
-import { OtpPage } from '../../pageElements/OtpPage';
+import { PaymentLinkPage } from '../../pageElements/PaymentLinks/PaymentLinkPage';
+import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import {
     gotoPaymentLink,
     mockValidBillLink,

@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { type Page } from '@playwright/test';
-import { HomePage } from '../../pageElements/HomePage';
-import { W2WTransferPage } from '../../pageElements/W2WTransferPage';
-import { TransactionsPage } from '../../pageElements/TransactionsPage';
-import { OtpPage } from '../../pageElements/OtpPage';
+import { HomePage } from '../../pageElements/Shared/HomePage';
+import { W2WTransferPage } from '../../pageElements/W2WTransfer/W2WTransferPage';
+import { TransactionsPage } from '../../pageElements/Shared/TransactionsPage';
+import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { performLogin, type W2WTestData } from '../W2WTransferHelper';
 import w2wData from '../../../data/w2wTransferData.json';
 

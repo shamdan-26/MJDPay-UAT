@@ -1,6 +1,6 @@
 import { test, expect, Page } from '../HomepageFixtures';
 import { HOME_URL_PATTERN, refreshHomepage } from '../HomePageHelper';
-import { HomepageBalanceCardPage } from '../../pageElements/HomepageBalanceCardPage';
+import { HomepageBalanceCardPage } from '../../pageElements/Homepage/HomepageBalanceCardPage';
 
 test.describe('Homepage – Balance card interactions', () => {
     test.describe.configure({ mode: 'serial' });

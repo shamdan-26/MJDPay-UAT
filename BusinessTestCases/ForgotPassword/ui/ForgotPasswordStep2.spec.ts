@@ -5,7 +5,7 @@ import {
     gotoForgotPassword,
     fillStep1AndProceed,
 } from '../ForgotPasswordHelper';
-import { ForgotPasswordPage } from '../../pageElements/ForgotPasswordPage';
+import { ForgotPasswordPage } from '../../pageElements/ForgotPassword/ForgotPasswordPage';
 
 test.describe('Forgot Password – Step 2 Page', () => {
     test.describe.configure({ mode: 'serial' });

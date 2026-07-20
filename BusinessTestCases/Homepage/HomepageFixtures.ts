@@ -1,14 +1,14 @@
 import { test as base } from '@playwright/test';
 import type { Page } from '@playwright/test';
 import { createHomepageSession } from './HomePageHelper';
-import { DashboardPage } from '../pageElements/DashboardPage';
-import { HomepageSidebarPage } from '../pageElements/HomepageSidebarPage';
-import { HomepageHeaderPage } from '../pageElements/HomepageHeaderPage';
-import { HomepageGreetingPage } from '../pageElements/HomepageGreetingPage';
-import { HomepageBalanceCardPage } from '../pageElements/HomepageBalanceCardPage';
-import { HomepageQuickActionsPage } from '../pageElements/HomepageQuickActionsPage';
-import { HomepageBillsOverviewPage } from '../pageElements/HomepageBillsOverviewPage';
-import { HomepageSubWalletsPage } from '../pageElements/HomepageSubWalletsPage';
+import { DashboardPage } from '../pageElements/Shared/DashboardPage';
+import { HomepageSidebarPage } from '../pageElements/Homepage/HomepageSidebarPage';
+import { HomepageHeaderPage } from '../pageElements/Homepage/HomepageHeaderPage';
+import { HomepageGreetingPage } from '../pageElements/Homepage/HomepageGreetingPage';
+import { HomepageBalanceCardPage } from '../pageElements/Homepage/HomepageBalanceCardPage';
+import { HomepageQuickActionsPage } from '../pageElements/Homepage/HomepageQuickActionsPage';
+import { HomepageBillsOverviewPage } from '../pageElements/Homepage/HomepageBillsOverviewPage';
+import { HomepageSubWalletsPage } from '../pageElements/Homepage/HomepageSubWalletsPage';
 
 /**
  * One shared homepage session (login + storageState restore) per worker,

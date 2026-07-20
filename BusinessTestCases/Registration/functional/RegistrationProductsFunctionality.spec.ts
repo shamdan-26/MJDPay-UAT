@@ -4,8 +4,8 @@ import {
     selectRandomOption, VALID_IBAN, VALID_VAT_NUMBER, TEST_FILE_BUFFER,
     isAlreadyRegisteredMessage,
 } from '../RegistrationHelper';
-import { RegistrationFinancialPage } from '../../pageElements/RegistrationFinancialPage';
-import { RegistrationVerificationPage } from '../../pageElements/RegistrationVerificationPage';
+import { RegistrationFinancialPage } from '../../pageElements/Registration/RegistrationFinancialPage';
+import { RegistrationVerificationPage } from '../../pageElements/Registration/RegistrationVerificationPage';
 
 // ── Selectors ─────────────────────────────────────────────────────────────────
 const ACTIVE_STEP = '.mp-step.is-active';

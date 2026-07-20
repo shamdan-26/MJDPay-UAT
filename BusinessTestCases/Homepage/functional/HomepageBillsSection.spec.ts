@@ -1,6 +1,6 @@
 import { test, expect, Page } from '../HomepageFixtures';
 import { HOME_URL_PATTERN, refreshHomepage } from '../HomePageHelper';
-import { HomepageBillsOverviewPage } from '../../pageElements/HomepageBillsOverviewPage';
+import { HomepageBillsOverviewPage } from '../../pageElements/Homepage/HomepageBillsOverviewPage';
 
 test.describe('Homepage – Bills section interactions', () => {
     test.describe.configure({ mode: 'serial' });

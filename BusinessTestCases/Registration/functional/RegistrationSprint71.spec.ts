@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import { goToInfoStep, goToVerificationStep, nextCitizenAsset, REGISTER_URL, VALID_IBAN, VALID_VAT_NUMBER, mockFixedMerchantMode, mockAutoApprovedRegistration } from '../RegistrationHelper';
-import { RegistrationInfoPage } from '../../pageElements/RegistrationInfoPage';
+import { RegistrationInfoPage } from '../../pageElements/Registration/RegistrationInfoPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Business Registration & Onboarding — MOCK ONLY, section 13 of the Sprint 71

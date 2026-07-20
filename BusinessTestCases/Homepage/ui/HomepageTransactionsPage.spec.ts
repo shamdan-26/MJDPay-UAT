@@ -1,7 +1,7 @@
 import { test, expect, Page } from '@playwright/test';
 import { ASSERTION_TIMEOUT_MS, createHomepageSession, refreshHomepage } from '../HomePageHelper';
-import { DashboardPage } from '../../pageElements/DashboardPage';
-import { HomepageTransactionsPage } from '../../pageElements/HomepageTransactionsPage';
+import { DashboardPage } from '../../pageElements/Shared/DashboardPage';
+import { HomepageTransactionsPage } from '../../pageElements/Homepage/HomepageTransactionsPage';
 
 test.describe('Homepage – Page Elements – Last 10 Transactions', () => {
     test.describe.configure({ mode: 'serial' });

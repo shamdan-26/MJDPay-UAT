@@ -3,9 +3,9 @@ import {
     goToInfoStep, nextCitizenAsset, generateEmail, isAlreadyRegisteredMessage,
     selectRandomOption,
 } from '../RegistrationHelper';
-import { RegistrationNafathPage } from '../../pageElements/RegistrationNafathPage';
-import { RegistrationInfoPage } from '../../pageElements/RegistrationInfoPage';
-import { RegistrationFinancialPage } from '../../pageElements/RegistrationFinancialPage';
+import { RegistrationNafathPage } from '../../pageElements/Registration/RegistrationNafathPage';
+import { RegistrationInfoPage } from '../../pageElements/Registration/RegistrationInfoPage';
+import { RegistrationFinancialPage } from '../../pageElements/Registration/RegistrationFinancialPage';
 
 test.describe('Registration - NAFATH Step Page Elements', () => {
     test.describe.configure({ mode: 'serial' });

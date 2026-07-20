@@ -55,7 +55,9 @@ All real-OTP flows query MongoDB directly (`notification-log` / `notifications` 
 
 ### Page Object Model
 
-All UI interactions are encapsulated in page objects under `BusinessTestCases/pageElements/` — one flat folder, 25 files, no subfolders. Tests never call raw `page.locator()`; that belongs in a page object.
+All UI interactions are encapsulated in page objects under `BusinessTestCases/pageElements/`, grouped into one subfolder per feature (`Login/`, `Registration/`, `Homepage/`, `BankTransfer/`, `Topup/`, `W2WTransfer/`, `PaymentLinks/`, `Products/`, `PayBill/`, `ForgotPassword/`) plus a `Shared/` folder for page objects used across multiple features (`DashboardPage`, `HomePage`, `OtpPage`, `TransactionsPage`). Tests never call raw `page.locator()`; that belongs in a page object.
+
+A page object lives in `Shared/` only once it's actually consumed by more than one feature folder — a page object still owned by a single feature belongs in that feature's subfolder even if the class itself is generic in shape.
 
 **Conventions:**
 - Locators are `readonly` Locator properties set once in the constructor — never re-queried per-test.
@@ -76,7 +78,7 @@ The suite has **two session lifecycles**, and each has its own fixtures file ext
        await loginPage.goto(LOGIN_URL);
    });
    ```
-   Fixtures are lazy — only the ones a test actually destructures get constructed, so bundling all 25 in one file costs nothing per-test.
+   Fixtures are lazy — only the ones a test actually destructures get constructed, so bundling all of them in one file costs nothing per-test.
 
 2. **`Homepage/HomepageFixtures.ts`** — for the Homepage suite, which shares one authenticated session across every test file a given worker runs (cheaper than re-logging-in per file). This is a **worker-scoped** fixture (`{ scope: 'worker' }`), Playwright's documented pattern for expensive shared setup, built on top of `createHomepageSession`/`refreshHomepage` in `Homepage/HomePageHelper.ts`:
    ```typescript
@@ -100,7 +102,11 @@ When adding a new page object, add its fixture to `fixtures.ts` (or `HomepageFix
 BusinessTestCases/
   fixtures.ts                 ← shared per-test page-object fixtures (see above)
   toastMessages.ts            ← waitForToastClear, assertToast
-  pageElements/                ← all 25 page-object classes, flat
+  pageElements/
+    Shared/                    ← page objects used by more than one feature (DashboardPage, HomePage, OtpPage, TransactionsPage)
+    Login/ · Registration/ · Homepage/ · BankTransfer/ · Topup/ · W2WTransfer/
+    PaymentLinks/ · Products/ · PayBill/ · ForgotPassword/
+                                 ← one subfolder per feature, holding that feature's page-object class(es)
   Login/
     LoginHelper.ts             ← credentials, OTP helpers, shared constants
     api/ · functional/ · ui/
@@ -125,13 +131,16 @@ BusinessTestCases/
     functional/ · ui/
   Topup/
     TopupHelper.ts
-    ui/
+    functional/ · ui/
   W2WTransfer/
     W2WTransferHelper.ts
     functional/
+  PayBill/
+    PayBillHelper.ts
+    functional/
 ```
 
-Every feature folder is PascalCase and holds one `<Feature>Helper.ts` plus a subset of `api/`, `functional/`, `ui/`, `archive/`.
+Every feature folder under `BusinessTestCases/` (and its mirror under `pageElements/`) is PascalCase. Each `BusinessTestCases/<Feature>/` folder holds one `<Feature>Helper.ts` plus a subset of `api/`, `functional/`, `ui/`, `archive/`; each `pageElements/<Feature>/` folder holds that feature's page-object class(es), named `<Feature>Page.ts` or split further where a feature has multiple distinct pages (e.g. `Registration/`, `Homepage/`).
 
 ### Key conventions
 

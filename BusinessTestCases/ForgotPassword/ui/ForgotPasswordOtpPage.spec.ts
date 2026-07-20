@@ -1,6 +1,6 @@
 import { test, expect } from '../../fixtures';
 import { gotoOtpModal } from '../ForgotPasswordHelper';
-import { OtpPage } from '../../pageElements/OtpPage';
+import { OtpPage } from '../../pageElements/Shared/OtpPage';
 
 test.describe('Forgot Password OTP Popup — UI', () => {
     test.describe.configure({ mode: 'serial' });

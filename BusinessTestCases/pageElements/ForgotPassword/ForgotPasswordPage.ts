@@ -1,5 +1,5 @@
 import { type Page, type Locator } from '@playwright/test';
-import { waitForToastClear } from '../toastMessages';
+import { waitForToastClear } from '../../toastMessages';
 
 export class ForgotPasswordPage {
     readonly page: Page;

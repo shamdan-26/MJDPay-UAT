@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import { goToInfoStep, nextCitizenAsset, generateEmail, REGISTER_URL } from '../RegistrationHelper';
-import { RegistrationProductsPage } from '../../pageElements/RegistrationProductsPage';
+import { RegistrationProductsPage } from '../../pageElements/Registration/RegistrationProductsPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Onboarding PoS Request Flow — MOCK ONLY (EMI-5781/5783/5785), section 1.2 of
