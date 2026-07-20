@@ -164,7 +164,12 @@ test.describe('Registration - Products Step: PoS Onboarding Setup (EMI-5783)', (
 
     test('should switch to per-device delivery groups when "split by devices" is selected', async () => {
         requireFlow();
-        await products.splitByDeviceDeliveryOption.click();
+        // Confirmed live: these are custom radios — a visually-hidden (sr-only)
+        // <input type="radio"> with a styled <span> label sitting on top, so a
+        // plain click's pointer-events check always finds the span intercepting
+        // and retries forever. force:true dispatches straight to the real input,
+        // which still fires the native radio change event correctly.
+        await products.splitByDeviceDeliveryOption.click({ force: true });
         try {
             await expect(products.addLocationGroupButton.or(products.deliveryGroupOneLabel)).toBeVisible({ timeout: 5000 });
         } finally {
@@ -172,7 +177,7 @@ test.describe('Registration - Products Step: PoS Onboarding Setup (EMI-5783)', (
             // tests exercise the one-address path this suite is otherwise built
             // around — in a `finally` so a failed assertion above still leaves
             // the page in a state later serial tests can run against.
-            await products.singleLocationDeliveryOption.click();
+            await products.singleLocationDeliveryOption.click({ force: true });
         }
     });
 
@@ -186,10 +191,12 @@ test.describe('Registration - Products Step: PoS Onboarding Setup (EMI-5783)', (
 
     test('should reveal a custom map location option when selected', async () => {
         requireFlow();
-        await products.customPinAddressOption.click();
+        // Same sr-only-input/styled-span custom radio pattern as the delivery-mode
+        // toggle above — force the click past the intercepting label span.
+        await products.customPinAddressOption.click({ force: true });
         await expect(products.customPinAddressOption).toBeVisible();
         // Switch back to Wathiq so the remaining tests continue with a resolved address.
-        await products.wathiqAddressOption.click();
+        await products.wathiqAddressOption.click({ force: true });
     });
 
     // ── Contact fields ────────────────────────────────────────────────────
