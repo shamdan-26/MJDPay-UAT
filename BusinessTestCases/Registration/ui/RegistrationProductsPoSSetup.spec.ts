@@ -222,6 +222,7 @@ test.describe('Registration - Products Step: PoS Onboarding Setup (EMI-5783)', (
         // requestDevicesNowButton and clicks skipSetupLaterButton to reach Devices
         // & Delivery, but that state doesn't reliably persist this far into the
         // suite — re-assert it here instead of assuming it still holds.
+        await page.pause();
         const stillOnProductsCard = await products.requestDevicesNowButton.isVisible().catch(() => false);
         if (stillOnProductsCard) {
             await products.requestDevicesNowButton.click();

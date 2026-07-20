@@ -12,7 +12,7 @@
       "crn": "1010016097",
       "nationalId": "1418257208",
       "mobile": "500062901",
-      "used": "products"
+      "used": "contract"
     },
     {
       "type": "citizen",
@@ -26,7 +26,7 @@
       "crn": "1010051690",
       "nationalId": "1618667578",
       "mobile": "500083440",
-      "used": false
+      "used": "contract"
     },
     {
       "type": "citizen",
@@ -40,35 +40,35 @@
       "crn": "1010091086",
       "nationalId": "1480826062",
       "mobile": "500474285",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010094219",
       "nationalId": "1687726933",
       "mobile": "500528763",
-      "used": "products"
+      "used": "contract"
     },
     {
       "type": "citizen",
       "crn": "1010108246",
       "nationalId": "1754664454",
       "mobile": "500622883",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010117673",
       "nationalId": "1237547706",
       "mobile": "500664869",
-      "used": "products"
+      "used": "contract"
     },
     {
       "type": "citizen",
       "crn": "1010121708",
       "nationalId": "1572609475",
       "mobile": "500802581",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "resident",
@@ -145,581 +145,581 @@
       "crn": "1010153636",
       "nationalId": "1892441245",
       "mobile": "500901343",
-      "used": "products"
+      "used": "contract"
     },
     {
       "type": "citizen",
       "crn": "1010174867",
       "nationalId": "1134801115",
       "mobile": "501017560",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010188016",
       "nationalId": "1394978231",
       "mobile": "501018826",
-      "used": "products"
+      "used": "contract"
     },
     {
       "type": "citizen",
       "crn": "1010192422",
       "nationalId": "1056148727",
       "mobile": "501169260",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010202324",
       "nationalId": "1951246634",
       "mobile": "501169631",
-      "used": "products"
+      "used": "already-registered"
     },
     {
       "type": "citizen",
       "crn": "1010203309",
       "nationalId": "1599157912",
       "mobile": "501330615",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010210495",
       "nationalId": "1586046060",
       "mobile": "501350736",
-      "used": "products"
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010217747",
       "nationalId": "1440213831",
       "mobile": "501458894",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010236009",
       "nationalId": "1173025352",
       "mobile": "501469741",
-      "used": "products"
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010242274",
       "nationalId": "1070768690",
       "mobile": "501805283",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010254553",
       "nationalId": "1648017521",
       "mobile": "501829713",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010268950",
       "nationalId": "1307873008",
       "mobile": "501846631",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010289600",
       "nationalId": "1007230103",
       "mobile": "501910830",
-      "used": false
+      "used": "already-registered"
     },
     {
       "type": "citizen",
       "crn": "1010301743",
       "nationalId": "1415584612",
       "mobile": "501943970",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010304234",
       "nationalId": "1106127176",
       "mobile": "502079816",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010353130",
       "nationalId": "1304109455",
       "mobile": "502224357",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010354603",
       "nationalId": "1929007217",
       "mobile": "502231255",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010354982",
       "nationalId": "1718602624",
       "mobile": "502235243",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010393614",
       "nationalId": "1213200080",
       "mobile": "502752531",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010421407",
       "nationalId": "1453714204",
       "mobile": "503126620",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010438464",
       "nationalId": "1110961727",
       "mobile": "503346392",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010447275",
       "nationalId": "1879224093",
       "mobile": "503411768",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010447301",
       "nationalId": "1992373637",
       "mobile": "503493510",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010466986",
       "nationalId": "1389887173",
       "mobile": "503593467",
-      "used": false
+      "used": "already-registered"
     },
     {
       "type": "citizen",
       "crn": "1010477595",
       "nationalId": "1857631640",
       "mobile": "503596330",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010497922",
       "nationalId": "1285046379",
       "mobile": "503706368",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010518718",
       "nationalId": "1825691163",
       "mobile": "503927201",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010541168",
       "nationalId": "1835548668",
       "mobile": "504142908",
-      "used": false
+      "used": "already-registered"
     },
     {
       "type": "citizen",
       "crn": "1010563655",
       "nationalId": "1463254787",
       "mobile": "504216776",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010566994",
       "nationalId": "1382350062",
       "mobile": "504250197",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010581700",
       "nationalId": "1673068241",
       "mobile": "504416148",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010593691",
       "nationalId": "1479134106",
       "mobile": "504712373",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010603095",
       "nationalId": "1474113048",
       "mobile": "504731598",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010604545",
       "nationalId": "1673569560",
       "mobile": "504834640",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010606554",
       "nationalId": "1213631367",
       "mobile": "504846396",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010615688",
       "nationalId": "1998502320",
       "mobile": "504948597",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010616349",
       "nationalId": "1501487845",
       "mobile": "504980924",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010622197",
       "nationalId": "1525440853",
       "mobile": "505015187",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010624694",
       "nationalId": "1576376436",
       "mobile": "505111211",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010634995",
       "nationalId": "1810396521",
       "mobile": "505183159",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010660925",
       "nationalId": "1100553906",
       "mobile": "505413111",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010673130",
       "nationalId": "1542224835",
       "mobile": "505534302",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010687027",
       "nationalId": "1315187821",
       "mobile": "505554596",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010692908",
       "nationalId": "1971063407",
       "mobile": "505677482",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010694337",
       "nationalId": "1413150895",
       "mobile": "505762061",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010698585",
       "nationalId": "1505559813",
       "mobile": "505795012",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010728986",
       "nationalId": "1738374766",
       "mobile": "505836409",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010732665",
       "nationalId": "1777427178",
       "mobile": "505929124",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010744185",
       "nationalId": "1380575900",
       "mobile": "506000368",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010747365",
       "nationalId": "1486752148",
       "mobile": "506035193",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010749263",
       "nationalId": "1230139949",
       "mobile": "506225933",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010754159",
       "nationalId": "1482866017",
       "mobile": "506253653",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010757571",
       "nationalId": "1653205557",
       "mobile": "506283431",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010773021",
       "nationalId": "1118083029",
       "mobile": "506690807",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010781506",
       "nationalId": "1471001170",
       "mobile": "506714469",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010783249",
       "nationalId": "1152501662",
       "mobile": "506748393",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010785291",
       "nationalId": "1003151162",
       "mobile": "506776239",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010804173",
       "nationalId": "1796468351",
       "mobile": "506818125",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010825946",
       "nationalId": "1377052996",
       "mobile": "506821640",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010835601",
       "nationalId": "1685271452",
       "mobile": "506939964",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010836812",
       "nationalId": "1241670775",
       "mobile": "507051216",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010843337",
       "nationalId": "1215575505",
       "mobile": "507219510",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010851673",
       "nationalId": "1040653568",
       "mobile": "507315662",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010871826",
       "nationalId": "1636406421",
       "mobile": "507339911",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010880509",
       "nationalId": "1537632091",
       "mobile": "510203001",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010914215",
       "nationalId": "1189559246",
       "mobile": "507530200",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010914547",
       "nationalId": "1043914694",
       "mobile": "507611849",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010924063",
       "nationalId": "1599978150",
       "mobile": "507675448",
-      "used": false
+      "used": "contract"
     },
     {
       "type": "citizen",
       "crn": "1010946905",
       "nationalId": "1697416368",
       "mobile": "508158344",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010948977",
       "nationalId": "1690382781",
       "mobile": "508162554",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010971113",
       "nationalId": "1024923482",
       "mobile": "508317861",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010978705",
       "nationalId": "1040872572",
       "mobile": "508533392",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1010988551",
       "nationalId": "1742686304",
       "mobile": "508535397",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1011021654",
       "nationalId": "1780593750",
       "mobile": "508753091",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1011030651",
       "nationalId": "1227932132",
       "mobile": "508898290",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1011053271",
       "nationalId": "1557193073",
       "mobile": "509298471",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1011072842",
       "nationalId": "1957101049",
       "mobile": "509344292",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1011093808",
       "nationalId": "1114036898",
       "mobile": "509422314",
-      "used": false
+      "used": "products"
     },
     {
       "type": "citizen",
       "crn": "1011093819",
       "nationalId": "1680997242",
       "mobile": "509444145",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1011125266",
       "nationalId": "1395481979",
       "mobile": "509639436",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1011146330",
       "nationalId": "1481020772",
       "mobile": "509755931",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
       "crn": "1011159646",
       "nationalId": "1021639438",
       "mobile": "509911126",
-      "used": false
+      "used": "products"
     },
     {
       "type": "citizen",
       "crn": "1011166492",
       "nationalId": "1572633970",
       "mobile": "509975208",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
@@ -733,7 +733,7 @@
       "crn": "1011204710",
       "nationalId": "1530929908",
       "mobile": "530190415",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
@@ -747,7 +747,7 @@
       "crn": "1011226845",
       "nationalId": "1989633704",
       "mobile": "530285435",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
@@ -761,7 +761,7 @@
       "crn": "1011265033",
       "nationalId": "1698648621",
       "mobile": "530463356",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",
@@ -775,7 +775,7 @@
       "crn": "1011294039",
       "nationalId": "1344763600",
       "mobile": "530502108",
-      "used": false
+      "used": "nafath"
     },
     {
       "type": "citizen",

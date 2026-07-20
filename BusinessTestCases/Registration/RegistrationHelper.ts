@@ -11,6 +11,7 @@ import { RegistrationFinancialPage } from '../pageElements/RegistrationFinancial
 import { RegistrationVerificationPage } from '../pageElements/RegistrationVerificationPage';
 import { RegistrationProductsPage } from '../pageElements/RegistrationProductsPage';
 import { RegistrationNafathPage } from '../pageElements/RegistrationNafathPage';
+import { RegistrationContractPage } from '../pageElements/RegistrationContractPage';
 import registrationDefaults from '../../data/registrationDefaults.json';
 import registrationAssets from '../../data/registrationAssets.json';
 
@@ -81,10 +82,14 @@ export function markCitizenAssetUsed(mobile: string, page: CitizenAssetOutcome):
  *  straight back to it, so it's included alongside unused ones — while an
  *  asset flagged for a *different* outcome (e.g. `contract`-flagged when the
  *  goal is `products`) is still skipped, since it would resume to the wrong
- *  page. Falls back to the full pool (ignoring the flag) once nothing
- *  matches, so callers never hard-fail — just lose the time-saving skip. */
-export function nextCitizenAsset(wantOutcome?: CitizenAssetOutcome) {
-    const available = CITIZEN_ASSETS.filter(a => !a.used || (wantOutcome && a.used === wantOutcome));
+ *  page. `wantOutcome` also accepts an array when more than one landing page
+ *  is acceptable (e.g. `goToProductsStep`'s `landOnContractOk` — an asset
+ *  already flagged `products` or `contract` both resume somewhere useful).
+ *  Falls back to the full pool (ignoring the flag) once nothing matches, so
+ *  callers never hard-fail — just lose the time-saving skip. */
+export function nextCitizenAsset(wantOutcome?: CitizenAssetOutcome | CitizenAssetOutcome[]) {
+    const wanted = Array.isArray(wantOutcome) ? wantOutcome : wantOutcome ? [wantOutcome] : [];
+    const available = CITIZEN_ASSETS.filter(a => !a.used || wanted.includes(a.used as CitizenAssetOutcome));
     if (available.length === 0) {
         console.warn('[RegistrationHelper] All citizen assets are flagged used — cycling the full pool again.');
         return CITIZEN_ASSETS[_citizenIndex++ % CITIZEN_ASSETS.length];
@@ -336,13 +341,33 @@ export async function fillVerificationForm(page: Page): Promise<void> {
  *
  * Returns true once Products is reached, false if maxAttempts is exhausted
  * without landing there.
+ *
+ * `landOnContractOk` — when true, a mobile that resumes straight past Products
+ * to Contract counts as success too (returns true immediately) instead of being
+ * discarded and cycled past. goToContractStep() passes this since Contract is
+ * its actual target anyway; skipping the extra full registration attempt saves
+ * ~30-45s per asset that would otherwise be wasted only to re-derive the same
+ * destination. Other callers (which specifically need the Products panel) leave
+ * this false.
  */
-export async function goToProductsStep(page: Page, maxAttempts = 10): Promise<boolean> {
+export async function goToProductsStep(page: Page, maxAttempts = 10, landOnContractOk = false): Promise<boolean> {
     const products = new RegistrationProductsPage(page);
-    const productsHeading = page.getByText(/Choose the products for your business\.|اختر المنتجات المناسبة لنشاطك التجاري\./i);
+    // Scoped to the Products step's own .form-sub-title element rather than a raw
+    // page.getByText() text search — the latter is ambiguous on this app (likely an
+    // Angular CDK a11y live-announcer duplicate of the same string elsewhere in the
+    // DOM), which throws a strict-mode violation that Promise.race's .catch() below
+    // silently swallows as 'neither', even when Products has clearly rendered.
+    const productsHeading = products.formSubTitle;
 
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-        const asset = nextCitizenAsset('products');
+        // When landing on Contract is an acceptable outcome (goToContractStep's
+        // actual target), also reuse assets already flagged `contract` — they
+        // resume straight there, same as `products`-flagged ones do for the
+        // Products-only callers. Without this, goToContractStep could never
+        // reuse its own previously-discovered fast path and had to burn a full
+        // fresh registration attempt (risking a real NAFATH dead end) every time.
+        const asset = nextCitizenAsset(landOnContractOk ? ['products', 'contract'] : 'products');
+        console.log(`[goToProductsStep] attempt ${attempt}/${maxAttempts} — mobile ${asset.mobile} (used=${(asset as { used?: unknown }).used ?? 'unused'})`);
         await goToInfoStep(page, asset.mobile);
 
         const infoPage = new RegistrationInfoPage(page);
@@ -394,17 +419,42 @@ export async function goToProductsStep(page: Page, maxAttempts = 10): Promise<bo
         const nafathPage = new RegistrationNafathPage(page);
 
         const landedOn = await Promise.race([
-            productsHeading.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'products' as const),
-            contractStep.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'contract' as const),
-            nafathPage.nafathHeading.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'nafath' as const),
+            productsHeading.waitFor({ state: 'visible', timeout: 40000 }).then(() => 'products' as const),
+            contractStep.waitFor({ state: 'visible', timeout: 40000 }).then(() => 'contract' as const),
+            nafathPage.nafathHeading.waitFor({ state: 'visible', timeout: 40000 }).then(() => 'nafath' as const),
         ]).catch(() => 'neither' as const);
+        console.log(`[goToProductsStep] attempt ${attempt} landed on: ${landedOn}`);
 
         if (landedOn === 'products') {
+            // Confirmed live: an asset whose product selection was already submitted
+            // in an earlier run (e.g. driven through goToContractStep's Products
+            // Continue button) renders the Products heading only as a brief flicker
+            // before the app auto-advances it to Contract on its own — the race
+            // above can catch that flicker and misreport 'products' for an asset
+            // that's actually already past it (confirmed via DOM dump: the "landed
+            // on products" page.content() was byte-identical to a Contract-page
+            // dump). Give reused `products`-flagged assets a short settle window to
+            // rule that out before trusting the landing; skip it for brand-new
+            // assets, which can't have this history yet and would otherwise pay a
+            // pure timeout tax on every single successful landing.
+            const isReusedAsset = asset.used === 'products';
+            if (isReusedAsset) {
+                const advancedToContract = await contractStep.waitFor({ state: 'visible', timeout: 5000 })
+                    .then(() => true)
+                    .catch(() => false);
+                if (advancedToContract) {
+                    console.log(`[goToProductsStep] attempt ${attempt} — 'products' was a flicker, actually already on contract`);
+                    markCitizenAssetUsed(asset.mobile, 'contract');
+                    if (landOnContractOk) return true;
+                    continue;
+                }
+            }
             markCitizenAssetUsed(asset.mobile, 'products');
             return true;
         }
         if (landedOn === 'contract') {
             markCitizenAssetUsed(asset.mobile, 'contract');
+            if (landOnContractOk) return true;
             continue;
         }
 
@@ -419,16 +469,22 @@ export async function goToProductsStep(page: Page, maxAttempts = 10): Promise<bo
             // EMI-4937 — see RegistrationNafathFunctionality.spec.ts). Playwright's
             // click() already waits for the target to become enabled as part of its
             // actionability checks, so no manual polling of the countdown is needed.
+            console.log(`[goToProductsStep] attempt ${attempt} hit NAFATH — clicking Verify`);
             const verified = await nafathPage.verifyButton.click({ timeout: 30000 }).then(() => true).catch(() => false);
+            console.log(`[goToProductsStep] attempt ${attempt} NAFATH verify click ${verified ? 'succeeded' : 'failed'}`);
             if (!verified) continue;
 
             const postNafathLandedOn = await Promise.race([
-                productsHeading.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'products' as const),
-                contractStep.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'contract' as const),
+                productsHeading.waitFor({ state: 'visible', timeout: 40000 }).then(() => 'products' as const),
+                contractStep.waitFor({ state: 'visible', timeout: 40000 }).then(() => 'contract' as const),
             ]).catch(() => 'neither' as const);
+            console.log(`[goToProductsStep] attempt ${attempt} post-NAFATH landed on: ${postNafathLandedOn}`);
 
             if (postNafathLandedOn === 'products') return true;
-            if (postNafathLandedOn === 'contract') continue;
+            if (postNafathLandedOn === 'contract') {
+                if (landOnContractOk) return true;
+                continue;
+            }
 
             // Neither Products nor Contract appeared after a successful NAFATH
             // verify — most likely an "already registered" rejection with no
@@ -449,6 +505,54 @@ export async function goToProductsStep(page: Page, maxAttempts = 10): Promise<bo
         markCitizenAssetUsed(asset.mobile, 'already-registered');
     }
     return false;
+}
+
+/**
+ * Drives the wizard to the Contract step: reaches Products via goToProductsStep,
+ * then clicks its Continue button — confirmed live to skip the PoS sub-flow
+ * straight to Contract when the "Request devices now" checkbox is left
+ * unchecked (see RegistrationProductsPage's skipSetupLaterButton comment).
+ * Throws if Products was never reached (goToProductsStep exhausted its
+ * attempts) rather than silently landing nowhere.
+ */
+export async function goToContractStep(page: Page): Promise<void> {
+    const reachedProducts = await goToProductsStep(page, 10, true);
+    if (!reachedProducts) {
+        throw new Error('Could not reach the Products step, so the Contract step is unreachable.');
+    }
+
+    const contractPage = new RegistrationContractPage(page);
+    const products = new RegistrationProductsPage(page);
+    // landOnContractOk means goToProductsStep may have already resolved straight
+    // onto Contract (mobile resumed past Products) — only click through Products'
+    // Continue button when we're actually still on it. A one-shot isVisible()
+    // check here raced the page: a `products`-landed asset that had already
+    // completed the PoS step on a prior run auto-advances off Products on its
+    // own, so by the time isVisible() ran neither the Contract heading nor the
+    // Products Continue button was necessarily up yet, and the click below would
+    // wait 20s for a button that had already been swept off the page. Racing the
+    // two locators (each with its own bounded wait) instead of a single instant
+    // snapshot lets whichever one actually renders win.
+    // skipSetupLaterButton (testid register-products-continue-btn) is the
+    // confirmed Products-step Continue control — products.continueButton is
+    // ambiguous with the Devices & Delivery panel's own "متابعة" button.
+    const initialState = await Promise.race([
+        contractPage.agreementHeading.waitFor({ state: 'visible', timeout: 15000 }).then(() => 'contract' as const),
+        products.skipSetupLaterButton.waitFor({ state: 'visible', timeout: 15000 }).then(() => 'products' as const),
+    ]).catch(() => 'neither' as const);
+    console.log(`[goToContractStep] initial state: ${initialState}`);
+
+    if (initialState === 'products') {
+        console.log('[goToContractStep] clicking Products skipSetupLaterButton to advance to Contract');
+        await products.skipSetupLaterButton.click({ timeout: 20000 }).catch(() => {
+            console.log('[goToContractStep] skipSetupLaterButton click failed/no-op — button may have already been swept off the page; falling through to waitForLoad');
+        });
+        console.log('[goToContractStep] skipSetupLaterButton click resolved');
+    }
+
+    console.log('[goToContractStep] waiting for contract agreementHeading to render');
+    await contractPage.waitForLoad();
+    console.log('[goToContractStep] contract page loaded');
 }
 
 /**

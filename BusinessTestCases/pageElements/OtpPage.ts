@@ -21,15 +21,29 @@ export class OtpPage {
 
         this.heading         = page.getByRole('heading', { name: /Enter OTP|أدخل رمز التحقق/i });
         this.instructionText = page.getByText(/A code has been sent to you|تم إرسال رمز التحقق/i);
-        // Login's OTP screen exposes an accessible name; the forgot-password
-        // modal's inputs don't, so match either shape.
+        // The shared OTP-modal testid (`otp-input`, QA-DATA-TESTID-HANDOFF.md §3) is
+        // the wrapper element, not the individual boxes — the boxes themselves are
+        // the ngx-otp-input library's inputs, which the handoff explicitly says have
+        // no testid ("focus the block and type the code"). So `inputs` stays on the
+        // per-box role/class locators rather than the wrapper testid, which wouldn't
+        // work with per-box .fill()/.pressSequentially() calls anyway. Login's OTP
+        // screen exposes an accessible name; the forgot-password modal's inputs
+        // don't, so match either shape.
         this.inputs = page.getByRole('textbox', { name: 'One time password input' })
             .or(page.locator('div.my-modal-container input'));
         this.countdownTimer = page.getByText(/Code ends|ينتهي الرمز/i);
-        this.resendButton   = page.getByRole('button', { name: /Click to resend|انقر لإعادة الإرسال/i });
+        // otp-resend-btn / otp-submit-btn / otp-cancel-btn: QA-DATA-TESTID-HANDOFF.md
+        // §3 shared OTP-modal component — confirmed for the modal variant (used by
+        // Bill Payment and, per gotoOtpModal()'s div.my-modal-container, ForgotPassword
+        // too). Login's full-screen OTP step isn't in §4.1's testid table, so its
+        // "Verify" button falls through to the role-based fallback below.
+        this.resendButton   = page.getByTestId('otp-resend-btn')
+            .or(page.getByRole('button', { name: /Click to resend|انقر لإعادة الإرسال/i }));
         // Login's screen labels this "Verify"; the forgot-password modal labels it "Confirm".
-        this.verifyButton = page.getByRole('button', { name: /^(verify|confirm|تحقق)$/i });
-        this.cancelButton = page.getByRole('button', { name: /cancel|إلغاء/i });
+        this.verifyButton = page.getByTestId('otp-submit-btn')
+            .or(page.getByRole('button', { name: /^(verify|confirm|تحقق)$/i }));
+        this.cancelButton = page.getByTestId('otp-cancel-btn')
+            .or(page.getByRole('button', { name: /cancel|إلغاء/i }));
 
         this.modalContainer = page.locator('div.my-modal-container');
         this.closeButton    = this.modalContainer.getByRole('button', { name: /close/i });

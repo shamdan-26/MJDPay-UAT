@@ -14,7 +14,11 @@ export async function waitForToastClear(
     appearTimeout = 3000,
     clearTimeout  = 8000,
 ): Promise<void> {
-    const toast = page.locator('mat-snack-bar-container, [class*="snack"], [class*="toast"]').first();
+    // `toast` is the QA-DATA-TESTID-HANDOFF.md §3 shared-component testid,
+    // kept alongside the original CSS-class locator as a fallback since not
+    // every screen using this helper has been confirmed to render it yet.
+    const toast = page.getByTestId('toast')
+        .or(page.locator('mat-snack-bar-container, [class*="snack"], [class*="toast"]')).first();
     await toast.waitFor({ state: 'visible', timeout: appearTimeout }).catch(() => null);
     if (await toast.isVisible().catch(() => false)) {
         await toast.waitFor({ state: 'hidden', timeout: clearTimeout }).catch(() => {});
@@ -35,7 +39,10 @@ export async function assertToast(
     expectedText?: string,
     timeout = 10000,
 ): Promise<void> {
-    const detail = page.locator('.toast-snackbar__detail');
+    // `toast-message` is the QA-DATA-TESTID-HANDOFF.md §3 shared-component
+    // testid — it explicitly replaces `.toast-snackbar__detail`, kept here as
+    // a fallback for any screen not yet confirmed to render the new testid.
+    const detail = page.getByTestId('toast-message').or(page.locator('.toast-snackbar__detail'));
     await expect(detail).toBeVisible({ timeout });
     if (expectedText) {
         await expect(detail).toContainText(expectedText, { ignoreCase: true });

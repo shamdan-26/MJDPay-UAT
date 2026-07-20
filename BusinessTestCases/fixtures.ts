@@ -17,6 +17,7 @@ import { LoginPage } from './pageElements/LoginPage';
 import { OtpPage } from './pageElements/OtpPage';
 import { PaymentLinkPage } from './pageElements/PaymentLinkPage';
 import { ProductsManagementPage } from './pageElements/ProductsManagementPage';
+import { RegistrationContractPage } from './pageElements/RegistrationContractPage';
 import { RegistrationFinancialPage } from './pageElements/RegistrationFinancialPage';
 import { RegistrationInfoPage } from './pageElements/RegistrationInfoPage';
 import { RegistrationMobilePage } from './pageElements/RegistrationMobilePage';
@@ -54,6 +55,7 @@ type PageObjectFixtures = {
     otp: OtpPage;
     paymentLink: PaymentLinkPage;
     productsManagement: ProductsManagementPage;
+    registrationContract: RegistrationContractPage;
     registrationFinancial: RegistrationFinancialPage;
     registrationInfo: RegistrationInfoPage;
     registrationMobile: RegistrationMobilePage;
@@ -83,6 +85,7 @@ export const test = base.extend<PageObjectFixtures>({
     otp: async ({ page }, use) => { await use(new OtpPage(page)); },
     paymentLink: async ({ page }, use) => { await use(new PaymentLinkPage(page)); },
     productsManagement: async ({ page }, use) => { await use(new ProductsManagementPage(page)); },
+    registrationContract: async ({ page }, use) => { await use(new RegistrationContractPage(page)); },
     registrationFinancial: async ({ page }, use) => { await use(new RegistrationFinancialPage(page)); },
     registrationInfo: async ({ page }, use) => { await use(new RegistrationInfoPage(page)); },
     registrationMobile: async ({ page }, use) => { await use(new RegistrationMobilePage(page)); },

@@ -45,8 +45,11 @@ export class ForgotPasswordPage {
         this.saveButton = page.getByRole('button', { name: /save|confirm/i });
         this.resetPasswordButton = page.getByRole('button', { name: /reset password|إعادة تعيين كلمة المرور/i });
 
-        this.enButton     = page.getByRole('button', { name: 'EN' });
-        this.arabicButton = page.getByRole('button', { name: 'العربية' });
+        // lang-en/lang-ar: QA-DATA-TESTID-HANDOFF.md §4.2 (header + auth layout).
+        // No testid documented for the company/mobile/password fields or Next/Save
+        // buttons on this flow — those stay on role-based locators.
+        this.enButton     = page.getByTestId('lang-en').or(page.getByRole('button', { name: 'EN' }));
+        this.arabicButton = page.getByTestId('lang-ar').or(page.getByRole('button', { name: 'العربية' }));
         this.themeToggle  = page.getByRole('button', { name: 'Switch theme' });
     }
 

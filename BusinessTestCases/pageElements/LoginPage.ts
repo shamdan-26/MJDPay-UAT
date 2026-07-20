@@ -49,29 +49,36 @@ export class LoginPage {
         this.logoImage = page.locator('img[alt="MJD Pay"]');
         this.logoLink  = page.locator('a:has(img[alt="MJD Pay"])');
 
+        // No testid documented for the company-number field in
+        // QA-DATA-TESTID-HANDOFF.md §4.1 (only mobile/password/toggle/submit
+        // are listed) — left on the role-based locator.
         this.companyInput      = page.getByRole('textbox', { name: /Company number|رقم الشركة/ });
         this.companyLabel      = page.locator('label.floating-field-label', { hasText: 'Company' });
         this.companyClearButton = page.locator('.floating-field-clear, [class*="clear-btn"], [aria-label*="lear" i]').first();
-        this.mobileInput       = page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ });
+        // §4.1: "Mobile number field" testid is literally named `login-username`.
+        this.mobileInput       = page.getByTestId('login-username')
+            .or(page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ }));
         this.mobileLabel       = page.locator('label.floating-field-label', { hasText: 'Mobile' });
         this.mobileClearButton  = page.locator('.floating-field-clear, [class*="clear-btn"], [aria-label*="lear" i]').nth(1);
         this.countryCode       = page.locator('.floating-prefix');
         this.countryFlag       = page.locator('.floating-prefix img, .floating-prefix [class*="flag"]').first();
-        this.passwordInput     = page.locator('input[aria-label="Password"], input[aria-label="كلمة المرور"]');
+        this.passwordInput     = page.getByTestId('login-password')
+            .or(page.locator('input[aria-label="Password"], input[aria-label="كلمة المرور"]'));
         this.passwordLabel     = page.locator('label.floating-field-label', { hasText: 'Password' });
-        this.showPasswordToggle = page.locator('button.floating-password-toggle');
+        this.showPasswordToggle = page.getByTestId('login-password-toggle-visibility')
+            .or(page.locator('button.floating-password-toggle'));
 
         const env = process.env['ENV'] ?? 'dev';
-        this.loginButton = env === 'dev'
-            ? page.locator('#btn_login')
-            : page.getByRole('button', { name: 'Log In' });
+        this.loginButton = page.getByTestId('login-submit')
+            .or(env === 'dev' ? page.locator('#btn_login') : page.getByRole('button', { name: 'Log In' }));
 
         this.forgotPasswordLink  = page.getByText(/Forgot Password\?|نسيت كلمة المرور؟/);
         this.signUpLink          = page.getByText('Sign Up');
         this.newToMjdText        = page.getByText('New to MJD PAY?');
 
-        this.enButton     = page.getByRole('button', { name: 'EN' });
-        this.arabicButton = page.getByRole('button', { name: 'العربية' });
+        // lang-en/lang-ar: QA-DATA-TESTID-HANDOFF.md §4.2 (header + auth layout).
+        this.enButton     = page.getByTestId('lang-en').or(page.getByRole('button', { name: 'EN' }));
+        this.arabicButton = page.getByTestId('lang-ar').or(page.getByRole('button', { name: 'العربية' }));
         this.themeToggle  = page.getByRole('button', { name: 'Switch theme' });
     }
 
