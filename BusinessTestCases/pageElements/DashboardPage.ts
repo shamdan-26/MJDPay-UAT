@@ -45,6 +45,9 @@ export class DashboardPage {
     readonly notificationsToggle: Locator;
     readonly darkModeToggle: Locator;
     readonly languageSelector: Locator;
+    readonly englishToggle: Locator;
+    readonly arabicToggle: Locator;
+    readonly switchLanguageConfirmButton: Locator;
     readonly walletConfigurationMenuItem: Locator;
     readonly faqsMenuItem: Locator;
     readonly logoutItem: Locator;
@@ -86,6 +89,9 @@ export class DashboardPage {
         this.notificationsToggle    = profileMenuPanel.filter({ hasText: /notifications/i }).locator('input[type="checkbox"]').first();
         this.darkModeToggle         = profileMenuPanel.filter({ hasText: /dark mode/i }).locator('input[type="checkbox"]').first();
         this.languageSelector       = profileMenuPanel.getByText(/^ENG$/).or(profileMenuPanel.getByText(/language/i)).first();
+        this.englishToggle              = page.getByTestId('lang-en');
+        this.arabicToggle               = page.getByTestId('lang-ar');
+        this.switchLanguageConfirmButton = page.getByTestId('switch-language-submit-btn');
         this.walletConfigurationMenuItem = profileMenuPanel.getByText(/wallet configuration/i).first();
         this.faqsMenuItem           = profileMenuPanel.getByText(/faqs?/i).first();
         this.logoutItem    = page.locator('#logout');
@@ -101,5 +107,16 @@ export class DashboardPage {
         await this.openProfileMenu();
         await this.logoutItem.click();
         await this.proceedButton.click();
+    }
+
+    /** Switches the app language via the header/profile-menu toggle, confirming the switch if a modal appears. */
+    async switchLanguage(target: 'en' | 'ar'): Promise<void> {
+        await this.openProfileMenu();
+        await this.languageSelector.click();
+        const toggle = target === 'ar' ? this.arabicToggle : this.englishToggle;
+        await toggle.click();
+        if (await this.switchLanguageConfirmButton.isVisible({ timeout: 3000 }).catch(() => false)) {
+            await this.switchLanguageConfirmButton.click();
+        }
     }
 }

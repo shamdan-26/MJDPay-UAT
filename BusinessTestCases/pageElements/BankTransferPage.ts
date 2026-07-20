@@ -47,11 +47,14 @@ export class BankTransferPage {
 
         // Locators mapped from Java elements
         this.bankTransferButton = page.locator('#balance-transfer-text');
-        this.inputAmount = page.locator('#input_set_amount');
-        this.proceedButton = page.locator('button.mp-btn-cta, #sa_button button, button:has-text("Proceed")').first();
-        this.proceedButtonInSummary = page.getByRole('button', { name: /Next/i })
+        this.inputAmount = page.getByTestId('amount-input').or(page.locator('#input_set_amount'));
+        this.proceedButton = page.getByTestId('bank-amount-proceed-btn')
+            .or(page.locator('button.mp-btn-cta, #sa_button button, button:has-text("Proceed")')).first();
+        this.proceedButtonInSummary = page.getByTestId('bank-summary-next-btn')
+            .or(page.getByRole('button', { name: /Next/i }))
             .or(page.locator('button:has-text("Next")')).first();
-        this.summaryCancelButton = page.locator('button.btn-outline-primary:has-text("Cancel")')
+        this.summaryCancelButton = page.getByTestId('bank-summary-cancel-btn')
+            .or(page.locator('button.btn-outline-primary:has-text("Cancel")'))
             .or(page.locator('button.btn.btn-outline-primary.custom-btn', { hasText: 'Cancel' }));
         this.Successful_OkButton = page.locator('button.mp-btn-wide:has-text("Ok")')
             .or(page.locator('button#submit_btn_info', { hasText: 'Ok' })); this.useFullBalanceToggle = page.locator('#use-full-balance-toggle');
