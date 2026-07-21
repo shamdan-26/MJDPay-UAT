@@ -1,5 +1,5 @@
 import { type Page, type Locator } from '@playwright/test';
-import { waitForToastClear } from '../../toastMessages';
+import { waitForToastClear } from '../toastMessages';
 
 export class RegistrationMobilePage {
     readonly page: Page;
@@ -31,9 +31,8 @@ export class RegistrationMobilePage {
         this.logoImage = page.locator('img[alt="MJD Pay"]');
         this.logoLink  = page.locator('a:has(img[alt="MJD Pay"])');
 
-        // lang-en/lang-ar: QA-DATA-TESTID-HANDOFF.md §4.2 (header + auth layout).
-        this.enButton     = page.getByTestId('lang-en').or(page.getByRole('button', { name: 'EN' }));
-        this.arabicButton = page.getByTestId('lang-ar').or(page.getByRole('button', { name: 'العربية' }));
+        this.enButton     = page.getByTestId('lang-en');
+        this.arabicButton = page.getByRole('button', { name: 'العربية' });
         this.themeToggle  = page.getByRole('button', { name: 'Switch theme' });
 
         this.createAccountEyebrow        = page.locator('.form-eyebrow');
