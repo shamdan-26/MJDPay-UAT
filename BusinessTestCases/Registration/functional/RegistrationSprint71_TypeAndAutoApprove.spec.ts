@@ -93,7 +93,7 @@ test.describe('Registration — Auto-Approval, Auto-Activation & Activation Emai
         const signUpBtn = page.getByRole('button', { name: /sign up/i });
         signUpReached = await signUpBtn.isEnabled({ timeout: 10000 }).catch(() => false);
         if (signUpReached) await signUpBtn.click();
-    }, 180_000);
+    });
 
     test.afterAll(async () => {
         await page.close();
