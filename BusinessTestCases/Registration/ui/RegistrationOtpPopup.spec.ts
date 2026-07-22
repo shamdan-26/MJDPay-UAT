@@ -1,12 +1,14 @@
 ﻿import { test, expect } from '@playwright/test';
-import { REGISTER_URL, generateFreshKSAMobile } from '../RegistrationHelper';
+import { REGISTER_URL, generateFreshKSAMobile, markUatOtpAssetUsed } from '../RegistrationHelper';
 
 test.describe('Registration - OTP Popup Page Elements', () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-        await page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ }).fill(generateFreshKSAMobile());
+        const mobile = generateFreshKSAMobile();
+        markUatOtpAssetUsed(mobile);
+        await page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ }).fill(mobile);
         await page.getByRole('button', { name: /next|التالي/i }).click();
         const otpAppeared = await page.getByRole('heading', { name: /Enter OTP|أدخل رمز التحقق/i })
             .waitFor({ state: 'visible', timeout: 20000 })

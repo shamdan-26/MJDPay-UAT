@@ -1,11 +1,13 @@
 import { test, expect, Page } from '@playwright/test';
 import {
     goToInfoStep, nextCitizenAsset, generateEmail, isAlreadyRegisteredMessage,
-    selectRandomOption,
+    fillFinancialForm, fillVerificationForm, markCitizenAssetUsed,
 } from '../RegistrationHelper';
 import { RegistrationNafathPage } from '../../pageElements/Registration/RegistrationNafathPage';
 import { RegistrationInfoPage } from '../../pageElements/Registration/RegistrationInfoPage';
 import { RegistrationFinancialPage } from '../../pageElements/Registration/RegistrationFinancialPage';
+import { RegistrationVerificationPage } from '../../pageElements/Registration/RegistrationVerificationPage';
+import { RegistrationProductsPage } from '../../pageElements/Registration/RegistrationProductsPage';
 
 test.describe('Registration - NAFATH Step Page Elements', () => {
     test.describe.configure({ mode: 'serial' });
@@ -51,22 +53,55 @@ test.describe('Registration - NAFATH Step Page Elements', () => {
                 .catch(() => false);
 
             if (financialLoaded) {
-                await financialPage.fill('1500', '50000', '10000', '20000');
-                await selectRandomOption(page, financialPage.industriesDropdown);
-                await selectRandomOption(page, financialPage.annualIncomeDropdown);
+                await fillFinancialForm(page);
                 await financialPage.next();
             }
 
-            advanced = await Promise.race([
-                nafathPage.nafathHeading.waitFor({ state: 'visible', timeout: 20000 }).then(() => true),
-                nafathPage.activeStep.filter({ hasText: /NAFATH|نَفاذ|نفاذ/i }).first()
-                    .waitFor({ state: 'visible', timeout: 20000 }).then(() => true),
-            ]).catch(() => false);
+            // Financial is followed by the Verification & Uploads sub-step (still
+            // under outer step 1) — NAFATH only appears after it is filled and
+            // Sign Up is clicked, not right after Financial (see goToProductsStep).
+            const verificationPage = new RegistrationVerificationPage(page);
+            const verificationLoaded = await verificationPage.ibanInput
+                .waitFor({ state: 'visible', timeout: 20000 })
+                .then(() => true)
+                .catch(() => false);
 
-            if (advanced) break;
+            if (verificationLoaded) {
+                await fillVerificationForm(page);
+                await verificationPage.signUpButton.click();
+                await nafathPage.loadingButton.waitFor({ state: 'hidden', timeout: 20000 }).catch(() => {});
+            }
+
+            // Race Nafath against Products: on ENV=dev, Nafath is bypassed and a
+            // successful Sign Up lands straight on Products instead — that asset is
+            // spent for this spec's purposes (see [[feedback_nafath_conventions]]),
+            // so flag it and move to the next unused one rather than burning the
+            // rest of maxAttempts re-discovering the same dead end.
+            const products = new RegistrationProductsPage(page);
+            const landedOn = await Promise.race([
+                nafathPage.nafathHeading.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'nafath' as const),
+                nafathPage.activeStep.filter({ hasText: /NAFATH|نَفاذ|نفاذ/i }).first()
+                    .waitFor({ state: 'visible', timeout: 20000 }).then(() => 'nafath' as const),
+                products.formSubTitle.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'products' as const),
+            ]).catch(() => 'neither' as const);
+
+            if (landedOn === 'nafath') {
+                markCitizenAssetUsed(asset.mobile, 'nafath');
+                advanced = true;
+                break;
+            }
+
+            if (landedOn === 'products') {
+                markCitizenAssetUsed(asset.mobile, 'products');
+                if (attempt < maxAttempts) continue;
+                break;
+            }
 
             lastPageText = await page.evaluate(() => document.body.innerText).catch(() => '');
-            if (isAlreadyRegisteredMessage(lastPageText) && attempt < maxAttempts) continue;
+            if (isAlreadyRegisteredMessage(lastPageText)) {
+                markCitizenAssetUsed(asset.mobile, 'already-registered');
+                if (attempt < maxAttempts) continue;
+            }
             break;
         }
 

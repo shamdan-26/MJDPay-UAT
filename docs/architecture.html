@@ -381,8 +381,8 @@
     <p class="path-line">BusinessTestCases/ · playwright.config.ts · TypeScript + @playwright/test</p>
 
     <div class="stats">
-      <div class="stat"><b>9</b><span>feature folders</span></div>
-      <div class="stat"><b>25</b><span>page objects</span></div>
+      <div class="stat"><b>10</b><span>feature folders</span></div>
+      <div class="stat"><b>27</b><span>page objects</span></div>
       <div class="stat"><b>2</b><span>fixture lifecycles</span></div>
       <div class="stat"><b>36</b><span>spec files on fixtures</span></div>
       <div class="stat"><b>42</b><span>dead grantPermissions() removed</span></div>
@@ -392,23 +392,28 @@
 
   <section id="folders">
     <div class="section-head"><span class="section-num">01</span><h2>Folder structure</h2></div>
-    <p class="section-intro">Every feature folder is now PascalCase and follows the same internal shape: one <span class="mono">&lt;Feature&gt;Helper.ts</span>, plus whichever of <span class="mono">api/</span>, <span class="mono">functional/</span>, <span class="mono">ui/</span>, <span class="mono">archive/</span> the flow actually needs.</p>
+    <p class="section-intro">Every feature folder is now PascalCase and follows the same internal shape: one <span class="mono">&lt;Feature&gt;Helper.ts</span>, plus whichever of <span class="mono">api/</span>, <span class="mono">functional/</span>, <span class="mono">ui/</span>, <span class="mono">archive/</span> the flow actually needs. <span class="mono">pageElements/</span> mirrors the same ten folders instead of sitting flat, plus one <span class="mono">Shared/</span> for classes more than one feature consumes.</p>
 
     <div class="tree">
 <div><span class="dir">BusinessTestCases/</span></div>
 <div class="indent1"><span class="file">fixtures.ts</span> <span class="note">— shared per-test page-object fixtures</span></div>
 <div class="indent1"><span class="file">toastMessages.ts</span> <span class="note">— waitForToastClear, assertToast</span></div>
-<div class="indent1"><span class="dir">pageElements/</span> <span class="note">— 25 page-object classes, flat, no subfolders</span></div>
+<div class="indent1"><span class="dir">pageElements/</span></div>
+<div class="indent2"><span class="dir">Shared/</span> <span class="note">— DashboardPage, HomePage, OtpPage, TransactionsPage</span></div>
+<div class="indent2"><span class="dir">Login/</span> <span class="dir">Homepage/</span> <span class="dir">ForgotPassword/</span> <span class="dir">Registration/</span></div>
+<div class="indent2"><span class="dir">BankTransfer/</span> <span class="dir">PaymentLinks/</span> <span class="dir">Products/</span> <span class="dir">Topup/</span> <span class="dir">W2WTransfer/</span> <span class="dir">PayBill/</span></div>
+<div class="indent2"><span class="note">— each holds that feature's page-object class(es), one file per class</span></div>
+<div class="indent1"><span class="note">(back at BusinessTestCases/ root — the spec-and-helper side, mirrors the same ten names)</span></div>
 <div class="indent1"><span class="dir">Login/</span> <span class="dir">Homepage/</span> <span class="dir">ForgotPassword/</span> <span class="dir">Registration/</span></div>
-<div class="indent1"><span class="dir">BankTransfer/</span> <span class="dir">PaymentLinks/</span> <span class="dir">Products/</span> <span class="dir">Topup/</span> <span class="dir">W2WTransfer/</span></div>
+<div class="indent1"><span class="dir">BankTransfer/</span> <span class="dir">PaymentLinks/</span> <span class="dir">Products/</span> <span class="dir">Topup/</span> <span class="dir">W2WTransfer/</span> <span class="dir">PayBill/</span></div>
 <div class="indent2"><span class="file">&lt;Feature&gt;Helper.ts</span> <span class="note">— constants, session/OTP helpers, mocks</span></div>
 <div class="indent2"><span class="file">api/</span> <span class="file">functional/</span> <span class="file">ui/</span> <span class="file">archive/</span> <span class="note">— present where relevant</span></div>
     </div>
   </section>
 
   <section id="features">
-    <div class="section-head"><span class="section-num">02</span><h2>The nine feature suites</h2></div>
-    <p class="section-intro">Naming was previously mixed — <span class="mono">homepage</span>, <span class="mono">Registration-KYC</span>, <span class="mono">BankTransfer</span> — three different conventions across nine folders. All nine now read the same way at a glance.</p>
+    <div class="section-head"><span class="section-num">02</span><h2>The ten feature suites</h2></div>
+    <p class="section-intro">Naming was previously mixed — <span class="mono">homepage</span>, <span class="mono">Registration-KYC</span>, <span class="mono">BankTransfer</span> — three different conventions across the folders. All ten now read the same way at a glance.</p>
 
     <div class="feature-grid">
       <div class="feature-card">
@@ -454,6 +459,11 @@
       <div class="feature-card">
         <div class="name">W2WTransfer</div>
         <div class="sub">Wallet-to-wallet transfer between merchants</div>
+        <div class="tags"><span class="tag bespoke">inline beforeAll</span></div>
+      </div>
+      <div class="feature-card">
+        <div class="name">PayBill</div>
+        <div class="sub">Bill lookup and payment flow</div>
         <div class="tags"><span class="tag bespoke">inline beforeAll</span></div>
       </div>
     </div>

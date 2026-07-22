@@ -113,15 +113,37 @@ export const UAT_OTP_ASSETS = registrationAssets.uatOtpAssets;
 
 let _uatOtpIndex = 0;
 
-/** Returns the next UAT OTP test account in round-robin order (phone numbers.xlsx). */
+/** Returns the next UAT OTP test account in round-robin order (phone numbers.xlsx).
+ *  Skips any asset already flagged `used` — same reasoning as `nextCitizenAsset`:
+ *  a mobile that already went through the OTP flow can land on an
+ *  "already registered" state instead of showing the OTP dialog. Falls back to
+ *  the full pool once nothing matches so callers never hard-fail. */
 export function nextUatOtpAsset() {
-    return UAT_OTP_ASSETS[_uatOtpIndex++ % UAT_OTP_ASSETS.length];
+    const available = UAT_OTP_ASSETS.filter(a => !a.used);
+    if (available.length === 0) {
+        console.warn('[RegistrationHelper] All UAT OTP assets are flagged used — cycling the full pool again.');
+        return UAT_OTP_ASSETS[_uatOtpIndex++ % UAT_OTP_ASSETS.length];
+    }
+    return available[_uatOtpIndex++ % available.length];
 }
 
+/** Marks a UAT OTP asset used and persists the flag to data/registrationAssets.json,
+ *  mirroring `markCitizenAssetUsed`. */
+export function markUatOtpAssetUsed(mobile: string): void {
+    const asset = UAT_OTP_ASSETS.find(a => a.mobile === mobile);
+    if (asset) (asset as { used?: boolean }).used = true;
+    try {
+        fs.writeFileSync(REGISTRATION_ASSETS_PATH, JSON.stringify(registrationAssets, null, 2) + '\n');
+    } catch (err) {
+        console.warn(`[RegistrationHelper] Failed to persist used-flag for ${mobile}: ${err}`);
+    }
+}
 
-/** Picks a UAT OTP test mobile from phone numbers.xlsx. */
+/** Picks an unused UAT OTP test mobile from phone numbers.xlsx (see `nextUatOtpAsset`). */
 export function generateFreshKSAMobile(): string {
-    return UAT_OTP_ASSETS[Math.floor(Math.random() * UAT_OTP_ASSETS.length)].mobile;
+    const available = UAT_OTP_ASSETS.filter(a => !a.used);
+    const pool = available.length > 0 ? available : UAT_OTP_ASSETS;
+    return pool[Math.floor(Math.random() * pool.length)].mobile;
 }
 
 

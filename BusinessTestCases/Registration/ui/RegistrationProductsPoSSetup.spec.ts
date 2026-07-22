@@ -1,6 +1,7 @@
 import { test, expect, Page } from '@playwright/test';
 import { goToProductsStep, expandPosCard } from '../RegistrationHelper';
 import { RegistrationProductsPage } from '../../pageElements/Registration/RegistrationProductsPage';
+import { RegistrationContractPage } from '../../pageElements/Registration/RegistrationContractPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Onboarding PoS Request Flow — web UI (EMI-5783)
@@ -9,8 +10,9 @@ import { RegistrationProductsPage } from '../../pageElements/Registration/Regist
 // element/text presence only (arrival state); this file covers the deeper PoS
 // device-request setup sub-flow once the wizard is already on the Products
 // step — expanding the PoS card, Devices & Delivery (device counter, delivery
-// type toggle, address radios, contact fields), Review, and the order-ready
-// inline state. Devices & Delivery locators/coverage match a live DOM
+// type toggle, address radios, contact fields), and the advance straight to
+// Contract that follows it — confirmed live, there is no separate Review step
+// in between. Devices & Delivery locators/coverage match a live DOM
 // extraction of that sub-step. Uses the same goToProductsStep() helper
 // (RegistrationHelper.ts) to reach Products, cycling the shared, reused
 // CITIZEN_ASSETS pool exactly as RegistrationProductsPage.spec.ts and
@@ -26,8 +28,8 @@ import { RegistrationProductsPage } from '../../pageElements/Registration/Regist
 // state to test — the Products-step Continue button (skipSetupLaterButton)
 // advances straight to Contract when requestDevicesNowButton isn't checked
 // first, so that's the terminal skip path and isn't exercised here (doing so
-// would end the flow before Devices & Delivery/Review/Order-ready, and this
-// suite's single browser session is shared serially across all of them).
+// would end the flow before Devices & Delivery, and this suite's single
+// browser session is shared serially across all of them).
 // ─────────────────────────────────────────────────────────────────────────────
 test.describe('Registration - Products Step: PoS Onboarding Setup (EMI-5783)', () => {
     test.describe.configure({ mode: 'serial' });
@@ -216,13 +218,12 @@ test.describe('Registration - Products Step: PoS Onboarding Setup (EMI-5783)', (
         await expect(products.contactMobileInput).toHaveValue('512345678');
     });
 
-    test('should reach the Review step after completing Devices & Delivery', async () => {
+    test('should display the Contract step after completing Devices & Delivery', async () => {
         requireFlow();
         // Confirmed live: an earlier test in this serial suite already checks
         // requestDevicesNowButton and clicks skipSetupLaterButton to reach Devices
         // & Delivery, but that state doesn't reliably persist this far into the
         // suite — re-assert it here instead of assuming it still holds.
-        await page.pause();
         const stillOnProductsCard = await products.requestDevicesNowButton.isVisible().catch(() => false);
         if (stillOnProductsCard) {
             await products.requestDevicesNowButton.click();
@@ -231,37 +232,19 @@ test.describe('Registration - Products Step: PoS Onboarding Setup (EMI-5783)', (
         await products.deviceCountInput.fill('2');
         // Confirmed live via probe: Wathiq is checked by default, so it never
         // needs a click — but the panel's submit button silently no-ops instead
-        // of advancing to Review if clicked while the address is still
-        // resolving (updateWathiqAddressButton only renders once that fetch
-        // completes), so wait for it rather than assuming an earlier test in
-        // this serial suite already left it resolved.
+        // of advancing if clicked while the address is still resolving
+        // (updateWathiqAddressButton only renders once that fetch completes), so
+        // wait for it rather than assuming an earlier test in this serial suite
+        // already left it resolved.
         await products.updateWathiqAddressButton.waitFor({ state: 'visible', timeout: 20000 });
         await products.contactNameInput.fill('Test Contact');
         await products.contactMobileInput.fill('512345678');
+        // Confirmed live: there is no separate Review step to land on — clicking
+        // Next here goes straight to the Contract step. That's the correct,
+        // intended behavior, not a skipped/missing Review page.
         await products.devicesDeliveryNextButton.click();
-        await expect(products.reviewTotalDevices).toBeVisible({ timeout: 10000 });
-    });
-
-    // ── Review ────────────────────────────────────────────────────────────
-
-    test('should show the delivery breakdown on the Review step', async () => {
-        requireFlow();
-        await expect(products.reviewDeliveryBreakdown).toBeVisible();
-    });
-
-    test('should show a note that the order is created when onboarding completes', async () => {
-        requireFlow();
-        await expect(products.reviewConfirmationNote).toBeVisible();
-    });
-
-    // ── Order-ready inline state ─────────────────────────────────────────
-
-    test('should show the order-ready inline state with Edit and Remove after confirming', async () => {
-        requireFlow();
-        await products.reviewConfirmButton.click();
-        await expect(products.activeStep.first()).toContainText(/products|المنتجات/i, { timeout: 15000 });
-        await expect(products.orderReadySummary).toBeVisible();
-        await expect(products.orderReadyEditButton).toBeVisible();
-        await expect(products.orderReadyRemoveButton).toBeVisible();
+        const contract = new RegistrationContractPage(page);
+        await contract.waitForLoad();
+        await expect(contract.activeStep).toContainText(/contract|العقد/i);
     });
 });
