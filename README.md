@@ -57,7 +57,7 @@ In `ENV=dev`, OTP is always `00000000` and MongoDB is skipped entirely — real-
 BusinessTestCases/
   fixtures.ts                  Shared per-test page-object fixtures (test.extend over @playwright/test)
   toastMessages.ts              waitForToastClear, assertToast
-  pageElements/                 Page-object locator classes — flat, 25 files, constructor-only locators + thin actions
+  pageElements/                 Page-object locator classes — one subfolder per feature, plus Shared/ for cross-feature objects (DashboardPage, HomePage, OtpPage, TransactionsPage)
 
   Login/                       Login flow
     LoginHelper.ts              Credentials, OTP helpers, shared constants

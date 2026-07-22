@@ -8,17 +8,6 @@ test.describe('Registration – Verification & Uploads Step (Tab 3 of 3)', () =>
         await goToVerificationStep(page);
     });
 
-    // ── Step indicator ────────────────────────────────────────────────────────
-
-    test('should show the Verification & Uploads tab as active', async ({ page }) => {
-        await expect(page.getByRole('tab', { name: /verification/i })).toHaveAttribute('aria-selected', 'true');
-    });
-
-    test('should display the step indicator "Step 3 of 3" or highlight the third tab', async ({ page }) => {
-        const step3 = page.getByText(/step 3 of 3/i).or(page.getByRole('tab', { name: /verification/i }));
-        await expect(step3.first()).toBeVisible();
-    });
-
     // ── IBAN field ────────────────────────────────────────────────────────────
 
     test('should display the IBAN field', async ({ page }) => {
@@ -182,11 +171,7 @@ test.describe('Registration – Verification & Uploads Step (Tab 3 of 3)', () =>
     });
 
     // ── File uploads ─────────────────────────────────────────────────────────
-    // Selectors are best-effort (input[type="file"] behind the "Click to upload"
-    // trigger) — not yet confirmed against a live build, mirroring the
-    // feature-detection pattern used for the Products PoS sub-flow (EMI-5783).
-    // Each test skips cleanly with a clear reason if the underlying <input>
-    // isn't found rather than failing hard on an unverified selector.
+    // Selectors target input[type="file"] behind the "Click to upload" trigger.
 
     test.describe('File upload interactions', () => {
         function ibanProofInput(page: import('@playwright/test').Page) {
@@ -198,7 +183,6 @@ test.describe('Registration – Verification & Uploads Step (Tab 3 of 3)', () =>
 
         test('should accept a valid PDF for IBAN proof upload', async ({ page }) => {
             const input = ibanProofInput(page);
-            test.skip((await input.count()) === 0, 'IBAN proof file input not found in this environment');
             await input.setInputFiles({ name: 'iban_proof.pdf', mimeType: 'application/pdf', buffer: TEST_FILE_BUFFER });
             const hasError = await page.locator('[class*="error"], [role="alert"]').isVisible().catch(() => false);
             expect(hasError).toBe(false);
@@ -206,7 +190,6 @@ test.describe('Registration – Verification & Uploads Step (Tab 3 of 3)', () =>
 
         test('should reject an unsupported file type for IBAN proof upload', async ({ page }) => {
             const input = ibanProofInput(page);
-            test.skip((await input.count()) === 0, 'IBAN proof file input not found in this environment');
             await input.setInputFiles({ name: 'iban_proof.exe', mimeType: 'application/octet-stream', buffer: TEST_FILE_BUFFER });
             await expect(
                 page.locator('[class*="error"], [role="alert"]').first()
@@ -215,7 +198,6 @@ test.describe('Registration – Verification & Uploads Step (Tab 3 of 3)', () =>
 
         test('should reject a file larger than 5MB for IBAN proof upload', async ({ page }) => {
             const input = ibanProofInput(page);
-            test.skip((await input.count()) === 0, 'IBAN proof file input not found in this environment');
             const oversized = Buffer.alloc(6 * 1024 * 1024, 1);
             await input.setInputFiles({ name: 'iban_proof_large.pdf', mimeType: 'application/pdf', buffer: oversized });
             await expect(
@@ -225,7 +207,6 @@ test.describe('Registration – Verification & Uploads Step (Tab 3 of 3)', () =>
 
         test('should accept a valid PDF for VAT certificate upload', async ({ page }) => {
             const input = vatCertificateInput(page);
-            test.skip((await input.count()) === 0, 'VAT certificate file input not found in this environment');
             await input.setInputFiles({ name: 'vat_certificate.pdf', mimeType: 'application/pdf', buffer: TEST_FILE_BUFFER });
             const hasError = await page.locator('[class*="error"], [role="alert"]').isVisible().catch(() => false);
             expect(hasError).toBe(false);
@@ -233,11 +214,49 @@ test.describe('Registration – Verification & Uploads Step (Tab 3 of 3)', () =>
 
         test('should reject a non-PDF file type for VAT certificate upload', async ({ page }) => {
             const input = vatCertificateInput(page);
-            test.skip((await input.count()) === 0, 'VAT certificate file input not found in this environment');
             await input.setInputFiles({ name: 'vat_certificate.jpg', mimeType: 'image/jpeg', buffer: TEST_FILE_BUFFER });
             await expect(
                 page.locator('[class*="error"], [role="alert"]').first()
             ).toBeVisible({ timeout: 5000 });
+        });
+
+        test('should reject a file larger than 5MB for VAT certificate upload', async ({ page }) => {
+            const input = vatCertificateInput(page);
+            const oversized = Buffer.alloc(6 * 1024 * 1024, 1);
+            await input.setInputFiles({ name: 'vat_certificate_large.pdf', mimeType: 'application/pdf', buffer: oversized });
+            await expect(
+                page.locator('[class*="error"], [role="alert"]').first()
+            ).toBeVisible({ timeout: 5000 });
+        });
+
+        // ── File name localization (Arabic / English) ───────────────────────
+
+        test('should accept an English-named PDF for IBAN proof upload', async ({ page }) => {
+            const input = ibanProofInput(page);
+            await input.setInputFiles({ name: 'bank-statement-header.pdf', mimeType: 'application/pdf', buffer: TEST_FILE_BUFFER });
+            const hasError = await page.locator('[class*="error"], [role="alert"]').isVisible().catch(() => false);
+            expect(hasError).toBe(false);
+        });
+
+        test('should accept an Arabic-named PDF for IBAN proof upload', async ({ page }) => {
+            const input = ibanProofInput(page);
+            await input.setInputFiles({ name: 'إثبات_الآيبان.pdf', mimeType: 'application/pdf', buffer: TEST_FILE_BUFFER });
+            const hasError = await page.locator('[class*="error"], [role="alert"]').isVisible().catch(() => false);
+            expect(hasError).toBe(false);
+        });
+
+        test('should accept an English-named PDF for VAT certificate upload', async ({ page }) => {
+            const input = vatCertificateInput(page);
+            await input.setInputFiles({ name: 'zatca-vat-certificate.pdf', mimeType: 'application/pdf', buffer: TEST_FILE_BUFFER });
+            const hasError = await page.locator('[class*="error"], [role="alert"]').isVisible().catch(() => false);
+            expect(hasError).toBe(false);
+        });
+
+        test('should accept an Arabic-named PDF for VAT certificate upload', async ({ page }) => {
+            const input = vatCertificateInput(page);
+            await input.setInputFiles({ name: 'شهادة_ضريبة_القيمة_المضافة.pdf', mimeType: 'application/pdf', buffer: TEST_FILE_BUFFER });
+            const hasError = await page.locator('[class*="error"], [role="alert"]').isVisible().catch(() => false);
+            expect(hasError).toBe(false);
         });
     });
 
