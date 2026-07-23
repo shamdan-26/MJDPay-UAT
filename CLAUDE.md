@@ -55,9 +55,9 @@ All real-OTP flows query MongoDB directly (`notification-log` / `notifications` 
 
 ### Page Object Model
 
-All UI interactions are encapsulated in page objects under `BusinessTestCases/pageElements/`, grouped into one subfolder per feature (`Login/`, `Registration/`, `Homepage/`, `BankTransfer/`, `Topup/`, `W2WTransfer/`, `PaymentLinks/`, `Products/`, `PayBill/`, `ForgotPassword/`) plus a `Shared/` folder for page objects used across multiple features (`DashboardPage`, `HomePage`, `OtpPage`, `TransactionsPage`). Tests never call raw `page.locator()`; that belongs in a page object.
+All UI interactions are encapsulated in page objects under `BusinessTestCases/pageElements/`, grouped into one subfolder per feature (`Registration/`, `Homepage/`, `Topup/`, `W2WTransfer/`, `PaymentLinks/`, `Products/`, `PayBill/`, `ForgotPassword/`) plus a `Shared/` folder for page objects used across multiple features (`DashboardPage`, `HomePage`, `OtpPage`, `TransactionsPage`, `LoginPage`, `BankTransferPage`, `HomepageQuickActionsPage`, `HomepageSidebarPage`). Tests never call raw `page.locator()`; that belongs in a page object.
 
-A page object lives in `Shared/` only once it's actually consumed by more than one feature folder — a page object still owned by a single feature belongs in that feature's subfolder even if the class itself is generic in shape.
+A page object lives in `Shared/` only once it's actually consumed by more than one feature folder — a page object still owned by a single feature belongs in that feature's subfolder even if the class itself is generic in shape. When a feature's last remaining page object moves to `Shared/` this way, its `pageElements/<Feature>/` subfolder disappears entirely (e.g. `Login/` and `BankTransfer/` no longer have a `pageElements/` mirror — `LoginPage` and `BankTransferPage` outgrew single-feature ownership and moved to `Shared/`); the `BusinessTestCases/<Feature>/` test folder itself is unaffected.
 
 **Conventions:**
 - Locators are `readonly` Locator properties set once in the constructor — never re-queried per-test.
@@ -103,10 +103,11 @@ BusinessTestCases/
   fixtures.ts                 ← shared per-test page-object fixtures (see above)
   toastMessages.ts            ← waitForToastClear, assertToast
   pageElements/
-    Shared/                    ← page objects used by more than one feature (DashboardPage, HomePage, OtpPage, TransactionsPage)
-    Login/ · Registration/ · Homepage/ · BankTransfer/ · Topup/ · W2WTransfer/
+    Shared/                    ← page objects used by more than one feature (DashboardPage, HomePage, OtpPage, TransactionsPage, LoginPage, BankTransferPage, HomepageQuickActionsPage, HomepageSidebarPage)
+    Registration/ · Homepage/ · Topup/ · W2WTransfer/
     PaymentLinks/ · Products/ · PayBill/ · ForgotPassword/
-                                 ← one subfolder per feature, holding that feature's page-object class(es)
+                                 ← one subfolder per feature, holding that feature's page-object class(es);
+                                   no Login/ or BankTransfer/ subfolder — their only page objects moved to Shared/
   Login/
     LoginHelper.ts             ← credentials, OTP helpers, shared constants
     api/ · functional/ · ui/
@@ -140,7 +141,7 @@ BusinessTestCases/
     functional/
 ```
 
-Every feature folder under `BusinessTestCases/` (and its mirror under `pageElements/`) is PascalCase. Each `BusinessTestCases/<Feature>/` folder holds one `<Feature>Helper.ts` plus a subset of `api/`, `functional/`, `ui/`, `archive/`; each `pageElements/<Feature>/` folder holds that feature's page-object class(es), named `<Feature>Page.ts` or split further where a feature has multiple distinct pages (e.g. `Registration/`, `Homepage/`).
+Every feature folder under `BusinessTestCases/` (and its mirror under `pageElements/`, where one still exists) is PascalCase. Each `BusinessTestCases/<Feature>/` folder holds one `<Feature>Helper.ts` plus a subset of `api/`, `functional/`, `ui/`, `archive/`; each `pageElements/<Feature>/` folder holds that feature's page-object class(es), named `<Feature>Page.ts` or split further where a feature has multiple distinct pages (e.g. `Registration/`, `Homepage/`). A `pageElements/<Feature>/` mirror only exists while at least one page object is still single-feature — see the `Shared/` promotion rule above.
 
 ### Key conventions
 

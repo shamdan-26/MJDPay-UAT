@@ -57,7 +57,7 @@ In `ENV=dev`, OTP is always `00000000` and MongoDB is skipped entirely — real-
 BusinessTestCases/
   fixtures.ts                  Shared per-test page-object fixtures (test.extend over @playwright/test)
   toastMessages.ts              waitForToastClear, assertToast
-  pageElements/                 Page-object locator classes — one subfolder per feature, plus Shared/ for cross-feature objects (DashboardPage, HomePage, OtpPage, TransactionsPage)
+  pageElements/                 Page-object locator classes — one subfolder per feature, plus Shared/ for cross-feature objects (DashboardPage, HomePage, OtpPage, TransactionsPage, LoginPage, BankTransferPage, HomepageQuickActionsPage, HomepageSidebarPage). A feature only keeps a pageElements/ subfolder while it still owns at least one single-feature page object — Login and BankTransfer don't have one anymore, since LoginPage and BankTransferPage moved to Shared/ once other features started importing them.
 
   Login/                       Login flow
     LoginHelper.ts              Credentials, OTP helpers, shared constants

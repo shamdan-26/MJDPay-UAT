@@ -1,7 +1,7 @@
 import { test, expect, Page } from '../HomepageFixtures';
 import { ASSERTION_TIMEOUT_MS, refreshHomepage } from '../HomePageHelper';
 import { DashboardPage } from '../../pageElements/Shared/DashboardPage';
-import { HomepageSidebarPage } from '../../pageElements/Homepage/HomepageSidebarPage';
+import { HomepageSidebarPage } from '../../pageElements/Shared/HomepageSidebarPage';
 
 test.describe('Homepage – Page Elements – Sidebar navigation', () => {
     test.describe.configure({ mode: 'serial' });

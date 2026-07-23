@@ -1,5 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
-import { TransactionsPage } from '../Shared/TransactionsPage';
+import { TransactionsPage } from './TransactionsPage';
 
 export class BankTransferPage {
     readonly page: Page;

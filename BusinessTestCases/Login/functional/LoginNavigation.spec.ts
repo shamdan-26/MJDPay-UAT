@@ -3,7 +3,7 @@ import {
     LOGIN_URL,
     SESSION_PATH,
 } from '../LoginHelper';
-import { LoginPage } from '../../pageElements/Login/LoginPage';
+import { LoginPage } from '../../pageElements/Shared/LoginPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // NAVIGATION

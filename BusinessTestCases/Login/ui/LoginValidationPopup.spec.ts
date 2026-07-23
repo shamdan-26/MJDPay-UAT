@@ -1,6 +1,6 @@
 import { test, expect, type Page } from '../../fixtures';
 import { LOGIN_URL, LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD } from '../LoginHelper';
-import { LoginPage } from '../../pageElements/Login/LoginPage';
+import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 
 async function submitAndCatchCard(page: Page, loginPage: LoginPage): Promise<void> {

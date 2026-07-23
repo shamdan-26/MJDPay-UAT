@@ -1,6 +1,6 @@
 import { test, expect, Page } from '../HomepageFixtures';
 import { refreshHomepage } from '../HomePageHelper';
-import { HomepageQuickActionsPage } from '../../pageElements/Homepage/HomepageQuickActionsPage';
+import { HomepageQuickActionsPage } from '../../pageElements/Shared/HomepageQuickActionsPage';
 
 test.describe('Homepage – Quick actions navigation', () => {
     test.describe.configure({ mode: 'serial' });

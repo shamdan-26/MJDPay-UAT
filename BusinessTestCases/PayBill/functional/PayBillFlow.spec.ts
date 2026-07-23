@@ -1,9 +1,9 @@
 import { test, expect, type Page } from '@playwright/test';
-import { LoginPage } from '../../pageElements/Login/LoginPage';
+import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { HomePage } from '../../pageElements/Shared/HomePage';
 import { BillsPage } from '../../pageElements/PayBill/BillsPage';
-import { BankTransferPage } from '../../pageElements/BankTransfer/BankTransferPage';
+import { BankTransferPage } from '../../pageElements/Shared/BankTransferPage';
 import { TransactionsPage } from '../../pageElements/Shared/TransactionsPage';
 import { HOME_URL, BILL_COMPANY, BILL_MOBILE, BILL_PASSWORD, BILL_STATUS } from '../PayBillHelper';
 import { LOGIN_URL, getOtpFromDb } from '../../Login/LoginHelper';

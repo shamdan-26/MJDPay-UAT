@@ -1,6 +1,6 @@
 import { type Page } from '@playwright/test';
 import { expect } from '@playwright/test';
-import { LoginPage } from '../pageElements/Login/LoginPage';
+import { LoginPage } from '../pageElements/Shared/LoginPage';
 import { OtpPage } from '../pageElements/Shared/OtpPage';
 
 export const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';

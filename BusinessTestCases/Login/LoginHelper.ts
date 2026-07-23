@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test';
 import { MongoClient } from 'mongodb';
 import { waitForToastClear } from '../toastMessages';
-import { LoginPage } from '../pageElements/Login/LoginPage';
+import { LoginPage } from '../pageElements/Shared/LoginPage';
 import testAccounts from '../../data/testAccounts.json';
 
 export const LOGIN_URL    = `${process.env['BASE_URL'] ?? 'https://uat.majdpay.com'}/business/auth/login`;

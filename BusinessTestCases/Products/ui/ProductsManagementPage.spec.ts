@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import { createHomepageSession } from '../../Homepage/HomePageHelper';
-import { HomepageSidebarPage } from '../../pageElements/Homepage/HomepageSidebarPage';
+import { HomepageSidebarPage } from '../../pageElements/Shared/HomepageSidebarPage';
 import { ProductsManagementPage } from '../../pageElements/Products/ProductsManagementPage';
 
 // ─────────────────────────────────────────────────────────────────────────────

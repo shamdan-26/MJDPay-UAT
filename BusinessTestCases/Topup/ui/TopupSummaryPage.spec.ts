@@ -1,8 +1,8 @@
 import { test, expect, type Page } from '@playwright/test';
-import { LoginPage } from '../../pageElements/Login/LoginPage';
+import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
-import { HomepageQuickActionsPage } from '../../pageElements/Homepage/HomepageQuickActionsPage';
-import { HomepageSidebarPage } from '../../pageElements/Homepage/HomepageSidebarPage';
+import { HomepageQuickActionsPage } from '../../pageElements/Shared/HomepageQuickActionsPage';
+import { HomepageSidebarPage } from '../../pageElements/Shared/HomepageSidebarPage';
 import { DashboardPage } from '../../pageElements/Shared/DashboardPage';
 import { TopupPage } from '../../pageElements/Topup/TopupPage';
 import { HOME_URL } from '../TopupHelper';

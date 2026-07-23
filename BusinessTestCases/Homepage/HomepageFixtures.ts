@@ -2,11 +2,11 @@ import { test as base } from '@playwright/test';
 import type { Page } from '@playwright/test';
 import { createHomepageSession } from './HomePageHelper';
 import { DashboardPage } from '../pageElements/Shared/DashboardPage';
-import { HomepageSidebarPage } from '../pageElements/Homepage/HomepageSidebarPage';
+import { HomepageSidebarPage } from '../pageElements/Shared/HomepageSidebarPage';
 import { HomepageHeaderPage } from '../pageElements/Homepage/HomepageHeaderPage';
 import { HomepageGreetingPage } from '../pageElements/Homepage/HomepageGreetingPage';
 import { HomepageBalanceCardPage } from '../pageElements/Homepage/HomepageBalanceCardPage';
-import { HomepageQuickActionsPage } from '../pageElements/Homepage/HomepageQuickActionsPage';
+import { HomepageQuickActionsPage } from '../pageElements/Shared/HomepageQuickActionsPage';
 import { HomepageBillsOverviewPage } from '../pageElements/Homepage/HomepageBillsOverviewPage';
 import { HomepageSubWalletsPage } from '../pageElements/Homepage/HomepageSubWalletsPage';
 

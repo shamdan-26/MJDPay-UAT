@@ -1,6 +1,6 @@
 import { test as base, expect } from '@playwright/test';
 
-import { BankTransferPage } from './pageElements/BankTransfer/BankTransferPage';
+import { BankTransferPage } from './pageElements/Shared/BankTransferPage';
 import { BillsPage } from './pageElements/PayBill/BillsPage';
 import { DashboardPage } from './pageElements/Shared/DashboardPage';
 import { ForgotPasswordPage } from './pageElements/ForgotPassword/ForgotPasswordPage';
@@ -9,11 +9,11 @@ import { HomepageBalanceCardPage } from './pageElements/Homepage/HomepageBalance
 import { HomepageBillsOverviewPage } from './pageElements/Homepage/HomepageBillsOverviewPage';
 import { HomepageGreetingPage } from './pageElements/Homepage/HomepageGreetingPage';
 import { HomepageHeaderPage } from './pageElements/Homepage/HomepageHeaderPage';
-import { HomepageQuickActionsPage } from './pageElements/Homepage/HomepageQuickActionsPage';
-import { HomepageSidebarPage } from './pageElements/Homepage/HomepageSidebarPage';
+import { HomepageQuickActionsPage } from './pageElements/Shared/HomepageQuickActionsPage';
+import { HomepageSidebarPage } from './pageElements/Shared/HomepageSidebarPage';
 import { HomepageSubWalletsPage } from './pageElements/Homepage/HomepageSubWalletsPage';
 import { HomepageTransactionsPage } from './pageElements/Homepage/HomepageTransactionsPage';
-import { LoginPage } from './pageElements/Login/LoginPage';
+import { LoginPage } from './pageElements/Shared/LoginPage';
 import { OtpPage } from './pageElements/Shared/OtpPage';
 import { PaymentLinkPage } from './pageElements/PaymentLinks/PaymentLinkPage';
 import { ProductsManagementPage } from './pageElements/Products/ProductsManagementPage';

@@ -2,11 +2,11 @@ import { Browser, Locator, Page, test } from '@playwright/test';
 import { getOtpFromDb, fillOTP } from '../Registration/RegistrationHelper';
 import { waitForToastClear } from '../toastMessages';
 import { DashboardPage } from '../pageElements/Shared/DashboardPage';
-import { HomepageSidebarPage } from '../pageElements/Homepage/HomepageSidebarPage';
+import { HomepageSidebarPage } from '../pageElements/Shared/HomepageSidebarPage';
 import { HomepageHeaderPage } from '../pageElements/Homepage/HomepageHeaderPage';
 import { HomepageGreetingPage } from '../pageElements/Homepage/HomepageGreetingPage';
 import { HomepageBalanceCardPage } from '../pageElements/Homepage/HomepageBalanceCardPage';
-import { HomepageQuickActionsPage } from '../pageElements/Homepage/HomepageQuickActionsPage';
+import { HomepageQuickActionsPage } from '../pageElements/Shared/HomepageQuickActionsPage';
 import { HomepageBillsOverviewPage } from '../pageElements/Homepage/HomepageBillsOverviewPage';
 import { HomepageSubWalletsPage } from '../pageElements/Homepage/HomepageSubWalletsPage';
 import { HomepageTransactionsPage } from '../pageElements/Homepage/HomepageTransactionsPage';
@@ -22,7 +22,7 @@ export const BASE_ORIGIN      = BASE_URL;
 const DEFAULT_TEST_PASSWORD = testAccounts.defaultPassword;
 
 /** In ENV=dev the login button has no accessible "Log In" role name — same
- *  env split already established in pageElements/Login/LoginPage.ts. */
+ *  env split already established in pageElements/Shared/LoginPage.ts. */
 function loginButton(page: Page): Locator {
     const env = process.env['ENV'] ?? 'dev';
     return env === 'dev'
