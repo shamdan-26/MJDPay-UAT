@@ -55,7 +55,7 @@ All real-OTP flows read the shared UAT/preprod test mailbox over IMAP via `fetch
 
 ### Page Object Model
 
-All UI interactions are encapsulated in page objects under `BusinessTestCases/pageElements/`, grouped into one subfolder per feature (`Registration/`, `Homepage/`, `Topup/`, `W2WTransfer/`, `PaymentLinks/`, `Products/`, `PayBill/`, `ForgotPassword/`) plus a `Shared/` folder for page objects used across multiple features (`DashboardPage`, `HomePage`, `OtpPage`, `TransactionsPage`, `LoginPage`, `BankTransferPage`, `HomepageQuickActionsPage`, `HomepageSidebarPage`). Tests never call raw `page.locator()`; that belongs in a page object.
+All UI interactions are encapsulated in page objects under `BusinessTestCases/pageElements/`, grouped into one subfolder per feature (`Registration/`, `Homepage/`, `Topup/`, `W2WTransfer/`, `PaymentLinks/`, `Products/`, `PayBill/`, `ForgotPassword/`, `BillManagement/`, `MoneyRequest/`, `QRPayment/`) plus a `Shared/` folder for page objects used across multiple features (`DashboardPage`, `HomePage`, `OtpPage`, `TransactionsPage`, `LoginPage`, `BankTransferPage`, `HomepageQuickActionsPage`, `HomepageSidebarPage`). Tests never call raw `page.locator()`; that belongs in a page object.
 
 A page object lives in `Shared/` only once it's actually consumed by more than one feature folder — a page object still owned by a single feature belongs in that feature's subfolder even if the class itself is generic in shape. When a feature's last remaining page object moves to `Shared/` this way, its `pageElements/<Feature>/` subfolder disappears entirely (e.g. `Login/` and `BankTransfer/` no longer have a `pageElements/` mirror — `LoginPage` and `BankTransferPage` outgrew single-feature ownership and moved to `Shared/`); the `BusinessTestCases/<Feature>/` test folder itself is unaffected.
 
@@ -68,7 +68,7 @@ A page object lives in `Shared/` only once it's actually consumed by more than o
 
 The suite has **two session lifecycles**, and each has its own fixtures file extending `@playwright/test`'s `test`/`expect`:
 
-1. **`BusinessTestCases/fixtures.ts`** — for specs that get a fresh `page` per test (the common case). Defines one lazy fixture per page object (all 25 classes), keyed by name (`loginPage`, `dashboard`, `otp`, `homepageBalanceCard`, `registrationInfo`, etc. — see the file for the full list). It also re-exports everything else from `@playwright/test` (`Page`, `Browser`, `expect`, ...), so a spec file only has to change its import source, not add a second import line for types:
+1. **`BusinessTestCases/fixtures.ts`** — for specs that get a fresh `page` per test (the common case). Defines one lazy fixture per page object (all 27 classes), keyed by name (`loginPage`, `dashboard`, `otp`, `homepageBalanceCard`, `registrationInfo`, etc. — see the file for the full list). It also re-exports everything else from `@playwright/test` (`Page`, `Browser`, `expect`, ...), so a spec file only has to change its import source, not add a second import line for types:
    ```typescript
    import { test, expect, type Page } from '../../fixtures'; // was '@playwright/test'
 
@@ -106,8 +106,10 @@ BusinessTestCases/
     Shared/                    ← page objects used by more than one feature (DashboardPage, HomePage, OtpPage, TransactionsPage, LoginPage, BankTransferPage, HomepageQuickActionsPage, HomepageSidebarPage)
     Registration/ · Homepage/ · Topup/ · W2WTransfer/
     PaymentLinks/ · Products/ · PayBill/ · ForgotPassword/
+    BillManagement/ · MoneyRequest/ · QRPayment/
                                  ← one subfolder per feature, holding that feature's page-object class(es);
-                                   no Login/ or BankTransfer/ subfolder — their only page objects moved to Shared/
+                                   no Login/ or BankTransfer/ subfolder — their only page objects moved to Shared/;
+                                   no Reconciliation/ or TransactionOperations/ mirror — those features are API-only, no page objects
   Login/
     LoginHelper.ts             ← credentials, OTP helpers, shared constants
     api/ · functional/ · ui/
@@ -139,6 +141,21 @@ BusinessTestCases/
   PayBill/
     PayBillHelper.ts
     functional/
+  BillManagement/
+    BillManagementHelper.ts
+    functional/
+  MoneyRequest/
+    MoneyRequestHelper.ts
+    functional/
+  QRPayment/
+    QRPaymentHelper.ts
+    functional/
+  Reconciliation/
+    ReconciliationHelper.ts
+    api/                       ← all specs test.skip() pending Admin Portal / Reconciliation Ops tooling access
+  TransactionOperations/
+    TransactionOperationsHelper.ts
+    api/                       ← all specs test.skip() pending Admin Portal tooling access (reversal/adjustment)
 ```
 
 Every feature folder under `BusinessTestCases/` (and its mirror under `pageElements/`, where one still exists) is PascalCase. Each `BusinessTestCases/<Feature>/` folder holds one `<Feature>Helper.ts` plus a subset of `api/`, `functional/`, `ui/`, `archive/`; each `pageElements/<Feature>/` folder holds that feature's page-object class(es), named `<Feature>Page.ts` or split further where a feature has multiple distinct pages (e.g. `Registration/`, `Homepage/`). A `pageElements/<Feature>/` mirror only exists while at least one page object is still single-feature — see the `Shared/` promotion rule above.
@@ -149,6 +166,8 @@ Every feature folder under `BusinessTestCases/` (and its mirror under `pageEleme
 - **`functional/` vs `ui/`** — `functional/` covers business logic, interactions, and outcomes; `ui/` covers element/text presence only. The same flow is often exercised in both, deliberately kept separate.
 - **Registration asset pools** — `CITIZEN_ASSETS` and `RESIDENT_ASSETS` in `Registration/RegistrationHelper.ts` are fixed CRN/National-ID/mobile tuples. Round-robin helpers (`nextCitizenAsset`, `nextResidentAsset`) cycle through them to avoid duplicate-registration rejections.
 - **BankTransfer, Products, and some Registration files** log in once via their own `test.beforeAll`/`browser.newPage()` (not the fixtures above) because each encodes bespoke multi-step login/OTP business logic inline. This is intentional — don't force these onto `fixtures.ts`, which assumes the default per-test `page`.
+- **BillManagement, MoneyRequest, and QRPayment** use a third pattern: a local async login helper (`loginAndOpenCreateBill`, `login`, etc.) defined at the top of the spec file and called per-test against the default `@playwright/test` `page` — no shared session across tests, no `fixtures.ts`. This is distinct from both the fixtures.ts and the BankTransfer/Products `beforeAll`-shared-session patterns above; flag before extending it further rather than treating it as a third blessed convention.
+- **Reconciliation and TransactionOperations** are API-only, page-object-free feature folders where every spec is `test.skip(true, ...)` — coverage is written and traceable to its ticket but pending Admin Portal / Reconciliation Ops tooling access, the same rationale already used by `BankTransferCommission.spec.ts`.
 - **Forgot-password tests use route mocking** — `abortUnmockedGatewayRequests` is registered first (LIFO ensures targeted mocks take priority) so tests don't hang on unmocked gateway traffic.
 - **Archive folder** — specs moved to `*/archive/` are retired but kept for reference. They are still discovered by Playwright; add `test.skip()` at the describe level if they should not run.
 - **Failure artifacts** — `playwright.config.ts` captures `trace: 'retain-on-failure'`, `screenshot: 'only-on-failure'`, and `video: 'retain-on-failure'`; `npx playwright show-report` surfaces all three for a failed run.

@@ -57,7 +57,7 @@ In `ENV=dev`, OTP is always `00000000` and the mailbox is skipped entirely — r
 BusinessTestCases/
   fixtures.ts                  Shared per-test page-object fixtures (test.extend over @playwright/test)
   toastMessages.ts              waitForToastClear, assertToast
-  pageElements/                 Page-object locator classes — one subfolder per feature, plus Shared/ for cross-feature objects (DashboardPage, HomePage, OtpPage, TransactionsPage, LoginPage, BankTransferPage, HomepageQuickActionsPage, HomepageSidebarPage). A feature only keeps a pageElements/ subfolder while it still owns at least one single-feature page object — Login and BankTransfer don't have one anymore, since LoginPage and BankTransferPage moved to Shared/ once other features started importing them.
+  pageElements/                 Page-object locator classes — one subfolder per feature, plus Shared/ for cross-feature objects (DashboardPage, HomePage, OtpPage, TransactionsPage, LoginPage, BankTransferPage, HomepageQuickActionsPage, HomepageSidebarPage). A feature only keeps a pageElements/ subfolder while it still owns at least one single-feature page object — Login and BankTransfer don't have one anymore, since LoginPage and BankTransferPage moved to Shared/ once other features started importing them. Reconciliation and TransactionOperations have no pageElements/ mirror at all — both are API-only (every spec is test.skip() pending Admin Portal tooling access).
 
   Login/                       Login flow
     LoginHelper.ts              Credentials, OTP helpers, shared constants
@@ -81,13 +81,21 @@ BusinessTestCases/
     functional/                  Happy path, negative, edge cases, session/cancellation
     ui/                          Element-presence per step (Amount, Confirmation, OTP)
 
-  PaymentLinks/ · Products/ · Topup/ · W2WTransfer/
+  PaymentLinks/ · Products/ · Topup/ · W2WTransfer/ · PayBill/
     <Feature>Helper.ts           Each holds its own helper + functional/ and/or ui/
+
+  BillManagement/ · MoneyRequest/ · QRPayment/
+    <Feature>Helper.ts           Each holds its own helper + functional/; specs log in per-test via a
+                                 local async login helper (not fixtures.ts, not a shared beforeAll session)
+
+  Reconciliation/ · TransactionOperations/
+    <Feature>Helper.ts           API-only, no page objects; every spec is test.skip() pending
+    api/                         Admin Portal / Reconciliation Ops tooling access
 ```
 
 ### Fixtures — the two session lifecycles
 
-Most spec files get a fresh Playwright `page` per test. A handful (`BankTransfer`, some `Registration` flows, `Products`) instead run one login inline in their own `test.beforeAll`, because each encodes bespoke multi-step business logic — those still import straight from `@playwright/test`.
+Most spec files get a fresh Playwright `page` per test. A handful (`BankTransfer`, some `Registration` flows, `Products`) instead run one login inline in their own `test.beforeAll`, because each encodes bespoke multi-step business logic — those still import straight from `@playwright/test`. A third group (`BillManagement`, `MoneyRequest`, `QRPayment`) defines a local async login helper at the top of the spec file and calls it per-test against the default `page`, with no session shared across tests and no `fixtures.ts` — see `CLAUDE.md` before extending this pattern further.
 
 Everything else uses one of two fixture files that extend `test`/`expect`:
 
