@@ -38,7 +38,7 @@ The `ENV` variable selects the environment config (`.env.uat`, `.env.preprod`, `
 | Variable | Used by |
 |---|---|
 | `BASE_URL` | every helper/page object |
-| `MONGO_URI` | OTP fetching from MongoDB |
+| `IMAP_HOST`, `IMAP_PORT`, `IMAP_USER`, `IMAP_PASSWORD` | OTP fetching from the shared test mailbox (`support/emailOtp.ts`) |
 | `UAT_COMPANY`, `UAT_MOBILE` | primary shared test account (homepage, bank transfer, login) |
 | `UAT_COMPANY_2`, `UAT_MOBILE_2`, ... `_3`, `_4` | additional homepage test accounts — the pool auto-extends as these are added, no code changes needed (see `Homepage/HomePageHelper.ts`) |
 | `UAT_SETUP_COMPANY/MOBILE/PASSWORD` | `support/global-setup.ts` |
@@ -47,7 +47,7 @@ The `ENV` variable selects the environment config (`.env.uat`, `.env.preprod`, `
 
 ### OTP handling
 
-All real-OTP flows query MongoDB directly (`notification-log` / `notifications` collection, sorted by `createdAt` desc, regex-matched on `recipient` and `Use this OTP` in the message). `getOtpFromDb` is implemented in `Registration/RegistrationHelper.ts` and `Login/LoginHelper.ts` with retry logic. In `ENV=dev` the OTP is always `00000000` and MongoDB is skipped.
+All real-OTP flows read the shared UAT/preprod test mailbox over IMAP via `fetchOtpFromEmail` (`support/emailOtp.ts`): newest message first within a 10-minute window, body must contain both the target mobile and `Use this OTP` (or a caller-supplied `messageFilter`), OTP digits pulled out by regex, with retry/delay. `getOtpFromDb` in `Registration/RegistrationHelper.ts` and `Login/LoginHelper.ts` both delegate to it (the name is legacy — kept to avoid touching every call site). In `ENV=dev` the OTP is always `00000000` and the mailbox is skipped.
 
 ### Toast / snackbar guard
 

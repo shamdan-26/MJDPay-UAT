@@ -145,7 +145,7 @@ export interface HomepageSession {
     transactions: HomepageTransactionsPage;
 }
 
-/** Full login flow for a biller: credentials → OTP (fetched from MongoDB) → home page.
+/** Full login flow for a biller: credentials → OTP (fetched by email) → home page.
  *  Requires UAT_BILLER_COMPANY and UAT_BILLER_MOBILE env vars to be set.
  *  Note (AMB-HP-01): assumes biller uses the same /business/auth/login endpoint as merchant.
  */
@@ -183,7 +183,7 @@ export async function loginAsBiller(page: Page): Promise<void> {
     await waitForToastClear(page);
 }
 
-/** Full login flow: credentials → OTP (fetched from MongoDB) → home page.
+/** Full login flow: credentials → OTP (fetched by email) → home page.
  *  Defaults to the primary merchant account; pass `creds` to log in as a
  *  different account (e.g. VALID_COMPANY_2 / VALID_MOBILE_2 / VALID_PASSWORD_2).
  *

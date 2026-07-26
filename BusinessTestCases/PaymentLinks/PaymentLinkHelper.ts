@@ -87,3 +87,53 @@ export async function gotoPaymentLink(page: Page, token: string): Promise<void> 
     await page.goto(paymentLinkUrl(token), { waitUntil: 'domcontentloaded', timeout: 60000 });
     await waitForToastClear(page);
 }
+
+/**
+ * Guest-flow mocks (EMI-5424 payment-link resolution & guest session, EMI-5446
+ * guest JWT generation, EMI-5523 guest bill payment processing, EMI-5551/5640/
+ * 5653/5860 guest wallet-QR regressions) — same MOCK ONLY / best-effort-guess
+ * caveat as the rest of this file. These target the *current* guest-flow
+ * tickets, distinct from the earlier EMI-5463/5791-5794/5774-5814 set already
+ * covered by mockValidLink/mockPayerInfoSubmitSuccess above.
+ */
+
+export const GUEST_WALLET_QR_TOKEN = paymentLinkMocks.validWalletToken;
+
+/** Mocks a successful guest JWT issuance on link/QR resolution (EMI-5446). */
+export async function mockGuestSessionJwt(page: Page, token: string): Promise<void> {
+    await page.route(`**/emi-profile/api/v1/payment-links/${token}/guest-session`, route =>
+        route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({ jwt: `mock-guest-jwt-${token}`, expiresInSeconds: 600 }),
+        })
+    );
+}
+
+/** Mocks the guest wallet-payment submit call succeeding (regression baseline for EMI-5640/5860). */
+export async function mockGuestWalletPaymentSuccess(page: Page): Promise<void> {
+    await page.route('**/emi-profile/api/v1/payment-links/**/pay', route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ status: 'SUCCESS' }) })
+    );
+}
+
+/** Mocks the guest bill-payment submit call succeeding (EMI-5523). */
+export async function mockGuestBillPaymentSuccess(page: Page): Promise<void> {
+    await page.route('**/emi-profile/api/v1/payment-links/**/pay', route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ status: 'SUCCESS', reference: 'MOCK-BILL-PAY-REF' }) })
+    );
+}
+
+/** Mocks an "invalid wallet code" payment failure — used to assert the regression (EMI-5860) does NOT reproduce once fixed. */
+export async function mockGuestWalletPaymentInvalidCode(page: Page): Promise<void> {
+    await page.route('**/emi-profile/api/v1/payment-links/**/pay', route =>
+        route.fulfill({ status: 400, contentType: 'application/json', body: JSON.stringify({ message: 'Payment failed (invalid wallet code)' }) })
+    );
+}
+
+/** Mocks a guest JWT rejected because it was issued for a different link (EMI-5446 cross-link reuse). */
+export async function mockGuestJwtWrongLink(page: Page): Promise<void> {
+    await page.route('**/emi-profile/api/v1/payment-links/**/pay', route =>
+        route.fulfill({ status: 401, contentType: 'application/json', body: JSON.stringify({ message: 'Unauthorized' }) })
+    );
+}

@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import { MongoClient } from 'mongodb';
+import { fetchOtpFromEmail } from '../../support/emailOtp';
 import { waitForToastClear } from '../toastMessages';
 import { LoginPage } from '../pageElements/Shared/LoginPage';
 import testAccounts from '../../data/testAccounts.json';
@@ -39,8 +39,6 @@ export function generateUnregisteredMobile(): string {
     return `5${random}`;
 }
 
-const MONGO_DB  = 'notification-log';
-
 export async function getOtpFromDb(
     mobile: string,
     maxAttempts = 10,
@@ -48,31 +46,7 @@ export async function getOtpFromDb(
     messageFilter: RegExp = /Use this OTP/i
 ): Promise<string> {
     if ((process.env['ENV'] ?? 'dev') === 'dev') return VALID_OTP;
-    const MONGO_URI = process.env['MONGO_URI'] ?? (() => { throw new Error('MONGO_URI env var is not set'); })();
-    const client = new MongoClient(MONGO_URI);
-    try {
-        await client.connect();
-        const col = client.db(MONGO_DB).collection('notifications');
-        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-            const doc = await col.findOne(
-                {
-                    recipient: { $in: [mobile, `966${mobile}`, `+966${mobile}`, `0${mobile}`] },
-                    message: { $regex: messageFilter },
-                },
-                { sort: { createdAt: -1 } }
-            );
-            if (doc) {
-                const msg = doc.message as string;
-                // Try the explicit "OTP: DIGITS" format first, then fall back to any 6–8 digit sequence.
-                const match = msg.match(/Use this OTP\s*[:\s]+(\d+)/i) ?? msg.match(/\b(\d{6,8})\b/);
-                if (match) return match[1];
-            }
-            if (attempt < maxAttempts) await new Promise(r => setTimeout(r, delayMs));
-        }
-        throw new Error(`No OTP notification found for mobile ${mobile} after ${maxAttempts} attempts`);
-    } finally {
-        await client.close();
-    }
+    return fetchOtpFromEmail(mobile, maxAttempts, delayMs, messageFilter);
 }
 
 export async function fillOtpInputs(page: Page, otp: string): Promise<void> {

@@ -238,6 +238,62 @@ This file serves as our central, living registry for all automated test suites a
 | W2W_AmountValidation_Clipboard_Paste \| Validation Type: Copy and Paste Amount Actions | Positive | Asserts a pasted valid amount (via clipboard + Ctrl/Cmd+V) is accepted and Proceed is enabled. |
 | W2W_Transfer_Insufficient_Fund | Negative | Attempts a transfer for (current balance + 100) and asserts an insufficient-fund toast is displayed. |
 
+### `W2WTransfer/functional/W2WTransferWalletLimits.spec.ts`
+*(WT-WB01–08; every test is `test.skip`'d pending an Admin Portal "Manage Limits → Wallet Balance" automation helper — EMI-1653/EMI-195 — kept in the suite 1:1 with `docs/manual-test-cases/B2B-Transactions.md` section G so coverage isn't silently dropped)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| WT-WB01 — sender transfer within min-balance floor succeeds (Merchant, Low risk) | Positive | *(Skipped, EMI-1653/EMI-195.)* |
+| WT-WB02 — sender transfer breaching min-balance floor is blocked (Merchant, Low risk) | Negative | *(Skipped, EMI-1653/EMI-195.)* |
+| WT-WB03 — receiver credit within max-balance ceiling succeeds (Biller, Low risk) | Positive | *(Skipped, EMI-1653/EMI-195.)* |
+| WT-WB04 — receiver credit breaching max-balance ceiling is blocked (Biller, Low risk) | Negative | *(Skipped, EMI-1653/EMI-195.)* |
+| WT-WB05 — sender transfer within min-balance floor succeeds (Merchant, Medium risk) | Positive | *(Skipped, EMI-1653/EMI-195.)* |
+| WT-WB06 — sender transfer breaching min-balance floor is blocked (Merchant, Medium risk) | Negative | *(Skipped, EMI-1653/EMI-195.)* |
+| WT-WB07 — receiver credit within max-balance ceiling succeeds (Biller, Medium risk) | Positive | *(Skipped, EMI-1653/EMI-195.)* |
+| WT-WB08 — receiver credit breaching max-balance ceiling is blocked (Biller, Medium risk) | Negative | *(Skipped, EMI-1653/EMI-195.)* |
+
+### `W2WTransfer/functional/W2WTransferTransactionLimits.spec.ts`
+*(WT-TL01–12; `test.skip`'d pending an Admin Portal "Manage Limits → Transaction" helper — EMI-87/EMI-1653/EMI-195)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| WT-TL01 — transfers within the daily amount limit succeed (Web) | Positive | *(Skipped, EMI-87/EMI-1653/EMI-195.)* |
+| WT-TL02 — cumulative transfers exceeding the daily amount limit are blocked (Web) | Negative | *(Skipped.)* |
+| WT-TL03 — transfers within the weekly amount limit succeed (Web) | Positive | *(Skipped.)* |
+| WT-TL04 — cumulative transfers exceeding the weekly amount limit are blocked (Web) | Negative | *(Skipped.)* |
+| WT-TL05 — transfers within the monthly amount limit succeed (App) | Positive | *(Skipped.)* |
+| WT-TL06 — cumulative transfers exceeding the monthly amount limit are blocked (App) | Negative | *(Skipped.)* |
+| WT-TL07 — transfers within the daily count limit succeed | Positive | *(Skipped.)* |
+| WT-TL08 — transfer once the daily count limit is exceeded is blocked | Negative | *(Skipped.)* |
+| WT-TL09 — transfers within the weekly count limit succeed | Positive | *(Skipped.)* |
+| WT-TL10 — transfer once the weekly count limit is exceeded is blocked | Negative | *(Skipped.)* |
+| WT-TL11 — transfers within the monthly count limit succeed | Positive | *(Skipped.)* |
+| WT-TL12 — transfer once the monthly count limit is exceeded is blocked | Negative | *(Skipped.)* |
+
+### `W2WTransfer/functional/W2WTransferCommission.spec.ts`
+*(WT-CM01–18; `test.skip`'d pending an Admin Portal "Commission Management" helper — EMI-2031)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| WT-CM01 — default schema applies when no custom commission exists | Positive | *(Skipped, EMI-2031.)* |
+| WT-CM02 — custom per-account schema overrides the default | Positive | *(Skipped.)* |
+| WT-CM03 — fixed commission deducted on a standard transfer | Positive | *(Skipped.)* |
+| WT-CM04 — fixed commission applied at minimum boundary | Positive | *(Skipped.)* |
+| WT-CM05 — fixed commission applied at maximum boundary | Positive | *(Skipped.)* |
+| WT-CM06 — fixed commission not applied below minimum | Negative | *(Skipped.)* |
+| WT-CM07 — fixed commission not applied above maximum | Negative | *(Skipped.)* |
+| WT-CM08 — percentage commission deducted on a standard transfer | Positive | *(Skipped.)* |
+| WT-CM09 — percentage commission applied at minimum boundary | Positive | *(Skipped.)* |
+| WT-CM10 — percentage commission applied at maximum boundary | Positive | *(Skipped.)* |
+| WT-CM11 — percentage commission not applied below minimum | Negative | *(Skipped.)* |
+| WT-CM12 — percentage commission not applied above maximum | Negative | *(Skipped.)* |
+| WT-CM13 — commission added on sender side / deducted on receiver side | Positive | *(Skipped.)* |
+| WT-CM14 — overlapping commission rules rejected | Negative | *(Skipped.)* |
+| WT-CM15 — min amount cannot exceed max amount | Negative | *(Skipped.)* |
+| WT-CM16 — transaction type cannot be edited on an existing commission | Negative | *(Skipped.)* |
+| WT-CM17 — disabling a commission schema stops it applying | Positive | *(Skipped.)* |
+| WT-CM18 — re-enabling a commission schema resumes applying it | Positive | *(Skipped.)* |
+
 ## 3. Bank Transfer
 **File Reference:**
 `BusinessTestCases/BankTransfer/functional/BankTransferCommission.spec.ts`
@@ -412,6 +468,62 @@ This file serves as our central, living registry for all automated test suites a
 | Verify transaction record creation and success status in transactions table | Positive | Identifies correct ledger row creation verifying amount and final `SUCCESS` status. |
 | Verify bill payment with insufficient funds error message | Negative | First uses Bank Transfer to drain account, then asserts 'Insufficient fund' toast. |
 
+### `PayBill/functional/PayBillWalletLimits.spec.ts`
+*(PB-WB01–08; `test.skip`'d pending an Admin Portal "Manage Limits → Wallet Balance" helper — EMI-1653/EMI-195 — kept 1:1 with `docs/manual-test-cases/B2B-Transactions.md` section J)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| PB-WB01 — payer bill payment within min-balance floor succeeds (Merchant, Low risk) | Positive | *(Skipped, EMI-1653/EMI-195.)* |
+| PB-WB02 — payer bill payment breaching min-balance floor is blocked (Merchant, Low risk) | Negative | *(Skipped.)* |
+| PB-WB03 — biller credit within max-balance ceiling succeeds (Biller, Low risk) | Positive | *(Skipped.)* |
+| PB-WB04 — biller credit breaching max-balance ceiling is blocked (Biller, Low risk) | Negative | *(Skipped.)* |
+| PB-WB05 — payer bill payment within min-balance floor succeeds (Merchant, Medium risk) | Positive | *(Skipped.)* |
+| PB-WB06 — payer bill payment breaching min-balance floor is blocked (Merchant, Medium risk) | Negative | *(Skipped.)* |
+| PB-WB07 — biller credit within max-balance ceiling succeeds (Biller, Medium risk) | Positive | *(Skipped.)* |
+| PB-WB08 — biller credit breaching max-balance ceiling is blocked (Biller, Medium risk) | Negative | *(Skipped.)* |
+
+### `PayBill/functional/PayBillTransactionLimits.spec.ts`
+*(PB-TL01–12; `test.skip`'d pending an Admin Portal "Manage Limits → Transaction" helper — EMI-87/EMI-1653/EMI-195)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| PB-TL01 — bill payments within the daily amount limit succeed (Web) | Positive | *(Skipped, EMI-87/EMI-1653/EMI-195.)* |
+| PB-TL02 — cumulative bill payments exceeding the daily amount limit are blocked (Web) | Negative | *(Skipped.)* |
+| PB-TL03 — bill payments within the weekly amount limit succeed (Web) | Positive | *(Skipped.)* |
+| PB-TL04 — cumulative bill payments exceeding the weekly amount limit are blocked (Web) | Negative | *(Skipped.)* |
+| PB-TL05 — bill payments within the monthly amount limit succeed (App) | Positive | *(Skipped.)* |
+| PB-TL06 — cumulative bill payments exceeding the monthly amount limit are blocked (App) | Negative | *(Skipped.)* |
+| PB-TL07 — bill payments within the daily count limit succeed | Positive | *(Skipped.)* |
+| PB-TL08 — bill payment once the daily count limit is exceeded is blocked | Negative | *(Skipped.)* |
+| PB-TL09 — bill payments within the weekly count limit succeed | Positive | *(Skipped.)* |
+| PB-TL10 — bill payment once the weekly count limit is exceeded is blocked | Negative | *(Skipped.)* |
+| PB-TL11 — bill payments within the monthly count limit succeed | Positive | *(Skipped.)* |
+| PB-TL12 — bill payment once the monthly count limit is exceeded is blocked | Negative | *(Skipped.)* |
+
+### `PayBill/functional/PayBillCommission.spec.ts`
+*(PB-CM01–18; `test.skip`'d pending an Admin Portal "Commission Management" helper — EMI-2031)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| PB-CM01 — default schema applies when no custom commission exists | Positive | *(Skipped, EMI-2031.)* |
+| PB-CM02 — custom per-account schema overrides the default | Positive | *(Skipped.)* |
+| PB-CM03 — fixed commission deducted on a standard bill payment | Positive | *(Skipped.)* |
+| PB-CM04 — fixed commission applied at minimum boundary | Positive | *(Skipped.)* |
+| PB-CM05 — fixed commission applied at maximum boundary | Positive | *(Skipped.)* |
+| PB-CM06 — fixed commission not applied below minimum | Negative | *(Skipped.)* |
+| PB-CM07 — fixed commission not applied above maximum | Negative | *(Skipped.)* |
+| PB-CM08 — percentage commission deducted on a standard bill payment | Positive | *(Skipped.)* |
+| PB-CM09 — percentage commission applied at minimum boundary | Positive | *(Skipped.)* |
+| PB-CM10 — percentage commission applied at maximum boundary | Positive | *(Skipped.)* |
+| PB-CM11 — percentage commission not applied below minimum | Negative | *(Skipped.)* |
+| PB-CM12 — percentage commission not applied above maximum | Negative | *(Skipped.)* |
+| PB-CM13 — commission added on payer side / deducted on biller side | Positive | *(Skipped.)* |
+| PB-CM14 — overlapping commission rules rejected | Negative | *(Skipped.)* |
+| PB-CM15 — min amount cannot exceed max amount | Negative | *(Skipped.)* |
+| PB-CM16 — transaction type cannot be edited on an existing commission | Negative | *(Skipped.)* |
+| PB-CM17 — disabling a commission schema stops it applying | Positive | *(Skipped.)* |
+| PB-CM18 — re-enabling a commission schema resumes applying it | Positive | *(Skipped.)* |
+
 ## 5. Wallet Top-up
 **File Reference:** `BusinessTestCases/Topup/functional/TopupFlow.spec.ts`
 
@@ -437,5 +549,229 @@ This file serves as our central, living registry for all automated test suites a
 | Topup_AmountValidation_CopyPaste_Invalid | Negative | Asserts invalid pasted amount clears field and disables proceed button. |
 | Topup_CancelTransaction_PageRefresh | Negative | Asserts page refresh cancels topup and leaves balance unchanged. |
 | Topup_CancelTransaction_SummaryCancelButton | Negative | Asserts summary cancel button leaves balance unchanged. |
+
+### `Topup/functional/TopupSadadFlow.spec.ts`
+*(EMI-3564 "Top-up via SADAD bill" — Jira status "To Do" when authored; no `data-testid` coverage yet, see `pageElements/Topup/TopupSadadPage.ts` for the locator caveat. Default/parallel mode — bill generation has no shared ledger state across tests.)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| TU-09: should generate a SADAD top-up bill with reference, amount, and expiry | Positive | Asserts a bill reference, amount, and expiry date render after Sadad "Create Bill" succeeds. |
+| TU-10: should offer download or copy-reference actions on a generated bill | Positive | Asserts a "Download PDF" or "Copy Reference" control is visible on a generated bill. |
+| TU-11: "My Sadad Bills" should list previously generated bills with reference/amount/date/status | Positive | Asserts at least one row renders in the SADAD bills list after generating a bill. |
+| TU-13: should show a user-friendly error when SADAD bill creation fails | Negative | Mocks the Sadad create-bill call to fail and asserts a clear error message is shown. |
+
+### `Topup/functional/TopupWalletLimits.spec.ts`
+*(TU-WB01–08; `test.skip`'d pending an Admin Portal "Manage Limits → Wallet Balance" helper — EMI-1653/EMI-195 — kept 1:1 with `docs/manual-test-cases/B2B-Transactions.md` section M. Only the max-balance ceiling applies — top-up has no in-platform sender to hit a min-balance floor.)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| TU-WB01 — top-up within max-balance ceiling succeeds (Merchant, Low risk) | Positive | *(Skipped, EMI-1653/EMI-195.)* |
+| TU-WB02 — top-up breaching max-balance ceiling is blocked (Merchant, Low risk) | Negative | *(Skipped.)* |
+| TU-WB03 — top-up within max-balance ceiling succeeds (Biller, Low risk) | Positive | *(Skipped.)* |
+| TU-WB04 — top-up breaching max-balance ceiling is blocked (Biller, Low risk) | Negative | *(Skipped.)* |
+| TU-WB05 — top-up within max-balance ceiling succeeds (Merchant, Medium risk) | Positive | *(Skipped.)* |
+| TU-WB06 — top-up breaching max-balance ceiling is blocked (Merchant, Medium risk) | Negative | *(Skipped.)* |
+| TU-WB07 — top-up within max-balance ceiling succeeds (Biller, Medium risk) | Positive | *(Skipped.)* |
+| TU-WB08 — top-up breaching max-balance ceiling is blocked (Biller, Medium risk) | Negative | *(Skipped.)* |
+
+### `Topup/functional/TopupTransactionLimits.spec.ts`
+*(TU-TL01–12; `test.skip`'d pending an Admin Portal "Manage Limits → Transaction" helper — EMI-87/EMI-1653/EMI-195)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| TU-TL01 — top-ups within the daily amount limit succeed (App) | Positive | *(Skipped, EMI-87/EMI-1653/EMI-195.)* |
+| TU-TL02 — cumulative top-ups exceeding the daily amount limit are blocked (App) | Negative | *(Skipped.)* |
+| TU-TL03 — top-ups within the weekly amount limit succeed | Positive | *(Skipped.)* |
+| TU-TL04 — cumulative top-ups exceeding the weekly amount limit are blocked | Negative | *(Skipped.)* |
+| TU-TL05 — top-ups within the monthly amount limit succeed | Positive | *(Skipped.)* |
+| TU-TL06 — cumulative top-ups exceeding the monthly amount limit are blocked | Negative | *(Skipped.)* |
+| TU-TL07 — top-ups within the daily count limit succeed | Positive | *(Skipped.)* |
+| TU-TL08 — top-up once the daily count limit is exceeded is blocked | Negative | *(Skipped.)* |
+| TU-TL09 — High-risk account with a 0 count limit cannot top up at all | Negative | *(Skipped.)* Per EMI-87's own example row (Risk=High, count=0). |
+| TU-TL10 — top-ups within the monthly count limit succeed | Positive | *(Skipped.)* |
+| TU-TL11 — top-up once the monthly count limit is exceeded is blocked | Negative | *(Skipped.)* |
+| TU-TL12 — top-ups within the weekly count limit succeed | Positive | *(Skipped.)* |
+
+### `Topup/functional/TopupCommission.spec.ts`
+*(TU-CM01–18; `test.skip`'d pending an Admin Portal "Commission Management" helper — EMI-2031)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| TU-CM01 — default schema applies when no custom commission exists | Positive | *(Skipped, EMI-2031.)* |
+| TU-CM02 — custom per-account schema overrides the default | Positive | *(Skipped.)* |
+| TU-CM03 — fixed commission deducted on a standard top-up | Positive | *(Skipped.)* |
+| TU-CM04 — fixed commission applied at minimum boundary | Positive | *(Skipped.)* |
+| TU-CM05 — fixed commission applied at maximum boundary | Positive | *(Skipped.)* |
+| TU-CM06 — fixed commission not applied below minimum | Negative | *(Skipped.)* |
+| TU-CM07 — fixed commission not applied above maximum | Negative | *(Skipped.)* |
+| TU-CM08 — percentage commission deducted on a standard top-up | Positive | *(Skipped.)* |
+| TU-CM09 — percentage commission applied at minimum boundary | Positive | *(Skipped.)* |
+| TU-CM10 — percentage commission applied at maximum boundary | Positive | *(Skipped.)* |
+| TU-CM11 — percentage commission not applied below minimum | Negative | *(Skipped.)* |
+| TU-CM12 — percentage commission not applied above maximum | Negative | *(Skipped.)* |
+| TU-CM13 — credited amount is net of commission | Positive | *(Skipped.)* |
+| TU-CM14 — overlapping commission rules rejected | Negative | *(Skipped.)* |
+| TU-CM15 — min amount cannot exceed max amount | Negative | *(Skipped.)* |
+| TU-CM16 — transaction type cannot be edited on an existing commission | Negative | *(Skipped.)* |
+| TU-CM17 — disabling a commission schema stops it applying | Positive | *(Skipped.)* |
+| TU-CM18 — re-enabling a commission schema resumes applying it | Positive | *(Skipped.)* |
+
+## 6. Create Bill — Bill Management
+**File Reference:** `BusinessTestCases/BillManagement/functional/CreateBillFlow.spec.ts`
+*(EMI-183 Bill Management, EMI-242 Excel bulk upload, EMI-3020 Predefined Items. No prior automation existed for the Biller-side "Add Bill" screens and they have no `data-testid` coverage yet — see `pageElements/BillManagement/CreateBillPage.ts` for the locator caveat. Default/parallel mode — each test creates an independent bill with no shared ledger state.)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| CB-01: should create a bill with only the required fields | Positive | Asserts a single-entry bill with Beneficiary/Bill Ref./Amount only reaches the confirmation summary. |
+| CB-02: should compute the amount breakdown correctly with VAT and a fixed discount | Positive | Asserts the confirmation summary's total amount renders after applying a fixed discount + VAT. |
+| CB-03: "No discount" should be the default and hide the discount amount field | Positive | Asserts the discount-value input is hidden by default. |
+| CB-04: selecting Fixed discount should reveal the discount amount field | Positive | Asserts the discount-value input becomes visible after selecting "Fixed". |
+| CB-05: a zero discount value should be rejected when a discount type is selected | Negative | Asserts a validation error appears when discount type is set but the value is 0. |
+| CB-06: should add multiple items and reflect them in the confirmation summary | Positive | Asserts 2 added item rows render and the detailed bill reaches the confirmation summary. |
+| CB-09: selecting a saved product should add it as a pre-filled line item | Positive | Asserts a product picked from "My Products" appears as an item row. |
+| CB-08: leaving expiry empty should create a bill that never expires | Positive | Asserts a "no expiry / never expires" indicator after submitting a bill with no expiry date. |
+| CB-27: submitting without a Bill Ref. or Amount should be blocked | Negative | Asserts Submit stays disabled or a required-field error appears with only Beneficiary filled. |
+| CB-14: uploading a valid Excel file should create all bills in it | Positive | Asserts a bulk-upload success message renders for a valid template file. |
+| CB-15: uploading a tampered Excel file should be rejected via checksum validation | Negative | Asserts an error message renders for a tampered template file. |
+| CB-16: one invalid row in the batch should roll back the entire upload | Negative | Asserts an error renders and no success message appears when one row in the batch is invalid. |
+
+## 7. Wallet Payment QR
+**File Reference:** `BusinessTestCases/QRPayment/functional/QRPaymentFlow.spec.ts`
+*(EMI-590 QR payment, EMI-3545 Dynamic QR, EMI-922 QR management. No prior automation existed for this screen — see `pageElements/QRPayment/QRPaymentPage.ts` / `QRPayment/QRPaymentHelper.ts` for the locator/mock caveat: real camera scans aren't drivable in Playwright, so "scanning" mocks the app's post-scan QR-decode API call.)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| QR-02 / QR-04: scanning a Dynamic QR should populate and disable the amount field | Positive | Asserts the amount field is pre-filled with the QR's amount and disabled. |
+| QR-03 / QR-04: scanning a Wallet QR should leave the amount field editable for manual entry | Positive | Asserts the amount field is enabled and accepts manual entry after a Wallet QR scan. |
+| QR-08: a valid QR payment should complete via OTP and show a success confirmation | Positive | Completes a QR payment through OTP and asserts a success confirmation. |
+| QR-12 / QR-13: scanning an expired or already-used QR should show "Invalid or Expired QR" | Negative | Asserts the expired/reused-QR error message renders. |
+| QR-15: a QR with a tampered/invalid signature should be rejected with a generic error | Negative | Asserts a signature/invalid-QR error renders for a tampered payload. |
+| QR-05: an amount exceeding the payer's balance should be rejected before OTP | Negative | Asserts an insufficient-funds indicator renders before OTP for an over-balance amount. |
+
+### `QRPayment/functional/QRPaymentWalletLimits.spec.ts`
+*(QR-WB01–08; `test.skip`'d pending an Admin Portal "Manage Limits → Wallet Balance" helper — EMI-1653/EMI-195 — kept 1:1 with `docs/manual-test-cases/B2B-Transactions.md` section P)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| QR-WB01 — payer QR payment within min-balance floor succeeds (Merchant, Low risk) | Positive | *(Skipped, EMI-1653/EMI-195.)* |
+| QR-WB02 — payer QR payment breaching min-balance floor is blocked (Merchant, Low risk) | Negative | *(Skipped.)* |
+| QR-WB03 — payee credit within max-balance ceiling succeeds (Biller, Low risk) | Positive | *(Skipped.)* |
+| QR-WB04 — payee credit breaching max-balance ceiling is blocked (Biller, Low risk) | Negative | *(Skipped.)* |
+| QR-WB05 — payer QR payment within min-balance floor succeeds (Merchant, Medium risk) | Positive | *(Skipped.)* |
+| QR-WB06 — payer QR payment breaching min-balance floor is blocked (Merchant, Medium risk) | Negative | *(Skipped.)* |
+| QR-WB07 — payee credit within max-balance ceiling succeeds (Biller, Medium risk) | Positive | *(Skipped.)* |
+| QR-WB08 — payee credit breaching max-balance ceiling is blocked (Biller, Medium risk) | Negative | *(Skipped.)* |
+
+### `QRPayment/functional/QRPaymentTransactionLimits.spec.ts`
+*(QR-TL01–12; `test.skip`'d pending an Admin Portal "Manage Limits → Transaction" helper — EMI-87/EMI-1653/EMI-195)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| QR-TL01 — QR payments within the daily amount limit succeed (App) | Positive | *(Skipped, EMI-87/EMI-1653/EMI-195.)* |
+| QR-TL02 — cumulative QR payments exceeding the daily amount limit are blocked (App) | Negative | *(Skipped.)* |
+| QR-TL03 — QR payments within the weekly amount limit succeed | Positive | *(Skipped.)* |
+| QR-TL04 — cumulative QR payments exceeding the weekly amount limit are blocked | Negative | *(Skipped.)* |
+| QR-TL05 — QR payments within the monthly amount limit succeed (Web) | Positive | *(Skipped.)* |
+| QR-TL06 — cumulative QR payments exceeding the monthly amount limit are blocked (Web) | Negative | *(Skipped.)* |
+| QR-TL07 — QR payments within the daily count limit succeed | Positive | *(Skipped.)* |
+| QR-TL08 — QR payment once the daily count limit is exceeded is blocked | Negative | *(Skipped.)* |
+| QR-TL09 — QR payments within the weekly count limit succeed | Positive | *(Skipped.)* |
+| QR-TL10 — QR payment once the weekly count limit is exceeded is blocked | Negative | *(Skipped.)* |
+| QR-TL11 — QR payments within the monthly count limit succeed | Positive | *(Skipped.)* |
+| QR-TL12 — QR payment once the monthly count limit is exceeded is blocked | Negative | *(Skipped.)* |
+
+### `QRPayment/functional/QRPaymentCommission.spec.ts`
+*(QR-CM01–18; `test.skip`'d pending an Admin Portal "Commission Management" helper — EMI-2031)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| QR-CM01 — default schema applies when no custom commission exists | Positive | *(Skipped, EMI-2031.)* |
+| QR-CM02 — custom per-account schema overrides the default | Positive | *(Skipped.)* |
+| QR-CM03 — fixed commission deducted on a standard QR payment | Positive | *(Skipped.)* |
+| QR-CM04 — fixed commission applied at minimum boundary | Positive | *(Skipped.)* |
+| QR-CM05 — fixed commission applied at maximum boundary | Positive | *(Skipped.)* |
+| QR-CM06 — fixed commission not applied below minimum | Negative | *(Skipped.)* |
+| QR-CM07 — fixed commission not applied above maximum | Negative | *(Skipped.)* |
+| QR-CM08 — percentage commission deducted on a standard QR payment | Positive | *(Skipped.)* |
+| QR-CM09 — percentage commission applied at minimum boundary | Positive | *(Skipped.)* |
+| QR-CM10 — percentage commission applied at maximum boundary | Positive | *(Skipped.)* |
+| QR-CM11 — percentage commission not applied below minimum | Negative | *(Skipped.)* |
+| QR-CM12 — percentage commission not applied above maximum | Negative | *(Skipped.)* |
+| QR-CM13 — commission added on payer side / deducted on payee side | Positive | *(Skipped.)* |
+| QR-CM14 — overlapping commission rules rejected | Negative | *(Skipped.)* |
+| QR-CM15 — min amount cannot exceed max amount | Negative | *(Skipped.)* |
+| QR-CM16 — transaction type cannot be edited on an existing commission | Negative | *(Skipped.)* |
+| QR-CM17 — disabling a commission schema stops it applying | Positive | *(Skipped.)* |
+| QR-CM18 — re-enabling a commission schema resumes applying it | Positive | *(Skipped.)* |
+
+## 8. Guest Flow — Payment Links
+**File Reference:**
+`BusinessTestCases/PaymentLinks/functional/PaymentLinkResolution.spec.ts`
+`BusinessTestCases/PaymentLinks/functional/PaymentLinkPayerInfoRemoval.spec.ts`
+`BusinessTestCases/PaymentLinks/functional/PaymentLinkBugs.spec.ts`
+`BusinessTestCases/PaymentLinks/functional/GuestWalletPayment.spec.ts`
+*(MOCK ONLY — Customer-app flow with no page object/testid coverage anywhere in this Business Portal repo; see `PaymentLinkHelper.ts` / `PaymentLinkPage.ts` for the caveat. The first three files (TC-PL-001–015) predate this registry entry and target an earlier ticket set — EMI-5463, EMI-5791–5794, EMI-5774/5775/5814. `GuestWalletPayment.spec.ts` is net-new, targeting the current guest-flow tickets: EMI-5424, EMI-5446, EMI-5523, EMI-5551, EMI-5640, EMI-5653, EMI-5860.)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| GF-02: a guest with no session should resolve a valid wallet link and see a sanitized summary | Positive | Asserts the summary renders and no internal identifiers (profileId/walletId) leak into the page. |
+| GF-03: a guest should resolve a valid bill link and see a sanitized bill summary | Positive | Asserts the bill summary and link-type label render. |
+| GF-05: an expired guest link should show an invalid/expired message and never resolve a summary | Negative | Asserts the invalid-link error renders and the summary never appears. |
+| GF-06: a disabled/already-paid bill link should be rejected before payment | Negative | Mocks a 409 "already paid" response and asserts a rejection message renders. |
+| GF-07: scanning a valid wallet QR as a guest must NOT show "Payment link not found" (EMI-5551 regression) | Negative | Asserts the summary renders and the "link not found" text never appears. |
+| GF-08 / GF-10: a guest wallet payment must complete without a generic "Payment Failed" or "invalid wallet code" error (EMI-5640/5860 regression) | Positive | Completes a mocked guest wallet payment and asserts neither failure banner appears, then a success state renders. |
+| GF-10 (regression guard): "invalid wallet code" mock reproduces the known bug shape | Negative | Confirms the bug-shape mock does surface the failure text, validating the positive assertion above is meaningful. |
+| GF-09: a location-permission prompt should not prevent the guest from completing payment (EMI-5653 regression) | Positive | Runs the flow in a context with no geolocation permission granted and asserts payment still completes. |
+| GF-11: a guest should be able to complete payment on a valid bill link | Positive | Completes a mocked guest bill payment and asserts a success state renders. |
+| GF-13: no internal/sensitive fields should appear in the guest payment summary | Negative | Asserts stack-trace/SQL/internal-ID text never appears on the summary screen. |
+| GF-14: a guest JWT scoped to one link must be rejected when used against a different link's payment endpoint | Negative | Mocks a 401 Unauthorized response and asserts a failure/unauthorized state renders. |
+
+## 9. Money Request
+**File Reference:** `BusinessTestCases/MoneyRequest/functional/MoneyRequestFlow.spec.ts`
+*(EMI-834, epic EMI-2203. No prior automation existed for this screen — no `data-testid` coverage yet, see `pageElements/MoneyRequest/MoneyRequestPage.ts` for the locator caveat. Test IDs mirror EMI-834's own TC-FP/NE/EC/SEC/UI test list 1:1.)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| MR-FP-01: should create a money request and show it in Requests Sent as REQUESTED | Positive | Asserts the new request appears in Requests Sent with status REQUESTED. |
+| MR-FP-02: the requested party should see the request and complete payment via Accept → Pay | Positive | Completes a two-account Accept→Pay flow through OTP and asserts a success state renders, after asserting the payment breakdown (amount/total) is visible. |
+| declining a request should not move any funds and update status to DECLINED | Negative | Asserts the requester's copy of the request shows DECLINED after the payer declines. |
+| MR-NE-01: accepting with an amount above balance should show Insufficient Funds | Negative | Asserts an insufficient-funds/limit-exceeded indicator renders; skipped if no pre-seeded over-balance request exists. |
+| MR-EC-01: the requester can cancel a pending request before it is accepted | Positive | Asserts status becomes CANCELLED after the requester cancels. |
+| MR-SEC-01: only the intended requested profile can act on a request | Negative | *(Skipped — needs a third unrelated fixture account not yet available.)* |
+| MR-UI-03: generating a QR for a request should show the QR image, expiry, and one-time-use flag | Positive | Asserts the QR modal/image, expiry label, and one-time-use label are all visible. |
+
+## 10. Reconciliation & End-of-Day (EOD) Processing
+**File Reference:**
+`BusinessTestCases/Reconciliation/api/ReconciliationFlow.spec.ts`
+`BusinessTestCases/Reconciliation/api/EODFlow.spec.ts`
+*(EMI-4537 core framework (Done) + DRMS overhaul EMI-4538/4541/4542/4543/4549/4550/4551 (To Do), epic EMI-2177; EOD tickets EMI-636/637/710/5258 (Done), EMI-5920 (To Do), regression EMI-5771. Finance/Ops + Admin Portal functions with no Business Portal UI — modeled as `request`-fixture API suites, every test `test.skip`'d pending Admin Portal / Castlemock / Ops tooling access, kept 1:1 with `docs/manual-test-cases/Transaction-Operations.md` sections B–C so coverage isn't silently dropped.)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| RC-01–RC-06 (External Reconciliation) | Positive/Negative | *(Skipped, EMI-4537.)* Missing-TXN detection, discrepancy flagging, omnibus-vs-Control-Wallet mismatch, auto-insert with metadata, running_balance impact, reconciliation_runs logging. |
+| RC-07–RC-13 (Internal Reconciliation) | Positive/Negative | *(Skipped, EMI-4537.)* running_balance mismatch detection, stale wallet-balance flagging, control-wallet-sum mismatch, manual/scheduled rebuild, history archiving, wallets-table update. |
+| RC-14–RC-20 (DRMS) | Positive | *(Skipped, EMI-4538/4541/4542/4543/4549/4550/4551.)* Rules engine, pair management, systems management, schema mapping, ingestion config, run execution & report generation, report export. |
+| EOD-01–EOD-04 (Internal/External/Balance/Incoming-TXN jobs) | Positive | *(Skipped, EMI-636/637/710/5258.)* |
+| EOD-05: a transferred amount must be released back to the user after a FAILED EOD bank statement | Negative | *(Skipped, EMI-5771.)* Full Castlemock repro sequence documented inline, ready to implement once mock-server access exists. |
+| EOD-06: a transferred amount stays reserved while the EOD bank statement is still pending | Positive | *(Skipped, EMI-5771.)* |
+| EOD-07–EOD-15 (T01–T09, recon_id Three-Way Matching) | Positive/Negative | *(Skipped, EMI-5920.)* Full match, held/missing/unknown/duplicate recon_id exception classes E13/E14/E15/E18/E19, device-level (per-TID) mismatch, matched-but-held classification. |
+| EOD-16 / EOD-17 (held-funds line, discrepancy queue aging) | Positive | *(Skipped, EMI-5920.)* |
+
+## 11. Transaction Reversal & Adjustment
+**File Reference:**
+`BusinessTestCases/TransactionOperations/api/TransactionReversal.spec.ts`
+`BusinessTestCases/TransactionOperations/api/TransactionAdjustment.spec.ts`
+*(EMI-2028 Transaction Reversal (epic EMI-2208) and EMI-2219 Transaction Adjustment (epic EMI-2209) — Financial Operations Manager / Admin Portal functions with no Business Portal UI. Every test `test.skip`'d pending Admin Portal tooling access, kept 1:1 with `docs/manual-test-cases/Transaction-Operations.md` sections D–E.)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| RV-01–RV-03 (reverse by state: Successful/Pending/Failed) | Positive | *(Skipped, EMI-2028.)* |
+| RV-04 / RV-05 (batch vs single-in-batch reversal) | Positive | *(Skipped.)* |
+| RV-06–RV-08 (idempotency, reason logging, ineligible-transaction error) | Negative | *(Skipped.)* RV-08 targets the exact AC error string. |
+| RV-09 / RV-10 (closed-loop / open-loop coverage) | Positive | *(Skipped.)* |
+| AD-01–AD-05 (append-only correction: amount/reference/date, direction lock) | Positive | *(Skipped, EMI-2219.)* |
+| AD-06–AD-10, AD-14 (reason requirement, audit metadata, multi-adjustment, read-only batch ref, full audit trail) | Positive | *(Skipped.)* |
+| AD-11: adjusting a settled transaction correctly replays the reserve→available flow | Positive | *(Skipped.)* Encodes EMI-2219's 4-step "Pair adjustment edge case" verbatim. |
+| AD-12 / AD-13 (missing-field validation, safe generic API error) | Negative | *(Skipped.)* AD-13 targets the exact AC error string. |
 
 <!-- AUTOMATION_REGISTRY_END -->

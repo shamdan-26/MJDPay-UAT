@@ -16,7 +16,7 @@ Copy the relevant `.env.<env>` file (see [Environments](#environments)) into the
 ```bash
 # Run everything against a given environment
 npm run test:dev       # ENV=dev      — local/dev backend, OTP hardcoded to 00000000
-npm run test:uat       # ENV=uat      — UAT backend, real OTP via MongoDB
+npm run test:uat       # ENV=uat      — UAT backend, real OTP via the shared test mailbox
 npm run test:preprod   # ENV=preprod  — pre-production backend
 
 # Run a single spec file
@@ -42,14 +42,14 @@ npx playwright show-report
 | Variable | Used by |
 |---|---|
 | `BASE_URL` | every helper/page object |
-| `MONGO_URI` | fetching real OTPs from MongoDB (UAT/preprod) |
+| `IMAP_HOST`, `IMAP_PORT`, `IMAP_USER`, `IMAP_PASSWORD` | fetching real OTPs from the shared test mailbox (UAT/preprod) |
 | `UAT_COMPANY`, `UAT_MOBILE` | primary shared test account (homepage, bank transfer, login) |
 | `UAT_SETUP_COMPANY` / `_MOBILE` / `_PASSWORD` | used once by `support/global-setup.ts` |
 | `UAT_COMPANY_2`, `UAT_MOBILE_2`, ... `_3`, `_4` | additional homepage test accounts — the pool auto-extends as these are added, no code changes needed (see `Homepage/HomePageHelper.ts`) |
 
 `support/global-setup.ts` runs once before the suite: it authenticates every account in the homepage account pool and saves a `storageState` per account under `playwright/.auth/`. `support/global-teardown.ts` cleans those up afterward. Any spec using `test.use({ storageState: ... })` or the `Homepage` worker fixture (see below) picks up a pre-authenticated session instead of logging in per test.
 
-In `ENV=dev`, OTP is always `00000000` and MongoDB is skipped entirely — real-OTP lookups only happen against UAT/preprod.
+In `ENV=dev`, OTP is always `00000000` and the mailbox is skipped entirely — real-OTP lookups only happen against UAT/preprod.
 
 ## Project structure
 

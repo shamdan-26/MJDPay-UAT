@@ -17,12 +17,15 @@
   "devDependencies": {
     "@faker-js/faker": "^10.5.0",
     "@playwright/test": "^1.60.0",
+    "@types/imapflow": "^1.0.23",
+    "@types/mailparser": "^3.4.6",
     "@types/node": "^25.9.1",
     "cross-env": "^10.1.0",
     "dotenv": "^17.4.2",
     "exceljs": "^4.4.0",
     "husky": "^9.1.7",
-    "mongodb": "^7.3.0",
+    "imapflow": "^1.5.0",
+    "mailparser": "^3.9.14",
     "typescript": "^6.0.3"
   }
 }

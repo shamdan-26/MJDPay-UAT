@@ -9,6 +9,8 @@ export class HomePage {
     readonly Bills_NavButton: Locator;
     readonly BillPayment_NavButton: Locator;
     readonly BillReport_NavButton: Locator;
+    readonly CreateBill_NavButton: Locator;
+    readonly MoneyRequest_NavButton: Locator;
     readonly Transactions_NavButton: Locator;
     readonly transferButton: Locator;
     readonly W2WTransferButton: Locator;
@@ -49,6 +51,15 @@ export class HomePage {
             .or(page.getByText(/bill reports?/i))
             .or(page.locator("(//span[@class='mdc-list-item__content'])[12]"));
 
+        // Best-effort guess (EMI-183 Bill Management "Add New Bills") — no data-testid yet
+        // per QA-DATA-TESTID-HANDOFF.md §5 and no prior nav entry existed for this screen.
+        this.CreateBill_NavButton = page.getByRole('link', { name: /create bill|add bill/i })
+            .or(page.getByText(/create bill|add bill/i));
+
+        // Best-effort guess (EMI-834 Money Request) — no data-testid yet, no prior nav entry.
+        this.MoneyRequest_NavButton = page.getByRole('button', { name: /request money|money request/i })
+            .or(page.getByText(/request money|money request/i));
+
         this.Transactions_NavButton = page.locator('#sideNav-menu-item-1');
 
         this.transferButton = page.locator("#quick-bank");
@@ -88,6 +99,16 @@ export class HomePage {
     async clickBillPayment_NavButton() {
         await expect(this.BillPayment_NavButton).toBeEnabled({ timeout: 30000 });
         await this.BillPayment_NavButton.click();
+    }
+
+    async clickCreateBill_NavButton() {
+        await expect(this.CreateBill_NavButton).toBeEnabled({ timeout: 30000 });
+        await this.CreateBill_NavButton.click();
+    }
+
+    async clickMoneyRequest_NavButton() {
+        await expect(this.MoneyRequest_NavButton).toBeEnabled({ timeout: 30000 });
+        await this.MoneyRequest_NavButton.click();
     }
 
     async clicBillReport_NavButton() {

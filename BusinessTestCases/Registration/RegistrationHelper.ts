@@ -3,7 +3,7 @@
 declare const process: { env: Record<string, string | undefined> };
 import * as fs from 'fs';
 import * as path from 'path';
-import { MongoClient } from 'mongodb';
+import { fetchOtpFromEmail } from '../../support/emailOtp';
 import { waitForToastClear } from '../toastMessages';
 import { RegistrationMobilePage } from '../pageElements/Registration/RegistrationMobilePage';
 import { RegistrationInfoPage } from '../pageElements/Registration/RegistrationInfoPage';
@@ -147,33 +147,9 @@ export function generateFreshKSAMobile(): string {
 }
 
 
-const MONGO_DB  = 'notification-log';
-
 export async function getOtpFromDb(mobile: string, maxAttempts = 10, delayMs = 2000): Promise<string> {
     if ((process.env['ENV'] ?? 'dev') === 'dev') return '';
-    const MONGO_URI = process.env['MONGO_URI'] ?? (() => { throw new Error('MONGO_URI env var is not set'); })();
-    const client = new MongoClient(MONGO_URI);
-    try {
-        await client.connect();
-        const col = client.db(MONGO_DB).collection('notifications');
-        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-            const doc = await col.findOne(
-                {
-                    recipient: { $in: [mobile, `966${mobile}`, `+966${mobile}`, `0${mobile}`] },
-                    message: { $regex: /Use this OTP/i },
-                },
-                { sort: { createdAt: -1 } }
-            );
-            if (doc) {
-                const match = (doc.message as string).match(/Use this OTP\s*:\s*(\d+)/i);
-                if (match) return match[1];
-            }
-            if (attempt < maxAttempts) await new Promise(r => setTimeout(r, delayMs));
-        }
-        throw new Error(`No OTP notification found for mobile ${mobile} after ${maxAttempts} attempts`);
-    } finally {
-        await client.close();
-    }
+    return fetchOtpFromEmail(mobile, maxAttempts, delayMs);
 }
 
 export async function fillOTP(page: Page, otp?: string) {
