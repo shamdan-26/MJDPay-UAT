@@ -38,7 +38,8 @@ The `ENV` variable selects the environment config (`.env.uat`, `.env.preprod`, `
 | Variable | Used by |
 |---|---|
 | `BASE_URL` | every helper/page object |
-| `IMAP_HOST`, `IMAP_PORT`, `IMAP_USER`, `IMAP_PASSWORD` | OTP fetching from the shared test mailbox (`support/emailOtp.ts`) |
+| `IMAP_HOST`, `IMAP_PORT`, `IMAP_USER` | OTP fetching from the shared test mailbox (`support/emailOtp.ts`) |
+| `AZURE_TENANT_ID`, `AZURE_CLIENT_ID`, `AZURE_CLIENT_SECRET` | OAuth2 (XOAUTH2) app-only login to that same mailbox — Exchange Online retired IMAP Basic Auth (`support/emailOtp.ts`) |
 | `UAT_COMPANY`, `UAT_MOBILE` | primary shared test account (homepage, bank transfer, login) |
 | `UAT_COMPANY_2`, `UAT_MOBILE_2`, ... `_3`, `_4` | additional homepage test accounts — the pool auto-extends as these are added, no code changes needed (see `Homepage/HomePageHelper.ts`) |
 | `UAT_SETUP_COMPANY/MOBILE/PASSWORD` | `support/global-setup.ts` |
@@ -48,6 +49,8 @@ The `ENV` variable selects the environment config (`.env.uat`, `.env.preprod`, `
 ### OTP handling
 
 All real-OTP flows read the shared UAT/preprod test mailbox over IMAP via `fetchOtpFromEmail` (`support/emailOtp.ts`): newest message first within a 10-minute window, body must contain both the target mobile and `Use this OTP` (or a caller-supplied `messageFilter`), OTP digits pulled out by regex, with retry/delay. `getOtpFromDb` in `Registration/RegistrationHelper.ts` and `Login/LoginHelper.ts` both delegate to it (the name is legacy — kept to avoid touching every call site). In `ENV=dev` the OTP is always `00000000` and the mailbox is skipped.
+
+IMAP auth is OAuth2 (XOAUTH2), not a password — the mailbox is a managed Microsoft 365 org account with MFA enforced, and Exchange Online has retired IMAP Basic Auth entirely. `fetchOtpFromEmail` gets an app-only access token via the Entra ID client-credentials flow (`getAccessToken` in the same file), cached until shortly before expiry. This requires an Entra app registration with the `IMAP.AccessAsApp` application permission (Office 365 Exchange Online API), admin consent, and ideally an Exchange `ApplicationAccessPolicy` scoping the app to just this mailbox (application permissions otherwise grant access tenant-wide).
 
 ### Toast / snackbar guard
 
@@ -107,6 +110,7 @@ BusinessTestCases/
     Registration/ · Homepage/ · Topup/ · W2WTransfer/
     PaymentLinks/ · Products/ · PayBill/ · ForgotPassword/
     BillManagement/ · MoneyRequest/ · QRPayment/
+    BeneficiaryManagement/ · UserManagement/ · SubWallets/
                                  ← one subfolder per feature, holding that feature's page-object class(es);
                                    no Login/ or BankTransfer/ subfolder — their only page objects moved to Shared/;
                                    no Reconciliation/ or TransactionOperations/ mirror — those features are API-only, no page objects
@@ -143,13 +147,19 @@ BusinessTestCases/
     functional/
   BillManagement/
     BillManagementHelper.ts
-    functional/
+    functional/ · ui/
   MoneyRequest/
     MoneyRequestHelper.ts
     functional/
   QRPayment/
     QRPaymentHelper.ts
     functional/
+  BeneficiaryManagement/         ← Manage Accounts → Manage Beneficiary
+    BeneficiaryManagementHelper.ts
+    functional/
+  UserManagement/                ← Manage Accounts → Manage Users + Access & Permissions
+    UserManagementHelper.ts
+    functional/ · ui/
   Reconciliation/
     ReconciliationHelper.ts
     api/                       ← all specs test.skip() pending Admin Portal / Reconciliation Ops tooling access

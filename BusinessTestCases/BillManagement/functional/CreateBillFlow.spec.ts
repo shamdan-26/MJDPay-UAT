@@ -191,3 +191,50 @@ test.describe('Create Bill — Bulk Upload via Excel (CB-14, CB-15, CB-16, CB-17
         await expect(createBill.uploadSuccessMessage).not.toBeVisible();
     });
 });
+
+// Excel Bulk Upload — additional edge cases found in UAT (EMI-5891, EMI-5813,
+// EMI-5182, EMI-5121, and parent story EMI-242). Extends the describe block
+// above rather than a new file, per the existing "Create Bill — Bulk Upload
+// via Excel" convention. Each fixture referenced below follows CB-14..CB-16's
+// pattern: maintain the file in data/fixtures/ locally, not committed by this suite.
+test.describe('Create Bill — Bulk Upload Edge Cases (CB-18, CB-19, CB-20, CB-21)', () => {
+    test('CB-18: uploading an Excel row with a MERCHANT payer type should not be rejected with INVALID_PAYER_TYPE', async ({ page }) => {
+        const createBill = await loginAndOpenCreateBill(page);
+        await createBill.openBulkUpload();
+
+        await createBill.uploadExcelFile(path.resolve(__dirname, '../../../data/fixtures/bulk-bills-merchant-payer.xlsx'));
+
+        await expect(createBill.uploadSuccessMessage.or(page.getByText(/invalid_payer_type|invalid payer type/i))).toBeVisible({ timeout: 20000 });
+        await expect(page.getByText(/invalid_payer_type|invalid payer type/i)).not.toBeVisible();
+    });
+
+    test('CB-19: uploading a valid Excel file and confirming should not fail with a 500 during bill generation', async ({ page }) => {
+        const createBill = await loginAndOpenCreateBill(page);
+        await createBill.openBulkUpload();
+
+        await createBill.uploadExcelFile(path.resolve(__dirname, '../../../data/fixtures/bulk-bills-valid.xlsx'));
+
+        await expect(createBill.uploadSuccessMessage).toBeVisible({ timeout: 20000 });
+        await expect(page.getByText(/internal server error|500/i)).not.toBeVisible();
+    });
+
+    test('CB-20: an Excel bill reference containing letters should be accepted, not rejected with a 400 on upload', async ({ page }) => {
+        const createBill = await loginAndOpenCreateBill(page);
+        await createBill.openBulkUpload();
+
+        await createBill.uploadExcelFile(path.resolve(__dirname, '../../../data/fixtures/bulk-bills-alpha-reference.xlsx'));
+
+        await expect(createBill.uploadSuccessMessage.or(createBill.uploadErrorMessage)).toBeVisible({ timeout: 20000 });
+        await expect(createBill.uploadSuccessMessage).toBeVisible();
+    });
+
+    test('CB-21: an Excel row targeting an individual (national ID) payer should not fail with "The profile could not be found."', async ({ page }) => {
+        const createBill = await loginAndOpenCreateBill(page);
+        await createBill.openBulkUpload();
+
+        await createBill.uploadExcelFile(path.resolve(__dirname, '../../../data/fixtures/bulk-bills-individual-id.xlsx'));
+
+        await expect(page.getByText(/the profile could not be found/i)).not.toBeVisible({ timeout: 20000 });
+        await expect(createBill.uploadSuccessMessage).toBeVisible();
+    });
+});

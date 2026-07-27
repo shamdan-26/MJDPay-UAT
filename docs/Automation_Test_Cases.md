@@ -774,4 +774,22 @@ This file serves as our central, living registry for all automated test suites a
 | AD-11: adjusting a settled transaction correctly replays the reserve→available flow | Positive | *(Skipped.)* Encodes EMI-2219's 4-step "Pair adjustment edge case" verbatim. |
 | AD-12 / AD-13 (missing-field validation, safe generic API error) | Negative | *(Skipped.)* AD-13 targets the exact AC error string. |
 
+## 12. Bill Beneficiary Management
+**File Reference:** `BusinessTestCases/BeneficiaryManagement/functional/BeneficiaryManagementFlow.spec.ts`
+*(EMI-185, epic EMI-2192. The homepage sidebar's "Manage Beneficiary" link already existed and was nav-smoke-tested in `Homepage/functional/HomepageSidebarNavigation.spec.ts`, but the add/list/filter/edit/delete screen itself had no prior page object or coverage — no `data-testid` coverage yet, see `pageElements/BeneficiaryManagement/BeneficiaryManagementPage.ts` for the locator caveat. Test IDs mirror `docs/manual-test-cases/B2B-Transactions.md` section S (BM-01..BM-14) 1:1.)*
+
+| Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
+| :--- | :--- | :--- |
+| BM-01: should add a beneficiary with a valid alias and CRN, showing the resolved brand name | Positive | Asserts the CRN profile lookup resolves and shows a brand name, then a success toast after save. Skipped without `BENEFICIARY_KNOWN_CRN`. |
+| BM-06: when OTP is required, a valid OTP completes the add-beneficiary flow | Positive | Handles an inline OTP step conditionally, then asserts success. Skipped without `BENEFICIARY_KNOWN_CRN`. |
+| BM-02–BM-04 (alias min-length, max-length, special-character validation) | Negative | Asserts a field-level validation error blocks save for a 1-2 char alias, a 16+ char alias, and an alias containing symbols. |
+| BM-05: looking up a CRN that does not exist blocks submission with an error | Negative | Asserts a lookup-failure error renders for an unknown CRN. |
+| BM-07: the beneficiaries list displays Alias and CRN for each row | Positive | Asserts at least one list row is visible. |
+| BM-08 / BM-09 (filter list by Alias / by CR) | Positive | Asserts the list still renders after applying each filter. BM-09 skipped without `BENEFICIARY_KNOWN_CRN`. |
+| BM-10: filtering by Status narrows the list to matching rows | Positive | Selects the first status option and asserts the list still renders. |
+| BM-11: deleting a beneficiary removes it from the list after confirmation | Positive | Asserts the row count decreases and a success toast appears after confirming delete. |
+| BM-12: editing a beneficiary updates its alias in the list | Positive | Asserts the new alias text appears in the list after save. |
+| BM-13: adding a beneficiary with an alias already in use is rejected | Negative | Asserts an "already exists" error toast renders. Skipped without `BENEFICIARY_KNOWN_CRN`. |
+| BM-14: submitting without an Alias or CRN is blocked | Negative | Asserts save is disabled, or a required-field error renders on submit. |
+
 <!-- AUTOMATION_REGISTRY_END -->

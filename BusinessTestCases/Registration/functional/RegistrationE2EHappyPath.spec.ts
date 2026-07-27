@@ -18,7 +18,7 @@ import { RegistrationContractPage } from '../../pageElements/Registration/Regist
 // not always land on the real NAFATH panel — in this environment it can land
 // straight on Products instead, bypassing NAFATH entirely. The first test
 // below races both outcomes rather than assuming NAFATH is the only one, so it
-// only skips on a genuine dead end (neither panel appearing), not on the
+// only fails on a genuine dead end (neither panel appearing), not on the
 // normal Products-bypass path.
 // ─────────────────────────────────────────────────────────────────────────────
 test.describe('Registration – Full E2E Happy Path (UI)', () => {
@@ -26,7 +26,6 @@ test.describe('Registration – Full E2E Happy Path (UI)', () => {
     test('should complete Business Info, Financial & Business, and Verification & Uploads, then reach NAFATH or Products after Sign Up', async ({ page, context }) => {
         test.setTimeout(180_000);
 
-        
         // Mobile entry -> OTP -> Business Info -> Financial & Business -> Verification & Uploads
         await goToVerificationStep(page);
         const verification = new RegistrationVerificationPage(page);
@@ -66,12 +65,6 @@ test.describe('Registration – Full E2E Happy Path (UI)', () => {
             products.formSubTitle.waitFor({ state: 'visible', timeout: 30000 }).then(() => 'products' as const),
         ]).catch(() => 'neither' as const);
 
-        test.skip(
-            landedOn === 'neither',
-            'Neither NAFATH nor Products appeared after Sign Up — verify whether the IBAN proof / VAT certificate ' +
-            'uploads are mandatory for submission to succeed in this environment before treating this as a regression.'
-        );
-
         expect(landedOn).not.toBe('neither');
     });
 
@@ -93,6 +86,7 @@ test.describe('Registration – Full E2E Happy Path (UI)', () => {
 
         await goToContractStep(page);
         const contract = new RegistrationContractPage(page);
+        await page.pause();
 
         await expect(contract.agreeCheckbox).toBeVisible({ timeout: 15000 });
         await contract.agreeCheckbox.check();
@@ -103,12 +97,6 @@ test.describe('Registration – Full E2E Happy Path (UI)', () => {
             .waitFor({ state: 'visible', timeout: 30000 })
             .then(() => true)
             .catch(() => false);
-
-        test.skip(
-            !completed,
-            'No recognizable post-submission confirmation state appeared — verify the actual completion UI in ' +
-            'this environment before treating this as a regression.'
-        );
 
         expect(completed).toBe(true);
         await context.close();

@@ -464,6 +464,34 @@ added to the payer's debit and deducted from the payee's credit, consistent with
 
 ---
 
+## S. Bill Beneficiary Management (EMI-185, epic EMI-2192)
+
+Context: a Business admin user maintains a reusable address book of billers — add (Alias + CRN, with
+a profile lookup that resolves the CRN to a brand name before saving, then an OTP step if required),
+view/filter (by Alias, CR, and Status), edit, and delete. Reached from the homepage sidebar's "Manage
+Beneficiary" link (`HomepageSidebarPage.manageBeneficiarySidebarLink`), which already existed and was
+nav-smoke-tested, but the destination screen itself had no coverage before this section. Per
+EMI-185's own AC: "Alias — no special characters, minimum length 3, maximum length 15."
+
+| ID | Title | Steps | Expected Result | Priority |
+|---|---|---|---|---|
+| BM-01 | Add a beneficiary with a valid alias and CRN | Open "Add Beneficiary"; enter a valid unique alias and an existing CRN; trigger the lookup | Profile lookup resolves and displays the CRN's brand name before save | P1 |
+| BM-02 | Alias below minimum length rejected | Enter a 1–2 character alias | Validation error shown; save blocked | P2 |
+| BM-03 | Alias above maximum length rejected | Enter a 16+ character alias | Validation error shown; save blocked | P2 |
+| BM-04 | Alias with special characters rejected | Enter an alias containing symbols (e.g. `#`, `!`, `$`) | Validation error shown; save blocked | P2 |
+| BM-05 | CRN lookup for a non-existent CRN | Enter an alias and a CRN that does not exist in the system | Lookup fails with a clear error; save blocked | P1 |
+| BM-06 | OTP required completes the add flow | Add a beneficiary where OTP verification is required; enter a valid OTP | Beneficiary is added after OTP verification succeeds | P2 |
+| BM-07 | Beneficiaries list shows Alias and CRN | Open the Beneficiary Management screen with existing beneficiaries | Each row displays its Alias and CRN | P1 |
+| BM-08 | Filter list by Alias | Enter a known alias (or partial) into the Alias filter | List narrows to matching row(s) only | P2 |
+| BM-09 | Filter list by CR | Enter a known CRN into the CR filter | List narrows to matching row(s) only | P2 |
+| BM-10 | Filter list by Status | Select a status from the Status filter dropdown | List narrows to beneficiaries matching that status | P3 |
+| BM-11 | Delete a beneficiary | Select Delete on an existing beneficiary; confirm | Beneficiary is removed from the list; success message shown | P1 |
+| BM-12 | Edit a beneficiary's alias | Select Edit on an existing beneficiary; change the alias; save | Updated alias is reflected in the list | P2 |
+| BM-13 | Duplicate alias rejected | Attempt to add a beneficiary using an alias already in use | Save is rejected with a clear "already exists" error | P2 |
+| BM-14 | Submitting without Alias or CRN blocked | Open "Add Beneficiary"; leave both fields empty; attempt to save | Save is blocked with a required-field error | P1 |
+
+---
+
 ## Automated coverage note
 
 - **Pay Bill** — `BusinessTestCases/PayBill/functional/PayBillFlow.spec.ts` covers PB-05, PB-06, PB-07,
@@ -512,3 +540,10 @@ added to the payer's debit and deducted from the payee's credit, consistent with
 
   Remove each file's `test.skip()` once an Admin Portal automation helper exists for the corresponding
   Manage Limits / Commission Management screen.
+- **Bill Beneficiary Management (section S)** — `BusinessTestCases/BeneficiaryManagement/functional/
+  BeneficiaryManagementFlow.spec.ts` automates BM-02–BM-05, BM-07, BM-08, BM-10, BM-11, BM-12, BM-14
+  directly. BM-01, BM-06, BM-09, BM-13 additionally `test.skip()` at runtime unless a
+  `BENEFICIARY_KNOWN_CRN` env var is set to a real fixture CRN that resolves via the profile-lookup
+  API (no such fixture account/CRN exists yet in this repo's data sets). Per
+  `QA-DATA-TESTID-HANDOFF.md` §5, this screen has no `data-testid` coverage — see
+  `BeneficiaryManagementPage.ts` for the locator caveat.

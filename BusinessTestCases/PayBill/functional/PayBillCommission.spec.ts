@@ -131,4 +131,18 @@ test.describe('Pay Bill – Commission', () => {
     test('PB-CM18 — re-enabling a commission schema resumes applying it', async () => {
         test.skip(true, PENDING);
     });
+
+    // ---- Commission/VAT calculation when commission applies to the destination
+    // (EMI-5614, EMI-5620) — affects both W2W transfer and Bill payment; kept
+    // here (rather than a new Detailed-Bill-Editing file) because verifying
+    // either requires the same Admin Portal "commission applies to destination"
+    // configuration step this whole file is gated on.
+
+    test('PB-CM19 — Commission/VAT/Rounded amounts display correctly in the summary when commission applies to the destination (EMI-5614)', async () => {
+        test.skip(true, PENDING);
+    });
+
+    test('PB-CM20 — reserved amount on the destination wallet equals commission + VAT, not the raw commission (EMI-5620)', async () => {
+        test.skip(true, PENDING);
+    });
 });

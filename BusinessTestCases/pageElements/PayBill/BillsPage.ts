@@ -20,6 +20,15 @@ export class BillsPage {
     // Shared toast (QA-DATA-TESTID-HANDOFF.md section 3)
     readonly toastMessage: Locator;
 
+    // Bill QR scan / manual bill-number lookup (EMI-5144, EMI-5143) — Business
+    // app side of Bill QR scanning. `bill-get-info-btn` is a confirmed testid
+    // per QA-DATA-TESTID-HANDOFF.md §4.6; the rest are best-effort guesses,
+    // same caveat as the OTP/toast locators above.
+    readonly scanBillQrButton: Locator;
+    readonly billNumberInput: Locator;
+    readonly getBillInfoButton: Locator;
+    readonly billLookupError: Locator;
+
     constructor(page: Page) {
         this.page = page;
 
@@ -39,6 +48,23 @@ export class BillsPage {
         this.otpResendButton = page.getByTestId('otp-resend-btn');
 
         this.toastMessage = page.getByTestId('toast-message');
+
+        this.scanBillQrButton = page.getByRole('button', { name: /scan (bill )?qr/i })
+            .or(page.getByText(/scan (bill )?qr/i));
+        this.billNumberInput = page.getByLabel(/bill number/i).or(page.getByPlaceholder(/bill number/i));
+        this.getBillInfoButton = page.getByTestId('bill-get-info-btn');
+        this.billLookupError = page.getByText(/something went wrong|bill (could not be found|not found)/i).first();
+    }
+
+    async searchBillByNumber(billNumber: string): Promise<void> {
+        await expect(this.billNumberInput).toBeVisible({ timeout: 15000 });
+        await this.billNumberInput.fill(billNumber);
+        await this.getBillInfoButton.click();
+    }
+
+    async openQrScanner(): Promise<void> {
+        await expect(this.scanBillQrButton).toBeVisible({ timeout: 15000 });
+        await this.scanBillQrButton.click();
     }
 
     async goToReceivedBills(): Promise<void> {

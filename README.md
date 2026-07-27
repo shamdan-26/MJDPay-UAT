@@ -42,7 +42,8 @@ npx playwright show-report
 | Variable | Used by |
 |---|---|
 | `BASE_URL` | every helper/page object |
-| `IMAP_HOST`, `IMAP_PORT`, `IMAP_USER`, `IMAP_PASSWORD` | fetching real OTPs from the shared test mailbox (UAT/preprod) |
+| `IMAP_HOST`, `IMAP_PORT`, `IMAP_USER` | fetching real OTPs from the shared test mailbox (UAT/preprod) |
+| `AZURE_TENANT_ID`, `AZURE_CLIENT_ID`, `AZURE_CLIENT_SECRET` | OAuth2 (XOAUTH2) app-only login to that mailbox — Exchange Online retired IMAP Basic Auth |
 | `UAT_COMPANY`, `UAT_MOBILE` | primary shared test account (homepage, bank transfer, login) |
 | `UAT_SETUP_COMPANY` / `_MOBILE` / `_PASSWORD` | used once by `support/global-setup.ts` |
 | `UAT_COMPANY_2`, `UAT_MOBILE_2`, ... `_3`, `_4` | additional homepage test accounts — the pool auto-extends as these are added, no code changes needed (see `Homepage/HomePageHelper.ts`) |

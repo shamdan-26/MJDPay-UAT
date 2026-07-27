@@ -40,6 +40,17 @@ export class PaymentLinkPage {
     // Incomplete-owner-profile error (EMI-5791..5794)
     readonly incompleteProfileError: Locator;
 
+    // Payment method selection (EMI-5830 — must offer more than Mada)
+    readonly paymentMethodOptions: Locator;
+
+    // Creation / sharing screen — biller side (EMI-5474, EMI-5527)
+    readonly createPaymentLinkButton: Locator;
+    readonly generatedLinkUrl: Locator;
+    readonly qrCodeImage: Locator;
+    readonly copyLinkButton: Locator;
+    readonly shareLinkButton: Locator;
+    readonly downloadQrButton: Locator;
+
     constructor(page: Page) {
         this.page = page;
 
@@ -68,5 +79,15 @@ export class PaymentLinkPage {
         this.resultFailureIcon  = page.locator('[class*="fail"], [class*="error"]').first();
 
         this.incompleteProfileError = page.getByText(/profile (information )?is incomplete|missing (required )?information/i).first();
+
+        this.paymentMethodOptions = this.paymentMethodGroup.getByRole('radio')
+            .or(this.paymentMethodGroup.locator('[class*="payment-method-option"]'));
+
+        this.createPaymentLinkButton = page.getByRole('button', { name: /create payment link|share payment link|generate link/i });
+        this.generatedLinkUrl = page.getByTestId('payment-link-url').or(page.locator('input[readonly][value*="payment-link"]'));
+        this.qrCodeImage = page.locator('img[alt*="QR" i], canvas[class*="qr" i]').first();
+        this.copyLinkButton = page.getByRole('button', { name: /^copy$/i });
+        this.shareLinkButton = page.getByRole('button', { name: /^share$/i });
+        this.downloadQrButton = page.getByRole('button', { name: /download/i });
     }
 }

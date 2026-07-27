@@ -35,6 +35,13 @@ function addedLines(file) {
     return diff.split('\n').filter((line) => line.startsWith('+') && !line.startsWith('+++'));
 }
 
+// Explicit, per-line escape hatch for known-safe test fixtures (mock tokens,
+// hardcoded test passwords used only in request bodies against non-prod
+// environments) that otherwise match SECRET_PATTERNS. Deliberately opt-in and
+// visible in the diff, rather than loosening the patterns themselves, so real
+// secrets elsewhere still get caught.
+const ALLOWLIST_MARKER = /allowlist-secret/;
+
 const violations = [];
 
 for (const file of stagedFiles()) {
@@ -45,6 +52,7 @@ for (const file of stagedFiles()) {
     }
 
     for (const line of addedLines(file)) {
+        if (ALLOWLIST_MARKER.test(line)) continue;
         for (const { name, regex } of SECRET_PATTERNS) {
             regex.lastIndex = 0;
             if (regex.test(line)) {

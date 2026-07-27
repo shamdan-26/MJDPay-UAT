@@ -45,6 +45,16 @@ export class CreateBillPage {
     readonly summarySection: Locator;
     readonly summaryTotalAmount: Locator;
     readonly submitBillButton: Locator;
+    readonly vatAmountValue: Locator;
+    readonly grandTotalValue: Locator;
+    readonly applyDiscountButton: Locator;
+    readonly discountSummaryText: Locator;
+    readonly noDiscountText: Locator;
+
+    // Edit flow (EMI-5809, EMI-5893, EMI-5812, EMI-5863, EMI-5776)
+    readonly editSubmitButton: Locator;
+    readonly editGenericError: Locator;
+    readonly expiredBillEditBlockedMessage: Locator;
 
     // Bulk upload (EMI-242)
     readonly fileUploadInput: Locator;
@@ -86,6 +96,15 @@ export class CreateBillPage {
         this.summarySection     = page.locator('[class*="bill-confirmation"], [class*="summary"]').first();
         this.summaryTotalAmount = page.getByText(/total amount/i).locator('xpath=following-sibling::*[1]').or(page.locator('.money-amount').last());
         this.submitBillButton   = page.getByRole('button', { name: /submit|save|create bill/i });
+        this.vatAmountValue     = page.getByText(/vat amount/i).locator('xpath=following-sibling::*[1]');
+        this.grandTotalValue    = page.getByText(/grand total/i).locator('xpath=following-sibling::*[1]');
+        this.applyDiscountButton = page.getByRole('button', { name: /apply discount/i });
+        this.discountSummaryText = page.locator('[class*="discount-summary"], [class*="discount-section"]').first();
+        this.noDiscountText     = page.getByText(/no discount/i);
+
+        this.editSubmitButton   = page.getByRole('button', { name: /^(save changes|update bill|submit)$/i });
+        this.editGenericError   = page.getByText(/an unexpected error occured|400 bad request/i);
+        this.expiredBillEditBlockedMessage = page.getByText(/expired bills? (cannot|can not|can't) be edited/i);
 
         this.fileUploadInput    = page.locator('input[type="file"]');
         this.uploadSubmitButton = page.getByRole('button', { name: /upload/i });
@@ -153,6 +172,17 @@ export class CreateBillPage {
     async uploadExcelFile(filePath: string): Promise<void> {
         await this.fileUploadInput.setInputFiles(filePath);
         await this.uploadSubmitButton.click();
+    }
+
+    /** Toggles the "Apply 15% VAT" checkbox on/off, without touching the discount fields. */
+    async toggleVat(): Promise<void> {
+        await expect(this.applyVatCheckbox).toBeVisible({ timeout: 10000 });
+        await this.applyVatCheckbox.click();
+    }
+
+    /** Submits the edit form (EMI-5809/EMI-5776 — distinct button/label from initial creation). */
+    async submitEdit(): Promise<void> {
+        await this.editSubmitButton.click();
     }
 
     async assertRequiredFieldBlocksSubmit(): Promise<void> {

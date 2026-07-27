@@ -41,3 +41,44 @@ export interface NewBillInput {
 export function uniqueBillRef(prefix = 'QA-BILL'): string {
     return `${prefix}-${Date.now()}`;
 }
+
+/**
+ * A single line item on a Detailed Bill (EMI-1679, EMI-3060, EMI-4123).
+ * `vat` is deliberately optional — EMI-3957 established that VAT must stay
+ * optional in the *edit item* form exactly as it already is in *add item*.
+ */
+export interface BillItemInput {
+    name: string;
+    quantity: string;
+    unitPrice: string;
+    discountType?: 'No Discount' | 'Fixed' | 'Percentage';
+    discountValue?: string;
+    vat?: string;
+}
+
+export function uniqueItemName(prefix = 'QA-ITEM'): string {
+    return `${prefix}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+}
+
+/** Strips currency symbols, thousands separators and whitespace from a money label so it can be compared numerically. */
+export function parseMoney(text: string | null | undefined): number {
+    if (!text) return NaN;
+    const cleaned = text.replace(/[^\d.,-]/g, '').replace(/,/g, '');
+    return Number.parseFloat(cleaned);
+}
+
+/**
+ * Item total as the product currently defines it (EMI-4123):
+ *   (unitPrice - fixedDiscount) x quantity
+ * i.e. the discount is applied to the *unit price*, before multiplying by
+ * quantity. EMI-4121 is still an open Inquiry asking whether the KSA market
+ * expects the discount applied to the line total instead — if that inquiry is
+ * resolved the other way, this function and BI-03/BI-04 are the single place
+ * that needs updating.
+ */
+export function expectedItemTotal(unitPrice: number, quantity: number, discount = 0, discountType: 'FIXED' | 'PERCENTAGE' = 'FIXED'): number {
+    const unitAfterDiscount = discountType === 'FIXED'
+        ? unitPrice - discount
+        : unitPrice * (1 - discount / 100);
+    return Math.max(0, unitAfterDiscount) * quantity;
+}

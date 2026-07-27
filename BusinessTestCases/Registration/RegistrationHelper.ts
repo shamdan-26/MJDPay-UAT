@@ -53,6 +53,9 @@ const REGISTRATION_ASSETS_PATH = path.resolve(__dirname, '../../data/registratio
 /** Where a citizen asset ended up when it was spent by goToProductsStep. */
 export type CitizenAssetOutcome = 'products' | 'contract' | 'nafath' | 'already-registered';
 
+/** Where a resident asset ended up when it was spent by goToFinancialStep. */
+export type ResidentAssetOutcome = 'products' | 'already-registered';
+
 /**
  * Marks a citizen asset as used — tagged with the page it landed on
  * (`products`, `contract`, `nafath`, or `already-registered`) rather than a
@@ -66,6 +69,26 @@ export type CitizenAssetOutcome = 'products' | 'contract' | 'nafath' | 'already-
 export function markCitizenAssetUsed(mobile: string, page: CitizenAssetOutcome): void {
     const asset = CITIZEN_ASSETS.find(a => a.mobile === mobile);
     if (asset) (asset as { used?: boolean | CitizenAssetOutcome }).used = page;
+    try {
+        fs.writeFileSync(REGISTRATION_ASSETS_PATH, JSON.stringify(registrationAssets, null, 2) + '\n');
+    } catch (err) {
+        console.warn(`[RegistrationHelper] Failed to persist used-flag for ${mobile}: ${err}`);
+    }
+}
+
+/**
+ * Marks a resident asset as used — tagged with the outcome it hit in
+ * goToFinancialStep (`products` if Business Info resumed straight past
+ * Financial, `already-registered` if the backend rejected it outright) —
+ * and persists the flag to data/registrationAssets.json, mirroring
+ * markCitizenAssetUsed. Without this, nextResidentAsset() had no way to
+ * know an asset was already spent — the `used` field existed in the JSON
+ * for residents but nothing ever wrote to it, so it stayed `false` forever
+ * regardless of live server state.
+ */
+export function markResidentAssetUsed(mobile: string, outcome: ResidentAssetOutcome): void {
+    const asset = RESIDENT_ASSETS.find(a => a.mobile === mobile);
+    if (asset) (asset as { used?: boolean | ResidentAssetOutcome }).used = outcome;
     try {
         fs.writeFileSync(REGISTRATION_ASSETS_PATH, JSON.stringify(registrationAssets, null, 2) + '\n');
     } catch (err) {
@@ -97,9 +120,19 @@ export function nextCitizenAsset(wantOutcome?: CitizenAssetOutcome | CitizenAsse
     return available[_citizenIndex++ % available.length];
 }
 
-/** Returns the next resident asset (CRN + Iqama + mobile) in round-robin order. */
+/** Returns the next resident asset (CRN + Iqama + mobile) in round-robin
+ *  order, skipping any asset already flagged `used` — same reasoning as
+ *  nextCitizenAsset: an asset that already resumed to Products or was
+ *  rejected as already-registered can't reach Financial again. Falls back
+ *  to the full pool (ignoring the flag) once nothing matches, so callers
+ *  never hard-fail — just lose the time-saving skip. */
 export function nextResidentAsset() {
-    return RESIDENT_ASSETS[_residentIndex++ % RESIDENT_ASSETS.length];
+    const available = RESIDENT_ASSETS.filter(a => !a.used);
+    if (available.length === 0) {
+        console.warn('[RegistrationHelper] All resident assets are flagged used — cycling the full pool again.');
+        return RESIDENT_ASSETS[_residentIndex++ % RESIDENT_ASSETS.length];
+    }
+    return available[_residentIndex++ % available.length];
 }
 
 /** Picks a random mobile from the full pre-generated pool. */
@@ -247,16 +280,28 @@ export async function goToFinancialStep(page: Page, credentials?: FinancialStepC
 
         const financialPage = new RegistrationFinancialPage(page);
         await financialPage.loadingButton.waitFor({ state: 'hidden', timeout: 20000 }).catch(() => {});
-        const advanced = await financialPage.monthlyBillsInput.waitFor({ state: 'visible', timeout: 20000 })
-            .then(() => true)
-            .catch(() => false);
-        if (advanced) return;
+        const products = new RegistrationProductsPage(page);
+        const outcome = await Promise.race([
+            financialPage.monthlyBillsInput.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'financial' as const),
+            products.formSubTitle.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'products' as const),
+        ]).catch(() => 'neither' as const);
+        if (outcome === 'financial') return;
+
+        if (usingDefaultIdentity && outcome === 'products') {
+            // Shared/reused pool asset had already progressed past Business Info
+            // (straight to Products) in a prior run — expected steady-state for
+            // this pool, same as the already-registered case below. Persist so
+            // future runs skip it via nextResidentAsset() instead of rediscovering it.
+            markResidentAssetUsed(mobile, 'products');
+            if (attempt < maxAttempts) continue;
+        }
 
         const errorMsg = await page.evaluate(() => document.body.innerText).catch(() => '(unknown)');
 
-        if (usingDefaultIdentity && isAlreadyRegisteredMessage(errorMsg) && attempt < maxAttempts) {
-            // Valid, expected outcome for a shared/reused pool asset — try the next one.
-            continue;
+        if (usingDefaultIdentity && isAlreadyRegisteredMessage(errorMsg)) {
+            // Valid, expected outcome for a shared/reused pool asset — persist and try the next one.
+            markResidentAssetUsed(mobile, 'already-registered');
+            if (attempt < maxAttempts) continue;
         }
 
         throw new Error(

@@ -19,21 +19,21 @@
       "crn": "1010036467",
       "nationalId": "1167272762",
       "mobile": "500064975",
-      "used": "products"
+      "used": "already-registered"
     },
     {
       "type": "citizen",
       "crn": "1010051690",
       "nationalId": "1618667578",
       "mobile": "500083440",
-      "used": "products"
+      "used": "already-registered"
     },
     {
       "type": "citizen",
       "crn": "1010077719",
       "nationalId": "1982507954",
       "mobile": "500318143",
-      "used": "contract"
+      "used": "already-registered"
     },
     {
       "type": "citizen",
@@ -47,7 +47,7 @@
       "crn": "1010094219",
       "nationalId": "1687726933",
       "mobile": "500528763",
-      "used": "contract"
+      "used": "products"
     },
     {
       "type": "citizen",
@@ -61,7 +61,7 @@
       "crn": "1010117673",
       "nationalId": "1237547706",
       "mobile": "500664869",
-      "used": "contract"
+      "used": "products"
     },
     {
       "type": "citizen",
@@ -75,21 +75,21 @@
       "crn": "1000659746",
       "nationalId": "2959795515",
       "mobile": "599000000",
-      "used": false
+      "used": "products"
     },
     {
       "type": "resident",
       "crn": "1002382941",
       "nationalId": "2258981709",
       "mobile": "599000001",
-      "used": false
+      "used": "products"
     },
     {
       "type": "resident",
       "crn": "1005135478",
       "nationalId": "2447227568",
       "mobile": "599000002",
-      "used": false
+      "used": "products"
     },
     {
       "type": "resident",
