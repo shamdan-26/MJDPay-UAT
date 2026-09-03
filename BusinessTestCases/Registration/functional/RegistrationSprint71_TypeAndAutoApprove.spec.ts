@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { goToInfoStep, goToVerificationStep, nextCitizenAsset, REGISTER_URL, VALID_IBAN, VALID_VAT_NUMBER, mockFixedMerchantMode, mockAutoApprovedRegistration } from '../RegistrationHelper';
+import { goToInfoStep, goToVerificationStep, nextCitizenAsset, REGISTER_URL, fillVerificationForm, mockFixedMerchantMode, mockAutoApprovedRegistration } from '../RegistrationHelper';
 import { RegistrationInfoPage } from '../../pageElements/Registration/RegistrationInfoPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -82,15 +82,18 @@ test.describe('Registration — Auto-Approval, Auto-Activation & Activation Emai
         await mockAutoApprovedRegistration(page);
         await goToVerificationStep(page);
 
-        const ibanInput = page.getByRole('textbox', { name: /iban/i });
-        const vatInput  = page.getByRole('textbox', { name: /vat number/i });
-        await ibanInput.waitFor({ state: 'visible', timeout: 15000 }).catch(() => {});
-        if (await ibanInput.isVisible().catch(() => false)) {
-            await ibanInput.fill(VALID_IBAN);
-            await vatInput.fill(VALID_VAT_NUMBER);
-        }
+        // Confirmed live (RegistrationVerificationUploads.spec.ts): Sign Up only
+        // enables once the Bank dropdown (when rendered) *and* both file
+        // uploads are filled, not just IBAN + VAT text — filling only the text
+        // fields left Sign Up permanently disabled here, so this beforeAll
+        // never actually reached submission and TC-REG-001/002/007 always
+        // silently skipped. fillVerificationForm() fills all of it.
+        await fillVerificationForm(page);
 
-        const signUpBtn = page.getByRole('button', { name: /sign up/i });
+        // Confirmed live: the app defaults to Arabic, so the button's
+        // accessible name is "إنشاء حساب", not "Sign Up" — an English-only
+        // regex here would never match it.
+        const signUpBtn = page.getByRole('button', { name: /sign up|إنشاء حساب/i });
         signUpReached = await signUpBtn.isEnabled({ timeout: 10000 }).catch(() => false);
         if (signUpReached) await signUpBtn.click();
     });
@@ -100,6 +103,15 @@ test.describe('Registration — Auto-Approval, Auto-Activation & Activation Emai
     });
 
     const SKIP_MSG = 'Sign Up submission could not be reached/completed automatically in this environment (NAFATH boundary)';
+
+    // NOTE: the text assertions below (approved/active/activation-email) are
+    // English-only, and this app defaults to Arabic everywhere else in this
+    // suite — the actual post-submission text is very likely Arabic too. Left
+    // as-is rather than guessing a translation: this session repeatedly hit
+    // wrong-guessed Arabic wording elsewhere (e.g. النَفاذ diacritics, "أدخل
+    // رقم الهاتف" vs the real "أدخل رقم الجوال"), always fixed only once a
+    // live snapshot confirmed the real text. Confirm live before trusting
+    // these three assertions.
 
     test('TC-REG-001: should reflect automatic approval without a manual admin step', async () => {
         test.skip(!signUpReached, SKIP_MSG);

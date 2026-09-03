@@ -78,11 +78,17 @@ test.describe('Registration - NAFATH Step Page Elements', () => {
             // so flag it and move to the next unused one rather than burning the
             // rest of maxAttempts re-discovering the same dead end.
             const products = new RegistrationProductsPage(page);
+            // productCards, not formSubTitle (.form-sub-title) — that class is
+            // shared by every wizard step's header, including Business Info's own
+            // subtitle, which is still visible immediately after this Next click
+            // before the app has settled on its actual destination. See the
+            // RegistrationFinancialPage.spec.ts hook-timeout goToFinancialStep's
+            // identical race caused for the full failure mode this avoids.
             const landedOn = await Promise.race([
                 nafathPage.nafathHeading.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'nafath' as const),
                 nafathPage.activeStep.filter({ hasText: /NAFATH|نَفاذ|نفاذ/i }).first()
                     .waitFor({ state: 'visible', timeout: 20000 }).then(() => 'nafath' as const),
-                products.formSubTitle.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'products' as const),
+                products.productCards.first().waitFor({ state: 'visible', timeout: 20000 }).then(() => 'products' as const),
             ]).catch(() => 'neither' as const);
 
             if (landedOn === 'nafath') {
@@ -122,7 +128,6 @@ test.describe('Registration - NAFATH Step Page Elements', () => {
     // ── Header / Banner ───────────────────────────────────────────────────
 
     test('should display the MJD Pay logo', async () => {
-        await page.pause();
         await expect(nafathPage.logoImage).toBeVisible();
     });
 

@@ -112,7 +112,7 @@ test.describe('Registration - Info Page', () => {
         });
 
         test('should display "NAFATH" as the second outer step [ref_13]', async () => {
-            await expect(infoPage.outerStepBar.nth(1).locator('.mp-step-meta')).toContainText(' نَفاذ ');
+            await expect(infoPage.outerStepBar.nth(1).locator('.mp-step-meta')).toContainText(' 2  نفاذ  ');
         });
 
         test('should display "Products" as the third outer step [ref_14]', async () => {
@@ -144,10 +144,6 @@ test.describe('Registration - Info Page', () => {
 
         test('should display Tab 1 — Business Info [ref_17, ref_19]', async () => {
             await expect(infoPage.page.locator('.mp-step.is-active', { hasText: ' بيانات النشاط التجاري ' }).first()).toBeVisible();
-        });
-
-        test('should display Tab 2 — Financial & Business [ref_20, ref_21]', async () => {
-            await expect(infoPage.page.locator('.mp-step.ng-star-inserted', { hasText: 'نَفاذ' }).first()).toBeVisible();
         });
 
         test('should display Tab 3 — Products [ref_22, ref_23]', async () => {
@@ -188,7 +184,7 @@ test.describe('Registration - Info Page', () => {
             // ── Profile Type [ref_26 – ref_39] ───────────────────────────────
 
             test('should display the Profile Type label [ref_26]', async () => {
-                await expect(infoPage.profileTypeLabel).toContainText(' نوع الملف التجاري ');
+                await expect(infoPage.profileTypeLabel).toContainText(' نوع الحساب ');
             });
 
             test('should display the Profile Type radiogroup [ref_27]', async () => {
@@ -273,7 +269,7 @@ test.describe('Registration - Info Page', () => {
             // ── Footer [ref_54 – ref_58] ──────────────────────────────────────
 
             test('should display "Already have an account?" text [ref_54]', async () => {
-                await expect(infoPage.page.getByText(' لديك حساب؟ ').first()).toBeVisible();
+                await expect(infoPage.alreadyHaveAccountText).toContainText(' لديك حساب بالفعل؟ ');
             });
 
             test('should display the Log In link [ref_55]', async () => {

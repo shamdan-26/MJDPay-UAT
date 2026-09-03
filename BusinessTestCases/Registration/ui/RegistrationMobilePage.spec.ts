@@ -76,7 +76,7 @@ test.describe('Registration - Mobile Number Page', () => {
         await expect(regPage.createAccountEyebrow).toBeVisible();
     });
 
-    test('should display the "Enter Phone Number" heading', async () => {
+    test('should display the "Enter Phone Number" heading', async ({ page }) => {
         await expect(regPage.enterPhoneHeading).toBeVisible();
     });
 
@@ -105,8 +105,8 @@ test.describe('Registration - Mobile Number Page', () => {
     });
 
     // ── Log In link ───────────────────────────────────────────────────────────
-
-    test('should display the "Already have an account?" text', async () => {
+    test('should display the "Already have an account?" text', async ({ page }) => {
+        await page.pause();
         await expect(regPage.alreadyHaveAccountText).toBeVisible();
     });
 

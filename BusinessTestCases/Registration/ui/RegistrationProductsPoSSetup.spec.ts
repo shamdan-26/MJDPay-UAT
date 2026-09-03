@@ -126,6 +126,16 @@ test.describe('Registration - Products Step: PoS Onboarding Setup (EMI-5783)', (
         await expect(products.walletPicker).not.toBeVisible();
     });
 
+    test('should display the delivery mode toggle', async () => {
+        requireFlow();
+        await expect(products.deliveryModeToggle).toBeVisible();
+    });
+
+    test('should display the Back button in Devices & Delivery', async () => {
+        requireFlow();
+        await expect(products.devicesDeliveryBackButton).toBeVisible();
+    });
+
     // ── Devices counter ──────────────────────────────────────────────────
 
     test('should default the total-devices count to 1', async () => {
@@ -173,12 +183,33 @@ test.describe('Registration - Products Step: PoS Onboarding Setup (EMI-5783)', (
         // which still fires the native radio change event correctly.
         await products.splitByDeviceDeliveryOption.click({ force: true });
         try {
-            await expect(products.addLocationGroupButton.or(products.deliveryGroupOneLabel)).toBeVisible({ timeout: 5000 });
+            // .or() previously masked this: addLocationGroupButton and
+            // deliveryGroupOneLabel are both visible simultaneously in
+            // split-by-device mode, not either/or alternates — same strict-mode
+            // pitfall already documented above for the address radios. Only
+            // surfaced once addLocationGroupButton's Arabic regex was fixed to
+            // actually match anything (see RegistrationProductsPage.ts).
+            await expect(products.addLocationGroupButton).toBeVisible({ timeout: 5000 });
+            await expect(products.deliveryGroupOneLabel).toBeVisible({ timeout: 5000 });
         } finally {
             // Restore single-location delivery so the remaining Devices & Delivery
             // tests exercise the one-address path this suite is otherwise built
             // around — in a `finally` so a failed assertion above still leaves
             // the page in a state later serial tests can run against.
+            await products.singleLocationDeliveryOption.click({ force: true });
+        }
+    });
+
+    test('should display the Add Location Group button in split-by-device mode', async () => {
+        requireFlow();
+        // Own toggle-into/restore-from split mode, same as the test above —
+        // presence-only here (actually adding/removing a group, and the
+        // resulting Remove button, is an interaction and belongs in
+        // RegistrationProductsFunctionality.spec.ts, not this presence-only file).
+        await products.splitByDeviceDeliveryOption.click({ force: true });
+        try {
+            await expect(products.addLocationGroupButton).toBeVisible({ timeout: 5000 });
+        } finally {
             await products.singleLocationDeliveryOption.click({ force: true });
         }
     });
@@ -205,12 +236,41 @@ test.describe('Registration - Products Step: PoS Onboarding Setup (EMI-5783)', (
 
     test('should accept a contact name', async () => {
         requireFlow();
+        // The Devices & Delivery panel doesn't reliably persist this far into
+        // the serial suite (same observation the last test in this file already
+        // makes) — re-check "Request devices now" and continue past the PoS
+        // card if an earlier test's toggling left the suite back on it, rather
+        // than assuming this panel is still open.
+        const stillOnProductsCard = await products.requestDevicesNowButton.isVisible().catch(() => false);
+        if (stillOnProductsCard) {
+            await products.requestDevicesNowButton.click();
+            await products.skipSetupLaterButton.click();
+        }
+        // Same Wathiq address-resolution race as the mobile-number test below —
+        // wait for it to settle before the contact-fields section is interacted
+        // with, rather than relying on it happening to have already resolved.
+        await products.updateWathiqAddressButton.waitFor({ state: 'visible', timeout: 20000 });
         await products.contactNameInput.fill('Test Contact');
         await expect(products.contactNameInput).toHaveValue('Test Contact');
     });
 
     test('should accept a Saudi contact mobile number', async () => {
         requireFlow();
+        // Same re-navigation as the test above — don't assume the Devices &
+        // Delivery panel is still open at this point in the serial suite.
+        const stillOnProductsCard = await products.requestDevicesNowButton.isVisible().catch(() => false);
+        if (stillOnProductsCard) {
+            await products.requestDevicesNowButton.click();
+            await products.skipSetupLaterButton.click();
+        }
+        // Wait for the Wathiq address resolution to settle before interacting —
+        // same reasoning as the "should display the Contract step" test below:
+        // updateWathiqAddressButton only renders once that fetch completes, and
+        // an in-flight/just-completed fetch can re-render the whole contact-
+        // fields section, leaving nothing stable for .fill() to retry against
+        // (confirmed live: this test's contactMobileInput.fill() hung the full
+        // 60s test timeout, forcing the browser closed mid-wait).
+        await products.updateWathiqAddressButton.waitFor({ state: 'visible', timeout: 20000 });
         // Confirmed live: the field is maxlength="9" — it takes the 9-digit
         // local number without the leading trunk "0" (the placeholder shows
         // the full "0512345678" just as an illustrative example).

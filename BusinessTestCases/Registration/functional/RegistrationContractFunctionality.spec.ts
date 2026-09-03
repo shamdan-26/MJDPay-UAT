@@ -7,8 +7,9 @@ import { RegistrationContractPage } from '../../pageElements/Registration/Regist
 //
 // RegistrationContractPage.spec.ts (ui/) covers element/text presence only —
 // this file covers the interactive behavior of that step: the acknowledgement
-// checkbox gating Submit, the negative "submit while unchecked" path, the PDF
-// download action, and the final submission itself. The submission endpoint
+// checkbox gating Submit (including auto-check on scrolling the document to
+// its end), the negative "submit while unchecked" path, the PDF download
+// action, and the final submission itself. The submission endpoint
 // is covered twice: once live (happy path) and once mocked (double-submit
 // dedup + server-error handling), matching the mock-only pattern already used
 // for endpoints that are hard to exercise deterministically elsewhere in this
@@ -28,7 +29,12 @@ test.describe('Registration – Contract Review: Acknowledgement & Actions (Live
     let contract: RegistrationContractPage;
 
     test.beforeAll(async ({ browser }) => {
-        test.setTimeout(300_000);
+        // goToContractStep can cycle up to 10 CITIZEN_ASSETS attempts, each a full
+        // Info->Financial->Verification->Sign-up round trip (~40-45s) — 300s isn't
+        // reliably enough for a worst-case run of that (see the 600_000 already
+        // used everywhere else in this suite that drives the same climb, and the
+        // ui/RegistrationContractPage.spec.ts beforeAll timeout this same math fixed).
+        test.setTimeout(600_000);
         const context = await browser.newContext();
         page = await context.newPage();
         await goToContractStep(page);
@@ -42,6 +48,13 @@ test.describe('Registration – Contract Review: Acknowledgement & Actions (Live
     test('should keep Submit disabled while the agreement checkbox is unchecked', async () => {
         await expect(contract.agreeCheckbox).not.toBeChecked();
         await expect(contract.submitButton).toBeDisabled();
+    });
+
+    test('should auto-check the agreement checkbox once the document is scrolled to its end', async () => {
+        await contract.scrollDocumentToEnd();
+        await expect(contract.agreeCheckbox).toBeChecked({ timeout: 5000 });
+        // restore the unchecked precondition the manual-check tests below rely on
+        await contract.agreeCheckbox.uncheck();
     });
 
     test('should enable Submit once the agreement checkbox is checked', async () => {
@@ -88,7 +101,12 @@ test.describe('Registration – Contract Submission (Mocked)', () => {
     let contract: RegistrationContractPage;
 
     test.beforeAll(async ({ browser }) => {
-        test.setTimeout(300_000);
+        // goToContractStep can cycle up to 10 CITIZEN_ASSETS attempts, each a full
+        // Info->Financial->Verification->Sign-up round trip (~40-45s) — 300s isn't
+        // reliably enough for a worst-case run of that (see the 600_000 already
+        // used everywhere else in this suite that drives the same climb, and the
+        // ui/RegistrationContractPage.spec.ts beforeAll timeout this same math fixed).
+        test.setTimeout(600_000);
         const context = await browser.newContext();
         page = await context.newPage();
         await goToContractStep(page);

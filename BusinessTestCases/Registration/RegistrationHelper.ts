@@ -1,4 +1,4 @@
-﻿import { Page, Locator } from '@playwright/test';
+﻿import { Page, Locator, test, expect } from '@playwright/test';
 
 declare const process: { env: Record<string, string | undefined> };
 import * as fs from 'fs';
@@ -45,8 +45,63 @@ export const VALID_CRN    = RESIDENT_ASSETS[0].crn;
 export const VALID_IQAMA  = RESIDENT_ASSETS[0].nationalId;
 export const VALID_MOBILE = RESIDENT_ASSETS[0].mobile;
 
+/**
+ * Reserved sub-pool exclusively for the "should start a brand-new registration
+ * when the mobile is reused with a different CRN" test in
+ * RegistrationInfoFunctionality.spec.ts (EMI-122 T21). That test draws two
+ * resident assets per run via nextResidentAsset() — the same pool every other
+ * Registration spec file/describe block draws from — and was confirmed to fail
+ * in full bulk runs (while passing in isolation) purely from contention over
+ * shared identities, not a real regression (see the
+ * project_resident_assets_worker_index_races memory). Carving out the last N
+ * assets and excluding them from nextResidentAsset()'s pool means this test
+ * stops contending with the rest of the suite. Reserved from the tail
+ * deliberately — the fixed-index pattern used elsewhere
+ * (RESIDENT_ASSETS[workerIndex % length], workerIndex always small) only ever
+ * touches the front of the array, so it never collides with this reservation.
+ */
+const MOBILE_REUSE_POOL_SIZE = 30;
+const MOBILE_REUSE_MOBILES = new Set(RESIDENT_ASSETS.slice(-MOBILE_REUSE_POOL_SIZE).map(a => a.mobile));
+const MOBILE_REUSE_ASSETS = RESIDENT_ASSETS.filter(a => MOBILE_REUSE_MOBILES.has(a.mobile));
+
+/**
+ * Reserved sub-pool for getFreshResidentAsset() — callers that want one
+ * dedicated identity of their own, isolated from nextResidentAsset()'s
+ * shared pool. Without this reservation, getFreshResidentAsset() drew from
+ * the same GENERAL_RESIDENT_ASSETS pool and deterministically returned the
+ * very first used:false entry every time — which nextResidentAsset() could
+ * also draw (it's just one asset among many available ones), so an unrelated
+ * test advancing that same identity further server-side silently broke the
+ * "dedicated" asset out from under its owner. Reserved directly after the
+ * MOBILE_REUSE slice, same tail-reservation reasoning as that pool.
+ *
+ * Sized well above what one test needs: 3 of the first 10 assets tried here
+ * turned out already progressed on the live UAT backend despite being
+ * flagged used:false locally (this tail of the pool predates full used-flag
+ * tracking, same as the front-of-pool staleness found earlier — see
+ * markResidentAssetUsed). A 30%+ stale rate means a narrow reservation
+ * risks exhausting itself the same way the original shared-pool
+ * maxAttempts did.
+ */
+const DEDICATED_ASSET_POOL_SIZE = 60;
+// Slice taken from the middle of the array (index 900), not the tail: live
+// checks proved the tail slice (indices -90..-30) was ~100% already
+// progressed to Products on both UAT and dev — some prior bulk process
+// consumed that whole neighborhood. A middle slice is untested territory,
+// not a guarantee of freshness, but it isn't a known-dead zone the way the
+// front (~150+ confirmed used) and that tail slice are.
+const DEDICATED_ASSET_START_INDEX = 900;
+const DEDICATED_ASSET_MOBILES = new Set(
+    RESIDENT_ASSETS.slice(DEDICATED_ASSET_START_INDEX, DEDICATED_ASSET_START_INDEX + DEDICATED_ASSET_POOL_SIZE).map(a => a.mobile)
+);
+const DEDICATED_RESIDENT_ASSETS = RESIDENT_ASSETS.filter(a => DEDICATED_ASSET_MOBILES.has(a.mobile));
+
+const GENERAL_RESIDENT_ASSETS = RESIDENT_ASSETS.filter(
+    a => !MOBILE_REUSE_MOBILES.has(a.mobile) && !DEDICATED_ASSET_MOBILES.has(a.mobile)
+);
+
 let _citizenIndex  = 0;
-let _residentIndex = 0;
+let _mobileReuseIndex = 0;
 
 const REGISTRATION_ASSETS_PATH = path.resolve(__dirname, '../../data/registrationAssets.json');
 
@@ -55,6 +110,44 @@ export type CitizenAssetOutcome = 'products' | 'contract' | 'nafath' | 'already-
 
 /** Where a resident asset ended up when it was spent by goToFinancialStep. */
 export type ResidentAssetOutcome = 'products' | 'already-registered';
+
+/**
+ * Thrown by goToFinancialStep when an explicit (non-default) identity has
+ * already progressed past Business Info straight to Products — a resume,
+ * not a backend rejection. A dedicated `instanceof`-checkable type rather
+ * than string-matching the message: goToFinancialStepWithDedicatedAsset
+ * catches this specifically to mark the stale asset and move on to the next
+ * one in its small reserved pool.
+ */
+export class AssetAlreadyProgressedError extends Error {}
+
+/**
+ * Persists one asset's `used` flag to data/registrationAssets.json — reading
+ * the file fresh from disk immediately beforehand rather than serializing
+ * the in-memory `registrationAssets` object imported at module load.
+ *
+ * playwright.config.ts runs 3 workers locally, each its own process with its
+ * own private copy of that JSON from process start. Writing that stale copy
+ * back clobbers every mark any other worker persisted since — confirmed via
+ * a live run where goToFinancialStep marked 10 resident assets 'products'
+ * (one per attempt, all logged) yet none of the 10 were on disk afterward:
+ * another worker's write, still holding its own older snapshot, stomped
+ * them. That's the actual cause behind repeated maxAttempts exhaustion —
+ * marks were never surviving to be skipped on the next run. Re-reading right
+ * before the write narrows the race to the brief gap between concurrent
+ * writes instead of leaving it open for a worker's entire lifetime.
+ */
+function persistAssetUsedFlag(poolKey: 'assets' | 'uatOtpAssets', mobile: string, used: boolean | string): void {
+    try {
+        const onDisk = JSON.parse(fs.readFileSync(REGISTRATION_ASSETS_PATH, 'utf8'));
+        const match = (onDisk[poolKey] as Array<{ mobile: string; used?: boolean | string }>)
+            .find(a => a.mobile === mobile);
+        if (match) match.used = used;
+        fs.writeFileSync(REGISTRATION_ASSETS_PATH, JSON.stringify(onDisk, null, 2) + '\n');
+    } catch (err) {
+        console.warn(`[RegistrationHelper] Failed to persist used-flag for ${mobile}: ${err}`);
+    }
+}
 
 /**
  * Marks a citizen asset as used — tagged with the page it landed on
@@ -69,11 +162,7 @@ export type ResidentAssetOutcome = 'products' | 'already-registered';
 export function markCitizenAssetUsed(mobile: string, page: CitizenAssetOutcome): void {
     const asset = CITIZEN_ASSETS.find(a => a.mobile === mobile);
     if (asset) (asset as { used?: boolean | CitizenAssetOutcome }).used = page;
-    try {
-        fs.writeFileSync(REGISTRATION_ASSETS_PATH, JSON.stringify(registrationAssets, null, 2) + '\n');
-    } catch (err) {
-        console.warn(`[RegistrationHelper] Failed to persist used-flag for ${mobile}: ${err}`);
-    }
+    persistAssetUsedFlag('assets', mobile, page);
 }
 
 /**
@@ -89,11 +178,33 @@ export function markCitizenAssetUsed(mobile: string, page: CitizenAssetOutcome):
 export function markResidentAssetUsed(mobile: string, outcome: ResidentAssetOutcome): void {
     const asset = RESIDENT_ASSETS.find(a => a.mobile === mobile);
     if (asset) (asset as { used?: boolean | ResidentAssetOutcome }).used = outcome;
+    persistAssetUsedFlag('assets', mobile, outcome);
+}
+
+/**
+ * Splits a pool into a disjoint slice per Playwright worker so concurrent
+ * workers (playwright.config.ts runs `workers: 3` locally) never draw the
+ * same "next available" asset at the same time and race to submit it —
+ * previously nextResidentAsset()/nextCitizenAsset() reset `_residentIndex`/
+ * `_citizenIndex` to 0 in every worker process independently, so two workers
+ * routinely picked the identical CRN/mobile pair and submitted Business Info
+ * for it concurrently, corrupting each other's "reached Financial" checks.
+ * Falls back to the full pool when not running inside a test worker (e.g.
+ * config.workers is 1 on CI, or the pool is too small to partition).
+ */
+function getWorkerPartition<T>(pool: T[]): T[] {
+    let parallelIndex = 0;
+    let totalWorkers = 1;
     try {
-        fs.writeFileSync(REGISTRATION_ASSETS_PATH, JSON.stringify(registrationAssets, null, 2) + '\n');
-    } catch (err) {
-        console.warn(`[RegistrationHelper] Failed to persist used-flag for ${mobile}: ${err}`);
+        const info = test.info();
+        parallelIndex = info.parallelIndex;
+        totalWorkers = info.config.workers || 1;
+    } catch {
+        // Not running inside an active test (e.g. a standalone script) — use the full pool.
     }
+    if (totalWorkers <= 1) return pool;
+    const slice = pool.filter((_, i) => i % totalWorkers === parallelIndex);
+    return slice.length > 0 ? slice : pool;
 }
 
 /** Returns the next citizen asset (CRN + National ID + mobile) in round-robin
@@ -112,27 +223,78 @@ export function markResidentAssetUsed(mobile: string, outcome: ResidentAssetOutc
  *  callers never hard-fail — just lose the time-saving skip. */
 export function nextCitizenAsset(wantOutcome?: CitizenAssetOutcome | CitizenAssetOutcome[]) {
     const wanted = Array.isArray(wantOutcome) ? wantOutcome : wantOutcome ? [wantOutcome] : [];
-    const available = CITIZEN_ASSETS.filter(a => !a.used || wanted.includes(a.used as CitizenAssetOutcome));
+    const pool = getWorkerPartition(CITIZEN_ASSETS);
+    const available = pool.filter(a => !a.used || wanted.includes(a.used as CitizenAssetOutcome));
     if (available.length === 0) {
         console.warn('[RegistrationHelper] All citizen assets are flagged used — cycling the full pool again.');
-        return CITIZEN_ASSETS[_citizenIndex++ % CITIZEN_ASSETS.length];
+        return pool[_citizenIndex++ % pool.length];
     }
     return available[_citizenIndex++ % available.length];
 }
 
-/** Returns the next resident asset (CRN + Iqama + mobile) in round-robin
- *  order, skipping any asset already flagged `used` — same reasoning as
- *  nextCitizenAsset: an asset that already resumed to Products or was
- *  rejected as already-registered can't reach Financial again. Falls back
- *  to the full pool (ignoring the flag) once nothing matches, so callers
- *  never hard-fail — just lose the time-saving skip. */
+/** Returns the next resident asset (CRN + Iqama + mobile), skipping any
+ *  asset already flagged `used` — same reasoning as nextCitizenAsset: an
+ *  asset that already resumed to Products or was rejected as
+ *  already-registered can't reach Financial again. Falls back to the full
+ *  pool (ignoring the flag) once nothing matches, so callers never
+ *  hard-fail — just lose the time-saving skip.
+ *
+ *  Picked at random from the available pool rather than walked in order:
+ *  a fixed worker partition + sequential index means every run starts at
+ *  the same offset and marches forward in the same order, so a contiguous
+ *  stretch of assets that are already progressed live on UAT but not yet
+ *  flagged locally (e.g. from ad-hoc runs before markResidentAssetUsed
+ *  existed) gets hit by every run in lockstep, exhausting goToFinancialStep's
+ *  maxAttempts regardless of how high it's set. Random draw decorrelates
+ *  attempts from data order so a dead zone in the pool no longer stalls
+ *  every run identically.
+ */
 export function nextResidentAsset() {
-    const available = RESIDENT_ASSETS.filter(a => !a.used);
+    const pool = getWorkerPartition(GENERAL_RESIDENT_ASSETS);
+    const available = pool.filter(a => !a.used);
     if (available.length === 0) {
         console.warn('[RegistrationHelper] All resident assets are flagged used — cycling the full pool again.');
-        return RESIDENT_ASSETS[_residentIndex++ % RESIDENT_ASSETS.length];
+        return pool[Math.floor(Math.random() * pool.length)];
     }
-    return available[_residentIndex++ % available.length];
+    return available[Math.floor(Math.random() * available.length)];
+}
+
+/**
+ * Returns one resident asset explicitly flagged `used: false` from the
+ * reserved DEDICATED_RESIDENT_ASSETS sub-pool — never GENERAL_RESIDENT_ASSETS,
+ * which nextResidentAsset() also draws from. For a caller that wants one
+ * dedicated, deterministic fresh identity of its own rather than drawing from
+ * (and being subject to the worker partitioning, random draw, and
+ * maxAttempts retry-cycling of) nextResidentAsset() — e.g. a single test that
+ * should own its own mobile outright instead of contending with the rest of
+ * the suite for the shared pool. Falls back to nextResidentAsset()'s general
+ * pool once the dedicated one is dry, so callers never hard-fail — just lose
+ * the isolation guarantee.
+ */
+export function getFreshResidentAsset() {
+    const asset = DEDICATED_RESIDENT_ASSETS.find(a => a.used === false);
+    if (asset) return asset;
+    console.warn('[RegistrationHelper] getFreshResidentAsset: dedicated pool exhausted — falling back to the general resident pool.');
+    return nextResidentAsset();
+}
+
+/** Returns the next resident asset from the pool reserved for the "mobile
+ *  reused with a different CRN" test (EMI-122 T21) — isolated from
+ *  nextResidentAsset()'s pool so that test stops contending with the rest of
+ *  the Registration suite for identities during a full bulk run. Same
+ *  round-robin + worker-partition + used-flag-skip behaviour as
+ *  nextResidentAsset(), just scoped to MOBILE_REUSE_ASSETS. Falls back to
+ *  nextResidentAsset()'s much larger general pool once this 30-asset
+ *  reservation is dry, rather than cycling back through known-used entries
+ *  — same time-saving reasoning as getFreshResidentAsset()'s fallback. */
+export function nextMobileReuseResidentAsset() {
+    const pool = getWorkerPartition(MOBILE_REUSE_ASSETS);
+    const available = pool.filter(a => !a.used);
+    if (available.length === 0) {
+        console.warn('[RegistrationHelper] All mobile-reuse resident assets are flagged used — falling back to the general resident pool.');
+        return nextResidentAsset();
+    }
+    return available[_mobileReuseIndex++ % available.length];
 }
 
 /** Picks a random mobile from the full pre-generated pool. */
@@ -165,11 +327,7 @@ export function nextUatOtpAsset() {
 export function markUatOtpAssetUsed(mobile: string): void {
     const asset = UAT_OTP_ASSETS.find(a => a.mobile === mobile);
     if (asset) (asset as { used?: boolean }).used = true;
-    try {
-        fs.writeFileSync(REGISTRATION_ASSETS_PATH, JSON.stringify(registrationAssets, null, 2) + '\n');
-    } catch (err) {
-        console.warn(`[RegistrationHelper] Failed to persist used-flag for ${mobile}: ${err}`);
-    }
+    persistAssetUsedFlag('uatOtpAssets', mobile, true);
 }
 
 /** Picks an unused UAT OTP test mobile from phone numbers.xlsx (see `nextUatOtpAsset`). */
@@ -181,7 +339,12 @@ export function generateFreshKSAMobile(): string {
 
 
 export async function getOtpFromDb(mobile: string, maxAttempts = 10, delayMs = 2000): Promise<string> {
-    if ((process.env['ENV'] ?? 'dev') === 'dev') return '';
+    const env = process.env['ENV'] ?? 'dev';
+    // UAT now accepts a fixed all-zero OTP for any mobile, same as dev — no
+    // longer limited to the dedicated UAT_OTP_ASSETS pool (see fillOTP's
+    // '0'-per-digit fallback for '' below; '000000' behaves identically).
+    // Skips the real IMAP/Azure round trip entirely.
+    if (env === 'dev' || env === 'uat') return '000000';
     return fetchOtpFromEmail(mobile, maxAttempts, delayMs);
 }
 
@@ -194,9 +357,40 @@ export async function fillOTP(page: Page, otp?: string) {
     }
 }
 
+/**
+ * fill() followed by a verifying assertion, retried once. On a step that just
+ * transitioned (mobile->OTP->Business Info, or a fresh page load), Angular can
+ * still be re-rendering the reactive form when .fill() lands — its bootstrap
+ * then silently resets the control back to empty right after, leaving Next
+ * permanently disabled and the caller waiting out its full timeout instead of
+ * failing fast. See goToInfoStep's mobile-field fix (RegistrationMobilePage)
+ * for the same race on the previous step.
+ */
+async function fillAndVerify(locator: Locator, value: string): Promise<void> {
+    await locator.fill(value);
+    try {
+        await expect(locator).toHaveValue(value, { timeout: 3000 });
+    } catch {
+        await locator.fill(value);
+        await expect(locator).toHaveValue(value);
+    }
+}
+
 export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
     const usedMobile = mobile ?? generateKSAMobile();
     const mobilePage = new RegistrationMobilePage(page);
+    await mobilePage.goto(REGISTER_URL);
+    // Clear any in-progress application resumed from a previous identity on this
+    // same page/context. The app persists registration state client-side, so a
+    // plain re-navigation to REGISTER_URL isn't enough — retry loops that reuse
+    // one page across many identities (goToFinancialStep, goToFinancialStepWithDedicatedAsset)
+    // were observed resuming the FIRST identity's stuck application on every
+    // later attempt regardless of the new mobile/CRN, making every attempt after
+    // the first report the same outcome (see the RegistrationFinancialPage.spec.ts
+    // hook-timeout failures this fixed — 19-20 consecutive 'products' outcomes
+    // drawn from an 86%-fresh pool, statistically impossible without state leakage).
+    await page.evaluate(() => localStorage.clear()).catch(() => {});
+    await page.context().clearCookies();
     await mobilePage.goto(REGISTER_URL);
     await mobilePage.fillMobile(usedMobile);
     await mobilePage.submitMobile();
@@ -207,9 +401,9 @@ export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
     if (otpVisible) {
         await page.getByRole('textbox', { name: 'One time password input' }).first()
             .waitFor({ state: 'visible', timeout: 10000 });
-        // Only the dedicated UAT_OTP_ASSETS pool always accepts an all-zero OTP;
-        // CITIZEN_ASSETS/RESIDENT_ASSETS mobiles (used here by default) require
-        // the real code — getOtpFromDb() returns '' in dev, where zeros do work.
+        // getOtpFromDb() returns a fixed all-zero OTP in both dev and uat —
+        // see its own comment for why the real IMAP/Azure fetch path is
+        // skipped entirely for any mobile in either environment now.
         const otp = await getOtpFromDb(usedMobile);
         await fillOTP(page, otp);
         const verifyBtn = page.getByRole('button', { name: /Verify|تحقق/i });
@@ -219,6 +413,37 @@ export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
     }
     await page.getByText(/Tell us about your business|أخبرنا عن نشاطك التجاري/i).waitFor({ state: 'visible', timeout: 60000 });
     await waitForToastClear(page);
+}
+
+/**
+ * Clicks Business Info's Next button while racing the network response for
+ * the profile-registration-type submission it triggers, and reports whether
+ * that submission was rejected as a conflict.
+ *
+ * Confirmed live via network capture: a mobile/CRN/National-ID combination
+ * the backend already considers registered returns a 409 on
+ * `POST .../register/profile-registration-type` with NO visible on-page
+ * error text or toast — isAlreadyRegisteredMessage() (which only scans
+ * rendered page text) can never catch this case. Every climb loop in this
+ * file that calls infoPage.nextButton.click() directly instead of through
+ * this helper shares that same blind spot: it silently treats an
+ * already-registered pool asset as a mysterious dead end (financial/
+ * verification never load, outcome races time out) rather than cycling to
+ * the next asset the way the isAlreadyRegisteredMessage() path already does.
+ * This was the real cause behind RegistrationNafathFunctionality.spec.ts (and
+ * its ui/RegistrationNafathPage.spec.ts sibling, which shares the same
+ * un-fixed blind spot) repeatedly exhausting a single "fresh" pool asset
+ * without ever detecting why.
+ */
+export async function submitBusinessInfo(
+    page: Page,
+    infoPage: RegistrationInfoPage
+): Promise<{ conflict: boolean }> {
+    const [response] = await Promise.all([
+        page.waitForResponse(res => res.url().includes('/register/profile-registration-type'), { timeout: 15000 }).catch(() => null),
+        infoPage.nextButton.click(),
+    ]);
+    return { conflict: response?.status() === 409 };
 }
 
 export interface FinancialStepCredentials {
@@ -248,8 +473,24 @@ export async function goToFinancialStep(page: Page, credentials?: FinancialStepC
     // Only the default round-robin pool is safe to retry across — an explicit
     // crn/nationalId means the caller is deliberately testing a specific
     // (often intentionally invalid) identity and must not be silently swapped.
+    //
+    // Capped well below the worker's partition size on purpose: this used to be
+    // RESIDENT_ASSETS.length (the full *unpartitioned* 2000-asset pool), while
+    // nextResidentAsset() only ever draws from this worker's much smaller slice
+    // of it. That mismatch meant a run of already-registered/already-progressed
+    // assets (expected steady-state on a shared pool — see isAlreadyRegisteredMessage
+    // above) could burn ~20-30s per rejected attempt for up to 2000 iterations —
+    // functionally an infinite loop that never reaches the test body. Per the
+    // project's own conclusion elsewhere (see the pool-exhaustion errors below):
+    // cycling indefinitely isn't the fix — fail fast with a clear diagnostic.
+    // NOTE: as of 2026-08-23 the front of this pool has 149+ consecutive assets
+    // already flagged 'products' (confirmed via data/registrationAssets.json) —
+    // already-known-used assets are skipped for free, but a run can still hit this
+    // cap on newly-discovered ones within that streak. If exhaustion errors persist,
+    // the fix is refreshing the pool per the error's own message, not raising this
+    // number further.
     const usingDefaultIdentity = !credentials?.crn && !credentials?.nationalId;
-    const maxAttempts = usingDefaultIdentity ? RESIDENT_ASSETS.length : 1;
+    const maxAttempts = usingDefaultIdentity ? Math.min(getWorkerPartition(GENERAL_RESIDENT_ASSETS).length, 10) : 1;
 
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         const asset = nextResidentAsset();
@@ -258,33 +499,49 @@ export async function goToFinancialStep(page: Page, credentials?: FinancialStepC
         const nationalId = credentials?.nationalId ?? asset.nationalId;
         const profileType = credentials?.profileType ?? 'individual';
 
+        // The retry loop below can legitimately take several minutes across
+        // maxAttempts (each a full mobile->OTP->Business Info round trip) — with
+        // no visible output, a multi-attempt run is indistinguishable from a hang.
+        console.log(`[goToFinancialStep] attempt ${attempt}/${maxAttempts} — mobile=${mobile}`);
+
         await goToInfoStep(page, mobile);
 
         const infoPage = new RegistrationInfoPage(page);
-        const radioGroup = page.getByRole('radiogroup', { name: /Profile Type|نوع الملف التجاري/i });
         if (profileType === 'merchant') {
-            const merchantRadio = radioGroup.getByRole('radio', { name: /merchant/i });
-            if (await merchantRadio.count() > 0) {
-                await merchantRadio.click();
-            } else {
-                await radioGroup.getByRole('radio').last().click();
-            }
+            // Accessible name is Arabic-only ("تاجر") when the app defaults to Arabic, so a
+            // name-based locator can't find it — infoPage.merchantButton is an id selector,
+            // stable across languages.
+            await infoPage.merchantButton.click();
         } else {
-            await radioGroup.getByRole('radio').first().click();
+            // The profile-type radiogroup now only has two cards: Merchant (index 0,
+            // pre-selected by default) and Freelancer (index 1, disabled/"coming soon").
+            // .first() reliably lands on Merchant — there's no separate individual/
+            // resident option in the UI anymore.
+            await infoPage.profileTypeGroup.getByRole('radio').first().click();
         }
 
-        await infoPage.crnInput.fill(crn);
-        await infoPage.idInput.fill(nationalId);
-        await infoPage.emailInput.fill(credentials?.email ?? generateEmail());
+        await fillAndVerify(infoPage.crnInput, crn);
+        await fillAndVerify(infoPage.idInput, nationalId);
+        await fillAndVerify(infoPage.emailInput, credentials?.email ?? generateEmail());
         await infoPage.nextButton.click();
 
         const financialPage = new RegistrationFinancialPage(page);
         await financialPage.loadingButton.waitFor({ state: 'hidden', timeout: 20000 }).catch(() => {});
         const products = new RegistrationProductsPage(page);
+        // Races against products.productCards (.mp-product-card), not
+        // products.formSubTitle (.form-sub-title) — that class is shared by
+        // every wizard step's header, including Financial & Business' own
+        // subtitle, so racing it against monthlyBillsInput produced a false
+        // 'products' read on nearly every attempt regardless of which step
+        // actually loaded (confirmed live: a run's failure snapshot showed the
+        // browser genuinely sitting on the Financial form after being
+        // misdetected as 'products' moments earlier). productCards only
+        // renders on the real Products step.
         const outcome = await Promise.race([
             financialPage.monthlyBillsInput.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'financial' as const),
-            products.formSubTitle.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'products' as const),
+            products.productCards.first().waitFor({ state: 'visible', timeout: 20000 }).then(() => 'products' as const),
         ]).catch(() => 'neither' as const);
+        console.log(`[goToFinancialStep] attempt ${attempt}/${maxAttempts} — outcome=${outcome}`);
         if (outcome === 'financial') return;
 
         if (usingDefaultIdentity && outcome === 'products') {
@@ -294,6 +551,29 @@ export async function goToFinancialStep(page: Page, credentials?: FinancialStepC
             // future runs skip it via nextResidentAsset() instead of rediscovering it.
             markResidentAssetUsed(mobile, 'products');
             if (attempt < maxAttempts) continue;
+            // Every asset in the pool has now progressed past Business Info — this is
+            // pool exhaustion, not a backend rejection. Thrown separately from the
+            // generic error below so callers aren't misled into debugging a
+            // nonexistent regression (the page shows Products, not a rejection).
+            throw new Error(
+                `goToFinancialStep: exhausted all ${maxAttempts} RESIDENT_ASSETS — every pool asset has ` +
+                `already progressed past Business Info straight to Products. Add fresh assets to ` +
+                `RESIDENT_ASSETS or free up ones marked 'products' in data/registrationAssets.json.`
+            );
+        }
+
+        if (outcome === 'products') {
+            // Explicit (non-default) identity — the caller passed a specific
+            // mobile/crn/nationalId, so there's no pool to cycle through (see
+            // maxAttempts above). The page resumed straight to Products, which
+            // is a legitimate prior-progress state, not a backend rejection —
+            // thrown separately so callers aren't misled by the generic
+            // "rejected by the backend" error below into debugging a
+            // nonexistent validation failure.
+            throw new AssetAlreadyProgressedError(
+                `goToFinancialStep: identity already progressed past Business Info straight to ` +
+                `Products (not a backend rejection). CRN=${crn}, ID=${nationalId}, Mobile=${mobile}.`
+            );
         }
 
         const errorMsg = await page.evaluate(() => document.body.innerText).catch(() => '(unknown)');
@@ -302,6 +582,12 @@ export async function goToFinancialStep(page: Page, credentials?: FinancialStepC
             // Valid, expected outcome for a shared/reused pool asset — persist and try the next one.
             markResidentAssetUsed(mobile, 'already-registered');
             if (attempt < maxAttempts) continue;
+            // Every asset in the pool is already registered — pool exhaustion, not a
+            // fresh backend rejection worth investigating as a regression.
+            throw new Error(
+                `goToFinancialStep: exhausted all ${maxAttempts} RESIDENT_ASSETS — every pool asset is ` +
+                `already registered. Add fresh assets to RESIDENT_ASSETS.`
+            );
         }
 
         throw new Error(
@@ -310,6 +596,99 @@ export async function goToFinancialStep(page: Page, credentials?: FinancialStepC
             `CRN=${crn}, ID=${nationalId}, Mobile=${mobile}.\n` +
             `Page text: ${errorMsg?.slice(0, 300)}`
         );
+    }
+}
+
+/**
+ * Drives goToFinancialStep for a caller that wants one dedicated identity of
+ * its own (see getFreshResidentAsset), retrying across the reserved
+ * DEDICATED_RESIDENT_ASSETS pool if a given asset turns out to have already
+ * progressed past Business Info. That pool predates full used-flag tracking
+ * (see markResidentAssetUsed) — a `used:false` entry can still turn out to
+ * already be spent on the live UAT backend — so a single fixed pick isn't
+ * reliable even when it's the only caller that ever draws it.
+ *
+ * Re-derives the available (used:false) set fresh on every attempt — rather
+ * than filtering once up front and walking the result in order — so each
+ * pick reflects every mark made so far this run (including ones just made
+ * this loop) before it's attempted, and picks randomly among what's left
+ * rather than sequentially, so a stale stretch in the pool doesn't get
+ * walked in the same order attempt after attempt. Marks each discovered-stale
+ * asset 'products' as it's found so later runs skip it too.
+ *
+ * Capped at 20 attempts rather than the full (60-asset) pool: live checks
+ * have turned up a real stale rate well above what the local used:false
+ * flags suggest (a pre-run check of this pool counted 12/60 already
+ * 'products' — the same run then discovered 4 more among the 48 it thought
+ * were fresh). Genuinely walking all 60 would be ~20-30 min of real UAT
+ * round trips per test run. If 20 isn't enough, the fix is refreshing this
+ * dataset against live backend state, not raising the cap further — see the
+ * project's own conclusion on the shared pool for the same reasoning.
+ *
+ * Bails out of the dedicated pool early (DEDICATED_FALLBACK_THRESHOLD
+ * consecutive already-progressed hits) rather than spending all maxAttempts
+ * inside it: a run confirmed 18/60 dedicated assets already-progressed in a
+ * single pass, and a bad random draw can chain enough of that stale 30% back
+ * to back to burn the whole beforeEach timeout before ever reaching a fresh
+ * one — see the RegistrationFinancialPage.spec.ts hook-timeout failure this
+ * fixed. GENERAL_RESIDENT_ASSETS (nextResidentAsset()'s pool, ~900+ assets)
+ * is checked flag-first the same way and is large enough that a fresh draw
+ * is far more likely on the first try, so falling back there for the
+ * remaining attempts trades a little of this pool's isolation guarantee for
+ * a bounded worst-case runtime.
+ */
+const DEDICATED_FALLBACK_THRESHOLD = 5;
+
+// If this many attempts IN A ROW land on 'products' — spanning BOTH the
+// dedicated pool and (after DEDICATED_FALLBACK_THRESHOLD) the general pool —
+// bail out rather than burning the rest of maxAttempts / the 600s hook
+// timeout. Originally added chasing what looked like systemic pool
+// exhaustion (every run producing 16-20/20 straight 'products' outcomes,
+// unaffected by clearing localStorage/cookies) — the real cause turned out
+// to be goToFinancialStep's outcome race matching products.formSubTitle
+// (.form-sub-title), a class shared by every wizard step's own header
+// including Financial's, so it false-won the race almost every attempt
+// regardless of which step actually loaded (fixed: races productCards
+// instead, which only renders on the real Products step). Kept as a
+// defensive cap for genuine pool exhaustion now that the false-positive
+// source is gone.
+const SYSTEMIC_FAILURE_THRESHOLD = 8;
+
+export async function goToFinancialStepWithDedicatedAsset(page: Page): Promise<void> {
+    const maxAttempts = Math.min(DEDICATED_RESIDENT_ASSETS.length, 20);
+    let dedicatedFailures = 0;
+    let totalFailures = 0;
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        if (totalFailures >= SYSTEMIC_FAILURE_THRESHOLD) {
+            throw new Error(
+                `goToFinancialStepWithDedicatedAsset: ${totalFailures} consecutive attempts across both the ` +
+                `dedicated and general pools landed on Products — genuine pool exhaustion across both a small ` +
+                `reserved pool and the much larger general pool simultaneously is very unlikely. If this fires ` +
+                `again after a fresh DEDICATED_RESIDENT_ASSETS pool, re-check goToFinancialStep's outcome race ` +
+                `for another false-positive 'products' match before assuming the pool is exhausted.`
+            );
+        }
+        const dedicatedAvailable = DEDICATED_RESIDENT_ASSETS.filter(a => !a.used);
+        const useFallbackPool = dedicatedFailures >= DEDICATED_FALLBACK_THRESHOLD || dedicatedAvailable.length === 0;
+        const asset = useFallbackPool ? nextResidentAsset() : dedicatedAvailable[Math.floor(Math.random() * dedicatedAvailable.length)];
+        console.log(`[goToFinancialStepWithDedicatedAsset] attempt ${attempt}/${maxAttempts} — mobile=${asset.mobile}${useFallbackPool ? ' (general pool fallback)' : ''}`);
+        try {
+            await goToFinancialStep(page, { mobile: asset.mobile, crn: asset.crn, nationalId: asset.nationalId });
+            return;
+        } catch (err) {
+            if (err instanceof AssetAlreadyProgressedError) {
+                markResidentAssetUsed(asset.mobile, 'products');
+                if (!useFallbackPool) dedicatedFailures++;
+                totalFailures++;
+                if (attempt < maxAttempts) continue;
+                throw new Error(
+                    `goToFinancialStepWithDedicatedAsset: exhausted ${maxAttempts} attempts — every asset tried ` +
+                    `had already progressed past Business Info. Refresh DEDICATED_RESIDENT_ASSETS' underlying ` +
+                    `data or raise DEDICATED_ASSET_POOL_SIZE.`
+                );
+            }
+            throw err;
+        }
     }
 }
 
@@ -356,9 +735,17 @@ export async function fillVerificationForm(page: Page): Promise<void> {
     const fileInputs = page.locator('input[type="file"]');
     const fileInputCount = await fileInputs.count();
     for (let i = 0; i < fileInputCount; i++) {
+        const fileName = `doc${i}.pdf`;
         await fileInputs.nth(i)
-            .setInputFiles({ name: `doc${i}.pdf`, mimeType: 'application/pdf', buffer: TEST_FILE_BUFFER })
+            .setInputFiles({ name: fileName, mimeType: 'application/pdf', buffer: TEST_FILE_BUFFER })
             .catch(() => {});
+        // Confirmed live (RegistrationVerificationUploads.spec.ts): setInputFiles()
+        // resolves once the DOM input holds the file, NOT once the app's own
+        // async upload finishes — callers clicking Sign Up right after this loop
+        // used to race that upload and find it still disabled. Wait for each
+        // filename to actually render (the app's own "Uploaded" confirmation)
+        // before moving on, same fix already applied at that call site.
+        await page.getByText(fileName).waitFor({ state: 'visible', timeout: 15000 }).catch(() => {});
     }
 }
 
@@ -395,12 +782,19 @@ export async function fillVerificationForm(page: Page): Promise<void> {
  */
 export async function goToProductsStep(page: Page, maxAttempts = 10, landOnContractOk = false): Promise<boolean> {
     const products = new RegistrationProductsPage(page);
-    // Scoped to the Products step's own .form-sub-title element rather than a raw
-    // page.getByText() text search — the latter is ambiguous on this app (likely an
-    // Angular CDK a11y live-announcer duplicate of the same string elsewhere in the
-    // DOM), which throws a strict-mode violation that Promise.race's .catch() below
-    // silently swallows as 'neither', even when Products has clearly rendered.
-    const productsHeading = products.formSubTitle;
+    // Scoped to products.productCards (.mp-product-card), not products.formSubTitle
+    // (.form-sub-title) — that class is shared by every wizard step's own header,
+    // including Business Info's, so racing it below could false-win as 'products'
+    // if the flow unexpectedly lands back on an earlier step instead (confirmed
+    // live: a RegistrationProductsPage.spec.ts run read Business Info's own title
+    // ("أخبرنا عن نشاطك التجاري") through this same shared-class hole — see the
+    // identical fix in goToFinancialStep's outcome race). productCards only
+    // renders on the real Products step. A raw page.getByText() text search isn't
+    // an option either — it's ambiguous on this app (likely an Angular CDK a11y
+    // live-announcer duplicate of the same string elsewhere in the DOM), which
+    // throws a strict-mode violation that Promise.race's .catch() below silently
+    // swallows as 'neither', even when Products has clearly rendered.
+    const productsHeading = products.productCards.first();
 
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         // When landing on Contract is an acceptable outcome (goToContractStep's
@@ -415,9 +809,9 @@ export async function goToProductsStep(page: Page, maxAttempts = 10, landOnContr
 
         const infoPage = new RegistrationInfoPage(page);
         await infoPage.profileTypeGroup.getByRole('radio').first().click();
-        await infoPage.crnInput.fill(asset.crn);
-        await infoPage.idInput.fill(asset.nationalId);
-        await infoPage.emailInput.fill(generateEmail());
+        await fillAndVerify(infoPage.crnInput, asset.crn);
+        await fillAndVerify(infoPage.idInput, asset.nationalId);
+        await fillAndVerify(infoPage.emailInput, generateEmail());
         await infoPage.nextButton.click();
         await page.getByRole('button', { name: /Loading|جاري التحميل/i })
             .waitFor({ state: 'hidden', timeout: 20000 })
@@ -541,11 +935,21 @@ export async function goToProductsStep(page: Page, maxAttempts = 10, landOnContr
         }
 
         // Neither Products, Contract, nor NAFATH appeared — most likely an
-        // "already registered" rejection with no recognizable panel. Cycle to
-        // the next asset instead of treating it as an unexpected failure.
+        // "already registered" rejection with no recognizable panel, but could
+        // also just be a slow-loading attempt on this one asset. Either way,
+        // cycle to the next asset instead of treating a single inconclusive
+        // attempt as an unexpected failure — maxAttempts already bounds the
+        // whole climb, and the final `return false` after the loop covers
+        // genuine exhaustion. (Previously this returned false immediately for
+        // the non-already-registered case, contradicting this very comment and
+        // giving up after a single attempt instead of using the other 9 — see
+        // the RegistrationProductsPage.spec.ts beforeAll failure this fixed.)
         const pageText = await page.evaluate(() => document.body.innerText).catch(() => '');
-        if (!isAlreadyRegisteredMessage(pageText)) return false;
-        markCitizenAssetUsed(asset.mobile, 'already-registered');
+        if (isAlreadyRegisteredMessage(pageText)) {
+            markCitizenAssetUsed(asset.mobile, 'already-registered');
+        } else {
+            console.log(`[goToProductsStep] attempt ${attempt} — landed on neither Products/Contract/NAFATH and no already-registered message; cycling to the next asset.`);
+        }
     }
     return false;
 }

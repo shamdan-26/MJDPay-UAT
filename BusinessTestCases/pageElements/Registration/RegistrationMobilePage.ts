@@ -1,4 +1,4 @@
-import { type Page, type Locator } from '@playwright/test';
+import { type Page, type Locator, expect } from '@playwright/test';
 import { waitForToastClear } from '../../toastMessages';
 
 export class RegistrationMobilePage {
@@ -36,13 +36,13 @@ export class RegistrationMobilePage {
         this.themeToggle  = page.getByRole('button', { name: 'Switch theme' });
 
         this.createAccountEyebrow        = page.locator('.form-eyebrow');
-        this.enterPhoneHeading           = page.locator('label.floating-field-label[for="floating-text-mobilenumber-1"]', { hasText: 'رقم الجوال' });
+        this.enterPhoneHeading           = page.locator('label.floating-field-label.ng-star-inserted', { hasText: 'رقم الجوال' });
         this.startRegistrationDescription = page.locator('.form-sub-title.mt-2', { hasText: 'ابدأ تسجيل نشاطك التجاري' });
 
         this.mobileInput = page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ });
         this.countryCode = page.locator('.floating-prefix');
         this.nextButton  = page.getByRole('button', { name: /next|التالي/i });
-        this.alreadyHaveAccountText = page.getByText(/Already have an account\?|لديك حساب؟/);
+        this.alreadyHaveAccountText = page.locator('div.new-user span', { hasText: /Already have an account\?|لديك حساب بالفعل؟/ });
         this.loginLink   = page.getByTestId('register-login-link');
         this.termsText   = page.getByText(/Terms/i).first();
         this.privacyText = page.getByText(/Privacy/i).first();
@@ -54,7 +54,18 @@ export class RegistrationMobilePage {
     }
 
     async fillMobile(mobile: string): Promise<void> {
+        // On a freshly-navigated page, Angular can still be hydrating the reactive
+        // form when .fill() lands — its bootstrap then resets the control back to
+        // empty right after, silently dropping the value. Verify the fill stuck
+        // and retry once rather than letting submitMobile() spin on a permanently
+        // disabled Next button until the caller's timeout fires.
         await this.mobileInput.fill(mobile);
+        try {
+            await expect(this.mobileInput).toHaveValue(mobile, { timeout: 3000 });
+        } catch {
+            await this.mobileInput.fill(mobile);
+            await expect(this.mobileInput).toHaveValue(mobile);
+        }
     }
 
     async submitMobile(): Promise<void> {

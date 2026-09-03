@@ -109,8 +109,12 @@ export class RegistrationProductsPage {
         this.deviceCountInput   = page.getByTestId('pos-delivery-editor-total-devices-input');
         this.decreaseDeviceCountButton = page.getByTestId('pos-delivery-editor-decrement-total-btn');
         this.increaseDeviceCountButton = page.getByTestId('pos-delivery-editor-increment-total-btn');
-        this.deliveryModeToggle = page.getByRole('radiogroup', { name: /delivery mode|التوصيل/i })
-            .or(page.getByRole('group', { name: /delivery mode|التوصيل/i }));
+        // Correction: confirmed live there is no radiogroup/group role wrapping
+        // the two delivery-mode radios with this accessible name — "التوصيل" /
+        // "Delivery" renders as a plain text label above two independent radio
+        // inputs (singleLocationDeliveryOption / splitByDeviceDeliveryOption
+        // below already cover those individually), not an ARIA group.
+        this.deliveryModeToggle = page.getByText(/^delivery$|^التوصيل$/i).first();
         this.singleLocationDeliveryOption = page.getByTestId('pos-delivery-editor-mode-single-radio');
         this.splitByDeviceDeliveryOption  = page.getByTestId('pos-delivery-editor-mode-split-radio');
         this.deliveryGroupOneLabel = page.getByText(/group 1|المجموعة 1/i).first();
@@ -120,12 +124,21 @@ export class RegistrationProductsPage {
         this.customPinAddressOption  = page.getByTestId('pos-delivery-editor-source-pin-radio-0');
         this.updateWathiqAddressButton = page.getByTestId('pos-delivery-editor-wathiq-refresh-btn-0');
         this.contactNameInput  = page.getByTestId('pos-delivery-editor-contact-name-input-0');
-        // The contact-number field's data-testid sits on the app-floating-label-input
-        // wrapper (a custom element), not a raw <input> — Playwright's fill()
-        // needs the actual editable control, so scope down to the inner textbox.
-        this.contactMobileInput = page.getByTestId('pos-delivery-editor-contact-number-input-0').getByRole('textbox');
-        this.addLocationGroupButton    = page.getByRole('button', { name: /add.*(location|group)/i });
-        this.removeLocationGroupButton = page.getByRole('button', { name: /remove.*(location|group)/i }).first();
+        // Correction: data-testid="pos-delivery-editor-contact-number-input-0" sits
+        // directly on the real <input> (class="mat-mdc-input-element ..."), not a
+        // wrapper — confirmed live via DOM inspection (aria-label="مثال: 0512345678").
+        // getByTestId() alone resolves it; the earlier .getByRole('textbox') chain
+        // was working around an incorrect assumption that the testid was on a
+        // separate wrapper element.
+        this.contactMobileInput = page.getByTestId('pos-delivery-editor-contact-number-input-0');
+        // Confirmed live: the button's accessible name is Arabic-only by default
+        // ("إضافة مجموعة موقع" — "Add location group") — the English-only pattern
+        // never matched it, since this app defaults to Arabic like every other
+        // step. removeLocationGroupButton's Arabic text isn't independently
+        // confirmed live yet, but every other Arabic word for "remove" in this
+        // codebase's UI is إزالة or حذف, so both are included defensively.
+        this.addLocationGroupButton    = page.getByRole('button', { name: /add.*(location|group)|إضافة.*(مجموعة|موقع)/i });
+        this.removeLocationGroupButton = page.getByRole('button', { name: /remove.*(location|group)|(إزالة|حذف).*(مجموعة|موقع)/i }).first();
         this.walletPicker = page.getByRole('combobox', { name: /wallet/i })
             .or(page.getByRole('listbox', { name: /wallet/i }));
         // register-pos-delivery-submit-btn/back-btn are the panel's own footer

@@ -27,7 +27,15 @@ test.describe('Registration — Contract Review', () => {
     let contract: RegistrationContractPage;
 
     test.beforeAll(async ({ browser }) => {
-        test.setTimeout(120_000);
+        // goToContractStep wraps goToProductsStep(page, 10, true), which can cycle
+        // up to 10 CITIZEN_ASSETS attempts, each a full Info->Financial->
+        // Verification->Sign-up round trip (~40-45s) — 120s only covers 2-3
+        // attempts before the hook itself gets killed mid-navigation (confirmed
+        // live: a run logged only 2/10 attempts before this timeout fired).
+        // Matches the 600_000 already used everywhere else in this suite that
+        // drives the same climb (RegistrationProductsPage.spec.ts,
+        // RegistrationProductsPoSSetup.spec.ts) — this file was the one outlier.
+        test.setTimeout(600_000);
         const context = await browser.newContext();
         page = await context.newPage();
         await goToContractStep(page);
@@ -76,7 +84,12 @@ test.describe('Registration — Contract Review', () => {
 
     test('should display all four outer step labels: Business Info, NAFATH, Products, Contract', async () => {
         await expect(contract.outerStepBar.filter({ hasText: 'بيانات النشاط التجاري' })).toBeVisible();
-        await expect(contract.outerStepBar.filter({ hasText: 'نَفاذ' })).toBeVisible();
+        // "نَفاذ" (with fatha diacritic) vs "نفاذ" (without) is a known dual-encoding
+        // ambiguity for this word in the app — every other Nafath match in this
+        // codebase defends against it with both variants (e.g.
+        // /nafath|نَفاذ|نفاذ/i in RegistrationProductsPage.spec.ts); this test
+        // hardcoded only the diacritic variant with no fallback.
+        await expect(contract.outerStepBar.filter({ hasText: /نَفاذ|نفاذ/i })).toBeVisible();
         await expect(contract.outerStepBar.filter({ hasText: 'المنتجات' })).toBeVisible();
         await expect(contract.outerStepBar.filter({ hasText: 'العقد' })).toBeVisible();
     });

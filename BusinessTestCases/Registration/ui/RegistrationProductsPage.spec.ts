@@ -76,6 +76,15 @@ test.describe('Registration - Products Step UI (Page Elements)', () => {
     // ── Page headings ─────────────────────────────────────────────────────
 
     test('should display the "Setup" eyebrow text', async () => {
+        // Correction: an earlier version of this test asserted "Create Account"
+        // (إنشاء حساب) here, reasoning .form-eyebrow was shared across every
+        // step — that was a misdiagnosis. The real cause of that failure was
+        // goToProductsStep landing back on Business Info instead of Products
+        // (fixed separately: the productCards race + retry-loop bugs in
+        // RegistrationHelper.ts). Now that the session genuinely reaches
+        // Products, its eyebrow correctly and distinctly reads "إعداد" (Setup)
+        // — Business Info/Financial/Verification show "Create Account", while
+        // Products/Contract (the setup-your-account phase) show "Setup".
         await expect(products.formEyebrow).toContainText(/setup|إعداد/i);
     });
 
@@ -130,11 +139,28 @@ test.describe('Registration - Products Step UI (Page Elements)', () => {
         await expect(products.selectedCounter).toBeVisible();
     });
 
+    test('should show a non-zero count in the selection counter on arrival', async () => {
+        // Not hardcoding the exact "N Selected" text — RegistrationProductsFunctionality.spec.ts
+        // confirms "1 Selected" live, but that's against a different environment/catalog than
+        // this file's dev.majdpay.com target. A required, non-deselectable product (walletCard())
+        // is always present per the page object's own docstring, so the counter should always
+        // read at least 1 on arrival regardless of exact catalog contents.
+        await expect(products.selectedCounter).toContainText(/[1-9]\d*/);
+    });
+
     test('should display the Cancel button', async () => {
         await expect(products.cancelButton).toBeVisible();
     });
 
     test('should display the Continue button', async () => {
         await expect(products.continueButton).toBeVisible();
+    });
+
+    test('should have the Continue button enabled by default via the required product', async () => {
+        // Confirmed live in RegistrationProductsFunctionality.spec.ts: the mandatory
+        // product is pre-selected and locked, so Continue starts enabled without any
+        // interaction — this only re-asserts that basic arrival state, not the fuller
+        // selection/deselection behavior already covered there.
+        await expect(products.continueButton).toBeEnabled();
     });
 });

@@ -51,6 +51,7 @@ export class RegistrationInfoPage {
 
     // Actions / footer
     readonly nextButton: Locator;
+    readonly alreadyHaveAccountText: Locator;
     readonly loginLink: Locator;
     readonly footer: Locator;
 
@@ -72,7 +73,11 @@ export class RegistrationInfoPage {
         this.activeStep   = page.locator('.mp-step.is-active');
 
         this.profileTypeLabel = page.locator('#register-profile-types .mp-field-label');
-        this.profileTypeGroup = page.getByRole('radiogroup', { name: /Profile Type|نوع الملف التجاري/i });
+        // Scoped to the #register-profile-types container by role only (no name/text
+        // filter) — the group's accessible name has changed at least once already
+        // ("نوع الحساب" -> "نوع الملف التجاري"), and #register-profile-types has exactly
+        // one radiogroup, so filtering by text is unnecessary fragility.
+        this.profileTypeGroup = page.locator('#register-profile-types').getByRole('radiogroup');
         this.merchantButton = page.locator('#register-profile-card-MERCHANT');
         this.billerCard     = page.locator('#register-profile-card-BILLER');
         this.customerCard   = page.locator('#register-profile-card-CUSTOMER');
@@ -82,13 +87,13 @@ export class RegistrationInfoPage {
         this.crnLabel         = page.locator('#register-unifiedNumber-group .field-hint-label__text');
         this.crnInput         = page.locator('#register-unifiedNumber-group input[type="text"]');
         this.crnGroup         = page.locator('#register-unifiedNumber-group');
-        this.crnTooltipButton = page.getByRole('button', { name: /Unified Number|الرقم الموحد/i });
+        this.crnTooltipButton = page.locator('#register-unifiedNumber-group .field-hint-label__info[aria-label="أدخل الرقم الموحّد المكوّن من 10 أرقام والذي يبدأ بـ 7."]');
         this.crnClearButton   = page.locator('#register-unifiedNumber-group').getByRole('button', { name: /Clear|مسح/i });
 
         this.idLabel         = page.locator('#register-id-group .field-hint-label__text');
         this.idInput         = page.locator('#register-id-group input[type="text"]');
         this.idGroup         = page.locator('#register-id-group');
-        this.idTooltipButton = page.getByRole('button', { name: /National ID.*Iqama|Iqama|رقم الهوية الوطنية/i });
+        this.idTooltipButton = page.locator('#register-id-group .field-hint-label__info[aria-label="رقم هويتك الوطنية السعودية (للمواطنين) أو رقم الإقامة (للمقيمين) المكوّن من 10 أرقام."]');
         this.idClearButton   = page.locator('#register-id-group').getByRole('button', { name: /Clear|مسح/i });
 
         this.emailLabel = page.locator('#register-email-group .floating-field-label');
@@ -96,6 +101,7 @@ export class RegistrationInfoPage {
         this.emailError = page.locator('#error_email.text-danger');
 
         this.nextButton = page.locator('#register-next-button');
+        this.alreadyHaveAccountText = page.locator('#login-line.new-user').first();
         this.loginLink  = page.locator('#btn_register_login_step1');
         this.footer     = page.locator('#login-form-footer').first();
     }

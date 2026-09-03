@@ -5,6 +5,13 @@ import { RegistrationInfoPage } from '../../pageElements/Registration/Registrati
 import { RegistrationFinancialPage } from '../../pageElements/Registration/RegistrationFinancialPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
+// ARCHIVED: the Verification & Documents inner tab (IBAN proof / VAT
+// certificate / CR uploads) this file covers is no longer part of the live
+// registration flow — retired here rather than deleted outright, per the
+// archive/ convention in CLAUDE.md. Skipped at the describe level so it's
+// still discovered but never run.
+// ─────────────────────────────────────────────────────────────────────────────
+//
 // Registration — Verification & Documents (Tab 3 of 3: "Verification & Uploads")
 //
 // Covers the full page shell reached at this step: header/banner, the
@@ -18,7 +25,7 @@ import { RegistrationFinancialPage } from '../../pageElements/Registration/Regis
 // not their full field-by-field behavior again.
 // ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('Registration — Verification & Documents', () => {
+test.describe.skip('Registration — Verification & Documents', () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;

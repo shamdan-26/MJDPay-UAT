@@ -54,6 +54,10 @@ export class RegistrationContractPage {
     // Numbered contract sections (أولاً–رابعاً)
     readonly contractSections: Locator;
 
+    // The document's own scrollable container (old build: .contract-doc,
+    // new build: .contract-doc__content — see class-level note above).
+    readonly documentContainer: Locator;
+
     // Acknowledgement & consent
     readonly agreeCheckbox: Locator;
     readonly agreeCheckboxLabel: Locator;
@@ -124,6 +128,8 @@ export class RegistrationContractPage {
         this.contractSections = page.locator('.contract-doc .section-title')
             .or(page.locator('.contract-doc__content h3').filter({ hasText: /^\d+\./ }));
 
+        this.documentContainer = page.locator('.contract-doc').or(page.locator('.contract-doc__content'));
+
         this.agreeCheckbox = page.getByTestId('register-contract-accept-checkbox')
             .or(page.getByRole('checkbox', { name: /لقد قرأت وأوافق على شروط العقد/ }));
         this.agreeCheckboxLabel = page.getByText('لقد قرأت وأوافق على شروط العقد');
@@ -144,5 +150,12 @@ export class RegistrationContractPage {
     /** The nth (1-based) numbered contract section heading. */
     section(index: number): Locator {
         return this.contractSections.nth(index - 1);
+    }
+
+    /** Scrolls the document's own scrollable container to its end, simulating
+     *  the user having read through the full agreement text (separate from
+     *  scrolling the outer page). */
+    async scrollDocumentToEnd(): Promise<void> {
+        await this.documentContainer.evaluate(el => { el.scrollTop = el.scrollHeight; });
     }
 }

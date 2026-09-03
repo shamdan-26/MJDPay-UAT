@@ -6,16 +6,31 @@ import {
     selectRandomOption,
     REGISTER_URL,
 } from '../RegistrationHelper';
+import { RegistrationFinancialPage } from '../../pageElements/Registration/RegistrationFinancialPage';
+import { RegistrationInfoPage } from '../../pageElements/Registration/RegistrationInfoPage';
+import { RegistrationVerificationPage } from '../../pageElements/Registration/RegistrationVerificationPage';
 
 test.describe('Registration - Financial & Business Functionality', () => {
     test.describe.configure({ mode: 'serial' });
     test.setTimeout(120_000);
 
     let page: Page;
+    let financialPage: RegistrationFinancialPage;
+    let infoPage: RegistrationInfoPage;
 
     test.beforeAll(async ({ browser }) => {
+        // describe-level test.setTimeout only covers test bodies, not this hook —
+        // beforeAll falls back to the global config timeout otherwise.
+        // goToFinancialStep can retry up to 10 times against the shared resident
+        // pool, each attempt a full mobile->OTP->Business Info round trip
+        // (~30-60s). 120s was cut off mid-navigation on attempt 5/10 in a live
+        // run — same class of budget-starvation bug fixed in
+        // RegistrationFinancialPage.spec.ts; matching its 600_000.
+        test.setTimeout(600_000);
         const context = await browser.newContext();
         page = await context.newPage();
+        financialPage = new RegistrationFinancialPage(page);
+        infoPage = new RegistrationInfoPage(page);
         await goToFinancialStep(page, { profileType: 'merchant', email: VALID_EMAIL });
     });
 
@@ -26,7 +41,7 @@ test.describe('Registration - Financial & Business Functionality', () => {
     // ── Monthly Expected Number Of Bills ──────────────────────────────────────
 
     test('should accept numeric input for Monthly Expected Number Of Bills', async () => {
-        const input = page.getByRole('textbox', { name: /monthly expected number/i });
+        const input = financialPage.monthlyBillsInput;
         await input.fill('1500');
         await expect(input).toHaveValue(/^\d+$/);
     });
@@ -34,7 +49,7 @@ test.describe('Registration - Financial & Business Functionality', () => {
     // ── Monthly Expected Sum Of Bills ─────────────────────────────────────────
 
     test('should accept numeric input for Monthly Expected Sum Of Bills', async () => {
-        const input = page.getByRole('textbox', { name: /monthly expected sum/i });
+        const input = financialPage.monthlyAmountInput;
         await input.fill('50000');
         await expect(input).toHaveValue('50000');
     });
@@ -42,7 +57,7 @@ test.describe('Registration - Financial & Business Functionality', () => {
     // ── Expected Monthly Withdrawal ───────────────────────────────────────────
 
     test('should accept numeric input for Expected Monthly Withdrawal', async () => {
-        const input = page.getByRole('textbox', { name: /monthly withdrawal/i });
+        const input = financialPage.monthlyWithdrawalInput;
         await input.fill('10000');
         await expect(input).toHaveValue('10000');
     });
@@ -50,7 +65,7 @@ test.describe('Registration - Financial & Business Functionality', () => {
     // ── Expected Monthly Deposit ──────────────────────────────────────────────
 
     test('should accept numeric input for Expected Monthly Deposit', async () => {
-        const input = page.getByRole('textbox', { name: /monthly deposit/i });
+        const input = financialPage.monthlyDepositInput;
         await input.fill('20000');
         await expect(input).toHaveValue('20000');
     });
@@ -58,28 +73,28 @@ test.describe('Registration - Financial & Business Functionality', () => {
     // ── Input validation – character filtering (all four fields) ─────────────
 
     test('should not accept alphabetic characters in the Monthly Expected Number field', async () => {
-        const input = page.getByRole('textbox', { name: /monthly expected number/i });
+        const input = financialPage.monthlyBillsInput;
         await input.clear();
         await input.pressSequentially('abc');
         await expect(input).toHaveValue('');
     });
 
     test('should not accept special characters in the Monthly Expected Sum field', async () => {
-        const input = page.getByRole('textbox', { name: /monthly expected sum/i });
+        const input = financialPage.monthlyAmountInput;
         await input.clear();
         await input.pressSequentially('!@#');
         await expect(input).toHaveValue('');
     });
 
     test('should not accept alphabetic characters in the Expected Monthly Withdrawal field', async () => {
-        const input = page.getByRole('textbox', { name: /monthly withdrawal/i });
+        const input = financialPage.monthlyWithdrawalInput;
         await input.clear();
         await input.pressSequentially('xyz');
         await expect(input).toHaveValue('');
     });
 
     test('should not accept special characters in the Expected Monthly Deposit field', async () => {
-        const input = page.getByRole('textbox', { name: /monthly deposit/i });
+        const input = financialPage.monthlyDepositInput;
         await input.clear();
         await input.pressSequentially('$%^');
         await expect(input).toHaveValue('');
@@ -88,7 +103,7 @@ test.describe('Registration - Financial & Business Functionality', () => {
     // ── Boundary values ────────────────────────────────────────────────────────
 
     test('should not retain a negative number in the Monthly Expected Number field', async () => {
-        const input = page.getByRole('textbox', { name: /monthly expected number/i });
+        const input = financialPage.monthlyBillsInput;
         await input.clear();
         await input.pressSequentially('-500');
         const value = await input.inputValue();
@@ -96,7 +111,7 @@ test.describe('Registration - Financial & Business Functionality', () => {
     });
 
     test('should not retain a decimal point in the Monthly Expected Sum field', async () => {
-        const input = page.getByRole('textbox', { name: /monthly expected sum/i });
+        const input = financialPage.monthlyAmountInput;
         await input.clear();
         await input.pressSequentially('12.5');
         const value = await input.inputValue();
@@ -104,14 +119,14 @@ test.describe('Registration - Financial & Business Functionality', () => {
     });
 
     test('should handle a very large value (15 digits) in the Expected Monthly Withdrawal field without crashing', async () => {
-        const input = page.getByRole('textbox', { name: /monthly withdrawal/i });
+        const input = financialPage.monthlyWithdrawalInput;
         await input.clear();
         await input.fill('999999999999999');
         await expect(input).toBeVisible();
     });
 
     test('should treat a zero value in the Expected Monthly Deposit field as valid input', async () => {
-        const input = page.getByRole('textbox', { name: /monthly deposit/i });
+        const input = financialPage.monthlyDepositInput;
         await input.fill('0');
         await expect(input).toHaveValue('0');
     });
@@ -121,7 +136,7 @@ test.describe('Registration - Financial & Business Functionality', () => {
     test('should not execute an XSS payload entered in the Monthly Expected Number field', async () => {
         let alertFired = false;
         page.once('dialog', dialog => { alertFired = true; dialog.dismiss(); });
-        const input = page.getByRole('textbox', { name: /monthly expected number/i });
+        const input = financialPage.monthlyBillsInput;
         await input.fill('<script>alert("xss")</script>');
         await page.waitForTimeout(500);
         expect(alertFired).toBe(false);
@@ -130,14 +145,14 @@ test.describe('Registration - Financial & Business Functionality', () => {
     test('should not execute an XSS payload entered in the Monthly Expected Sum field', async () => {
         let alertFired = false;
         page.once('dialog', dialog => { alertFired = true; dialog.dismiss(); });
-        const input = page.getByRole('textbox', { name: /monthly expected sum/i });
+        const input = financialPage.monthlyAmountInput;
         await input.fill('<img src=x onerror=alert(1)>');
         await page.waitForTimeout(500);
         expect(alertFired).toBe(false);
     });
 
     test('should not accept a SQL injection pattern in the Expected Monthly Withdrawal field', async () => {
-        const input = page.getByRole('textbox', { name: /monthly withdrawal/i });
+        const input = financialPage.monthlyWithdrawalInput;
         await input.clear();
         await input.pressSequentially("1' OR '1'='1");
         const value = await input.inputValue();
@@ -145,7 +160,7 @@ test.describe('Registration - Financial & Business Functionality', () => {
     });
 
     test('should not accept a SQL injection pattern in the Expected Monthly Deposit field', async () => {
-        const input = page.getByRole('textbox', { name: /monthly deposit/i });
+        const input = financialPage.monthlyDepositInput;
         await input.clear();
         await input.pressSequentially("1; DROP TABLE users;--");
         const value = await input.inputValue();
@@ -156,28 +171,31 @@ test.describe('Registration - Financial & Business Functionality', () => {
     // "Expected sum of bills" must be > 0 and must not start with 0.
     test.skip('should keep Next disabled when Monthly Expected Number Of Bills is 0', async () => {
         await fillFinancialForm(page);
-        await page.getByRole('textbox', { name: /monthly expected number/i }).fill('0');
-        await expect(page.getByRole('button', { name: /next/i })).toBeDisabled({ timeout: 5000 });
+        await financialPage.monthlyBillsInput.fill('0');
+        await expect(financialPage.nextButton).toBeDisabled({ timeout: 5000 });
     });
 
     test.skip('should keep Next disabled when Monthly Expected Sum Of Bills has a leading zero', async () => {
         await fillFinancialForm(page);
-        await page.getByRole('textbox', { name: /monthly expected sum/i }).fill('0500');
-        await expect(page.getByRole('button', { name: /next/i })).toBeDisabled({ timeout: 5000 });
+        await financialPage.monthlyAmountInput.fill('0500');
+        await expect(financialPage.nextButton).toBeDisabled({ timeout: 5000 });
     });
 
     // Restore valid values before continuing with dropdown / navigation tests
     test('should restore valid values to all four fields after boundary/security probing', async () => {
-        await page.getByRole('textbox', { name: /monthly expected number/i }).fill('1500');
-        await page.getByRole('textbox', { name: /monthly expected sum/i }).fill('50000');
-        await page.getByRole('textbox', { name: /monthly withdrawal/i }).fill('10000');
-        await page.getByRole('textbox', { name: /monthly deposit/i }).fill('20000');
-        await expect(page.getByRole('textbox', { name: /monthly deposit/i })).toHaveValue('20000');
+        await financialPage.monthlyBillsInput.fill('1500');
+        await financialPage.monthlyAmountInput.fill('50000');
+        await financialPage.monthlyWithdrawalInput.fill('10000');
+        await financialPage.monthlyDepositInput.fill('20000');
+        await expect(financialPage.monthlyDepositInput).toHaveValue('20000');
     });
 
     // ── Industries dropdown ───────────────────────────────────────────────────
     // Only Industries (index 0) and Annual Income (index 1) render on this step
     // — see RegistrationHelper.ts goToVerificationStep(). There is no Banks select.
+    // These use Angular Material's auto-generated #mat-select-value-N ids (same
+    // locators RegistrationHelper.ts's own fillFinancialForm()/goToVerificationStep()
+    // use) — language-agnostic since they aren't derived from visible text.
 
     test('should open the Industries dropdown when clicked', async () => {
         await selectRandomOption(page, page.locator('#mat-select-value-0'));
@@ -247,47 +265,52 @@ test.describe('Registration - Financial & Business Functionality', () => {
     // ── Next button state — partial completion ────────────────────────────────
 
     test('should keep Next disabled when only the numeric fields are filled and no dropdown is selected', async ({ browser }) => {
+        // This test draws its own identity via goToFinancialStep (default
+        // credentials -> shared resident pool, up to 10 retry attempts) rather
+        // than reusing the describe's shared page — same budget-starvation risk
+        // as the beforeAll hook above, so it needs the same real headroom
+        // instead of the describe-level 120_000 default.
+        test.setTimeout(600_000);
         const context = await browser.newContext();
         const freshPage = await context.newPage();
+        const freshFinancialPage = new RegistrationFinancialPage(freshPage);
         await goToFinancialStep(freshPage, { profileType: 'merchant' });
-        await freshPage.getByRole('textbox', { name: /monthly expected number/i }).fill('1500');
-        await freshPage.getByRole('textbox', { name: /monthly expected sum/i }).fill('50000');
-        await freshPage.getByRole('textbox', { name: /monthly withdrawal/i }).fill('10000');
-        await freshPage.getByRole('textbox', { name: /monthly deposit/i }).fill('20000');
-        await expect(freshPage.getByRole('button', { name: /next/i })).toBeDisabled();
+        await freshFinancialPage.monthlyBillsInput.fill('1500');
+        await freshFinancialPage.monthlyAmountInput.fill('50000');
+        await freshFinancialPage.monthlyWithdrawalInput.fill('10000');
+        await freshFinancialPage.monthlyDepositInput.fill('20000');
+        await expect(freshFinancialPage.nextButton).toBeDisabled();
         await context.close();
     });
 
     test('should enable Next when all required fields and dropdowns are filled', async () => {
         await fillFinancialForm(page);
-        await expect(page.getByRole('button', { name: /next/i })).toBeEnabled({ timeout: 5000 });
+        await expect(financialPage.nextButton).toBeEnabled({ timeout: 5000 });
     });
 
     // ── Back navigation ───────────────────────────────────────────────────────
 
     test('should return to the Business Info step when Back is clicked', async () => {
-        await page.getByRole('button', { name: /back/i }).click();
-        await expect(page.getByRole('textbox', { name: /Email|البريد الإلكتروني/i }))
-            .toBeVisible({ timeout: 10000 });
+        await financialPage.backButton.click();
+        await expect(infoPage.emailInput).toBeVisible({ timeout: 10000 });
     });
 
     test('should preserve the email on Business Info step after navigating back', async () => {
-        await expect(page.getByRole('textbox', { name: /Email|البريد الإلكتروني/i })).toHaveValue(VALID_EMAIL);
+        await expect(infoPage.emailInput).toHaveValue(VALID_EMAIL);
     });
 
     test('should allow re-advancing to Financial step after going back to Info step', async () => {
-        await expect(page.getByRole('button', { name: /next/i })).toBeEnabled({ timeout: 5000 });
-        await page.getByRole('button', { name: /next/i }).click();
-        await expect(page.getByRole('textbox', { name: /monthly expected number/i }))
-            .toBeVisible({ timeout: 10000 });
+        await expect(infoPage.nextButton).toBeEnabled({ timeout: 5000 });
+        await infoPage.nextButton.click();
+        await expect(financialPage.monthlyBillsInput).toBeVisible({ timeout: 10000 });
     });
 
     // ── Forward navigation to Verification ───────────────────────────────────
 
     test('should advance to Verification & Uploads step when Next is clicked with valid data', async () => {
         await fillFinancialForm(page);
-        await page.getByRole('button', { name: /next/i }).click();
-        await expect(page.getByRole('textbox', { name: /iban/i }))
-            .toBeVisible({ timeout: 10000 });
+        await financialPage.nextButton.click();
+        const verificationPage = new RegistrationVerificationPage(page);
+        await expect(verificationPage.ibanInput).toBeVisible({ timeout: 10000 });
     });
 });

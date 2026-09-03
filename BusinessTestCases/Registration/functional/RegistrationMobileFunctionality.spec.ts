@@ -1,4 +1,4 @@
-﻿import { test, expect } from '@playwright/test';
+﻿import { test, expect } from '../../fixtures';
 import { LOGIN_URL, REGISTER_URL, generateKSAMobile } from '../RegistrationHelper';
 
 test.describe('Registration - Mobile Number Functionality', () => {
@@ -101,14 +101,14 @@ test.describe('Registration - Mobile Number Functionality', () => {
 
     // ── Navigation ────────────────────────────────────────────────────────────
 
-    test('should navigate to the login page when Log In is clicked', async ({ page }) => {
-        await page.getByText('Log In', { exact: true }).click();
+    test('should navigate to the login page when Log In is clicked', async ({ page, registrationMobile }) => {
+        await registrationMobile.loginLink.click();
         await expect(page).toHaveURL(LOGIN_URL, { timeout: 10000 });
     });
 
-    test('should open the registration page when Sign Up is clicked on the login page', async ({ page }) => {
-        await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-        await page.getByText('Sign Up').click();
+    test('should open the registration page when Sign Up is clicked on the login page', async ({ page, loginPage }) => {
+        await loginPage.goto(LOGIN_URL);
+        await loginPage.signUpLink.click();
         await expect(page).toHaveURL(REGISTER_URL, { timeout: 15000 });
     });
 });
