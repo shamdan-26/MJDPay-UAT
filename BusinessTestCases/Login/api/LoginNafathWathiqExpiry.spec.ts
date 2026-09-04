@@ -254,3 +254,97 @@ test.describe('Login – deactivation scope (per Amer Majed Abdalrazeq\'s 2026-0
         test.skip(true, PENDING);
     });
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// NW-14–NW-16 — Arabic localisation of the expiry messages (EMI-5969)
+//
+// EMI-5969 ("Nafath and Wathiq Expiry message is not displayed in Arabic") is
+// the localisation half of the EMI-5836 blocking behaviour asserted above: the
+// 409 fires correctly, but its message came back in English regardless of the
+// requested locale. Part of the wider EMI-5964 / EMI-6024 / EMI-6050 locale
+// sweep — EMI-6024 specifically lists "Session" among the actions with a
+// hard-coded locale, which is what this endpoint is.
+//
+// These need the same blocked fixture accounts as NW-01..NW-05 and skip
+// identically when they are not configured.
+// ─────────────────────────────────────────────────────────────────────────────
+
+test.describe('Login – NAFATH / WATHIQ expiry message localisation (EMI-5969)', () => {
+    test.describe.configure({ mode: 'serial' });
+
+    const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev.majdpay.com';
+    const NO_NAFATH_ACCOUNT = 'set NAFATH_EXPIRED_COMPANY / NAFATH_EXPIRED_MOBILE to a blocked fixture account';
+    const NO_WATHIQ_ACCOUNT = 'set WATHIQ_EXPIRED_COMPANY / WATHIQ_EXPIRED_MOBILE to a blocked fixture account';
+
+    /** Arabic script range — a translated message must actually contain Arabic. */
+    const ARABIC_SCRIPT = /[؀-ۿ]/;
+
+    function signinHeaders(locale: 'en_uk' | 'ar_sa'): Record<string, string> {
+        return {
+            'Content-Type':    'application/json',
+            Accept:            '*/*',
+            'Accept-Language': locale,
+            locale,
+            platform:          'web',
+        };
+    }
+
+    test('NW-14: the NAFATH_DATA_EXPIRED message is returned in Arabic when ar_sa is requested', async ({ request }) => {
+        test.skip(!NAFATH_EXPIRED_COMPANY || !NAFATH_EXPIRED_MOBILE, NO_NAFATH_ACCOUNT);
+
+        const res = await request.post(`${API_BASE}/auth/signin`, {
+            headers: signinHeaders('ar_sa'),
+            data: {
+                username:     `+966${NAFATH_EXPIRED_MOBILE}`,
+                password:     NAFATH_EXPIRED_PASSWORD,
+                tenantNumber: NAFATH_EXPIRED_COMPANY,
+            },
+        });
+
+        expect(res.status(), 'the account is not blocked — NW-01 covers the blocking behaviour').toBe(409);
+
+        const text = await res.text();
+        expect(text, 'the NAFATH expiry message came back with no Arabic in it').toMatch(ARABIC_SCRIPT);
+    });
+
+    test('NW-15: the WATHIQ_DATA_EXPIRED message is returned in Arabic when ar_sa is requested', async ({ request }) => {
+        test.skip(!WATHIQ_EXPIRED_COMPANY || !WATHIQ_EXPIRED_MOBILE, NO_WATHIQ_ACCOUNT);
+
+        const res = await request.post(`${API_BASE}/auth/signin`, {
+            headers: signinHeaders('ar_sa'),
+            data: {
+                username:     `+966${WATHIQ_EXPIRED_MOBILE}`,
+                password:     WATHIQ_EXPIRED_PASSWORD,
+                tenantNumber: WATHIQ_EXPIRED_COMPANY,
+            },
+        });
+
+        expect(res.status(), 'the account is not blocked — NW-02 covers the blocking behaviour').toBe(409);
+
+        const text = await res.text();
+        expect(text, 'the WATHIQ expiry message came back with no Arabic in it').toMatch(ARABIC_SCRIPT);
+    });
+
+    test('NW-16: the en_uk and ar_sa responses differ, and the error CODE stays stable across both', async ({ request }) => {
+        test.skip(!NAFATH_EXPIRED_COMPANY || !NAFATH_EXPIRED_MOBILE, NO_NAFATH_ACCOUNT);
+
+        const credentials = {
+            username:     `+966${NAFATH_EXPIRED_MOBILE}`,
+            password:     NAFATH_EXPIRED_PASSWORD,
+            tenantNumber: NAFATH_EXPIRED_COMPANY,
+        };
+
+        const english = await request.post(`${API_BASE}/auth/signin`, { headers: signinHeaders('en_uk'), data: credentials });
+        const arabic  = await request.post(`${API_BASE}/auth/signin`, { headers: signinHeaders('ar_sa'), data: credentials });
+
+        const englishText = await english.text();
+        const arabicText  = await arabic.text();
+
+        // EMI-5969: pre-fix the two were byte-identical because the message was
+        // resolved in a hard-coded locale.
+        expect(arabicText, 'the ar_sa response is identical to the en_uk one').not.toBe(englishText);
+        // The machine-readable code must NOT be translated — only the prose.
+        expect(englishText).toContain('NAFATH_DATA_EXPIRED');
+        expect(arabicText).toContain('NAFATH_DATA_EXPIRED');
+    });
+});
