@@ -12,8 +12,9 @@ export const VALID_COMPANY  = process.env['UAT_COMPANY'] ?? testAccounts.merchan
 export const VALID_MOBILE   = process.env['UAT_MOBILE']  ?? testAccounts.merchant.mobile;
 
 // Account used for successful-login tests (happy path, OTP flow, validation card).
-export const LOGIN_COMPANY  = process.env['UAT_LOGIN_COMPANY'] ?? testAccounts.loginHappyPath.company;
-export const LOGIN_MOBILE   = process.env['UAT_LOGIN_MOBILE']  ?? testAccounts.loginHappyPath.mobile;
+// Same shared merchant account as above — its password is testAccounts.defaultPassword.
+export const LOGIN_COMPANY  = process.env['UAT_LOGIN_COMPANY'] ?? testAccounts.merchant.company;
+export const LOGIN_MOBILE   = process.env['UAT_LOGIN_MOBILE']  ?? testAccounts.merchant.mobile;
 
 export const VALID_PASSWORD = testAccounts.defaultPassword;
 export const WRONG_PASSWORD = testAccounts.wrongPassword;
@@ -32,6 +33,22 @@ export const AML_MOBILE          = process.env['AML_MOBILE']           ?? '';
 export const LOCKOUT_COMPANY     = process.env['LOCKOUT_COMPANY']      ?? '';
 export const LOCKOUT_MOBILE      = process.env['LOCKOUT_MOBILE']       ?? '';
 export const LOCKOUT_PASSWORD    = process.env['LOCKOUT_PASSWORD']     ?? VALID_PASSWORD;
+
+// EMI-5836 — dedicated accounts whose NAFATH/WATHIQ *document* has expired
+// (is_nafath_data_expired / is_wathiq_data_expired = true via the government
+// document-expiration validation job). Set via env vars once QA has these
+// provisioned in UAT; every test consuming these is skipped, not failed,
+// when unset. There is deliberately no equivalent pair for the Redis-*TTL*-only
+// expiry variant — that state isn't reachable through any UI/API surface QA
+// controls (it's set by the internal Redis TTL-monitoring job), so those
+// scenarios are covered as skip(true)-pending in the spec instead of being
+// wired to env vars that could never be satisfied.
+export const NAFATH_EXPIRED_COMPANY  = process.env['NAFATH_EXPIRED_COMPANY']  ?? '';
+export const NAFATH_EXPIRED_MOBILE   = process.env['NAFATH_EXPIRED_MOBILE']   ?? '';
+export const NAFATH_EXPIRED_PASSWORD = process.env['NAFATH_EXPIRED_PASSWORD'] ?? VALID_PASSWORD;
+export const WATHIQ_EXPIRED_COMPANY  = process.env['WATHIQ_EXPIRED_COMPANY']  ?? '';
+export const WATHIQ_EXPIRED_MOBILE   = process.env['WATHIQ_EXPIRED_MOBILE']   ?? '';
+export const WATHIQ_EXPIRED_PASSWORD = process.env['WATHIQ_EXPIRED_PASSWORD'] ?? VALID_PASSWORD;
 
 /** Generates a random valid KSA-format mobile (9 digits, starts with 5) not present in UAT test data. */
 export function generateUnregisteredMobile(): string {

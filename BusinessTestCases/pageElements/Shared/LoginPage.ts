@@ -1,4 +1,4 @@
-import { type Page, type Locator } from '@playwright/test';
+import { type Page, type Locator, expect } from '@playwright/test';
 import { waitForToastClear } from '../../toastMessages';
 
 export class LoginPage {
@@ -44,7 +44,9 @@ export class LoginPage {
         this.formBox     = page.locator('#login-form-box');
         this.formEyebrow = page.locator('#login-form-eyebrow');
         this.formTitle   = page.locator('#login-form-title');
-        this.taglineText = page.getByText(/Seamless transactions.*get started/);
+        // Bilingual: UAT loads the login page in Arabic by default (same reason
+        // forgotPasswordLink / signUpLink / newToMjdText carry both languages).
+        this.taglineText = page.getByText(/Seamless transactions.*get started|معاملات سلسة.*لنبدأ/);
 
         this.logoImage = page.locator('img[alt="MJD Pay"]');
         this.logoLink  = page.locator('a:has(img[alt="MJD Pay"])');
@@ -53,18 +55,18 @@ export class LoginPage {
         // QA-DATA-TESTID-HANDOFF.md §4.1 (only mobile/password/toggle/submit
         // are listed) — left on the role-based locator.
         this.companyInput      = page.getByRole('textbox', { name: /Company number|رقم الشركة/ });
-        this.companyLabel      = page.locator('label.floating-field-label', { hasText: 'Company' });
+        this.companyLabel      = page.locator('label.floating-field-label', { hasText: /Company|رقم الشركة/ });
         this.companyClearButton = page.locator('.floating-field-clear, [class*="clear-btn"], [aria-label*="lear" i]').first();
         // §4.1: "Mobile number field" testid is literally named `login-username`.
         this.mobileInput       = page.getByTestId('login-username')
             .or(page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ }));
-        this.mobileLabel       = page.locator('label.floating-field-label', { hasText: 'Mobile' });
+        this.mobileLabel       = page.locator('label.floating-field-label', { hasText: /Mobile|رقم الجوال/ });
         this.mobileClearButton  = page.locator('.floating-field-clear, [class*="clear-btn"], [aria-label*="lear" i]').nth(1);
         this.countryCode       = page.locator('.floating-prefix');
         this.countryFlag       = page.locator('.floating-prefix img, .floating-prefix [class*="flag"]').first();
         this.passwordInput     = page.getByTestId('login-password')
             .or(page.locator('input[aria-label="Password"], input[aria-label="كلمة المرور"]'));
-        this.passwordLabel     = page.locator('label.floating-field-label', { hasText: 'Password' });
+        this.passwordLabel     = page.locator('label.floating-field-label', { hasText: /Password|كلمة المرور/ });
         this.showPasswordToggle = page.getByTestId('login-password-toggle-visibility')
             .or(page.locator('button.floating-password-toggle'));
 
@@ -73,8 +75,12 @@ export class LoginPage {
             .or(env === 'dev' ? page.locator('#btn_login') : page.getByRole('button', { name: 'Log In' }));
 
         this.forgotPasswordLink  = page.getByText(/Forgot Password\?|نسيت كلمة المرور؟/);
-        this.signUpLink          = page.getByText('Sign Up');
-        this.newToMjdText        = page.getByText('New to MJD PAY?');
+        // No testid yet for this element (not in QA-DATA-TESTID-HANDOFF.md §4.1)
+        // and UAT currently loads the login page in Arabic by default, so the
+        // English-only text 'Sign Up' never matches — same bilingual-regex
+        // fix already applied to forgotPasswordLink above.
+        this.signUpLink          = page.getByText(/Sign Up|إنشاء حساب/);
+        this.newToMjdText        = page.getByText(/New to MJD PAY\?|جديد على MJD PAY؟/);
 
         // lang-en/lang-ar: QA-DATA-TESTID-HANDOFF.md §4.2 (header + auth layout).
         this.enButton     = page.getByTestId('lang-en').or(page.getByRole('button', { name: 'EN' }));
@@ -88,10 +94,34 @@ export class LoginPage {
         await waitForToastClear(this.page);
     }
 
+    /**
+     * Force the auth layout to English. UAT loads the login page in Arabic by
+     * default (see the aria-pressed assertions in LoginPage.spec.ts), so any
+     * test that asserts English label/eyebrow/heading copy must set this
+     * precondition explicitly rather than relying on the ambient default.
+     */
+    async useEnglish(): Promise<void> {
+        await this.enButton.click();
+        await expect(this.enButton).toHaveAttribute('aria-pressed', 'true');
+    }
+
+    /**
+     * Clear any pre-existing value (select-all + delete) before typing. Angular
+     * Material inputs and browser autofill can leave the field non-empty in a
+     * way a bare .fill() occasionally doesn't reset cleanly, so do it explicitly.
+     * ControlOrMeta keeps the select-all shortcut correct on macOS and other OSes.
+     */
+    private async setField(field: Locator, value: string): Promise<void> {
+        await field.click();
+        await field.press('ControlOrMeta+a');
+        await field.press('Delete');
+        await field.fill(value);
+    }
+
     async fill(company: string, mobile: string, password: string): Promise<void> {
-        await this.companyInput.fill(company);
-        await this.mobileInput.fill(mobile);
-        await this.passwordInput.fill(password);
+        await this.setField(this.companyInput, company);
+        await this.setField(this.mobileInput, mobile);
+        await this.setField(this.passwordInput, password);
     }
 
     async submit(): Promise<void> {

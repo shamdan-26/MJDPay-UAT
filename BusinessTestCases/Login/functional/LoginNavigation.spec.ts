@@ -1,9 +1,13 @@
 import { test, expect } from '../../fixtures';
 import {
     LOGIN_URL,
-    SESSION_PATH,
+    LOGIN_COMPANY,
+    LOGIN_MOBILE,
+    VALID_PASSWORD,
+    getOtpFromDb,
 } from '../LoginHelper';
 import { LoginPage } from '../../pageElements/Shared/LoginPage';
+import { OtpPage } from '../../pageElements/Shared/OtpPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // NAVIGATION
@@ -48,15 +52,31 @@ test.describe('Login — Navigation', () => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 test.describe('Login — Already Authenticated', () => {
-    test.use({ storageState: SESSION_PATH });
+    test.describe.configure({ mode: 'serial' });
 
-    test.skip('should redirect away from the login page when already logged in', async ({ page }) => {
+    // Establish a real authenticated session first — these tests assert what
+    // happens when an already-logged-in user hits the login URL, so the login
+    // is the precondition, not something to assume from a global session.json
+    // (which only exists when UAT_SETUP_* is set and its login succeeded).
+    test.beforeEach(async ({ page, loginPage: lp }) => {
+        const loginPage = lp;
+        await loginPage.goto(LOGIN_URL);
+        await loginPage.fillAndSubmit(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
+
+        const otp = new OtpPage(page);
+        if (await otp.isVisible()) {
+            await otp.fillAndVerify(await getOtpFromDb(LOGIN_MOBILE));
+        }
+        await page.waitForURL(url => !url.pathname.includes('/auth/'), { timeout: 30000 });
+    });
+
+    test('should redirect away from the login page when already logged in', async ({ page }) => {
         await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
         await expect(page).not.toHaveURL(/auth\/login/, { timeout: 10000 });
     });
 
-    test.skip('should not display the Log In button when already logged in', async ({ page }) => {
+    test('should not display the Log In button when already logged in', async ({ page }) => {
         await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-        await expect(page.getByRole('button', { name: 'Log In' })).not.toBeVisible({ timeout: 10000 });
+        await expect(page.getByRole('button', { name: /Log In|تسجيل الدخول/ })).not.toBeVisible({ timeout: 10000 });
     });
 });

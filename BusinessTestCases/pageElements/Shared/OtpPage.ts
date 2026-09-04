@@ -37,13 +37,35 @@ export class OtpPage {
         // Bill Payment and, per gotoOtpModal()'s div.my-modal-container, ForgotPassword
         // too). Login's full-screen OTP step isn't in §4.1's testid table, so its
         // "Verify" button falls through to the role-based fallback below.
-        this.resendButton   = page.getByTestId('otp-resend-btn')
-            .or(page.getByRole('button', { name: /Click to resend|انقر لإعادة الإرسال/i }));
+        //
+        // The W2W / Bank-transfer / Top-up flows use a *different* inline OTP widget
+        // (§3's own warning) with their own per-flow testids (§4.3/§4.4/§4.5) — this
+        // class is shared by all of those flows too (see W2WTransferPage, BankTransferPage,
+        // TopupPage, which all delegate OTP interaction here), so every flow-specific
+        // testid is included alongside the shared-modal one. Only one will ever match on
+        // a given screen; `.first()` keeps that safe even if more than one somehow did.
+        this.resendButton = page.getByTestId('otp-resend-btn')
+            .or(page.getByTestId('w2w-otp-resend-btn'))
+            .or(page.getByTestId('bank-amount-otp-resend-btn'))
+            .or(page.getByTestId('bank-confirm-otp-resend-btn'))
+            .or(page.getByTestId('topup-otp-resend-btn'))
+            .or(page.getByRole('button', { name: /Click to resend|انقر لإعادة الإرسال/i }))
+            .first();
         // Login's screen labels this "Verify"; the forgot-password modal labels it "Confirm".
         this.verifyButton = page.getByTestId('otp-submit-btn')
-            .or(page.getByRole('button', { name: /^(verify|confirm|تحقق)$/i }));
+            .or(page.getByTestId('w2w-otp-verify-btn'))
+            .or(page.getByTestId('bank-amount-otp-verify-btn'))
+            .or(page.getByTestId('bank-confirm-otp-verify-btn'))
+            .or(page.getByTestId('topup-otp-verify-btn'))
+            .or(page.getByRole('button', { name: /^(verify|confirm|تحقق)$/i }))
+            .first();
         this.cancelButton = page.getByTestId('otp-cancel-btn')
-            .or(page.getByRole('button', { name: /cancel|إلغاء/i }));
+            .or(page.getByTestId('w2w-otp-cancel-btn'))
+            .or(page.getByTestId('bank-amount-otp-cancel-btn'))
+            .or(page.getByTestId('bank-confirm-otp-cancel-btn'))
+            .or(page.getByTestId('topup-otp-cancel-btn'))
+            .or(page.getByRole('button', { name: /cancel|إلغاء/i }))
+            .first();
 
         this.modalContainer = page.locator('div.my-modal-container');
         this.closeButton    = this.modalContainer.getByRole('button', { name: /close/i });

@@ -27,11 +27,13 @@ test.describe('Login Page', () => {
     });
 
     test('should display the Login eyebrow text', async () => {
+        await loginPage.useEnglish(); // UAT defaults to Arabic; assert English copy explicitly
         await expect(loginPage.formEyebrow).toHaveText('Login');
     });
 
     test('should display the Welcome heading', async () => {
-        await expect(loginPage.formTitle).toHaveText(' Welcome to MJD Pay');
+        await loginPage.useEnglish();
+        await expect(loginPage.formTitle).toHaveText('Welcome to MJD Pay');
     });
 
     test('should display the tagline description', async () => {
@@ -95,7 +97,9 @@ test.describe('Login Page', () => {
     });
 
     test('should display the Company number input with the correct placeholder', async () => {
-        await expect(loginPage.companyInput).toHaveAttribute('placeholder', 'Eg. 153165659');
+        // Placeholder is "Eg. Z9246" (en) / "مثال: Z9246" (ar) — assert the locale-stable
+        // example token rather than the product-tweakable prefix.
+        await expect(loginPage.companyInput).toHaveAttribute('placeholder', /Z9246/);
     });
 
     test('should display the clear button on the Company Number field when filled', async () => {

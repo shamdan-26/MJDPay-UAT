@@ -59,9 +59,12 @@ export class DashboardPage {
         this.logo             = page.locator('#sideNav-logo');
         this.logoImages       = page.locator('#sideNav-logo-menu, .logo-menu');
         this.navigation       = page.locator('nav, aside, [role="navigation"]').first();
-        this.homeLink         = page.getByRole('link', { name: /^home$/i });
-        this.transactionsLink = page.getByRole('link', { name: /transactions?/i });
-        this.paymentsLink     = page.getByRole('link', { name: /payments?/i });
+        // Match on the route href, not the visible link text — the sidebar
+        // renders in the account's language (Arabic on UAT/dev by default).
+        // .first() guards against the responsive/duplicate nav.
+        this.homeLink         = page.locator('a[href$="/business/main/home"]').first();
+        this.transactionsLink = page.locator('a[href$="/business/main/transactions"]').first();
+        this.paymentsLink     = page.locator('a[href*="/business/main/payment-links"]').first();
         this.brandName        = page.locator('#sideNav-sidenav #userSettings-brand-name');
 
         this.accountWidgetAvatar      = page.locator('#sideNav-sidenav #userSettings-image-container');
@@ -95,7 +98,11 @@ export class DashboardPage {
         this.walletConfigurationMenuItem = profileMenuPanel.getByText(/wallet configuration/i).first();
         this.faqsMenuItem           = profileMenuPanel.getByText(/faqs?/i).first();
         this.logoutItem    = page.locator('#logout');
-        this.proceedButton = page.getByRole('button', { name: 'proceed' });
+        // Logout confirmation is the shared confirmation/action modal (QA-DATA-TESTID-HANDOFF.md
+        // §3) with no custom prefix set, so it falls back to the default `modal-submit-btn`.
+        this.proceedButton = page.getByTestId('modal-submit-btn')
+            .or(page.getByRole('button', { name: /proceed|متابعة/i }))
+            .first();
     }
 
     async openProfileMenu(): Promise<void> {

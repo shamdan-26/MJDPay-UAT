@@ -227,6 +227,30 @@ Context: the login UI is backed by three API calls in sequence — device IP loo
 
 ---
 
+## K. NAFATH / WATHIQ data expiry & renewal (EMI-5836)
+
+Context: EMI-5836 ("BE - Block login when Nafath or Yaqeen TTL /data has expired") blocks login when a customer's NAFATH (National ID/Iqama) or WATHIQ (CRN) data is stale. Two independent expiry types exist per provider — **document expiry** (the real-world ID/CRN has expired) and **Redis TTL expiry** (only the cached copy has expired) — and must not be conflated in error messaging. Note: the ticket title says "Yaqeen", but the ticket description and every comment on it refer only to NAFATH and WATHIQ — no "Yaqeen" system is described anywhere in the source ticket. Confirm with the reporter whether the title is a naming error before treating "Yaqeen" as in scope.
+
+| ID | Title | Steps | Expected Result | Priority |
+|---|---|---|---|---|
+| LG-132 | Login blocked — NAFATH document expired | Attempt login for an account whose National ID/Iqama has expired | 409 returned with error code `NAFATH_DATA_EXPIRED`; login rejected | P1 |
+| LG-133 | Login blocked — WATHIQ document expired | Attempt login for a profile whose CRN has expired | 409 returned with error code `WATHIQ_DATA_EXPIRED`; login rejected | P1 |
+| LG-134 | Login blocked — NAFATH Redis TTL expired, document still valid | Attempt login where only the NAFATH cache TTL has expired | 409 returned with an error distinct from `NAFATH_DATA_EXPIRED`, indicating cache expiry not document expiry | P1 |
+| LG-135 | WATHIQ Redis TTL expired — auto-heals, login should succeed | Attempt login after the WATHIQ TTL-monitoring job has silently refreshed the cache (CRN still valid) | Login succeeds (200); no user interaction required | P1 |
+| LG-136 | WATHIQ Redis TTL expired — refresh reveals CRN actually expired | Attempt login where the TTL-refresh job discovers the CRN itself has expired | 409 `WATHIQ_DATA_EXPIRED` (document-expiry variant); profile deactivated | P2 |
+| LG-137 | Both NAFATH and WATHIQ expired simultaneously | Attempt login for an account with both flags true | 409 returned; confirm which error code takes precedence — undocumented in the ticket, verify against the actual response | P2 |
+| LG-138 | Unaffected account logs in normally (regression) | Attempt login for an account with neither flag set | Login succeeds (200), no change from pre-EMI-5836 behavior | P1 |
+| LG-139 | NAFATH revalidation flow succeeds | From a blocked account, complete Generate Random + Get Status | `is_nafath_data_expired` reset; DB/Redis updated; login subsequently succeeds | P1 |
+| LG-140 | NAFATH revalidation flow fails/abandoned | From a blocked account, fail or abandon re-verification | Flag remains true; login still rejected with 409 `NAFATH_DATA_EXPIRED` | P2 |
+| LG-141 | WATHIQ revalidation flow succeeds | From a blocked profile, call the WATHIQ refresh API after renewing the CRN | `is_wathiq_data_expired` reset; DB/Redis updated; login subsequently succeeds | P1 |
+| LG-142 | WATHIQ revalidation flow — CRN still expired | Call the WATHIQ refresh API without having renewed the CRN | Flag remains true; login still rejected with 409 `WATHIQ_DATA_EXPIRED` | P2 |
+| LG-143 | NAFATH expiry deactivates the user, not the profile | Expire NAFATH data for a user linked to 2+ business profiles, run the validation job | The USER entity is deactivated; linked business profiles are unaffected (per Amer Majed Abdalrazeq's 2026-07-16 clarification) | P1 |
+| LG-144 | WATHIQ expiry deactivates the profile, not the user | Expire WATHIQ CRN for a profile, run the validation job | The PROFILE is deactivated (business-scoped) | P2 |
+| LG-145 | Error responses carry no internal detail | Trigger each of LG-132/133/134 | Response body/text contains no stack trace, SQL, or exception text | P1 |
+| LG-146 | PR and code review sign-off completed | Check the linked PR for EMI-5836 | PR exists, is linked to the ticket, and has Senior Engineer approval — required by the ticket's own acceptance criteria | P3 |
+
+---
+
 ## Automated coverage note
 
 This manual test suite mirrors the existing Playwright automation for the Login feature. The corresponding automated specs are:
@@ -240,5 +264,6 @@ This manual test suite mirrors the existing Playwright automation for the Login 
 - `BusinessTestCases/login/functional/LoginNavigation.spec.ts` — navigation links and already-authenticated redirect (Section H)
 - `BusinessTestCases/login/functional/LoginSecurity.spec.ts` — lockout, enumeration, XSS, POST-only, and error-detail checks (Section I)
 - `BusinessTestCases/login/api/LoginAPIFlow.spec.ts` — device/sign-in/OTP API contract (Section J)
+- `BusinessTestCases/login/api/LoginNafathWathiqExpiry.spec.ts` — NAFATH/WATHIQ document & TTL expiry, revalidation flows, and deactivation scope (Section K, EMI-5836). Document-expiry cases (LG-132, LG-133, LG-138) run against dedicated env-gated accounts (`NAFATH_EXPIRED_COMPANY/MOBILE`, `WATHIQ_EXPIRED_COMPANY/MOBILE` in `LoginHelper.ts`) and are skipped until those are provisioned in UAT. The remaining cases (TTL-only expiry, revalidation APIs, deactivation scope) are written as `test.skip(true, ...)` pending Redis-seeding access and confirmation of the renewal endpoint paths against the Emi Profile Service Swagger doc — see the file header for details.
 
 Supporting helpers referenced by these specs: `BusinessTestCases/login/LoginHelper.ts` (test data, OTP retrieval via MongoDB, login helpers) and `BusinessTestCases/pageElements/LoginPage.ts` (the page object for all locators and actions used above).

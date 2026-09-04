@@ -6,9 +6,6 @@ import {
     VALID_MOBILE,
     VALID_PASSWORD,
     WRONG_PASSWORD,
-    LOCKOUT_COMPANY,
-    LOCKOUT_MOBILE,
-    LOCKOUT_PASSWORD,
 } from '../LoginHelper';
 import { LoginPage } from '../../pageElements/Shared/LoginPage';
 
@@ -20,21 +17,6 @@ test.describe('Login — Security', () => {
     test.beforeEach(async ({ page, loginPage: lp }) => {
         loginPage = lp;
         await loginPage.goto(LOGIN_URL);
-    });
-
-    test('should lock the account after 3 consecutive failed login attempts', async ({ page }) => {
-        test.skip(!LOCKOUT_COMPANY || !LOCKOUT_MOBILE, 'Set LOCKOUT_COMPANY, LOCKOUT_MOBILE and LOCKOUT_PASSWORD env vars to run this test');
-        for (let attempt = 1; attempt <= 3; attempt++) {
-            await loginPage.goto(LOGIN_URL);
-            await loginPage.fill(LOCKOUT_COMPANY, LOCKOUT_MOBILE, WRONG_PASSWORD);
-            await loginPage.submit();
-            await assertToast(page);
-        }
-        await loginPage.goto(LOGIN_URL);
-        await loginPage.fill(LOCKOUT_COMPANY, LOCKOUT_MOBILE, LOCKOUT_PASSWORD);
-        await loginPage.submit();
-        await assertToast(page);
-        await expect(page.getByRole('heading', { name: /Enter OTP|أدخل رمز التحقق/i })).not.toBeVisible();
     });
 
     test('should return the same error response for a wrong company number and a wrong mobile number (prevents user enumeration)', async ({ page }) => {
@@ -96,5 +78,23 @@ test.describe('Login — Security', () => {
             const text = await toastDetail.textContent() ?? '';
             expect(text).not.toMatch(/stack|exception|sql|database|null pointer|traceback|ORA-|JDBC/i);
         }
+    });
+
+    // Kept last on purpose: this genuinely locks the merchant account
+    // (VALID_COMPANY / VALID_MOBILE), so it must run after every other test here
+    // that logs in. Any Login/Homepage-merchant spec running afterwards in the
+    // same session will hit a locked account until it's unlocked out-of-band.
+    test('should lock the account after 3 consecutive failed login attempts', async ({ page }) => {
+        for (let attempt = 1; attempt <= 3; attempt++) {
+            await loginPage.goto(LOGIN_URL);
+            await loginPage.fill(VALID_COMPANY, VALID_MOBILE, WRONG_PASSWORD);
+            await loginPage.submit();
+            await assertToast(page);
+        }
+        await loginPage.goto(LOGIN_URL);
+        await loginPage.fill(VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD);
+        await loginPage.submit();
+        await assertToast(page);
+        await expect(page.getByRole('heading', { name: /Enter OTP|أدخل رمز التحقق/i })).not.toBeVisible();
     });
 });
