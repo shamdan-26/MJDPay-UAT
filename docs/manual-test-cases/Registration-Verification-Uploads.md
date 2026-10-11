@@ -106,7 +106,7 @@ Context: covers "File upload interactions".
 
 This manual test suite mirrors the existing Playwright automation for the Registration Verification & Uploads step. The corresponding automated specs are:
 
-- `BusinessTestCases/Registration/ui/RegistrationVerificationPage.spec.ts` — page elements (read-only)
-- `BusinessTestCases/Registration/functional/RegistrationVerificationUploads.spec.ts` — IBAN/VAT field validation (format, checksum, length, XSS/SQLi) and file-upload interactions (type, size, filename encoding, accept/reject)
+- `BusinessTestCases/Registration/ui/04-verification/RegistrationVerificationPage.spec.ts` — page elements (read-only)
+- `BusinessTestCases/Registration/functional/04-verification/RegistrationVerificationUploads.spec.ts` — IBAN/VAT field validation (format, checksum, length, XSS/SQLi) and file-upload interactions (type, size, filename encoding, accept/reject)
 
 Supporting helper: `BusinessTestCases/pageElements/Registration/RegistrationVerificationPage.ts`.

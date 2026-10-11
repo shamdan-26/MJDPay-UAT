@@ -48,6 +48,44 @@ async function getAccessToken(): Promise<string> {
     return access_token;
 }
 
+const MAILOSAUR_API = 'https://mailosaur.com/api';
+
+/**
+ * Reads the OTP from a Mailosaur server (MAILOSAUR_API_KEY + MAILOSAUR_SERVER_ID).
+ * Searches only mail received in the last minute (the OTP lives 30s, so older mail is always stale),
+ * newest first, preferring a message whose body contains the mobile; Mailosaur's own extracted
+ * `text.codes` is used first, then the same regexes as the IMAP path.
+ */
+async function fetchOtpFromMailosaur(mobile: string, maxAttempts: number, delayMs: number, messageFilter: RegExp): Promise<string> {
+    const apiKey = process.env['MAILOSAUR_API_KEY']!;
+    const server = process.env['MAILOSAUR_SERVER_ID'];
+    if (!server) throw new Error('MAILOSAUR_SERVER_ID env var must be set alongside MAILOSAUR_API_KEY');
+    const headers = { Authorization: 'Basic ' + Buffer.from(`${apiKey}:`).toString('base64'), 'Content-Type': 'application/json' };
+    const receivedAfter = new Date(Date.now() - 60_000).toISOString();
+    const local = mobile.replace(/^\+?966/, '').replace(/^0/, '');
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        // The list endpoint (not /search, which requires criteria) — newest first, only mail from the last minute.
+        const res = await fetch(`${MAILOSAUR_API}/messages?server=${server}&receivedAfter=${encodeURIComponent(receivedAfter)}&itemsPerPage=25`, { headers });
+        if (!res.ok) throw new Error(`Mailosaur list failed (${res.status}): ${await res.text()}`);
+        const { items = [] } = await res.json() as { items?: { id: string }[] };
+
+        for (const item of items) {
+            const msgRes = await fetch(`${MAILOSAUR_API}/messages/${item.id}`, { headers });
+            if (!msgRes.ok) continue;
+            const msg = await msgRes.json() as { text?: { body?: string; codes?: { value: string }[] }; html?: { body?: string } };
+            const body = msg.text?.body ?? msg.html?.body ?? '';
+            if (!body.includes(local) || !messageFilter.test(body)) continue;
+            const code = msg.text?.codes?.[0]?.value
+                ?? body.match(/Use this OTP\s*[:\s]+(\d+)/i)?.[1]
+                ?? body.match(/\b(\d{4,8})\b/)?.[1];
+            if (code) return code;
+        }
+        if (attempt < maxAttempts) await new Promise(r => setTimeout(r, delayMs));
+    }
+    throw new Error(`No OTP email found in Mailosaur for mobile ${mobile} after ${maxAttempts} attempts`);
+}
+
 /**
  * Fetches a real OTP from the shared UAT/preprod test mailbox over IMAP —
  * replaces the old MongoDB notification-log lookup (`getOtpFromDb` in
@@ -62,17 +100,26 @@ export async function fetchOtpFromEmail(
     delayMs = 2000,
     messageFilter: RegExp = /Use this OTP/i
 ): Promise<string> {
+    // Mailosaur (HTTP API, no IMAP/2FA) takes over whenever its API key is configured.
+    if (process.env['MAILOSAUR_API_KEY']) {
+        return fetchOtpFromMailosaur(mobile, maxAttempts, delayMs, messageFilter);
+    }
     if (!IMAP_HOST || !IMAP_USER) {
         throw new Error('IMAP_HOST and IMAP_USER env vars must be set to fetch OTP by email');
     }
 
-    const accessToken = await getAccessToken();
+    // Microsoft 365 (OAuth2) when the Entra app is configured; otherwise plain IMAP with an app password
+    // (e.g. Gmail: imap.gmail.com, 2-Step Verification + App password).
+    const useOAuth = !!(AZURE_TENANT_ID && AZURE_CLIENT_ID && AZURE_CLIENT_SECRET);
+    const auth = useOAuth
+        ? { user: IMAP_USER, accessToken: await getAccessToken() }
+        : { user: IMAP_USER, pass: process.env['IMAP_PASSWORD'] ?? '' };
 
     const client = new ImapFlow({
         host:   IMAP_HOST,
         port:   IMAP_PORT,
         secure: true,
-        auth:   { user: IMAP_USER, accessToken },
+        auth,
         logger: false,
     });
     try {
@@ -100,7 +147,7 @@ export async function fetchOtpFromEmail(
                     const body   = parsed.text ?? parsed.html ?? '';
                     if (!body.includes(mobile) || !messageFilter.test(body)) continue;
 
-                    const match = body.match(/Use this OTP\s*[:\s]+(\d+)/i) ?? body.match(/\b(\d{6,8})\b/);
+                    const match = body.match(/Use this OTP\s*[:\s]+(\d+)/i) ?? body.match(/\b(\d{4,8})\b/);
                     if (match) return match[1];
                 }
             } finally {

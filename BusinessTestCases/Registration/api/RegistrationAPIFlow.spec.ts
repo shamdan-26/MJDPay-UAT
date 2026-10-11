@@ -7,10 +7,17 @@ import {
   VALID_VAT_NUMBER,
   TEST_FILE_BUFFER,
 } from '../RegistrationHelper';
+import { REGISTRATION_API_BASE, registrationHeaders } from '../helpers/registrationApi';
 
 declare const process: { env: Record<string, string | undefined> };
 
-const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev.majdpay.com';
+const API_BASE = REGISTRATION_API_BASE;
+
+// The gateway answers 400 MISSING_REQUIRED_HEADER without these on every request; per-request headers still override.
+test.use({ extraHTTPHeaders: registrationHeaders() });
+
+/** The gateway now returns sessionToken as { token, expirationDuration }; older builds returned a bare string. */
+const tok = (t: unknown): string => (typeof t === 'string' ? t : (t as { token?: string } | null)?.token ?? '');
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Registration API Flow – end-to-end API test suite
@@ -59,6 +66,7 @@ test.describe('Registration – API Flow', { tag: ['@registration', '@api'], ann
   let mobileNumber: string;
   let selectedAsset: typeof DEV_OTP_ASSETS[0];
   let otpLength: number;
+  let requestId: string | undefined;
   let otpRequired = false;
   let ibanFileId: string;
   let vatFileId: string;
@@ -84,11 +92,12 @@ test.describe('Registration – API Flow', { tag: ['@registration', '@api'], ann
         selectedAsset = asset;
         mobileNumber  = mobile;
         otpRequired   = body.otpRequired === true;
+        requestId     = body.requestId;
         if (otpRequired) {
           expect(body).toHaveProperty('requestId');
         }
         if (body.sessionToken) {
-          sessionToken = body.sessionToken;
+          sessionToken = tok(body.sessionToken);
         }
         found = true;
         break;
@@ -123,7 +132,7 @@ test.describe('Registration – API Flow', { tag: ['@registration', '@api'], ann
     const otp    = rawOtp || '0'.repeat(otpLength ?? 6);
 
     const res = await request.post(`${API_BASE}/emi-profile/api/v1/register/verify/otp`, {
-      data: { mobileNumber, otp },
+      data: { mobileNumber, otp, requestId },
       headers: { 'Content-Type': 'application/json' },
     });
 
@@ -131,7 +140,7 @@ test.describe('Registration – API Flow', { tag: ['@registration', '@api'], ann
     const body = await res.json();
     expect(body).toHaveProperty('sessionToken');
     expect(typeof body.sessionToken).toBe('string');
-    sessionToken = body.sessionToken;
+    sessionToken = tok(body.sessionToken);
   });
 
   // ── 4. Resend OTP (optional path) ──────────────────────────────────────────
@@ -209,17 +218,18 @@ test.describe('Registration – API Flow', { tag: ['@registration', '@api'], ann
       });
       const otpBody = await otpRes.json().catch(() => ({}));
       otpRequired = otpBody.otpRequired === true;
-      if (otpBody.sessionToken) sessionToken = otpBody.sessionToken;
+      requestId   = otpBody.requestId;
+      if (otpBody.sessionToken) sessionToken = tok(otpBody.sessionToken);
 
       if (otpRequired) {
         const rawOtp   = await getOtpFromDb(selectedAsset.mobile);
         const otp      = rawOtp || '0'.repeat(otpLength ?? 6);
         const verifyRes = await request.post(`${API_BASE}/emi-profile/api/v1/register/verify/otp`, {
-          data: { mobileNumber, otp },
+          data: { mobileNumber, otp, requestId },
           headers: { 'Content-Type': 'application/json' },
         });
         const verifyBody = await verifyRes.json().catch(() => ({}));
-        if (verifyBody.sessionToken) sessionToken = verifyBody.sessionToken;
+        if (verifyBody.sessionToken) sessionToken = tok(verifyBody.sessionToken);
       }
     }
 
@@ -445,19 +455,20 @@ test.describe('Registration – API Flow', { tag: ['@registration', '@api'], ann
     const asset2      = DEV_OTP_ASSETS[DEV_OTP_ASSETS.length - 2];
     const freshMobile = `+966${asset2.mobile}`;
 
-    await request.post(`${API_BASE}/emi-profile/api/v1/register/mobile/otp`, {
+    const sentN2 = await request.post(`${API_BASE}/emi-profile/api/v1/register/mobile/otp`, {
       data: { mobileNumber: freshMobile },
       headers: { 'Content-Type': 'application/json' },
     });
+    const sentN2Body = await sentN2.json().catch(() => ({}));
 
     const res = await request.post(`${API_BASE}/emi-profile/api/v1/register/verify/otp`, {
-      data: { mobileNumber: freshMobile, otp: '999999' },
+      data: { mobileNumber: freshMobile, otp: '999999', requestId: sentN2Body.requestId },
       headers: { 'Content-Type': 'application/json' },
     });
 
     expect(res.status()).toBe(400);
     const body = await res.json();
-    expect(body).toHaveProperty('errorCode');
+    expect(body.message?.messageCode ?? body.errorCode).toBeTruthy();
   });
 
   test('API-N3: POST /register/profile-registration-type without token should return 401', async ({ request }) => {

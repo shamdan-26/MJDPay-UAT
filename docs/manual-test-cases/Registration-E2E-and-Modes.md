@@ -48,7 +48,7 @@ Context: covers "Registration — Auto-Approval, Auto-Activation & Activation Em
 
 This manual test suite mirrors the existing Playwright automation for cross-cutting Registration flows. The corresponding automated specs are:
 
-- `BusinessTestCases/Registration/functional/RegistrationE2EHappyPath.spec.ts` — the full UI journey through every step in one run
-- `BusinessTestCases/Registration/functional/RegistrationSprint71_TypeAndAutoApprove.spec.ts` — fixed-Merchant sign-up mode and auto-approval/auto-activation/activation-email behavior
+- `BusinessTestCases/Registration/functional/journeys/RegistrationE2EHappyPath.spec.ts` — the full UI journey through every step in one run
+- `BusinessTestCases/Registration/functional/journeys/RegistrationFixedMerchantAutoApprove.spec.ts` — fixed-Merchant sign-up mode and auto-approval/auto-activation/activation-email behavior
 
 Every other Registration part (Mobile, OTP, Business Info, Financial, Verification & Uploads, NAFATH, Products, Contract) has its own dedicated manual-test-case doc in this folder; this file only covers what those individually do not.

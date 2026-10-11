@@ -125,9 +125,9 @@ Context: covers "Registration — Onboarding PoS Request Flow: submission error 
 
 This manual test suite mirrors the existing Playwright automation for the Registration Products step and its PoS Onboarding Setup sub-flow. The corresponding automated specs are:
 
-- `BusinessTestCases/Registration/ui/RegistrationProductsPage.spec.ts` — Products step page elements
-- `BusinessTestCases/Registration/ui/RegistrationProductsPoSSetup.spec.ts` — PoS Onboarding Setup panel elements (EMI-5783)
-- `BusinessTestCases/Registration/functional/RegistrationProductsFunctionality.spec.ts` — product selection/counter logic, and the PoS Devices & Delivery functional sub-flow
-- `BusinessTestCases/Registration/functional/RegistrationPoSOnboarding.spec.ts` — PoS order-request submission (TC-POS-026..028)
+- `BusinessTestCases/Registration/ui/06-products/RegistrationProductsPage.spec.ts` — Products step page elements
+- `BusinessTestCases/Registration/ui/06-products/RegistrationProductsPoSSetup.spec.ts` — PoS Onboarding Setup panel elements (EMI-5783)
+- `BusinessTestCases/Registration/functional/06-products/RegistrationProductsFunctionality.spec.ts` — product selection/counter logic, and the PoS Devices & Delivery functional sub-flow
+- `BusinessTestCases/Registration/functional/06-products/RegistrationPoSOnboarding.spec.ts` — PoS order-request submission (TC-POS-026..028)
 
 Supporting helper: `BusinessTestCases/pageElements/Registration/RegistrationProductsPage.ts`.

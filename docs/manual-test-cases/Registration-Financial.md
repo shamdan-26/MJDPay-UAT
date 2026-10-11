@@ -116,7 +116,7 @@ Context: covers "Registration - Financial & Business Functionality".
 
 This manual test suite mirrors the existing Playwright automation for the Registration Financial & Business step. The corresponding automated specs are:
 
-- `BusinessTestCases/Registration/ui/RegistrationFinancialPage.spec.ts` — page elements (read-only, stateful, and dedicated-asset sections)
-- `BusinessTestCases/Registration/functional/RegistrationFinancialFunctionality.spec.ts` — numeric field validation (boundaries, XSS/SQLi, negative/decimal/zero handling), Industries/Annual Income dropdown search, Next-button logic, and Back navigation
+- `BusinessTestCases/Registration/ui/03-financial/RegistrationFinancialPage.spec.ts` — page elements (read-only, stateful, and dedicated-asset sections)
+- `BusinessTestCases/Registration/functional/03-financial/RegistrationFinancialFunctionality.spec.ts` — numeric field validation (boundaries, XSS/SQLi, negative/decimal/zero handling), Industries/Annual Income dropdown search, Next-button logic, and Back navigation
 
 Supporting helper: `BusinessTestCases/pageElements/Registration/RegistrationFinancialPage.ts`.

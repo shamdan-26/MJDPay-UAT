@@ -38,7 +38,7 @@ import { test, expect } from '@playwright/test';
 // EMI-5995 is Under-Testing and EMI-6059 is DEV DONE at time of writing.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev.majdpay.com';
+const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev-emi.dg-cash.app';
 
 const VERIFY_OTP_PATH  = '/api/v1/register/verify/otp';
 const MOBILE_OTP_PATH  = '/api/v1/register/mobile/otp';

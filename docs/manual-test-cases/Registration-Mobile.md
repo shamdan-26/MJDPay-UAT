@@ -60,7 +60,7 @@ Context: covers "Registration - Mobile Number Functionality".
 
 This manual test suite mirrors the existing Playwright automation for the Registration Mobile step. The corresponding automated specs are:
 
-- `BusinessTestCases/Registration/ui/RegistrationMobilePage.spec.ts` — page elements & layout
-- `BusinessTestCases/Registration/functional/RegistrationMobileFunctionality.spec.ts` — field validation, XSS/SQLi inertness, and navigation
+- `BusinessTestCases/Registration/ui/01-entry/RegistrationMobilePage.spec.ts` — page elements & layout
+- `BusinessTestCases/Registration/functional/01-entry/RegistrationMobileFunctionality.spec.ts` — field validation, XSS/SQLi inertness, and navigation
 
 Supporting helpers: `BusinessTestCases/Registration/RegistrationHelper.ts` and `BusinessTestCases/pageElements/Registration/RegistrationMobilePage.ts`.

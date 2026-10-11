@@ -50,5 +50,16 @@ export default defineConfig({
         viewport: null,
       },
     },
+    // Opt-in cross-browser coverage (CROSS_BROWSER=1): the mock-driven Registration UI specs only — they need no
+    // real OTP, pool identity or login session, so they are safe to run in any engine.
+    // Run with:  CROSS_BROWSER=1 npm run test:dev -- --project=Chromium --project=WebKit BusinessTestCases/Registration/ui
+    ...(process.env['CROSS_BROWSER']
+      ? (['Chromium', 'WebKit'] as const).map(name => ({
+          name,
+          use: { browserName: name.toLowerCase() as 'chromium' | 'webkit', headless: true, viewport: { width: 1280, height: 900 } },
+          grep: /(?=.*@registration)(?=.*@ui)/,
+          grepInvert: /@visual|@performance/,
+        }))
+      : []),
   ],
 });

@@ -2,7 +2,7 @@
 
 Source tickets: [EMI-5783](https://digitalcash.atlassian.net/browse/EMI-5783) (Onboarding PoS Request Flow) and [EMI-5782](https://digitalcash.atlassian.net/browse/EMI-5782) (Products Navigation & In-App PoS Request Flow).
 
-Both tickets are tagged **FE - iOS** (native Business app). There is no automation harness for the iOS app in this repository, so these are manual/exploratory test cases for QA execution on device/simulator. Where a piece of the flow is also reachable on the web portal (the registration Products step), it has been automated separately in [`RegistrationProductsFunctionality.spec.ts`](../../BusinessTestCases/Registration/functional/RegistrationProductsFunctionality.spec.ts).
+Both tickets are tagged **FE - iOS** (native Business app). There is no automation harness for the iOS app in this repository, so these are manual/exploratory test cases for QA execution on device/simulator. Where a piece of the flow is also reachable on the web portal (the registration Products step), it has been automated separately in [`RegistrationProductsFunctionality.spec.ts`](../../BusinessTestCases/Registration/functional/06-products/RegistrationProductsFunctionality.spec.ts).
 
 Priority key: **P1** = blocks the release / core happy path, **P2** = important secondary behavior, **P3** = edge case / polish.
 
