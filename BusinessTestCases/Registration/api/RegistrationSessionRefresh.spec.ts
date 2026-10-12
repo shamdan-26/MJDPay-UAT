@@ -109,7 +109,7 @@ test.describe('Registration Session Refresh — Response Shapes (RSR-01, EMI-599
 
         const res = await request.post(`${API_BASE}${VERIFY_OTP_PATH}`, {
             headers: headers({ Authorization: `Bearer ${SESSION_TOKEN}` }),
-            data: { otp: process.env['REGISTRATION_OTP'] ?? '00000000' },
+            data: { otp: process.env['REGISTRATION_OTP'] ?? '918512' },
         });
         test.skip(!res.ok(), `verify OTP returned ${res.status()} — the session may already be consumed`);
 

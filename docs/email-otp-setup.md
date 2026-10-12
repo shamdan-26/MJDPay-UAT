@@ -24,7 +24,7 @@ Until they are filled in, any test that needs a real OTP fails with:
 
 > AZURE_TENANT_ID, AZURE_CLIENT_ID, and AZURE_CLIENT_SECRET env vars must be set to fetch OTP by email
 
-`ENV=dev` is unaffected — the OTP there is always `00000000` and the mailbox is
+`ENV=dev` is unaffected — the OTP there is always `918512` and the mailbox is
 skipped entirely.
 
 ## Why an admin has to be involved

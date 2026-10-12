@@ -15,7 +15,7 @@ Create a `.env.dev` file in the project root (see [Environment](#environment)) b
 
 ```bash
 # Run everything against the dev environment (the only supported environment)
-npm run test:dev       # ENV=dev      — dev backend, OTP hardcoded to 00000000
+npm run test:dev       # ENV=dev      — dev backend, OTP hardcoded to 918512
 
 # Run a single spec file
 npx playwright test BusinessTestCases/Login/functional/LoginHappyPath.spec.ts
@@ -50,7 +50,7 @@ Dev is the only environment this suite targets; UAT and preprod support has been
 
 `support/global-setup.ts` runs once before the suite: it logs in with `DEV_SETUP_*` and saves `session.json`, then authenticates every account in the homepage account pool and saves a `storageState` per account under `playwright/.auth/`. `support/global-teardown.ts` cleans those up afterward. Any spec using `test.use({ storageState: ... })` or the `Homepage` worker fixture (see below) picks up a pre-authenticated session instead of logging in per test.
 
-In `ENV=dev`, OTP is always `00000000` and the mailbox is skipped entirely — real-OTP lookups only happen against dev.
+In `ENV=dev`, OTP is always `918512` and the mailbox is skipped entirely — real-OTP lookups only happen against dev.
 
 ## Project structure
 

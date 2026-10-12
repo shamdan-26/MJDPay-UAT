@@ -52,9 +52,11 @@ test.describe('Registration API – contract (DRAFT)', { tag: ['@registration', 
     });
 
     test('error responses use the gateway error envelope', async ({ request }) => {
-        const res = await postRegistration(request, '/register/verify/otp', { mobileNumber: toApiMobile(generateFreshKSAMobile()), otp: '000000', requestId: 'does-not-exist' });
+        const res = await postRegistration(request, '/register/verify/otp', { mobileNumber: toApiMobile(generateFreshKSAMobile()), otp: '918512', requestId: 'does-not-exist' });
         expect(res.status()).toBeGreaterThanOrEqual(400);
-        expect(conforms(await res.json(), ERROR_SCHEMA)).toEqual([]);
+        // The gateway wraps errors in a one-element array: [{ httpStatusCode, message: { messageCode, ... } }]
+        const body = await res.json();
+        expect(conforms(Array.isArray(body) ? body[0] : body, ERROR_SCHEMA)).toEqual([]);
     });
 
     test('profile-registration-type fixture matches the flag schema (offline fixture check)', async () => {

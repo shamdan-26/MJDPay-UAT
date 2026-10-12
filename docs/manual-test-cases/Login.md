@@ -98,7 +98,7 @@ Context: after submitting valid-looking credentials, a modal card appears showin
 
 ## D. OTP verification
 
-Context: when OTP is enabled for the account, a one-time password dialog appears after the validation card. OTP digits arrive via SMS (in dev environments the OTP is always `00000000`).
+Context: when OTP is enabled for the account, a one-time password dialog appears after the validation card. OTP digits arrive via SMS (in dev environments the OTP is always `918512`).
 
 | ID | Title | Steps | Expected Result | Priority |
 |---|---|---|---|---|
@@ -113,7 +113,7 @@ Context: when OTP is enabled for the account, a one-time password dialog appears
 | LG-72 | Cancel closes the OTP dialog | Click "Cancel" on the OTP dialog | OTP dialog closes | P1 |
 | LG-73 | Cancel returns to the login form | Click "Cancel" on the OTP dialog | User is returned to the login form with the "Log In" button visible | P1 |
 | LG-74 | Wrong OTP keeps user on the OTP dialog | Enter an incorrect OTP (e.g. `11111111`), click Verify | Dialog remains open (does not redirect); an error is expected to surface | P1 |
-| LG-75 | Correct OTP logs the user in | Enter the correct OTP (retrieved via SMS or, in dev, `00000000`), click Verify | User is redirected away from the login page to the dashboard | P1 |
+| LG-75 | Correct OTP logs the user in | Enter the correct OTP (retrieved via SMS or, in dev, `918512`), click Verify | User is redirected away from the login page to the dashboard | P1 |
 
 ---
 
@@ -263,7 +263,7 @@ This manual test suite mirrors the existing Playwright automation for the Login 
 - `BusinessTestCases/login/functional/LoginInvalidCredentials.spec.ts` — invalid credentials, account status errors, and edge cases (Sections F & G)
 - `BusinessTestCases/login/functional/LoginNavigation.spec.ts` — navigation links and already-authenticated redirect (Section H)
 - `BusinessTestCases/login/functional/LoginSecurity.spec.ts` — lockout, enumeration, XSS, POST-only, and error-detail checks (Section I)
-- `BusinessTestCases/login/api/LoginAPIFlow.spec.ts` — device/sign-in/OTP API contract (Section J)
-- `BusinessTestCases/login/api/LoginNafathWathiqExpiry.spec.ts` — NAFATH/WATHIQ document & TTL expiry, revalidation flows, and deactivation scope (Section K, EMI-5836). Document-expiry cases (LG-132, LG-133, LG-138) run against dedicated env-gated accounts (`NAFATH_EXPIRED_COMPANY/MOBILE`, `WATHIQ_EXPIRED_COMPANY/MOBILE` in `LoginHelper.ts`) and are skipped until those are provisioned in UAT. The remaining cases (TTL-only expiry, revalidation APIs, deactivation scope) are written as `test.skip(true, ...)` pending Redis-seeding access and confirmation of the renewal endpoint paths against the Emi Profile Service Swagger doc — see the file header for details.
+- `BusinessTestCases/Login/api/signin/*.spec.ts` — device/sign-in/OTP API contract (Section J)
+- `BusinessTestCases/Login/api/document-expiry/LoginNafathWathiqExpiry.spec.ts` — NAFATH/WATHIQ document & TTL expiry, revalidation flows, and deactivation scope (Section K, EMI-5836). Document-expiry cases (LG-132, LG-133, LG-138) run against dedicated env-gated accounts (`NAFATH_EXPIRED_COMPANY/MOBILE`, `WATHIQ_EXPIRED_COMPANY/MOBILE` in `LoginHelper.ts`) and are skipped until those are provisioned in UAT. The remaining cases (TTL-only expiry, revalidation APIs, deactivation scope) are written as `test.skip(true, ...)` pending Redis-seeding access and confirmation of the renewal endpoint paths against the Emi Profile Service Swagger doc — see the file header for details.
 
 Supporting helpers referenced by these specs: `BusinessTestCases/login/LoginHelper.ts` (test data, OTP retrieval via MongoDB, login helpers) and `BusinessTestCases/pageElements/LoginPage.ts` (the page object for all locators and actions used above).

@@ -9,9 +9,9 @@ export async function getOtpFromDb(mobile: string, maxAttempts = 10, delayMs = 2
     if (process.env['OTP_SOURCE'] === 'email') return fetchOtpFromEmail(mobile, maxAttempts, delayMs);
     // UAT now accepts a fixed all-zero OTP for any mobile, same as dev — no
     // longer limited to the dedicated DEV_OTP_ASSETS pool (see fillOTP's
-    // '0'-per-digit fallback for '' below; '000000' behaves identically).
+    // '0'-per-digit fallback for '' below; '918512' behaves identically).
     // Skips the real IMAP/Azure round trip entirely.
-    if (env === 'dev' || env === 'uat') return '000000';
+    if (env === 'dev' || env === 'uat') return '918512';
     return fetchOtpFromEmail(mobile, maxAttempts, delayMs);
 }
 

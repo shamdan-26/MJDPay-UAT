@@ -11,7 +11,7 @@ test.describe('Registration – smoke (DRAFT)', { tag: ['@registration', '@smoke
     test('registration page loads with title, logo and the mobile field', async ({ page }) => {
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
         await expect(page).toHaveTitle('EMI - Business');
-        await expect(page.locator('img[alt="MJD Pay"]').or(page.locator('#auth_header_logo'))).toBeVisible();
+        await expect(page.locator('img[alt="MJD Pay"]').first()).toBeVisible();
         await expect(page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ })).toBeVisible();
     });
 

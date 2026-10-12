@@ -6,8 +6,8 @@ This file serves as our central, living registry for all automated test suites a
 
 ## 1. Authentication (Login)
 **File Reference:**
-`BusinessTestCases/Login/api/LoginAPIFlow.spec.ts`
-`BusinessTestCases/Login/api/LoginNafathWathiqExpiry.spec.ts`
+`BusinessTestCases/Login/api/signin/ (LoginApi*.spec.ts)`
+`BusinessTestCases/Login/api/document-expiry/LoginNafathWathiqExpiry.spec.ts`
 `BusinessTestCases/Login/functional/LoginFormValidation.spec.ts`
 `BusinessTestCases/Login/functional/LoginInvalidCredentials.spec.ts`
 `BusinessTestCases/Login/functional/LoginOtpFlow.spec.ts`
@@ -17,7 +17,7 @@ This file serves as our central, living registry for all automated test suites a
 `BusinessTestCases/Login/ui/LoginPage.spec.ts`
 `BusinessTestCases/Login/ui/LoginValidationPopup.spec.ts`
 
-### `Login/api/LoginAPIFlow.spec.ts`
+### `Login/api/signin/ (LoginApi*.spec.ts)`
 *(3-step pre-auth + sign-in chain: GET /devices/ip-address → POST /devices/uuid → POST /auth/signin → POST /auth/verify/otp)*
 
 | Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |
@@ -47,13 +47,13 @@ This file serves as our central, living registry for all automated test suites a
 | API-S1: error response should not expose stack traces or database details | Negative | Asserts the error response body for wrong credentials doesn't match stack/exception/sql/ORA-/JDBC patterns. |
 | API-S2: error status should be identical whether tenant or username is wrong (prevents enumeration) | Negative | Asserts a wrong-tenant attempt and a wrong-username attempt return the same HTTP status. |
 | API-S3: GET to /auth/signin must not return 200 — credentials must not appear in URLs | Negative | Asserts a `GET` on the sign-in endpoint does not return 200. |
-| API-04: should return 200 with valid OTP (dev env — OTP is 00000000) | Positive | Asserts OTP verification with the correct OTP and a bearer token returns 200/201 (skipped if sign-in produced no access token). |
+| API-04: should return 200 with valid OTP (dev env — OTP is 918512) | Positive | Asserts OTP verification with the correct OTP and a bearer token returns 200/201 (skipped if sign-in produced no access token). |
 | API-N11: should return 401 with an incorrect OTP | Negative | Asserts an incorrect OTP returns 401. |
 | API-N12: should return 400 when OTP field is missing | Negative | Asserts a missing `otp` field returns 400/422. |
 | API-N13: should return 401 when Authorization header is missing | Negative | Asserts a missing `Authorization` header returns 401. |
 | API-FLOW-01: should complete the full pre-auth and sign-in chain successfully | Positive | Chains IP lookup → device UUID registration → sign-in, asserting each step succeeds and the final access token is non-empty. |
 
-### `Login/api/LoginNafathWathiqExpiry.spec.ts`
+### `Login/api/document-expiry/LoginNafathWathiqExpiry.spec.ts`
 *(EMI-5836 — login blocked when NAFATH/WATHIQ document or Redis-TTL data has expired, plus revalidation flows and deactivation scope. Ticket title says "Yaqeen"; the ticket text itself only ever discusses NAFATH and WATHIQ — flagged in the file header, not assumed to be a third system.)*
 
 | Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |

@@ -85,11 +85,14 @@ test.describe('Registration – localization (DRAFT)', { tag: ['@registration', 
     });
 
     test('Arabic page contains Arabic text and English page contains Latin text for the main heading', async ({ page }) => {
-        await goToInfoStepMocked(page);
-        const heading = page.locator('#register-form-title');
-        await expect(heading).toHaveText(/[A-Za-z]{3,}/);
+        // Checked on the mobile step: switching language on Business Info resets the wizard (#register-form-title disappears).
+        await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        const next = page.getByRole('button', { name: /^(next|التالي)$/i });
+        await expect(next).toHaveText(/[؀-ۿ]{3,}/); // the wizard opens in Arabic by default
+        await page.getByRole('button', { name: 'EN', exact: true }).click();
+        await expect(next).toHaveText(/[A-Za-z]{3,}/);
         await page.getByRole('button', { name: 'العربية' }).click();
-        await expect(heading).toHaveText(/[؀-ۿ]{3,}/);
+        await expect(next).toHaveText(/[؀-ۿ]{3,}/);
     });
 
     test('dates shown in the UI use a consistent calendar and 4-digit year', async ({ page }) => {

@@ -1,7 +1,7 @@
 {
   "defaultPassword": "Aa#1234567",
   "wrongPassword": "WrongPass@99",
-  "validOtp": "00000000",
+  "validOtp": "918512",
   "invalidOtp": "11111111",
   "merchant": { "company": "A3713", "mobile": "599834420" },
   "merchant2": { "company": "T9446", "mobile": "502310965" },

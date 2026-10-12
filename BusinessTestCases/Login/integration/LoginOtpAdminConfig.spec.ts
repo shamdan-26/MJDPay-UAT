@@ -15,7 +15,7 @@ import { AdminOtpConfigPage, OTP_OPERATION, createAdminContext } from '../../pag
 // bespoke-beforeAll pattern BankTransfer/Products already use.
 // ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('Login — Admin OTP Configuration', { tag: ['@login', '@functional'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Login — Admin OTP Configuration', { tag: ['@login', '@integration'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'integration' }] }, () => {
     test.describe.configure({ mode: 'serial' });
     test.setTimeout(120000);
 

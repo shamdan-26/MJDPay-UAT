@@ -97,7 +97,7 @@ test.describe('Registration - OTP Functionality', { tag: ['@registration', '@fun
         const seconds = Math.max(parsedSeconds, 60);
         test.setTimeout((seconds + 15) * 1000);
 
-        // '1', not '0' — dev/uat's fixed valid OTP is '000000' (see
+        // '1', not '0' — dev/uat's fixed valid OTP is '918512' (see
         // getOtpFromDb), so filling all-zero here auto-submits a CORRECT OTP
         // and navigates straight to Business Info before the countdown/resend
         // logic below ever runs (confirmed live: this test ended up on the

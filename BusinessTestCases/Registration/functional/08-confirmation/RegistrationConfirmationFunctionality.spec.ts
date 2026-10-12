@@ -82,7 +82,7 @@ test.describe('Registration – Confirmation Page (Live)', { tag: ['@registratio
 
     test('should not display the OTP, a password or sensitive data', { annotation: [{ type: 'testcase', description: "RC-40: Confirmation page does not display the password, OTP or other sensitive data" }] }, async () => {
         const text = await confirmation.bodyText();
-        expect(text).not.toMatch(/00000000|password|كلمة المرور/i);
+        expect(text).not.toMatch(/918512|password|كلمة المرور/i);
         expect(page.url()).not.toMatch(/otp|password|token/i);
     });
 

@@ -13,7 +13,8 @@ const DEVICES = ['iPhone 14', 'Pixel 7', 'Galaxy S9+', 'iPad (gen 7)'] as const;
 
 for (const name of DEVICES) {
     test.describe(`Registration – ${name} (DRAFT)`, { tag: ['@registration', '@ui', '@devices'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
-        test.use({ ...devices[name], viewport: devices[name].viewport });
+        const { defaultBrowserType: _browser, ...device } = devices[name]; // defaultBrowserType cannot be set inside a describe
+        test.use(device);
 
         test('mobile step: numeric input, tap target size and no horizontal scroll', async ({ page }) => {
             await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });

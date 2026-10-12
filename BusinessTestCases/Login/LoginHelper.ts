@@ -4,7 +4,7 @@ import { waitForToastClear } from '../toastMessages';
 import { LoginPage } from '../pageElements/Shared/LoginPage';
 import testAccounts from '../../data/testAccounts.json';
 
-export const LOGIN_URL    = `${process.env['BASE_URL'] ?? 'https://uat.majdpay.com'}/business/auth/login`;
+export const LOGIN_URL    = `${process.env['BASE_URL'] ?? 'https://dev-emi.dg-cash.app'}/business/auth/login`;
 export const SESSION_PATH = 'session.json';
 
 // Account used for wrong-password / invalid-credential tests.
@@ -62,6 +62,8 @@ export async function getOtpFromDb(
     delayMs = 2000,
     messageFilter: RegExp = /Use this OTP/i
 ): Promise<string> {
+    // OTP_SOURCE=email reads the real OTP from the Mailosaur/IMAP inbox (opt-in, see support/emailOtp.ts).
+    if (process.env['OTP_SOURCE'] === 'email') return fetchOtpFromEmail(mobile, maxAttempts, delayMs, messageFilter);
     if ((process.env['ENV'] ?? 'dev') === 'dev') return VALID_OTP;
     return fetchOtpFromEmail(mobile, maxAttempts, delayMs, messageFilter);
 }

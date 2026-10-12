@@ -16,7 +16,7 @@ Context: sending and verifying the mobile OTP that starts a registration session
 |---|---|---|---|---|
 | API-01 | Send mobile OTP for an unregistered number | `POST /emi-profile/api/v1/register/mobile/otp` with a fresh KSA mobile number | 200 OK. If `otpRequired` is `true`, a `requestId` is returned; if `false`, `sessionToken`/`refreshToken` objects are returned directly (EMI-5995/EMI-6059) | P1 |
 | API-02 | Read the OTP settings for registration | `GET /otp/otp-settings/q?operationCode=REGISTRATION` (public, no token) | 200 OK with `length`, `validityInSeconds`, `canResendOtpAfterInSeconds` | P2 |
-| API-03 | Verify the OTP | `POST /emi-profile/api/v1/register/verify/otp` with the mobile number and the correct OTP (dev/UAT accept a fixed `000000`) | 200 OK with a `sessionToken` object (`{token, expirationDuration}`) and a `refreshToken` object (EMI-5995/EMI-6059) | P1 |
+| API-03 | Verify the OTP | `POST /emi-profile/api/v1/register/verify/otp` with the mobile number and the correct OTP (dev/UAT accept a fixed `918512`) | 200 OK with a `sessionToken` object (`{token, expirationDuration}`) and a `refreshToken` object (EMI-5995/EMI-6059) | P1 |
 | API-04 | Resend the mobile OTP | `POST /emi-profile/api/v1/register/mobile/otp/resend` for a mobile that already requested one | 200 OK with a fresh `requestId` and `otpRequired: true` | P2 |
 | API-N1 | Reject an invalid mobile format | `POST /register/mobile/otp` with `mobileNumber: "123"` | 400 Bad Request | P2 |
 | API-N2 | Reject a wrong OTP | `POST /register/verify/otp` with a deliberately wrong 6-digit code | 400 Bad Request with an `errorCode` in the body | P1 |

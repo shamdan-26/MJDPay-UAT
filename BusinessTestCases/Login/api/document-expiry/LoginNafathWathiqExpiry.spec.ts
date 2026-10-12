@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test';
 import {
     VALID_MOBILE,
-    VALID_PASSWORD,
     VALID_COMPANY,
     NAFATH_EXPIRED_COMPANY,
     NAFATH_EXPIRED_MOBILE,
@@ -9,7 +8,8 @@ import {
     WATHIQ_EXPIRED_COMPANY,
     WATHIQ_EXPIRED_MOBILE,
     WATHIQ_EXPIRED_PASSWORD,
-} from '../LoginHelper';
+} from '../../LoginHelper';
+import { API_BASE, signIn } from '../../helpers/loginApi';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Login – NAFATH / WATHIQ Data Expiry & Renewal (EMI-5836, "BE - Block login
@@ -50,35 +50,6 @@ import {
 // Reconciliation/api/*.spec.ts and TransactionOperations/api/*.spec.ts for
 // coverage that's written but blocked on access/confirmation.
 // ─────────────────────────────────────────────────────────────────────────────
-
-const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev.majdpay.com';
-
-function commonHeaders(): Record<string, string> {
-    return {
-        'Content-Type':        'application/json',
-        'Accept':              '*/*',
-        'Accept-Language':     'en_uk',
-        'locale':              'en_uk',
-        'platform':            'web',
-        'platformType':        'web',
-        'channel':             'ONLINE',
-        'toster_ID':           `toster_ID_${Date.now()}`,
-        'device-finger-print': 'test-fingerprint-hash-api-testing',
-        'latitude':            '24.7136',
-        'longitude':           '46.6753',
-    };
-}
-
-async function signIn(request: import('@playwright/test').APIRequestContext, company: string, mobile: string, password: string = VALID_PASSWORD) {
-    return request.post(`${API_BASE}/auth/signin`, {
-        data: {
-            username:     `+966${mobile}`,
-            password,
-            tenantNumber: company,
-        },
-        headers: commonHeaders(),
-    });
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // NW-01–NW-08 — Document expiry blocks login (env-gated real accounts)
@@ -272,7 +243,6 @@ test.describe('Login – deactivation scope (per Amer Majed Abdalrazeq\'s 2026-0
 test.describe('Login – NAFATH / WATHIQ expiry message localisation (EMI-5969)', { tag: ['@login', '@api'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'api' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
-    const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev.majdpay.com';
     const NO_NAFATH_ACCOUNT = 'set NAFATH_EXPIRED_COMPANY / NAFATH_EXPIRED_MOBILE to a blocked fixture account';
     const NO_WATHIQ_ACCOUNT = 'set WATHIQ_EXPIRED_COMPANY / WATHIQ_EXPIRED_MOBILE to a blocked fixture account';
 
