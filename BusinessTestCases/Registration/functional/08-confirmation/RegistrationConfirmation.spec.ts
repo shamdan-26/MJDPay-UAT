@@ -31,7 +31,7 @@ import { RegistrationConfirmationPage } from '../../../pageElements/Registration
 
 const SUBMIT_PATH = '/register/contract/accept';
 
-test.describe('Registration – Confirmation Page (Live)', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration – Confirmation Page (Live)', { tag: ['@registration', '@confirmation', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;
@@ -164,7 +164,7 @@ test.describe('Registration – Confirmation Page (Live)', { tag: ['@registratio
 // Own live registration: double-click Submit, then the language switch (which
 // destroys the confirmation state, so it runs last).
 // ─────────────────────────────────────────────────────────────────────────────
-test.describe('Registration – Confirmation Page: Double Submit & Language (Live)', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration – Confirmation Page: Double Submit & Language (Live)', { tag: ['@registration', '@confirmation', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;

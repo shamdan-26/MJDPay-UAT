@@ -275,7 +275,7 @@ Context: covers "Registration – Continue/Resume Registration (EMI-5666, T03)".
 
 This manual test suite mirrors the existing Playwright automation for the Registration Business Info step. The corresponding automated specs are:
 
-- `BusinessTestCases/Registration/ui/02-business-info/RegistrationInfoPage.spec.ts` — page elements & layout (the `[ref_NN]` markers in the automated titles trace each assertion to a captured DOM snapshot reference, omitted here)
-- `BusinessTestCases/Registration/functional/02-business-info/RegistrationInfoFieldsFunctionality.spec.ts` / `…InfoNavigationFunctionality.spec.ts` / `…InfoResumeFunctionality.spec.ts` — profile-type selection, CRN/National ID/Email field validation, Next-button enable logic, tab transitions, footer/language/theme chrome, tooltips, and resume-registration (EMI-5666)
+- `BusinessTestCases/Registration/ui/02-business-info/RegistrationInfoShell.spec.ts` — page elements & layout (the `[ref_NN]` markers in the automated titles trace each assertion to a captured DOM snapshot reference, omitted here)
+- `BusinessTestCases/Registration/functional/02-business-info/fields/` / `…InfoNavigationFunctionality.spec.ts` / `…InfoResumeFunctionality.spec.ts` — profile-type selection, CRN/National ID/Email field validation, Next-button enable logic, tab transitions, footer/language/theme chrome, tooltips, and resume-registration (EMI-5666)
 
 Supporting helpers: `BusinessTestCases/Registration/RegistrationHelper.ts` (asset pools `CITIZEN_ASSETS`/`RESIDENT_ASSETS`, `goToInfoStep`) and `BusinessTestCases/pageElements/Registration/RegistrationInfoPage.ts`.

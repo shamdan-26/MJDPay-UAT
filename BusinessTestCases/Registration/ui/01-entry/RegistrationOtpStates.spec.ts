@@ -5,7 +5,7 @@ import { fillOTP, goToOtpDialogMocked, mockOtpRequired, OTP_NOT_VALID } from '..
 const OTP_BOX    = { name: 'One time password input' };
 const VERIFY_BTN = /Verify|تحقق/i;
 
-test.describe('Registration – OTP dialog states', { tag: ['@registration', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
+test.describe('Registration – OTP dialog states', { tag: ['@registration', '@entry', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
     test.beforeEach(async ({ page }) => {
         await mockOtpRequired(page, () => OTP_NOT_VALID);
         await goToOtpDialogMocked(page);

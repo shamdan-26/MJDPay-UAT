@@ -9,7 +9,7 @@ import { RegistrationFinancialPage } from '../../../pageElements/Registration/Re
 import { RegistrationVerificationPage } from '../../../pageElements/Registration/RegistrationVerificationPage';
 import { RegistrationProductsPage } from '../../../pageElements/Registration/RegistrationProductsPage';
 
-test.describe('Registration - Nafath Verification', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration - Nafath Verification', { tag: ['@registration', '@identity', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;

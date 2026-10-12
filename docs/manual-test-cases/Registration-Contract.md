@@ -83,6 +83,6 @@ Context: the final screen shown after the applicant clicks Submit and finish on 
 This manual test suite mirrors the existing Playwright automation for the Registration Contract Review step. The corresponding automated specs are:
 
 - `BusinessTestCases/Registration/ui/07-contract/RegistrationContractPage.spec.ts` — page elements & layout
-- `BusinessTestCases/Registration/functional/07-contract/RegistrationContractFunctionality.spec.ts` — agreement checkbox behavior (Live section) and mocked submission error/double-submit handling
+- `BusinessTestCases/Registration/functional/07-contract/RegistrationContract.spec.ts` — agreement checkbox behavior (Live section) and mocked submission error/double-submit handling
 
 Supporting helper: `BusinessTestCases/pageElements/Registration/RegistrationContractPage.ts`.

@@ -5,7 +5,7 @@ import { CRN_TOOLTIP_INFO_BTN, ID_TOOLTIP_INFO_BTN, FIELD_HINT_TOOLTIP_POPUP, TE
 // ─────────────────────────────────────────────────────────────────────────────
 // 9. Footer Navigation
 // ─────────────────────────────────────────────────────────────────────────────
-test.describe('Registration – Footer Navigation', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration – Footer Navigation', { tag: ['@registration', '@business-info', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let asset: Asset;
@@ -59,7 +59,7 @@ test.describe('Registration – Footer Navigation', { tag: ['@registration', '@f
 // ─────────────────────────────────────────────────────────────────────────────
 // 10. Language Toggle
 // ─────────────────────────────────────────────────────────────────────────────
-test.describe('Registration – Language Toggle', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration – Language Toggle', { tag: ['@registration', '@business-info', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let asset: Asset;
@@ -98,7 +98,7 @@ test.describe('Registration – Language Toggle', { tag: ['@registration', '@fun
 // ─────────────────────────────────────────────────────────────────────────────
 // 11. Theme Toggle
 // ─────────────────────────────────────────────────────────────────────────────
-test.describe('Registration – Theme Toggle', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration – Theme Toggle', { tag: ['@registration', '@business-info', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let asset: Asset;
@@ -129,7 +129,7 @@ test.describe('Registration – Theme Toggle', { tag: ['@registration', '@functi
 // ─────────────────────────────────────────────────────────────────────────────
 // 12. Tooltip Interactions
 // ─────────────────────────────────────────────────────────────────────────────
-test.describe('Registration – Tooltip Interactions', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration – Tooltip Interactions', { tag: ['@registration', '@business-info', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let asset: Asset;

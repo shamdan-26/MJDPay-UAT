@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { RESIDENT_ASSETS, generateEmail, nextResidentAsset } from '../../RegistrationHelper';
 import { PROFILE_MERCHANT, PROFILE_FREELANCER, CRN_INPUT, ID_INPUT, EMAIL_INPUT, NEXT_BTN, ACTIVE_STEP, FORM_TITLE, BUSINESS_INFO_TEXT, FINANCIAL_TITLE_TEXT, MONTHLY_EXPECTED_NUMBER, NAFATH_TEXT, NEXT_BTN_NAME, BACK_BTN_NAME, Asset, gotoTab1, fillTab1AndAdvance } from '../../helpers/infoStepForm';
 
-test.describe('Registration – Tab 1 → Tab 2 Transition', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration – Tab 1 → Tab 2 Transition', { tag: ['@registration', '@business-info', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let asset: Asset;
@@ -72,7 +72,7 @@ test.describe('Registration – Tab 1 → Tab 2 Transition', { tag: ['@registrat
 // ─────────────────────────────────────────────────────────────────────────────
 // 7. Back Navigation – state preservation
 // ─────────────────────────────────────────────────────────────────────────────
-test.describe('Registration – Back Navigation (Tab 2 → Tab 1)', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration – Back Navigation (Tab 2 → Tab 1)', { tag: ['@registration', '@business-info', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let asset: Asset;
@@ -121,7 +121,7 @@ test.describe('Registration – Back Navigation (Tab 2 → Tab 1)', { tag: ['@re
 // ─────────────────────────────────────────────────────────────────────────────
 // 8. Step Indicator Progression
 // ─────────────────────────────────────────────────────────────────────────────
-test.describe('Registration – Step Indicator Progression', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration – Step Indicator Progression', { tag: ['@registration', '@business-info', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let asset: Asset;

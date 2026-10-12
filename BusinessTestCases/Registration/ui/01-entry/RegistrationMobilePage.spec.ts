@@ -2,7 +2,7 @@ import { test, expect } from '../../../fixtures';
 import { REGISTER_URL } from '../../RegistrationHelper';
 import { RegistrationMobilePage } from '../../../pageElements/Registration/RegistrationMobilePage';
 
-test.describe('Registration - Mobile Number Page', { tag: ['@registration', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
+test.describe('Registration - Mobile Number Page', { tag: ['@registration', '@entry', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let regPage: RegistrationMobilePage;

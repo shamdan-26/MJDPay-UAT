@@ -29,7 +29,7 @@ async function fill(page: Page): Promise<RegistrationInfoPage> {
     return info;
 }
 
-test.describe('Registration – Business Info server-side rejections', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration – Business Info server-side rejections', { tag: ['@registration', '@business-info', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.beforeEach(() => { test.setTimeout(120_000); });
 
     for (const r of REJECTIONS) {

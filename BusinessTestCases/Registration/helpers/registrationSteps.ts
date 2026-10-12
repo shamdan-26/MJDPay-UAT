@@ -84,7 +84,7 @@ export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
  * already-registered pool asset as a mysterious dead end (financial/
  * verification never load, outcome races time out) rather than cycling to
  * the next asset the way the isAlreadyRegisteredMessage() path already does.
- * This was the real cause behind RegistrationNafathFunctionality.spec.ts (and
+ * This was the real cause behind RegistrationNafath.spec.ts (and
  * its ui/RegistrationNafathPage.spec.ts sibling, which shares the same
  * un-fixed blind spot) repeatedly exhausting a single "fresh" pool asset
  * without ever detecting why.

@@ -7,7 +7,7 @@ import { RegistrationProductsPage } from '../../../pageElements/Registration/Reg
 // the Sprint 71 test-case doc.
 //
 // Corrected against what ui/RegistrationProductsPoSSetup.spec.ts and
-// RegistrationProductsFunctionality.spec.ts's PoS blocks have since confirmed
+// RegistrationProducts.spec.ts's PoS blocks have since confirmed
 // live:
 //   - There is NO separate Review step between Devices & Delivery and
 //     Contract — clicking devicesDeliveryNextButton submits the request and
@@ -23,7 +23,7 @@ import { RegistrationProductsPage } from '../../../pageElements/Registration/Reg
 //   - Product card names ("Wallet", "PoS Terminals", "Bill Payment",
 //     "Payouts") don't match this environment's actual catalogue (walletTest,
 //     ttt, testTuqa, TuqaTestLimit, Point of Sale Device, POS Terminal — see
-//     RegistrationProductsFunctionality.spec.ts's PRODUCT_NAMES). Card-listing
+//     RegistrationProducts.spec.ts's PRODUCT_NAMES). Card-listing
 //     and PoS-card-expansion presence coverage already lives correctly there
 //     and in the ui/ sibling — not duplicated here.
 //   - wathiqAddressOption/customPinAddressOption are both visible
@@ -37,7 +37,7 @@ import { RegistrationProductsPage } from '../../../pageElements/Registration/Reg
 // PoS order-submission endpoint (`POST /emi-profile/api/v1/products/orders/pos`,
 // documented in section 1.1 of the same ticket) for deterministic dedup-click
 // and server-error coverage — the same pattern already used for Contract
-// submission in RegistrationContractFunctionality.spec.ts. The exact
+// submission in RegistrationContract.spec.ts. The exact
 // request/response shape and precise trigger timing aren't independently
 // confirmed live (no network trace available), so assertions below stay
 // tolerant (dedup count, "didn't silently succeed") rather than asserting a
@@ -45,7 +45,7 @@ import { RegistrationProductsPage } from '../../../pageElements/Registration/Reg
 // used throughout RegistrationVerificationUploads.spec.ts for the same reason.
 // ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('Registration — Onboarding PoS Request Flow (TC-POS-026…028)', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration — Onboarding PoS Request Flow (TC-POS-026…028)', { tag: ['@registration', '@products', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;
@@ -141,7 +141,7 @@ test.describe('Registration — Onboarding PoS Request Flow (TC-POS-026…028)',
 // advances past Devices & Delivery on success, leaving no "still on this form"
 // state to retry a failed submission against in the same shared session.
 // ─────────────────────────────────────────────────────────────────────────────
-test.describe('Registration — Onboarding PoS Request Flow: submission error handling', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration — Onboarding PoS Request Flow: submission error handling', { tag: ['@registration', '@products', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test('should surface an error and stay on Devices & Delivery when the PoS order request fails', { annotation: [{ type: 'testcase', description: "RP-64: Surface an error and stay on Devices & Delivery when the PoS order request fails" }] }, async ({ browser }) => {
         test.setTimeout(600_000);
         const context = await browser.newContext();

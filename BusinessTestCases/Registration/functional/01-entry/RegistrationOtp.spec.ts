@@ -1,7 +1,7 @@
 ﻿import { test, expect } from '@playwright/test';
 import { REGISTER_URL, generateFreshKSAMobile, fillOTP, getOtpFromDb } from '../../RegistrationHelper';
 
-test.describe('Registration - OTP Functionality', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration - OTP Functionality', { tag: ['@registration', '@entry', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let currentMobile: string;

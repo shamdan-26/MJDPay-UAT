@@ -20,7 +20,7 @@ import { RegistrationContractPage } from '../../../pageElements/Registration/Reg
 // positionally (RegistrationContractPage.section(n)).
 // ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('Registration — Contract Review', { tag: ['@registration', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
+test.describe('Registration — Contract Review', { tag: ['@registration', '@contract', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
     test.describe.configure({ mode: 'serial', retries: 1 });
 
     let page: Page;

@@ -1,7 +1,7 @@
 ﻿import { test, expect } from '@playwright/test';
 import { REGISTER_URL, generateFreshKSAMobile, markUatOtpAssetUsed } from '../../RegistrationHelper';
 
-test.describe('Registration - OTP Popup Page Elements', { tag: ['@registration', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
+test.describe('Registration - OTP Popup Page Elements', { tag: ['@registration', '@entry', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, context }) => {

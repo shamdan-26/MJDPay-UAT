@@ -18,7 +18,7 @@ export const VALID_MOBILE = RESIDENT_ASSETS[0].mobile;
 /**
  * Reserved sub-pool exclusively for the "should start a brand-new registration
  * when the mobile is reused with a different CRN" test in
- * RegistrationInfoFieldsFunctionality.spec.ts (EMI-122 T21). That test draws two
+ * fields/Registration*Field (EMI-122 T21). That test draws two
  * resident assets per run via nextResidentAsset() — the same pool every other
  * Registration spec file/describe block draws from — and was confirmed to fail
  * in full bulk runs (while passing in isolation) purely from contention over

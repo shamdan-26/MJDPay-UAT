@@ -10,7 +10,7 @@ import { RegistrationFinancialPage } from '../../../pageElements/Registration/Re
 import { RegistrationInfoPage } from '../../../pageElements/Registration/RegistrationInfoPage';
 import { RegistrationVerificationPage } from '../../../pageElements/Registration/RegistrationVerificationPage';
 
-test.describe('Registration - Financial & Business Functionality', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration - Financial & Business Functionality', { tag: ['@registration', '@financial', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
     test.setTimeout(120_000);
 

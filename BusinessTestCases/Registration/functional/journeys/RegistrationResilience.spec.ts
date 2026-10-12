@@ -22,7 +22,7 @@ async function fillInfoAndNext(page: Page) {
     return info;
 }
 
-test.describe('Registration – Resilience', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration – Resilience', { tag: ['@registration', '@journey', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.beforeEach(() => { test.setTimeout(120_000); });
 
     test.describe('Mobile step', () => {

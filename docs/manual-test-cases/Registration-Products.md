@@ -127,7 +127,7 @@ This manual test suite mirrors the existing Playwright automation for the Regist
 
 - `BusinessTestCases/Registration/ui/06-products/RegistrationProductsPage.spec.ts` — Products step page elements
 - `BusinessTestCases/Registration/ui/06-products/RegistrationProductsPoSSetup.spec.ts` — PoS Onboarding Setup panel elements (EMI-5783)
-- `BusinessTestCases/Registration/functional/06-products/RegistrationProductsFunctionality.spec.ts` — product selection/counter logic, and the PoS Devices & Delivery functional sub-flow
+- `BusinessTestCases/Registration/functional/06-products/RegistrationProducts.spec.ts` — product selection/counter logic, and the PoS Devices & Delivery functional sub-flow
 - `BusinessTestCases/Registration/functional/06-products/RegistrationPoSOnboarding.spec.ts` — PoS order-request submission (TC-POS-026..028)
 
 Supporting helper: `BusinessTestCases/pageElements/Registration/RegistrationProductsPage.ts`.

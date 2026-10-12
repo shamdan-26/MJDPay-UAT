@@ -2,7 +2,7 @@
 
 Source tickets: [EMI-5783](https://digitalcash.atlassian.net/browse/EMI-5783) (Onboarding PoS Request Flow) and [EMI-5782](https://digitalcash.atlassian.net/browse/EMI-5782) (Products Navigation & In-App PoS Request Flow).
 
-Both tickets are tagged **FE - iOS** (native Business app). There is no automation harness for the iOS app in this repository, so these are manual/exploratory test cases for QA execution on device/simulator. Where a piece of the flow is also reachable on the web portal (the registration Products step), it has been automated separately in [`RegistrationProductsFunctionality.spec.ts`](../../BusinessTestCases/Registration/functional/06-products/RegistrationProductsFunctionality.spec.ts).
+Both tickets are tagged **FE - iOS** (native Business app). There is no automation harness for the iOS app in this repository, so these are manual/exploratory test cases for QA execution on device/simulator. Where a piece of the flow is also reachable on the web portal (the registration Products step), it has been automated separately in [`RegistrationProducts.spec.ts`](../../BusinessTestCases/Registration/functional/06-products/RegistrationProducts.spec.ts).
 
 Priority key: **P1** = blocks the release / core happy path, **P2** = important secondary behavior, **P3** = edge case / polish.
 
@@ -166,4 +166,4 @@ Context: post-registration "More" menu restructuring — renames the old bill-re
 
 ## Automated coverage note
 
-The registration **Products step on the web portal** already has Playwright coverage in `RegistrationProductsFunctionality.spec.ts`, including a case added specifically for the POS Terminal product's distinct "5 SAR / annual" pricing (relevant to EMI-5783's PoS Terminals context). The richer inline expand/Skip/Request-now/Devices & Delivery/Review sub-flow described in EMI-5783, and the entire More-menu restructuring in EMI-5782, are iOS-native UI with no equivalent currently reachable on web — hence manual coverage only, above.
+The registration **Products step on the web portal** already has Playwright coverage in `RegistrationProducts.spec.ts`, including a case added specifically for the POS Terminal product's distinct "5 SAR / annual" pricing (relevant to EMI-5783's PoS Terminals context). The richer inline expand/Skip/Request-now/Devices & Delivery/Review sub-flow described in EMI-5783, and the entire More-menu restructuring in EMI-5782, are iOS-native UI with no equivalent currently reachable on web — hence manual coverage only, above.

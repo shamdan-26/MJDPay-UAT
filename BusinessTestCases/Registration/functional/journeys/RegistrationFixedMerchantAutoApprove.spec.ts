@@ -12,7 +12,7 @@ import { RegistrationInfoPage } from '../../../pageElements/Registration/Registr
 // business/...) and are intentionally not covered here rather than guessed.
 // ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('Registration — Fixed Merchant Sign-Up Mode (TC-REG-005, TC-REG-006)', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration — Fixed Merchant Sign-Up Mode (TC-REG-005, TC-REG-006)', { tag: ['@registration', '@journey', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;
@@ -45,7 +45,7 @@ test.describe('Registration — Fixed Merchant Sign-Up Mode (TC-REG-005, TC-REG-
     });
 });
 
-test.describe('Registration — Fixed Merchant mode disabled (control)', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration — Fixed Merchant mode disabled (control)', { tag: ['@registration', '@journey', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test('should show the normal profile-type selector when fixed-Merchant mode is off', { annotation: [{ type: 'testcase', description: "RE-05: Show the normal profile-type selector when fixed-Merchant mode is off" }] }, async ({ browser }) => {
         const context = await browser.newContext();
         const page = await context.newPage();
@@ -70,7 +70,7 @@ test.describe('Registration — Fixed Merchant mode disabled (control)', { tag: 
 // are deterministic on the rare environment where NAFATH auto-bypasses.
 // ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('Registration — Auto-Approval, Auto-Activation & Activation Email (TC-REG-001, TC-REG-002, TC-REG-007)', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration — Auto-Approval, Auto-Activation & Activation Email (TC-REG-001, TC-REG-002, TC-REG-007)', { tag: ['@registration', '@journey', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     let page: Page;
     let signUpReached = false;
 

@@ -11,7 +11,7 @@ const OTP_HEADING = /Enter OTP|أدخل رمز التحقق/i;
 const VERIFY_BTN  = /Verify|تحقق/i;
 const OTP_BOX     = { name: 'One time password input' };
 
-test.describe('Registration – OTP behaviour (mocked backend)', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration – OTP behaviour (mocked backend)', { tag: ['@registration', '@entry', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test('should send the typed code together with the requestId issued for the mobile', async ({ page }) => {
         const mocks = await mockOtpRequired(page, () => OTP_NOT_VALID);
         const mobile = await goToOtpDialogMocked(page);

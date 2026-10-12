@@ -9,7 +9,7 @@ const REGISTER = '**/emi-profile/api/v1/register';
 
 const pdf = (name: string, size?: number) => ({ name, mimeType: 'application/pdf', buffer: size ? Buffer.alloc(size, 1) : TEST_FILE_BUFFER });
 
-test.describe('Registration – Verification & Uploads states', { tag: ['@registration', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
+test.describe('Registration – Verification & Uploads states', { tag: ['@registration', '@verification', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
     let page: Page;
     let verification: RegistrationVerificationPage;
 

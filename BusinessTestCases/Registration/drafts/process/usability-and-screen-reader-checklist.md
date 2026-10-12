@@ -1,6 +1,6 @@
 # DRAFT — usability heuristics and screen-reader checklist for Registration (unverified)
 
-Axe-core (see `ui/shared/RegistrationAccessibility.spec.ts`) finds roughly a third of accessibility issues. This manual
+Axe-core (see `non-functional/RegistrationAccessibility.spec.ts`) finds roughly a third of accessibility issues. This manual
 checklist covers the rest. Run once per release and after UI redesigns. Record pass / fail / n.a. and a screenshot per fail.
 
 ## A. Screen reader pass (NVDA + Firefox/Chrome on Windows; VoiceOver + Safari on iPhone)

@@ -1,10 +1,10 @@
 import { test, expect, Page } from '@playwright/test';
-import { REGISTER_URL, goToInfoStepMocked, goToFinancialStepMocked, goToOtpDialogMocked, mockOtpRequired, OTP_NOT_VALID } from '../../RegistrationHelper';
+import { REGISTER_URL, goToInfoStepMocked, goToFinancialStepMocked, goToOtpDialogMocked, mockOtpRequired, OTP_NOT_VALID } from '../RegistrationHelper';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Visual regression — pixel snapshots of each step reachable without a real OTP, English/Arabic × light/dark,
 // on a desktop and a phone viewport. First run on a machine writes the baselines:
-//   npm run test:dev -- BusinessTestCases/Registration/ui/shared/RegistrationVisualRegression.spec.ts --update-snapshots
+//   npm run test:dev -- BusinessTestCases/Registration/non-functional/RegistrationVisualRegression.spec.ts --update-snapshots
 // Review the generated images under *-snapshots/ before committing them. Dynamic regions (countdown timer, masked
 // inputs) are masked so the comparison is stable.
 // ─────────────────────────────────────────────────────────────────────────────

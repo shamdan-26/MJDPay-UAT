@@ -50,6 +50,6 @@ Context: covers "Registration - Nafath Verification".
 This manual test suite mirrors the existing Playwright automation for the Registration NAFATH step. The corresponding automated specs are:
 
 - `BusinessTestCases/Registration/ui/05-identity/RegistrationNafathPage.spec.ts` — page elements & layout
-- `BusinessTestCases/Registration/functional/05-identity/RegistrationNafathFunctionality.spec.ts` — the redirect countdown and Verify-button enable timing (EMI-4895, EMI-4937)
+- `BusinessTestCases/Registration/functional/05-identity/RegistrationNafath.spec.ts` — the redirect countdown and Verify-button enable timing (EMI-4895, EMI-4937)
 
 Supporting helper: `BusinessTestCases/pageElements/Registration/RegistrationNafathPage.ts`. NAFATH approval itself is out of scope — it requires the applicant's own NAFATH app.

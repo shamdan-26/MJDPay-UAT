@@ -26,7 +26,7 @@ import { test, expect } from '@playwright/test';
 // Driving a real refresh needs a live registration session, which means burning
 // a CITIZEN_ASSETS / RESIDENT_ASSETS tuple and clearing NAFATH — and NAFATH is
 // not automatable on UAT, the same blocker that already gates
-// RegistrationNafathFunctionality.spec.ts. So:
+// RegistrationNafath.spec.ts. So:
 //   * the SHAPE cases (RSR-01, RSR-02) run against the mobile-OTP step, which
 //     is reachable without NAFATH;
 //   * the REFRESH cases (RSR-03..RSR-06) need a session token and skip unless

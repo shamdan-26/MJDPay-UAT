@@ -41,7 +41,7 @@ async function landedOn(page: Page): Promise<Step | 'none'> {
     ]).catch(() => 'none' as const);
 }
 
-test.describe('Registration – Resume state table (profile-registration-type flags → step)', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration – Resume state table (profile-registration-type flags → step)', { tag: ['@registration', '@journey', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.beforeEach(() => { test.setTimeout(120_000); });
 
     for (const row of TABLE) {

@@ -560,7 +560,7 @@ const main = async () => {
     // RegistrationInfoFunctionality.spec.ts for continue-registration,
     // Registration-Nafath.md and Registration-Products.md for the NAFATH ->
     // Products hand-off, and the Back-navigation tests in
-    // RegistrationFinancialFunctionality.spec.ts (RF-74) for data preservation.
+    // RegistrationFinancial.spec.ts (RF-74) for data preservation.
     //
     // Applied only where the source is still empty, so a later AIO fix wins
     // over this backfill.

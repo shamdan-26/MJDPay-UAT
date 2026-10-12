@@ -10,7 +10,7 @@ const LOOKUPS = {
     banks: '**/api/v1/lookup/banks',
 };
 
-test.describe('Registration – Financial & Business states', { tag: ['@registration', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
+test.describe('Registration – Financial & Business states', { tag: ['@registration', '@financial', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
     test.beforeEach(() => { test.setTimeout(120_000); });
 
     for (const [name, pattern] of Object.entries(LOOKUPS)) {

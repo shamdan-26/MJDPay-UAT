@@ -33,7 +33,7 @@ import { RegistrationVerificationPage } from '../../../pageElements/Registration
 // this shared session. That coverage belongs in a spec with its own isolated
 // session (or the ui/ sibling) instead.
 // ─────────────────────────────────────────────────────────────────────────────
-test.describe('Registration – Verification & Uploads Step (Tab 3 of 3)', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration – Verification & Uploads Step (Tab 3 of 3)', { tag: ['@registration', '@verification', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;

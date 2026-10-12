@@ -6,7 +6,7 @@ import { RegistrationInfoPage } from '../../../pageElements/Registration/Registr
 // OTP bypass (no real OTP, no pool identity). Submits are answered by mockProfileType.
 const asset = RESIDENT_ASSETS[0];
 
-test.describe('Registration – Business Info states', { tag: ['@registration', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
+test.describe('Registration – Business Info states', { tag: ['@registration', '@business-info', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
     let info: RegistrationInfoPage;
 
     test.beforeEach(async ({ page }) => {

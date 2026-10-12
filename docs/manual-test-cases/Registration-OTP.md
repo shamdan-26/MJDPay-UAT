@@ -46,6 +46,6 @@ Context: covers "Registration - OTP Functionality".
 This manual test suite mirrors the existing Playwright automation for the Registration OTP popup. The corresponding automated specs are:
 
 - `BusinessTestCases/Registration/ui/01-entry/RegistrationOtpPopup.spec.ts` — page elements (skips cleanly when OTP is disabled for the environment)
-- `BusinessTestCases/Registration/functional/01-entry/RegistrationOtpFunctionality.spec.ts` — input behavior, resend cooldown, wrong-OTP handling, Cancel flow
+- `BusinessTestCases/Registration/functional/01-entry/RegistrationOtp.spec.ts` — input behavior, resend cooldown, wrong-OTP handling, Cancel flow
 
 Supporting helper: `BusinessTestCases/Registration/RegistrationHelper.ts` (`fillOTP`, `getOtpFromDb`).

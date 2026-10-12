@@ -18,7 +18,7 @@ import { RegistrationVerificationPage } from '../../../pageElements/Registration
 // spec's warning that this step's inner structure has drifted from what its
 // locators assume, they're left out here rather than asserted on unverified.
 // ─────────────────────────────────────────────────────────────────────────────
-test.describe('Registration – Verification & Uploads Step (Tab 3 of 3) — read-only', { tag: ['@registration', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
+test.describe('Registration – Verification & Uploads Step (Tab 3 of 3) — read-only', { tag: ['@registration', '@verification', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;

@@ -15,14 +15,14 @@ import { RegistrationConfirmationPage } from '../../../pageElements/Registration
 // single pass, and complements the API E2E flow (RegistrationAPIFlow.spec.ts)
 // by proving the same journey through the real browser UI.
 //
-// Confirmed live (see RegistrationProductsFunctionality.spec.ts): Sign Up does
+// Confirmed live (see RegistrationProducts.spec.ts): Sign Up does
 // not always land on the real NAFATH panel — in this environment it can land
 // straight on Products instead, bypassing NAFATH entirely. The first test
 // below races both outcomes rather than assuming NAFATH is the only one, so it
 // fails on a genuine dead end (neither panel appearing), not on the
 // normal Products-bypass path.
 // ─────────────────────────────────────────────────────────────────────────────
-test.describe('Registration – Full E2E Happy Path (UI)', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration – Full E2E Happy Path (UI)', { tag: ['@registration', '@journey', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     test('should complete Business Info, Financial & Business, and Verification & Uploads, then reach NAFATH or Products after Sign Up', async ({ page, context }) => {
@@ -84,13 +84,13 @@ test.describe('Registration – Full E2E Happy Path (UI)', { tag: ['@registratio
     // drives the same chain as the test above via its own independent asset
     // cycling, including a real NAFATH panel when one is hit along the way
     // (its Verify countdown, EMI-4895/EMI-4937, is not a dead end — see
-    // goToProductsStep's NAFATH handling). RegistrationContractFunctionality.spec.ts
+    // goToProductsStep's NAFATH handling). RegistrationContract.spec.ts
     // covers the acknowledgement/submit interaction in isolation; this proves
     // it also works as the tail end of the full journey.
     // ─────────────────────────────────────────────────────────────────────────
 
     test('should reach Contract and complete submission after accepting the agreement', async ({ browser }) => {
-        // Same worst-case math as RegistrationContractFunctionality.spec.ts's
+        // Same worst-case math as RegistrationContract.spec.ts's
         // beforeAll timeouts: goToContractStep can cycle up to 10 CITIZEN_ASSETS
         // attempts (~40-45s each) before this test's own body even starts, so
         // 300s isn't reliably enough headroom on top of the submission that follows.

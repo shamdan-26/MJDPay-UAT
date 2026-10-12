@@ -26,7 +26,7 @@ change test counts or CI. Each file starts with a banner listing prerequisites a
 
 ## How to promote a draft
 1. Read its banner; install the listed prerequisites; capture the listed fixtures.
-2. Rename `X.draft.ts` → `X.spec.ts` and move it to the folder named in its banner (`security/`, `functional/...`, `ui/shared/`…);
+2. Rename `X.draft.ts` → `X.spec.ts` and move it to the folder named in its banner (`security/`, `functional/...`, `non-functional/`, `api/`…);
    fix the relative imports (one or two `../` less).
 3. Run it once with `npm run test:dev -- <path> --workers=1`, correct guessed selectors/status codes, then commit.
 4. Delete the draft header and update the Excel/doc mappings if the spec carries manual-case ids.

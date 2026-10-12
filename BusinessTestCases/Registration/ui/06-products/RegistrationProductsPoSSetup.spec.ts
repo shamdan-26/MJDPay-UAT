@@ -31,7 +31,7 @@ import { RegistrationContractPage } from '../../../pageElements/Registration/Reg
 // would end the flow before Devices & Delivery, and this suite's single
 // browser session is shared serially across all of them).
 // ─────────────────────────────────────────────────────────────────────────────
-test.describe('Registration - Products Step: PoS Onboarding Setup (EMI-5783)', { tag: ['@registration', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
+test.describe('Registration - Products Step: PoS Onboarding Setup (EMI-5783)', { tag: ['@registration', '@products', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;
@@ -205,7 +205,7 @@ test.describe('Registration - Products Step: PoS Onboarding Setup (EMI-5783)', {
         // Own toggle-into/restore-from split mode, same as the test above —
         // presence-only here (actually adding/removing a group, and the
         // resulting Remove button, is an interaction and belongs in
-        // RegistrationProductsFunctionality.spec.ts, not this presence-only file).
+        // RegistrationProducts.spec.ts, not this presence-only file).
         await products.splitByDeviceDeliveryOption.click({ force: true });
         try {
             await expect(products.addLocationGroupButton).toBeVisible({ timeout: 5000 });

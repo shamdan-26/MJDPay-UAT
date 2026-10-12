@@ -181,7 +181,7 @@ export async function goToProductsStep(page: Page, maxAttempts = getWorkerPartit
 
             // Happy path: the Verify button starts disabled and only enables once
             // the redirect countdown expires (EMI-4895 — see
-            // RegistrationNafathFunctionality.spec.ts). The wait is sized from the
+            // RegistrationNafath.spec.ts). The wait is sized from the
             // live timer (waitForCountdownToFinish), so it holds whatever the
             // countdown duration currently is.
             console.log(`[goToProductsStep] attempt ${attempt} hit NAFATH — clicking Verify`);

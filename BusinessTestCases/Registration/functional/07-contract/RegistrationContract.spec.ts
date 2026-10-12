@@ -22,7 +22,7 @@ import { RegistrationContractPage } from '../../../pageElements/Registration/Reg
 // registered dead ends the same way the other Products/Contract specs do.
 // ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('Registration – Contract Review: Acknowledgement & Actions (Live)', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration – Contract Review: Acknowledgement & Actions (Live)', { tag: ['@registration', '@contract', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;
@@ -94,7 +94,7 @@ test.describe('Registration – Contract Review: Acknowledgement & Actions (Live
 // response is expected to navigate away from Contract and end the session for
 // any test that would otherwise run after it.
 // ─────────────────────────────────────────────────────────────────────────────
-test.describe('Registration – Contract Submission (Mocked)', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration – Contract Submission (Mocked)', { tag: ['@registration', '@contract', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;

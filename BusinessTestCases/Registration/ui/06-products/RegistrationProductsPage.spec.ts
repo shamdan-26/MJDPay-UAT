@@ -27,7 +27,7 @@ import { RegistrationProductsPage } from '../../../pageElements/Registration/Reg
 // so there's no guarantee this file's beforeAll finishes (or even runs on the
 // same worker) before the other file's beforeAll starts.
 // ─────────────────────────────────────────────────────────────────────────────
-test.describe('Registration - Products Step UI (Page Elements)', { tag: ['@registration', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
+test.describe('Registration - Products Step UI (Page Elements)', { tag: ['@registration', '@products', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;
@@ -120,7 +120,7 @@ test.describe('Registration - Products Step UI (Page Elements)', { tag: ['@regis
     });
 
     test('should show a non-zero count in the selection counter on arrival', { annotation: [{ type: 'testcase', description: "RP-16: Show a non-zero count in the selection counter on arrival" }] }, async () => {
-        // Not hardcoding the exact "N Selected" text — RegistrationProductsFunctionality.spec.ts
+        // Not hardcoding the exact "N Selected" text — RegistrationProducts.spec.ts
         // confirms "1 Selected" live, but that's against a different environment/catalog than
         // this file's dev.majdpay.com target. A required, non-deselectable product (walletCard())
         // is always present per the page object's own docstring, so the counter should always
@@ -137,7 +137,7 @@ test.describe('Registration - Products Step UI (Page Elements)', { tag: ['@regis
     });
 
     test('should have the Continue button enabled by default via the required product', { annotation: [{ type: 'testcase', description: "RP-19: Have the Continue button enabled by default via the required product" }] }, async () => {
-        // Confirmed live in RegistrationProductsFunctionality.spec.ts: the mandatory
+        // Confirmed live in RegistrationProducts.spec.ts: the mandatory
         // product is pre-selected and locked, so Continue starts enabled without any
         // interaction — this only re-asserts that basic arrival state, not the fuller
         // selection/deselection behavior already covered there.

@@ -5,7 +5,7 @@ import { RegistrationMobilePage } from '../../../pageElements/Registration/Regis
 // Mobile step — interaction states (loading, error, keyboard, focus, input handling), with the OTP request mocked.
 const SEND_OTP = '**/emi-profile/api/v1/register/mobile/otp';
 
-test.describe('Registration – Mobile step states', { tag: ['@registration', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
+test.describe('Registration – Mobile step states', { tag: ['@registration', '@entry', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
     let mobilePage: RegistrationMobilePage;
 
     test.beforeEach(async ({ page }) => {

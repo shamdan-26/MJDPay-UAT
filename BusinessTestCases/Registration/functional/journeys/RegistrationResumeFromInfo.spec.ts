@@ -5,7 +5,7 @@ import { RegistrationFinancialPage } from '../../../pageElements/Registration/Re
 import { RegistrationVerificationPage } from '../../../pageElements/Registration/RegistrationVerificationPage';
 import { PROFILE_MERCHANT, CRN_INPUT, ID_INPUT, EMAIL_INPUT, NEXT_BTN, ACTIVE_STEP, MONTHLY_EXPECTED_NUMBER, Asset, gotoTab1, fillTab1 } from '../../helpers/infoStepForm';
 
-test.describe('Registration – Continue/Resume Registration (EMI-5666, T03)', { tag: ['@registration', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Registration – Continue/Resume Registration (EMI-5666, T03)', { tag: ['@registration', '@journey', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     test('should require re-entering Registration Info, then skip straight to Products/Contract, when resuming a registration already past Financial & Business', { annotation: [{ type: 'testcase', description: "RI-136: Require re-entering Registration Info, then skip straight to Products/Contract, when resuming a registration already past Financial & Business" }] }, async ({ page, context, browser }) => {

@@ -9,7 +9,7 @@ import { RegistrationFinancialPage } from '../../../pageElements/Registration/Re
 import { RegistrationVerificationPage } from '../../../pageElements/Registration/RegistrationVerificationPage';
 import { RegistrationProductsPage } from '../../../pageElements/Registration/RegistrationProductsPage';
 
-test.describe('Registration - NAFATH Step Page Elements', { tag: ['@registration', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
+test.describe('Registration - NAFATH Step Page Elements', { tag: ['@registration', '@identity', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let page: Page;
