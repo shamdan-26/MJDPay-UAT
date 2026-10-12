@@ -46,7 +46,7 @@ export const LOGIN_PASSWORD = process.env['LOGIN_PASSWORD'] ?? '';
 export interface TopupAccount { company: string; mobile: string; password?: string }
 
 /**
- * Account for the UI specs under Topup/ui/: company J7264 / mobile 500021788. The Biller
+ * Account for the UI specs under Topup/ui/: company W1550 / mobile 500021788. The Biller
  * wallet accumulates every successful top-up and eventually hits
  * COLLECTION_DESTINATION_WALLET_LIMITATION_EXCEEDED, so UI testing runs on this account
  * instead. Functional specs keep the Biller account (they assert BILLER wallet type and
@@ -54,7 +54,7 @@ export interface TopupAccount { company: string; mobile: string; password?: stri
  * The wallet-code prefix depends on the account type — assert on the generic pattern.
  */
 export const TOPUP_UI_ACCOUNT: TopupAccount = {
-    company:  'J7264',
+    company:  'W1550',
     mobile:   '500021788',
     password: testAccounts.defaultPassword,
 };

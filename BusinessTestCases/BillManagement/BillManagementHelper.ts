@@ -1,4 +1,4 @@
-import payBillData from '../../data/PayBill.json';
+import testAccounts from '../../data/testAccounts.json';
 
 /**
  * Create Bill / Bill Management (EMI-183 Bill Management, EMI-242 Excel bulk
@@ -10,21 +10,9 @@ import payBillData from '../../data/PayBill.json';
 export const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 export const HOME_URL = `${BASE_URL}/business/main/home`;
 
-type PayBillTestData = {
-    description: string;
-    companyNumber: string;
-    mobileNumber: string;
-    password: string;
-    otpCode?: string;
-    billStatus: string;
-};
-
-const dataSets = payBillData as PayBillTestData[];
-const primary = dataSets[0]!;
-
-export const BILLER_COMPANY  = process.env['BILL_CREATE_COMPANY']  ?? primary.companyNumber;
-export const BILLER_MOBILE   = process.env['BILL_CREATE_MOBILE']   ?? primary.mobileNumber;
-export const BILLER_PASSWORD = process.env['BILL_CREATE_PASSWORD'] ?? primary.password;
+export const BILLER_COMPANY  = process.env['BILL_CREATE_COMPANY']  ?? testAccounts.moduleAccounts.billCreate.company;
+export const BILLER_MOBILE   = process.env['BILL_CREATE_MOBILE']   ?? testAccounts.moduleAccounts.billCreate.mobile;
+export const BILLER_PASSWORD = process.env['BILL_CREATE_PASSWORD'] ?? testAccounts.defaultPassword;
 
 export interface NewBillInput {
     beneficiary: string;

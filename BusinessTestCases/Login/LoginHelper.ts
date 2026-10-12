@@ -17,6 +17,13 @@ export const LOGIN_COMPANY  = process.env['DEV_LOGIN_COMPANY'] ?? testAccounts.m
 export const LOGIN_MOBILE   = process.env['DEV_LOGIN_MOBILE']  ?? testAccounts.merchant.mobile;
 
 export const VALID_PASSWORD = testAccounts.defaultPassword;
+
+/**
+ * Business accounts created by the Registration suite, with the company numbers read from the
+ * Admin Portal (Manage Users → Accounts → Business → user info). They sign in with
+ * `VALID_PASSWORD` (same assumption as the shared merchant/biller — not yet confirmed per account).
+ */
+export const CREATED_ACCOUNTS: ReadonlyArray<{ company: string; mobile: string }> = testAccounts.createdAccounts;
 export const WRONG_PASSWORD = testAccounts.wrongPassword;
 
 // DEV-only OTP bypass — in UAT use getOtpFromDb() instead.
