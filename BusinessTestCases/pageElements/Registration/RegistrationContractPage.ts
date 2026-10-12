@@ -156,6 +156,9 @@ export class RegistrationContractPage {
      *  the user having read through the full agreement text (separate from
      *  scrolling the outer page). */
     async scrollDocumentToEnd(): Promise<void> {
-        await this.documentContainer.evaluate(el => { el.scrollTop = el.scrollHeight; });
+        // The new build nests `.contract-doc__content` inside `.contract-doc`, so the locator matches
+        // both. Whichever one is the scroll container takes the scrollTop; on the other it's a no-op.
+        await this.documentContainer.first().waitFor({ state: 'visible', timeout: 10000 });
+        await this.documentContainer.evaluateAll(els => els.forEach(el => { el.scrollTop = el.scrollHeight; }));
     }
 }

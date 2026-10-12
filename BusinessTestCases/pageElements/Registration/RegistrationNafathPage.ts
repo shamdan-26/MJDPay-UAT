@@ -68,6 +68,33 @@ export class RegistrationNafathPage {
         this.loadingButton = page.getByRole('button', { name: /Loading|جاري التحميل/i });
     }
 
+    /** Seconds currently left on the redirect countdown ("mm:ss" + "s"), or null if it isn't readable.
+     *  The duration is not fixed, so callers must read it at runtime. */
+    async getCountdownSeconds(): Promise<number | null> {
+        const text = await this.countdownTimer.textContent({ timeout: 1000 }).catch(() => null);
+        const m = text?.match(/(\d{1,2}):(\d{2})s/);
+        return m ? Number(m[1]) * 60 + Number(m[2]) : null;
+    }
+
+    /** Waits for the Verify button to enable, taking the countdown on the spot: the timer is
+     *  polled until it renders, then re-read on every tick, so the deadline follows whatever
+     *  the page is actually counting down from (no assumed duration). Returns the first
+     *  seconds value read, or null if the timer never became readable. */
+    async waitForCountdownToFinish(bufferSeconds = 10): Promise<number | null> {
+        let initial: number | null = null;
+        let deadline = Date.now() + 15_000; // time allowed for the timer to render
+        while (Date.now() < deadline) {
+            if (await this.verifyButton.isEnabled().catch(() => false)) return initial;
+            const remaining = await this.getCountdownSeconds();
+            if (remaining !== null) {
+                initial ??= remaining;
+                deadline = Date.now() + (remaining + bufferSeconds) * 1000; // re-based on the live reading
+            }
+            await this.page.waitForTimeout(500);
+        }
+        return initial;
+    }
+
     /** Resolves true once the real Nafath verification panel (heading) renders,
      *  false if it never appears — some test accounts bypass NAFATH in UAT. */
     async waitForNafathPanel(): Promise<boolean> {
