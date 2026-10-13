@@ -1,19 +1,19 @@
-import { test, expect } from '../../fixtures';
+import { test, expect } from '../../../fixtures';
 import {
     LOGIN_URL,
     LOGIN_COMPANY,
     LOGIN_MOBILE,
     VALID_PASSWORD,
     getOtpFromDb,
-} from '../LoginHelper';
-import { LoginPage } from '../../pageElements/Shared/LoginPage';
-import { OtpPage } from '../../pageElements/Shared/OtpPage';
+} from '../../LoginHelper';
+import { LoginPage } from '../../../pageElements/Shared/LoginPage';
+import { OtpPage } from '../../../pageElements/Shared/OtpPage';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // NAVIGATION
 // ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('Login — Navigation', { tag: ['@login', '@functional'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Login — Navigation', { tag: ['@login', '@functional', '@session'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let loginPage: LoginPage;
@@ -35,7 +35,9 @@ test.describe('Login — Navigation', { tag: ['@login', '@functional'], annotati
 
     test('should navigate to a valid page when the logo link is clicked', async ({ page }) => {
         await loginPage.logoLink.click();
-        await expect(page).toHaveURL(/majdpay\.com/, { timeout: 10000 });
+        // The logo is an in-app "home" link (/business/) that redirects to the public landing page.
+        await expect(page).toHaveURL(/\/business\/landing/, { timeout: 10000 });
+        await expect(page).not.toHaveURL(/auth\/login/);
     });
 
     test('should change the theme when the toggle is clicked', async ({ page }) => {
@@ -51,7 +53,7 @@ test.describe('Login — Navigation', { tag: ['@login', '@functional'], annotati
 // ALREADY AUTHENTICATED
 // ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('Login — Already Authenticated', { tag: ['@login', '@functional'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Login — Already Authenticated', { tag: ['@login', '@functional', '@session'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     // Establish a real authenticated session first — these tests assert what

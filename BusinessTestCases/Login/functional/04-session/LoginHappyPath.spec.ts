@@ -1,14 +1,14 @@
-import { test, expect } from '../../fixtures';
-import { LOGIN_URL, LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../LoginHelper';
-import { LoginPage } from '../../pageElements/Shared/LoginPage';
-import { DashboardPage } from '../../pageElements/Shared/DashboardPage';
-import { OtpPage } from '../../pageElements/Shared/OtpPage';
+import { test, expect } from '../../../fixtures';
+import { LOGIN_URL, LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../LoginHelper';
+import { LoginPage } from '../../../pageElements/Shared/LoginPage';
+import { DashboardPage } from '../../../pageElements/Shared/DashboardPage';
+import { OtpPage } from '../../../pageElements/Shared/OtpPage';
 
 // The validation card's 3-step display and the post-card OTP dialog appearing
 // are owned by ui/LoginValidationPopup.spec.ts — this file owns only what's
 // unique to the happy path: form state, dashboard landing, and logout.
 
-test.describe('Login — Happy Path (End-to-End)', { tag: ['@login', '@functional'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'functional' }] }, () => {
+test.describe('Login — Happy Path (End-to-End)', { tag: ['@login', '@functional', '@session'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
     let loginPage: LoginPage;

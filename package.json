@@ -23,6 +23,7 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@faker-js/faker": "^10.5.0",
     "@playwright/test": "^1.60.0",
     "@types/imapflow": "^1.0.23",

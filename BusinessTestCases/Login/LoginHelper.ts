@@ -7,14 +7,19 @@ import testAccounts from '../../data/testAccounts.json';
 export const LOGIN_URL    = `${process.env['BASE_URL'] ?? 'https://dev-emi.dg-cash.app'}/business/auth/login`;
 export const SESSION_PATH = 'session.json';
 
-// Account used for wrong-password / invalid-credential tests.
+// Shared merchant (not blocked): used by the other modules and by the Login API regression check.
 export const VALID_COMPANY  = process.env['DEV_COMPANY'] ?? testAccounts.merchant.company;
 export const VALID_MOBILE   = process.env['DEV_MOBILE']  ?? testAccounts.merchant.mobile;
 
-// Account used for successful-login tests (happy path, OTP flow, validation card).
-// Same shared merchant account as above — its password is testAccounts.defaultPassword.
-export const LOGIN_COMPANY  = process.env['DEV_LOGIN_COMPANY'] ?? testAccounts.merchant.company;
-export const LOGIN_MOBILE   = process.env['DEV_LOGIN_MOBILE']  ?? testAccounts.merchant.mobile;
+// HAPPY-PATH account (not blocked): successful-login tests only (happy path, OTP flow, navigation, validation card).
+// No negative, wrong-password or lockout scenario may use it — those use NEGATIVE_* below.
+export const LOGIN_COMPANY  = process.env['DEV_LOGIN_COMPANY'] ?? testAccounts.loginAccounts.happy.company;
+export const LOGIN_MOBILE   = process.env['DEV_LOGIN_MOBILE']  ?? testAccounts.loginAccounts.happy.mobile;
+
+// NEGATIVE-PATH account (gets blocked): wrong-password, invalid-credential, form-validation and lockout scenarios.
+// The lockout test genuinely blocks it, so it needs an out-of-band unblock before the next full run.
+export const NEGATIVE_COMPANY = process.env['DEV_BLOCKED_COMPANY'] ?? testAccounts.loginAccounts.blocked.company;
+export const NEGATIVE_MOBILE  = process.env['DEV_BLOCKED_MOBILE']  ?? testAccounts.loginAccounts.blocked.mobile;
 
 export const VALID_PASSWORD = testAccounts.defaultPassword;
 

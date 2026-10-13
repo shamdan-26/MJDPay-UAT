@@ -1,107 +1,98 @@
 import { type Page, type Locator, expect } from '@playwright/test';
+import { ADMIN_BASE_URL } from '../Shared/AdminOtpConfigPage';
+import { UserInformationPage } from './UserInformationPage';
 
-const BASE_URL = process.env['BASE_URL'] ?? 'https://dev.majdpay.com';
-
-/** Admin Portal → Manage Users → Accounts → Business ("Accounts List", Business tab). */
-export const ADMIN_BUSINESS_ACCOUNTS_URL = `${BASE_URL}/admin/main/account-management/accounts-list`;
+/** Admin Portal → Manage Users → Accounts → Business ("Business accounts"). */
+export const ADMIN_BUSINESS_ACCOUNTS_URL = `${ADMIN_BASE_URL}/admin/main/account-management/accounts-list`;
 
 /**
- * Admin Portal → Manage Users → Accounts → Business. Confirmed live 2026-09-28
- * against the dev admin SPA.
+ * Admin Portal → Manage Users → Accounts → Business. Re-confirmed live
+ * 2026-10-11 against the redesigned dev admin SPA (heading "Business accounts",
+ * "Filters" button that opens a drawer, replacing the old "Filter Here..." panel).
  *
- * The filter panel ("Filter Here...") starts collapsed and must be expanded
- * before its inputs exist in the DOM. Fields are page-authored `id`s (this
- * screen isn't in QA-DATA-TESTID-HANDOFF.md):
- *   #input_type_text_name_companyNumber_companynumber
- *   #input_type_text_name_mobileNumber_mobilenumber
- *   #input_type_text_name_unifiedNumber_unifiednumber
- *
- * **Confirmed-live defect**: the Mobile Number filter returns "No Data Found"
- * even for a mobile number that demonstrably belongs to a listed account
- * (verified by cross-checking the same account via Company Number, whose
- * filter works correctly). Use `searchByCompanyNumber` instead — Company
- * Number is what `RegistrationFullDetail.tenant_number` (RegistrationHelper.ts)
- * captures for a newly registered business, and it's what this app's own
- * login screen calls "Company Number" everywhere else. Do not switch this
- * page object's default search to Mobile Number without re-confirming the
- * defect is fixed.
- *
- * The results grid is a div-based layout, not a real `<table>`: each row is
- * a `.rows` container wrapping an `<app-merchant-biller-row>` component.
+ * - Filter drawer: the Mobile Number input keeps the page-authored id
+ *   `#input_type_text_name_mobileNumber_mobilenumber`; the drawer's button is
+ *   "Search". The filter **requires the `+966` prefix** (`+966501000022`) —
+ *   without it nothing matches. This supersedes the older "Mobile Number filter
+ *   is broken" note: it works with the prefix.
+ * - Results are rows with stable ids: `merchantBillerRow-active-button`
+ *   (Active/Inactive), `-approved-button` (Approved), `-blocked-button`
+ *   (Unblock = not blocked), `-options-dropdown-toggle` (Row actions →
+ *   "user info" / "commissions"). A search with hits shows "Total users: N".
+ * - Newest registrations are at the END of the unfiltered list (last page) —
+ *   filter instead of paging.
  */
 export class AdminBusinessAccountsPage {
     readonly page: Page;
 
-    readonly filterToggle: Locator;
-    readonly companyNumberInput: Locator;
+    readonly heading: Locator;
+    readonly filtersButton: Locator;
+    readonly filterDrawer: Locator;
     readonly mobileNumberInput: Locator;
-    readonly unifiedNumberInput: Locator;
     readonly searchButton: Locator;
-    readonly clearFilterButton: Locator;
-
-    readonly resultsContainer: Locator;
-    readonly accountRows: Locator;
-    readonly noDataText: Locator;
-    /** e.g. "Total Users: 1" — only rendered once a search has returned at least one row. */
-    readonly totalUsersLabel: Locator;
+    readonly totalUsersText: Locator;
 
     constructor(page: Page) {
         this.page = page;
 
-        this.filterToggle = page.getByText(/^\s*Filter Here\.{3}\s*$/i);
-        this.companyNumberInput = page.locator('#input_type_text_name_companyNumber_companynumber');
-        this.mobileNumberInput  = page.locator('#input_type_text_name_mobileNumber_mobilenumber');
-        this.unifiedNumberInput = page.locator('#input_type_text_name_unifiedNumber_unifiednumber');
-        this.searchButton      = page.getByRole('button', { name: /^\s*search\s*$/i });
-        this.clearFilterButton = page.getByRole('button', { name: /clear filter/i });
-
-        this.resultsContainer = page.locator('.table-container');
-        this.accountRows      = this.resultsContainer.locator('.rows');
-        this.noDataText       = this.resultsContainer.getByText(/No Data Found/i);
-        this.totalUsersLabel  = page.locator('.total-pages');
+        this.heading           = page.getByRole('heading', { name: /business accounts/i });
+        this.filtersButton     = page.getByRole('button', { name: /^filters$/i });
+        this.filterDrawer      = page.locator('.filter-drawer-layer');
+        this.mobileNumberInput = page.locator('#input_type_text_name_mobileNumber_mobilenumber');
+        this.searchButton      = this.filterDrawer.getByRole('button', { name: /^search$/i });
+        this.totalUsersText    = page.getByText(/Total users:\s*\d+/i);
     }
 
-    /** Navigates via Manage Users → Accounts → Business (not a direct deep link), so a broken sidebar path fails this step rather than being silently bypassed. */
-    async gotoViaSidebar(): Promise<void> {
-        await this.page.getByRole('link', { name: /^\s*Manage Users\s*$/i })
-            .or(this.page.getByText(/^\s*Manage Users\s*$/i)).first().click();
-        await this.page.getByText(/^\s*Accounts\s*$/i).first().click();
-        await this.page.getByText(/^\s*Business\s*$/i).first().click();
-        await expect(this.filterToggle).toBeVisible({ timeout: 20000 });
+    /** Opens the Business accounts list by deep link (sidebar labels changed with the redesign). */
+    async goto(): Promise<void> {
+        await this.page.goto(ADMIN_BUSINESS_ACCOUNTS_URL, { waitUntil: 'domcontentloaded' });
+        await expect(this.heading).toBeVisible({ timeout: 30000 });
     }
 
-    private async ensureFilterExpanded(): Promise<void> {
-        const expanded = await this.companyNumberInput.isVisible().catch(() => false);
-        if (expanded) return;
-        await this.filterToggle.click();
-        await this.companyNumberInput.waitFor({ state: 'visible', timeout: 10000 });
+    /** `+966` + the local digits, whatever format the DB/test holds (`+966…`, `966…`, `05…`, `5…`). */
+    static toAdminMobile(mobile: string): string {
+        const digits = mobile.replace(/\D/g, '').replace(/^966/, '').replace(/^0/, '');
+        return `+966${digits}`;
     }
 
-    /**
-     * Filters the Business accounts list by Company Number (e.g. `detail.tenant_number`
-     * from `getFullRegistrationDetailByMobileFromSql`) and waits for the grid to settle.
-     */
-    async searchByCompanyNumber(companyNumber: string): Promise<void> {
-        await this.ensureFilterExpanded();
-        await this.companyNumberInput.fill(companyNumber);
+    /** Filters the list by mobile number (prefix added automatically) and waits for the grid to settle. */
+    async searchByMobile(mobile: string): Promise<void> {
+        await this.filtersButton.click();
+        await this.mobileNumberInput.fill(AdminBusinessAccountsPage.toAdminMobile(mobile));
         await this.searchButton.click();
-        await Promise.race([
-            this.accountRows.first().waitFor({ state: 'visible', timeout: 20000 }),
-            this.noDataText.waitFor({ state: 'visible', timeout: 20000 }),
-        ]).catch(() => { /* fall through to the caller's own assertion */ });
+        await expect(this.filterDrawer).toBeHidden({ timeout: 10000 }).catch(() => { /* drawer may stay in DOM */ });
+        await expect(this.totalUsersText.or(this.page.getByText(/no data|no results/i)).first()).toBeVisible({ timeout: 20000 });
     }
 
-    /**
-     * Asserts exactly one account is listed for this Company Number — the
-     * expected outcome right after a business finishes registration, since a
-     * Company Number is unique per account.
-     */
-    async expectAccountListed(companyNumber: string): Promise<void> {
-        await this.searchByCompanyNumber(companyNumber);
-        await expect(
-            this.noDataText,
-            `Business account for Company Number ${companyNumber} was not found under Manage Users → Accounts → Business`,
-        ).not.toBeVisible();
-        await expect(this.accountRows).toHaveCount(1);
+    /** The result row containing this mobile number (rows have no wrapper id — anchor on the status buttons' row). */
+    rowFor(mobile: string): Locator {
+        return this.page
+            .locator('div')
+            .filter({ hasText: AdminBusinessAccountsPage.toAdminMobile(mobile) })
+            .filter({ has: this.page.locator('#merchantBillerRow-active-button') })
+            .last();
     }
+
+    /** Asserts exactly one account is listed for this mobile number. */
+    async expectAccountListed(mobile: string): Promise<void> {
+        await this.searchByMobile(mobile);
+        await expect(
+            this.totalUsersText,
+            `Business account for ${AdminBusinessAccountsPage.toAdminMobile(mobile)} was not found under Manage Users → Accounts → Business`,
+        ).toHaveText(/Total users:\s*1\b/i);
+        await expect(this.page.locator('#merchantBillerRow-active-button')).toHaveCount(1);
+    }
+
+    /** Searches by mobile and opens that account's User Information page (it has no ID in its URL). */
+    async openAccountDetails(mobile: string): Promise<UserInformationPage> {
+        await this.expectAccountListed(mobile);
+        await this.rowFor(mobile).getByText(AdminBusinessAccountsPage.toAdminMobile(mobile)).first().click();
+        const details = new UserInformationPage(this.page);
+        await expect(details.header).toBeVisible({ timeout: 20000 });
+        return details;
+    }
+
+    get activeButton(): Locator   { return this.page.locator('#merchantBillerRow-active-button'); }
+    get approvedButton(): Locator { return this.page.locator('#merchantBillerRow-approved-button'); }
+    get blockedButton(): Locator  { return this.page.locator('#merchantBillerRow-blocked-button'); }
 }

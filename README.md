@@ -18,7 +18,7 @@ Create a `.env.dev` file in the project root (see [Environment](#environment)) b
 npm run test:dev       # ENV=dev      — dev backend, OTP hardcoded to 918512
 
 # Run a single spec file
-npx playwright test BusinessTestCases/Login/functional/LoginHappyPath.spec.ts
+npx playwright test BusinessTestCases/Login/functional/04-session/LoginHappyPath.spec.ts
 
 # Run everything in a feature folder
 npx playwright test BusinessTestCases/Homepage/
