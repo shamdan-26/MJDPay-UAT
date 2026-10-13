@@ -13,7 +13,7 @@ Run from the repo root (dev only): `npm run test:dev -- BusinessTestCases/Regist
 | `non-functional/` | Accessibility (axe), performance budgets, visual regression. |
 | `api/` | `RegistrationAPIFlow` (serial 22-endpoint chain, shares session state — keep whole), `RegistrationLookups`, `RegistrationSessionRefresh`. |
 | `security/` | `RegistrationApiSecurity` (gateway: auth, validation, brute force, replay) and `RegistrationInputSecurity` (browser inputs). |
-| `integration/` | Admin portal ↔ registration (account listing, OTP configuration). |
+| `integration/` | Admin portal ↔ registration (account listing). The admin OTP-configuration check is shared: `../OtpAdminConfig/`. |
 | `helpers/` | Shared code behind the `RegistrationHelper.ts` barrel — import from the barrel, not the files. |
 | `drafts/` | Unverified extra test types (`*.draft.ts`, not run by the suite). See `drafts/README.md`. |
 
