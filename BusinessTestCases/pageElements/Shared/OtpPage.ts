@@ -10,6 +10,7 @@ export class OtpPage {
     readonly resendButton: Locator;
     readonly verifyButton: Locator;
     readonly cancelButton: Locator;
+    readonly errorMessage: Locator;
 
     // Only present when OTP entry is shown inside the forgot-password
     // "my-modal-container" popup rather than login's full-screen OTP step.
@@ -31,7 +32,10 @@ export class OtpPage {
         // don't, so match either shape.
         this.inputs = page.getByRole('textbox', { name: 'One time password input' })
             .or(page.locator('div.my-modal-container input'));
-        this.countdownTimer = page.getByText(/Code ends|ينتهي الرمز/i);
+        // Arabic copy on the Bank/W2W/Top-up inline OTP is "تنتهي صلاحية الرمز
+        // خلال MM:SS" (confirmed live on dev, 2026-09-07); login/forgot-password
+        // phrase it "Code ends in ...". Match the distinctive stem of either.
+        this.countdownTimer = page.getByText(/Code ends|ينتهي الرمز|تنتهي صلاحية الرمز/i);
         // otp-resend-btn / otp-submit-btn / otp-cancel-btn: QA-DATA-TESTID-HANDOFF.md
         // §3 shared OTP-modal component — confirmed for the modal variant (used by
         // Bill Payment and, per gotoOtpModal()'s div.my-modal-container, ForgotPassword
@@ -69,6 +73,13 @@ export class OtpPage {
 
         this.modalContainer = page.locator('div.my-modal-container');
         this.closeButton    = this.modalContainer.getByRole('button', { name: /close/i });
+
+        // Wrong-OTP feedback (EMI-TC-3125 "Invalid OTP. Please try again." and the
+        // message shown after the 3rd failed attempt before the flow resets). The
+        // Bank/W2W/Top-up inline widget renders it as .mp-otp-error / an alert;
+        // match the distinctive copy in either language plus those containers.
+        this.errorMessage = page.getByText(/invalid otp|otp is (?:invalid|incorrect)|please try again|رمز(?:\s|.)*غير صحيح|رمز التحقق غير صحيح|حاول مرة أخرى|المحاولة مرة أخرى/i)
+            .or(page.locator('.mp-otp-error, [role="alert"]'));
     }
 
     async isVisible(): Promise<boolean> {
@@ -86,8 +97,25 @@ export class OtpPage {
     }
 
     async verify(): Promise<void> {
-        if (await this.verifyButton.isVisible().catch(() => false)) {
-            await this.verifyButton.click();
+        // The OTP widgets in this app AUTO-SUBMIT once the final digit is entered
+        // (Bank transfer / W2W / Top-up / Bill payment / QR — confirmed on dev):
+        // the request fires on its own and the button goes disabled + "is-loading"
+        // then detaches. A blind click there retries on the disabled button until
+        // the test timeout. So: let the auto-submit fire, and only fall back to an
+        // explicit click for a screen that does NOT auto-submit (e.g. login /
+        // forgot-password), and only while the button is idle + enabled.
+        await this.page.waitForTimeout(700);
+
+        const deadline = Date.now() + 3000;
+        while (Date.now() < deadline) {
+            if (!(await this.verifyButton.isVisible().catch(() => false))) return;        // auto-submitted / advanced
+            const cls = (await this.verifyButton.getAttribute('class').catch(() => null)) ?? '';
+            if (/\b(is-loading|processing|loading|submitting)\b/i.test(cls)) return;       // submit already in flight
+            if (await this.verifyButton.isEnabled().catch(() => false)) {
+                await this.verifyButton.click({ timeout: 5000 }).catch(() => { /* auto-submitted mid-click */ });
+                return;
+            }
+            await this.page.waitForTimeout(200);
         }
     }
 
@@ -96,9 +124,13 @@ export class OtpPage {
         await this.verify();
     }
 
-    /** Parses the "Code ends in MM:SS" countdown text into remaining seconds. */
+    /**
+     * Parses the "Code ends in MM:SS" countdown text into remaining seconds.
+     * Bounded read — returns 0 rather than hanging to the test timeout if the
+     * countdown element can't be found (e.g. a copy change the locator misses).
+     */
     async getRemainingSeconds(): Promise<number> {
-        const text = await this.countdownTimer.textContent() ?? '';
+        const text = await this.countdownTimer.textContent({ timeout: 10000 }).catch(() => '') ?? '';
         const match = text.match(/(\d+):(\d+)/);
         if (!match) return 0;
         return Number(match[1]) * 60 + Number(match[2]);

@@ -1,0 +1,341 @@
+{
+  "item": [
+    {
+      "id": "0473c9ce-f425-4e67-9a39-03ebf8196d75",
+      "name": "post-registration-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "36889213-73cb-45f5-b948-afb5b9784d32",
+          "name": "post Registration Staff",
+          "request": {
+            "name": "post Registration Staff",
+            "description": {},
+            "url": {
+              "path": [
+                "registration",
+                "staff",
+                "post"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/registration/staff/post"
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "Accept-Language",
+                "value": "dolore commodo id aute"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"createdStaffUser\": {\n    \"id\": -84513906,\n    \"userIds\": [\n      {\n        \"username\": \"qui sit culpa\",\n        \"tenantNumber\": \"sed\"\n      },\n      {\n        \"username\": \"commodo elit\",\n        \"tenantNumber\": \"laborum ut\"\n      }\n    ],\n    \"username\": \"ea consequat\",\n    \"tenantNumber\": \"sit ullamco\",\n    \"password\": \"quis culpa\",\n    \"profileId\": \"officia dolor\",\n    \"identityNumber\": \"culpa enim\",\n    \"active\": false,\n    \"locked\": false,\n    \"approved\": false,\n    \"groups\": [\n      {\n        \"id\": -18437842,\n        \"name\": \"velit nisi tempor\",\n        \"nameAr\": \"sit eu sint nulla et\",\n        \"code\": \"sint ullamco ad\",\n        \"description\": \"id deserunt\",\n        \"isSystem\": false,\n        \"roles\": [\n          {\n            \"id\": -53840823,\n            \"name\": \"exercitation consectetur\",\n            \"nameAr\": \"commodo \",\n            \"code\": \"Excepteur\",\n            \"description\": \"in enim eu ipsum amet\",\n            \"isSystem\": true,\n            \"privileges\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"id\": -41064743,\n            \"name\": \"deserunt laboris\",\n            \"nameAr\": \"ad aliquip minim\",\n            \"code\": \"ad officia\",\n            \"description\": \"no\",\n            \"isSystem\": true,\n            \"privileges\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ]\n      },\n      {\n        \"id\": -33835399,\n        \"name\": \"fugiat cupidatat\",\n        \"nameAr\": \"mollit esse\",\n        \"code\": \"esse magna mollit\",\n        \"description\": \"labore sunt et amet\",\n        \"isSystem\": true,\n        \"roles\": [\n          {\n            \"id\": 62234911,\n            \"name\": \"aliquip aliqua\",\n            \"nameAr\": \"irure labore comm\",\n            \"code\": \"nostrud laboris\",\n            \"description\": \"ut dolore nostrud\",\n            \"isSystem\": true,\n            \"privileges\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"id\": -61977557,\n            \"name\": \"ut ullamco\",\n            \"nameAr\": \"Excepteur sint velit nostrud dolore\",\n            \"code\": \"proident aliquip consectetur occaecat\",\n            \"description\": \"sint consectetur\",\n            \"isSystem\": false,\n            \"privileges\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ]\n      }\n    ],\n    \"type\": {\n      \"nameEn\": \"voluptate mollit\",\n      \"nameAr\": \"culpa labore\",\n      \"code\": \"magna ut\"\n    },\n    \"privileges\": [\n      \"enim ullamco\",\n      \"incididunt fugiat\"\n    ],\n    \"accessToken\": \"dolore magna aute non ea\",\n    \"refreshToken\": \"nisi qui aliquip proident\"\n  },\n  \"parentUserId\": 45522520,\n  \"parentProfileCode\": \"adipisicing\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "14e21db7-73bd-43d4-8309-71f87ff10ee8",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "registration",
+                    "staff",
+                    "post"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Accept-Language",
+                    "value": "dolore commodo id aute"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"createdStaffUser\": {\n    \"id\": -84513906,\n    \"userIds\": [\n      {\n        \"username\": \"qui sit culpa\",\n        \"tenantNumber\": \"sed\"\n      },\n      {\n        \"username\": \"commodo elit\",\n        \"tenantNumber\": \"laborum ut\"\n      }\n    ],\n    \"username\": \"ea consequat\",\n    \"tenantNumber\": \"sit ullamco\",\n    \"password\": \"quis culpa\",\n    \"profileId\": \"officia dolor\",\n    \"identityNumber\": \"culpa enim\",\n    \"active\": false,\n    \"locked\": false,\n    \"approved\": false,\n    \"groups\": [\n      {\n        \"id\": -18437842,\n        \"name\": \"velit nisi tempor\",\n        \"nameAr\": \"sit eu sint nulla et\",\n        \"code\": \"sint ullamco ad\",\n        \"description\": \"id deserunt\",\n        \"isSystem\": false,\n        \"roles\": [\n          {\n            \"id\": -53840823,\n            \"name\": \"exercitation consectetur\",\n            \"nameAr\": \"commodo \",\n            \"code\": \"Excepteur\",\n            \"description\": \"in enim eu ipsum amet\",\n            \"isSystem\": true,\n            \"privileges\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"id\": -41064743,\n            \"name\": \"deserunt laboris\",\n            \"nameAr\": \"ad aliquip minim\",\n            \"code\": \"ad officia\",\n            \"description\": \"no\",\n            \"isSystem\": true,\n            \"privileges\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ]\n      },\n      {\n        \"id\": -33835399,\n        \"name\": \"fugiat cupidatat\",\n        \"nameAr\": \"mollit esse\",\n        \"code\": \"esse magna mollit\",\n        \"description\": \"labore sunt et amet\",\n        \"isSystem\": true,\n        \"roles\": [\n          {\n            \"id\": 62234911,\n            \"name\": \"aliquip aliqua\",\n            \"nameAr\": \"irure labore comm\",\n            \"code\": \"nostrud laboris\",\n            \"description\": \"ut dolore nostrud\",\n            \"isSystem\": true,\n            \"privileges\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"id\": -61977557,\n            \"name\": \"ut ullamco\",\n            \"nameAr\": \"Excepteur sint velit nostrud dolore\",\n            \"code\": \"proident aliquip consectetur occaecat\",\n            \"description\": \"sint consectetur\",\n            \"isSystem\": false,\n            \"privileges\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ]\n      }\n    ],\n    \"type\": {\n      \"nameEn\": \"voluptate mollit\",\n      \"nameAr\": \"culpa labore\",\n      \"code\": \"magna ut\"\n    },\n    \"privileges\": [\n      \"enim ullamco\",\n      \"incididunt fugiat\"\n    ],\n    \"accessToken\": \"dolore magna aute non ea\",\n    \"refreshToken\": \"nisi qui aliquip proident\"\n  },\n  \"parentUserId\": 45522520,\n  \"parentProfileCode\": \"adipisicing\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "183891f6-0d6f-48a5-bd81-098b42234184",
+          "name": "post Registration",
+          "request": {
+            "name": "post Registration",
+            "description": {},
+            "url": {
+              "path": [
+                "registration",
+                "post"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/registration/post"
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "Accept-Language",
+                "value": "dolore commodo id aute"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": -16951228,\n  \"userIds\": [\n    {\n      \"username\": \"velit proident officia ea\",\n      \"tenantNumber\": \"eu i\"\n    },\n    {\n      \"username\": \"dolor et in\",\n      \"tenantNumber\": \"adipisicing officia quis ea\"\n    }\n  ],\n  \"username\": \"mollit\",\n  \"tenantNumber\": \"laborum\",\n  \"password\": \"fugiat commodo\",\n  \"profileId\": \"pariatur eiusmod occaecat Duis\",\n  \"identityNumber\": \"mollit reprehenderit\",\n  \"active\": false,\n  \"locked\": false,\n  \"approved\": false,\n  \"groups\": [\n    {\n      \"id\": -940454,\n      \"name\": \"adipisicing pariatur dolor es\",\n      \"nameAr\": \"nostrud sit minim ut\",\n      \"code\": \"anim ullamco aliquip\",\n      \"description\": \"mollit consectetur sunt\",\n      \"isSystem\": false,\n      \"roles\": [\n        {\n          \"id\": 17363123,\n          \"name\": \"c\",\n          \"nameAr\": \"consectetur\",\n          \"code\": \"ullamco aliquip\",\n          \"description\": \"non sint do pariatur dolor\",\n          \"isSystem\": true,\n          \"privileges\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"nameAr\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"code\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        {\n          \"id\": -95952584,\n          \"name\": \"laboru\",\n          \"nameAr\": \"laboris magna reprehenderit ipsum\",\n          \"code\": \"dolor eiusmod incididunt nulla est\",\n          \"description\": \"ut ut\",\n          \"isSystem\": true,\n          \"privileges\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"nameAr\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"code\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"id\": -60673323,\n      \"name\": \"sed\",\n      \"nameAr\": \"Duis id esse\",\n      \"code\": \"consectetur\",\n      \"description\": \"quis occaecat dolor\",\n      \"isSystem\": true,\n      \"roles\": [\n        {\n          \"id\": 88587145,\n          \"name\": \"dolore fugiat\",\n          \"nameAr\": \"officia proident\",\n          \"code\": \"ut adipisicing consequat quis\",\n          \"description\": \"veniam\",\n          \"isSystem\": false,\n          \"privileges\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"nameAr\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"code\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        {\n          \"id\": -39113558,\n          \"name\": \"Duis\",\n          \"nameAr\": \"id adipisicing occaecat\",\n          \"code\": \"ad est pariatur do commodo\",\n          \"description\": \"veniam\",\n          \"isSystem\": true,\n          \"privileges\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"nameAr\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"code\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        }\n      ]\n    }\n  ],\n  \"type\": {\n    \"nameEn\": \"est enim cillum ut\",\n    \"nameAr\": \"qui dolor ni\",\n    \"code\": \"reprehenderit incididunt culpa veniam ad\"\n  },\n  \"privileges\": [\n    \"dolor quis sint\",\n    \"enim\"\n  ],\n  \"accessToken\": \"adipisicing incididunt voluptate dolor\",\n  \"refreshToken\": \"et dolore anim\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b829a37b-37ae-468f-a70d-f05f2b33730a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "registration",
+                    "post"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Accept-Language",
+                    "value": "dolore commodo id aute"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": -38087776,\n  \"userIds\": [\n    {\n      \"username\": \"pariatur consectetur\",\n      \"tenantNumber\": \"incididunt adipisicing ex\"\n    },\n    {\n      \"username\": \"in in nostrud ullamco\",\n      \"tenantNumber\": \"exercitation dolor\"\n    }\n  ],\n  \"username\": \"consequat do aute incididunt\",\n  \"tenantNumber\": \"fugiat sint Duis\",\n  \"password\": \"in et fugiat ex sit\",\n  \"profileId\": \"nulla sed magna ex culpa\",\n  \"identityNumber\": \"aliquip id labore dolor dolore\",\n  \"active\": true,\n  \"locked\": true,\n  \"approved\": false,\n  \"groups\": [\n    {\n      \"id\": -96055389,\n      \"name\": \"ipsum velit est elit\",\n      \"nameAr\": \"anim eiusmod do non\",\n      \"code\": \"nisi Lorem ut ipsum\",\n      \"description\": \"deserunt laborum tempor veniam Excepteur\",\n      \"isSystem\": true,\n      \"roles\": [\n        {\n          \"id\": -49337835,\n          \"name\": \"laboris dolor\",\n          \"nameAr\": \"cillum\",\n          \"code\": \"quis enim Duis\",\n          \"description\": \"ut\",\n          \"isSystem\": true,\n          \"privileges\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"nameAr\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"code\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        {\n          \"id\": -43280452,\n          \"name\": \"ipsum ullamco minim\",\n          \"nameAr\": \"do ea Ut velit laborum\",\n          \"code\": \"Duis \",\n          \"description\": \"cupidata\",\n          \"isSystem\": true,\n          \"privileges\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"nameAr\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"code\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"id\": 50252831,\n      \"name\": \"pariatur laboris eu anim\",\n      \"nameAr\": \"ex cillum\",\n      \"code\": \"mollit veniam labore ad\",\n      \"description\": \"exercitation sint\",\n      \"isSystem\": true,\n      \"roles\": [\n        {\n          \"id\": 11714921,\n          \"name\": \"veniam quis elit\",\n          \"nameAr\": \"Lorem nostrud\",\n          \"code\": \"sit nisi\",\n          \"description\": \"consequat in ex culpa do\",\n          \"isSystem\": false,\n          \"privileges\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"nameAr\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"code\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        {\n          \"id\": 21575440,\n          \"name\": \"in exercitation id\",\n          \"nameAr\": \"Excepteur nostrud dolor nulla\",\n          \"code\": \"ea Excepteur ut\",\n          \"description\": \"laboris esse\",\n          \"isSystem\": false,\n          \"privileges\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"nameAr\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"code\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        }\n      ]\n    }\n  ],\n  \"type\": {\n    \"nameEn\": \"aliqua laborum velit\",\n    \"nameAr\": \"quis\",\n    \"code\": \"Excepteur elit in\"\n  },\n  \"privileges\": [\n    \"nostrud Lorem\",\n    \"enim ut\"\n  ],\n  \"accessToken\": \"consequat do c\",\n  \"refreshToken\": \"sit fugiat consequat deserunt\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "331581f3-b10d-41a8-b8b7-b1e03f605267",
+          "name": "post Admin Staff Creation Registration",
+          "request": {
+            "name": "post Admin Staff Creation Registration",
+            "description": {},
+            "url": {
+              "path": [
+                "registration",
+                "admin-staff",
+                "post"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/registration/admin-staff/post"
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "Accept-Language",
+                "value": "dolore commodo id aute"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": -16951228,\n  \"userIds\": [\n    {\n      \"username\": \"velit proident officia ea\",\n      \"tenantNumber\": \"eu i\"\n    },\n    {\n      \"username\": \"dolor et in\",\n      \"tenantNumber\": \"adipisicing officia quis ea\"\n    }\n  ],\n  \"username\": \"mollit\",\n  \"tenantNumber\": \"laborum\",\n  \"password\": \"fugiat commodo\",\n  \"profileId\": \"pariatur eiusmod occaecat Duis\",\n  \"identityNumber\": \"mollit reprehenderit\",\n  \"active\": false,\n  \"locked\": false,\n  \"approved\": false,\n  \"groups\": [\n    {\n      \"id\": -940454,\n      \"name\": \"adipisicing pariatur dolor es\",\n      \"nameAr\": \"nostrud sit minim ut\",\n      \"code\": \"anim ullamco aliquip\",\n      \"description\": \"mollit consectetur sunt\",\n      \"isSystem\": false,\n      \"roles\": [\n        {\n          \"id\": 17363123,\n          \"name\": \"c\",\n          \"nameAr\": \"consectetur\",\n          \"code\": \"ullamco aliquip\",\n          \"description\": \"non sint do pariatur dolor\",\n          \"isSystem\": true,\n          \"privileges\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"nameAr\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"code\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        {\n          \"id\": -95952584,\n          \"name\": \"laboru\",\n          \"nameAr\": \"laboris magna reprehenderit ipsum\",\n          \"code\": \"dolor eiusmod incididunt nulla est\",\n          \"description\": \"ut ut\",\n          \"isSystem\": true,\n          \"privileges\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"nameAr\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"code\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"id\": -60673323,\n      \"name\": \"sed\",\n      \"nameAr\": \"Duis id esse\",\n      \"code\": \"consectetur\",\n      \"description\": \"quis occaecat dolor\",\n      \"isSystem\": true,\n      \"roles\": [\n        {\n          \"id\": 88587145,\n          \"name\": \"dolore fugiat\",\n          \"nameAr\": \"officia proident\",\n          \"code\": \"ut adipisicing consequat quis\",\n          \"description\": \"veniam\",\n          \"isSystem\": false,\n          \"privileges\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"nameAr\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"code\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        {\n          \"id\": -39113558,\n          \"name\": \"Duis\",\n          \"nameAr\": \"id adipisicing occaecat\",\n          \"code\": \"ad est pariatur do commodo\",\n          \"description\": \"veniam\",\n          \"isSystem\": true,\n          \"privileges\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"nameAr\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"code\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        }\n      ]\n    }\n  ],\n  \"type\": {\n    \"nameEn\": \"est enim cillum ut\",\n    \"nameAr\": \"qui dolor ni\",\n    \"code\": \"reprehenderit incididunt culpa veniam ad\"\n  },\n  \"privileges\": [\n    \"dolor quis sint\",\n    \"enim\"\n  ],\n  \"accessToken\": \"adipisicing incididunt voluptate dolor\",\n  \"refreshToken\": \"et dolore anim\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9b28ea85-4df4-4287-a25c-9e7eee9bb14f",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "registration",
+                    "admin-staff",
+                    "post"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Accept-Language",
+                    "value": "dolore commodo id aute"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": -38087776,\n  \"userIds\": [\n    {\n      \"username\": \"pariatur consectetur\",\n      \"tenantNumber\": \"incididunt adipisicing ex\"\n    },\n    {\n      \"username\": \"in in nostrud ullamco\",\n      \"tenantNumber\": \"exercitation dolor\"\n    }\n  ],\n  \"username\": \"consequat do aute incididunt\",\n  \"tenantNumber\": \"fugiat sint Duis\",\n  \"password\": \"in et fugiat ex sit\",\n  \"profileId\": \"nulla sed magna ex culpa\",\n  \"identityNumber\": \"aliquip id labore dolor dolore\",\n  \"active\": true,\n  \"locked\": true,\n  \"approved\": false,\n  \"groups\": [\n    {\n      \"id\": -96055389,\n      \"name\": \"ipsum velit est elit\",\n      \"nameAr\": \"anim eiusmod do non\",\n      \"code\": \"nisi Lorem ut ipsum\",\n      \"description\": \"deserunt laborum tempor veniam Excepteur\",\n      \"isSystem\": true,\n      \"roles\": [\n        {\n          \"id\": -49337835,\n          \"name\": \"laboris dolor\",\n          \"nameAr\": \"cillum\",\n          \"code\": \"quis enim Duis\",\n          \"description\": \"ut\",\n          \"isSystem\": true,\n          \"privileges\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"nameAr\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"code\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        {\n          \"id\": -43280452,\n          \"name\": \"ipsum ullamco minim\",\n          \"nameAr\": \"do ea Ut velit laborum\",\n          \"code\": \"Duis \",\n          \"description\": \"cupidata\",\n          \"isSystem\": true,\n          \"privileges\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"nameAr\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"code\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"id\": 50252831,\n      \"name\": \"pariatur laboris eu anim\",\n      \"nameAr\": \"ex cillum\",\n      \"code\": \"mollit veniam labore ad\",\n      \"description\": \"exercitation sint\",\n      \"isSystem\": true,\n      \"roles\": [\n        {\n          \"id\": 11714921,\n          \"name\": \"veniam quis elit\",\n          \"nameAr\": \"Lorem nostrud\",\n          \"code\": \"sit nisi\",\n          \"description\": \"consequat in ex culpa do\",\n          \"isSystem\": false,\n          \"privileges\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"nameAr\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"code\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        {\n          \"id\": 21575440,\n          \"name\": \"in exercitation id\",\n          \"nameAr\": \"Excepteur nostrud dolor nulla\",\n          \"code\": \"ea Excepteur ut\",\n          \"description\": \"laboris esse\",\n          \"isSystem\": false,\n          \"privileges\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"nameAr\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"code\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"description\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        }\n      ]\n    }\n  ],\n  \"type\": {\n    \"nameEn\": \"aliqua laborum velit\",\n    \"nameAr\": \"quis\",\n    \"code\": \"Excepteur elit in\"\n  },\n  \"privileges\": [\n    \"nostrud Lorem\",\n    \"enim ut\"\n  ],\n  \"accessToken\": \"consequat do c\",\n  \"refreshToken\": \"sit fugiat consequat deserunt\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generated guard: a 5xx from any request is a gateway/service defect, not a test-data problem.",
+          "pm.test('no 5xx (' + pm.info.requestName + ')', function () {",
+          "  pm.expect(pm.response.code, (pm.response.text() || '').slice(0, 300)).to.be.below(500);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{gatewayBaseUrl}}/user-registration-service",
+      "type": "string"
+    }
+  ],
+  "info": {
+    "_postman_id": "1def4260-32f2-4c4d-97f9-8033924cd3f0",
+    "name": "Emi User Registration Service - majdpay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Emi User Registration Service (user-registration-service) — 3 operations.\n\nGENERATED from the OpenAPI 3.1.0 spec published at the UAT gateway swagger-ui\n(Select a definition -> \"Emi User Registration Service APIs\"). Request bodies are schema-derived placeholders (lorem-ipsum\nstrings, sample numbers) — replace with real values before sending.\n\nBase URL: {{gatewayBaseUrl}}/user-registration-service  (gatewayBaseUrl lives in EMI-dev.postman_environment.json).\nSpec server: https://gateway-emiuat.dg-cash.app/user-registration-service\n\nAUTH: the spec declares no security scheme, but the gateway front-doors every route with a bearer\ntoken. Set {{token}} in the environment (mint one with the Authentication Service collection's\nsign-in, or pass --env-var token=... to newman). Some back-office routes need an admin/service\ntoken rather than a merchant one.\n\nCompanion Playwright scaffold: BusinessTestCases/ServiceApis/UserRegistrationService.generated.spec.ts\n"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

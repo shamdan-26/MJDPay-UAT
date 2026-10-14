@@ -1,0 +1,1848 @@
+{
+  "info": {
+    "_postman_id": "c4a2f1d8-3b56-4e72-9a10-registration01",
+    "name": "Registration API - majdpay (dev)",
+    "description": "Business-portal Merchant registration flow of emi-profile-service, plus the public lookup endpoints it depends on.\n\nBuilt from BusinessTestCases/Registration/api/RegistrationAPIFlow.spec.ts (the 22-endpoint happy-path + negative + lookup suite) and RegistrationSessionRefresh.spec.ts (EMI-5995 / EMI-6059 session-refresh mechanism).\n\nBase URL: https://gateway-dev.majdpay.com\n\nRun folders 1-6 in order for one full registration E2E pass (mobile OTP -> verify -> identity -> file uploads -> submit -> NAFATH -> products -> contract). Folder 6 (Session Refresh) can be run at any point after folder 1's OTP verify to swap the session token; folders 7-8 (Lookups, Negative/Auth) are independent and can run any time.\n\n{{otp}} defaults to '918512' — dev and UAT both accept a fixed all-zero OTP for any mobile (see RegistrationHelper.getOtpFromDb), so no IMAP/mailbox access is needed to run this by hand.\n\n{{unifiedNumber}} / {{nationalId}} default to one entry from data/registrationAssets.json (uatOtpAssets) that is marked unused as of this writing. A 409/duplicate on request 5 just means it has since been consumed by a Playwright run — swap in a fresh entry from that file.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Phone Entry",
+      "item": [
+        {
+          "name": "1. POST send mobile OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register/mobile/otp",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register",
+                "mobile",
+                "otp"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\n  \"mobileNumber\": \"{{mobileNumber}}\"\n}"
+            },
+            "description": "EMI-5751: no Authorization header here by design — this endpoint must keep working without a session token (see '11. mobile/otp works without a token' below).\n\nThe pre-request script on this folder's first request refreshes {{mobileNumber}} to a fresh KSA number so repeat runs do not collide.\n\nIf otpRequired is false, the response already carries sessionToken/refreshToken (EMI-5995/EMI-6059) — the test script below stores them so step 4 can be skipped."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// A fresh KSA-shaped mobile per run so repeat runs don't collide on an already-registered number.",
+                  "pm.collectionVariables.set('mobileNumber', '+9665' + String(Date.now()).slice(-8));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('otpRequired is boolean', () => pm.expect(typeof b.otpRequired).to.eql('boolean'));",
+                  "if (b.otpRequired) { pm.test('requestId present when OTP is required', () => pm.expect(b).to.have.property('requestId')); }",
+                  "if (b.sessionToken && b.sessionToken.token) { pm.collectionVariables.set('sessionToken', b.sessionToken.token); }",
+                  "if (b.refreshToken && b.refreshToken.token) { pm.collectionVariables.set('refreshToken', b.refreshToken.token); }",
+                  "pm.collectionVariables.set('otpRequired', String(!!b.otpRequired));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. GET OTP settings for REGISTRATION",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/otp/otp-settings/q?operationCode=REGISTRATION",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "otp",
+                "otp-settings",
+                "q"
+              ],
+              "query": [
+                {
+                  "key": "operationCode",
+                  "value": "REGISTRATION"
+                }
+              ]
+            },
+            "description": "Public — no token. Returns the OTP length/validity/resend-cooldown this environment enforces."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('has length/validityInSeconds/canResendOtpAfterInSeconds', () => {",
+                  "  pm.expect(b).to.have.property('length');",
+                  "  pm.expect(b).to.have.property('validityInSeconds');",
+                  "  pm.expect(b).to.have.property('canResendOtpAfterInSeconds');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3. POST resend mobile OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register/mobile/otp/resend",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register",
+                "mobile",
+                "otp",
+                "resend"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\n  \"mobileNumber\": \"{{mobileNumber}}\"\n}"
+            },
+            "description": "Only meaningful when otpRequired was true on request 1 — otherwise this environment has OTP disabled and resend is not applicable."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "if (pm.collectionVariables.get('otpRequired') === 'true') {",
+                  "  pm.test('requestId present', () => pm.expect(pm.response.json()).to.have.property('requestId'));",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "4. POST verify OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register/verify/otp",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register",
+                "verify",
+                "otp"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\n  \"mobileNumber\": \"{{mobileNumber}}\",\n  \"otp\": \"{{otp}}\"\n}"
+            },
+            "description": "Skip this request if request 1 already returned otpRequired: false (dev/UAT both accept a fixed OTP — {{otp}} defaults to '918512', same value RegistrationHelper.getOtpFromDb() uses for ENV=dev|uat.\n\nEMI-5995/EMI-6059: response now carries sessionToken AND refreshToken, each as { token, expirationDuration } (milliseconds)."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('sessionToken object present', () => {",
+                  "  pm.expect(b).to.have.property('sessionToken');",
+                  "  pm.expect(b.sessionToken).to.have.property('token');",
+                  "  pm.expect(b.sessionToken).to.have.property('expirationDuration');",
+                  "});",
+                  "pm.test('refreshToken object present (EMI-5995/EMI-6059)', () => {",
+                  "  pm.expect(b).to.have.property('refreshToken');",
+                  "  pm.expect(b.refreshToken).to.have.property('token');",
+                  "});",
+                  "pm.collectionVariables.set('sessionToken', b.sessionToken.token);",
+                  "if (b.refreshToken && b.refreshToken.token) { pm.collectionVariables.set('refreshToken', b.refreshToken.token); }"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. Business Info",
+      "item": [
+        {
+          "name": "5. POST profile registration type",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sessionToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register/profile-registration-type",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register",
+                "profile-registration-type"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\n  \"profileType\": \"MERCHANT\",\n  \"unifiedNumber\": \"{{unifiedNumber}}\",\n  \"nationalId\": \"{{nationalId}}\",\n  \"email\": \"{{email}}\"\n}"
+            },
+            "description": "Identity-establishing step. 201 on a fresh identity.\n\nA 409 (or a 400 whose body mentions \"already registered\"/\"duplicate\") means {{unifiedNumber}} was already registered by a previous run against the shared UAT fixture pool — that is expected, not a bug (see RegistrationAPIFlow.spec.ts API-05). Pick a fresh, unused entry from data/registrationAssets.json (uatOtpAssets) and re-run from request 1 if you need a clean E2E pass."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const b = pm.response.json();",
+                  "const alreadyRegistered = pm.response.code === 409 || /already\\s*(registered|exists)|duplicate/i.test(JSON.stringify(b));",
+                  "pm.test('201 on a fresh identity, or a documented already-registered response', () => {",
+                  "  pm.expect(pm.response.code === 201 || alreadyRegistered).to.be.true;",
+                  "});",
+                  "if (alreadyRegistered) { console.warn('unifiedNumber already registered — pick a fresh asset from data/registrationAssets.json'); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "6. POST upload IBAN proof",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('fileId present', () => pm.expect(b).to.have.property('fileId'));",
+                  "pm.collectionVariables.set('ibanFileId', b.fileId);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sessionToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/file/attachment/upload?unifiedNumber={{unifiedNumber}}&fileType=iban",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "file",
+                "attachment",
+                "upload"
+              ],
+              "query": [
+                {
+                  "key": "unifiedNumber",
+                  "value": "{{unifiedNumber}}"
+                },
+                {
+                  "key": "fileType",
+                  "value": "iban"
+                }
+              ]
+            },
+            "description": "Attach any small image/PDF in Postman's file picker (the 'file' form field) before sending — Postman cannot embed a file inline in a committed collection. Playwright's equivalent (RegistrationAPIFlow.spec.ts API-06) uses a 1x1 PNG from data/registrationDefaults.json (testFileBase64)."
+          },
+          "response": []
+        },
+        {
+          "name": "7. POST upload VAT certificate",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('fileId present', () => pm.expect(b).to.have.property('fileId'));",
+                  "pm.collectionVariables.set('vatFileId', b.fileId);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sessionToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/file/attachment/upload?unifiedNumber={{unifiedNumber}}&fileType=vat",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "file",
+                "attachment",
+                "upload"
+              ],
+              "query": [
+                {
+                  "key": "unifiedNumber",
+                  "value": "{{unifiedNumber}}"
+                },
+                {
+                  "key": "fileType",
+                  "value": "vat"
+                }
+              ]
+            },
+            "description": "Attach any small image/PDF in Postman's file picker (the 'file' form field) before sending — Postman cannot embed a file inline in a committed collection. Playwright's equivalent (RegistrationAPIFlow.spec.ts API-07) uses a 1x1 PNG from data/registrationDefaults.json (testFileBase64)."
+          },
+          "response": []
+        },
+        {
+          "name": "8. POST submit registration",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sessionToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\n  \"unifiedNumber\": \"{{unifiedNumber}}\",\n  \"nationalId\": \"{{nationalId}}\",\n  \"email\": \"{{email}}\",\n  \"profileType\": \"MERCHANT\",\n  \"monthlyExpectedNumberOfBills\": 2000,\n  \"monthlyExpectedSumOfBills\": 2000,\n  \"expectedMonthlyWithdrawal\": 2000,\n  \"expectedMonthlyDeposit\": 2000,\n  \"bankCode\": \"AL_INMA_BANK\",\n  \"industry\": \"HEALTHCARE\",\n  \"annualIncome\": \"0-1000\",\n  \"iban\": \"{{iban}}\",\n  \"vatNumber\": \"{{vatNumber}}\",\n  \"ibanFileId\": \"{{ibanFileId}}\",\n  \"vatFileId\": \"{{vatFileId}}\"\n}"
+            },
+            "description": "Full sign-up submission. Stores profileCode (when returned) for the Contract folder."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "if (b.profileCode) pm.collectionVariables.set('profileCode', b.profileCode);"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3. NAFATH",
+      "item": [
+        {
+          "name": "9. POST initiate NAFATH",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sessionToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register/uri/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register",
+                "uri",
+                "status"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{}"
+            },
+            "description": "Returns a redirect URI to the NAFATH app/web flow. NAFATH itself is not automatable — this only checks the URI is issued."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('uri present', () => pm.expect(pm.response.json()).to.have.property('uri'));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "4. Products",
+      "item": [
+        {
+          "name": "10. GET available products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sessionToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "products"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('non-empty array of {id, name}', () => {",
+                  "  pm.expect(b).to.be.an('array');",
+                  "  pm.expect(b.length).to.be.greaterThan(0);",
+                  "  pm.expect(b[0]).to.have.property('id');",
+                  "  pm.expect(b[0]).to.have.property('name');",
+                  "});",
+                  "if (b[0]) pm.collectionVariables.set('pickedProductId', String(b[0].id));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "11. POST assign products",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sessionToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register",
+                "products"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\n  \"productIds\": [\n    \"{{pickedProductId}}\"\n  ]\n}"
+            },
+            "description": "productIds is sent as a Postman string variable here — {{pickedProductId}} — Postman does not template a raw-body value into a JSON number, so this arrives as a numeric string; the API accepts it either way. Playwright sends a real number."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "5. Contract",
+      "item": [
+        {
+          "name": "12. GET contract preview",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sessionToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/contracts/preview?profileCode={{profileCode}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "contracts",
+                "preview"
+              ],
+              "query": [
+                {
+                  "key": "profileCode",
+                  "value": "{{profileCode}}"
+                }
+              ]
+            },
+            "description": "profileCode falls back to {{unifiedNumber}} if step 8 did not return one — set it manually if both are empty."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "13. POST accept contract",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sessionToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register/contract/accept",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register",
+                "contract",
+                "accept"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\n  \"productIds\": [\n    \"{{pickedProductId}}\"\n  ],\n  \"contractAccepted\": true\n}"
+            },
+            "description": "Completes registration. Per EMI-122, this only creates a \"Pending Manual KYB\" profile — no wallet/login credentials are issued until an admin reviews it (see the Negative folder's last-mile check)."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "14. GET contract PDF",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sessionToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/contracts/generate-file?profileCode={{profileCode}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "contracts",
+                "generate-file"
+              ],
+              "query": [
+                {
+                  "key": "profileCode",
+                  "value": "{{profileCode}}"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "6. Session Refresh (EMI-5995 / EMI-6059)",
+      "item": [
+        {
+          "name": "15. POST refresh registration session",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "refreshToken",
+                "value": "{{refreshToken}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sessionToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register/session/refresh",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register",
+                "session",
+                "refresh"
+              ]
+            },
+            "description": "EMI-5995 (BE) / EMI-6059 (FE Web). The refresh token travels as a HEADER named 'refreshToken', not a body field — confirm this collection still matches the live contract if it starts failing.\n\nContinues the SAME registration session (no restart): run this any time after request 4 to swap in a fresh sessionToken before it expires, then keep going from wherever you left off in Business Info / NAFATH / Products / Contract."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('a NEW sessionToken is returned', () => {",
+                  "  pm.expect(b).to.have.property('sessionToken');",
+                  "  pm.expect(b.sessionToken).to.have.property('token');",
+                  "});",
+                  "pm.collectionVariables.set('sessionToken', b.sessionToken.token);",
+                  "if (b.refreshToken && b.refreshToken.token) pm.collectionVariables.set('refreshToken', b.refreshToken.token);"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "7. Lookups (public)",
+      "item": [
+        {
+          "name": "16. GET industries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/industries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "industries"
+              ]
+            },
+            "description": "Public — no Authorization header required."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('response is an array', () => pm.expect(pm.response.json()).to.be.an('array'));",
+                  "pm.test('non-empty', () => pm.expect(pm.response.json().length).to.be.greaterThan(0));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "17. GET banks",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/lookup/banks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "lookup",
+                "banks"
+              ]
+            },
+            "description": "Public — no Authorization header required."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('response is an array', () => pm.expect(pm.response.json()).to.be.an('array'));",
+                  "pm.test('non-empty', () => pm.expect(pm.response.json().length).to.be.greaterThan(0));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "18. GET purpose of transfer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/purpose-of-transfer",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "purpose-of-transfer"
+              ]
+            },
+            "description": "Public — no Authorization header required."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('response is an array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "19. GET transaction types",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/transaction-types",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transaction-types"
+              ]
+            },
+            "description": "Public — no Authorization header required."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('response is an array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "20. GET payment methods",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payment-method",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "payment-method"
+              ]
+            },
+            "description": "Public — no Authorization header required."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('response is an array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "21. GET annual incomes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/annual-incomes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "annual-incomes"
+              ]
+            },
+            "description": "Public — no Authorization header required."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('response is an array', () => pm.expect(pm.response.json()).to.be.an('array'));",
+                  "pm.test('non-empty', () => pm.expect(pm.response.json().length).to.be.greaterThan(0));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "22. GET discount types",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/discountTypes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "discountTypes"
+              ]
+            },
+            "description": "Public — no Authorization header required."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('response is an array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "23. GET profile registration type options",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register/profile-registration-type",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register",
+                "profile-registration-type"
+              ]
+            },
+            "description": "Public — no Authorization header required."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('response is an array', () => pm.expect(pm.response.json()).to.be.an('array'));",
+                  "pm.test('non-empty', () => pm.expect(pm.response.json().length).to.be.greaterThan(0));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "8. Negative / Auth checks",
+      "item": [
+        {
+          "name": "1. POST mobile OTP - invalid format (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register/mobile/otp",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register",
+                "mobile",
+                "otp"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\n  \"mobileNumber\": \"123\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. POST verify OTP - wrong code (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register/verify/otp",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register",
+                "verify",
+                "otp"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\n  \"mobileNumber\": \"{{mobileNumber}}\",\n  \"otp\": \"999999\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                  "pm.test('errorCode present', () => pm.expect(pm.response.json()).to.have.property('errorCode'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3. POST profile-registration-type - no token (401)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register/profile-registration-type",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register",
+                "profile-registration-type"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\n  \"profileType\": \"MERCHANT\",\n  \"unifiedNumber\": \"0000000000\",\n  \"nationalId\": \"0000000000\",\n  \"email\": \"unauth@test.com\"\n}"
+            },
+            "description": "No Authorization header sent — deliberately omitted, do not add {{sessionToken}} here."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "4. POST profile-registration-type - invalid nationalId (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sessionToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register/profile-registration-type",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register",
+                "profile-registration-type"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\n  \"profileType\": \"MERCHANT\",\n  \"unifiedNumber\": \"1307335131\",\n  \"nationalId\": \"1012345678\",\n  \"email\": \"invalid@test.com\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                  "pm.test('errorCode is INVALID-NATIONAL-ID', () => pm.expect(pm.response.json().errorCode).to.match(/INVALID-NATIONAL-ID/i));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "5. GET products - no token (401)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "products"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "6. POST register - no token (401)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\n  \"unifiedNumber\": \"0000000000\",\n  \"nationalId\": \"0000000000\",\n  \"email\": \"unauth@test.com\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "7. POST NAFATH uri/status - no token (401)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register/uri/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register",
+                "uri",
+                "status"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "8. POST assign products - no token (401)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register",
+                "products"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\n  \"productIds\": [\n    1\n  ]\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "9. GET contract preview - no token (401)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/contracts/preview?profileCode=TEST-0001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "contracts",
+                "preview"
+              ],
+              "query": [
+                {
+                  "key": "profileCode",
+                  "value": "TEST-0001"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10. GET contract PDF - no token (401)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/contracts/generate-file?profileCode=TEST-0001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "contracts",
+                "generate-file"
+              ],
+              "query": [
+                {
+                  "key": "profileCode",
+                  "value": "TEST-0001"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "11. POST contract accept - no token (401)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register/contract/accept",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register",
+                "contract",
+                "accept"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\n  \"productIds\": [\n    1\n  ],\n  \"contractAccepted\": true\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "12. POST mobile OTP works WITHOUT a token (control)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register/mobile/otp",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register",
+                "mobile",
+                "otp"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\n  \"mobileNumber\": \"{{mobileNumber}}\"\n}"
+            },
+            "description": "EMI-5751 negative-control: this OTP-stage endpoint must itself NOT start requiring auth."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is not 401', () => pm.expect(pm.response.code).to.not.eql(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "13. POST session refresh - invalid refresh token (4xx)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "refreshToken",
+                "value": "not-a-real-refresh-token"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sessionToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register/session/refresh",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register",
+                "session",
+                "refresh"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('rejected, not 200', () => pm.expect(pm.response.code).to.not.eql(200));",
+                  "pm.test('is a 4xx', () => pm.expect(pm.response.code).to.be.within(400, 499));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "14. POST session refresh - refresh token in body, not header (should not be 200)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sessionToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/emi-profile/api/v1/register/session/refresh",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emi-profile",
+                "api",
+                "v1",
+                "register",
+                "session",
+                "refresh"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "description": "EMI-6059 is explicit that refreshToken is a HEADER. If this starts returning 200, the contract has quietly widened to also accept it in the body."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('body-only refresh token is NOT accepted', () => pm.expect(pm.response.code).to.not.eql(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "15. The just-registered account cannot sign in yet (Pending Manual KYB)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/signin",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "signin"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\n  \"username\": \"{{mobileNumber}}\",\n  \"password\": \"not-yet-issued\",\n  \"tenantNumber\": \"PENDING\"\n}"
+            },
+            "description": "EMI-122: contract/accept only creates a \"Pending Manual KYB\" profile. A wallet, Company Number and login credentials are issued only after an admin reviews and activates the account (separate Admin Portal flow, out of scope here)."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('sign-in does not succeed yet', () => pm.expect(pm.response.code).to.not.eql(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "noauth"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://gateway-dev.majdpay.com"
+    },
+    {
+      "key": "mobileNumber",
+      "value": ""
+    },
+    {
+      "key": "otp",
+      "value": "918512"
+    },
+    {
+      "key": "otpRequired",
+      "value": ""
+    },
+    {
+      "key": "unifiedNumber",
+      "value": "1240000230"
+    },
+    {
+      "key": "nationalId",
+      "value": "1000000230"
+    },
+    {
+      "key": "email",
+      "value": ""
+    },
+    {
+      "key": "sessionToken",
+      "value": ""
+    },
+    {
+      "key": "refreshToken",
+      "value": ""
+    },
+    {
+      "key": "ibanFileId",
+      "value": ""
+    },
+    {
+      "key": "vatFileId",
+      "value": ""
+    },
+    {
+      "key": "iban",
+      "value": "SA0380000001234567891234"
+    },
+    {
+      "key": "vatNumber",
+      "value": "300123456700003"
+    },
+    {
+      "key": "pickedProductId",
+      "value": ""
+    },
+    {
+      "key": "profileCode",
+      "value": ""
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Fresh email per run so profile-registration-type never rejects on a duplicate email.",
+          "if (!pm.collectionVariables.get('email')) {",
+          "  pm.collectionVariables.set('email', 'test+' + Date.now() + '@dg-cash.com');",
+          "}"
+        ]
+      }
+    }
+  ]
+}

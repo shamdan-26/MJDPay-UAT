@@ -24,10 +24,13 @@ import { OtpPage } from './OtpPage';
  * A locked (assigned + non-detachable) checkbox also carries `.disabled-checkbox`.
  */
 
-const BASE_URL = process.env['BASE_URL'] ?? 'https://dev.majdpay.com';
+const BASE_URL = process.env['BASE_URL'] ?? 'https://dev-emi.dg-cash.app';
 
-export const ADMIN_LOGIN_URL = `${BASE_URL}/admin/auth/login`;
-export const ADMIN_OTP_CONFIG_URL = `${BASE_URL}/admin/main/configuration/otp`;
+// The admin SPA is hosted separately from the merchant portal.
+export const ADMIN_BASE_URL = process.env['ADMIN_BASE_URL'] ?? 'https://dev-emi.dg-cash.app';
+
+export const ADMIN_LOGIN_URL = `${ADMIN_BASE_URL}/admin/auth/login`;
+export const ADMIN_OTP_CONFIG_URL = `${ADMIN_BASE_URL}/admin/main/configuration/otp`;
 
 export const ADMIN_MOBILE   = process.env['ADMIN_MOBILE']   ?? '+966510202020';
 export const ADMIN_PASSWORD = process.env['ADMIN_PASSWORD'] ?? 'Aa#1234567';
@@ -36,12 +39,20 @@ export const ADMIN_PASSWORD = process.env['ADMIN_PASSWORD'] ?? 'Aa#1234567';
 // Same dev-environment all-zeros bypass CLAUDE.md documents for the merchant
 // login's 8-digit OTP, confirmed separately for Topup's 6-digit transaction
 // OTP (TopupNegative.spec.ts) — this is the 6-digit form of the same bypass.
-export const ADMIN_OTP_CODE = process.env['ADMIN_OTP_CODE'] ?? '000000';
+export const ADMIN_OTP_CODE = process.env['ADMIN_OTP_CODE'] ?? '918512';
 
 /** OTP operation codes as they appear in the name field id suffix. */
 export const OTP_OPERATION = {
     LOGIN: 'LOGIN',
     REGISTRATION: 'registration',
+    FORGET_PASSWORD: 'FORGET_PASSWORD', // allowlist-secret: enum label, not a credential
+    ADD_BENEFICIARY: 'ADD_BENEFICIARY',
+    TRANSACTION_TOPUP: 'transaction-topup',
+    TRANSACTION_BILL_PAYMENT: 'transaction-bill-payment',
+    BANK_TRANSFER: 'bank-transfer',
+    WALLET_PAYMENT: 'WalletPayment',
+    OTC_TRANSACTION: 'OTC-Transaction',
+    CARD_TRANSACTIONS: 'CardTransactions',
 } as const;
 
 // Riyadh — matches playwright.config.ts's geolocation. The admin SPA throws a
@@ -146,6 +157,12 @@ export class AdminOtpConfigPage {
         const client = await this.page.context().newCDPSession(this.page);
         await client.send('Network.setCacheDisabled', { cacheDisabled: true });
         await this.page.goto(url, { waitUntil: 'domcontentloaded' });
+        // A stale SPA bootstrap can survive a cache-disabled navigation because
+        // its auth/session state is read from storage — clear it, then reload.
+        await this.page.evaluate(() => {
+            try { localStorage.clear(); sessionStorage.clear(); } catch { /* storage may be blocked */ }
+        }).catch(() => { /* best-effort */ });
+        await this.page.reload({ waitUntil: 'domcontentloaded' });
     }
 
     /** Logs into the admin SPA and lands on the authenticated shell. */
