@@ -44,7 +44,7 @@ for (const screen of SCREENS) {
     for (const vp of VIEWPORTS) {
         for (const lang of ['en', 'ar'] as const) {
             for (const theme of ['light', 'dark'] as const) {
-                test(`${screen.name} should match its ${vp.label} ${lang}/${theme} baseline`, { tag: ['@login', '@ui', '@visual'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'non-functional' }] }, async ({ page }) => {
+                test(`${screen.name} should match its ${vp.label} ${lang}/${theme} baseline`, { tag: ['@login', '@ui', '@visual'], annotation: [{ type: 'testcase', description: "LG-VIS-01: Screen matches its viewport, language and theme baseline" }, { type: 'feature', description: 'Login' }, { type: 'layer', description: 'non-functional' }] }, async ({ page }) => {
                     test.skip(SKIPPED_SCREENS.has(screen.name), 'OTP dialog is not reachable with a stubbed sign-in response');
                     test.skip(SKIPPED_THEMES.has(theme), 'Dark theme only changes the page background; no baseline until the card themes too');
                     test.skip(SKIPPED_CASES.has(`${screen.name}-${vp.label}-${lang}-${theme}`), 'Known mismatch against its baseline');

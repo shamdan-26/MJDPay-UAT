@@ -62,12 +62,12 @@ test.describe('Registration — Admin Business Accounts listing', { tag: ['@regi
         await closeMongoClient();
     });
 
-    test('newly registered business is listed under Manage Users → Accounts → Business', async () => {
+    test('newly registered business is listed under Manage Users → Accounts → Business', { annotation: [{ type: 'testcase', description: "RG-ADMIN-01: Newly registered business is listed under Manage Users → Accounts → Business" }] }, async () => {
         test.setTimeout(120_000);
         await accounts.expectAccountListed(detail.mobile_number);
     });
 
-    test('listed account is Active, Approved and not blocked', async () => {
+    test('listed account is Active, Approved and not blocked', { annotation: [{ type: 'testcase', description: "RG-ADMIN-02: Listed account is Active, Approved and not blocked" }] }, async () => {
         await expect(accounts.activeButton).toContainText(/^\s*Active\s*$/i);
         await expect(accounts.approvedButton).toContainText(/approved/i);
         await expect(accounts.approvedButton).not.toContainText(/disapproved/i);
@@ -81,7 +81,7 @@ test.describe('Registration — Admin Business Accounts listing', { tag: ['@regi
     // → completed_form/wathiq/ws1/crn, Nafath → nafath_status, Products → product_assigned), and
     // "Submit and finish" flips the rest (contract, abc, ws3) while creating the profile, its
     // merchant_profiles | biller_profiles row and the user_wallets wallet together.
-    test('registration request is fully completed in emi_profile', async () => {
+    test('registration request is fully completed in emi_profile', { annotation: [{ type: 'testcase', description: "RG-ADMIN-03: Registration request is fully completed in emi_profile" }] }, async () => {
         const request = await getBusinessRegistrationRequestByMobileFromSql(mobile);
         expect(request, 'business_profile_registration_requests row').not.toBeNull();
         expect(request).toMatchObject({
@@ -96,7 +96,7 @@ test.describe('Registration — Admin Business Accounts listing', { tag: ['@regi
         expect(request!.profile_code).toBe(detail.profile_code);
     });
 
-    test('creates exactly one type-specific profile row matching the account type', async () => {
+    test('creates exactly one type-specific profile row matching the account type', { annotation: [{ type: 'testcase', description: "RG-ADMIN-04: Creates exactly one type-specific profile row matching the account type" }] }, async () => {
         const request = await getBusinessRegistrationRequestByMobileFromSql(mobile);
         const prov = await getRegistrationProvisioningFromSql(mobile);
         expect(prov, 'provisioned profile').not.toBeNull();
@@ -107,14 +107,14 @@ test.describe('Registration — Admin Business Accounts listing', { tag: ['@regi
         );
     });
 
-    test('creates one wallet of the matching type in emi_wallet.user_wallets', async () => {
+    test('creates one wallet of the matching type in emi_wallet.user_wallets', { annotation: [{ type: 'testcase', description: "RG-ADMIN-05: Creates one wallet of the matching type in emi_wallet.user_wallets" }] }, async () => {
         test.setTimeout(120_000);
         await expect.poll(async () => (await getRegistrationProvisioningFromSql(mobile))?.wallets, { timeout: 60_000, intervals: [2000] }).toBe(1);
         const prov = await getRegistrationProvisioningFromSql(mobile);
         expect(prov!.wallet_types).toBe(prov!.profile_type);
     });
 
-    test('records a delivered User Activation email to the registered address in Mongo', async () => {
+    test('records a delivered User Activation email to the registered address in Mongo', { annotation: [{ type: 'testcase', description: "RG-ADMIN-06: Records a delivered User Activation email to the registered address in Mongo" }] }, async () => {
         test.setTimeout(120_000);
         expect(detail.profile_code, 'profile_code of the new profile').toBeTruthy();
         await expect.poll(
@@ -128,7 +128,7 @@ test.describe('Registration — Admin Business Accounts listing', { tag: ['@regi
         expect(notification?.isSuccessfullySent, notification?.errorMessage || 'activation email was not delivered').toBe(true);
     });
 
-    test('sends two activation emails: API credentials and login details', async () => {
+    test('sends two activation emails: API credentials and login details', { annotation: [{ type: 'testcase', description: "RG-ADMIN-07: Sends two activation emails: API credentials and login details" }] }, async () => {
         test.setTimeout(120_000);
         await expect.poll(
             async () => (await getActivationNotificationsFromMongo(detail.profile_code)).length,
@@ -150,7 +150,7 @@ test.describe('Registration — Admin Business Accounts listing', { tag: ['@regi
         expect(login[0].message).toContain(AdminBusinessAccountsPage.toAdminMobile(detail.mobile_number));
     });
 
-    test('listed account shows the registered contact number and a brand name', async () => {
+    test('listed account shows the registered contact number and a brand name', { annotation: [{ type: 'testcase', description: "RG-ADMIN-08: Listed account shows the registered contact number and a brand name" }] }, async () => {
         const row = accounts.rowFor(detail.mobile_number);
         await expect(row).toContainText(AdminBusinessAccountsPage.toAdminMobile(detail.mobile_number));
         const text = (await row.innerText()).replace(/\s+/g, ' ').trim();

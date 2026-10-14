@@ -40,7 +40,7 @@ const STEPS: { name: string; open: (page: Page) => Promise<void> }[] = [
 for (const step of STEPS) {
     for (const lang of ['EN', 'AR'] as const) {
         for (const theme of ['light', 'dark'] as const) {
-            test(`${step.name} should have no serious accessibility violations (${lang}, ${theme} theme)`, { tag: ['@registration', '@ui', '@a11y'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, async ({ page }) => {
+            test(`${step.name} should have no serious accessibility violations (${lang}, ${theme} theme)`, { tag: ['@registration', '@ui', '@a11y'], annotation: [{ type: 'testcase', description: "RG-A11Y-01: Step has no serious accessibility violations" }, { type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, async ({ page }) => {
                 test.skip(!AxeBuilderCtor, 'Install @axe-core/playwright (npm i -D @axe-core/playwright) to run accessibility scans');
                 test.setTimeout(120_000);
                 await page.emulateMedia({ colorScheme: theme });

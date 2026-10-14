@@ -25,7 +25,7 @@ const PROTECTED: { method: 'POST' | 'GET'; path: string; body?: unknown }[] = [
 
 test.describe('Registration API – Authentication & session', { tag: ['@registration', '@security', '@api'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'security' }] }, () => {
     for (const ep of PROTECTED) {
-        test(`${ep.method} ${ep.path.split('?')[0]} should reject a request with no session token`, async ({ request }) => {
+        test(`${ep.method} ${ep.path.split('?')[0]} should reject a request with no session token`, { annotation: [{ type: 'testcase', description: "RG-APISEC-01: … … should reject a request with no session token" }] }, async ({ request }) => {
             const res = ep.method === 'POST'
                 ? await postRegistration(request, ep.path, ep.body)
                 : await request.get(`${REGISTRATION_API}${ep.path}`, { headers: registrationHeaders() });
@@ -33,7 +33,7 @@ test.describe('Registration API – Authentication & session', { tag: ['@registr
             expect(res.status()).toBeLessThan(500);
         });
 
-        test(`${ep.method} ${ep.path.split('?')[0]} should reject a forged session token`, async ({ request }) => {
+        test(`${ep.method} ${ep.path.split('?')[0]} should reject a forged session token`, { annotation: [{ type: 'testcase', description: "RG-APISEC-02: … … should reject a forged session token" }] }, async ({ request }) => {
             const forged = 'eyJhbGciOiJub25lIn0.eyJzdWIiOiJhdHRhY2tlciJ9.';
             const res = ep.method === 'POST'
                 ? await postRegistration(request, ep.path, ep.body, forged)
@@ -57,7 +57,7 @@ test.describe('Registration API – Mobile / OTP input validation', { tag: ['@re
     ];
 
     for (const [label, mobileNumber] of BAD_MOBILES) {
-        test(`POST /register/mobile/otp should not issue an OTP for an invalid mobile (${label})`, async ({ request }) => {
+        test(`POST /register/mobile/otp should not issue an OTP for an invalid mobile (${label})`, { annotation: [{ type: 'testcase', description: "RG-APISEC-03: POST /register/mobile/otp should not issue an OTP for an invalid mobile (…)" }] }, async ({ request }) => {
             const res = await postRegistration(request, '/register/mobile/otp', { mobileNumber });
             const body = await res.json().catch(() => ({}));
             expect(res.status(), `Server accepted ${JSON.stringify(mobileNumber)} and answered ${JSON.stringify(body)}`).toBeGreaterThanOrEqual(400);
@@ -65,13 +65,13 @@ test.describe('Registration API – Mobile / OTP input validation', { tag: ['@re
         });
     }
 
-    test('POST /register/mobile/otp should reject a missing mobileNumber', async ({ request }) => {
+    test('POST /register/mobile/otp should reject a missing mobileNumber', { annotation: [{ type: 'testcase', description: "RG-APISEC-04: POST /register/mobile/otp should reject a missing mobileNumber" }] }, async ({ request }) => {
         const res = await postRegistration(request, '/register/mobile/otp', {});
         expect(res.status()).toBeGreaterThanOrEqual(400);
         expect(res.status()).toBeLessThan(500);
     });
 
-    test('POST /register/verify/otp should reject a non-numeric OTP without a server error', async ({ request }) => {
+    test('POST /register/verify/otp should reject a non-numeric OTP without a server error', { annotation: [{ type: 'testcase', description: "RG-APISEC-05: POST /register/verify/otp should reject a non-numeric OTP without a server error" }] }, async ({ request }) => {
         const res = await postRegistration(request, '/register/verify/otp', { mobileNumber: toApiMobile(generateFreshKSAMobile()), otp: "' OR '1'='1" });
         expect(res.status()).toBeGreaterThanOrEqual(400);
         expect(res.status()).toBeLessThan(500);
@@ -79,7 +79,7 @@ test.describe('Registration API – Mobile / OTP input validation', { tag: ['@re
 });
 
 test.describe('Registration API – OTP brute force', { tag: ['@registration', '@security', '@api'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'security' }] }, () => {
-    test('repeated wrong OTPs should never yield a session and should end in a lockout', async ({ request }) => {
+    test('repeated wrong OTPs should never yield a session and should end in a lockout', { annotation: [{ type: 'testcase', description: "RG-APISEC-06: Repeated wrong OTPs should never yield a session and should end in a lockout" }] }, async ({ request }) => {
         test.setTimeout(120_000);
         const mobileNumber = toApiMobile(generateFreshKSAMobile());
         const sent = await postRegistration(request, '/register/mobile/otp', { mobileNumber });
@@ -104,7 +104,7 @@ test.describe('Registration API – OTP brute force', { tag: ['@registration', '
             `No lockout after 12 wrong OTPs — every attempt answered ${statuses[0]}`).toBe(true);
     });
 
-    test('OTP requests for one mobile should be rate-limited', async ({ request }) => {
+    test('OTP requests for one mobile should be rate-limited', { annotation: [{ type: 'testcase', description: "RG-APISEC-07: OTP requests for one mobile should be rate-limited" }] }, async ({ request }) => {
         test.setTimeout(120_000);
         const mobileNumber = toApiMobile(generateFreshKSAMobile());
         const statuses: number[] = [];
@@ -129,7 +129,7 @@ test.describe('Registration API – Session-bound abuse', { tag: ['@registration
         token = await openRegistrationSession(request, asset.mobile);
     });
 
-    test('profile-registration-type should ignore client-supplied progress flags (mass assignment)', async ({ request }) => {
+    test('profile-registration-type should ignore client-supplied progress flags (mass assignment)', { annotation: [{ type: 'testcase', description: "RG-APISEC-08: Profile-registration-type should ignore client-supplied progress flags (mass assignment)" }] }, async ({ request }) => {
         test.skip(!token, 'Could not open a registration session (OTP unreadable)');
         const res = await postRegistration(request, '/register/profile-registration-type', {
             profileType: 'MERCHANT',
@@ -149,19 +149,19 @@ test.describe('Registration API – Session-bound abuse', { tag: ['@registration
         }
     });
 
-    test('contract/accept should be rejected before Products and Contract steps are completed', async ({ request }) => {
+    test('contract/accept should be rejected before Products and Contract steps are completed', { annotation: [{ type: 'testcase', description: "RG-APISEC-09: Contract/accept should be rejected before Products and Contract steps are completed" }] }, async ({ request }) => {
         test.skip(!token, 'Could not open a registration session (OTP unreadable)');
         const res = await postRegistration(request, '/register/contract/accept', { profileCode: 'BIL-000000' }, token!);
         expect(res.ok(), `Contract accepted without completing the journey: ${await res.text()}`).toBe(false);
     });
 
-    test('a session token should not be usable against another applicant\'s contract', async ({ request }) => {
+    test('a session token should not be usable against another applicant\'s contract', { annotation: [{ type: 'testcase', description: "RG-APISEC-10: A session token should not be usable against another applicant's contract" }] }, async ({ request }) => {
         test.skip(!token, 'Could not open a registration session (OTP unreadable)');
         const res = await request.get(`${REGISTRATION_API}/contracts/preview?profileCode=BIL-000001`, { headers: registrationHeaders(token!) });
         expect(res.ok(), `Foreign profile contract readable: ${(await res.text()).slice(0, 200)}`).toBe(false);
     });
 
-    test('a used OTP should not verify twice', async ({ request }) => {
+    test('a used OTP should not verify twice', { annotation: [{ type: 'testcase', description: "RG-APISEC-11: A used OTP should not verify twice" }] }, async ({ request }) => {
         test.skip(!token, 'Could not open a registration session (OTP unreadable)');
         // The session above consumed the OTP; replaying any code for the same mobile must not mint a new session.
         const res = await postRegistration(request, '/register/verify/otp', { mobileNumber: toApiMobile(asset.mobile), otp: '918512' });
@@ -171,7 +171,7 @@ test.describe('Registration API – Session-bound abuse', { tag: ['@registration
 });
 
 test.describe('Registration API – Concurrency', { tag: ['@registration', '@security', '@api'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'security' }] }, () => {
-    test('two applicants submitting the same CRN at the same time should not both be accepted', async ({ request }) => {
+    test('two applicants submitting the same CRN at the same time should not both be accepted', { annotation: [{ type: 'testcase', description: "RG-APISEC-12: Two applicants submitting the same CRN at the same time should not both be accepted" }] }, async ({ request }) => {
         test.setTimeout(180_000);
         const a = nextResidentAsset();
         const b = nextResidentAsset();

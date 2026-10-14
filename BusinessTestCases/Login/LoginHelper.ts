@@ -1,5 +1,4 @@
 import type { Page } from '@playwright/test';
-import { fetchOtpFromEmail } from '../../support/emailOtp';
 import { waitForToastClear } from '../toastMessages';
 import { LoginPage } from '../pageElements/Shared/LoginPage';
 import testAccounts from '../../data/testAccounts.json';
@@ -30,6 +29,9 @@ export const VALID_PASSWORD = testAccounts.defaultPassword;
  */
 export const CREATED_ACCOUNTS: ReadonlyArray<{ company: string; mobile: string }> = testAccounts.createdAccounts;
 export const WRONG_PASSWORD = testAccounts.wrongPassword;
+
+/** Password every new Business user starts with; signing in with it forces a password update. */
+export const FIRST_LOGIN_DEFAULT_PASSWORD = testAccounts.firstLoginDefaultPassword;
 
 // DEV-only OTP bypass — in UAT use getOtpFromDb() instead.
 export const VALID_OTP   = testAccounts.validOtp;
@@ -68,16 +70,17 @@ export function generateUnregisteredMobile(): string {
     return `5${random}`;
 }
 
+/**
+ * Every environment accepts the fixed OTP 918512 (testAccounts.validOtp), so no mailbox/DB round trip is needed.
+ * The mobile/attempt/filter parameters are kept only so existing callers keep compiling.
+ */
 export async function getOtpFromDb(
-    mobile: string,
-    maxAttempts = 10,
-    delayMs = 2000,
-    messageFilter: RegExp = /Use this OTP/i
+    _mobile?: string,
+    _maxAttempts?: number,
+    _delayMs?: number,
+    _messageFilter?: RegExp
 ): Promise<string> {
-    // OTP_SOURCE=email reads the real OTP from the Mailosaur/IMAP inbox (opt-in, see support/emailOtp.ts).
-    if (process.env['OTP_SOURCE'] === 'email') return fetchOtpFromEmail(mobile, maxAttempts, delayMs, messageFilter);
-    if ((process.env['ENV'] ?? 'dev') === 'dev') return VALID_OTP;
-    return fetchOtpFromEmail(mobile, maxAttempts, delayMs, messageFilter);
+    return VALID_OTP;
 }
 
 export async function fillOtpInputs(page: Page, otp: string): Promise<void> {

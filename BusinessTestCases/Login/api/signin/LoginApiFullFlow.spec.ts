@@ -8,7 +8,7 @@ import { API_BASE, commonHeaders, VALID_USERNAME, VALID_TENANT, DEVICE_ID } from
 // ─────────────────────────────────────────────────────────────────────────────
 
 test.describe('Login – Full API Flow (IP → UUID → Sign In)', { tag: ['@login', '@api'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'api' }] }, () => {
-    test('API-FLOW-01: should complete the full pre-auth and sign-in chain successfully', async ({ request }) => {
+    test('API-FLOW-01: should complete the full pre-auth and sign-in chain successfully', { annotation: [{ type: 'testcase', description: "LG-131: Full pre-auth + sign-in chain succeeds end to end" }] }, async ({ request }) => {
         // Step 1 — get IP
         const ipRes  = await request.get(`${API_BASE}/devices/ip-address`, { headers: commonHeaders() });
         expect(ipRes.status()).toBe(200);

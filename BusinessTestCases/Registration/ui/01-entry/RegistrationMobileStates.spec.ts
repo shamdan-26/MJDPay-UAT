@@ -13,15 +13,15 @@ test.describe('Registration – Mobile step states', { tag: ['@registration', '@
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     });
 
-    test('should put keyboard focus in the mobile field on load', async () => {
+    test('should put keyboard focus in the mobile field on load', { annotation: [{ type: 'testcase', description: "RG-MOBST-01: Should put keyboard focus in the mobile field on load" }] }, async () => {
         await expect(mobilePage.mobileInput).toBeFocused();
     });
 
-    test('should expose a numeric input mode for the mobile field', async () => {
+    test('should expose a numeric input mode for the mobile field', { annotation: [{ type: 'testcase', description: "RG-MOBST-02: Should expose a numeric input mode for the mobile field" }] }, async () => {
         await expect(mobilePage.mobileInput).toHaveAttribute('inputmode', /numeric|tel/);
     });
 
-    test('should submit the mobile number when Enter is pressed in the field', async ({ page }) => {
+    test('should submit the mobile number when Enter is pressed in the field', { annotation: [{ type: 'testcase', description: "RG-MOBST-03: Should submit the mobile number when Enter is pressed in the field" }] }, async ({ page }) => {
         let sent = 0;
         await page.route(SEND_OTP, route => { sent++; return json(route, 200, { requestId: 'r', otpRequired: true, sessionToken: null, refreshToken: null }); });
         await mobilePage.mobileInput.fill(generateKSAMobile());
@@ -29,7 +29,7 @@ test.describe('Registration – Mobile step states', { tag: ['@registration', '@
         await expect.poll(() => sent).toBe(1);
     });
 
-    test('should keep Next from firing a second request while the first is in flight', async ({ page }) => {
+    test('should keep Next from firing a second request while the first is in flight', { annotation: [{ type: 'testcase', description: "RG-MOBST-04: Should keep Next from firing a second request while the first is in flight" }] }, async ({ page }) => {
         let sent = 0;
         await page.route(SEND_OTP, async route => {
             sent++;
@@ -43,7 +43,7 @@ test.describe('Registration – Mobile step states', { tag: ['@registration', '@
         expect(sent).toBe(1);
     });
 
-    test('should stay on the mobile step and keep the number when the server returns an error', async ({ page }) => {
+    test('should stay on the mobile step and keep the number when the server returns an error', { annotation: [{ type: 'testcase', description: "RG-MOBST-05: Should stay on the mobile step and keep the number when the server returns an error" }] }, async ({ page }) => {
         const mobile = generateKSAMobile();
         const err = apiError(500, 'INTERNAL_ERROR');
         await page.route(SEND_OTP, route => json(route, err.status, err.body));
@@ -54,7 +54,7 @@ test.describe('Registration – Mobile step states', { tag: ['@registration', '@
         await expect(mobilePage.mobileInput).toBeEnabled();
     });
 
-    test('should show an error and not open the OTP dialog when the number is rejected as already registered', async ({ page }) => {
+    test('should show an error and not open the OTP dialog when the number is rejected as already registered', { annotation: [{ type: 'testcase', description: "RG-MOBST-06: Should show an error and not open the OTP dialog when the number is rejected as already registered" }] }, async ({ page }) => {
         const err = apiError(409, 'PROFILE_ALREADY_EXISTS');
         await page.route(SEND_OTP, route => json(route, err.status, err.body));
         await mobilePage.mobileInput.fill(generateKSAMobile());
@@ -64,7 +64,7 @@ test.describe('Registration – Mobile step states', { tag: ['@registration', '@
     });
 
     for (const [label, pasted] of [['a +966-prefixed number', '+966512345678'], ['a 0-prefixed number', '0512345678'], ['a number with spaces and dashes', '51 234-5678']] as const) {
-        test(`should keep only digits (max 9) when ${label} is pasted`, async ({ page }) => {
+        test(`should keep only digits (max 9) when ${label} is pasted`, { annotation: [{ type: 'testcase', description: "RG-MOBST-07: Should keep only digits (max 9) when … is pasted" }] }, async ({ page }) => {
             await mobilePage.mobileInput.focus();
             await page.evaluate(text => {
                 const el = document.activeElement as HTMLInputElement;
@@ -77,12 +77,12 @@ test.describe('Registration – Mobile step states', { tag: ['@registration', '@
         });
     }
 
-    test('should show the country code prefix next to the field', async () => {
+    test('should show the country code prefix next to the field', { annotation: [{ type: 'testcase', description: "RG-MOBST-08: Should show the country code prefix next to the field" }] }, async () => {
         await expect(mobilePage.countryCode).toBeVisible();
         await expect(mobilePage.countryCode).toContainText(/966/);
     });
 
-    test('should move focus logically from the field to Next with the Tab key', async ({ page }) => {
+    test('should move focus logically from the field to Next with the Tab key', { annotation: [{ type: 'testcase', description: "RG-MOBST-09: Should move focus logically from the field to Next with the Tab key" }] }, async ({ page }) => {
         await mobilePage.mobileInput.fill(generateKSAMobile());
         await page.keyboard.press('Tab');
         await expect(mobilePage.nextButton).toBeFocused();

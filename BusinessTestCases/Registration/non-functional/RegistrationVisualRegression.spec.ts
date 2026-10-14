@@ -22,7 +22,7 @@ for (const step of STEPS) {
     for (const vp of VIEWPORTS) {
         for (const lang of ['en', 'ar'] as const) {
             for (const theme of ['light', 'dark'] as const) {
-                test(`${step.name} should match its ${vp.label} ${lang}/${theme} baseline`, { tag: ['@registration', '@ui', '@visual'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, async ({ page }) => {
+                test(`${step.name} should match its ${vp.label} ${lang}/${theme} baseline`, { tag: ['@registration', '@ui', '@visual'], annotation: [{ type: 'testcase', description: "RG-VIS-01: Step matches its viewport, language and theme baseline" }, { type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, async ({ page }) => {
                     test.setTimeout(120_000);
                     await page.setViewportSize({ width: vp.width, height: vp.height });
                     await page.emulateMedia({ colorScheme: theme, reducedMotion: 'reduce' });

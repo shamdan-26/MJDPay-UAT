@@ -1,18 +1,11 @@
-declare const process: { env: Record<string, string | undefined> };
 import { Page } from '@playwright/test';
-import { fetchOtpFromEmail } from '../../../support/emailOtp';
 
-export async function getOtpFromDb(mobile: string, maxAttempts = 10, delayMs = 2000): Promise<string> {
-    const env = process.env['ENV'] ?? 'dev';
-    // OTP_SOURCE=email reads the real OTP from the Mailosaur/IMAP inbox on every env (opt-in: dev's mail
-    // relay must be delivering OTP emails there first, see support/emailOtp.ts).
-    if (process.env['OTP_SOURCE'] === 'email') return fetchOtpFromEmail(mobile, maxAttempts, delayMs);
-    // UAT now accepts a fixed all-zero OTP for any mobile, same as dev — no
-    // longer limited to the dedicated DEV_OTP_ASSETS pool (see fillOTP's
-    // '0'-per-digit fallback for '' below; '918512' behaves identically).
-    // Skips the real IMAP/Azure round trip entirely.
-    if (env === 'dev' || env === 'uat') return '918512';
-    return fetchOtpFromEmail(mobile, maxAttempts, delayMs);
+/** Every environment accepts this fixed OTP for any mobile — no mailbox/DB round trip needed. */
+export const FIXED_OTP = '918512';
+
+/** Parameters are kept only so existing callers keep compiling. */
+export async function getOtpFromDb(_mobile?: string, _maxAttempts?: number, _delayMs?: number): Promise<string> {
+    return FIXED_OTP;
 }
 
 export async function fillOTP(page: Page, otp?: string) {

@@ -47,12 +47,12 @@ test.describe('Login — Admin status integration', { tag: ['@login', '@integrat
         }
     });
 
-    test('baseline: the account can sign in while active', async ({ request }) => {
+    test('baseline: the account can sign in while active', { annotation: [{ type: 'testcase', description: "LG-INT-01: Baseline: the account can sign in while active" }] }, async ({ request }) => {
         const res = await signIn(request, COMPANY, MOBILE, VALID_PASSWORD);
         expect(res.status(), await res.text()).toBe(200);
     });
 
-    test('should reject sign-in after an admin deactivates the account', async ({ request }) => {
+    test('should reject sign-in after an admin deactivates the account', { annotation: [{ type: 'testcase', description: "LG-INT-02: Should reject sign-in after an admin deactivates the account" }] }, async ({ request }) => {
         await accounts.goto();
         const details = await accounts.openAccountDetails(MOBILE);
         await details.setActiveStatus('Deactivate');
@@ -63,14 +63,14 @@ test.describe('Login — Admin status integration', { tag: ['@login', '@integrat
         expect(res.status()).toBeLessThan(500);
     });
 
-    test('should show a generic error in the UI for a deactivated account (no status detail leaked)', async ({ page, loginPage, otp }) => {
+    test('should show a generic error in the UI for a deactivated account (no status detail leaked)', { annotation: [{ type: 'testcase', description: "LG-INT-03: Should show a generic error in the UI for a deactivated account (no status detail leaked)" }] }, async ({ page, loginPage, otp }) => {
         await loginPage.goto((process.env['BASE_URL'] ?? 'https://dev-emi.dg-cash.app') + '/business/auth/login');
         await loginPage.fillAndSubmit(COMPANY, MOBILE, VALID_PASSWORD);
         await expect(otp.heading).not.toBeVisible({ timeout: 15000 });
         await expect(page.locator('body')).not.toContainText(/stack|exception|sql/i);
     });
 
-    test('should allow sign-in again after the admin re-activates the account', async ({ request }) => {
+    test('should allow sign-in again after the admin re-activates the account', { annotation: [{ type: 'testcase', description: "LG-INT-04: Should allow sign-in again after the admin re-activates the account" }] }, async ({ request }) => {
         await accounts.goto();
         const details = await accounts.openAccountDetails(MOBILE);
         await details.setActiveStatus('Activate');

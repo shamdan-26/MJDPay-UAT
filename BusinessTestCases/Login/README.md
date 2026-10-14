@@ -32,11 +32,17 @@ npm run test:dev -- BusinessTestCases/Login --grep @security     # one layer
 npm run test:dev -- BusinessTestCases/Login --list               # count without running
 ```
 
+## Categories (business capability — the folders stay layer-first)
+Coverage is read by capability; the full table with specs, manual sections and status is in `docs/test-plans/Login-Test-Plan.md` §5, and the duplicated-scenario owners are in the same section.
+1. Login page and form · 2. Authentication (credentials) · 3. OTP and device verification · 4. Session and token lifecycle · 5. First login and password lifecycle · 6. Account status and lockout · 7. Security · 8. API contract · 9. Localization · 10. Non-functional.
+New in `functional/`: `04-session/LoginTokenLifecycle.spec.ts` (498 sign-out, refresh-token TTL, OTP on every sign-in), `05-first-login/` and `06-pending/LoginPendingCases.spec.ts` (skipped placeholders, each with its blocker in the annotations). Direct `/auth/signin` calls used to get HTTP 412 on dev: the gateway validates `device-finger-print` (must match the `user-agent` and a registered device). `helpers/loginApi.ts` now builds it via `support/deviceFingerprint.ts` and `signIn()` works; the `api/signin` and `LoginApiSecurity` specs have not been re-run since the fix.
+
 ## Accounts (read before adding tests)
 - `LOGIN_*` — happy-path account. Successful-login tests only. Never wrong-password / lockout.
 - `NEGATIVE_*` — wrong-password / invalid-credential tests. Not locked out by the suite any more.
 - `LOCKOUT_*` — used only by the lockout test; it really locks it; `afterAll` unlocks it via Admin Portal → Accounts → Business → details → Users tab (needs `ADMIN_*` env vars, already in `.env.dev`).
 - `LOCKED_*`, `DEACTIVATED_*`, `AML_*`, `*_EXPIRED_*` — env-provisioned; dependent tests skip when unset.
+- `firstLoginAccounts` (`data/testAccounts.json`) — registration-created accounts still on the default password `Aa#123456` (`FIRST_LOGIN_DEFAULT_PASSWORD`). Sign-in returns 200 and the OTP; after OTP `918512` the app forces `/business/auth/reset-password`. Used by `functional/05-first-login/`: `FirstLoginUi.spec.ts` (accounts 0–4, one per worker for the form cases, never consumes one), `FirstLoginEndToEnd.spec.ts` (opt-in `FIRST_LOGIN_E2E=1`, consumes the account at `FIRST_LOGIN_E2E_INDEX`, default last, and sets the password to `Aa#1234567`), and `FirstLoginProbe.spec.ts` (opt-in `FIRST_LOGIN_PROBE=1`, re-checks which accounts are still first-time). A direct `signIn()` API call gets an empty 412 on dev for every user, so these specs sign in through the browser.
 
 ## Known weaknesses (not yet fixed)
 1. ~~Lockout vs parallel files~~ — fixed: lockout now uses the dedicated `LOCKOUT_*` account and skips when it is unset.

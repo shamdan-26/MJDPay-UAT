@@ -22,7 +22,7 @@ test.describe('Login — Happy Path (End-to-End)', { tag: ['@login', '@functiona
 
     // ── Step 1: Login form ────────────────────────────────────────────────────
 
-    test('should display the login form on page load', async () => {
+    test('should display the login form on page load', { annotation: [{ type: 'testcase', description: "LG-76: Login form present on load" }] }, async () => {
         await expect(loginPage.companyInput).toBeVisible();
         await expect(loginPage.mobileInput).toBeVisible();
         await expect(loginPage.passwordInput).toBeVisible();
@@ -30,27 +30,27 @@ test.describe('Login — Happy Path (End-to-End)', { tag: ['@login', '@functiona
         await expect(loginPage.loginButton).toBeDisabled();
     });
 
-    test('should enable the Log In button once all fields are filled', async () => {
+    test('should enable the Log In button once all fields are filled', { annotation: [{ type: 'testcase', description: "LG-77: Button enables once all fields are filled" }] }, async () => {
         await loginPage.fill(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
         await expect(loginPage.loginButton).toBeEnabled();
     });
 
     // ── Step 2: Validation card ───────────────────────────────────────────────
 
-    test('should dismiss the validation card after all steps complete', async ({ page }) => {
+    test('should dismiss the validation card after all steps complete', { annotation: [{ type: 'testcase', description: "LG-60: Card dismisses after all steps complete" }] }, async ({ page }) => {
         await loginPage.fillAndSubmit(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
         await expect(page.getByText('Just a moment...')).not.toBeVisible({ timeout: 30000 });
     });
 
     // ── Step 3: Dashboard ─────────────────────────────────────────────────────
 
-    test('should redirect away from the login page after submitting valid credentials', async ({ page }) => {
+    test('should redirect away from the login page after submitting valid credentials', { annotation: [{ type: 'testcase', description: "LG-79: Redirect away from login on valid login" }] }, async ({ page }) => {
         await loginPage.fillAndSubmit(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
         await handleOtpIfPresent(page);
         await expect(page).not.toHaveURL(/auth\/login/, { timeout: 30000 });
     });
 
-    test('should display the sidebar logo and brand name on the dashboard', async ({ page }) => {
+    test('should display the sidebar logo and brand name on the dashboard', { annotation: [{ type: 'testcase', description: "LG-80: Dashboard sidebar logo and brand shown" }] }, async ({ page }) => {
         await loginPage.fillAndSubmit(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
         await handleOtpIfPresent(page);
         await expect(page).not.toHaveURL(/auth\/login/, { timeout: 30000 });
@@ -58,7 +58,7 @@ test.describe('Login — Happy Path (End-to-End)', { tag: ['@login', '@functiona
         await expect(dashboard.brandName).toBeVisible();
     });
 
-    test('should display the sidebar navigation links on the dashboard', async ({ page }) => {
+    test('should display the sidebar navigation links on the dashboard', { annotation: [{ type: 'testcase', description: "LG-81: Dashboard sidebar navigation shown" }] }, async ({ page }) => {
         await loginPage.fillAndSubmit(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
         await handleOtpIfPresent(page);
         await expect(page).not.toHaveURL(/auth\/login/, { timeout: 30000 });
@@ -68,7 +68,7 @@ test.describe('Login — Happy Path (End-to-End)', { tag: ['@login', '@functiona
         await expect(dashboard.paymentsLink).toBeVisible();
     });
 
-    test('should display the header profile and notifications icons on the dashboard', async ({ page }) => {
+    test('should display the header profile and notifications icons on the dashboard', { annotation: [{ type: 'testcase', description: "LG-82: Header profile & notification icons shown" }] }, async ({ page }) => {
         await loginPage.fillAndSubmit(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
         await handleOtpIfPresent(page);
         await expect(page).not.toHaveURL(/auth\/login/, { timeout: 30000 });
@@ -76,21 +76,21 @@ test.describe('Login — Happy Path (End-to-End)', { tag: ['@login', '@functiona
         await expect(dashboard.notificationsIcon).toBeVisible();
     });
 
-    test('should display the wallet balance widget on the dashboard', async ({ page }) => {
+    test('should display the wallet balance widget on the dashboard', { annotation: [{ type: 'testcase', description: "LG-83: Wallet balance widget shown" }] }, async ({ page }) => {
         await loginPage.fillAndSubmit(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
         await handleOtpIfPresent(page);
         await expect(page).not.toHaveURL(/auth\/login/, { timeout: 30000 });
         await expect(dashboard.walletBalanceSar).toBeVisible({ timeout: 15000 });
     });
 
-    test('should display the last transactions widget on the dashboard', async ({ page }) => {
+    test('should display the last transactions widget on the dashboard', { annotation: [{ type: 'testcase', description: "LG-84: Last transactions widget shown" }] }, async ({ page }) => {
         await loginPage.fillAndSubmit(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
         await handleOtpIfPresent(page);
         await expect(page).not.toHaveURL(/auth\/login/, { timeout: 30000 });
         await expect(dashboard.lastTransactionsContainer).toBeVisible({ timeout: 15000 });
     });
 
-    test('should display the last login timestamp on the dashboard', async ({ page }) => {
+    test('should display the last login timestamp on the dashboard', { annotation: [{ type: 'testcase', description: "LG-85: Last login timestamp shown" }] }, async ({ page }) => {
         await loginPage.fillAndSubmit(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
         await handleOtpIfPresent(page);
         await expect(page).not.toHaveURL(/auth\/login/, { timeout: 30000 });
@@ -99,7 +99,7 @@ test.describe('Login — Happy Path (End-to-End)', { tag: ['@login', '@functiona
 
     // ── Step 4: Logout ────────────────────────────────────────────────────────
 
-    test('should log out successfully and return to the login page', async ({ page }) => {
+    test('should log out successfully and return to the login page', { annotation: [{ type: 'testcase', description: "LG-86: Logout returns to login page" }] }, async ({ page }) => {
         await loginPage.fillAndSubmit(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
         await handleOtpIfPresent(page);
         await expect(page).not.toHaveURL(/auth\/login/, { timeout: 30000 });

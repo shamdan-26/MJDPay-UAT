@@ -61,39 +61,39 @@ test.describe('Login Validation Popup — UI', { tag: ['@login', '@ui'], annotat
         await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
     });
 
-    test('should show the "Just a moment..." heading', async ({ page }) => {
+    test('should show the "Just a moment..." heading', { annotation: [{ type: 'testcase', description: "LG-54: \"Just a moment...\" heading appears on submit" }] }, async ({ page }) => {
         await submitAndShowCard(page, loginPage);
         await expect(validationCard(page)).toBeVisible();
     });
 
-    test('should show the popup subtitle text', async ({ page }) => {
+    test('should show the popup subtitle text', { annotation: [{ type: 'testcase', description: "LG-55: Subtitle text shown" }] }, async ({ page }) => {
         await submitAndShowCard(page, loginPage);
         await expect(page.getByText(/preparing a secure session for this device/i)).toBeVisible();
     });
 
-    test('should display all three validation steps', async ({ page }) => {
+    test('should display all three validation steps', { annotation: [{ type: 'testcase', description: "LG-56: All three step labels shown" }] }, async ({ page }) => {
         await submitAndShowCard(page, loginPage);
         await expect(page.getByText(/Verifying your credentials/i)).toBeVisible();
         await expect(page.getByText(/Preparing this device/i)).toBeVisible();
         await expect(page.getByText(/Securing your session/i)).toBeVisible();
     });
 
-    test('should show step 1 "Verifying your credentials"', async ({ page }) => {
+    test('should show step 1 "Verifying your credentials"', { annotation: [{ type: 'testcase', description: "LG-POP-01: Should show step 1 \"Verifying your credentials\"" }] }, async ({ page }) => {
         await submitAndShowCard(page, loginPage);
         await expect(page.getByText(/Verifying your credentials/i)).toBeVisible();
     });
 
-    test('should show step 2 "Preparing this device"', async ({ page }) => {
+    test('should show step 2 "Preparing this device"', { annotation: [{ type: 'testcase', description: "LG-POP-02: Should show step 2 \"Preparing this device\"" }] }, async ({ page }) => {
         await submitAndShowCard(page, loginPage);
         await expect(page.getByText(/Preparing this device/i)).toBeVisible();
     });
 
-    test('should show step 3 "Securing your session"', async ({ page }) => {
+    test('should show step 3 "Securing your session"', { annotation: [{ type: 'testcase', description: "LG-POP-03: Should show step 3 \"Securing your session\"" }] }, async ({ page }) => {
         await submitAndShowCard(page, loginPage);
         await expect(page.getByText(/Securing your session/i)).toBeVisible();
     });
 
-    test('should show the OTP dialog after the validation card completes (when OTP is enabled)', async ({ page }) => {
+    test('should show the OTP dialog after the validation card completes (when OTP is enabled)', { annotation: [{ type: 'testcase', description: "LG-63: OTP dialog appears when OTP is enabled" }] }, async ({ page }) => {
         await submitAndShowCard(page, loginPage);
         await expect(validationCard(page)).not.toBeVisible({ timeout: 20000 });
         const otp = new OtpPage(page);

@@ -71,7 +71,7 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3) — read-
         await expect(page.getByRole('textbox', { name: /monthly expected number|العدد الشهري المتوقع للفواتير/i })).toBeVisible();
     });
 
-    test('should show the correct placeholder for Monthly Expected Number Of Bills', async () => {
+    test('should show the correct placeholder for Monthly Expected Number Of Bills', { annotation: [{ type: 'testcase', description: "RF-12: Show the correct placeholder for Monthly Expected Number Of Bills" }] }, async () => {
         await expect(page.getByRole('textbox', { name: /monthly expected number|العدد الشهري المتوقع للفواتير/i }))
             .toHaveAttribute('placeholder', /2000/i);
     });
@@ -86,7 +86,7 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3) — read-
         await expect(page.getByRole('textbox', { name: /monthly expected sum|إجمالي الفواتير الصادرة/i })).toBeVisible();
     });
 
-    test('should show the correct placeholder for Monthly Expected Sum Of Bills', async () => {
+    test('should show the correct placeholder for Monthly Expected Sum Of Bills', { annotation: [{ type: 'testcase', description: "RF-15: Show the correct placeholder for Monthly Expected Sum Of Bills" }] }, async () => {
         await expect(page.getByRole('textbox', { name: /monthly expected sum|إجمالي الفواتير الصادرة/i }))
             .toHaveAttribute('placeholder', /2000/i);
     });
@@ -172,11 +172,11 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3) — read-
 
     // ── Navigation buttons ────────────────────────────────────────────────────
 
-    test('should display the Back button', async () => {
+    test('should display the Back button', { annotation: [{ type: 'testcase', description: "RF-28: Display the Back button" }] }, async () => {
         await expect(page.getByRole('button', { name: /back|رجوع/i })).toBeVisible();
     });
 
-    test('should display the Next button', async () => {
+    test('should display the Next button', { annotation: [{ type: 'testcase', description: "RF-29: Display the Next button" }] }, async () => {
         await expect(page.getByRole('button', { name: /next|التالي/i })).toBeVisible();
     });
 
@@ -186,15 +186,15 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3) — read-
 
     // ── Footer ────────────────────────────────────────────────────────────────
 
-    test('should display "Already have an account?" text', async () => {
+    test('should display "Already have an account?" text', { annotation: [{ type: 'testcase', description: "RF-31: Display \"Already have an account?\" text" }] }, async () => {
         await expect(page.locator('#login-line.new-user span').filter({ visible: true }).first()).toBeVisible();
     });
 
-    test('should display the Log In link', async () => {
+    test('should display the Log In link', { annotation: [{ type: 'testcase', description: "RF-32: Display the Log In link" }] }, async () => {
         await expect(financial.loginLink).toContainText(/log.?in|تسجيل الدخول/i);
     });
 
-    test('should display "By continuing, you agree to our" text', async () => {
+    test('should display "By continuing, you agree to our" text', { annotation: [{ type: 'testcase', description: "RF-33: Display \"By continuing, you agree to our\" text" }] }, async () => {
         // .filter({ visible: true }) is required here — like the "Already have an
         // account?" test above, .first() alone can land on a hidden duplicate
         // (Angular CDK a11y live-announcer clone) instead of the rendered span.
@@ -204,11 +204,11 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3) — read-
         ).toBeVisible();
     });
 
-    test('should display Terms & Conditions link', async () => {
+    test('should display Terms & Conditions link', { annotation: [{ type: 'testcase', description: "RF-34: Display Terms & Conditions link" }] }, async () => {
         await expect(page.locator('span.text-primary.link').filter({ hasText: /terms & conditions|الشروط والأحكام/i }).filter({ visible: true }).first()).toBeVisible();
     });
 
-    test('should display Privacy Policy link', async () => {
+    test('should display Privacy Policy link', { annotation: [{ type: 'testcase', description: "RF-35: Display Privacy Policy link" }] }, async () => {
         await expect(page.locator('span.text-primary.link').filter({ hasText: /privacy policy|سياسة الخصوصية/i }).filter({ visible: true }).first()).toBeVisible();
     });
 });

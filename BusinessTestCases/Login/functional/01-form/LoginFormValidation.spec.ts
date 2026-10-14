@@ -40,19 +40,19 @@ test.describe('Login — Button State', { tag: ['@login', '@functional', '@form'
         await expect(loginPage.loginButton).toBeDisabled();
     });
 
-    test('should be disabled when company and mobile are filled but not password', async () => {
+    test('should be disabled when company and mobile are filled but not password', { annotation: [{ type: 'testcase', description: "LG-36: Disabled with Company + Mobile, no Password" }] }, async () => {
         await loginPage.companyInput.fill(NEGATIVE_COMPANY);
         await loginPage.mobileInput.fill(NEGATIVE_MOBILE);
         await expect(loginPage.loginButton).toBeDisabled();
     });
 
-    test('should be disabled when company and password are filled but not mobile', async () => {
+    test('should be disabled when company and password are filled but not mobile', { annotation: [{ type: 'testcase', description: "LG-37: Disabled with Company + Password, no Mobile" }] }, async () => {
         await loginPage.companyInput.fill(NEGATIVE_COMPANY);
         await loginPage.passwordInput.fill(VALID_PASSWORD);
         await expect(loginPage.loginButton).toBeDisabled();
     });
 
-    test('should be disabled when mobile and password are filled but not company', async () => {
+    test('should be disabled when mobile and password are filled but not company', { annotation: [{ type: 'testcase', description: "LG-38: Disabled with Mobile + Password, no Company" }] }, async () => {
         await loginPage.mobileInput.fill(NEGATIVE_MOBILE);
         await loginPage.passwordInput.fill(VALID_PASSWORD);
         await expect(loginPage.loginButton).toBeDisabled();
@@ -98,42 +98,42 @@ test.describe('Login — Mobile Number Validation', { tag: ['@login', '@function
         await loginPage.passwordInput.fill(VALID_PASSWORD);
     });
 
-    test('should keep Log In button disabled when mobile is too short (4 digits)', async () => {
+    test('should keep Log In button disabled when mobile is too short (4 digits)', { annotation: [{ type: 'testcase', description: "LG-44: Mobile too short (4 digits)" }] }, async () => {
         await loginPage.mobileInput.fill('5123');
         await expect(loginPage.loginButton).toBeDisabled();
     });
 
-    test('should keep Log In button disabled when mobile is 8 digits (one short of minimum)', async () => {
+    test('should keep Log In button disabled when mobile is 8 digits (one short of minimum)', { annotation: [{ type: 'testcase', description: "LG-45: Mobile one digit short (8 digits)" }] }, async () => {
         await loginPage.mobileInput.fill('50021788');
         await expect(loginPage.loginButton).toBeDisabled();
     });
 
-    test('should keep Log In button disabled when mobile has a leading zero', async () => {
+    test('should keep Log In button disabled when mobile has a leading zero', { annotation: [{ type: 'testcase', description: "LG-46: Mobile with leading zero rejected" }] }, async () => {
         await loginPage.mobileInput.fill('0500021788');
         await expect(loginPage.loginButton).toBeDisabled();
     });
 
-    test('should trim the mobile field to 9 digits when more than 9 are entered', async () => {
+    test('should trim the mobile field to 9 digits when more than 9 are entered', { annotation: [{ type: 'testcase', description: "LG-47: Mobile field truncates beyond 9 digits" }] }, async () => {
         await loginPage.mobileInput.fill('5001234567');
         await expect(loginPage.mobileInput).toHaveValue('500123456');
     });
 
-    test('should keep Log In button disabled when mobile does not start with 5', async () => {
+    test('should keep Log In button disabled when mobile does not start with 5', { annotation: [{ type: 'testcase', description: "LG-48: Mobile not starting with 5 rejected" }] }, async () => {
         await loginPage.mobileInput.fill('600318143');
         await expect(loginPage.loginButton).toBeDisabled();
     });
 
-    test('should not accept alphabetic characters in the mobile field', async () => {
+    test('should not accept alphabetic characters in the mobile field', { annotation: [{ type: 'testcase', description: "LG-49: Mobile field rejects letters" }] }, async () => {
         await loginPage.mobileInput.pressSequentially('abc');
         await expect(loginPage.mobileInput).toHaveValue('');
     });
 
-    test('should not accept special characters in the mobile field', async () => {
+    test('should not accept special characters in the mobile field', { annotation: [{ type: 'testcase', description: "LG-50: Mobile field rejects special characters" }] }, async () => {
         await loginPage.mobileInput.pressSequentially('!@#');
         await expect(loginPage.mobileInput).toHaveValue('');
     });
 
-    test('should enable the Log In button with a valid 9-digit mobile starting with 5', async () => {
+    test('should enable the Log In button with a valid 9-digit mobile starting with 5', { annotation: [{ type: 'testcase', description: "LG-51: Valid 9-digit mobile starting with 5 enables button" }] }, async () => {
         await loginPage.mobileInput.fill('500021788');
         await expect(loginPage.loginButton).toBeEnabled();
     });
@@ -153,14 +153,14 @@ test.describe('Login — Password Visibility', { tag: ['@login', '@functional', 
         await loginPage.goto(LOGIN_URL);
     });
 
-    test('should reveal password text when the show password toggle is clicked', async () => {
+    test('should reveal password text when the show password toggle is clicked', { annotation: [{ type: 'testcase', description: "LG-52: Show-password toggle reveals text" }] }, async () => {
         await loginPage.passwordInput.fill(VALID_PASSWORD);
         await expect(loginPage.passwordInput).toHaveAttribute('type', 'password');
         await loginPage.showPasswordToggle.click();
         await expect(loginPage.passwordInput).toHaveAttribute('type', 'text');
     });
 
-    test('should re-mask password when the toggle is clicked a second time', async () => {
+    test('should re-mask password when the toggle is clicked a second time', { annotation: [{ type: 'testcase', description: "LG-53: Show-password toggle re-masks on second click" }] }, async () => {
         await loginPage.passwordInput.fill(VALID_PASSWORD);
         await loginPage.showPasswordToggle.click();
         await expect(loginPage.passwordInput).toHaveAttribute('type', 'text');

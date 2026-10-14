@@ -40,7 +40,7 @@ test.describe('Login — Validation Card', { tag: ['@login', '@functional', '@ot
         await loginPage.goto(LOGIN_URL);
     });
 
-    test('should NOT display the validation card when login fails with wrong password', async ({ page }) => {
+    test('should NOT display the validation card when login fails with wrong password', { annotation: [{ type: 'testcase', description: "LG-61: Card does NOT appear on wrong password" }] }, async ({ page }) => {
         await loginPage.fill(NEGATIVE_COMPANY, NEGATIVE_MOBILE, WRONG_PASSWORD);
         await loginPage.submit();
         await expect(page.getByText('Just a moment...')).not.toBeVisible({ timeout: 5000 });
@@ -60,7 +60,7 @@ test.describe('Login — Validation Card', { tag: ['@login', '@functional', '@ot
         return !page.url().includes('/auth/login');
     };
 
-    test('should mark step 1 "Verifying your credentials" as complete with a checkmark', async ({ page }) => {
+    test('should mark step 1 "Verifying your credentials" as complete with a checkmark', { annotation: [{ type: 'testcase', description: "LG-57: Step 1 marked complete with checkmark" }] }, async ({ page }) => {
         await submitWithSequentialPassword(page, loginPage);
         await page.getByText('Just a moment...').waitFor({ state: 'visible', timeout: 15000 }).catch(() => {});
         await expect
@@ -71,7 +71,7 @@ test.describe('Login — Validation Card', { tag: ['@login', '@functional', '@ot
             .toBe(true);
     });
 
-    test('should mark step 2 "Preparing this device" as complete with a checkmark', async ({ page }) => {
+    test('should mark step 2 "Preparing this device" as complete with a checkmark', { annotation: [{ type: 'testcase', description: "LG-58: Step 2 marked complete with checkmark" }] }, async ({ page }) => {
         await submitWithSequentialPassword(page, loginPage);
         await page.getByText('Just a moment...').waitFor({ state: 'visible', timeout: 15000 }).catch(() => {});
         await expect
@@ -82,7 +82,7 @@ test.describe('Login — Validation Card', { tag: ['@login', '@functional', '@ot
             .toBe(true);
     });
 
-    test('should show a spinner on step 3 "Securing your session" while it is in progress', async ({ page }) => {
+    test('should show a spinner on step 3 "Securing your session" while it is in progress', { annotation: [{ type: 'testcase', description: "LG-59: Step 3 shows a spinner while in progress" }] }, async ({ page }) => {
         await submitWithSequentialPassword(page, loginPage);
         await page.getByText('Just a moment...').waitFor({ state: 'visible', timeout: 15000 }).catch(() => {});
 
@@ -109,7 +109,9 @@ test.describe('Login — Validation Card', { tag: ['@login', '@functional', '@ot
 
     // ── Post-card transition ──────────────────────────────────────────────────
 
-    test.skip('should redirect to dashboard after the validation card dismisses (when OTP is disabled)', async ({ page }) => {
+    // SKIPPED, LIKELY OBSOLETE: web login always requires OTP (EMI-4625, "Web portal login always needs OTP"), so the
+    // "OTP is disabled" path this case needs cannot occur. Retire the case (and manual LG-62) once the business confirms.
+    test.skip('should redirect to dashboard after the validation card dismisses (when OTP is disabled)', { annotation: [{ type: 'testcase', description: "LG-62: Redirect to dashboard when OTP is disabled" }] }, async ({ page }) => {
         await submitWithSequentialPassword(page, loginPage);
 
         // The card can flash and dismiss faster than an assertion can catch it —

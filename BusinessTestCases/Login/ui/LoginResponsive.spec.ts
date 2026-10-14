@@ -19,12 +19,12 @@ test.describe('Login — Responsive layout', { tag: ['@login', '@ui'], annotatio
                 await loginPage.goto(LOGIN_URL);
             });
 
-            test('should not scroll horizontally', async ({ page }) => {
+            test('should not scroll horizontally', { annotation: [{ type: 'testcase', description: "LG-RESP-01: Should not scroll horizontally" }] }, async ({ page }) => {
                 const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
                 expect(overflow).toBeLessThanOrEqual(1);
             });
 
-            test('should keep all form fields and the Log In button inside the viewport width', async ({ loginPage }) => {
+            test('should keep all form fields and the Log In button inside the viewport width', { annotation: [{ type: 'testcase', description: "LG-RESP-02: Should keep all form fields and the Log In button inside the viewport width" }] }, async ({ loginPage }) => {
                 for (const el of [loginPage.companyInput, loginPage.mobileInput, loginPage.passwordInput, loginPage.loginButton]) {
                     await el.scrollIntoViewIfNeeded();
                     const box = await el.boundingBox();
@@ -34,14 +34,14 @@ test.describe('Login — Responsive layout', { tag: ['@login', '@ui'], annotatio
                 }
             });
 
-            test('should offer touch targets of at least 32px height for the primary controls', async ({ loginPage }) => {
+            test('should offer touch targets of at least 32px height for the primary controls', { annotation: [{ type: 'testcase', description: "LG-RESP-03: Should offer touch targets of at least 32px height for the primary controls" }] }, async ({ loginPage }) => {
                 for (const el of [loginPage.companyInput, loginPage.mobileInput, loginPage.passwordInput, loginPage.loginButton]) {
                     const box = await el.boundingBox();
                     expect(box!.height).toBeGreaterThanOrEqual(32);
                 }
             });
 
-            test('should keep the Forgot Password and Sign Up links reachable', async ({ loginPage }) => {
+            test('should keep the Forgot Password and Sign Up links reachable', { annotation: [{ type: 'testcase', description: "LG-RESP-04: Should keep the Forgot Password and Sign Up links reachable" }] }, async ({ loginPage }) => {
                 await loginPage.forgotPasswordLink.scrollIntoViewIfNeeded();
                 await expect(loginPage.forgotPasswordLink).toBeVisible();
                 await loginPage.signUpLink.scrollIntoViewIfNeeded();
@@ -50,7 +50,7 @@ test.describe('Login — Responsive layout', { tag: ['@login', '@ui'], annotatio
         });
     }
 
-    test('should keep the layout intact after rotating from portrait to landscape', async ({ page, loginPage }) => {
+    test('should keep the layout intact after rotating from portrait to landscape', { annotation: [{ type: 'testcase', description: "LG-RESP-05: Should keep the layout intact after rotating from portrait to landscape" }] }, async ({ page, loginPage }) => {
         await page.setViewportSize({ width: 375, height: 812 });
         await loginPage.goto(LOGIN_URL);
         await page.setViewportSize({ width: 812, height: 375 });

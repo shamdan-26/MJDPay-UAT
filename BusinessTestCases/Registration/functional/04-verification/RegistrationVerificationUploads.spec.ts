@@ -281,7 +281,7 @@ test.describe('Registration – Verification & Uploads Step (Tab 3 of 3)', { tag
 
     // ── NAFATH notice ─────────────────────────────────────────────────────────
 
-    test('should display the post-submit NAFATH verification notice', async () => {
+    test('should display the post-submit NAFATH verification notice', { annotation: [{ type: 'testcase', description: "RVU-69: Display the post-submit NAFATH verification notice" }] }, async () => {
         await expect(
             page.getByText(/otp|nafath|نفاذ/i).filter({ hasText: /verif|تحقق/i }).first()
         ).toBeVisible();
@@ -327,7 +327,7 @@ test.describe('Registration – Verification & Uploads Step (Tab 3 of 3)', { tag
 
     // ── Footer ────────────────────────────────────────────────────────────────
 
-    test('should display Terms & Conditions link', async () => {
+    test('should display Terms & Conditions link', { annotation: [{ type: 'testcase', description: "RVU-72: Display Terms & Conditions link" }] }, async () => {
         // Confirmed live: the footer (and its Terms/Privacy links) is duplicated
         // once per wizard step panel — completed steps stay in the DOM rather
         // than unmounting — so a page-wide text search resolves to 3 elements
@@ -336,7 +336,7 @@ test.describe('Registration – Verification & Uploads Step (Tab 3 of 3)', { tag
         await expect(page.getByText(/terms & conditions|الشروط والأحكام/i).filter({ visible: true }).first()).toBeVisible();
     });
 
-    test('should display Privacy Policy link', async () => {
+    test('should display Privacy Policy link', { annotation: [{ type: 'testcase', description: "RVU-73: Display Privacy Policy link" }] }, async () => {
         await expect(page.getByText(/privacy policy|سياسة الخصوصية/i).filter({ visible: true }).first()).toBeVisible();
     });
 });

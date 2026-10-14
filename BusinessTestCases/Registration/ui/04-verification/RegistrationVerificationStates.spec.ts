@@ -19,7 +19,7 @@ test.describe('Registration – Verification & Uploads states', { tag: ['@regist
         verification = new RegistrationVerificationPage(page);
     });
 
-    test('should show an error and keep Sign Up disabled when the IBAN proof upload fails (500)', async () => {
+    test('should show an error and keep Sign Up disabled when the IBAN proof upload fails (500)', { annotation: [{ type: 'testcase', description: "RG-VERST-01: Should show an error and keep Sign Up disabled when the IBAN proof upload fails (500)" }] }, async () => {
         const err = apiError(500, 'FILE_UPLOAD_FAILED');
         await page.route(UPLOAD, route => json(route, err.status, err.body));
         await goToVerificationStepMocked(page);
@@ -30,7 +30,7 @@ test.describe('Registration – Verification & Uploads states', { tag: ['@regist
         await expect(verification.signUpButton).toBeDisabled();
     });
 
-    test('should let a failed upload be retried with the same file', async () => {
+    test('should let a failed upload be retried with the same file', { annotation: [{ type: 'testcase', description: "RG-VERST-02: Should let a failed upload be retried with the same file" }] }, async () => {
         let calls = 0;
         await page.route(UPLOAD, route => {
             calls++;
@@ -44,7 +44,7 @@ test.describe('Registration – Verification & Uploads states', { tag: ['@regist
         await expect.poll(() => calls).toBe(2);
     });
 
-    test('should reject a renamed non-PDF (server says invalid file) without enabling Sign Up', async () => {
+    test('should reject a renamed non-PDF (server says invalid file) without enabling Sign Up', { annotation: [{ type: 'testcase', description: "RG-VERST-03: Should reject a renamed non-PDF (server says invalid file) without enabling Sign Up" }] }, async () => {
         const err = apiError(400, 'INVALID_FILE_TYPE');
         await page.route(UPLOAD, route => json(route, err.status, err.body));
         await goToVerificationStepMocked(page);
@@ -54,14 +54,14 @@ test.describe('Registration – Verification & Uploads states', { tag: ['@regist
         await expect(verification.signUpButton).toBeDisabled();
     });
 
-    test('should not enable Sign Up for a zero-byte file', async () => {
+    test('should not enable Sign Up for a zero-byte file', { annotation: [{ type: 'testcase', description: "RG-VERST-04: Should not enable Sign Up for a zero-byte file" }] }, async () => {
         await page.route(UPLOAD, route => json(route, 400, apiError(400, 'EMPTY_FILE').body));
         await goToVerificationStepMocked(page);
         await page.locator('input[type="file"]').first().setInputFiles({ name: 'empty.pdf', mimeType: 'application/pdf', buffer: Buffer.alloc(0) });
         await expect(verification.signUpButton).toBeDisabled();
     });
 
-    test('should replace the IBAN proof when a second file is chosen', async () => {
+    test('should replace the IBAN proof when a second file is chosen', { annotation: [{ type: 'testcase', description: "RG-VERST-05: Should replace the IBAN proof when a second file is chosen" }] }, async () => {
         const ids: string[] = [];
         await page.route(UPLOAD, route => { const id = `file-${ids.length + 1}`; ids.push(id); return json(route, 200, { fileId: id }); });
         await goToVerificationStepMocked(page);
@@ -73,7 +73,7 @@ test.describe('Registration – Verification & Uploads states', { tag: ['@regist
         await expect(page.getByText('second.pdf')).toBeVisible();
     });
 
-    test('should keep the entered IBAN and VAT number after going Back and returning', async () => {
+    test('should keep the entered IBAN and VAT number after going Back and returning', { annotation: [{ type: 'testcase', description: "RG-VERST-06: Should keep the entered IBAN and VAT number after going Back and returning" }] }, async () => {
         await goToVerificationStepMocked(page);
         await verification.ibanInput.fill(VALID_IBAN);
         await verification.vatInput.fill(VALID_VAT_NUMBER);
@@ -84,7 +84,7 @@ test.describe('Registration – Verification & Uploads states', { tag: ['@regist
         await expect(verification.vatInput).toHaveValue(VALID_VAT_NUMBER);
     });
 
-    test('should upper-case a lower-case IBAN', async () => {
+    test('should upper-case a lower-case IBAN', { annotation: [{ type: 'testcase', description: "RG-VERST-07: Should upper-case a lower-case IBAN" }] }, async () => {
         await goToVerificationStepMocked(page);
         await verification.ibanInput.fill(VALID_IBAN.toLowerCase());
         await expect(verification.ibanInput).toHaveValue(VALID_IBAN.toUpperCase());
@@ -100,7 +100,7 @@ test.describe('Registration – Verification & Uploads states', { tag: ['@regist
             await expect(verification.signUpButton).toBeEnabled({ timeout: 15000 });
         }
 
-        test('should stay on the step with Sign Up usable again when registration fails (500)', async () => {
+        test('should stay on the step with Sign Up usable again when registration fails (500)', { annotation: [{ type: 'testcase', description: "RG-VERST-08: Should stay on the step with Sign Up usable again when registration fails (500)" }] }, async () => {
             await page.route(UPLOAD, route => json(route, 200, { fileId: 'file-x' }));
             const err = apiError(500, 'INTERNAL_ERROR');
             await page.route(REGISTER, route => route.request().method() === 'POST' ? json(route, err.status, err.body) : route.continue());
@@ -111,7 +111,7 @@ test.describe('Registration – Verification & Uploads states', { tag: ['@regist
             await expect(verification.signUpButton).toBeEnabled({ timeout: 15000 });
         });
 
-        test('should send only one registration request when Sign Up is double-clicked', async () => {
+        test('should send only one registration request when Sign Up is double-clicked', { annotation: [{ type: 'testcase', description: "RG-VERST-09: Should send only one registration request when Sign Up is double-clicked" }] }, async () => {
             let calls = 0;
             await page.route(UPLOAD, route => json(route, 200, { fileId: 'file-x' }));
             await page.route(REGISTER, async route => {
@@ -127,7 +127,7 @@ test.describe('Registration – Verification & Uploads states', { tag: ['@regist
             expect(calls).toBe(1);
         });
 
-        test('should send the uploaded file ids and the IBAN/VAT values in the registration request', async () => {
+        test('should send the uploaded file ids and the IBAN/VAT values in the registration request', { annotation: [{ type: 'testcase', description: "RG-VERST-10: Should send the uploaded file ids and the IBAN/VAT values in the registration request" }] }, async () => {
             let body: Record<string, unknown> | undefined;
             await page.route(UPLOAD, route => json(route, 200, { fileId: 'file-x' }));
             await page.route(REGISTER, route => {

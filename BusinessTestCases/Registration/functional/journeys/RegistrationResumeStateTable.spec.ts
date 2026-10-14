@@ -45,7 +45,7 @@ test.describe('Registration – Resume state table (profile-registration-type fl
     test.beforeEach(() => { test.setTimeout(120_000); });
 
     for (const row of TABLE) {
-        test(`should land on ${row.expect} for ${row.label}`, async ({ page }) => {
+        test(`should land on ${row.expect} for ${row.label}`, { annotation: [{ type: 'testcase', description: "RG-RESUME-01: Should land on … for …" }] }, async ({ page }) => {
             await mockProfileType(page, 201, { ...NEW_APPLICATION_STATE, ...row.flags });
             await goToInfoStepMocked(page);
             const info = new RegistrationInfoPage(page);
@@ -59,7 +59,7 @@ test.describe('Registration – Resume state table (profile-registration-type fl
         });
     }
 
-    test('should never land past Contract for an application that is already complete', async ({ page }) => {
+    test('should never land past Contract for an application that is already complete', { annotation: [{ type: 'testcase', description: "RG-RESUME-02: Should never land past Contract for an application that is already complete" }] }, async ({ page }) => {
         await mockProfileType(page, 201, { ...NEW_APPLICATION_STATE, isCompletedForm: true, isProductAssigned: true, isContractAccepted: true, isGetNafathStatusCompleted: true, isGetNafathRandomNumberCompleted: true });
         await goToInfoStepMocked(page);
         const info = new RegistrationInfoPage(page);

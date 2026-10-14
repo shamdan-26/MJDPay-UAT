@@ -11,7 +11,7 @@ const BUDGET = { firstContentMs: 5_000, stepTransitionMs: 4_000, uploadUnderSlow
 test.describe('Registration – Performance budgets', { tag: ['@registration', '@ui', '@performance'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
     test.beforeEach(() => { test.setTimeout(150_000); });
 
-    test(`should render the mobile step within ${BUDGET.firstContentMs}ms (largest contentful paint)`, async ({ page }) => {
+    test(`should render the mobile step within ${BUDGET.firstContentMs}ms (largest contentful paint)`, { annotation: [{ type: 'testcase', description: "RG-PERF-01: Should render the mobile step within …ms (largest contentful paint)" }] }, async ({ page }) => {
         await page.addInitScript(() => {
             (window as unknown as { __lcp: number }).__lcp = 0;
             new PerformanceObserver(list => {
@@ -27,7 +27,7 @@ test.describe('Registration – Performance budgets', { tag: ['@registration', '
         expect(lcp, `LCP ${Math.round(lcp)}ms`).toBeLessThan(BUDGET.firstContentMs);
     });
 
-    test(`should move from Mobile to Business Info within ${BUDGET.stepTransitionMs}ms of pressing Next (mocked backend)`, async ({ page }) => {
+    test(`should move from Mobile to Business Info within ${BUDGET.stepTransitionMs}ms of pressing Next (mocked backend)`, { annotation: [{ type: 'testcase', description: "RG-PERF-02: Should move from Mobile to Business Info within …ms of pressing Next (mocked backend)" }] }, async ({ page }) => {
         await page.route('**/emi-profile/api/v1/register/mobile/otp', route => json(route, 200, { requestId: 'r', otpRequired: false, sessionToken: { token: 'a.b.c', expirationDuration: 600000 }, refreshToken: { token: 'd.e.f', expirationDuration: 1200000 } }));
         await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded' });
         const mobilePage = new RegistrationMobilePage(page);
@@ -40,7 +40,7 @@ test.describe('Registration – Performance budgets', { tag: ['@registration', '
         expect(elapsed).toBeLessThan(BUDGET.stepTransitionMs);
     });
 
-    test('should keep the main thread responsive (no long task over 500ms) while loading Business Info', async ({ page }) => {
+    test('should keep the main thread responsive (no long task over 500ms) while loading Business Info', { annotation: [{ type: 'testcase', description: "RG-PERF-03: Should keep the main thread responsive (no long task over 500ms) while loading Business Info" }] }, async ({ page }) => {
         await page.addInitScript(() => {
             (window as unknown as { __longest: number }).__longest = 0;
             new PerformanceObserver(list => {
@@ -53,7 +53,7 @@ test.describe('Registration – Performance budgets', { tag: ['@registration', '
         expect(longest).toBeLessThan(500);
     });
 
-    test(`should finish a 5MB upload within ${BUDGET.uploadUnderSlow3gMs}ms on a throttled connection (mocked server)`, async ({ page, context }) => {
+    test(`should finish a 5MB upload within ${BUDGET.uploadUnderSlow3gMs}ms on a throttled connection (mocked server)`, { annotation: [{ type: 'testcase', description: "RG-PERF-04: Should finish a 5MB upload within …ms on a throttled connection (mocked server)" }] }, async ({ page, context }) => {
         await page.route('**/file/attachment/upload**', route => json(route, 200, { fileId: 'file-x' }));
         await goToVerificationStepMocked(page);
         const cdp = await context.newCDPSession(page);

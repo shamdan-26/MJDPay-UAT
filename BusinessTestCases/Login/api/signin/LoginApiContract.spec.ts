@@ -20,7 +20,7 @@ test.describe('Login – API contract: POST /auth/signin and /auth/verify/otp', 
         signInBody = await res.json().catch(() => ({}));
     });
 
-    test('sign-in response should expose the documented accessToken fields with the right types', () => {
+    test('sign-in response should expose the documented accessToken fields with the right types', { annotation: [{ type: 'testcase', description: "LG-CON-01: Sign-in response should expose the documented accessToken fields with the right types" }] }, () => {
         test.skip(signInStatus !== 200, `sign-in answered ${signInStatus}`);
         const t = signInBody['accessToken'];
         expect(typeof t.token).toBe('string');
@@ -31,7 +31,7 @@ test.describe('Login – API contract: POST /auth/signin and /auth/verify/otp', 
         expect(typeof t.username).toBe('string');
     });
 
-    test('sign-in token should be a three-part JWT that has not already expired', () => {
+    test('sign-in token should be a three-part JWT that has not already expired', { annotation: [{ type: 'testcase', description: "LG-CON-02: Sign-in token should be a three-part JWT that has not already expired" }] }, () => {
         test.skip(signInStatus !== 200, `sign-in answered ${signInStatus}`);
         const token: string = signInBody['accessToken'].token;
         const parts = token.split('.');
@@ -40,7 +40,7 @@ test.describe('Login – API contract: POST /auth/signin and /auth/verify/otp', 
         if (payload.exp) expect(payload.exp * 1000).toBeGreaterThan(Date.now());
     });
 
-    test('sign-in token expirationDuration should be a plausible session length (1 minute to 24 hours)', () => {
+    test('sign-in token expirationDuration should be a plausible session length (1 minute to 24 hours)', { annotation: [{ type: 'testcase', description: "LG-CON-03: Sign-in token expirationDuration should be a plausible session length (1 minute to 24 hours)" }] }, () => {
         test.skip(signInStatus !== 200, `sign-in answered ${signInStatus}`);
         const d: number = signInBody['accessToken'].expirationDuration;
         // The unit (seconds vs milliseconds) is not documented: accept either reading.
@@ -49,14 +49,14 @@ test.describe('Login – API contract: POST /auth/signin and /auth/verify/otp', 
         expect(seconds).toBeLessThanOrEqual(86_400);
     });
 
-    test('sign-in response should not contain the password, hash or internal fields', () => {
+    test('sign-in response should not contain the password, hash or internal fields', { annotation: [{ type: 'testcase', description: "LG-CON-04: Sign-in response should not contain the password, hash or internal fields" }] }, () => {
         test.skip(signInStatus !== 200, `sign-in answered ${signInStatus}`);
         const text = JSON.stringify(signInBody);
         expect(text).not.toContain(VALID_PASSWORD);
         expect(text).not.toMatch(/passwordHash|"password"|salt|secret/i);
     });
 
-    test('verify-otp response should carry a session/token payload when the OTP is correct', async ({ request }) => {
+    test('verify-otp response should carry a session/token payload when the OTP is correct', { annotation: [{ type: 'testcase', description: "LG-CON-05: Verify-otp response should carry a session/token payload when the OTP is correct" }] }, async ({ request }) => {
         test.skip(signInStatus !== 200, `sign-in answered ${signInStatus}`);
         const res = await request.post(`${API_BASE}/auth/verify/otp`, {
             data: { otp: VALID_OTP },
@@ -68,7 +68,7 @@ test.describe('Login – API contract: POST /auth/signin and /auth/verify/otp', 
         expect(typeof (body.accessToken?.token ?? body.token)).toBe('string');
     });
 
-    test('error responses should use a consistent JSON shape (message or error present)', async ({ request }) => {
+    test('error responses should use a consistent JSON shape (message or error present)', { annotation: [{ type: 'testcase', description: "LG-CON-06: Error responses should use a consistent JSON shape (message or error present)" }] }, async ({ request }) => {
         const res = await request.post(`${API_BASE}/auth/signin`, {
             data: { username: '+966500000001', password: 'x', tenantNumber: 'NOSUCHTENANT' },
             headers: commonHeaders(),

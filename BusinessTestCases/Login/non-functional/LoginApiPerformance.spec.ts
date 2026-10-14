@@ -32,21 +32,21 @@ const failedSignIn = (request: import('@playwright/test').APIRequestContext, use
 test.describe('Login – API performance', { tag: ['@login', '@api', '@performance'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'non-functional' }] }, () => {
     test.beforeEach(() => { test.setTimeout(120_000); });
 
-    test(`GET /devices/ip-address should answer within ${BUDGET.simpleGetMs}ms`, async ({ request }) => {
+    test(`GET /devices/ip-address should answer within ${BUDGET.simpleGetMs}ms`, { annotation: [{ type: 'testcase', description: "LG-APIPERF-01: GET /devices/ip-address should answer within …ms" }] }, async ({ request }) => {
         const { ms, value } = await timed(() => request.get(`${API_BASE}/devices/ip-address`, { headers: commonHeaders() }));
         test.info().annotations.push({ type: 'ip-address-ms', description: String(ms) });
         expect(value.status()).toBe(200);
         expect(ms).toBeLessThan(BUDGET.simpleGetMs);
     });
 
-    test(`POST /devices/uuid should answer within ${BUDGET.simpleGetMs}ms`, async ({ request }) => {
+    test(`POST /devices/uuid should answer within ${BUDGET.simpleGetMs}ms`, { annotation: [{ type: 'testcase', description: "LG-APIPERF-02: POST /devices/uuid should answer within …ms" }] }, async ({ request }) => {
         const { ms, value } = await timed(() => request.post(`${API_BASE}/devices/uuid`, { data: { deviceId: 'perf-device' }, headers: commonHeaders() }));
         test.info().annotations.push({ type: 'device-uuid-ms', description: String(ms) });
         expect(value.status()).toBe(200);
         expect(ms).toBeLessThan(BUDGET.simpleGetMs);
     });
 
-    test(`valid POST /auth/signin p95 over ${SAMPLES} calls should stay under ${BUDGET.signInP95Ms}ms`, async ({ request }) => {
+    test(`valid POST /auth/signin p95 over ${SAMPLES} calls should stay under ${BUDGET.signInP95Ms}ms`, { annotation: [{ type: 'testcase', description: "LG-APIPERF-03: Valid POST /auth/signin p95 over … calls should stay under …ms" }] }, async ({ request }) => {
         const times: number[] = [];
         for (let i = 0; i < SAMPLES; i++) {
             const { ms, value } = await timed(() => validSignIn(request));
@@ -57,7 +57,7 @@ test.describe('Login – API performance', { tag: ['@login', '@api', '@performan
         expect(p95(times)).toBeLessThan(BUDGET.signInP95Ms);
     });
 
-    test(`rejected POST /auth/signin p95 over ${SAMPLES} calls should stay under ${BUDGET.failedSignInP95Ms}ms`, async ({ request }) => {
+    test(`rejected POST /auth/signin p95 over ${SAMPLES} calls should stay under ${BUDGET.failedSignInP95Ms}ms`, { annotation: [{ type: 'testcase', description: "LG-APIPERF-04: Rejected POST /auth/signin p95 over … calls should stay under …ms" }] }, async ({ request }) => {
         const times: number[] = [];
         for (let i = 0; i < SAMPLES; i++) {
             const { ms, value } = await timed(() => failedSignIn(request));
@@ -68,20 +68,20 @@ test.describe('Login – API performance', { tag: ['@login', '@api', '@performan
         expect(p95(times)).toBeLessThan(BUDGET.failedSignInP95Ms);
     });
 
-    test(`${CONCURRENCY} concurrent valid sign-ins should all succeed within ${BUDGET.concurrentTotalMs}ms`, async ({ request }) => {
+    test(`${CONCURRENCY} concurrent valid sign-ins should all succeed within ${BUDGET.concurrentTotalMs}ms`, { annotation: [{ type: 'testcase', description: "LG-APIPERF-05: … concurrent valid sign-ins should all succeed within …ms" }] }, async ({ request }) => {
         const { ms, value } = await timed(() => Promise.all(Array.from({ length: CONCURRENCY }, () => validSignIn(request))));
         test.info().annotations.push({ type: 'concurrent-ms', description: String(ms) });
         expect(value.map(r => r.status()), 'every concurrent sign-in should succeed').toEqual(Array(CONCURRENCY).fill(200));
         expect(ms).toBeLessThan(BUDGET.concurrentTotalMs);
     });
 
-    test(`${CONCURRENCY * 2} concurrent rejected sign-ins should produce no 5xx`, async ({ request }) => {
+    test(`${CONCURRENCY * 2} concurrent rejected sign-ins should produce no 5xx`, { annotation: [{ type: 'testcase', description: "LG-APIPERF-06: … concurrent rejected sign-ins should produce no 5xx" }] }, async ({ request }) => {
         const results = await Promise.all(Array.from({ length: CONCURRENCY * 2 }, () => failedSignIn(request)));
         const statuses = results.map(r => r.status());
         expect(statuses.filter(s => s >= 500), `statuses: ${statuses.join(',')}`).toEqual([]);
     });
 
-    test('should respond similarly fast for an unknown user and a known user with a wrong password (no timing leak)', async ({ request }) => {
+    test('should respond similarly fast for an unknown user and a known user with a wrong password (no timing leak)', { annotation: [{ type: 'testcase', description: "LG-APIPERF-07: Should respond similarly fast for an unknown user and a known user with a wrong password (no timing leak)" }] }, async ({ request }) => {
         // Known user + wrong password would count towards a real lockout, so the "known" side uses a non-existent
         // tenant/user pair of the same shape; this guards against gross latency differences by input shape only.
         const unknownA: number[] = [];
@@ -93,7 +93,7 @@ test.describe('Login – API performance', { tag: ['@login', '@api', '@performan
         expect(Math.abs(median(unknownA) - median(unknownB))).toBeLessThan(BUDGET.timingSpreadMs);
     });
 
-    test('should not slow down noticeably across 20 sequential sign-ins (no degradation / leak)', async ({ request }) => {
+    test('should not slow down noticeably across 20 sequential sign-ins (no degradation / leak)', { annotation: [{ type: 'testcase', description: "LG-APIPERF-08: Should not slow down noticeably across 20 sequential sign-ins (no degradation / leak)" }] }, async ({ request }) => {
         const times: number[] = [];
         for (let i = 0; i < 20; i++) times.push((await timed(() => validSignIn(request))).ms);
         const firstHalf = median(times.slice(0, 10));

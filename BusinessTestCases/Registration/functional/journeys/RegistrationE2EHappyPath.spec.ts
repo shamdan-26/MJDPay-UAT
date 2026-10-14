@@ -25,7 +25,7 @@ import { RegistrationConfirmationPage } from '../../../pageElements/Registration
 test.describe('Registration – Full E2E Happy Path (UI)', { tag: ['@registration', '@journey', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
-    test('should complete Business Info, Financial & Business, and Verification & Uploads, then reach NAFATH or Products after Sign Up', async ({ page, context }) => {
+    test('should complete Business Info, Financial & Business, and Verification & Uploads, then reach NAFATH or Products after Sign Up', { annotation: [{ type: 'testcase', description: "RE-01: Complete Business Info, Financial & Business, and Verification & Uploads, then reach NAFATH or Products after Sign Up" }] }, async ({ page, context }) => {
         test.setTimeout(180_000);
 
         // Mobile entry -> OTP -> Business Info -> Financial & Business -> Verification & Uploads
@@ -89,7 +89,7 @@ test.describe('Registration – Full E2E Happy Path (UI)', { tag: ['@registratio
     // it also works as the tail end of the full journey.
     // ─────────────────────────────────────────────────────────────────────────
 
-    test('should reach Contract and complete submission after accepting the agreement', async ({ browser }) => {
+    test('should reach Contract and complete submission after accepting the agreement', { annotation: [{ type: 'testcase', description: "RE-02: Reach Contract and complete submission after accepting the agreement" }] }, async ({ browser }) => {
         // Same worst-case math as RegistrationContract.spec.ts's
         // beforeAll timeouts: goToContractStep can cycle up to 10 CITIZEN_ASSETS
         // attempts (~40-45s each) before this test's own body even starts, so

@@ -10,13 +10,13 @@ const DASHBOARD_URL = LOGIN_URL.replace('/auth/login', '/main');
 test.describe('Login — Session Lifecycle', { tag: ['@login', '@functional', '@session'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
-    test('should keep the session after a page refresh', async ({ page }) => {
+    test('should keep the session after a page refresh', { annotation: [{ type: 'testcase', description: "LG-SESS-01: Should keep the session after a page refresh" }] }, async ({ page }) => {
         await loginToDashboard(page);
         await page.reload({ waitUntil: 'domcontentloaded' });
         await expect(page).not.toHaveURL(/auth\/login/, { timeout: 20000 });
     });
 
-    test('should send a logged-out user to the login page when pressing Back', async ({ page, dashboard }) => {
+    test('should send a logged-out user to the login page when pressing Back', { annotation: [{ type: 'testcase', description: "LG-SESS-02: Should send a logged-out user to the login page when pressing Back" }] }, async ({ page, dashboard }) => {
         await loginToDashboard(page);
         await dashboard.logout();
         await expect(page).toHaveURL(/auth\/login/, { timeout: 15000 });
@@ -24,7 +24,7 @@ test.describe('Login — Session Lifecycle', { tag: ['@login', '@functional', '@
         await expect(page).toHaveURL(/auth\/login/, { timeout: 15000 });
     });
 
-    test('should clear the stored session after logout', async ({ page, dashboard }) => {
+    test('should clear the stored session after logout', { annotation: [{ type: 'testcase', description: "LG-SESS-03: Should clear the stored session after logout" }] }, async ({ page, dashboard }) => {
         await loginToDashboard(page);
         await dashboard.logout();
         await expect(page).toHaveURL(/auth\/login/, { timeout: 15000 });
@@ -35,12 +35,12 @@ test.describe('Login — Session Lifecycle', { tag: ['@login', '@functional', '@
         expect(leftovers, 'auth-looking storage keys still populated after logout').toEqual([]);
     });
 
-    test('should redirect an unauthenticated visit to a protected page to the login page', async ({ page }) => {
+    test('should redirect an unauthenticated visit to a protected page to the login page', { annotation: [{ type: 'testcase', description: "LG-SESS-04: Should redirect an unauthenticated visit to a protected page to the login page" }] }, async ({ page }) => {
         await page.goto(DASHBOARD_URL, { waitUntil: 'domcontentloaded' });
         await expect(page).toHaveURL(/auth\/login/, { timeout: 20000 });
     });
 
-    test('should not allow a protected page to be reopened after logout by navigating to its URL', async ({ page, dashboard }) => {
+    test('should not allow a protected page to be reopened after logout by navigating to its URL', { annotation: [{ type: 'testcase', description: "LG-SESS-05: Should not allow a protected page to be reopened after logout by navigating to its URL" }] }, async ({ page, dashboard }) => {
         await loginToDashboard(page);
         await dashboard.logout();
         await expect(page).toHaveURL(/auth\/login/, { timeout: 15000 });
@@ -48,7 +48,7 @@ test.describe('Login — Session Lifecycle', { tag: ['@login', '@functional', '@
         await expect(page).toHaveURL(/auth\/login/, { timeout: 20000 });
     });
 
-    test('should return to the originally requested page after logging in from a deep link', async ({ page }) => {
+    test('should return to the originally requested page after logging in from a deep link', { annotation: [{ type: 'testcase', description: "LG-SESS-06: Should return to the originally requested page after logging in from a deep link" }] }, async ({ page }) => {
         const deepLink = LOGIN_URL.replace('/auth/login', '/main/transactions');
         await page.goto(deepLink, { waitUntil: 'domcontentloaded' });
         await expect(page).toHaveURL(/auth\/login/, { timeout: 20000 });
@@ -58,7 +58,7 @@ test.describe('Login — Session Lifecycle', { tag: ['@login', '@functional', '@
         await expect(page).toHaveURL(/transactions/);
     });
 
-    test('should log the second tab out when the user logs out in the first tab', async ({ page, dashboard, context }) => {
+    test('should log the second tab out when the user logs out in the first tab', { annotation: [{ type: 'testcase', description: "LG-SESS-07: Should log the second tab out when the user logs out in the first tab" }] }, async ({ page, dashboard, context }) => {
         await loginToDashboard(page);
         const second = await context.newPage();
         await second.goto(DASHBOARD_URL, { waitUntil: 'domcontentloaded' });
@@ -69,7 +69,7 @@ test.describe('Login — Session Lifecycle', { tag: ['@login', '@functional', '@
         await expect(second).toHaveURL(/auth\/login/, { timeout: 20000 });
     });
 
-    test('should allow the same account to sign in from two separate browser contexts', async ({ browser }) => {
+    test('should allow the same account to sign in from two separate browser contexts', { annotation: [{ type: 'testcase', description: "LG-SESS-08: Should allow the same account to sign in from two separate browser contexts" }] }, async ({ browser }) => {
         const a = await browser.newContext({ permissions: ['geolocation'], geolocation: { latitude: 24.7136, longitude: 46.6753 } });
         const b = await browser.newContext({ permissions: ['geolocation'], geolocation: { latitude: 24.7136, longitude: 46.6753 } });
         try {

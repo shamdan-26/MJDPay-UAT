@@ -70,7 +70,7 @@ test.describe('Registration — Contract Review', { tag: ['@registration', '@con
         await expect(contract.instructionText.first()).toBeVisible();
     });
 
-    test('should display all four outer step labels: Business Info, NAFATH, Products, Contract', async () => {
+    test('should display all four outer step labels: Business Info, NAFATH, Products, Contract', { annotation: [{ type: 'testcase', description: "RC-09: Display all four outer step labels: Business Info, NAFATH, Products, Contract" }] }, async () => {
         await expect(contract.outerStepBar.filter({ hasText: 'بيانات النشاط التجاري' })).toBeVisible();
         // "نَفاذ" (with fatha diacritic) vs "نفاذ" (without) is a known dual-encoding
         // ambiguity for this word in the app — every other Nafath match in this
@@ -102,7 +102,7 @@ test.describe('Registration — Contract Review', { tag: ['@registration', '@con
         await expect(contract.contractVersionValue).not.toBeEmpty();
     });
 
-    test('should display the registration date field showing today\'s date', async () => {
+    test('should display the registration date field showing today\'s date', { annotation: [{ type: 'testcase', description: "RC-14: Display the registration date field showing today's date" }] }, async () => {
         const now = new Date();
         const todayYmd = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 
@@ -115,7 +115,7 @@ test.describe('Registration — Contract Review', { tag: ['@registration', '@con
         await expect(contract.introParagraph).not.toBeEmpty();
     });
 
-    test('should display the involved company\'s name in the customer-info table', async () => {
+    test('should display the involved company\'s name in the customer-info table', { annotation: [{ type: 'testcase', description: "RC-16: Display the involved company's name in the customer-info table" }] }, async () => {
         await expect(contract.customerNameValue).toBeVisible();
         await expect(contract.customerNameValue).not.toBeEmpty();
     });
@@ -142,7 +142,7 @@ test.describe('Registration — Contract Review', { tag: ['@registration', '@con
         await expect(contract.agreeCheckbox).not.toBeChecked();
     });
 
-    test('should display the Cancel button', async () => {
+    test('should display the Cancel button', { annotation: [{ type: 'testcase', description: "RC-19: Display the Cancel button" }] }, async () => {
         await expect(contract.cancelButton).toBeVisible();
     });
 

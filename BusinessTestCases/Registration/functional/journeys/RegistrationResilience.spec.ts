@@ -26,7 +26,7 @@ test.describe('Registration – Resilience', { tag: ['@registration', '@journey'
     test.beforeEach(() => { test.setTimeout(120_000); });
 
     test.describe('Mobile step', () => {
-        test('should stay on the mobile step and keep the number when the request times out', async ({ page }) => {
+        test('should stay on the mobile step and keep the number when the request times out', { annotation: [{ type: 'testcase', description: "RG-RES-01: Should stay on the mobile step and keep the number when the request times out" }] }, async ({ page }) => {
             await page.route(SEND_OTP, route => route.abort('timedout'));
             await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded' });
             const mobile = generateKSAMobile();
@@ -37,7 +37,7 @@ test.describe('Registration – Resilience', { tag: ['@registration', '@journey'
             await expect(mobilePage.mobileInput).toHaveValue(mobile);
         });
 
-        test('should recover and continue once the network is back after an offline attempt', async ({ page, context }) => {
+        test('should recover and continue once the network is back after an offline attempt', { annotation: [{ type: 'testcase', description: "RG-RES-02: Should recover and continue once the network is back after an offline attempt" }] }, async ({ page, context }) => {
             await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded' });
             const mobilePage = new RegistrationMobilePage(page);
             await mobilePage.mobileInput.fill(generateKSAMobile());
@@ -52,7 +52,7 @@ test.describe('Registration – Resilience', { tag: ['@registration', '@journey'
     });
 
     test.describe('Business Info step', () => {
-        test('should not advance and should re-enable Next when the submit times out', async ({ page }) => {
+        test('should not advance and should re-enable Next when the submit times out', { annotation: [{ type: 'testcase', description: "RG-RES-03: Should not advance and should re-enable Next when the submit times out" }] }, async ({ page }) => {
             await goToInfoStepMocked(page);
             await page.route(PROFILE_TYPE, route => (route.request().method() === 'POST' ? route.abort('timedout') : route.continue()));
             const info = await fillInfoAndNext(page);
@@ -60,7 +60,7 @@ test.describe('Registration – Resilience', { tag: ['@registration', '@journey'
             await expect(info.nextButton).toBeEnabled({ timeout: 20000 });
         });
 
-        test('should not advance when the registration session has expired (401 SESSION_INVALID)', async ({ page }) => {
+        test('should not advance when the registration session has expired (401 SESSION_INVALID)', { annotation: [{ type: 'testcase', description: "RG-RES-04: Should not advance when the registration session has expired (401 SESSION_INVALID)" }] }, async ({ page }) => {
             await goToInfoStepMocked(page);
             const err = apiError(401, 'SESSION_INVALID');
             await mockProfileType(page, err.status, err.body);
@@ -68,13 +68,13 @@ test.describe('Registration – Resilience', { tag: ['@registration', '@journey'
             await expect(page.getByRole('textbox', { name: /Monthly expected number|العدد الشهري المتوقع للفواتير/i })).toHaveCount(0);
         });
 
-        test('should return to a usable wizard after a page refresh on Business Info', async ({ page }) => {
+        test('should return to a usable wizard after a page refresh on Business Info', { annotation: [{ type: 'testcase', description: "RG-RES-05: Should return to a usable wizard after a page refresh on Business Info" }] }, async ({ page }) => {
             await goToInfoStepMocked(page);
             await page.reload({ waitUntil: 'domcontentloaded' });
             await expect(page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ }).or(page.locator('#register-profile-card-MERCHANT'))).toBeVisible({ timeout: 30000 });
         });
 
-        test('should not break the wizard when the browser Back and Forward buttons are used', async ({ page }) => {
+        test('should not break the wizard when the browser Back and Forward buttons are used', { annotation: [{ type: 'testcase', description: "RG-RES-06: Should not break the wizard when the browser Back and Forward buttons are used" }] }, async ({ page }) => {
             const pageErrors: string[] = [];
             page.on('pageerror', e => pageErrors.push(e.message));
             await goToInfoStepMocked(page);
@@ -84,7 +84,7 @@ test.describe('Registration – Resilience', { tag: ['@registration', '@journey'
             expect(pageErrors).toHaveLength(0);
         });
 
-        test('should send one request per submit when the connection is slow', async ({ page }) => {
+        test('should send one request per submit when the connection is slow', { annotation: [{ type: 'testcase', description: "RG-RES-07: Should send one request per submit when the connection is slow" }] }, async ({ page }) => {
             await goToInfoStepMocked(page);
             let calls = 0;
             await page.route(PROFILE_TYPE, async route => {
@@ -101,7 +101,7 @@ test.describe('Registration – Resilience', { tag: ['@registration', '@journey'
     });
 
     test.describe('Financial step', () => {
-        test('should keep the entered values when the browser goes offline and back online', async ({ page, context }) => {
+        test('should keep the entered values when the browser goes offline and back online', { annotation: [{ type: 'testcase', description: "RG-RES-08: Should keep the entered values when the browser goes offline and back online" }] }, async ({ page, context }) => {
             await goToFinancialStepMocked(page);
             const bills = page.getByRole('textbox', { name: /monthly expected number|العدد الشهري المتوقع للفواتير/i });
             await bills.fill('1500');
@@ -112,7 +112,7 @@ test.describe('Registration – Resilience', { tag: ['@registration', '@journey'
     });
 
     test.describe('Two tabs', () => {
-        test('should let two tabs start a registration for the same mobile without breaking either', async ({ context }) => {
+        test('should let two tabs start a registration for the same mobile without breaking either', { annotation: [{ type: 'testcase', description: "RG-RES-09: Should let two tabs start a registration for the same mobile without breaking either" }] }, async ({ context }) => {
             const mobile = generateKSAMobile();
             const a = await context.newPage();
             const b = await context.newPage();

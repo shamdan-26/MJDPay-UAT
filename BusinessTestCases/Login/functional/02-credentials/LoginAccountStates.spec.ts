@@ -18,7 +18,7 @@ const STATES = [
 
 test.describe('Login — Account States', { tag: ['@login', '@functional', '@credentials'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'functional' }] }, () => {
     for (const s of STATES) {
-        test(`should not reach the OTP step for an account with ${s.label}`, async ({ page, loginPage, otp }) => {
+        test(`should not reach the OTP step for an account with ${s.label}`, { annotation: [{ type: 'testcase', description: "LG-STATE-01: Should not reach the OTP step for an account with …" }] }, async ({ page, loginPage, otp }) => {
             test.skip(!s.company || !s.mobile, `Set ${s.vars} to run this case`);
             await loginPage.goto(LOGIN_URL);
             await loginPage.fillAndSubmit(s.company, s.mobile, s.password);
@@ -27,7 +27,7 @@ test.describe('Login — Account States', { tag: ['@login', '@functional', '@cre
             await expect(page).toHaveURL(LOGIN_URL);
         });
 
-        test(`should return a non-200 sign-in response for an account with ${s.label}`, async ({ request }) => {
+        test(`should return a non-200 sign-in response for an account with ${s.label}`, { annotation: [{ type: 'testcase', description: "LG-STATE-02: Should return a non-200 sign-in response for an account with …" }] }, async ({ request }) => {
             test.skip(!s.company || !s.mobile, `Set ${s.vars} to run this case`);
             const res = await signIn(request, s.company, s.mobile, s.password);
             expect(res.status()).not.toBe(200);
@@ -46,7 +46,7 @@ test.describe('Login — Registration-created accounts can sign in', { tag: ['@l
     test.skip(!CREATED_PASSWORD, 'Set CREATED_ACCOUNTS_PASSWORD (a password shared by all createdAccounts) — wrong guesses would lock accounts other modules use');
 
     for (const account of CREATED_ACCOUNTS) {
-        test(`should sign in ${account.company} / ${account.mobile} through the gateway`, async ({ request }) => {
+        test(`should sign in ${account.company} / ${account.mobile} through the gateway`, { annotation: [{ type: 'testcase', description: "LG-STATE-03: Should sign in … / … through the gateway" }] }, async ({ request }) => {
             const res = await signIn(request, account.company, account.mobile, CREATED_PASSWORD);
             expect(res.status(), await res.text()).toBe(200);
             const body = await res.json();

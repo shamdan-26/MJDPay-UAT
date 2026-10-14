@@ -58,7 +58,7 @@ import { API_BASE, signIn } from '../../helpers/loginApi';
 test.describe('Login – NAFATH document (National ID/Iqama) expired', { tag: ['@login', '@api'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'api' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
-    test('NW-01: should return 409 when NAFATH document data has expired', async ({ request }) => {
+    test('NW-01: should return 409 when NAFATH document data has expired', { annotation: [{ type: 'testcase', description: "LG-132: Login blocked — NAFATH document expired" }] }, async ({ request }) => {
         test.skip(!NAFATH_EXPIRED_COMPANY || !NAFATH_EXPIRED_MOBILE, 'Set NAFATH_EXPIRED_COMPANY and NAFATH_EXPIRED_MOBILE env vars to run this test');
 
         const res = await signIn(request, NAFATH_EXPIRED_COMPANY, NAFATH_EXPIRED_MOBILE, NAFATH_EXPIRED_PASSWORD);
@@ -66,7 +66,7 @@ test.describe('Login – NAFATH document (National ID/Iqama) expired', { tag: ['
         expect(res.status()).toBe(409);
     });
 
-    test('NW-01a: 409 response body should carry error code NAFATH_DATA_EXPIRED', async ({ request }) => {
+    test('NW-01a: 409 response body should carry error code NAFATH_DATA_EXPIRED', { annotation: [{ type: 'testcase', description: "LG-NW-01a: 409 response body should carry error code NAFATH_DATA_EXPIRED" }] }, async ({ request }) => {
         test.skip(!NAFATH_EXPIRED_COMPANY || !NAFATH_EXPIRED_MOBILE, 'Set NAFATH_EXPIRED_COMPANY and NAFATH_EXPIRED_MOBILE env vars to run this test');
 
         const res  = await signIn(request, NAFATH_EXPIRED_COMPANY, NAFATH_EXPIRED_MOBILE, NAFATH_EXPIRED_PASSWORD);
@@ -78,7 +78,7 @@ test.describe('Login – NAFATH document (National ID/Iqama) expired', { tag: ['
         expect(JSON.stringify(body)).toContain('NAFATH_DATA_EXPIRED');
     });
 
-    test('NW-01b: error response should not expose stack traces or database details', async ({ request }) => {
+    test('NW-01b: error response should not expose stack traces or database details', { annotation: [{ type: 'testcase', description: "LG-NW-01b: Error response should not expose stack traces or database details" }] }, async ({ request }) => {
         test.skip(!NAFATH_EXPIRED_COMPANY || !NAFATH_EXPIRED_MOBILE, 'Set NAFATH_EXPIRED_COMPANY and NAFATH_EXPIRED_MOBILE env vars to run this test');
 
         const res  = await signIn(request, NAFATH_EXPIRED_COMPANY, NAFATH_EXPIRED_MOBILE, NAFATH_EXPIRED_PASSWORD);
@@ -91,7 +91,7 @@ test.describe('Login – NAFATH document (National ID/Iqama) expired', { tag: ['
 test.describe('Login – WATHIQ document (CRN) expired', { tag: ['@login', '@api'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'api' }] }, () => {
     test.describe.configure({ mode: 'serial' });
 
-    test('NW-02: should return 409 when WATHIQ document data has expired', async ({ request }) => {
+    test('NW-02: should return 409 when WATHIQ document data has expired', { annotation: [{ type: 'testcase', description: "LG-133: Login blocked — WATHIQ document expired" }] }, async ({ request }) => {
         test.skip(!WATHIQ_EXPIRED_COMPANY || !WATHIQ_EXPIRED_MOBILE, 'Set WATHIQ_EXPIRED_COMPANY and WATHIQ_EXPIRED_MOBILE env vars to run this test');
 
         const res = await signIn(request, WATHIQ_EXPIRED_COMPANY, WATHIQ_EXPIRED_MOBILE, WATHIQ_EXPIRED_PASSWORD);
@@ -99,7 +99,7 @@ test.describe('Login – WATHIQ document (CRN) expired', { tag: ['@login', '@api
         expect(res.status()).toBe(409);
     });
 
-    test('NW-02a: 409 response body should carry error code WATHIQ_DATA_EXPIRED', async ({ request }) => {
+    test('NW-02a: 409 response body should carry error code WATHIQ_DATA_EXPIRED', { annotation: [{ type: 'testcase', description: "LG-NW-02a: 409 response body should carry error code WATHIQ_DATA_EXPIRED" }] }, async ({ request }) => {
         test.skip(!WATHIQ_EXPIRED_COMPANY || !WATHIQ_EXPIRED_MOBILE, 'Set WATHIQ_EXPIRED_COMPANY and WATHIQ_EXPIRED_MOBILE env vars to run this test');
 
         const res  = await signIn(request, WATHIQ_EXPIRED_COMPANY, WATHIQ_EXPIRED_MOBILE, WATHIQ_EXPIRED_PASSWORD);
@@ -108,7 +108,7 @@ test.describe('Login – WATHIQ document (CRN) expired', { tag: ['@login', '@api
         expect(JSON.stringify(body)).toContain('WATHIQ_DATA_EXPIRED');
     });
 
-    test('NW-02b: error response should not expose stack traces or database details', async ({ request }) => {
+    test('NW-02b: error response should not expose stack traces or database details', { annotation: [{ type: 'testcase', description: "LG-NW-02b: Error response should not expose stack traces or database details" }] }, async ({ request }) => {
         test.skip(!WATHIQ_EXPIRED_COMPANY || !WATHIQ_EXPIRED_MOBILE, 'Set WATHIQ_EXPIRED_COMPANY and WATHIQ_EXPIRED_MOBILE env vars to run this test');
 
         const res  = await signIn(request, WATHIQ_EXPIRED_COMPANY, WATHIQ_EXPIRED_MOBILE, WATHIQ_EXPIRED_PASSWORD);
@@ -120,7 +120,7 @@ test.describe('Login – WATHIQ document (CRN) expired', { tag: ['@login', '@api
 
 test.describe('Login – regression: unaffected account still logs in normally', { tag: ['@login', '@api'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'api' }] }, () => {
     test.describe.configure({ mode: 'serial' });
-    test('NW-03: login should still succeed (200) for an account with no NAFATH/WATHIQ expiry', async ({ request }) => {
+    test('NW-03: login should still succeed (200) for an account with no NAFATH/WATHIQ expiry', { annotation: [{ type: 'testcase', description: "LG-138: Unaffected account logs in normally (regression)" }] }, async ({ request }) => {
         const res = await signIn(request, VALID_COMPANY, VALID_MOBILE);
 
         expect(res.status()).toBe(200);
@@ -138,7 +138,7 @@ test.describe('Login – NAFATH Redis TTL expired (document still valid)', { tag
     test.describe.configure({ mode: 'serial' });
     const PENDING = 'pending a way to seed a NAFATH Redis-TTL-only-expired state (no document expiry) — coordinate with BE, see EMI-5836';
 
-    test('NW-04: should return 409 distinguishing TTL/cache expiry from document expiry', async ({ request }) => {
+    test('NW-04: should return 409 distinguishing TTL/cache expiry from document expiry', { annotation: [{ type: 'testcase', description: "LG-134: Login blocked — NAFATH Redis TTL expired, document still valid" }] }, async ({ request }) => {
         test.skip(true, PENDING);
         // Per the spec comment thread: the error here must NOT be
         // NAFATH_DATA_EXPIRED (that's reserved for actual document expiry) —
@@ -146,7 +146,7 @@ test.describe('Login – NAFATH Redis TTL expired (document still valid)', { tag
         // confirm the account's National ID/Iqama itself has not expired.
     });
 
-    test('NW-05: should not require the user to physically re-present ID — only NAFATH Generate Random + Get Status re-verification', async ({ request }) => {
+    test('NW-05: should not require the user to physically re-present ID — only NAFATH Generate Random + Get Status re-verification', { annotation: [{ type: 'testcase', description: "LG-NW-05: Should not require the user to physically re-present ID — only NAFATH Generate Random + Get Status re-verification" }] }, async ({ request }) => {
         test.skip(true, PENDING);
     });
 });
@@ -155,7 +155,7 @@ test.describe('Login – WATHIQ Redis TTL expired (auto-heal, should NOT block l
     test.describe.configure({ mode: 'serial' });
     const PENDING = 'pending a way to seed a WATHIQ Redis-TTL-only-expired state and trigger the TTL-monitoring job on demand — coordinate with BE, see EMI-5836';
 
-    test('NW-06: login should succeed once the background TTL-monitoring job has refreshed WATHIQ data automatically', async ({ request }) => {
+    test('NW-06: login should succeed once the background TTL-monitoring job has refreshed WATHIQ data automatically', { annotation: [{ type: 'testcase', description: "LG-135: WATHIQ Redis TTL expired — auto-heals, login should succeed" }] }, async ({ request }) => {
         test.skip(true, PENDING);
         // Per spec: "This process should be fully automated without requiring
         // any user interaction." If login is blocked here, that's either a bug
@@ -163,7 +163,7 @@ test.describe('Login – WATHIQ Redis TTL expired (auto-heal, should NOT block l
         // expected timing with the assignee before treating a failure as a defect.
     });
 
-    test('NW-07: login should be blocked with WATHIQ_DATA_EXPIRED if the TTL-refresh job discovers the CRN itself has since expired', async ({ request }) => {
+    test('NW-07: login should be blocked with WATHIQ_DATA_EXPIRED if the TTL-refresh job discovers the CRN itself has since expired', { annotation: [{ type: 'testcase', description: "LG-136: WATHIQ Redis TTL expired — refresh reveals CRN actually expired" }] }, async ({ request }) => {
         test.skip(true, PENDING);
     });
 });
@@ -179,13 +179,13 @@ test.describe('Login – NAFATH revalidation flow (Generate Random + Get Status)
     test.describe.configure({ mode: 'serial' });
     const PENDING = 'pending confirmed endpoint paths from the Emi Profile Service Swagger (profile-data-renewal-controller) and a dedicated blocked test account — see EMI-5836';
 
-    test('NW-08: successful re-verification should clear is_nafath_data_expired and allow login', async ({ request }) => {
+    test('NW-08: successful re-verification should clear is_nafath_data_expired and allow login', { annotation: [{ type: 'testcase', description: "LG-139: NAFATH revalidation flow succeeds" }] }, async ({ request }) => {
         test.skip(true, PENDING);
         // Intended flow: call Generate Random -> complete verification -> poll
         // Get Status until verified -> retry POST /auth/signin -> expect 200.
     });
 
-    test('NW-09: a failed/abandoned re-verification should leave the account blocked with 409 NAFATH_DATA_EXPIRED', async ({ request }) => {
+    test('NW-09: a failed/abandoned re-verification should leave the account blocked with 409 NAFATH_DATA_EXPIRED', { annotation: [{ type: 'testcase', description: "LG-140: NAFATH revalidation flow fails/abandoned" }] }, async ({ request }) => {
         test.skip(true, PENDING);
     });
 });
@@ -194,11 +194,11 @@ test.describe('Login – WATHIQ revalidation flow (refresh CRN)', { tag: ['@logi
     test.describe.configure({ mode: 'serial' });
     const PENDING = 'pending confirmed endpoint paths from the Emi Profile Service Swagger (profile-data-renewal-controller) and a dedicated blocked test account — see EMI-5836';
 
-    test('NW-10: successful CRN refresh should clear is_wathiq_data_expired and allow login', async ({ request }) => {
+    test('NW-10: successful CRN refresh should clear is_wathiq_data_expired and allow login', { annotation: [{ type: 'testcase', description: "LG-141: WATHIQ revalidation flow succeeds" }] }, async ({ request }) => {
         test.skip(true, PENDING);
     });
 
-    test('NW-11: a refresh attempt that still returns an expired CRN should leave the account blocked with 409 WATHIQ_DATA_EXPIRED', async ({ request }) => {
+    test('NW-11: a refresh attempt that still returns an expired CRN should leave the account blocked with 409 WATHIQ_DATA_EXPIRED', { annotation: [{ type: 'testcase', description: "LG-142: WATHIQ revalidation flow — CRN still expired" }] }, async ({ request }) => {
         test.skip(true, PENDING);
     });
 });
@@ -213,7 +213,7 @@ test.describe('Login – deactivation scope (per Amer Majed Abdalrazeq\'s 2026-0
     test.describe.configure({ mode: 'serial' });
     const PENDING = 'pending DB access to confirm which entity (user vs. profile) was deactivated — not observable from the login API response alone, see EMI-5836';
 
-    test('NW-12: NAFATH expiry should deactivate the USER, not the individual business profile', async ({ request }) => {
+    test('NW-12: NAFATH expiry should deactivate the USER, not the individual business profile', { annotation: [{ type: 'testcase', description: "LG-143: NAFATH expiry deactivates the user, not the profile" }] }, async ({ request }) => {
         test.skip(true, PENDING);
         // For a user linked to 2+ business profiles: expire NAFATH data for the
         // user, run the validation job, and confirm the USER record (not a
@@ -259,7 +259,7 @@ test.describe('Login – NAFATH / WATHIQ expiry message localisation (EMI-5969)'
         };
     }
 
-    test('NW-14: the NAFATH_DATA_EXPIRED message is returned in Arabic when ar_sa is requested', async ({ request }) => {
+    test('NW-14: the NAFATH_DATA_EXPIRED message is returned in Arabic when ar_sa is requested', { annotation: [{ type: 'testcase', description: "LG-NW-14: The NAFATH_DATA_EXPIRED message is returned in Arabic when ar_sa is requested" }] }, async ({ request }) => {
         test.skip(!NAFATH_EXPIRED_COMPANY || !NAFATH_EXPIRED_MOBILE, NO_NAFATH_ACCOUNT);
 
         const res = await request.post(`${API_BASE}/auth/signin`, {
@@ -277,7 +277,7 @@ test.describe('Login – NAFATH / WATHIQ expiry message localisation (EMI-5969)'
         expect(text, 'the NAFATH expiry message came back with no Arabic in it').toMatch(ARABIC_SCRIPT);
     });
 
-    test('NW-15: the WATHIQ_DATA_EXPIRED message is returned in Arabic when ar_sa is requested', async ({ request }) => {
+    test('NW-15: the WATHIQ_DATA_EXPIRED message is returned in Arabic when ar_sa is requested', { annotation: [{ type: 'testcase', description: "LG-NW-15: The WATHIQ_DATA_EXPIRED message is returned in Arabic when ar_sa is requested" }] }, async ({ request }) => {
         test.skip(!WATHIQ_EXPIRED_COMPANY || !WATHIQ_EXPIRED_MOBILE, NO_WATHIQ_ACCOUNT);
 
         const res = await request.post(`${API_BASE}/auth/signin`, {
@@ -295,7 +295,7 @@ test.describe('Login – NAFATH / WATHIQ expiry message localisation (EMI-5969)'
         expect(text, 'the WATHIQ expiry message came back with no Arabic in it').toMatch(ARABIC_SCRIPT);
     });
 
-    test('NW-16: the en_uk and ar_sa responses differ, and the error CODE stays stable across both', async ({ request }) => {
+    test('NW-16: the en_uk and ar_sa responses differ, and the error CODE stays stable across both', { annotation: [{ type: 'testcase', description: "LG-NW-16: The en_uk and ar_sa responses differ, and the error CODE stays stable across both" }] }, async ({ request }) => {
         test.skip(!NAFATH_EXPIRED_COMPANY || !NAFATH_EXPIRED_MOBILE, NO_NAFATH_ACCOUNT);
 
         const credentials = {

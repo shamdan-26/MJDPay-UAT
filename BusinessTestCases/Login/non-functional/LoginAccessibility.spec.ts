@@ -36,7 +36,7 @@ const meta = { tag: ['@login', '@ui', '@a11y'], annotation: [{ type: 'feature', 
 test.describe('Login – Accessibility (axe)', meta, () => {
     for (const lang of ['en', 'ar'] as const) {
         for (const theme of ['light', 'dark'] as const) {
-            test(`login form should have no serious axe violations (${lang}/${theme})`, async ({ page }) => {
+            test(`login form should have no serious axe violations (${lang}/${theme})`, { annotation: [{ type: 'testcase', description: "LG-A11Y-01: Login form should have no serious axe violations (…/…)" }] }, async ({ page }) => {
                 test.skip(!AxeBuilderCtor, 'Install @axe-core/playwright to run the axe scans');
                 // Dark theme only darkens the page background (the login card stays white), so text fails colour contrast.
                 test.skip(theme === 'dark', 'Known product defect: dark theme fails colour contrast; re-enable once the card themes');
@@ -50,7 +50,7 @@ test.describe('Login – Accessibility (axe)', meta, () => {
         }
     }
 
-    test('login form with a visible error toast should have no serious axe violations', async ({ page }) => {
+    test('login form with a visible error toast should have no serious axe violations', { annotation: [{ type: 'testcase', description: "LG-A11Y-02: Login form with a visible error toast should have no serious axe violations" }] }, async ({ page }) => {
         test.skip(!AxeBuilderCtor, 'Install @axe-core/playwright to run the axe scans');
         const login = new LoginPage(page);
         await login.goto(LOGIN_URL);
@@ -64,7 +64,7 @@ test.describe('Login – Accessibility (axe)', meta, () => {
 test.describe('Login – Accessibility (semantics & keyboard)', meta, () => {
     test.beforeEach(async ({ page }) => { await new LoginPage(page).goto(LOGIN_URL); });
 
-    test('every input should have an accessible name', async ({ page }) => {
+    test('every input should have an accessible name', { annotation: [{ type: 'testcase', description: "LG-A11Y-03: Every input should have an accessible name" }] }, async ({ page }) => {
         for (const input of await page.locator('input:visible').all()) {
             const name = (await input.getAttribute('aria-label')) || (await input.getAttribute('placeholder')) || (await input.getAttribute('id'));
             const labelled = await input.evaluate(el => !!(el as HTMLInputElement).labels?.length || el.getAttribute('aria-labelledby'));
@@ -72,25 +72,25 @@ test.describe('Login – Accessibility (semantics & keyboard)', meta, () => {
         }
     });
 
-    test('icon-only buttons (show password, theme, clear) should have an accessible name', async ({ page }) => {
+    test('icon-only buttons (show password, theme, clear) should have an accessible name', { annotation: [{ type: 'testcase', description: "LG-A11Y-04: Icon-only buttons (show password, theme, clear) should have an accessible name" }] }, async ({ page }) => {
         for (const button of await page.locator('button:visible').all()) {
             const text = ((await button.innerText().catch(() => '')) || (await button.getAttribute('aria-label')) || (await button.getAttribute('title')) || '').trim();
             expect.soft(text.length, `button without a name: ${await button.evaluate(el => el.outerHTML.slice(0, 120))}`).toBeGreaterThan(0);
         }
     });
 
-    test('the page should declare a language and a title', async ({ page }) => {
+    test('the page should declare a language and a title', { annotation: [{ type: 'testcase', description: "LG-A11Y-05: The page should declare a language and a title" }] }, async ({ page }) => {
         expect(await page.locator('html').getAttribute('lang')).toBeTruthy();
         expect((await page.title()).trim().length).toBeGreaterThan(0);
     });
 
-    test('the language buttons should expose their pressed state to assistive tech', async ({ page }) => {
+    test('the language buttons should expose their pressed state to assistive tech', { annotation: [{ type: 'testcase', description: "LG-A11Y-06: The language buttons should expose their pressed state to assistive tech" }] }, async ({ page }) => {
         const login = new LoginPage(page);
         await expect(login.enButton).toHaveAttribute('aria-pressed', /true|false/);
         await expect(login.arabicButton).toHaveAttribute('aria-pressed', /true|false/);
     });
 
-    test('the whole login can be completed with the keyboard only', async ({ page }) => {
+    test('the whole login can be completed with the keyboard only', { annotation: [{ type: 'testcase', description: "LG-A11Y-07: The whole login can be completed with the keyboard only" }] }, async ({ page }) => {
         const login = new LoginPage(page);
         const signIn = await mockSignIn(page, 401);
         await login.companyInput.focus();
@@ -105,7 +105,7 @@ test.describe('Login – Accessibility (semantics & keyboard)', meta, () => {
         await expect.poll(() => signIn.count(), { timeout: 10000 }).toBe(1);
     });
 
-    test('the error toast should be announced to screen readers (role alert/status or aria-live)', async ({ page }) => {
+    test('the error toast should be announced to screen readers (role alert/status or aria-live)', { annotation: [{ type: 'testcase', description: "LG-A11Y-08: The error toast should be announced to screen readers (role alert/status or aria-live)" }] }, async ({ page }) => {
         const login = new LoginPage(page);
         await mockSignIn(page, 401);
         await login.fillAndSubmit(NEGATIVE_COMPANY, NEGATIVE_MOBILE, VALID_PASSWORD);
@@ -113,7 +113,7 @@ test.describe('Login – Accessibility (semantics & keyboard)', meta, () => {
         await expect(live.first()).toBeVisible({ timeout: 10000 });
     });
 
-    test('text and controls should remain usable at 200% zoom (no horizontal scroll)', async ({ page }) => {
+    test('text and controls should remain usable at 200% zoom (no horizontal scroll)', { annotation: [{ type: 'testcase', description: "LG-A11Y-09: Text and controls should remain usable at 200% zoom (no horizontal scroll)" }] }, async ({ page }) => {
         await page.setViewportSize({ width: 640, height: 450 }); // 1280x900 at 200%
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
         expect(overflow).toBeLessThanOrEqual(1);

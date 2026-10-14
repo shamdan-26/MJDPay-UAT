@@ -37,48 +37,48 @@ for (const step of STEPS) {
             chrome = step.chrome(page);
         });
 
-        test('should display the MJD Pay logo', async () => {
+        test('should display the MJD Pay logo', { annotation: [{ type: 'testcase', description: "RG-CHROME-01: Should display the MJD Pay logo" }] }, async () => {
             await expect(chrome.logoImage).toBeVisible();
         });
 
-        test('should link the MJD Pay logo to the landing page', async () => {
+        test('should link the MJD Pay logo to the landing page', { annotation: [{ type: 'testcase', description: "RG-CHROME-02: Should link the MJD Pay logo to the landing page" }] }, async () => {
             await expect(chrome.logoLink).toBeVisible();
             await expect(chrome.logoLink).toHaveAttribute('href', /landing|majdpay|\//);
         });
 
-        test('should display the EN and Arabic language buttons', async () => {
+        test('should display the EN and Arabic language buttons', { annotation: [{ type: 'testcase', description: "RG-CHROME-03: Should display the EN and Arabic language buttons" }] }, async () => {
             await expect(chrome.enButton).toBeVisible();
             await expect(chrome.arabicButton).toBeVisible();
         });
 
-        test('should display the theme toggle button', async () => {
+        test('should display the theme toggle button', { annotation: [{ type: 'testcase', description: "RG-CHROME-04: Should display the theme toggle button" }] }, async () => {
             await expect(chrome.themeToggle).toBeVisible();
         });
 
-        test('should have the correct page title', async ({ page }) => {
+        test('should have the correct page title', { annotation: [{ type: 'testcase', description: "RG-CHROME-05: Should have the correct page title" }] }, async ({ page }) => {
             await expect(page).toHaveTitle('EMI - Business');
         });
 
-        test('should switch the document to Arabic and right-to-left', async ({ page }) => {
+        test('should switch the document to Arabic and right-to-left', { annotation: [{ type: 'testcase', description: "RG-CHROME-06: Should switch the document to Arabic and right-to-left" }] }, async ({ page }) => {
             await chrome.arabicButton.click();
             await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
             await expect(page.locator('html')).toHaveAttribute('lang', /ar/i);
         });
 
-        test('should switch back to English and left-to-right', async ({ page }) => {
+        test('should switch back to English and left-to-right', { annotation: [{ type: 'testcase', description: "RG-CHROME-07: Should switch back to English and left-to-right" }] }, async ({ page }) => {
             await chrome.arabicButton.click();
             await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
             await chrome.enButton.click();
             await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
         });
 
-        test('should change the theme class when the theme toggle is clicked', async ({ page }) => {
+        test('should change the theme class when the theme toggle is clicked', { annotation: [{ type: 'testcase', description: "RG-CHROME-08: Should change the theme class when the theme toggle is clicked" }] }, async ({ page }) => {
             const before = await page.locator('body').getAttribute('class');
             await chrome.themeToggle.click();
             await expect.poll(() => page.locator('body').getAttribute('class')).not.toBe(before);
         });
 
-        test('should load without console errors or failed asset requests', async ({ page }) => {
+        test('should load without console errors or failed asset requests', { annotation: [{ type: 'testcase', description: "RG-CHROME-09: Should load without console errors or failed asset requests" }] }, async ({ page }) => {
             const consoleErrors: string[] = [];
             const failedAssets: string[] = [];
             page.on('console', m => { if (m.type() === 'error' && !/favicon|firebase|analytics/i.test(m.text())) consoleErrors.push(m.text()); });
@@ -89,7 +89,7 @@ for (const step of STEPS) {
         });
 
         for (const vp of [{ label: 'phone 375px', width: 375, height: 800 }, { label: 'tablet 768px', width: 768, height: 1024 }]) {
-            test(`should not scroll horizontally on a ${vp.label} viewport`, async ({ page }) => {
+            test(`should not scroll horizontally on a ${vp.label} viewport`, { annotation: [{ type: 'testcase', description: "RG-CHROME-10: Should not scroll horizontally on a … viewport" }] }, async ({ page }) => {
                 await page.setViewportSize({ width: vp.width, height: vp.height });
                 await step.open(page);
                 const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);

@@ -36,7 +36,7 @@ test.describe('Login — Security', tags, () => {
         await loginPage.goto(LOGIN_URL);
     });
 
-    test('should return the same error response for a wrong company number and a wrong mobile number (prevents user enumeration)', async ({ page }) => {
+    test('should return the same error response for a wrong company number and a wrong mobile number (prevents user enumeration)', { annotation: [{ type: 'testcase', description: "LG-106: Wrong company vs. wrong mobile give identical response" }] }, async ({ page }) => {
         const wrongCompany = await submitAndCaptureSignIn(page, loginPage, 'WRONGCMPNY', NEGATIVE_MOBILE, VALID_PASSWORD);
         const wrongCompanyBody = await wrongCompany.json().catch(() => ({}));
         await assertToast(page);
@@ -51,7 +51,7 @@ test.describe('Login — Security', tags, () => {
         await expect(page).toHaveURL(LOGIN_URL);
     });
 
-    test('should not execute a script payload entered in the company number field (XSS)', async ({ page }) => {
+    test('should not execute a script payload entered in the company number field (XSS)', { annotation: [{ type: 'testcase', description: "LG-107: Script injection in Company field is inert" }] }, async ({ page }) => {
         let dialogTriggered = false;
         page.on('dialog', async dialog => { dialogTriggered = true; await dialog.dismiss(); });
         await loginPage.companyInput.fill('<script>alert(1)</script>');
@@ -61,7 +61,7 @@ test.describe('Login — Security', tags, () => {
         expect(dialogTriggered).toBe(false);
     });
 
-    test('should not execute a script payload entered in the password field (XSS)', async ({ page }) => {
+    test('should not execute a script payload entered in the password field (XSS)', { annotation: [{ type: 'testcase', description: "LG-108: Script injection in Password field is inert" }] }, async ({ page }) => {
         let dialogTriggered = false;
         page.on('dialog', async dialog => { dialogTriggered = true; await dialog.dismiss(); });
         await loginPage.companyInput.fill(NEGATIVE_COMPANY);
@@ -70,7 +70,7 @@ test.describe('Login — Security', tags, () => {
         expect(dialogTriggered).toBe(false);
     });
 
-    test('should send the login request via POST — credentials must not appear in the URL', async ({ page }) => {
+    test('should send the login request via POST — credentials must not appear in the URL', { annotation: [{ type: 'testcase', description: "LG-109: Login request uses POST, not URL parameters" }] }, async ({ page }) => {
         const response = await submitAndCaptureSignIn(page, loginPage, NEGATIVE_COMPANY, NEGATIVE_MOBILE, VALID_PASSWORD);
         const request = response.request();
         expect(request.method()).toBe('POST');
@@ -79,7 +79,7 @@ test.describe('Login — Security', tags, () => {
         expect(request.url()).not.toContain(NEGATIVE_MOBILE);
     });
 
-    test('should not expose stack traces or database details in failed login error responses', async ({ page }) => {
+    test('should not expose stack traces or database details in failed login error responses', { annotation: [{ type: 'testcase', description: "LG-110: Failed-login error has no internal details" }] }, async ({ page }) => {
         const response = await submitAndCaptureSignIn(page, loginPage, 'WRONG', '500000000', WRONG_PASSWORD);
         expect(response.ok()).toBe(false);
         const text = await response.text();
@@ -114,7 +114,7 @@ test.describe('Login — Security: account lockout', tags, () => {
         }
     });
 
-    test('should lock the account after 3 consecutive failed login attempts', async ({ page, loginPage }) => {
+    test('should lock the account after 3 consecutive failed login attempts', { annotation: [{ type: 'testcase', description: "LG-105: Account locks after repeated failed attempts" }] }, async ({ page, loginPage }) => {
         accountLocked = true; // set before the attempts: even a half-failed run may have locked it
         for (let attempt = 1; attempt <= 3; attempt++) {
             await loginPage.goto(LOGIN_URL);

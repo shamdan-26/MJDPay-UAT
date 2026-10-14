@@ -33,7 +33,7 @@ test.describe('Registration – Business Info server-side rejections', { tag: ['
     test.beforeEach(() => { test.setTimeout(120_000); });
 
     for (const r of REJECTIONS) {
-        test(`should stay on Business Info with feedback when ${r.rule}`, async ({ page }) => {
+        test(`should stay on Business Info with feedback when ${r.rule}`, { annotation: [{ type: 'testcase', description: "RG-SRV-01: Should stay on Business Info with feedback when …" }] }, async ({ page }) => {
             await goToInfoStepMocked(page);
             const err = apiError(r.status, r.code);
             await mockProfileType(page, err.status, err.body);
@@ -47,7 +47,7 @@ test.describe('Registration – Business Info server-side rejections', { tag: ['
         });
     }
 
-    test('should accept a corrected resubmission after a rejection', async ({ page }) => {
+    test('should accept a corrected resubmission after a rejection', { annotation: [{ type: 'testcase', description: "RG-SRV-02: Should accept a corrected resubmission after a rejection" }] }, async ({ page }) => {
         await goToInfoStepMocked(page);
         let attempt = 0;
         await page.route('**/emi-profile/api/v1/register/profile-registration-type', route => {

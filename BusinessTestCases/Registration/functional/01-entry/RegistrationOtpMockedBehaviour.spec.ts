@@ -12,7 +12,7 @@ const VERIFY_BTN  = /Verify|تحقق/i;
 const OTP_BOX     = { name: 'One time password input' };
 
 test.describe('Registration – OTP behaviour (mocked backend)', { tag: ['@registration', '@entry', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
-    test('should send the typed code together with the requestId issued for the mobile', async ({ page }) => {
+    test('should send the typed code together with the requestId issued for the mobile', { annotation: [{ type: 'testcase', description: "RG-OTPM-01: Should send the typed code together with the requestId issued for the mobile" }] }, async ({ page }) => {
         const mocks = await mockOtpRequired(page, () => OTP_NOT_VALID);
         const mobile = await goToOtpDialogMocked(page);
         await fillOTP(page, '123456');
@@ -22,7 +22,7 @@ test.describe('Registration – OTP behaviour (mocked backend)', { tag: ['@regis
         expect(mocks.verifyCalls[0].mobileNumber).toContain(mobile);
     });
 
-    test('should stay on the OTP dialog and allow another attempt after a wrong code', async ({ page }) => {
+    test('should stay on the OTP dialog and allow another attempt after a wrong code', { annotation: [{ type: 'testcase', description: "RO-15: Remain on OTP popup after submitting wrong OTP" }] }, async ({ page }) => {
         await mockOtpRequired(page, () => OTP_NOT_VALID);
         await goToOtpDialogMocked(page);
         await fillOTP(page, '111111');
@@ -31,7 +31,7 @@ test.describe('Registration – OTP behaviour (mocked backend)', { tag: ['@regis
         await expect(page.getByRole('textbox', OTP_BOX).first()).toBeEnabled();
     });
 
-    test('should advance to Business Info when the second attempt is correct', async ({ page }) => {
+    test('should advance to Business Info when the second attempt is correct', { annotation: [{ type: 'testcase', description: "RG-OTPM-02: Should advance to Business Info when the second attempt is correct" }] }, async ({ page }) => {
         const mocks = await mockOtpRequired(page, attempt => (attempt === 1 ? OTP_NOT_VALID : OTP_OK));
         await goToOtpDialogMocked(page);
         await fillOTP(page, '111111');
@@ -45,7 +45,7 @@ test.describe('Registration – OTP behaviour (mocked backend)', { tag: ['@regis
         expect(mocks.verifyCalls).toHaveLength(2);
     });
 
-    test('should not advance when the OTP has expired', async ({ page }) => {
+    test('should not advance when the OTP has expired', { annotation: [{ type: 'testcase', description: "RG-OTPM-03: Should not advance when the OTP has expired" }] }, async ({ page }) => {
         await mockOtpRequired(page, () => apiError(400, 'OTP_EXPIRED'));
         await goToOtpDialogMocked(page);
         await fillOTP(page, '123456');
@@ -54,7 +54,7 @@ test.describe('Registration – OTP behaviour (mocked backend)', { tag: ['@regis
         await expect(page.locator('#register-profile-card-MERCHANT')).toHaveCount(0);
     });
 
-    test('should not advance when too many wrong attempts lock the request', async ({ page }) => {
+    test('should not advance when too many wrong attempts lock the request', { annotation: [{ type: 'testcase', description: "RG-OTPM-04: Should not advance when too many wrong attempts lock the request" }] }, async ({ page }) => {
         await mockOtpRequired(page, attempt => (attempt >= 3 ? apiError(423, 'OTP_MAX_ATTEMPTS_EXCEEDED') : OTP_NOT_VALID));
         await goToOtpDialogMocked(page);
         for (let i = 0; i < 3; i++) {
@@ -67,7 +67,7 @@ test.describe('Registration – OTP behaviour (mocked backend)', { tag: ['@regis
         await expect(page.getByRole('heading', { name: OTP_HEADING }).or(page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ }))).toBeVisible();
     });
 
-    test('should survive a server error on verify without leaving the OTP dialog or throwing', async ({ page }) => {
+    test('should survive a server error on verify without leaving the OTP dialog or throwing', { annotation: [{ type: 'testcase', description: "RG-OTPM-05: Should survive a server error on verify without leaving the OTP dialog or throwing" }] }, async ({ page }) => {
         const pageErrors: string[] = [];
         page.on('pageerror', e => pageErrors.push(e.message));
         await mockOtpRequired(page, () => apiError(500, 'INTERNAL_ERROR'));
@@ -78,7 +78,7 @@ test.describe('Registration – OTP behaviour (mocked backend)', { tag: ['@regis
         expect(pageErrors).toHaveLength(0);
     });
 
-    test('should send only one verify request when Verify is double-clicked', async ({ page }) => {
+    test('should send only one verify request when Verify is double-clicked', { annotation: [{ type: 'testcase', description: "RG-OTPM-06: Should send only one verify request when Verify is double-clicked" }] }, async ({ page }) => {
         const mocks = await mockOtpRequired(page, () => OTP_OK);
         await goToOtpDialogMocked(page);
         await fillOTP(page, '123456');
@@ -87,7 +87,7 @@ test.describe('Registration – OTP behaviour (mocked backend)', { tag: ['@regis
         expect(mocks.verifyCalls).toHaveLength(1);
     });
 
-    test('should fill every box when a full code is pasted into the first one', async ({ page }) => {
+    test('should fill every box when a full code is pasted into the first one', { annotation: [{ type: 'testcase', description: "RG-OTPM-07: Should fill every box when a full code is pasted into the first one" }] }, async ({ page }) => {
         await mockOtpRequired(page, () => OTP_NOT_VALID);
         await goToOtpDialogMocked(page);
         const boxes = page.getByRole('textbox', OTP_BOX);
@@ -104,7 +104,7 @@ test.describe('Registration – OTP behaviour (mocked backend)', { tag: ['@regis
         expect(values).toBe(code);
     });
 
-    test('should move focus back to the previous box on Backspace in an empty box', async ({ page }) => {
+    test('should move focus back to the previous box on Backspace in an empty box', { annotation: [{ type: 'testcase', description: "RG-OTPM-08: Should move focus back to the previous box on Backspace in an empty box" }] }, async ({ page }) => {
         await mockOtpRequired(page, () => OTP_NOT_VALID);
         await goToOtpDialogMocked(page);
         const boxes = page.getByRole('textbox', OTP_BOX);
@@ -114,7 +114,7 @@ test.describe('Registration – OTP behaviour (mocked backend)', { tag: ['@regis
         await expect(boxes.nth(0)).toBeFocused();
     });
 
-    test('should request a new code (not reuse the old requestId) when Resend is used', async ({ page }) => {
+    test('should request a new code (not reuse the old requestId) when Resend is used', { annotation: [{ type: 'testcase', description: "RG-OTPM-09: Should request a new code (not reuse the old requestId) when Resend is used" }] }, async ({ page }) => {
         test.setTimeout(120_000);
         const mocks = await mockOtpRequired(page, () => OTP_NOT_VALID);
         await goToOtpDialogMocked(page);

@@ -78,7 +78,7 @@ test.describe('Registration - Products Step UI (Page Elements)', { tag: ['@regis
 
     // ── Outer progress bar ───────────────────────────────────────────────
 
-    test('should display all four outer step labels: Business Info, NAFATH, Products, Contract', async () => {
+    test('should display all four outer step labels: Business Info, NAFATH, Products, Contract', { annotation: [{ type: 'testcase', description: "RP-09: Display all four outer step labels: Business Info, NAFATH, Products, Contract" }] }, async () => {
         await expect(products.outerStepBar.filter({ hasText: /business info|بيانات النشاط/i })).toBeVisible();
         await expect(products.outerStepBar.filter({ hasText: /nafath|نَفاذ|نفاذ/i })).toBeVisible();
         await expect(products.outerStepBar.filter({ hasText: /products|المنتجات/i })).toBeVisible();
@@ -128,7 +128,7 @@ test.describe('Registration - Products Step UI (Page Elements)', { tag: ['@regis
         await expect(products.selectedCounter).toContainText(/[1-9]\d*/);
     });
 
-    test('should display the Cancel button', async () => {
+    test('should display the Cancel button', { annotation: [{ type: 'testcase', description: "RP-17: Display the Cancel button" }] }, async () => {
         await expect(products.cancelButton).toBeVisible();
     });
 

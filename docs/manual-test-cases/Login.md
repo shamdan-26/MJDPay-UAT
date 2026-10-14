@@ -251,19 +251,95 @@ Context: EMI-5836 ("BE - Block login when Nafath or Yaqeen TTL /data has expired
 
 ---
 
+## L. First login and password lifecycle
+
+Context: a new Business user is issued the default password `Aa#123456`. Signing in with it makes the app send the user, after the OTP, to a forced reset screen (`/business/auth/reset-password`) with Current password, New password, Confirm password and a Reset password button, before anything else is reachable (EMI-2191, EMI-125/124). The policy shown on the screen is 8–20 characters with a lowercase letter, an uppercase letter, a digit and a special character. A password change ends the session (EMI-200). Business rule: no reuse of the last 3 passwords (EMI-2191); the policy is admin-configurable.
+
+| ID | Title | Steps | Expected Result | Priority |
+|---|---|---|---|---|
+| LG-147 | Default password forces the reset screen after the OTP | 1. Sign in as a Business user still on the default password `Aa#123456`<br>2. Enter the OTP | The user lands on `/business/auth/reset-password`; the Current password, New password and Confirm password fields and the Reset password button are shown | P1 |
+| LG-148 | The app is unreachable until the password is changed | 1. Reach the reset screen as in LG-147<br>2. Open `/business/main/home` directly | The home page is not shown; the user is kept out of the app | P1 |
+| LG-149 | New password policy is enforced: 8–20 characters with lowercase, uppercase, digit and special character | On the reset screen enter, one at a time, a new password with: 7 characters; 21 characters; no uppercase letter; no lowercase letter; no digit; no special character; then exactly 8 and exactly 20 valid characters | Each broken password keeps Reset password disabled; the 8- and the 20-character valid passwords enable it | P1 |
+| LG-150 | The confirmation must match the new password, case-sensitive | 1. Enter a valid new password<br>2. Enter a confirmation that differs by one character, then one that differs only in letter case<br>3. Correct the confirmation | The message "new password and its confirmation do not match" is shown and Reset password stays disabled in both cases; the message clears and the button enables when the confirmation matches | P2 |
+| LG-151 | A wrong current password is rejected | Enter a wrong current password and a valid new password with matching confirmation; click Reset password | An error message is shown, the user stays on the reset screen and the password is unchanged | P1 |
+| LG-152 | The default password cannot be reused as the new password | Enter `Aa#123456` as current, new and confirmation; click Reset password if it is enabled | Open Question — expected: the change is refused and the user stays on the reset screen with a message that explains why. Record whether the form blocks it or the server does | P2 |
+| LG-153 | A valid change sets the password, ends the session and retires the default | 1. Reach the reset screen<br>2. Enter `Aa#123456` as current and `Aa#1234567` as new and confirmation; click Reset password<br>3. Sign in with `Aa#1234567` and the OTP<br>4. Sign out and sign in with `Aa#123456` | 1. After the change the user is signed out and sent to the login page (EMI-200)<br>2. `Aa#1234567` signs in through the OTP straight to the home page, with no second reset<br>3. `Aa#123456` is rejected | P1 |
+| LG-154 | The last 3 passwords cannot be set again | Change the password through three successive changes, then try to set the first of them again | The reuse is refused with a message and the password is unchanged (EMI-2191, last 3 passwords) | P2 |
+| LG-155 | An expired password forces a change at sign-in | Sign in as a user whose password has passed its configured expiry | After the OTP the user is taken to the password change screen and cannot reach the app until it is changed | P2 |
+| LG-156 | Switching language on the reset screen warns before discarding typed input | 1. Type the current password on the reset screen<br>2. Click EN<br>3. Choose to keep editing, then repeat and choose to change | 1. A warning says changing the language reloads the page and loses what was typed<br>2. Keep editing closes the warning and keeps the typed value<br>3. Change reloads the reset screen with empty fields in the chosen language | P3 |
+
+---
+
+## M. Session and token lifecycle
+
+Context: access and refresh tokens, invalid-token handling and the one-active-session rule (EMI-2042 / EMI-2043, EMI-4625). The refresh token lives exactly 1 minute longer than the access token. An invalid token returns HTTP 498 and the client signs the user out with "Session expired. Please log in again." Web portal login always needs an OTP; there is no trusted-device mode on the web.
+
+| ID | Title | Steps | Expected Result | Priority |
+|---|---|---|---|---|
+| LG-157 | HTTP 498 signs the user out with a session-expired message | 1. Sign in and reach the home page<br>2. Make the next API call answer HTTP 498 (invalid token)<br>3. Reload the page | 1. The user is returned to the login page<br>2. A session-expired message is shown<br>3. Opening a protected page redirects to login | P1 |
+| LG-158 | The refresh token lives exactly 1 minute longer than the access token | Sign in and read the lifetime (issued-at to expiry) of the access token and of the refresh token | The refresh token lifetime equals the access token lifetime plus 60 seconds | P2 |
+| LG-159 | Web sign-in always asks for the OTP | 1. Sign in with the OTP and reach home<br>2. Sign out<br>3. Sign in again | The OTP step is shown on both sign-ins and the sign-in response says an OTP is required; no trusted-device skip | P1 |
+| LG-160 | A second sign-in on another device ends the first session | 1. Sign in with an account in browser A<br>2. Sign in with the same account in browser B<br>3. Use browser A | The first session is ended (forced logout) and browser A is returned to login (single-device policy, SAMA CSF 3.1) | P1 |
+| LG-161 | An idle session is ended after the inactivity timeout | Sign in and leave the page idle past the timeout | Open Question — no timeout value is defined in the business rules; record the product decision | P3 |
+| LG-162 | An expired access token returns 401 and the refresh token renews it; an expired refresh token forces sign-in | 1. Call a protected endpoint with an expired access token<br>2. Call the refresh endpoint with a valid refresh token<br>3. Call it again with an expired refresh token | 1. 401<br>2. A new access token is issued<br>3. The user must sign in again | P2 |
+
+---
+
+## N. Lockout and account lifecycle
+
+Context: three consecutive failed sign-ins lock the account temporarily; three temporary locks deactivate it (EMI-4625). The lock duration and the unlock mechanism are not specified. Admins can unlock an account (EMI-2121).
+
+| ID | Title | Steps | Expected Result | Priority |
+|---|---|---|---|---|
+| LG-163 | Three temporary locks deactivate the account | Fail the sign-in three times, wait out or clear the lock, and repeat until three locks have occurred | After the third lock the account is deactivated and sign-in is refused with the deactivated-account message | P1 |
+| LG-164 | A temporary lock lifts by itself after the lock duration | Lock the account with three failed sign-ins and wait for the lock duration | Open Question — the duration is unspecified; record it. After it, a correct sign-in succeeds | P2 |
+| LG-165 | After an admin unlocks the account, the user can sign in again | 1. Lock the account with three failed sign-ins<br>2. An admin unlocks it in the Admin Portal<br>3. Sign in with the correct password | 1. The locked account is refused<br>2. After the unlock the correct password signs in through the OTP | P1 |
+
+---
+
+## O. Audit and notifications
+
+Context: every login, OTP, trust and logout event is logged with user, device, location, IP and timestamp and kept for 10 years (EMI-4625). A first sign-in on a new device triggers an SMS acknowledgement; credential changes trigger an SMS alert (EMI-645).
+
+| ID | Title | Steps | Expected Result | Priority |
+|---|---|---|---|---|
+| LG-166 | Every sign-in, OTP and sign-out is recorded in the audit log | Sign in, complete the OTP and sign out; read the audit records for the user | Records exist for the sign-in, the OTP and the sign-out, each with user, device, location, IP and timestamp | P2 |
+| LG-167 | A first sign-in on a new device sends the SMS acknowledgement | Sign in with an account from a device it has not used before | The account's mobile receives the new-device SMS | P2 |
+| LG-168 | A credential change sends the SMS alert | Change the password of an account | The account's mobile receives the credential-change SMS | P2 |
+
+---
+
+## P. Device trust and risk (mobile app and risk engine)
+
+Context: on the mobile app a device becomes trusted after the first username, password and OTP, and biometric can then skip the OTP; risk-engine flags force an OTP (EMI-4625, EMI-243). The web portal has no trusted-device mode, so these cases are not runnable from the web suite.
+
+| ID | Title | Steps | Expected Result | Priority |
+|---|---|---|---|---|
+| LG-169 | After the first successful sign-in on the app the device is trusted and biometric can skip the OTP | 1. Sign in on the app with password and OTP<br>2. Sign out and reopen the app<br>3. Sign in with biometric | 1. The device becomes trusted without a prompt<br>2. Biometric sign-in succeeds without an OTP<br>3. A password sign-in on the trusted device still needs the OTP | P2 |
+| LG-170 | A risk-engine flag forces the OTP | Raise each flag in turn on a trusted device: device fingerprint change, location anomaly, VPN/proxy/TOR, high-frequency attempts, then sign in with biometric | An OTP is required in every case | P2 |
+
+---
+
 ## Automated coverage note
 
-This manual test suite mirrors the existing Playwright automation for the Login feature. The corresponding automated specs are:
+The Playwright specs for this feature are in `BusinessTestCases/Login/` (layer first, login stage second). The automation ids below are cross-referenced to the manual sections. Grouping by business capability, the full category table and the known gaps are in `docs/test-plans/Login-Test-Plan.md`.
 
-- `BusinessTestCases/login/ui/LoginPage.spec.ts` — page elements & layout (Section A)
-- `BusinessTestCases/login/functional/LoginFormValidation.spec.ts` — button state & field validation (Section B)
-- `BusinessTestCases/login/ui/LoginValidationPopup.spec.ts` — validation card UI (Section C)
-- `BusinessTestCases/login/functional/LoginOtpFlow.spec.ts` — validation card negative/detail cases and OTP verification (Sections C & D)
-- `BusinessTestCases/login/functional/LoginHappyPath.spec.ts` — end-to-end successful login and dashboard landing (Section E)
-- `BusinessTestCases/login/functional/LoginInvalidCredentials.spec.ts` — invalid credentials, account status errors, and edge cases (Sections F & G)
-- `BusinessTestCases/login/functional/LoginNavigation.spec.ts` — navigation links and already-authenticated redirect (Section H)
-- `BusinessTestCases/login/functional/LoginSecurity.spec.ts` — lockout, enumeration, XSS, POST-only, and error-detail checks (Section I)
-- `BusinessTestCases/Login/api/signin/*.spec.ts` — device/sign-in/OTP API contract (Section J)
-- `BusinessTestCases/Login/api/document-expiry/LoginNafathWathiqExpiry.spec.ts` — NAFATH/WATHIQ document & TTL expiry, revalidation flows, and deactivation scope (Section K, EMI-5836). Document-expiry cases (LG-132, LG-133, LG-138) run against dedicated env-gated accounts (`NAFATH_EXPIRED_COMPANY/MOBILE`, `WATHIQ_EXPIRED_COMPANY/MOBILE` in `LoginHelper.ts`) and are skipped until those are provisioned in UAT. The remaining cases (TTL-only expiry, revalidation APIs, deactivation scope) are written as `test.skip(true, ...)` pending Redis-seeding access and confirmation of the renewal endpoint paths against the Emi Profile Service Swagger doc — see the file header for details.
+| Manual section | Automated spec(s) | Automation ids |
+|---|---|---|
+| A. Page elements and layout | `ui/LoginPage.spec.ts`, `ui/LoginResponsive.spec.ts` | LG-01 to LG-31, LG-PAGE, LG-RESP |
+| B. Form validation | `functional/01-form/LoginFormValidation.spec.ts`, `LoginFormKeyboard.spec.ts` | LG-32 to LG-53, LG-KBD |
+| C. Validation card | `ui/LoginValidationPopup.spec.ts`, `functional/03-otp/LoginValidationCard.spec.ts` | LG-54 to LG-63, LG-POP (LG-62 skipped, likely obsolete) |
+| D. OTP | `functional/03-otp/LoginOtp.spec.ts`, `LoginOtpEdgeCases.spec.ts` | LG-64 to LG-75, LG-OTPX |
+| E. Happy path | `functional/04-session/LoginHappyPath.spec.ts`, `LoginSessionLifecycle.spec.ts` | LG-76 to LG-86, LG-SESS |
+| F. Invalid credentials | `functional/02-credentials/LoginInvalidCredentials.spec.ts`, `LoginEdgeCases.spec.ts`, `LoginErrorHandling.spec.ts` | LG-87 to LG-96, LG-EDGE, LG-ERR |
+| G. Locked, deactivated, AML | `functional/02-credentials/LoginAccountStatus.spec.ts`, `LoginAccountStates.spec.ts`, `integration/LoginAdminStatusIntegration.spec.ts` | LG-92 to LG-100, LG-STATE, LG-INT (env-gated accounts) |
+| H. Navigation | `functional/04-session/LoginNavigation.spec.ts` | LG-101 to LG-104, LG-NAV |
+| I. Security | `security/LoginSecurity.spec.ts`, `LoginApiSecurity.spec.ts`, `LoginSessionSecurity.spec.ts` | LG-105 to LG-110, LG-APISEC, LG-SESSSEC |
+| J. API contract | `api/signin/*.spec.ts` | LG-111 to LG-131, LG-CON, LG-APIL10N — direct sign-in used to get HTTP 412 on dev (invalid device fingerprint, fixed 2026-10-14); re-run to confirm |
+| K. NAFATH/WATHIQ expiry | `api/document-expiry/LoginNafathWathiqExpiry.spec.ts` | LG-132 to LG-146 (env-gated; TTL cases pending) |
+| L. First login | `functional/05-first-login/FirstLoginUi.spec.ts`, `FirstLoginEndToEnd.spec.ts` | LG-147 to LG-153 ← LG-FIRST-01 to 18 and LG-FIRST-20; LG-156 ← LG-FIRST-19, LG-FIRST-21; LG-153 also covers EMI-200 |
+| M. Session and token | `functional/04-session/LoginTokenLifecycle.spec.ts` | LG-157 ← LG-TOK-01, LG-158 ← LG-TOK-02, LG-159 ← LG-TOK-03 |
+| L–P, not yet automatable | `functional/06-pending/LoginPendingCases.spec.ts` | LG-154, LG-155, LG-160 to LG-170 and LG-137, each skipped with its blocker |
+| Non-functional | `non-functional/*` | LG-A11Y, LG-PERF, LG-APIPERF and the visual baselines have no manual counterpart |
 
-Supporting helpers referenced by these specs: `BusinessTestCases/login/LoginHelper.ts` (test data, OTP retrieval via MongoDB, login helpers) and `BusinessTestCases/pageElements/LoginPage.ts` (the page object for all locators and actions used above).
+Supporting code: `BusinessTestCases/Login/LoginHelper.ts` (accounts and the fixed OTP `918512`), `BusinessTestCases/Login/helpers/` (API, mocks, session and first-login helpers) and `BusinessTestCases/pageElements/Shared/LoginPage.ts` (the page object for the login screen).

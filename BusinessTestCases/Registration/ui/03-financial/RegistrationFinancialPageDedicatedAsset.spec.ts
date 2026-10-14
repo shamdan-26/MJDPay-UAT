@@ -26,7 +26,7 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3) — dedic
         await goToFinancialStepWithDedicatedAsset(page);
     });
 
-    test('should accept numeric input for Monthly Expected Number Of Bills', async ({ page }) => {
+    test('should accept numeric input for Monthly Expected Number Of Bills', { annotation: [{ type: 'testcase', description: "RF-45: Accept numeric input for Monthly Expected Number Of Bills" }] }, async ({ page }) => {
         await page.getByRole('textbox', { name: /monthly expected number|العدد الشهري المتوقع للفواتير/i }).fill('1500');
         await expect(page.getByRole('textbox', { name: /monthly expected number|العدد الشهري المتوقع للفواتير/i })).toHaveValue('1500');
     });

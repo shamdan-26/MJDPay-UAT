@@ -31,17 +31,17 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3) — state
         await goToFinancialStep(page);
     });
 
-    test('should accept numeric input for Monthly Expected Sum Of Bills', async ({ page }) => {
+    test('should accept numeric input for Monthly Expected Sum Of Bills', { annotation: [{ type: 'testcase', description: "RF-36: Accept numeric input for Monthly Expected Sum Of Bills" }] }, async ({ page }) => {
         await page.getByRole('textbox', { name: /monthly expected sum|إجمالي الفواتير الصادرة/i }).fill('50000');
         await expect(page.getByRole('textbox', { name: /monthly expected sum|إجمالي الفواتير الصادرة/i })).toHaveValue('50000');
     });
 
-    test('should accept numeric input for Expected Monthly Withdrawal', async ({ page }) => {
+    test('should accept numeric input for Expected Monthly Withdrawal', { annotation: [{ type: 'testcase', description: "RF-37: Accept numeric input for Expected Monthly Withdrawal" }] }, async ({ page }) => {
         await page.getByRole('textbox', { name: /monthly withdrawal|السحب الشهري/i }).fill('10000');
         await expect(page.getByRole('textbox', { name: /monthly withdrawal|السحب الشهري/i })).toHaveValue('10000');
     });
 
-    test('should accept numeric input for Expected Monthly Deposit', async ({ page }) => {
+    test('should accept numeric input for Expected Monthly Deposit', { annotation: [{ type: 'testcase', description: "RF-38: Accept numeric input for Expected Monthly Deposit" }] }, async ({ page }) => {
         await page.getByRole('textbox', { name: /monthly deposit|الإيداع الشهري/i }).fill('20000');
         await expect(page.getByRole('textbox', { name: /monthly deposit|الإيداع الشهري/i })).toHaveValue('20000');
     });
@@ -67,7 +67,7 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3) — state
         await expect(page.getByText(/banks|البنك/i).first()).toBeVisible();
     });
 
-    test('should open the Industries dropdown when clicked', async ({ page }) => {
+    test('should open the Industries dropdown when clicked', { annotation: [{ type: 'testcase', description: "RF-40: Open the Industries dropdown when clicked" }] }, async ({ page }) => {
         // Industries is mat-select-value-0 on arrival — Banks and Annual Income are
         // mat-select-value-1 at different points (Annual Income pre-advance, Banks
         // post-advance), so index 0 is the only unambiguous one on arrival.
@@ -75,7 +75,7 @@ test.describe('Registration – Financial & Business Step (Tab 2 of 3) — state
         await expect(page.locator('mat-option').first()).toBeVisible({ timeout: 5000 });
     });
 
-    test('should open the Annual Income dropdown when clicked', async ({ page }) => {
+    test('should open the Annual Income dropdown when clicked', { annotation: [{ type: 'testcase', description: "RF-41: Open the Annual Income dropdown when clicked" }] }, async ({ page }) => {
         await page.locator('#mat-select-value-1.mat-mdc-select-value').click();
         await expect(page.locator('mat-option').first()).toBeVisible({ timeout: 5000 });
     });

@@ -20,7 +20,7 @@ test.describe('Login – API 2: POST /devices/uuid', { tag: ['@login', '@api'], 
         token:            '',
     };
 
-    test('API-02: should return 200 with a UUID', async ({ request }) => {
+    test('API-02: should return 200 with a UUID', { annotation: [{ type: 'testcase', description: "LG-112: POST /devices/uuid succeeds" }] }, async ({ request }) => {
         const res = await request.post(`${API_BASE}/devices/uuid`, {
             data:    devicePayload,
             headers: commonHeaders(),
@@ -31,7 +31,7 @@ test.describe('Login – API 2: POST /devices/uuid', { tag: ['@login', '@api'], 
         expect(body).toHaveProperty('uuid');
     });
 
-    test('API-02a: uuid should be a non-empty string in UUID format', async ({ request }) => {
+    test('API-02a: uuid should be a non-empty string in UUID format', { annotation: [{ type: 'testcase', description: "LG-API-02a: Uuid should be a non-empty string in UUID format" }] }, async ({ request }) => {
         const res  = await request.post(`${API_BASE}/devices/uuid`, {
             data:    devicePayload,
             headers: commonHeaders(),
@@ -44,7 +44,7 @@ test.describe('Login – API 2: POST /devices/uuid', { tag: ['@login', '@api'], 
         );
     });
 
-    test('API-02b: response should use JSON content-type', async ({ request }) => {
+    test('API-02b: response should use JSON content-type', { annotation: [{ type: 'testcase', description: "LG-API-02b: Response should use JSON content-type" }] }, async ({ request }) => {
         const res = await request.post(`${API_BASE}/devices/uuid`, {
             data:    devicePayload,
             headers: commonHeaders(),
@@ -55,7 +55,7 @@ test.describe('Login – API 2: POST /devices/uuid', { tag: ['@login', '@api'], 
 
     // ── Negative ──────────────────────────────────────────────────────────────
 
-    test('API-N1: should return 400 when body is empty', async ({ request }) => {
+    test('API-N1: should return 400 when body is empty', { annotation: [{ type: 'testcase', description: "LG-113: POST /devices/uuid rejects empty body" }] }, async ({ request }) => {
         const res = await request.post(`${API_BASE}/devices/uuid`, {
             data:    {},
             headers: commonHeaders(),
@@ -64,7 +64,7 @@ test.describe('Login – API 2: POST /devices/uuid', { tag: ['@login', '@api'], 
         expect([400, 422]).toContain(res.status());
     });
 
-    test('API-N2: should return 400 when deviceId is missing', async ({ request }) => {
+    test('API-N2: should return 400 when deviceId is missing', { annotation: [{ type: 'testcase', description: "LG-114: POST /devices/uuid rejects missing deviceId" }] }, async ({ request }) => {
         const { deviceId: _, ...payload } = devicePayload as Record<string, unknown>;
         const res = await request.post(`${API_BASE}/devices/uuid`, {
             data:    payload,

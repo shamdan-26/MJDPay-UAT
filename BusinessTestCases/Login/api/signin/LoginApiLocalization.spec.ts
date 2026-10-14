@@ -15,37 +15,37 @@ async function failedSignIn(request: import('@playwright/test').APIRequestContex
 }
 
 test.describe('Login – API: localisation of auth errors', { tag: ['@login', '@api'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'api' }] }, () => {
-    test('should return the English message for locale en_uk', async ({ request }) => {
+    test('should return the English message for locale en_uk', { annotation: [{ type: 'testcase', description: "LG-APIL10N-01: Should return the English message for locale en_uk" }] }, async ({ request }) => {
         const r = await failedSignIn(request, 'en_uk');
         expect(r.status).toBeGreaterThanOrEqual(400);
         expect(r.text).not.toMatch(ARABIC);
     });
 
-    test('should return an Arabic message for locale ar_sa', async ({ request }) => {
+    test('should return an Arabic message for locale ar_sa', { annotation: [{ type: 'testcase', description: "LG-APIL10N-02: Should return an Arabic message for locale ar_sa" }] }, async ({ request }) => {
         const r = await failedSignIn(request, 'ar_sa');
         expect(r.status).toBeGreaterThanOrEqual(400);
         expect(r.text).toMatch(ARABIC);
     });
 
-    test('should return the same HTTP status in both languages', async ({ request }) => {
+    test('should return the same HTTP status in both languages', { annotation: [{ type: 'testcase', description: "LG-APIL10N-03: Should return the same HTTP status in both languages" }] }, async ({ request }) => {
         const en = await failedSignIn(request, 'en_uk');
         const ar = await failedSignIn(request, 'ar_sa');
         expect(ar.status).toBe(en.status);
     });
 
-    test('should keep the error code identical across languages', async ({ request }) => {
+    test('should keep the error code identical across languages', { annotation: [{ type: 'testcase', description: "LG-APIL10N-04: Should keep the error code identical across languages" }] }, async ({ request }) => {
         const en = await failedSignIn(request, 'en_uk');
         const ar = await failedSignIn(request, 'ar_sa');
         expect(ar.body['code'] ?? ar.body['errorCode']).toEqual(en.body['code'] ?? en.body['errorCode']);
     });
 
-    test('should fall back to a valid response for an unsupported locale', async ({ request }) => {
+    test('should fall back to a valid response for an unsupported locale', { annotation: [{ type: 'testcase', description: "LG-APIL10N-05: Should fall back to a valid response for an unsupported locale" }] }, async ({ request }) => {
         const r = await failedSignIn(request, 'xx_yy');
         expect(r.status).toBeGreaterThanOrEqual(400);
         expect(r.status).toBeLessThan(500);
     });
 
-    test('should localise the missing-field validation error too', async ({ request }) => {
+    test('should localise the missing-field validation error too', { annotation: [{ type: 'testcase', description: "LG-APIL10N-06: Should localise the missing-field validation error too" }] }, async ({ request }) => {
         const res = await request.post(`${API_BASE}/auth/signin`, { data: {}, headers: withLocale('ar_sa') });
         expect(res.status()).toBe(400);
         expect(await res.text()).toMatch(ARABIC);

@@ -433,7 +433,7 @@ test.describe('Registration – API Flow', { tag: ['@registration', '@api'], ann
 
   // ── Negative / Edge-case tests ─────────────────────────────────────────────
 
-  test('API-N1: POST /register/mobile/otp with invalid number format should return 400', async ({ request }) => {
+  test('API-N1: POST /register/mobile/otp with invalid number format should return 400', { annotation: [{ type: 'testcase', description: "RG-API-N1: POST /register/mobile/otp with invalid number format should return 400" }] }, async ({ request }) => {
     const res = await request.post(`${API_BASE}/emi-profile/api/v1/register/mobile/otp`, {
       data: { mobileNumber: '123' },
       headers: { 'Content-Type': 'application/json' },
@@ -441,7 +441,7 @@ test.describe('Registration – API Flow', { tag: ['@registration', '@api'], ann
     expect(res.status()).toBe(400);
   });
 
-  test('API-N2: POST /register/verify/otp with wrong OTP should return 400', async ({ request }) => {
+  test('API-N2: POST /register/verify/otp with wrong OTP should return 400', { annotation: [{ type: 'testcase', description: "RG-API-N2: POST /register/verify/otp with wrong OTP should return 400" }] }, async ({ request }) => {
     // Use second-to-last asset (last is reserved for API-04 resend test)
     const asset2      = DEV_OTP_ASSETS[DEV_OTP_ASSETS.length - 2];
     const freshMobile = `+966${asset2.mobile}`;
@@ -462,7 +462,7 @@ test.describe('Registration – API Flow', { tag: ['@registration', '@api'], ann
     expect(body.message?.messageCode ?? body.errorCode).toBeTruthy();
   });
 
-  test('API-N3: POST /register/profile-registration-type without token should return 401', async ({ request }) => {
+  test('API-N3: POST /register/profile-registration-type without token should return 401', { annotation: [{ type: 'testcase', description: "RG-API-N3: POST /register/profile-registration-type without token should return 401" }] }, async ({ request }) => {
     const res = await request.post(
       `${API_BASE}/emi-profile/api/v1/register/profile-registration-type`,
       {
@@ -478,7 +478,7 @@ test.describe('Registration – API Flow', { tag: ['@registration', '@api'], ann
     expect(res.status()).toBe(401);
   });
 
-  test('API-N4: POST /register/profile-registration-type with invalid nationalId should return 400', async ({ request }) => {
+  test('API-N4: POST /register/profile-registration-type with invalid nationalId should return 400', { annotation: [{ type: 'testcase', description: "RG-API-N4: POST /register/profile-registration-type with invalid nationalId should return 400" }] }, async ({ request }) => {
     const res = await request.post(
       `${API_BASE}/emi-profile/api/v1/register/profile-registration-type`,
       {
@@ -499,7 +499,7 @@ test.describe('Registration – API Flow', { tag: ['@registration', '@api'], ann
     expect(body.errorCode).toMatch(/INVALID-NATIONAL-ID/i);
   });
 
-  test('API-N5: GET /products without token should return 401', async ({ request }) => {
+  test('API-N5: GET /products without token should return 401', { annotation: [{ type: 'testcase', description: "RG-API-N5: GET /products without token should return 401" }] }, async ({ request }) => {
     const res = await request.get(`${API_BASE}/emi-profile/api/v1/products`);
     expect(res.status()).toBe(401);
   });
@@ -509,7 +509,7 @@ test.describe('Registration – API Flow', { tag: ['@registration', '@api'], ann
   // were covered above — this extends the same 401-without-token check across the
   // remaining endpoints the ticket lists as protected.
 
-  test('API-N6: POST /register without token should return 401', async ({ request }) => {
+  test('API-N6: POST /register without token should return 401', { annotation: [{ type: 'testcase', description: "RG-API-N6: POST /register without token should return 401" }] }, async ({ request }) => {
     const res = await request.post(`${API_BASE}/emi-profile/api/v1/register`, {
       data: { unifiedNumber: '0000000000', nationalId: '0000000000', email: 'unauth@test.com' },
       headers: { 'Content-Type': 'application/json' },
@@ -517,7 +517,7 @@ test.describe('Registration – API Flow', { tag: ['@registration', '@api'], ann
     expect(res.status()).toBe(401);
   });
 
-  test('API-N7: POST /register/uri/status (NAFATH) without token should return 401', async ({ request }) => {
+  test('API-N7: POST /register/uri/status (NAFATH) without token should return 401', { annotation: [{ type: 'testcase', description: "RG-API-N7: POST /register/uri/status (NAFATH) without token should return 401" }] }, async ({ request }) => {
     const res = await request.post(`${API_BASE}/emi-profile/api/v1/register/uri/status`, {
       data: {},
       headers: { 'Content-Type': 'application/json' },
@@ -525,7 +525,7 @@ test.describe('Registration – API Flow', { tag: ['@registration', '@api'], ann
     expect(res.status()).toBe(401);
   });
 
-  test('API-N8: POST /register/products without token should return 401', async ({ request }) => {
+  test('API-N8: POST /register/products without token should return 401', { annotation: [{ type: 'testcase', description: "RG-API-N8: POST /register/products without token should return 401" }] }, async ({ request }) => {
     const res = await request.post(`${API_BASE}/emi-profile/api/v1/register/products`, {
       data: { productIds: [1] },
       headers: { 'Content-Type': 'application/json' },
@@ -533,17 +533,17 @@ test.describe('Registration – API Flow', { tag: ['@registration', '@api'], ann
     expect(res.status()).toBe(401);
   });
 
-  test('API-N9: GET /contracts/preview without token should return 401', async ({ request }) => {
+  test('API-N9: GET /contracts/preview without token should return 401', { annotation: [{ type: 'testcase', description: "RG-API-N9: GET /contracts/preview without token should return 401" }] }, async ({ request }) => {
     const res = await request.get(`${API_BASE}/emi-profile/api/v1/contracts/preview?profileCode=TEST-0001`);
     expect(res.status()).toBe(401);
   });
 
-  test('API-N10: GET /contracts/generate-file without token should return 401', async ({ request }) => {
+  test('API-N10: GET /contracts/generate-file without token should return 401', { annotation: [{ type: 'testcase', description: "RG-API-N10: GET /contracts/generate-file without token should return 401" }] }, async ({ request }) => {
     const res = await request.get(`${API_BASE}/emi-profile/api/v1/contracts/generate-file?profileCode=TEST-0001`);
     expect(res.status()).toBe(401);
   });
 
-  test('API-N11: POST /register/contract/accept without token should return 401', async ({ request }) => {
+  test('API-N11: POST /register/contract/accept without token should return 401', { annotation: [{ type: 'testcase', description: "RG-API-N11: POST /register/contract/accept without token should return 401" }] }, async ({ request }) => {
     const res = await request.post(`${API_BASE}/emi-profile/api/v1/register/contract/accept`, {
       data: { productIds: [1], contractAccepted: true },
       headers: { 'Content-Type': 'application/json' },
@@ -555,7 +555,7 @@ test.describe('Registration – API Flow', { tag: ['@registration', '@api'], ann
   // token (EMI-5751 explicitly says not to send one here) — i.e. they must not
   // themselves start requiring auth.
 
-  test('API-N12: POST /register/mobile/otp should not require a session token', async ({ request }) => {
+  test('API-N12: POST /register/mobile/otp should not require a session token', { annotation: [{ type: 'testcase', description: "RG-API-N12: POST /register/mobile/otp should not require a session token" }] }, async ({ request }) => {
     const res = await request.post(`${API_BASE}/emi-profile/api/v1/register/mobile/otp`, {
       data: { mobileNumber: `+966${DEV_OTP_ASSETS[0].mobile}` },
       headers: { 'Content-Type': 'application/json' },

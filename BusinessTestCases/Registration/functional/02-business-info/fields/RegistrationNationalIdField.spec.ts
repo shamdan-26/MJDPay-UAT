@@ -22,11 +22,11 @@ test.describe('Registration – National ID / Iqama Field', { tag: ['@registrati
         await expect(page.locator(ID_INPUT)).toHaveValue(asset.nationalId);
     });
 
-    test('should be empty on initial page load', async ({ page }) => {
+    test('should be empty on initial page load', { annotation: [{ type: 'testcase', description: "RI-69: Be empty on initial page load" }] }, async ({ page }) => {
         await expect(page.locator(ID_INPUT)).toHaveValue('');
     });
 
-    test('should show the Clear button after a value is entered', async ({ page }) => {
+    test('should show the Clear button after a value is entered', { annotation: [{ type: 'testcase', description: "RI-70: Show the Clear button after a value is entered" }] }, async ({ page }) => {
         await page.locator(ID_INPUT).fill(asset.nationalId);
         await expect(
             page.locator('#register-id-group').getByRole('button', { name: CLEAR_BTN_NAME })
@@ -39,7 +39,7 @@ test.describe('Registration – National ID / Iqama Field', { tag: ['@registrati
         await expect(page.locator(ID_INPUT)).toHaveValue('');
     });
 
-    test('should hide the Clear button after the field is emptied via Clear', async ({ page }) => {
+    test('should hide the Clear button after the field is emptied via Clear', { annotation: [{ type: 'testcase', description: "RI-72: Hide the Clear button after the field is emptied via Clear" }] }, async ({ page }) => {
         await page.locator(ID_INPUT).fill(asset.nationalId);
         await page.locator('#register-id-group').getByRole('button', { name: CLEAR_BTN_NAME }).click();
         await expect(
@@ -77,7 +77,7 @@ test.describe('Registration – National ID / Iqama Field', { tag: ['@registrati
     });
 
     // Boundary
-    test('should handle a 1000-character input without crashing', async ({ page }) => {
+    test('should handle a 1000-character input without crashing', { annotation: [{ type: 'testcase', description: "RI-78: Handle a 1000-character input without crashing" }] }, async ({ page }) => {
         await page.locator(ID_INPUT).fill('1'.repeat(1000));
         await expect(page.locator(ID_INPUT)).toBeVisible();
     });

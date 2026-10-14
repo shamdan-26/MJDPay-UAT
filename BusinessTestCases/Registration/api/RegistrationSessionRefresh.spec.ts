@@ -229,7 +229,7 @@ test.describe('Registration Session Refresh — Isolation From Login (RSR-06, EM
 });
 
 test.describe('Registration Session Refresh — Contract Pinned (RSR-07, EMI-5995 / EMI-6059)', { tag: ['@registration', '@api'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'api' }] }, () => {
-    test('RSR-07: the endpoint paths and the millisecond unit are version-controlled', () => {
+    test('RSR-07: the endpoint paths and the millisecond unit are version-controlled', { annotation: [{ type: 'testcase', description: "RSR-07: The endpoint paths and the millisecond unit are version-controlled" }] }, () => {
         // No network. This pins the three paths and the expirationDuration unit
         // from the EMI-6059 AC so a silent change shows up as a code diff
         // rather than as a mystery skip.

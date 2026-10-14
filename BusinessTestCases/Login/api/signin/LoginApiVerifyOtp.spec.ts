@@ -27,7 +27,7 @@ test.describe('Login – API 4: POST /auth/verify/otp', { tag: ['@login', '@api'
         }
     });
 
-    test('API-04: should return 200 with valid OTP (dev env — OTP is 918512)', async ({ request }) => {
+    test('API-04: should return 200 with valid OTP (dev env — OTP is 918512)', { annotation: [{ type: 'testcase', description: "LG-127: POST /auth/verify/otp succeeds with correct OTP" }] }, async ({ request }) => {
         test.skip(!accessToken, 'Sign-in did not return an accessToken — skipping OTP verification');
 
         const res = await request.post(`${API_BASE}/auth/verify/otp`, {
@@ -41,7 +41,7 @@ test.describe('Login – API 4: POST /auth/verify/otp', { tag: ['@login', '@api'
         expect([200, 201]).toContain(res.status());
     });
 
-    test('API-N11: should return 401 with an incorrect OTP', async ({ request }) => {
+    test('API-N11: should return 401 with an incorrect OTP', { annotation: [{ type: 'testcase', description: "LG-128: POST /auth/verify/otp rejects incorrect OTP" }] }, async ({ request }) => {
         test.skip(!accessToken, 'Sign-in did not return an accessToken — skipping OTP verification');
 
         const res = await request.post(`${API_BASE}/auth/verify/otp`, {
@@ -55,7 +55,7 @@ test.describe('Login – API 4: POST /auth/verify/otp', { tag: ['@login', '@api'
         expect(res.status()).toBe(401);
     });
 
-    test('API-N12: should return 400 when OTP field is missing', async ({ request }) => {
+    test('API-N12: should return 400 when OTP field is missing', { annotation: [{ type: 'testcase', description: "LG-129: POST /auth/verify/otp rejects missing OTP field" }] }, async ({ request }) => {
         test.skip(!accessToken, 'Sign-in did not return an accessToken — skipping OTP verification');
 
         const res = await request.post(`${API_BASE}/auth/verify/otp`, {
@@ -69,7 +69,7 @@ test.describe('Login – API 4: POST /auth/verify/otp', { tag: ['@login', '@api'
         expect([400, 422]).toContain(res.status());
     });
 
-    test('API-N13: should return 401 when Authorization header is missing', async ({ request }) => {
+    test('API-N13: should return 401 when Authorization header is missing', { annotation: [{ type: 'testcase', description: "LG-130: POST /auth/verify/otp rejects missing auth header" }] }, async ({ request }) => {
         const res = await request.post(`${API_BASE}/auth/verify/otp`, {
             data:    { otp: VALID_OTP },
             headers: commonHeaders(),

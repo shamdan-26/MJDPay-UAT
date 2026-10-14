@@ -46,7 +46,7 @@ test.describe('Registration - OTP Popup Page Elements', { tag: ['@registration',
 
     // ── Buttons ───────────────────────────────────────────────────────────────
 
-    test('should display the Cancel button', async ({ page }) => {
+    test('should display the Cancel button', { annotation: [{ type: 'testcase', description: "RO-05: Display the Cancel button" }] }, async ({ page }) => {
         await expect(page.getByRole('button', { name: /Cancel|إلغاء/i })).toBeVisible();
     });
 

@@ -9,7 +9,7 @@ const BUDGET = { lcpMs: 5_000, interactiveMs: 6_000, errorToastMs: 3_000, transf
 test.describe('Login – Performance budgets', { tag: ['@login', '@ui', '@performance'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'non-functional' }] }, () => {
     test.beforeEach(() => { test.setTimeout(90_000); });
 
-    test(`should paint the login form within ${BUDGET.lcpMs}ms (largest contentful paint)`, async ({ page, loginPage }) => {
+    test(`should paint the login form within ${BUDGET.lcpMs}ms (largest contentful paint)`, { annotation: [{ type: 'testcase', description: "LG-PERF-01: Should paint the login form within …ms (largest contentful paint)" }] }, async ({ page, loginPage }) => {
         await page.addInitScript(() => {
             (window as unknown as { __lcp: number }).__lcp = 0;
             new PerformanceObserver(list => {
@@ -25,7 +25,7 @@ test.describe('Login – Performance budgets', { tag: ['@login', '@ui', '@perfor
         expect(lcp, `LCP ${Math.round(lcp)}ms`).toBeLessThan(BUDGET.lcpMs);
     });
 
-    test(`should let the user type within ${BUDGET.interactiveMs}ms of navigation`, async ({ page, loginPage }) => {
+    test(`should let the user type within ${BUDGET.interactiveMs}ms of navigation`, { annotation: [{ type: 'testcase', description: "LG-PERF-02: Should let the user type within …ms of navigation" }] }, async ({ page, loginPage }) => {
         const start = Date.now();
         await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded' });
         await loginPage.companyInput.fill(NEGATIVE_COMPANY);
@@ -34,7 +34,7 @@ test.describe('Login – Performance budgets', { tag: ['@login', '@ui', '@perfor
         expect(ms).toBeLessThan(BUDGET.interactiveMs);
     });
 
-    test('should have no layout shift larger than 0.1 while the login form loads (CLS)', async ({ page, loginPage }) => {
+    test('should have no layout shift larger than 0.1 while the login form loads (CLS)', { annotation: [{ type: 'testcase', description: "LG-PERF-03: Should have no layout shift larger than 0.1 while the login form loads (CLS)" }] }, async ({ page, loginPage }) => {
         await page.addInitScript(() => {
             (window as unknown as { __cls: number }).__cls = 0;
             new PerformanceObserver(list => {
@@ -51,7 +51,7 @@ test.describe('Login – Performance budgets', { tag: ['@login', '@ui', '@perfor
         expect(cls).toBeLessThan(0.1);
     });
 
-    test(`should show the error toast within ${BUDGET.errorToastMs}ms of a mocked rejected sign-in`, async ({ page, loginPage }) => {
+    test(`should show the error toast within ${BUDGET.errorToastMs}ms of a mocked rejected sign-in`, { annotation: [{ type: 'testcase', description: "LG-PERF-04: Should show the error toast within …ms of a mocked rejected sign-in" }] }, async ({ page, loginPage }) => {
         await loginPage.goto(LOGIN_URL);
         await mockSignIn(page, 401);
         await loginPage.fill(NEGATIVE_COMPANY, NEGATIVE_MOBILE, VALID_PASSWORD);
@@ -61,7 +61,7 @@ test.describe('Login – Performance budgets', { tag: ['@login', '@ui', '@perfor
         test.info().annotations.push({ type: 'toast-ms', description: String(Date.now() - start) });
     });
 
-    test(`should keep the main thread free of long tasks over ${BUDGET.longTaskMs}ms while loading`, async ({ page, loginPage }) => {
+    test(`should keep the main thread free of long tasks over ${BUDGET.longTaskMs}ms while loading`, { annotation: [{ type: 'testcase', description: "LG-PERF-05: Should keep the main thread free of long tasks over …ms while loading" }] }, async ({ page, loginPage }) => {
         await page.addInitScript(() => {
             (window as unknown as { __longest: number }).__longest = 0;
             new PerformanceObserver(list => {
@@ -76,7 +76,7 @@ test.describe('Login – Performance budgets', { tag: ['@login', '@ui', '@perfor
         expect(longest).toBeLessThan(BUDGET.longTaskMs);
     });
 
-    test(`should load with fewer than ${BUDGET.requests} requests and ${BUDGET.transferKb} KB transferred`, async ({ page, loginPage }) => {
+    test(`should load with fewer than ${BUDGET.requests} requests and ${BUDGET.transferKb} KB transferred`, { annotation: [{ type: 'testcase', description: "LG-PERF-06: Should load with fewer than … requests and … KB transferred" }] }, async ({ page, loginPage }) => {
         const origin = new URL(LOGIN_URL).origin;
         const sizes: Promise<number>[] = [];
         page.on('requestfinished', req => {
@@ -92,7 +92,7 @@ test.describe('Login – Performance budgets', { tag: ['@login', '@ui', '@perfor
         expect(bytes / 1024).toBeLessThan(BUDGET.transferKb);
     });
 
-    test('should stay usable on a slow 3G connection (form visible within 20 s)', async ({ page, loginPage }) => {
+    test('should stay usable on a slow 3G connection (form visible within 20 s)', { annotation: [{ type: 'testcase', description: "LG-PERF-07: Should stay usable on a slow 3G connection (form visible within 20 s)" }] }, async ({ page, loginPage }) => {
         const cdp = await page.context().newCDPSession(page);
         await cdp.send('Network.enable');
         await cdp.send('Network.emulateNetworkConditions', { offline: false, latency: 400, downloadThroughput: (400 * 1024) / 8, uploadThroughput: (400 * 1024) / 8 });

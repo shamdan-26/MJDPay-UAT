@@ -53,7 +53,7 @@ test.describe('Registration - Info Page — Shell', { tag: ['@registration', '@b
             await expect(infoPage.page.locator('main')).toBeVisible();
         });
 
-        test('should display the "Create Account" eyebrow text [ref_9]', async () => {
+        test('should display the "Create Account" eyebrow text [ref_9]', { annotation: [{ type: 'testcase', description: "RI-08: Display the \"Create Account\" eyebrow text" }] }, async () => {
             await expect(infoPage.formEyebrow).toContainText(' إنشاء حساب');
         });
 
@@ -76,11 +76,11 @@ test.describe('Registration - Info Page — Shell', { tag: ['@registration', '@b
             await expect(infoPage.outerStepBar.nth(1).locator('.mp-step-meta')).toContainText(' 2  نفاذ  ');
         });
 
-        test('should display "Products" as the third outer step [ref_14]', async () => {
+        test('should display "Products" as the third outer step [ref_14]', { annotation: [{ type: 'testcase', description: "RI-13: Display \"Products\" as the third outer step" }] }, async () => {
             await expect(infoPage.outerStepBar.nth(2).locator('.mp-step-meta')).toContainText(' المنتجات ');
         });
 
-        test('should display "Contract" as the fourth outer step [ref_15]', async () => {
+        test('should display "Contract" as the fourth outer step [ref_15]', { annotation: [{ type: 'testcase', description: "RI-14: Display \"Contract\" as the fourth outer step" }] }, async () => {
             await expect(infoPage.outerStepBar.nth(3).locator('.mp-step-meta')).toContainText(' العقد ');
         });
     });
@@ -107,11 +107,11 @@ test.describe('Registration - Info Page — Shell', { tag: ['@registration', '@b
             await expect(infoPage.page.locator('.mp-step.is-active', { hasText: ' بيانات النشاط التجاري ' }).first()).toBeVisible();
         });
 
-        test('should display Tab 3 — Products [ref_22, ref_23]', async () => {
+        test('should display Tab 3 — Products [ref_22, ref_23]', { annotation: [{ type: 'testcase', description: "RI-17: Display Tab 3 — Products" }] }, async () => {
             await expect(infoPage.page.locator('.mp-step.ng-star-inserted', { hasText: ' المنتجات ' }).first()).toBeVisible();
         });
 
-        test('should display Tab 4 — Contract [ref_24, ref_25]', async () => {
+        test('should display Tab 4 — Contract [ref_24, ref_25]', { annotation: [{ type: 'testcase', description: "RI-18: Display Tab 4 — Contract" }] }, async () => {
             await expect(infoPage.page.locator('.mp-step.ng-star-inserted', { hasText: ' العقد' }).first()).toBeVisible();
         });
     });

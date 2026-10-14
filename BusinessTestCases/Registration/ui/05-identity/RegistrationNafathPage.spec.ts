@@ -129,7 +129,7 @@ test.describe('Registration - NAFATH Step Page Elements', { tag: ['@registration
 
     // ── Page headings ────────────────────────────────────────────────────
 
-    test('should display the "Create Account" eyebrow text', async () => {
+    test('should display the "Create Account" eyebrow text', { annotation: [{ type: 'testcase', description: "RN-06: Display the \"Create Account\" eyebrow text" }] }, async () => {
         await expect(nafathPage.formEyebrow).toContainText(/Create Account|إنشاء حساب/i);
     });
 
@@ -147,11 +147,11 @@ test.describe('Registration - NAFATH Step Page Elements', { tag: ['@registration
         await expect(nafathPage.activeStep.first()).toContainText(/NAFATH|نَفاذ|نفاذ/i);
     });
 
-    test('should display "Products" as the third outer step', async () => {
+    test('should display "Products" as the third outer step', { annotation: [{ type: 'testcase', description: "RN-09: Display \"Products\" as the third outer step" }] }, async () => {
         await expect(nafathPage.outerStepBar.nth(2)).toContainText(/Products|المنتجات/i);
     });
 
-    test('should display "Contract" as the fourth outer step', async () => {
+    test('should display "Contract" as the fourth outer step', { annotation: [{ type: 'testcase', description: "RN-10: Display \"Contract\" as the fourth outer step" }] }, async () => {
         await expect(nafathPage.outerStepBar.nth(3)).toContainText(/Contract|العقد/i);
     });
 

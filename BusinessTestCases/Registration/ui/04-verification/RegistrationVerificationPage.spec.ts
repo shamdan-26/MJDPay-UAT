@@ -40,23 +40,23 @@ test.describe('Registration – Verification & Uploads Step (Tab 3 of 3) — rea
 
     // ── Header ────────────────────────────────────────────────────────────────
 
-    test('should display the MJD Pay logo', async () => {
+    test('should display the MJD Pay logo', { annotation: [{ type: 'testcase', description: "RVU-01: Display the MJD Pay logo" }] }, async () => {
         await expect(verification.logoImage).toBeVisible();
     });
 
-    test('should link the MJD Pay logo to the landing page', async () => {
+    test('should link the MJD Pay logo to the landing page', { annotation: [{ type: 'testcase', description: "RVU-02: Link the MJD Pay logo to the landing page" }] }, async () => {
         await expect(verification.logoLink).toHaveAttribute('href', /\/business\/landing/);
     });
 
-    test('should display the EN language button', async () => {
+    test('should display the EN language button', { annotation: [{ type: 'testcase', description: "RVU-03: Display the EN language button" }] }, async () => {
         await expect(verification.enButton).toBeVisible();
     });
 
-    test('should display the Arabic language button', async () => {
+    test('should display the Arabic language button', { annotation: [{ type: 'testcase', description: "RVU-04: Display the Arabic language button" }] }, async () => {
         await expect(verification.arabicButton).toBeVisible();
     });
 
-    test('should display the Switch theme button', async () => {
+    test('should display the Switch theme button', { annotation: [{ type: 'testcase', description: "RVU-05: Display the Switch theme button" }] }, async () => {
         await expect(verification.themeToggle).toBeVisible();
     });
 
@@ -79,15 +79,15 @@ test.describe('Registration – Verification & Uploads Step (Tab 3 of 3) — rea
 
     // ── IBAN field ────────────────────────────────────────────────────────────
 
-    test('should display the IBAN field', async () => {
+    test('should display the IBAN field', { annotation: [{ type: 'testcase', description: "RVU-09: Display the IBAN field" }] }, async () => {
         await expect(verification.ibanInput).toBeVisible();
     });
 
-    test('should show the correct placeholder for IBAN', async () => {
+    test('should show the correct placeholder for IBAN', { annotation: [{ type: 'testcase', description: "RVU-10: Show the correct placeholder for IBAN" }] }, async () => {
         await expect(verification.ibanInput).toHaveAttribute('placeholder', /SA0380000001234567891234/i);
     });
 
-    test('should display the IBAN hint "24 characters starting with SA"', async () => {
+    test('should display the IBAN hint "24 characters starting with SA"', { annotation: [{ type: 'testcase', description: "RVU-11: Display the IBAN hint \"24 characters starting with SA\"" }] }, async () => {
         await expect(verification.ibanHint).toBeVisible();
     });
 
@@ -97,7 +97,7 @@ test.describe('Registration – Verification & Uploads Step (Tab 3 of 3) — rea
         await expect(verification.ibanProofLabel).toBeVisible();
     });
 
-    test('should display the "Click to upload" prompt for IBAN proof', async () => {
+    test('should display the "Click to upload" prompt for IBAN proof', { annotation: [{ type: 'testcase', description: "RVU-13: Display the \"Click to upload\" prompt for IBAN proof" }] }, async () => {
         await expect(verification.ibanUploadPrompt).toBeVisible();
     });
 
@@ -109,25 +109,25 @@ test.describe('Registration – Verification & Uploads Step (Tab 3 of 3) — rea
         await expect(page.locator('.file-size').first()).toContainText(/bank letter|statement (header|letterhead)|خطاب بنكي/i);
     });
 
-    test('should display the accepted file types for IBAN proof (PDF, JPG)', async () => {
+    test('should display the accepted file types for IBAN proof (PDF, JPG)', { annotation: [{ type: 'testcase', description: "RVU-15: Display the accepted file types for IBAN proof (PDF, JPG)" }] }, async () => {
         await expect(page.getByText(/pdf.*jpg|jpg.*pdf/i).first()).toBeVisible();
     });
 
-    test('should display the max file size for IBAN proof (5MB)', async () => {
+    test('should display the max file size for IBAN proof (5MB)', { annotation: [{ type: 'testcase', description: "RVU-16: Display the max file size for IBAN proof (5MB)" }] }, async () => {
         await expect(page.getByText(/5\s*(mb|ميجابايت)/i).first()).toBeVisible();
     });
 
     // ── VAT Number ────────────────────────────────────────────────────────────
 
-    test('should display the VAT Number field', async () => {
+    test('should display the VAT Number field', { annotation: [{ type: 'testcase', description: "RVU-17: Display the VAT Number field" }] }, async () => {
         await expect(verification.vatInput).toBeVisible();
     });
 
-    test('should show the correct placeholder for VAT Number', async () => {
+    test('should show the correct placeholder for VAT Number', { annotation: [{ type: 'testcase', description: "RVU-18: Show the correct placeholder for VAT Number" }] }, async () => {
         await expect(verification.vatInput).toHaveAttribute('placeholder', /300123456700003/i);
     });
 
-    test('should display the VAT Number hint "From your VAT certificate"', async () => {
+    test('should display the VAT Number hint "From your VAT certificate"', { annotation: [{ type: 'testcase', description: "RVU-19: Display the VAT Number hint \"From your VAT certificate\"" }] }, async () => {
         await expect(verification.vatHint).toBeVisible();
     });
 
@@ -147,40 +147,40 @@ test.describe('Registration – Verification & Uploads Step (Tab 3 of 3) — rea
 
     // ── NAFATH notice ─────────────────────────────────────────────────────────
 
-    test('should display the post-submit OTP/NAFATH verification notice', async () => {
+    test('should display the post-submit OTP/NAFATH verification notice', { annotation: [{ type: 'testcase', description: "RVU-23: Display the post-submit OTP/NAFATH verification notice" }] }, async () => {
         await expect(verification.otpNafathNotice).toBeVisible();
     });
 
     // ── Navigation buttons ────────────────────────────────────────────────────
 
-    test('should display the Back button', async () => {
+    test('should display the Back button', { annotation: [{ type: 'testcase', description: "RVU-24: Display the Back button" }] }, async () => {
         await expect(verification.backButton).toBeVisible();
     });
 
-    test('should display the Sign Up button', async () => {
+    test('should display the Sign Up button', { annotation: [{ type: 'testcase', description: "RVU-25: Display the Sign Up button" }] }, async () => {
         await expect(verification.signUpButton).toBeVisible();
     });
 
-    test('should keep Sign Up disabled when required fields are empty', async () => {
+    test('should keep Sign Up disabled when required fields are empty', { annotation: [{ type: 'testcase', description: "RVU-26: Keep Sign Up disabled when required fields are empty" }] }, async () => {
         await expect(verification.signUpButton).toBeDisabled();
     });
 
     // ── Footer ────────────────────────────────────────────────────────────────
 
-    test('should display "Already have an account?" text', async () => {
+    test('should display "Already have an account?" text', { annotation: [{ type: 'testcase', description: "RVU-27: Display \"Already have an account?\" text" }] }, async () => {
         await expect(page.locator('#login-line.new-user span').filter({ visible: true }).first())
             .toContainText(/already have an account|لديك حساب بالفعل/i);
     });
 
-    test('should display the Log In link', async () => {
+    test('should display the Log In link', { annotation: [{ type: 'testcase', description: "RVU-28: Display the Log In link" }] }, async () => {
         await expect(verification.loginLink).toContainText(/log.?in|تسجيل الدخول/i);
     });
 
-    test('should display Terms & Conditions reference', async () => {
+    test('should display Terms & Conditions reference', { annotation: [{ type: 'testcase', description: "RVU-29: Display Terms & Conditions reference" }] }, async () => {
         await expect(verification.footer).toContainText(/terms & conditions|الشروط والأحكام/i);
     });
 
-    test('should display Privacy Policy reference', async () => {
+    test('should display Privacy Policy reference', { annotation: [{ type: 'testcase', description: "RVU-30: Display Privacy Policy reference" }] }, async () => {
         await expect(verification.footer).toContainText(/privacy policy|سياسة الخصوصية/i);
     });
 });

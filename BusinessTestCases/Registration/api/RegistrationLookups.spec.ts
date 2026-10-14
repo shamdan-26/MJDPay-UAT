@@ -12,7 +12,7 @@ test.use({ extraHTTPHeaders: registrationHeaders() });
 
 test.describe('Registration – Lookup Endpoints', { tag: ['@registration', '@api'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'api' }] }, () => {
 
-  test('API-L1: GET /industries should return a list of industries', async ({ request }) => {
+  test('API-L1: GET /industries should return a list of industries', { annotation: [{ type: 'testcase', description: "RG-API-L1: GET /industries should return a list of industries" }] }, async ({ request }) => {
     const res = await request.get(`${API_BASE}/emi-profile/api/v1/industries`);
     expect(res.status()).toBe(200);
     const body = await res.json();
@@ -20,7 +20,7 @@ test.describe('Registration – Lookup Endpoints', { tag: ['@registration', '@ap
     expect(body.length).toBeGreaterThan(0);
   });
 
-  test('API-L2: GET /lookup/banks should return a list of banks', async ({ request }) => {
+  test('API-L2: GET /lookup/banks should return a list of banks', { annotation: [{ type: 'testcase', description: "RG-API-L2: GET /lookup/banks should return a list of banks" }] }, async ({ request }) => {
     const res = await request.get(`${API_BASE}/api/v1/lookup/banks`);
     expect(res.status()).toBe(200);
     const body = await res.json();
@@ -28,28 +28,28 @@ test.describe('Registration – Lookup Endpoints', { tag: ['@registration', '@ap
     expect(body.length).toBeGreaterThan(0);
   });
 
-  test('API-L3: GET /purpose-of-transfer should return transfer purpose options', async ({ request }) => {
+  test('API-L3: GET /purpose-of-transfer should return transfer purpose options', { annotation: [{ type: 'testcase', description: "RG-API-L3: GET /purpose-of-transfer should return transfer purpose options" }] }, async ({ request }) => {
     const res = await request.get(`${API_BASE}/api/v1/purpose-of-transfer`);
     expect(res.status()).toBe(200);
     const body = await res.json();
     expect(Array.isArray(body)).toBe(true);
   });
 
-  test('API-L4: GET /transaction-types should return transaction type options', async ({ request }) => {
+  test('API-L4: GET /transaction-types should return transaction type options', { annotation: [{ type: 'testcase', description: "RG-API-L4: GET /transaction-types should return transaction type options" }] }, async ({ request }) => {
     const res = await request.get(`${API_BASE}/api/v1/transaction-types`);
     expect(res.status()).toBe(200);
     const body = await res.json();
     expect(Array.isArray(body)).toBe(true);
   });
 
-  test('API-L5: GET /payment-method should return payment method options', async ({ request }) => {
+  test('API-L5: GET /payment-method should return payment method options', { annotation: [{ type: 'testcase', description: "RG-API-L5: GET /payment-method should return payment method options" }] }, async ({ request }) => {
     const res = await request.get(`${API_BASE}/api/v1/payment-method`);
     expect(res.status()).toBe(200);
     const body = await res.json();
     expect(Array.isArray(body)).toBe(true);
   });
 
-  test('API-L6: GET /annual-incomes should return annual income brackets', async ({ request }) => {
+  test('API-L6: GET /annual-incomes should return annual income brackets', { annotation: [{ type: 'testcase', description: "RG-API-L6: GET /annual-incomes should return annual income brackets" }] }, async ({ request }) => {
     const res = await request.get(`${API_BASE}/emi-profile/api/v1/annual-incomes`);
     expect(res.status()).toBe(200);
     const body = await res.json();
@@ -57,14 +57,14 @@ test.describe('Registration – Lookup Endpoints', { tag: ['@registration', '@ap
     expect(body.length).toBeGreaterThan(0);
   });
 
-  test('API-L7: GET /discountTypes should return discount type options', async ({ request }) => {
+  test('API-L7: GET /discountTypes should return discount type options', { annotation: [{ type: 'testcase', description: "RG-API-L7: GET /discountTypes should return discount type options" }] }, async ({ request }) => {
     const res = await request.get(`${API_BASE}/api/v1/discountTypes`);
     expect(res.status()).toBe(200);
     const body = await res.json();
     expect(Array.isArray(body)).toBe(true);
   });
 
-  test('API-L8: GET /register/profile-registration-type should return available profile types', async ({ request }) => {
+  test('API-L8: GET /register/profile-registration-type should return available profile types', { annotation: [{ type: 'testcase', description: "RG-API-L8: GET /register/profile-registration-type should return available profile types" }] }, async ({ request }) => {
     const res = await request.get(
       `${API_BASE}/emi-profile/api/v1/register/profile-registration-type`
     );

@@ -45,13 +45,13 @@ test.describe('Registration – Input Security (XSS / SQL injection)', { tag: ['
             await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
         });
 
-        test('should not execute an XSS payload entered in the Mobile number field', async () => {
+        test('should not execute an XSS payload entered in the Mobile number field', { annotation: [{ type: 'testcase', description: "RM-31: Not execute an XSS payload entered in the Mobile number field" }] }, async () => {
             const input = page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ });
             await expectNoDialog(page, () => input.fill(XSS_SCRIPT));
             await expect(page.getByRole('button', { name: /next|التالي/i })).toBeDisabled();
         });
 
-        test('should not accept a SQL injection pattern in the Mobile number field', async () => {
+        test('should not accept a SQL injection pattern in the Mobile number field', { annotation: [{ type: 'testcase', description: "RM-32: Not accept a SQL injection pattern in the Mobile number field" }] }, async () => {
             const input = page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ });
             await input.clear();
             await input.pressSequentially("' OR '1'='1");
@@ -66,15 +66,15 @@ test.describe('Registration – Input Security (XSS / SQL injection)', { tag: ['
             await gotoTab1(page, page.context(), nextResidentAsset());
         });
 
-        test('should not execute an XSS payload entered in the CRN field', async () => {
+        test('should not execute an XSS payload entered in the CRN field', { annotation: [{ type: 'testcase', description: "RI-63: Not execute an XSS payload entered in the CRN field" }] }, async () => {
             await expectNoDialog(page, () => page.locator(CRN_INPUT).fill(XSS_SCRIPT));
         });
 
-        test('should not execute an XSS payload entered in the National ID field', async () => {
+        test('should not execute an XSS payload entered in the National ID field', { annotation: [{ type: 'testcase', description: "RI-76: Not execute an XSS payload entered in the National ID field" }] }, async () => {
             await expectNoDialog(page, () => page.locator(ID_INPUT).fill(XSS_IMG));
         });
 
-        test('should not execute XSS entered in the email field', async () => {
+        test('should not execute XSS entered in the email field', { annotation: [{ type: 'testcase', description: "RI-94: Not execute XSS entered in the email field" }] }, async () => {
             await expectNoDialog(page, async () => {
                 await page.locator(EMAIL_INPUT).fill(XSS_SCRIPT);
                 await page.locator(EMAIL_INPUT).blur();
@@ -82,7 +82,7 @@ test.describe('Registration – Input Security (XSS / SQL injection)', { tag: ['
             await expect(page.locator(EMAIL_ERROR)).toBeVisible({ timeout: 5000 });
         });
 
-        test('should treat SQL injection pattern in email as invalid and show error', async () => {
+        test('should treat SQL injection pattern in email as invalid and show error', { annotation: [{ type: 'testcase', description: "RI-95: Treat SQL injection pattern in email as invalid and show error" }] }, async () => {
             await page.locator(EMAIL_INPUT).fill("' OR '1'='1'; --");
             await page.locator(EMAIL_INPUT).blur();
             await expect(page.locator(EMAIL_ERROR)).toBeVisible({ timeout: 5000 });
@@ -100,22 +100,22 @@ test.describe('Registration – Input Security (XSS / SQL injection)', { tag: ['
             await goToFinancialStep(page, { profileType: 'merchant', email: VALID_EMAIL });
         });
 
-        test('should not execute an XSS payload entered in the Monthly Expected Number field', async () => {
+        test('should not execute an XSS payload entered in the Monthly Expected Number field', { annotation: [{ type: 'testcase', description: "RF-58: Not execute an XSS payload entered in the Monthly Expected Number field" }] }, async () => {
             await expectNoDialog(page, () => financialPage.monthlyBillsInput.fill(XSS_SCRIPT));
         });
 
-        test('should not execute an XSS payload entered in the Monthly Expected Sum field', async () => {
+        test('should not execute an XSS payload entered in the Monthly Expected Sum field', { annotation: [{ type: 'testcase', description: "RF-59: Not execute an XSS payload entered in the Monthly Expected Sum field" }] }, async () => {
             await expectNoDialog(page, () => financialPage.monthlyAmountInput.fill(XSS_IMG));
         });
 
-        test('should not accept a SQL injection pattern in the Expected Monthly Withdrawal field', async () => {
+        test('should not accept a SQL injection pattern in the Expected Monthly Withdrawal field', { annotation: [{ type: 'testcase', description: "RF-60: Not accept a SQL injection pattern in the Expected Monthly Withdrawal field" }] }, async () => {
             const input = financialPage.monthlyWithdrawalInput;
             await input.clear();
             await input.pressSequentially("1' OR '1'='1");
             expect(/[^0-9]/.test(await input.inputValue())).toBe(false);
         });
 
-        test('should not accept a SQL injection pattern in the Expected Monthly Deposit field', async () => {
+        test('should not accept a SQL injection pattern in the Expected Monthly Deposit field', { annotation: [{ type: 'testcase', description: "RF-61: Not accept a SQL injection pattern in the Expected Monthly Deposit field" }] }, async () => {
             const input = financialPage.monthlyDepositInput;
             await input.clear();
             await input.pressSequentially('1; DROP TABLE users;--');
@@ -136,15 +136,15 @@ test.describe('Registration – Input Security (XSS / SQL injection)', { tag: ['
             await verification.waitForLoad();
         });
 
-        test('should not execute an XSS payload entered in the IBAN field', async () => {
+        test('should not execute an XSS payload entered in the IBAN field', { annotation: [{ type: 'testcase', description: "RVU-56: Not execute an XSS payload entered in the IBAN field" }] }, async () => {
             await expectNoDialog(page, () => verification.ibanInput.fill(XSS_SCRIPT));
         });
 
-        test('should not execute an XSS payload entered in the VAT Number field', async () => {
+        test('should not execute an XSS payload entered in the VAT Number field', { annotation: [{ type: 'testcase', description: "RVU-57: Not execute an XSS payload entered in the VAT Number field" }] }, async () => {
             await expectNoDialog(page, () => verification.vatInput.fill(XSS_IMG));
         });
 
-        test('should treat a SQL injection pattern in the IBAN field as invalid', async () => {
+        test('should treat a SQL injection pattern in the IBAN field as invalid', { annotation: [{ type: 'testcase', description: "RVU-58: Treat a SQL injection pattern in the IBAN field as invalid" }] }, async () => {
             await verification.ibanInput.fill("SA03' OR '1'='1");
             await page.getByRole('button', { name: /sign up|إنشاء حساب/i }).click({ force: true });
             const hasError = await page.locator('[class*="error"], [role="alert"]').isVisible().catch(() => false);

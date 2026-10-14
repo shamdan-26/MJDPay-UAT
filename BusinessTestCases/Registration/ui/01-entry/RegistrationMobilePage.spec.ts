@@ -56,7 +56,7 @@ test.describe('Registration - Mobile Number Page', { tag: ['@registration', '@en
 
     // ── Page content ──────────────────────────────────────────────────────────
 
-    test('should display the "Create Account" eyebrow text', async () => {
+    test('should display the "Create Account" eyebrow text', { annotation: [{ type: 'testcase', description: "RM-12: Display the \"Create Account\" eyebrow text" }] }, async () => {
         await expect(regPage.createAccountEyebrow).toBeVisible();
     });
 
@@ -80,7 +80,7 @@ test.describe('Registration - Mobile Number Page', { tag: ['@registration', '@en
 
     // ── Next button ───────────────────────────────────────────────────────────
 
-    test('should display the Next button', async () => {
+    test('should display the Next button', { annotation: [{ type: 'testcase', description: "RM-17: Display the Next button" }] }, async () => {
         await expect(regPage.nextButton).toBeVisible();
     });
 
@@ -89,12 +89,12 @@ test.describe('Registration - Mobile Number Page', { tag: ['@registration', '@en
     });
 
     // ── Log In link ───────────────────────────────────────────────────────────
-    test('should display the "Already have an account?" text', async ({ page }) => {
+    test('should display the "Already have an account?" text', { annotation: [{ type: 'testcase', description: "RM-19: Display the \"Already have an account?\" text" }] }, async ({ page }) => {
         await page.pause();
         await expect(regPage.alreadyHaveAccountText).toBeVisible();
     });
 
-    test('should display the Log In link', async () => {
+    test('should display the Log In link', { annotation: [{ type: 'testcase', description: "RM-20: Display the Log In link" }] }, async () => {
         await expect(regPage.loginLink).toBeVisible();
         await expect(regPage.loginLink).toHaveText('تسجيل الدخول');
     });

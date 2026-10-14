@@ -121,32 +121,32 @@ test.describe('Registration - Info Page — Form', { tag: ['@registration', '@bu
 
             // ── Next button [ref_53] ──────────────────────────────────────────
 
-            test('should display the Next button [ref_53]', async () => {
+            test('should display the Next button [ref_53]', { annotation: [{ type: 'testcase', description: "RI-38: Display the Next button" }] }, async () => {
                 await expect(infoPage.nextButton).toBeVisible();
                 await expect(infoPage.nextButton).toContainText('التالي');
             });
 
             // ── Footer [ref_54 – ref_58] ──────────────────────────────────────
 
-            test('should display "Already have an account?" text [ref_54]', async () => {
+            test('should display "Already have an account?" text [ref_54]', { annotation: [{ type: 'testcase', description: "RI-39: Display \"Already have an account?\" text" }] }, async () => {
                 await expect(infoPage.alreadyHaveAccountText).toContainText(' لديك حساب بالفعل؟ ');
             });
 
-            test('should display the Log In link [ref_55]', async () => {
+            test('should display the Log In link [ref_55]', { annotation: [{ type: 'testcase', description: "RI-40: Display the Log In link" }] }, async () => {
                 await expect(infoPage.loginLink).toContainText('تسجيل الدخول');
             });
 
-            test('should display "By continuing, you agree to our" text [ref_56]', async () => {
+            test('should display "By continuing, you agree to our" text [ref_56]', { annotation: [{ type: 'testcase', description: "RI-41: Display \"By continuing, you agree to our\" text" }] }, async () => {
                 await expect(
                     infoPage.page.locator('#login-line span', { hasText: ' بالمتابعة، فإنك توافق على ' }).first()
                 ).toBeVisible();
             });
 
-            test('should display Terms & Conditions reference [ref_57]', async () => {
+            test('should display Terms & Conditions reference [ref_57]', { annotation: [{ type: 'testcase', description: "RI-42: Display Terms & Conditions reference" }] }, async () => {
                 await expect(infoPage.footer).toContainText(' الشروط والأحكام ');
             });
 
-            test('should display Privacy Policy reference [ref_58]', async () => {
+            test('should display Privacy Policy reference [ref_58]', { annotation: [{ type: 'testcase', description: "RI-43: Display Privacy Policy reference" }] }, async () => {
                 await expect(infoPage.footer).toContainText(' سياسة الخصوصية ');
             });
         });
