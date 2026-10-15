@@ -14,8 +14,7 @@ test.describe('Forgot Password OTP Popup — UI', () => {
 
     // ── Modal container ───────────────────────────────────────────────────────
 
-    test('should display the OTP modal dialog', async ({ page }) => {
-        await page.pause();
+    test('should display the OTP modal dialog', async () => {
         await expect(otp.modalContainer).toBeVisible();
     });
 

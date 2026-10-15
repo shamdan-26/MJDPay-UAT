@@ -141,7 +141,8 @@ test.describe('Forgot Password — Step 2: Back Navigation', () => {
         await expect(forgotPassword.nextButton).toBeVisible({ timeout: 10000 });
     });
 
-    test.skip('should preserve Company and Mobile number values when navigating back to step 1', async () => {
+    // fixme (was a skip with no reason): reason not recorded. Run it, then either re-enable it or note the product gap here.
+    test.fixme('should preserve Company and Mobile number values when navigating back to step 1', async () => {
         await forgotPassword.backButton.click();
         await expect(forgotPassword.companyInput).toHaveValue(VALID_COMPANY, { timeout: 10000 });
         await expect(forgotPassword.mobileInput).toHaveValue(VALID_MOBILE, { timeout: 10000 });

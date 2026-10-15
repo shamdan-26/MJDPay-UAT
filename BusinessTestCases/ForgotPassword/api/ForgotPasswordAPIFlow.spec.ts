@@ -3,7 +3,7 @@ import { VALID_COMPANY, VALID_MOBILE } from '../ForgotPasswordHelper';
 
 declare const process: { env: Record<string, string | undefined> };
 
-const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev.majdpay.com';
+const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev-emi.dg-cash.app';
 const MOBILE   = `+966${VALID_MOBILE}`;
 
 // ─────────────────────────────────────────────────────────────────────────────

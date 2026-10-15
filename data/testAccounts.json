@@ -1,6 +1,7 @@
 {
   "defaultPassword": "Aa#1234567",
   "firstLoginDefaultPassword": "Aa#123456",
+  "tempResetPassword": "Temp#Reset9Aa",
   "wrongPassword": "WrongPass@99",
   "validOtp": "918512",
   "invalidOtp": "11111111",

@@ -174,19 +174,54 @@ Context: these checks validate the two endpoints the Forgot Password UI calls un
 | FP-83 | OTP settings endpoint returns a valid config | `GET /otp/otp-settings/q?operationCode=FORGET_PASSWORD` | Returns HTTP 200 with `length` (positive number), `validityInSeconds` (positive number), `canResendOtpAfterInSeconds` (non-negative number), and `enabled` (boolean) | P2 |
 | FP-84 | Unknown/omitted operation code rejected | Call the OTP settings endpoint with an invalid `operationCode`, and again with the parameter omitted entirely | Returns HTTP 400 or 404 for an unknown code, and HTTP 400 when the parameter is omitted | P2 |
 
+## Q. Added Coverage — Account States, Policy Edges, Resilience, Security, Localization, Accessibility, Performance
+
+Automated by the specs added in `ForgotPassword/functional`, `security`, `ui` and `non-functional`. FP-E2E-01 to FP-E2E-04 (in the audit additions) are automated in `ForgotPasswordPostReset.spec.ts` and `ForgotPasswordOtpLifecycle.spec.ts`; FP-E2E-02 is a `fixme` stub until a token-protected endpoint is confirmed.
+
+| ID | Title | Steps | Expected Result | Priority |
+|---|---|---|---|---|
+| FP-85 | Unknown company and unknown mobile are indistinguishable | Submit an unknown company with a valid mobile, then a valid company with an unknown mobile | Same HTTP status and same message in both cases | P1 |
+| FP-86 | Blocked account cannot start a reset | Submit the Company + Mobile of a blocked account | User stays on Step 1; no Step 2 and no OTP dialog | P1 |
+| FP-87 | Rejected identities do not leak internals | Submit unknown and blocked identities | Status is below 500; no stack trace, SQL or database text in the response or page | P1 |
+| FP-88 | Minimum-length boundary (8 chars) is accepted | Enter `Aa#12345` in both password fields | All rules pass; Reset Password is enabled | P2 |
+| FP-89 | One below the minimum length stays blocked | Enter `Aa#1234` (7 chars) in both fields | Reset Password stays disabled | P2 |
+| FP-90 | Leading/trailing space is not trimmed into validity | Enter a valid password with a space at the start, then at the end | Reset Password stays disabled in both cases | P2 |
+| FP-91 | Arabic-only letters do not meet the case rules | Enter an Arabic-letters password with a digit and symbol | Reset Password stays disabled | P3 |
+| FP-92 | Very long password does not crash the form | Enter a 256-character valid password | Form stays usable; no error page or `undefined`/`NaN` text | P3 |
+| FP-93 | Step 1 server error is handled gracefully | Submit Step 1 while the API returns 500 | User stays on Step 1, values are kept, no technical text is shown | P1 |
+| FP-94 | Step 1 network failure keeps the form usable | Submit Step 1 while the connection drops | User stays on Step 1; Next becomes usable again | P2 |
+| FP-95 | Retry after a failed Step 1 succeeds | Fail Step 1 once, then click Next again | Second attempt reaches Step 2 | P2 |
+| FP-96 | Reset network failure keeps data and allows retry | Submit the reset while the connection drops | User stays on Step 2, passwords are kept, Reset Password is enabled again | P2 |
+| FP-97 | Resend invalidates the previous OTP | Request an OTP, resend after the countdown, then enter the first code | First code is refused; OTP dialog stays open | P1 |
+| FP-98 | Non-POST methods are refused | Call `/auth/passwords/forget` with PUT, PATCH and DELETE | None returns 200 and none returns a 5xx | P2 |
+| FP-99 | Injection payloads are rejected cleanly | Send SQL, NoSQL, script, path and template payloads as company and mobile | Not 200, not 5xx, no technical text in the body | P1 |
+| FP-100 | Wrong data types return a 4xx | Send numbers, arrays, objects and null as company/mobile | Each returns a 4xx | P2 |
+| FP-101 | Rapid repeated requests are throttled or consistently refused | Send 15 requests quickly with unknown identities | No 5xx and no 200; record whether the service throttles (429) | P2 |
+| FP-102 | Rejection response does not echo input or issue credentials | Send an unknown identity and read the response | Body does not contain the submitted values; no cookie is set | P2 |
+| FP-103 | Step 1 renders RTL in Arabic | Click the Arabic button on Step 1 | Layout switches to right-to-left; labels and Next button are in Arabic | P2 |
+| FP-104 | Arabic persists from Step 1 to Step 2 | Choose Arabic, complete Step 1 | Step 2 labels and Reset button are in Arabic | P2 |
+| FP-105 | English can be restored after Arabic | Switch to Arabic, then back to EN | Labels return to English and the RTL layout is removed | P3 |
+| FP-A11Y-01 | Step 1 should have no serious axe violations (EN/AR) | Run an axe scan on Step 1 in each language | No serious or critical violations | P2 |
+| FP-A11Y-02 | Step 2 should have no serious axe violations (EN/AR) | Run an axe scan on Step 2 in each language | No serious or critical violations | P2 |
+| FP-A11Y-03 | Step 1 is keyboard operable | Complete Step 1 using only Tab, typing and Enter | User reaches Step 2 without a mouse | P2 |
+| FP-PERF-01 | OTP settings should answer within budget | `GET /otp/otp-settings/q?operationCode=FORGET_PASSWORD` | 200 within 2 seconds | P3 |
+| FP-PERF-02 | Rejected forget request p95 stays within budget | Send 10 rejected requests and take the 95th percentile | p95 under 3 seconds, no 5xx | P3 |
+| FP-PERF-03 | Concurrent rejected requests finish within budget | Send 5 rejected requests at once | All finish within 12 seconds with no 5xx | P3 |
+
 ---
 
 ## Automated coverage note
 
 This manual test suite mirrors the existing Playwright automation for the Forgot Password feature. The corresponding automated specs are:
 
-- `BusinessTestCases/forgot-password/ForgotPasswordHelper.ts` — shared navigation/route-mocking helpers (`mockOtpDisabled`, `mockForgetPasswordSuccess`, `mockForgetPasswordFailure`, `mockAllPasswordsSuccess`, `gotoForgotPassword`, `gotoOtpModal`) used across the specs below
-- `BusinessTestCases/forgot-password/ui/ForgotPassword.spec.ts` — Step 1 page elements & layout (sections A)
-- `BusinessTestCases/forgot-password/ui/ForgotPasswordStep2.spec.ts` — Step 2 page elements & layout (section I)
-- `BusinessTestCases/forgot-password/ui/ForgotPasswordOtpPage.spec.ts` — OTP modal UI elements (section G)
-- `BusinessTestCases/forgot-password/functional/ForgotPasswordStep1.spec.ts` — Step 1 happy path, mobile validation, negative scenarios, edge cases, security (sections B–F)
-- `BusinessTestCases/forgot-password/functional/ForgotPasswordStep2.spec.ts` — Step 2 password validation, back navigation, interactions, edge cases, security (sections J–N)
-- `BusinessTestCases/forgot-password/functional/ForgotPasswordOtpFunctionality.spec.ts` — OTP verification functional flow, including the live-OTP happy path via MongoDB lookup (section H)
-- `BusinessTestCases/forgot-password/functional/ForgotPasswordHappyPath.spec.ts` — full end-to-end flow and mocked failure handling (section O)
-- `BusinessTestCases/forgot-password/api/ForgotPasswordAPIFlow.spec.ts` — API-level contract checks for `POST /auth/passwords/forget` and `GET /otp/otp-settings/q` (section P)
-- `BusinessTestCases/pageElements/ForgotPasswordPage.ts` / `BusinessTestCases/pageElements/OtpPage.ts` — page objects backing all of the above
+- `BusinessTestCases/ForgotPassword/ForgotPasswordHelper.ts` — shared navigation/route-mocking helpers (`mockOtpDisabled`, `mockForgetPasswordSuccess`, `mockForgetPasswordFailure`, `mockAllPasswordsSuccess`, `gotoForgotPassword`, `gotoOtpModal`) used across the specs below
+- `BusinessTestCases/ForgotPassword/ui/ForgotPassword.spec.ts` — Step 1 page elements & layout (sections A)
+- `BusinessTestCases/ForgotPassword/ui/ForgotPasswordStep2.spec.ts` — Step 2 page elements & layout (section I)
+- `BusinessTestCases/ForgotPassword/ui/ForgotPasswordOtpPage.spec.ts` — OTP modal UI elements (section G)
+- `BusinessTestCases/ForgotPassword/functional/ForgotPasswordStep1.spec.ts` — Step 1 happy path, mobile validation, negative scenarios, edge cases, security (sections B–F)
+- `BusinessTestCases/ForgotPassword/functional/ForgotPasswordStep2.spec.ts` — Step 2 password validation, back navigation, interactions, edge cases, security (sections J–N)
+- `BusinessTestCases/ForgotPassword/functional/ForgotPasswordOtpFunctionality.spec.ts` — OTP verification functional flow, including the live-OTP happy path via MongoDB lookup (section H)
+- `BusinessTestCases/ForgotPassword/functional/ForgotPasswordHappyPath.spec.ts` — full end-to-end flow and mocked failure handling (section O)
+- `BusinessTestCases/ForgotPassword/api/ForgotPasswordAPIFlow.spec.ts` — API-level contract checks for `POST /auth/passwords/forget` and `GET /otp/otp-settings/q` (section P)
+- `BusinessTestCases/pageElements/ForgotPassword/ForgotPasswordPage.ts` / `BusinessTestCases/pageElements/Shared/OtpPage.ts` — page objects backing all of the above
+- Added specs: `functional/ForgotPasswordAccountStates`, `ForgotPasswordPasswordPolicy`, `ForgotPasswordResilience`, `ForgotPasswordOtpLifecycle`, `ForgotPasswordPostReset`; `security/ForgotPasswordApiSecurity`; `ui/ForgotPasswordLocalization`; `non-functional/ForgotPasswordAccessibility`, `ForgotPasswordPerformance`

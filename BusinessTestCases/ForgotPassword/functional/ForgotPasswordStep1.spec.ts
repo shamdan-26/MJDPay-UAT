@@ -273,8 +273,9 @@ test.describe('Forgot Password — Step 1: Edge Cases', () => {
         await forgotPassword.arabicButton.waitFor({ state: 'visible', timeout: 10000 });
         await expect(themeBtn).toHaveClass(/dark/);
     });
-
-    test.skip('should submit step 1 when Enter is pressed in the Mobile field', async ({ page }) => {
+    // fixme (was a skip with no reason): reason not recorded. Run it, then either re-enable it or note the product gap here.
+    // Marked fixme (was an unexplained skip): Enter in the Mobile field does not submit step 1 today. Re-enable once the product supports it.
+    test.fixme('should submit step 1 when Enter is pressed in the Mobile field', async ({ page }) => {
         await mockForgetPasswordSuccess(page);
         await forgotPassword.companyInput.fill(VALID_COMPANY);
         await forgotPassword.mobileInput.fill(VALID_MOBILE);

@@ -9,17 +9,14 @@ const BASE_URL              = process.env['BASE_URL'] ?? 'https://uat.majdpay.co
 export const FORGOT_URL     = `${BASE_URL}/business/auth/forgot-password`;
 export { LOGIN_URL, VALID_OTP, INVALID_OTP };
 
-// Dedicated ForgotPassword identities (not the shared UAT_COMPANY/UAT_MOBILE
-// pool used elsewhere) — kept separate so repeated forgot-password runs can't
-// accidentally lock out an account other suites depend on.
-export const VALID_COMPANY  = 'V7204';
-export const VALID_MOBILE   = '599995846';
+// Identities come from the shared account list (data/testAccounts.json).
+export const VALID_COMPANY  = testAccounts.loginAccounts.happy.company;
+export const VALID_MOBILE   = testAccounts.loginAccounts.happy.mobile;
 
-// Reserved for negative scenarios involving a blocked/locked account (or a
-// flow that deliberately drives an account into that state) — never used on
-// the happy path, so it doesn't get burned by unrelated test runs.
-export const BLOCKED_COMPANY = 'A3713';
-export const BLOCKED_MOBILE  = '599834420';
+// Reserved for negative scenarios involving a blocked/locked account — never
+// used on the happy path, so it doesn't get burned by unrelated test runs.
+export const BLOCKED_COMPANY = testAccounts.loginAccounts.blocked.company;
+export const BLOCKED_MOBILE  = testAccounts.loginAccounts.blocked.mobile;
 
 export const SUBMIT_BUTTON  = 'reset password';
 export const VALID_PASSWORD = testAccounts.defaultPassword;
@@ -123,12 +120,13 @@ export async function submitStep1AndGetResult(
 /** Drives the full step1 → step2 → submit flow up to the OTP modal, for specs
  *  whose subject is the OTP popup itself rather than the flow that reaches it.
  *  Returns whether the modal actually appeared, so callers in environments
- *  where forget-password OTP may be disabled can skip instead of hard-failing. */
-export async function gotoOtpModal(page: Page): Promise<boolean> {
+ *  where forget-password OTP may be disabled can skip instead of hard-failing.
+ *  `newPassword` defaults to the account's current password so the account is left unchanged. */
+export async function gotoOtpModal(page: Page, newPassword: string = VALID_PASSWORD): Promise<boolean> {
     await gotoForgotPassword(page);
     await fillStep1AndProceed(page);
     const fp = new ForgotPasswordPage(page);
-    await fp.fillStep2(VALID_PASSWORD, VALID_PASSWORD);
+    await fp.fillStep2(newPassword, newPassword);
     await fp.resetPasswordButton.click();
     const otp = new OtpPage(page);
     return otp.modalContainer.waitFor({ state: 'visible', timeout: 20000 })
