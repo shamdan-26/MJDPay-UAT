@@ -38,6 +38,7 @@ async function loginAndOpenBillManagement(page: Page): Promise<{ createBill: Cre
 }
 
 test.describe('Detailed Bill Editing — Editing an Existing Bill Succeeds (DBE-01, EMI-5809)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('DBE-01: editing a Single or Detailed bill and submitting a change should succeed, not 400 Bad Request', async ({ page }) => {
         const home = new HomePage(page);
         const { createBill, billsList } = await loginAndOpenBillManagement(page);
@@ -55,10 +56,14 @@ test.describe('Detailed Bill Editing — Editing an Existing Bill Succeeds (DBE-
         await createBill.submitEdit();
 
         await expect(createBill.editGenericError).not.toBeVisible({ timeout: 10000 });
+        // Positive assertion: the absence of an error isn't proof the edit actually
+        // saved — the submission must also have produced its success feedback.
+        await expect(createBill.successToast).toBeVisible({ timeout: 10000 });
     });
 });
 
 test.describe('Detailed Bill Editing — Discount Persists on Reopen (DBE-02, EMI-5893)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('DBE-02: reopening a detailed bill for edit should show the previously applied discount, not "No Discount"', async ({ page }) => {
         const { createBill } = await loginAndOpenBillManagement(page);
         await createBill.openDetailedBillEntry();
@@ -81,6 +86,7 @@ test.describe('Detailed Bill Editing — Discount Persists on Reopen (DBE-02, EM
 });
 
 test.describe('Detailed Bill Editing — VAT Change Recalculates Summary Immediately (DBE-03, EMI-5812)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('DBE-03: toggling VAT on a Detailed Bill should update VAT Amount and Grand Total without clicking Apply Discount', async ({ page }) => {
         const { createBill } = await loginAndOpenBillManagement(page);
         await createBill.openDetailedBillEntry();
@@ -101,6 +107,7 @@ test.describe('Detailed Bill Editing — VAT Change Recalculates Summary Immedia
 });
 
 test.describe('Detailed Bill Editing — Discount Survives VAT Toggle (DBE-04, EMI-5863)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('DBE-04: enabling/disabling VAT on a Detailed Bill should not clear an already-applied discount', async ({ page }) => {
         const { createBill } = await loginAndOpenBillManagement(page);
         await createBill.openDetailedBillEntry();
@@ -122,6 +129,7 @@ test.describe('Detailed Bill Editing — Discount Survives VAT Toggle (DBE-04, E
 });
 
 test.describe('Detailed Bill Editing — Expired Bill Editing Allowed (DBE-05, EMI-5776)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('DBE-05: editing an expired detailed bill should be allowed instead of failing with an unclear 400 error', async ({ page }) => {
         const home = new HomePage(page);
         const { createBill, billsList } = await loginAndOpenBillManagement(page);
@@ -141,5 +149,87 @@ test.describe('Detailed Bill Editing — Expired Bill Editing Allowed (DBE-05, E
         await createBill.submitEdit();
 
         await expect(createBill.editGenericError).not.toBeVisible({ timeout: 10000 });
+        // Positive assertion: the absence of an error isn't proof the edit actually
+        // saved — the submission must also have produced its success feedback.
+        await expect(createBill.successToast).toBeVisible({ timeout: 10000 });
+    });
+});
+
+test.describe('Detailed Bill Editing — Added Items Persist (DBE-06, EMI-6030)', () => {
+    test.describe.configure({ mode: 'serial' });
+
+    test('DBE-06: items added while editing a Detailed Bill are saved and the total is recalculated', async ({ page }) => {
+        const home = new HomePage(page);
+        const { createBill, billsList } = await loginAndOpenBillManagement(page);
+
+        await home.clicBillReport_NavButton();
+        await billsList.waitForTableLoaded();
+
+        const refs = await billsList.getVisibleBillRefs();
+        test.skip(refs.length === 0, 'No bills present in the current data set to edit — verify UAT data setup.');
+
+        await billsList.openBillByRef(refs[0]!);
+        await billsList.clickEditOnOpenBill();
+
+        const itemsBefore = await createBill.itemRows.count();
+        const totalBefore = (await createBill.grandTotalValue.innerText()).trim();
+
+        await createBill.addItemButton.click();
+        await expect(createBill.itemRows).toHaveCount(itemsBefore + 1, { timeout: 15000 });
+
+        await createBill.submitEdit();
+        await expect(createBill.editGenericError).not.toBeVisible({ timeout: 10000 });
+
+        // EMI-6030's signature: the PUT answered 200 OK, so a status-only
+        // assertion passed while nothing was actually persisted. Re-opening the
+        // bill is the only way to see that the item and the total never changed.
+        await home.clicBillReport_NavButton();
+        await billsList.waitForTableLoaded();
+        await billsList.openBillByRef(refs[0]!);
+
+        await expect(createBill.itemRows).toHaveCount(itemsBefore + 1, { timeout: 20000 });
+
+        const totalAfter = (await createBill.grandTotalValue.innerText()).trim();
+        expect(totalAfter, 'the bill total was not recalculated after adding an item').not.toBe(totalBefore);
+    });
+
+    test('DBE-06b: a 200 OK on the update is not treated as proof the edit saved', async ({ page }) => {
+        const home = new HomePage(page);
+        const { createBill, billsList } = await loginAndOpenBillManagement(page);
+
+        await home.clicBillReport_NavButton();
+        await billsList.waitForTableLoaded();
+
+        const refs = await billsList.getVisibleBillRefs();
+        test.skip(refs.length === 0, 'No bills present in the current data set to edit — verify UAT data setup.');
+
+        await billsList.openBillByRef(refs[0]!);
+        await billsList.clickEditOnOpenBill();
+
+        const itemsBefore = await createBill.itemRows.count();
+        await createBill.addItemButton.click();
+        await expect(createBill.itemRows).toHaveCount(itemsBefore + 1, { timeout: 15000 });
+
+        // Capture the PUT alongside the click so the 200-that-does-nothing is
+        // visible in the trace when this fails, rather than being inferred.
+        const [response] = await Promise.all([
+            page.waitForResponse(
+                res => /\/api\/v1\/bills\/\d+/.test(res.url()) && res.request().method() === 'PUT',
+                { timeout: 30000 }
+            ).catch(() => null),
+            createBill.submitEdit(),
+        ]);
+        test.skip(!response, 'no PUT /api/v1/bills/{id} observed — the edit form may post elsewhere');
+
+        expect(response!.status()).toBe(200);
+
+        await home.clicBillReport_NavButton();
+        await billsList.waitForTableLoaded();
+        await billsList.openBillByRef(refs[0]!);
+
+        await expect(
+            createBill.itemRows,
+            'PUT returned 200 but the added item is not on the reloaded bill'
+        ).toHaveCount(itemsBefore + 1, { timeout: 20000 });
     });
 });

@@ -1,0 +1,454 @@
+{
+  "item": [
+    {
+      "id": "a6f3b529-7e8c-4022-a97a-0853f7ca306c",
+      "name": "refresh-api-key-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4fa7cba1-537f-462e-882c-dc77fe65c61d",
+          "name": "refresh Api Key",
+          "request": {
+            "name": "refresh Api Key",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "erp",
+                "refresh",
+                "api-key"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/erp/refresh/api-key"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clientId\": \"ipsum reprehenderit dolore in consectetur\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "49c39f01-d64a-4bff-acb2-153cae48aa37",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "erp",
+                    "refresh",
+                    "api-key"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "ut quis"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"clientId\": \"ipsum reprehenderit dolore in consectetur\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"apiKey\": \"veniam ut\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "d0c9fcae-ac34-4ac9-a723-b66f8ce558b8",
+      "name": "customer-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "746ad9bf-b778-43ec-84e6-c6a78c4b3245",
+          "name": "customer Sign Up",
+          "request": {
+            "name": "customer Sign Up",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "customer",
+                "signup"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/customer/signup"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"number\": \"aute sunt ipsum ut\",\n  \"displayName\": \"laboris esse id dolore\",\n  \"type\": \"COMPANY\",\n  \"addressLine1\": \"nostrud voluptate sunt minim\",\n  \"addressLine2\": \"ullamco minim incididunt\",\n  \"city\": \"proident mollit aliquip offici\",\n  \"state\": \"ea sunt\",\n  \"country\": \"voluptate laborum aliquip\",\n  \"postalCode\": \"consectetur dolore ullamco\",\n  \"phoneNumber\": \"dolor\",\n  \"email\": \"ipsum officia\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fe4af564-f95c-4802-9069-a5928b573909",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "customer",
+                    "signup"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"number\": \"aute sunt ipsum ut\",\n  \"displayName\": \"laboris esse id dolore\",\n  \"type\": \"COMPANY\",\n  \"addressLine1\": \"nostrud voluptate sunt minim\",\n  \"addressLine2\": \"ullamco minim incididunt\",\n  \"city\": \"proident mollit aliquip offici\",\n  \"state\": \"ea sunt\",\n  \"country\": \"voluptate laborum aliquip\",\n  \"postalCode\": \"consectetur dolore ullamco\",\n  \"phoneNumber\": \"dolor\",\n  \"email\": \"ipsum officia\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "ut quis",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "fccc5298-0959-4f04-a4cd-65b850fd0802",
+      "name": "lookup-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3c93a657-a5dc-48e3-9643-af5583fb8662",
+          "name": "industry Name",
+          "request": {
+            "name": "industry Name",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "lookup",
+                "industries"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/lookup/industries"
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "client_id",
+                "value": "ut quis"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "36a5dea5-baa0-4d43-b694-b65044f200ef",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "lookup",
+                    "industries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "ut quis"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "client_id",
+                    "value": "ut quis"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"industryName\": \"anim ex do labore\",\n    \"code\": \"laborum culpa officia\"\n  },\n  {\n    \"industryName\": \"dolor\",\n    \"code\": \"consectetur Duis mollit ut consequat\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "990fcad9-8c71-4941-b6d0-6bd2aa489036",
+          "name": "bank Codes",
+          "request": {
+            "name": "bank Codes",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "lookup",
+                "banks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/lookup/banks"
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "client_id",
+                "value": "ut quis"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2be78664-ce5f-4e5b-a3c7-81ac7ff753d9",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "lookup",
+                    "banks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "ut quis"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "client_id",
+                    "value": "ut quis"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"institutionNameEnglish\": \"Dui\",\n    \"swiftCode\": \"velit sint occaecat amet\",\n    \"code\": \"et\"\n  },\n  {\n    \"institutionNameEnglish\": \"cillum\",\n    \"swiftCode\": \"eu proident cillum Duis\",\n    \"code\": \"ullamco eiusmod enim id sed\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generated guard: a 5xx from any request is a gateway/service defect, not a test-data problem.",
+          "pm.test('no 5xx (' + pm.info.requestName + ')', function () {",
+          "  pm.expect(pm.response.code, (pm.response.text() || '').slice(0, 300)).to.be.below(500);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{gatewayBaseUrl}}/erp-integration-service",
+      "type": "string"
+    }
+  ],
+  "info": {
+    "_postman_id": "d0cc0921-2c6d-4832-ae7d-339a1a722faa",
+    "name": "Erp Integration Service - majdpay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Erp Integration Service (erp-integration-service) — 4 operations.\n\nGENERATED from the OpenAPI 3.1.0 spec published at the UAT gateway swagger-ui\n(Select a definition -> \"Erp Integration Service APIs\"). Request bodies are schema-derived placeholders (lorem-ipsum\nstrings, sample numbers) — replace with real values before sending.\n\nBase URL: {{gatewayBaseUrl}}/erp-integration-service  (gatewayBaseUrl lives in EMI-dev.postman_environment.json).\nSpec server: https://gateway-emiuat.dg-cash.app/erp-integration-service\n\nAUTH: the spec declares no security scheme, but the gateway front-doors every route with a bearer\ntoken. Set {{token}} in the environment (mint one with the Authentication Service collection's\nsign-in, or pass --env-var token=... to newman). Some back-office routes need an admin/service\ntoken rather than a merchant one.\n\nCompanion Playwright scaffold: BusinessTestCases/ServiceApis/ErpIntegrationService.generated.spec.ts\n"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

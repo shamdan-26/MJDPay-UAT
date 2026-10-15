@@ -35,7 +35,7 @@
  * EMI-719 Jobs-section access, the same convention Reconciliation/ uses.
  */
 
-export const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev.majdpay.com';
+export const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev-emi.dg-cash.app';
 
 export const TTL_IMPLEMENTED = (process.env['TTL_IMPLEMENTED'] ?? '').toLowerCase() === 'true';
 export const PENDING_BUILD = 'EMI-6031 is To Do — set TTL_IMPLEMENTED=true once the job is specified and exposed';

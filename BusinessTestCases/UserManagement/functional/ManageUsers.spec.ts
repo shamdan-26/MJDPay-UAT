@@ -32,6 +32,7 @@ import {
 // ─────────────────────────────────────────────────────────────────────────────
 
 test.describe('Manage Users — List (MU-01, MU-02)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('MU-01: the users list renders Full Name, User Group, Mobile Number and Status for each row', async ({ page }) => {
@@ -62,6 +63,7 @@ test.describe('Manage Users — List (MU-01, MU-02)', () => {
 });
 
 test.describe('Manage Users — Add New User (MU-03, MU-04, MU-05, MU-06)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('MU-03: the create-user form asks for National ID / Iqama and no longer asks for first or last name (EMI-4847)', async ({ page }) => {
@@ -133,6 +135,7 @@ test.describe('Manage Users — Add New User (MU-03, MU-04, MU-05, MU-06)', () =
 });
 
 test.describe('Manage Users — Status Filter (MU-07)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     // EMI-4844 defines six statuses; the filter must reach the API for each.
@@ -157,6 +160,7 @@ test.describe('Manage Users — Status Filter (MU-07)', () => {
 });
 
 test.describe('Manage Users — Edit & Lifecycle (MU-08, MU-09, MU-10)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('MU-08: editing a user updates their group and confirms with a success message', async ({ page }) => {

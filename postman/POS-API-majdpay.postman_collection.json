@@ -1,0 +1,779 @@
+{
+  "info": {
+    "_postman_id": "b7e1c2a4-9f31-4d8a-8f10-pos0majdpay01",
+    "name": "POS API - majdpay (dev)",
+    "description": "POS endpoints of product-management-service.\n\nBuilt from:\n- pos-api-reference-business.md (self-service / tenant-scoped)\n- pos-api-reference-admin.md (back-office / unscoped)\n- pos-api-reference-integration.md (terminal callback)\n\nBase URL: https://gateway-dev.majdpay.com\n\nAll requests need: Authorization: Bearer {{token}} (set at collection level), device-finger-print, platform.\nEvery endpoint also needs its own privilege on the token - a valid token alone is not enough (403 UNAUTHORIZED_USER otherwise).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://gateway-dev.majdpay.com" },
+    { "key": "token", "value": "" },
+    { "key": "deviceFingerPrint", "value": "" },
+    { "key": "platform", "value": "WEB" },
+    { "key": "terminalId", "value": "T0012345" },
+    { "key": "walletReference", "value": "WLT-0099" },
+    { "key": "walletCode", "value": "WLT-0099" },
+    { "key": "profileCode", "value": "PRF-0123" },
+    { "key": "merchantId", "value": "123456789012" },
+    { "key": "batchRef", "value": "BR-2026-08-30-001" },
+    { "key": "batchRef2", "value": "BR-2026-08-30-002" },
+    { "key": "stan", "value": "" },
+    { "key": "rrn", "value": "" }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Fresh STAN/RRN per run so callback requests are not treated as duplicates.",
+          "pm.collectionVariables.set('stan', String(Math.floor(Math.random() * 900000) + 100000));",
+          "pm.collectionVariables.set('rrn', String(Date.now()).slice(-12));"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "Business (self-service, tenant-scoped)",
+      "description": "Caller sees only their own data. Scoping comes from profileCode inside the JWT. Privileges: GET_POS_TRANSACTIONS, GET_POS_LEDGER.",
+      "item": [
+        {
+          "name": "1. GET my transactions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Spring Page envelope', () => {",
+                  "  const b = pm.response.json();",
+                  "  pm.expect(b).to.have.property('content');",
+                  "  pm.expect(b.content).to.be.an('array');",
+                  "  pm.expect(b).to.have.property('totalElements');",
+                  "});",
+                  "const c = pm.response.json().content;",
+                  "if (c && c.length) {",
+                  "  pm.collectionVariables.set('terminalId', c[0].terminalId);",
+                  "  pm.test('PAN is masked in response', () => pm.expect(String(c[0].maskedPan || '')).to.not.match(/^[0-9]{13,19}$/));",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "platform", "value": "{{platform}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/pos/transactions?page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "pos", "transactions"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" },
+                { "key": "processingStatus", "value": "SETTLED", "disabled": true, "description": "RECEIVED | ACCEPTED | UNMATCHED | COMPLIANCE_HOLD | SETTLEMENT_HELD | GROUPED | SETTLED | DISPUTED | FAILED_RETRYABLE | REJECTED | FAILED" },
+                { "key": "dateFrom", "value": "2026-08-01T00:00:00Z", "disabled": true },
+                { "key": "dateTo", "value": "2026-08-31T23:59:59Z", "disabled": true }
+              ]
+            },
+            "description": "Privilege: GET_POS_TRANSACTIONS. 403 UNAUTHORIZED_USER if missing.\n\nThis request saves the first returned terminalId into {{terminalId}} so the next requests can reuse it."
+          },
+          "response": []
+        },
+        {
+          "name": "2. GET my transactions by terminal",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('All rows belong to the requested terminal', () => {",
+                  "  const c = pm.response.json().content || [];",
+                  "  c.forEach(t => pm.expect(t.terminalId).to.eql(pm.collectionVariables.get('terminalId')));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "platform", "value": "{{platform}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/pos/transactions/terminals/{{terminalId}}?page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "pos", "transactions", "terminals", "{{terminalId}}"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" },
+                { "key": "processingStatus", "value": "SETTLED", "disabled": true },
+                { "key": "dateFrom", "value": "2026-08-01T00:00:00Z", "disabled": true },
+                { "key": "dateTo", "value": "2026-08-31T23:59:59Z", "disabled": true }
+              ]
+            },
+            "description": "Privilege: GET_POS_TRANSACTIONS + ownership of the terminal.\nA terminal that exists but belongs to another profile raises PosDeviceNotFoundException, NOT a 403 - treat both as access-denied outcomes."
+          },
+          "response": []
+        },
+        {
+          "name": "3. GET my ledger by terminal",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const c = pm.response.json().content || [];",
+                  "if (c.length && c[0].reconBatchRefNum) { pm.collectionVariables.set('batchRef', c[0].reconBatchRefNum); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "platform", "value": "{{platform}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/pos/ledger/terminals/{{terminalId}}?page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "pos", "ledger", "terminals", "{{terminalId}}"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" },
+                { "key": "status", "value": "SUCCESS", "disabled": true, "description": "PENDING | SUCCESS | FAILED | REVERSED" },
+                { "key": "entryType", "value": "POS_CASH_IN", "disabled": true, "description": "POS_CASH_IN | REVERSAL | SUSPENSE" },
+                { "key": "dateFrom", "value": "2026-08-01T00:00:00Z", "disabled": true },
+                { "key": "dateTo", "value": "2026-08-31T23:59:59Z", "disabled": true }
+              ]
+            },
+            "description": "Privilege: GET_POS_LEDGER + ownership of the terminal."
+          },
+          "response": []
+        },
+        {
+          "name": "4. GET my ledger by wallet",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status is 200', () => pm.response.to.have.status(200));"]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "platform", "value": "{{platform}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/pos/ledger/wallets/{{walletReference}}?page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "pos", "ledger", "wallets", "{{walletReference}}"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" },
+                { "key": "status", "value": "SUCCESS", "disabled": true },
+                { "key": "entryType", "value": "POS_CASH_IN", "disabled": true },
+                { "key": "dateFrom", "value": "2026-08-01T00:00:00Z", "disabled": true },
+                { "key": "dateTo", "value": "2026-08-31T23:59:59Z", "disabled": true }
+              ]
+            },
+            "description": "Privilege: GET_POS_LEDGER + the wallet must be linked to the caller's profile."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin (back-office, unscoped)",
+      "description": "No ownership check - a holder of the privilege sees and acts on every profile's data.",
+      "item": [
+        {
+          "name": "1. GET all transactions (admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Page envelope', () => pm.expect(pm.response.json().content).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "platform", "value": "{{platform}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/pos/transactions?page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "pos", "transactions"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" },
+                { "key": "deviceId", "value": "42", "disabled": true, "description": "Long - internal device ID" },
+                { "key": "terminalId", "value": "{{terminalId}}", "disabled": true },
+                { "key": "walletCode", "value": "{{walletCode}}", "disabled": true },
+                { "key": "profileCode", "value": "{{profileCode}}", "disabled": true, "description": "How an admin scopes down to one merchant" },
+                { "key": "processingStatus", "value": "SETTLED", "disabled": true },
+                { "key": "dateFrom", "value": "2026-08-01T00:00:00Z", "disabled": true },
+                { "key": "dateTo", "value": "2026-08-31T23:59:59Z", "disabled": true }
+              ]
+            },
+            "description": "Privilege: ADMIN_GET_POS_TRANSACTIONS. Same DTO as the business list, but unscoped."
+          },
+          "response": []
+        },
+        {
+          "name": "2. GET all ledger entries (admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status is 200', () => pm.response.to.have.status(200));"]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "platform", "value": "{{platform}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/pos/ledger?page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "pos", "ledger"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" },
+                { "key": "terminalId", "value": "{{terminalId}}", "disabled": true },
+                { "key": "walletReference", "value": "{{walletReference}}", "disabled": true },
+                { "key": "status", "value": "SUCCESS", "disabled": true },
+                { "key": "entryType", "value": "POS_CASH_IN", "disabled": true },
+                { "key": "dateFrom", "value": "2026-08-01T00:00:00Z", "disabled": true },
+                { "key": "dateTo", "value": "2026-08-31T23:59:59Z", "disabled": true }
+              ]
+            },
+            "description": "Privilege: ADMIN_GET_POS_LEDGER."
+          },
+          "response": []
+        },
+        {
+          "name": "3. GET all ACH transfers",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const c = pm.response.json().content || [];",
+                  "pm.test('allowedActions only on AWAITING_APPROVAL', () => {",
+                  "  c.forEach(t => {",
+                  "    if (t.status === 'AWAITING_APPROVAL') { pm.expect(t.allowedActions).to.have.members(['RELEASE', 'REJECT']); }",
+                  "    else { pm.expect(t.allowedActions || []).to.be.empty; }",
+                  "  });",
+                  "});",
+                  "const pending = c.find(t => t.status === 'AWAITING_APPROVAL');",
+                  "if (pending) { pm.collectionVariables.set('batchRef', pending.reconBatchRefNum); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "platform", "value": "{{platform}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/pos/ach-transfers?page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "pos", "ach-transfers"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20", "description": "Server caps the effective page size at 100" },
+                { "key": "batchRef", "value": "{{batchRef}}", "disabled": true },
+                { "key": "terminalId", "value": "{{terminalId}}", "disabled": true },
+                { "key": "walletCode", "value": "{{walletCode}}", "disabled": true },
+                { "key": "beneficiaryAccountIban", "value": "SA0000000000000000000000", "disabled": true },
+                { "key": "status", "value": "AWAITING_APPROVAL", "disabled": true, "description": "AWAITING_APPROVAL | APPROVED | PENDING | SUCCESSFUL | REVERSED | REJECTED" },
+                { "key": "dateFrom", "value": "2026-08-01T00:00:00Z", "disabled": true },
+                { "key": "dateTo", "value": "2026-08-31T23:59:59Z", "disabled": true }
+              ]
+            },
+            "description": "Privilege: ADMIN_GET_POS_ACH_TRANSFERS.\nThis request stores the first AWAITING_APPROVAL batchRef into {{batchRef}} for the release/reject calls below."
+          },
+          "response": []
+        },
+        {
+          "name": "4. POST release ACH transfers",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Batch counters add up', () => {",
+                  "  const b = pm.response.json();",
+                  "  pm.expect(b.succeeded + b.failed + b.skipped).to.eql(b.total);",
+                  "  pm.expect(b.items.length).to.eql(b.total);",
+                  "});",
+                  "// Per-item outcomes (NOT_FOUND / INVALID_STATUS / ALREADY_RELEASED / FAILED / REJECTED_BY_BANK)",
+                  "// are reported inside this 200 body - they are NOT HTTP errors."
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "platform", "value": "{{platform}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"batchRefs\": [\"{{batchRef}}\"],\n  \"reason\": \"Approved by finance for weekly settlement run\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/pos/ach-transfers/release",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "pos", "ach-transfers", "release"]
+            },
+            "description": "Privilege: ADMIN_RELEASE_POS_ACH_TRANSFERS.\n\nValidation (400 on failure): batchRefs non-null, non-empty, no blank entries, max 100 items; reason max 255 chars.\nOnly AWAITING_APPROVAL transfers can be released - anything else returns INVALID_STATUS inside the 200 body.\n\nCAUTION: this sends a real payment instruction to the bank on whichever environment you point it at."
+          },
+          "response": []
+        },
+        {
+          "name": "5. POST reject ACH transfers",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Results limited to REJECTED / NOT_FOUND / INVALID_STATUS', () => {",
+                  "  pm.response.json().items.forEach(i => pm.expect(['REJECTED', 'NOT_FOUND', 'INVALID_STATUS']).to.include(i.result));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "platform", "value": "{{platform}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"batchRefs\": [\"{{batchRef}}\"],\n  \"reason\": \"Rejected - beneficiary IBAN under review\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/pos/ach-transfers/reject",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "pos", "ach-transfers", "reject"]
+            },
+            "description": "Privilege: ADMIN_REJECT_POS_ACH_TRANSFERS. Same request shape and validation rules as release. Only AWAITING_APPROVAL can be rejected."
+          },
+          "response": []
+        },
+        {
+          "name": "6. POST release - invalid body (negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                  "pm.test('ErrorMessageDto shape', () => {",
+                  "  const b = pm.response.json();",
+                  "  const e = Array.isArray(b) ? b[0] : b;",
+                  "  pm.expect(e).to.have.property('httpStatusCode');",
+                  "  pm.expect(e.message).to.have.property('messageCode');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "platform", "value": "{{platform}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"batchRefs\": [\"\"],\n  \"reason\": \"blank batchRef should fail validation\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/pos/ach-transfers/release",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "pos", "ach-transfers", "release"]
+            },
+            "description": "Negative test: a blank entry in batchRefs must fail AchTransferActionRequestValidator -> 400.\nOther cases worth trying by editing the body: empty array, null, more than 100 refs, reason longer than 255 chars."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Integration (terminal callback)",
+      "description": "Server-to-server MADA terminal callback. Despite being a bank-style webhook it goes through the normal POS gateway route, so it still needs a JWT, device-finger-print and platform - plus Accept-Language, which is a required header on the controller method.\n\nPrivilege: POS_TRANSACTION_CALLBACK.",
+      "item": [
+        {
+          "name": "1. POST callback - valid purchase (200 ACCEPTED)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('result is ACCEPTED', () => pm.expect(b.result).to.eql('ACCEPTED'));",
+                  "pm.test('subStatus is ACCEPTED or PARKED', () => pm.expect(['ACCEPTED', 'PARKED']).to.include(b.subStatus));",
+                  "pm.test('reconciliationKey present', () => pm.expect(b.reconciliationKey).to.be.a('string').and.not.empty);",
+                  "if (b.subStatus === 'PARKED') { console.log('Parked - terminal not matched. reasonCode:', b.reasonCode); }",
+                  "if (b.externalReference) { pm.collectionVariables.set('externalReference', b.externalReference); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept-Language", "value": "en" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "platform", "value": "{{platform}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"madaArchives\": {\n    \"madaTransactionResult\": {\n      \"Retailer\": \"ACME Retail LLC\",\n      \"Performance\": \"OK\",\n      \"BankId\": \"01\",\n      \"MerchantId\": \"{{merchantId}}\",\n      \"TerminalId\": \"{{terminalId}}\",\n      \"Mcc\": \"5411\",\n      \"Stan\": \"{{stan}}\",\n      \"Version\": \"1.0\",\n      \"Rrn\": \"{{rrn}}\",\n      \"CardScheme\": \"MADA\",\n      \"ApplicationLabel\": \"MADA\",\n      \"Pan\": \"410621******1234\",\n      \"CardExpiryDate\": \"2812\",\n      \"TransactionType\": \"PURCHASE\",\n      \"Amount\": { \"Amount\": 150.00 },\n      \"Result\": \"APPROVED\",\n      \"CardholderVerification\": \"PIN\",\n      \"ApprovalCode\": \"654321\",\n      \"EmvTags\": {\n        \"PosEntryMode\": \"051\",\n        \"ResponseCode\": \"00\",\n        \"TerminalStatusCode\": \"00\",\n        \"AID\": \"A0000000041010\",\n        \"TVR\": \"0000008000\",\n        \"TSI\": \"E800\",\n        \"CVR\": \"0000000000\",\n        \"ACI\": \"Y\",\n        \"AC\": \"1234567890ABCDEF\",\n        \"KID\": \"01\",\n        \"PAR\": \"\",\n        \"FPAN\": \"\"\n      },\n      \"Campaign\": { \"QrCodeData\": \"\", \"CampaignText\": \"\" }\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/pos/transactions/callback",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "pos", "transactions", "callback"]
+            },
+            "description": "Stan and Rrn are randomised by the collection pre-request script, so each send is a new transaction.\n\nExpected outcomes:\n- Terminal matched and active -> 200, subStatus ACCEPTED\n- Terminal unknown -> still 200, subStatus PARKED, reasonCode UNKNOWN_TID"
+          },
+          "response": []
+        },
+        {
+          "name": "2. POST callback - duplicate replay (idempotency)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Replay stays ACCEPTED', () => pm.expect(pm.response.json().result).to.eql('ACCEPTED'));",
+                  "// Send this request twice. TerminalId + Rrn + Stan are pinned here, so the second send",
+                  "// must be handled as an idempotent DUPLICATE - no second transaction row."
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept-Language", "value": "en" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "platform", "value": "{{platform}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"madaArchives\": {\n    \"madaTransactionResult\": {\n      \"Retailer\": \"ACME Retail LLC\",\n      \"MerchantId\": \"{{merchantId}}\",\n      \"TerminalId\": \"{{terminalId}}\",\n      \"Stan\": \"000123\",\n      \"Rrn\": \"241234567890\",\n      \"CardScheme\": \"MADA\",\n      \"Pan\": \"410621******1234\",\n      \"TransactionType\": \"PURCHASE\",\n      \"Amount\": { \"Amount\": 150.00 },\n      \"Result\": \"APPROVED\",\n      \"ApprovalCode\": \"654321\"\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/pos/transactions/callback",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "pos", "transactions", "callback"]
+            },
+            "description": "Idempotency key inputs = TerminalId + Rrn + Stan, all hard-coded here so replays are detectable. Verify in GET transactions that only one row exists for this Rrn."
+          },
+          "response": []
+        },
+        {
+          "name": "3. POST callback - full PAN (400 FULL_PAN_PRESENT)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                  "const b = pm.response.json();",
+                  "pm.test('TERMINAL_REJECTED / REJECTED', () => {",
+                  "  pm.expect(b.result).to.eql('TERMINAL_REJECTED');",
+                  "  pm.expect(b.subStatus).to.eql('REJECTED');",
+                  "});",
+                  "pm.test('reasonCode FULL_PAN_PRESENT', () => pm.expect(b.reasonCode).to.eql('FULL_PAN_PRESENT'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept-Language", "value": "en" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "platform", "value": "{{platform}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"madaArchives\": {\n    \"madaTransactionResult\": {\n      \"MerchantId\": \"{{merchantId}}\",\n      \"TerminalId\": \"{{terminalId}}\",\n      \"Stan\": \"{{stan}}\",\n      \"Rrn\": \"{{rrn}}\",\n      \"Pan\": \"4106214567891234\",\n      \"TransactionType\": \"PURCHASE\",\n      \"Amount\": { \"Amount\": 150.00 },\n      \"Result\": \"APPROVED\"\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/pos/transactions/callback",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "pos", "transactions", "callback"]
+            },
+            "description": "Validation rule 4: an unmasked PAN is rejected with FULL_PAN_PRESENT. The raw event is still archived with outcome REJECTED, but no business transaction is created."
+          },
+          "response": []
+        },
+        {
+          "name": "4. POST callback - missing merchantId (400 INVALID)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                  "pm.test('reasonCode INVALID_POS_TRANSACTION_CALLBACK', () => pm.expect(pm.response.json().reasonCode).to.eql('INVALID_POS_TRANSACTION_CALLBACK'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept-Language", "value": "en" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "platform", "value": "{{platform}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"madaArchives\": {\n    \"madaTransactionResult\": {\n      \"MerchantId\": \"\",\n      \"TerminalId\": \"{{terminalId}}\",\n      \"Stan\": \"{{stan}}\",\n      \"Rrn\": \"{{rrn}}\",\n      \"Pan\": \"410621******1234\",\n      \"TransactionType\": \"PURCHASE\",\n      \"Amount\": { \"Amount\": 150.00 },\n      \"Result\": \"APPROVED\"\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/pos/transactions/callback",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "pos", "transactions", "callback"]
+            },
+            "description": "Validation rule 1. The same 400 / INVALID_POS_TRANSACTION_CALLBACK applies to: missing Amount object, missing amount, negative amount (rule 3), blank TerminalId/Rrn/Stan (rule 2), and a PAN masked in the wrong format (rule 5). Rules run in order - the first failure wins."
+          },
+          "response": []
+        },
+        {
+          "name": "5. POST callback - unsupported type (400 UNKNOWN_EVENT_TYPE)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                  "pm.test('reasonCode UNKNOWN_EVENT_TYPE', () => pm.expect(pm.response.json().reasonCode).to.eql('UNKNOWN_EVENT_TYPE'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept-Language", "value": "en" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "platform", "value": "{{platform}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"madaArchives\": {\n    \"madaTransactionResult\": {\n      \"MerchantId\": \"{{merchantId}}\",\n      \"TerminalId\": \"{{terminalId}}\",\n      \"Stan\": \"{{stan}}\",\n      \"Rrn\": \"{{rrn}}\",\n      \"Pan\": \"410621******1234\",\n      \"TransactionType\": \"REFUND\",\n      \"Amount\": { \"Amount\": 150.00 },\n      \"Result\": \"APPROVED\"\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/pos/transactions/callback",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "pos", "transactions", "callback"]
+            },
+            "description": "Only PURCHASE is supported today (case-insensitive, trimmed). A blank TransactionType is tolerated as valid; anything else -> UNKNOWN_EVENT_TYPE."
+          },
+          "response": []
+        },
+        {
+          "name": "6. POST callback - missing Accept-Language (400 framework)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Framework error, not a callback response body', () => {",
+                  "  const b = pm.response.json();",
+                  "  const e = Array.isArray(b) ? b[0] : b;",
+                  "  pm.expect(e).to.not.have.property('reconciliationKey');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "platform", "value": "{{platform}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"madaArchives\": {\n    \"madaTransactionResult\": {\n      \"MerchantId\": \"{{merchantId}}\",\n      \"TerminalId\": \"{{terminalId}}\",\n      \"Stan\": \"{{stan}}\",\n      \"Rrn\": \"{{rrn}}\",\n      \"Pan\": \"410621******1234\",\n      \"TransactionType\": \"PURCHASE\",\n      \"Amount\": { \"Amount\": 150.00 },\n      \"Result\": \"APPROVED\"\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/pos/transactions/callback",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "pos", "transactions", "callback"]
+            },
+            "description": "Accept-Language is bound with no default, so Spring rejects the request before the facade runs. This is a framework-level 400 with the ErrorMessageDto shape - not a PosTransactionCallbackResponse."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth / header negative checks",
+      "description": "Gateway-level failures, raised by TokenValidationFilter / DeviceFingerPrintValidationFilter before the request reaches product-management-service.",
+      "item": [
+        {
+          "name": "401 - missing device-finger-print",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status is 401', () => pm.response.to.have.status(401));"]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "platform", "value": "{{platform}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/pos/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "pos", "transactions"]
+            },
+            "description": "Missing or empty device-finger-print -> 401 at the gateway. Filter-level failures may return a single bare ErrorMessageDto object instead of an array."
+          },
+          "response": []
+        },
+        {
+          "name": "401 - no Authorization",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status is 401', () => pm.response.to.have.status(401));"]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "platform", "value": "{{platform}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/pos/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "pos", "transactions"]
+            },
+            "description": "Collection-level bearer auth is overridden to 'No Auth' on this request only."
+          },
+          "response": []
+        },
+        {
+          "name": "403 - token without the privilege",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 403', () => pm.response.to.have.status(403));",
+                  "pm.test('messageCode is UNAUTHORIZED_USER', () => {",
+                  "  const b = pm.response.json();",
+                  "  const e = Array.isArray(b) ? b[0] : b;",
+                  "  pm.expect(e.message.messageCode).to.eql('UNAUTHORIZED_USER');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "platform", "value": "{{platform}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/pos/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "pos", "transactions"]
+            },
+            "description": "Run this with a business-only token (no ADMIN_GET_POS_TRANSACTIONS) to confirm the privilege check is enforced, not just the token check."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

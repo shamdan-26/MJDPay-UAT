@@ -39,6 +39,7 @@ async function loginAndOpenBeneficiaryManagement(page: Page): Promise<Beneficiar
 }
 
 test.describe('Beneficiary Management — Add Beneficiary (BM-01, BM-06)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BM-01: should add a beneficiary with a valid alias and CRN, showing the resolved brand name', async ({ page }) => {
         test.skip(!KNOWN_CRN, 'requires BENEFICIARY_KNOWN_CRN env var pointing at a real fixture CRN');
         const beneficiary = await loginAndOpenBeneficiaryManagement(page);
@@ -69,6 +70,7 @@ test.describe('Beneficiary Management — Add Beneficiary (BM-01, BM-06)', () =>
 });
 
 test.describe('Beneficiary Management — Alias Validation (BM-02, BM-03, BM-04)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BM-02: an alias shorter than 3 characters is rejected', async ({ page }) => {
         const beneficiary = await loginAndOpenBeneficiaryManagement(page);
         await beneficiary.openAddBeneficiaryForm();
@@ -98,6 +100,7 @@ test.describe('Beneficiary Management — Alias Validation (BM-02, BM-03, BM-04)
 });
 
 test.describe('Beneficiary Management — CRN Lookup (BM-05)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BM-05: looking up a CRN that does not exist blocks submission with an error', async ({ page }) => {
         const beneficiary = await loginAndOpenBeneficiaryManagement(page);
         await beneficiary.openAddBeneficiaryForm();
@@ -109,6 +112,7 @@ test.describe('Beneficiary Management — CRN Lookup (BM-05)', () => {
 });
 
 test.describe('Beneficiary Management — List & Filters (BM-07, BM-08, BM-09, BM-10)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BM-07: the beneficiaries list displays Alias and CRN for each row', async ({ page }) => {
         const beneficiary = await loginAndOpenBeneficiaryManagement(page);
         await expect(beneficiary.beneficiaryRows.first()).toBeVisible({ timeout: 15000 });
@@ -140,6 +144,7 @@ test.describe('Beneficiary Management — List & Filters (BM-07, BM-08, BM-09, B
 });
 
 test.describe('Beneficiary Management — Edit & Delete (BM-11, BM-12)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BM-11: deleting a beneficiary removes it from the list after confirmation', async ({ page }) => {
         const beneficiary = await loginAndOpenBeneficiaryManagement(page);
         await expect(beneficiary.beneficiaryRows.first()).toBeVisible({ timeout: 15000 });
@@ -167,6 +172,7 @@ test.describe('Beneficiary Management — Edit & Delete (BM-11, BM-12)', () => {
 });
 
 test.describe('Beneficiary Management — Duplicate & Required Field Validation (BM-13, BM-14)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BM-13: adding a beneficiary with an alias already in use is rejected', async ({ page }) => {
         test.skip(!KNOWN_CRN, 'requires BENEFICIARY_KNOWN_CRN env var pointing at a real fixture CRN');
         const beneficiary = await loginAndOpenBeneficiaryManagement(page);

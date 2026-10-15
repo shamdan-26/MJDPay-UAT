@@ -1,0 +1,1998 @@
+{
+  "item": [
+    {
+      "id": "da8333af-9d1e-4411-a0fa-b5bfdbda2b82",
+      "name": "page-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3bc7f1b7-859e-419f-8103-dae09f616049",
+          "name": "get Page By Id",
+          "request": {
+            "name": "get Page By Id",
+            "description": {},
+            "url": {
+              "path": [
+                "pages",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-29490366",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/pages/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b26df857-4d22-4da8-8380-54906aed9a07",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pages",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-29490366",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 29267054,\n  \"title\": \"deserunt et ut nostrud qui\",\n  \"content\": \"in ut\",\n  \"isEnabled\": false,\n  \"authorProfileId\": \"in velit laboris dolor adipisicing\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "86433c1e-e3be-4cda-9834-4b1f078a7755",
+          "name": "update",
+          "request": {
+            "name": "update",
+            "description": {},
+            "url": {
+              "path": [
+                "pages",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-29490366",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/pages/:id"
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "Accept-Language",
+                "value": "mollit ad culpa Excepteur"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": -77524417,\n  \"title\": \"nulla Ut sed in\",\n  \"content\": \"dolor laborum pro\",\n  \"isEnabled\": true,\n  \"authorProfileId\": 92173950\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "996eb896-28ee-47af-b27f-96ca17a6cc95",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pages",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-29490366",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "mollit ad culpa Excepteur"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Accept-Language",
+                    "value": "mollit ad culpa Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": -77524417,\n  \"title\": \"nulla Ut sed in\",\n  \"content\": \"dolor laborum pro\",\n  \"isEnabled\": true,\n  \"authorProfileId\": 92173950\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 29267054,\n  \"title\": \"deserunt et ut nostrud qui\",\n  \"content\": \"in ut\",\n  \"isEnabled\": false,\n  \"authorProfileId\": \"in velit laboris dolor adipisicing\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "96c33eca-e2d2-430f-bfb4-1daa72b29a0b",
+          "name": "delete",
+          "request": {
+            "name": "delete",
+            "description": {},
+            "url": {
+              "path": [
+                "pages",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-29490366",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/pages/:id"
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7aa1880b-b0c1-4b2a-a288-8615047a7c96",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pages",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-29490366",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "mollit ad culpa Excepteur"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0633115f-b632-4288-a1df-282d73667dbc",
+          "name": "enable",
+          "request": {
+            "name": "enable",
+            "description": {},
+            "url": {
+              "path": [
+                "pages",
+                ":id",
+                "enable"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-29490366",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/pages/:id/enable"
+            },
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "824498bc-1c61-442d-a9f6-c37ca5de5588",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pages",
+                    ":id",
+                    "enable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-29490366",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "mollit ad culpa Excepteur"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "451c1132-13af-432b-821f-86229b399ba0",
+          "name": "disable",
+          "request": {
+            "name": "disable",
+            "description": {},
+            "url": {
+              "path": [
+                "pages",
+                ":id",
+                "disable"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-29490366",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/pages/:id/disable"
+            },
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4b6b75c1-dd45-41fa-a637-362688b3f561",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pages",
+                    ":id",
+                    "disable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-29490366",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "mollit ad culpa Excepteur"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7e3a8bd2-f64f-4b85-8b56-79a15c4e0d30",
+          "name": "create",
+          "request": {
+            "name": "create",
+            "description": {},
+            "url": {
+              "path": [
+                "pages"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/pages"
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "Accept-Language",
+                "value": "mollit ad culpa Excepteur"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"qui dolore laborum esse do\",\n  \"content\": \"amet sit est officia\",\n  \"isEnabled\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "58a4476e-2523-40a3-957d-4a23b9e0a508",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "mollit ad culpa Excepteur"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Accept-Language",
+                    "value": "mollit ad culpa Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"qui dolore laborum esse do\",\n  \"content\": \"amet sit est officia\",\n  \"isEnabled\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 29267054,\n  \"title\": \"deserunt et ut nostrud qui\",\n  \"content\": \"in ut\",\n  \"isEnabled\": false,\n  \"authorProfileId\": \"in velit laboris dolor adipisicing\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "83b38990-d272-448a-b275-4beb776e2788",
+          "name": "get Titles",
+          "request": {
+            "name": "get Titles",
+            "description": {},
+            "url": {
+              "path": [
+                "pages",
+                "titles"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "12498347",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "95525244",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "title",
+                  "value": "in minim cupidatat in",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "isEnabled",
+                  "value": "false",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/pages/titles?page=12498347&size=95525244&title=in minim cupidatat in&isEnabled=false"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "868abd93-9092-4443-8418-ebc1bfda69aa",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pages",
+                    "titles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "12498347"
+                    },
+                    {
+                      "key": "size",
+                      "value": "95525244"
+                    },
+                    {
+                      "key": "title",
+                      "value": "in minim cupidatat in"
+                    },
+                    {
+                      "key": "isEnabled",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": 29860,\n  \"totalElements\": -74137622,\n  \"size\": 87569384,\n  \"content\": [\n    {\n      \"id\": 57060606,\n      \"title\": \"laborum\",\n      \"isEnabled\": true\n    },\n    {\n      \"id\": 1335491,\n      \"title\": \"et\",\n      \"isEnabled\": true\n    }\n  ],\n  \"number\": 10917248,\n  \"sort\": [\n    {\n      \"direction\": \"sed adipisicing reprehenderit\",\n      \"nullHandling\": \"fugiat\",\n      \"ascending\": false,\n      \"property\": \"nulla velit amet\",\n      \"ignoreCase\": false\n    },\n    {\n      \"direction\": \"anim\",\n      \"nullHandling\": \"occaecat in culpa irure\",\n      \"ascending\": true,\n      \"property\": \"l\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"pageable\": {\n    \"offset\": -42478794,\n    \"sort\": [\n      {\n        \"direction\": \"commodo mollit Duis cillum\",\n        \"nullHandling\": \"exercitation cillum laborum proident\",\n        \"ascending\": false,\n        \"property\": \"minim incididunt\",\n        \"ignoreCase\": false\n      },\n      {\n        \"direction\": \"nisi\",\n        \"nullHandling\": \"occaecat reprehenderit mollit non Excepteur\",\n        \"ascending\": true,\n        \"property\": \"irure\",\n        \"ignoreCase\": false\n      }\n    ],\n    \"pageNumber\": 77855143,\n    \"pageSize\": -2822883,\n    \"paged\": true,\n    \"unpaged\": false\n  },\n  \"first\": false,\n  \"last\": false,\n  \"numberOfElements\": -98453661,\n  \"empty\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "68a9de72-c172-44bd-b3fd-7c5617b74799",
+          "name": "get Page By Title",
+          "request": {
+            "name": "get Page By Title",
+            "description": {},
+            "url": {
+              "path": [
+                "pages",
+                "title",
+                ":title"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "mollit ad culpa Excepteur",
+                  "key": "title",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/pages/title/:title"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d6a95c70-66f1-459a-bece-e53e04888d81",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pages",
+                    "title",
+                    ":title"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "mollit ad culpa Excepteur",
+                      "key": "title",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 29267054,\n  \"title\": \"deserunt et ut nostrud qui\",\n  \"content\": \"in ut\",\n  \"isEnabled\": false,\n  \"authorProfileId\": \"in velit laboris dolor adipisicing\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "6f058287-7d7c-4271-a26e-a5c10360140f",
+      "name": "faq-category-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ec3968ef-e591-44cf-9443-937f1b94d03d",
+          "name": "link Faq With Category",
+          "request": {
+            "name": "link Faq With Category",
+            "description": {},
+            "url": {
+              "path": [
+                "faq-category",
+                ":category-id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-29490366",
+                  "key": "category-id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/faq-category/:category-id"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  -4620551,\n  57930589\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9869b410-0bb9-4347-ba30-eff61bfa773a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "faq-category",
+                    ":category-id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-29490366",
+                      "key": "category-id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "mollit ad culpa Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  65822275,\n  11999939\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -8546733,\n  \"categoryName\": \"ad tempor Ut sint\",\n  \"categoryNameAr\": \"Excepteur pariatur ipsum\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "68b70130-57f0-4270-aeaf-0101dc49d2de",
+          "name": "unlink Faq With Category",
+          "request": {
+            "name": "unlink Faq With Category",
+            "description": {},
+            "url": {
+              "path": [
+                "faq-category",
+                ":category-id",
+                "unlink"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-29490366",
+                  "key": "category-id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/faq-category/:category-id/unlink"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  -4620551,\n  57930589\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "17b42cb6-5e5d-492a-b3f0-aa3d9c555ec0",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "faq-category",
+                    ":category-id",
+                    "unlink"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-29490366",
+                      "key": "category-id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "mollit ad culpa Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  65822275,\n  11999939\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -8546733,\n  \"categoryName\": \"ad tempor Ut sint\",\n  \"categoryNameAr\": \"Excepteur pariatur ipsum\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d3fc443a-14a9-4704-b749-7a25be1b9c8f",
+          "name": "get All Faqs 1",
+          "request": {
+            "name": "get All Faqs 1",
+            "description": {},
+            "url": {
+              "path": [
+                "faq-category"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "-79477713",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "14849125",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "categoryName",
+                  "value": "enim dolore",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "categoryNameAr",
+                  "value": "est occaecat cillum laborum",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/faq-category?page=-79477713&size=14849125&categoryName=enim dolore&categoryNameAr=est occaecat cillum laborum"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3e2cbfc5-f0ca-4184-8783-b21ee805fa94",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "faq-category"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "-79477713"
+                    },
+                    {
+                      "key": "size",
+                      "value": "14849125"
+                    },
+                    {
+                      "key": "categoryName",
+                      "value": "enim dolore"
+                    },
+                    {
+                      "key": "categoryNameAr",
+                      "value": "est occaecat cillum laborum"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": -2849001,\n  \"totalElements\": -90680851,\n  \"size\": 74937568,\n  \"content\": [\n    {\n      \"id\": 57212666,\n      \"categoryName\": \"laborum culpa enim consequat ad\",\n      \"categoryNameAr\": \"quis officia velit dolor\"\n    },\n    {\n      \"id\": -18964186,\n      \"categoryName\": \"pariatur te\",\n      \"categoryNameAr\": \"esse voluptate\"\n    }\n  ],\n  \"number\": -88218882,\n  \"sort\": [\n    {\n      \"direction\": \"do ullamco dolore\",\n      \"nullHandling\": \"in ea\",\n      \"ascending\": true,\n      \"property\": \"Lorem Duis amet anim cillum\",\n      \"ignoreCase\": false\n    },\n    {\n      \"direction\": \"qui\",\n      \"nullHandling\": \"anim\",\n      \"ascending\": false,\n      \"property\": \"consequat sint in elit occaecat\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"pageable\": {\n    \"offset\": -89023995,\n    \"sort\": [\n      {\n        \"direction\": \"consectetur magna occae\",\n        \"nullHandling\": \"quis do esse\",\n        \"ascending\": false,\n        \"property\": \"aliqua sint\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"ani\",\n        \"nullHandling\": \"labore id ipsum\",\n        \"ascending\": false,\n        \"property\": \"sint reprehenderit\",\n        \"ignoreCase\": false\n      }\n    ],\n    \"pageNumber\": -6378555,\n    \"pageSize\": -28547439,\n    \"paged\": true,\n    \"unpaged\": false\n  },\n  \"first\": false,\n  \"last\": true,\n  \"numberOfElements\": -27636038,\n  \"empty\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "75bf6a8e-f9fd-49d8-a76e-ed272056900b",
+          "name": "create Faqs",
+          "request": {
+            "name": "create Faqs",
+            "description": {},
+            "url": {
+              "path": [
+                "faq-category"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/faq-category"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryName\": \"reprehenderit incididunt Ut in aute\",\n  \"categoryNameAr\": \"veniam aliquip\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6e711403-0217-4f58-8e7a-52b5274e47bb",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "faq-category"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "mollit ad culpa Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"categoryName\": \"reprehenderit incididunt Ut in aute\",\n  \"categoryNameAr\": \"veniam aliquip\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -8546733,\n  \"categoryName\": \"ad tempor Ut sint\",\n  \"categoryNameAr\": \"Excepteur pariatur ipsum\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "a11b61b1-d81a-4b60-8952-9283c7fbda23",
+      "name": "tac-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c8cdde6f-3ef0-4fba-9030-6b543a60ea9d",
+          "name": "upload Tc Pdf File",
+          "request": {
+            "name": "upload Tc Pdf File",
+            "description": {},
+            "url": {
+              "path": [
+                "tac",
+                "pdf",
+                "upload"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "all",
+                  "value": "{\"Duis2\":\"irure consequat nisi Lorem\",\"officia_6c3\":\"nostrud consequat quis Lorem\",\"ipsum759\":\"adipisicing sint dolore officia\",\"irured0\":\"non aliquip ipsum eu\"}",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "empty",
+                  "value": "false",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "pariatur5c",
+                  "value": "[\"fugiat anim aute\",\"dolor non\"]",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "Duis35",
+                  "value": "[\"deserunt aliqua labore\",\"mollit incididunt ut cupidatat ipsum\"]",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "userType",
+                  "value": "OTC_TRANSFER",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/tac/pdf/upload?all={\"Duis2\":\"irure consequat nisi Lorem\",\"officia_6c3\":\"nostrud consequat quis Lorem\",\"ipsum759\":\"adipisicing sint dolore officia\",\"irured0\":\"non aliquip ipsum eu\"}&empty=false&pariatur5c=[\"fugiat anim aute\",\"dolor non\"]&Duis35=[\"deserunt aliqua labore\",\"mollit incididunt ut cupidatat ipsum\"]&userType=OTC_TRANSFER"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pdfFile\": \"officia\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3ac48d0f-215a-4ef1-bc3e-218c39ac6ed8",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tac",
+                    "pdf",
+                    "upload"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "all",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "empty",
+                      "value": "false"
+                    },
+                    {
+                      "key": "pariatur5c",
+                      "value": "fugiat anim aute,dolor non"
+                    },
+                    {
+                      "key": "Duis35",
+                      "value": "deserunt aliqua labore,mollit incididunt ut cupidatat ipsum"
+                    },
+                    {
+                      "key": "userType",
+                      "value": "OTC_TRANSFER"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "mollit ad culpa Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pdfFile\": \"officia\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 40663550,\n  \"token\": \"Ut sunt nostrud adipisicing\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "adf2fc88-fe52-46c4-bc36-1dedf56ab4ab",
+          "name": "get Tc Pdf File",
+          "request": {
+            "name": "get Tc Pdf File",
+            "description": {},
+            "url": {
+              "path": [
+                "tac",
+                "pdf"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "userType",
+                  "value": "OTC_TRANSFER",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/tac/pdf?userType=OTC_TRANSFER"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0a9ab477-a145-4788-aff0-35fe8ed984bc",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tac",
+                    "pdf"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userType",
+                      "value": "OTC_TRANSFER"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 40663550,\n  \"token\": \"Ut sunt nostrud adipisicing\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "124f97c8-60a6-40a2-8eee-72dd276fbc29",
+      "name": "privacy-policy-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0883de47-cf66-4cf0-bc7c-f40e6c6652b3",
+          "name": "upload Tc Pdf File 1",
+          "request": {
+            "name": "upload Tc Pdf File 1",
+            "description": {},
+            "url": {
+              "path": [
+                "privacyPolicy",
+                "pdf",
+                "upload"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "all",
+                  "value": "{\"Duis2\":\"irure consequat nisi Lorem\",\"officia_6c3\":\"nostrud consequat quis Lorem\",\"ipsum759\":\"adipisicing sint dolore officia\",\"irured0\":\"non aliquip ipsum eu\"}",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "empty",
+                  "value": "false",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "pariatur5c",
+                  "value": "[\"fugiat anim aute\",\"dolor non\"]",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "Duis35",
+                  "value": "[\"deserunt aliqua labore\",\"mollit incididunt ut cupidatat ipsum\"]",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "userType",
+                  "value": "BUSINESS",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/privacyPolicy/pdf/upload?all={\"Duis2\":\"irure consequat nisi Lorem\",\"officia_6c3\":\"nostrud consequat quis Lorem\",\"ipsum759\":\"adipisicing sint dolore officia\",\"irured0\":\"non aliquip ipsum eu\"}&empty=false&pariatur5c=[\"fugiat anim aute\",\"dolor non\"]&Duis35=[\"deserunt aliqua labore\",\"mollit incididunt ut cupidatat ipsum\"]&userType=BUSINESS"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pdfFile\": \"officia\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b624521f-c63a-4396-809e-9d65ddb93547",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "privacyPolicy",
+                    "pdf",
+                    "upload"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "all",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "empty",
+                      "value": "false"
+                    },
+                    {
+                      "key": "pariatur5c",
+                      "value": "fugiat anim aute,dolor non"
+                    },
+                    {
+                      "key": "Duis35",
+                      "value": "deserunt aliqua labore,mollit incididunt ut cupidatat ipsum"
+                    },
+                    {
+                      "key": "userType",
+                      "value": "BUSINESS"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "mollit ad culpa Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pdfFile\": \"officia\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 40663550,\n  \"token\": \"Ut sunt nostrud adipisicing\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "00256ee9-2862-436e-b048-b9a0e65b19b9",
+          "name": "get Tc Pdf File 1",
+          "request": {
+            "name": "get Tc Pdf File 1",
+            "description": {},
+            "url": {
+              "path": [
+                "privacyPolicy",
+                "pdf"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "userType",
+                  "value": "BUSINESS",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/privacyPolicy/pdf?userType=BUSINESS"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3ee7bbad-f400-4a15-a971-557b330e59cc",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "privacyPolicy",
+                    "pdf"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userType",
+                      "value": "BUSINESS"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 40663550,\n  \"token\": \"Ut sunt nostrud adipisicing\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "f08e3488-a80f-46de-b65c-b065a47b5de4",
+      "name": "faq-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9b58b20b-faac-42f4-be41-8735c28ece03",
+          "name": "get All Faqs",
+          "request": {
+            "name": "get All Faqs",
+            "description": {},
+            "url": {
+              "path": [
+                "faq"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "-76910754",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "-86132568",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "categoryId",
+                  "value": "-51143804",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "questionEn",
+                  "value": "dolor deserunt",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "questionAr",
+                  "value": "minim adipisicing",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "answerEn",
+                  "value": "laborum aute aliquip cupidatat nulla",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "answerAr",
+                  "value": "nisi",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/faq?page=-76910754&size=-86132568&categoryId=-51143804&questionEn=dolor deserunt&questionAr=minim adipisicing&answerEn=laborum aute aliquip cupidatat nulla&answerAr=nisi"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "192c0536-4905-4a15-bde2-46f3e8715fba",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "faq"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "-76910754"
+                    },
+                    {
+                      "key": "size",
+                      "value": "-86132568"
+                    },
+                    {
+                      "key": "categoryId",
+                      "value": "-51143804"
+                    },
+                    {
+                      "key": "questionEn",
+                      "value": "dolor deserunt"
+                    },
+                    {
+                      "key": "questionAr",
+                      "value": "minim adipisicing"
+                    },
+                    {
+                      "key": "answerEn",
+                      "value": "laborum aute aliquip cupidatat nulla"
+                    },
+                    {
+                      "key": "answerAr",
+                      "value": "nisi"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": -60715013,\n  \"totalElements\": -46575403,\n  \"size\": 70519185,\n  \"content\": [\n    {\n      \"id\": -79133631,\n      \"questionEn\": \"nulla\",\n      \"questionAr\": \"ut dolor do\",\n      \"answerEn\": \"magna quis Ut\",\n      \"answerAr\": \"ullamco Lorem proident non\"\n    },\n    {\n      \"id\": -93164755,\n      \"questionEn\": \"ullamco mollit et\",\n      \"questionAr\": \"aliqua reprehenderit\",\n      \"answerEn\": \"ut cupidatat aliquip enim deserunt\",\n      \"answerAr\": \"reprehenderit\"\n    }\n  ],\n  \"number\": -10280106,\n  \"sort\": [\n    {\n      \"direction\": \"occaecat\",\n      \"nullHandling\": \"commodo id aliq\",\n      \"ascending\": false,\n      \"property\": \"do exercitation labore\",\n      \"ignoreCase\": true\n    },\n    {\n      \"direction\": \"non adipisicing aute aliqua\",\n      \"nullHandling\": \"veniam\",\n      \"ascending\": true,\n      \"property\": \"Lorem dolore tempor ex mollit\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"pageable\": {\n    \"offset\": -59982137,\n    \"sort\": [\n      {\n        \"direction\": \"ut sunt ipsum minim\",\n        \"nullHandling\": \"culpa sit in tempor\",\n        \"ascending\": false,\n        \"property\": \"magna est\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"nostrud mollit incididunt\",\n        \"nullHandling\": \"eu sunt\",\n        \"ascending\": true,\n        \"property\": \"Excepteur in sed\",\n        \"ignoreCase\": false\n      }\n    ],\n    \"pageNumber\": -2320772,\n    \"pageSize\": 17056579,\n    \"paged\": false,\n    \"unpaged\": true\n  },\n  \"first\": true,\n  \"last\": true,\n  \"numberOfElements\": -25385664,\n  \"empty\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "382c2747-a128-4673-b598-1604e2936aa9",
+          "name": "create Faq",
+          "request": {
+            "name": "create Faq",
+            "description": {},
+            "url": {
+              "path": [
+                "faq"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/faq"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"questionEn\": \"adipisicing eu elit Lorem\",\n  \"questionAr\": \"eu anim id in\",\n  \"answerEn\": \"nulla in reprehenderit\",\n  \"answerAr\": \"proident pariatur Lorem dolore\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "14bbc6f5-73fe-4ca1-82ab-5baf888d455b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "faq"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "mollit ad culpa Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"questionEn\": \"adipisicing eu elit Lorem\",\n  \"questionAr\": \"eu anim id in\",\n  \"answerEn\": \"nulla in reprehenderit\",\n  \"answerAr\": \"proident pariatur Lorem dolore\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 33429250,\n  \"questionEn\": \"ipsum Lorem\",\n  \"questionAr\": \"fugiat in laboris esse est\",\n  \"answerEn\": \"elit\",\n  \"answerAr\": \"dolore non\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generated guard: a 5xx from any request is a gateway/service defect, not a test-data problem.",
+          "pm.test('no 5xx (' + pm.info.requestName + ')', function () {",
+          "  pm.expect(pm.response.code, (pm.response.text() || '').slice(0, 300)).to.be.below(500);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{gatewayBaseUrl}}/faq-service",
+      "type": "string"
+    }
+  ],
+  "info": {
+    "_postman_id": "38cb6883-e053-49b1-b43d-d5e3722bea54",
+    "name": "FAQ Service - majdpay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "FAQ Service (faq-service) — 18 operations.\n\nGENERATED from the OpenAPI 3.1.0 spec published at the UAT gateway swagger-ui\n(Select a definition -> \"FAQ Service APIs\"). Request bodies are schema-derived placeholders (lorem-ipsum\nstrings, sample numbers) — replace with real values before sending.\n\nBase URL: {{gatewayBaseUrl}}/faq-service  (gatewayBaseUrl lives in EMI-dev.postman_environment.json).\nSpec server: https://gateway-emiuat.dg-cash.app/faq-service\n\nAUTH: the spec declares no security scheme, but the gateway front-doors every route with a bearer\ntoken. Set {{token}} in the environment (mint one with the Authentication Service collection's\nsign-in, or pass --env-var token=... to newman). Some back-office routes need an admin/service\ntoken rather than a merchant one.\n\nCompanion Playwright scaffold: BusinessTestCases/ServiceApis/FaqService.generated.spec.ts\n"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

@@ -1,0 +1,1106 @@
+{
+  "item": [
+    {
+      "id": "650ca945-08b1-4c48-9c35-90ab848805ac",
+      "name": "otp-settings-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c40b1989-154a-45df-8fe4-e0bbace2ee03",
+          "name": "get Otp Settings By Id",
+          "request": {
+            "name": "get Otp Settings By Id",
+            "description": {},
+            "url": {
+              "path": [
+                "otp",
+                "otp-settings",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "26015163",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/otp/otp-settings/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5f083395-dc72-48cc-b93b-a7f2ccf4f2fc",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "otp",
+                    "otp-settings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "26015163",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "adipisicing exercitation cupidatat"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 52137922,\n  \"length\": 31907271,\n  \"validityInSeconds\": -82713611,\n  \"canResendOtpAfterInSeconds\": -16762723,\n  \"code\": \"quis cupidatat minim\",\n  \"nameEn\": \"fugiat reprehenderit adipisicing\",\n  \"nameAr\": \"nisi aliqua cillum\",\n  \"otpOperations\": [\n    {\n      \"id\": -74803312,\n      \"code\": \"in n\",\n      \"nameEN\": \"ipsum occaecat sed\",\n      \"nameAR\": \"ea ut eu ex\",\n      \"description\": \"sint esse in in\"\n    },\n    {\n      \"id\": 18849180,\n      \"code\": \"minim laborum culpa laboris\",\n      \"nameEN\": \"velit ipsum cillum\",\n      \"nameAR\": \"esse et\",\n      \"description\": \"consectetur fugiat\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7cfd5972-0289-4691-81cd-d63bbf42f3b8",
+          "name": "update Otp Settings",
+          "request": {
+            "name": "update Otp Settings",
+            "description": {},
+            "url": {
+              "path": [
+                "otp",
+                "otp-settings",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "26015163",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/otp/otp-settings/:id"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"length\": 62215139,\n  \"validityInSeconds\": 27041209,\n  \"canResendOtpAfterInSeconds\": 41571646,\n  \"nameEn\": \"Excepteur nisi\",\n  \"nameAr\": \"voluptate Lorem aliquip\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "331d84e9-df48-4f6d-8b5b-69f18511f3de",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "otp",
+                    "otp-settings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "26015163",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "adipisicing exercitation cupidatat"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"length\": 62215139,\n  \"validityInSeconds\": 27041209,\n  \"canResendOtpAfterInSeconds\": 41571646,\n  \"nameEn\": \"Excepteur nisi\",\n  \"nameAr\": \"voluptate Lorem aliquip\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 52137922,\n  \"length\": 31907271,\n  \"validityInSeconds\": -82713611,\n  \"canResendOtpAfterInSeconds\": -16762723,\n  \"code\": \"quis cupidatat minim\",\n  \"nameEn\": \"fugiat reprehenderit adipisicing\",\n  \"nameAr\": \"nisi aliqua cillum\",\n  \"otpOperations\": [\n    {\n      \"id\": -74803312,\n      \"code\": \"in n\",\n      \"nameEN\": \"ipsum occaecat sed\",\n      \"nameAR\": \"ea ut eu ex\",\n      \"description\": \"sint esse in in\"\n    },\n    {\n      \"id\": 18849180,\n      \"code\": \"minim laborum culpa laboris\",\n      \"nameEN\": \"velit ipsum cillum\",\n      \"nameAR\": \"esse et\",\n      \"description\": \"consectetur fugiat\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5184aa5b-89c2-43ad-94a2-c1a6650465bc",
+          "name": "get All Otp Settings",
+          "request": {
+            "name": "get All Otp Settings",
+            "description": {},
+            "url": {
+              "path": [
+                "otp",
+                "otp-settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "code",
+                  "value": "adipisicing exercitation cupidatat"
+                },
+                {
+                  "disabled": false,
+                  "key": "nameEn",
+                  "value": "adipisicing exercitation cupidatat"
+                },
+                {
+                  "disabled": false,
+                  "key": "nameAr",
+                  "value": "adipisicing exercitation cupidatat"
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/otp/otp-settings?code=adipisicing exercitation cupidatat&nameEn=adipisicing exercitation cupidatat&nameAr=adipisicing exercitation cupidatat"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "34529c9f-8597-457f-aa6f-0ab5808af38e",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "otp",
+                    "otp-settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "code",
+                      "value": "adipisicing exercitation cupidatat"
+                    },
+                    {
+                      "key": "nameEn",
+                      "value": "adipisicing exercitation cupidatat"
+                    },
+                    {
+                      "key": "nameAr",
+                      "value": "adipisicing exercitation cupidatat"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "adipisicing exercitation cupidatat"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": 51630693,\n    \"length\": 7585448,\n    \"validityInSeconds\": -41038392,\n    \"canResendOtpAfterInSeconds\": -10033691,\n    \"code\": \"esse ea\",\n    \"nameEn\": \"magna nisi elit\",\n    \"nameAr\": \"eiusmod nostrud in\",\n    \"otpOperations\": [\n      {\n        \"id\": 32694692,\n        \"code\": \"sint id sed\",\n        \"nameEN\": \"nostrud ullamco eiusmod sed\",\n        \"nameAR\": \"anim adipisicing amet\",\n        \"description\": \"sed cupidatat officia amet\"\n      },\n      {\n        \"id\": -77701561,\n        \"code\": \"velit dolor ipsum nisi\",\n        \"nameEN\": \"ullamco qui proident sint\",\n        \"nameAR\": \"ut incididunt ea amet irure\",\n        \"description\": \"nulla sed deserunt\"\n      }\n    ]\n  },\n  {\n    \"id\": 36545558,\n    \"length\": 39401768,\n    \"validityInSeconds\": -16306019,\n    \"canResendOtpAfterInSeconds\": 59533616,\n    \"code\": \"irure\",\n    \"nameEn\": \"proident in ad\",\n    \"nameAr\": \"laborum nisi adipisicing\",\n    \"otpOperations\": [\n      {\n        \"id\": -11463048,\n        \"code\": \"mollit occaecat id sed\",\n        \"nameEN\": \"do culpa amet\",\n        \"nameAR\": \"esse pariatur aliquip ut\",\n        \"description\": \"sunt\"\n      },\n      {\n        \"id\": -63044769,\n        \"code\": \"ullamco reprehenderit\",\n        \"nameEN\": \"nostrud sint ut anim\",\n        \"nameAR\": \"culpa enim\",\n        \"description\": \"id sint\"\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "644d3d1a-0086-4df6-84cf-b6efeea7e03a",
+          "name": "create Otp Setting",
+          "request": {
+            "name": "create Otp Setting",
+            "description": {},
+            "url": {
+              "path": [
+                "otp",
+                "otp-settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/otp/otp-settings"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"length\": -70572730,\n  \"validityInSeconds\": -89426896,\n  \"canResendOtpAfterInSeconds\": 57211381,\n  \"code\": \"enim labore mollit\",\n  \"nameEn\": \"ut deserunt aliquip\",\n  \"nameAr\": \"aliqua in esse eiusmod\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "95a4cf5c-e3a7-4c72-8f37-e5bde75aafb0",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "otp",
+                    "otp-settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "adipisicing exercitation cupidatat"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"length\": -70572730,\n  \"validityInSeconds\": -89426896,\n  \"canResendOtpAfterInSeconds\": 57211381,\n  \"code\": \"enim labore mollit\",\n  \"nameEn\": \"ut deserunt aliquip\",\n  \"nameAr\": \"aliqua in esse eiusmod\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 52137922,\n  \"length\": 31907271,\n  \"validityInSeconds\": -82713611,\n  \"canResendOtpAfterInSeconds\": -16762723,\n  \"code\": \"quis cupidatat minim\",\n  \"nameEn\": \"fugiat reprehenderit adipisicing\",\n  \"nameAr\": \"nisi aliqua cillum\",\n  \"otpOperations\": [\n    {\n      \"id\": -74803312,\n      \"code\": \"in n\",\n      \"nameEN\": \"ipsum occaecat sed\",\n      \"nameAR\": \"ea ut eu ex\",\n      \"description\": \"sint esse in in\"\n    },\n    {\n      \"id\": 18849180,\n      \"code\": \"minim laborum culpa laboris\",\n      \"nameEN\": \"velit ipsum cillum\",\n      \"nameAR\": \"esse et\",\n      \"description\": \"consectetur fugiat\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "581f48ef-736b-4914-91ca-ce0e216ad7b1",
+          "name": "get Otp Settings By Code",
+          "request": {
+            "name": "get Otp Settings By Code",
+            "description": {},
+            "url": {
+              "path": [
+                "otp",
+                "otp-settings",
+                "q"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "operationCode",
+                  "value": "adipisicing exercitation cupidatat",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/otp/otp-settings/q?operationCode=adipisicing exercitation cupidatat"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2d7828da-87ce-4127-95b3-0a9a4b886cab",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "otp",
+                    "otp-settings",
+                    "q"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "operationCode",
+                      "value": "adipisicing exercitation cupidatat"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 52137922,\n  \"length\": 31907271,\n  \"validityInSeconds\": -82713611,\n  \"canResendOtpAfterInSeconds\": -16762723,\n  \"code\": \"quis cupidatat minim\",\n  \"nameEn\": \"fugiat reprehenderit adipisicing\",\n  \"nameAr\": \"nisi aliqua cillum\",\n  \"otpOperations\": [\n    {\n      \"id\": -74803312,\n      \"code\": \"in n\",\n      \"nameEN\": \"ipsum occaecat sed\",\n      \"nameAR\": \"ea ut eu ex\",\n      \"description\": \"sint esse in in\"\n    },\n    {\n      \"id\": 18849180,\n      \"code\": \"minim laborum culpa laboris\",\n      \"nameEN\": \"velit ipsum cillum\",\n      \"nameAR\": \"esse et\",\n      \"description\": \"consectetur fugiat\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "39f0eefa-2989-4463-aa7a-8a7affd57b68",
+          "name": "delete Otp Setting",
+          "request": {
+            "name": "delete Otp Setting",
+            "description": {},
+            "url": {
+              "path": [
+                "otp",
+                "otp-settings",
+                ":settingId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "26015163",
+                  "key": "settingId",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/otp/otp-settings/:settingId"
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "74b46495-cba3-4339-8623-de8cc1bce05a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "otp",
+                    "otp-settings",
+                    ":settingId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "26015163",
+                      "key": "settingId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "adipisicing exercitation cupidatat"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "2e19e91e-fb90-4642-9789-77326c319f59",
+      "name": "otp-operation-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6ab63a1a-3eef-450c-9f08-35b51b87dd56",
+          "name": "get All Function Types",
+          "request": {
+            "name": "get All Function Types",
+            "description": {},
+            "url": {
+              "path": [
+                "otp",
+                "operations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/otp/operations"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ec18ece0-29d1-4ffd-9908-cf0c72175aed",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "otp",
+                    "operations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "adipisicing exercitation cupidatat"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -66255645,\n    \"code\": \"anim occaecat Duis dolor et\",\n    \"nameEn\": \"cupidatat consequat officia in\",\n    \"nameAr\": \"ame\",\n    \"description\": \"cill\",\n    \"otpSettingId\": 85137537\n  },\n  {\n    \"id\": -87462815,\n    \"code\": \"pariatur Duis reprehe\",\n    \"nameEn\": \"sint qui aliqua\",\n    \"nameAr\": \"occaecat adipisicing est et\",\n    \"description\": \"occaecat ad dolore aliquip commo\",\n    \"otpSettingId\": -43877466\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b7a22abc-f23c-49ac-8210-cafd09dd04f8",
+          "name": "update Operation",
+          "request": {
+            "name": "update Operation",
+            "description": {},
+            "url": {
+              "path": [
+                "otp",
+                "operations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "id",
+                  "value": "26015163",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/otp/operations?id=26015163"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"otpSettingsId\": 76895926,\n  \"nameAr\": \"Duis dolore\",\n  \"nameEn\": \"fugiat proident do\",\n  \"description\": \"officia ad irure deseru\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a7836fea-e785-4b90-9c44-e94f7c672b58",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "otp",
+                    "operations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "26015163"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "adipisicing exercitation cupidatat"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"otpSettingsId\": 76895926,\n  \"nameAr\": \"Duis dolore\",\n  \"nameEn\": \"fugiat proident do\",\n  \"description\": \"officia ad irure deseru\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -56830961,\n  \"code\": \"culpa commodo\",\n  \"nameEn\": \"nostrud consectetur amet ut minim\",\n  \"nameAr\": \"labore occaecat dolore\",\n  \"description\": \"commodo\",\n  \"otpSettingId\": 73279369\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e47dcd88-4702-4be8-9574-ff3be0376566",
+          "name": "create Operation",
+          "request": {
+            "name": "create Operation",
+            "description": {},
+            "url": {
+              "path": [
+                "otp",
+                "operations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/otp/operations"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"culpa quis\",\n  \"nameEN\": \"reprehenderit\",\n  \"nameAR\": \"nulla dolor sit sed ea\",\n  \"description\": \"incididunt ip\",\n  \"otpSettingsId\": 82408478\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2c420dff-8cc4-4697-92ee-7e1ca44b099a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "otp",
+                    "operations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "adipisicing exercitation cupidatat"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"culpa quis\",\n  \"nameEN\": \"reprehenderit\",\n  \"nameAR\": \"nulla dolor sit sed ea\",\n  \"description\": \"incididunt ip\",\n  \"otpSettingsId\": 82408478\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -56830961,\n  \"code\": \"culpa commodo\",\n  \"nameEn\": \"nostrud consectetur amet ut minim\",\n  \"nameAr\": \"labore occaecat dolore\",\n  \"description\": \"commodo\",\n  \"otpSettingId\": 73279369\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "93997259-c13a-4af3-999a-9864c88c9263",
+          "name": "get Operation By Code",
+          "request": {
+            "name": "get Operation By Code",
+            "description": {},
+            "url": {
+              "path": [
+                "otp",
+                "operations",
+                "q"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "operationCode",
+                  "value": "adipisicing exercitation cupidatat",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/otp/operations/q?operationCode=adipisicing exercitation cupidatat"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fcce31a6-0a0e-4612-9a4a-754b42654edd",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "otp",
+                    "operations",
+                    "q"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "operationCode",
+                      "value": "adipisicing exercitation cupidatat"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -56830961,\n  \"code\": \"culpa commodo\",\n  \"nameEn\": \"nostrud consectetur amet ut minim\",\n  \"nameAr\": \"labore occaecat dolore\",\n  \"description\": \"commodo\",\n  \"otpSettingId\": 73279369\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "745f8dd7-64dc-44c0-ad5a-eaee9acea789",
+          "name": "get All Function Types By Page",
+          "request": {
+            "name": "get All Function Types By Page",
+            "description": {},
+            "url": {
+              "path": [
+                "otp",
+                "operations",
+                "page"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10"
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/otp/operations/page?page=0&size=10"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a47caa06-029f-4753-b131-fb4b16e21ed6",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "otp",
+                    "operations",
+                    "page"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "adipisicing exercitation cupidatat"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalElements\": -64573244,\n  \"totalPages\": -4565875,\n  \"size\": 64299932,\n  \"content\": [\n    {\n      \"id\": -60398694,\n      \"code\": \"exercitation laborum velit tempor\",\n      \"nameEn\": \"sunt\",\n      \"nameAr\": \"non et ut anim\",\n      \"description\": \"velit proident amet officia ipsum\",\n      \"otpSettingId\": -65134630\n    },\n    {\n      \"id\": 52049475,\n      \"code\": \"officia adipisicing ut enim\",\n      \"nameEn\": \"qui minim dolor sit\",\n      \"nameAr\": \"in eu aliqua\",\n      \"description\": \"Duis reprehenderi\",\n      \"otpSettingId\": -60441631\n    }\n  ],\n  \"number\": 45519864,\n  \"sort\": [\n    {\n      \"direction\": \"quis Lorem minim eu\",\n      \"nullHandling\": \"enim\",\n      \"ascending\": true,\n      \"property\": \"labore Duis\",\n      \"ignoreCase\": false\n    },\n    {\n      \"direction\": \"enim adipisicing laborum exercitation\",\n      \"nullHandling\": \"culpa est\",\n      \"ascending\": false,\n      \"property\": \"magna reprehenderit sunt dolore\",\n      \"ignoreCase\": true\n    }\n  ],\n  \"last\": true,\n  \"first\": false,\n  \"numberOfElements\": -60066326,\n  \"pageable\": {\n    \"offset\": -60777416,\n    \"sort\": [\n      {\n        \"direction\": \"adipisicing aliqua\",\n        \"nullHandling\": \"sit\",\n        \"ascending\": false,\n        \"property\": \"ea velit deserunt\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"tem\",\n        \"nullHandling\": \"dolore ad cupidatat consectetur\",\n        \"ascending\": false,\n        \"property\": \"ut dolore\",\n        \"ignoreCase\": false\n      }\n    ],\n    \"pageSize\": 22927834,\n    \"pageNumber\": -87796564,\n    \"paged\": true,\n    \"unpaged\": false\n  },\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generated guard: a 5xx from any request is a gateway/service defect, not a test-data problem.",
+          "pm.test('no 5xx (' + pm.info.requestName + ')', function () {",
+          "  pm.expect(pm.response.code, (pm.response.text() || '').slice(0, 300)).to.be.below(500);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{gatewayBaseUrl}}/otp-service",
+      "type": "string"
+    }
+  ],
+  "info": {
+    "_postman_id": "10fe6574-16e5-4a4b-bc58-28e3c38d365a",
+    "name": "OTP Service - majdpay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "OTP Service (otp-service) — 11 operations.\n\nGENERATED from the OpenAPI 3.1.0 spec published at the UAT gateway swagger-ui\n(Select a definition -> \"OTP Service APIs\"). Request bodies are schema-derived placeholders (lorem-ipsum\nstrings, sample numbers) — replace with real values before sending.\n\nBase URL: {{gatewayBaseUrl}}/otp-service  (gatewayBaseUrl lives in EMI-dev.postman_environment.json).\nSpec server: https://gateway-emiuat.dg-cash.app/otp-service\n\nAUTH: the spec declares no security scheme, but the gateway front-doors every route with a bearer\ntoken. Set {{token}} in the environment (mint one with the Authentication Service collection's\nsign-in, or pass --env-var token=... to newman). Some back-office routes need an admin/service\ntoken rather than a merchant one.\n\nCompanion Playwright scaffold: BusinessTestCases/ServiceApis/OtpService.generated.spec.ts\n\nNOTE: OTP settings/verify are also exercised by the Registration collection."
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

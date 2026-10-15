@@ -94,6 +94,12 @@ test.describe('Pay Bill — Received Bill Flow', () => {
         await homePage.clickBillPayment_NavButton();
         await billsPage.goToReceivedBills();
 
+        // The first test in this file already pays off one "Approved" bill —
+        // check a second one is actually available rather than letting this
+        // fail deep inside initiateQuickPayment with a generic data-setup error.
+        const hasApprovedBill = await billsPage.hasBillWithStatus(BILL_STATUS);
+        test.skip(!hasApprovedBill, `No further "${BILL_STATUS}" bill available for the insufficient-funds attempt — verify UAT data setup.`);
+
         await billsPage.initiateQuickPayment(BILL_STATUS);
         await billsPage.clickSummaryPayButton();
         await billsPage.clickConfirmPayButton();

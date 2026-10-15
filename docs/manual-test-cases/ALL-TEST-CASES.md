@@ -922,7 +922,7 @@ Automation: `BusinessTestCases/BillManagement/functional/BillItems.spec.ts` (BI-
 
 Web parity version of [EMI-5782-5783-PoS-Products.md](EMI-5782-5783-PoS-Products.md) — same scenarios and steps as the iOS cases, translated to the web business portal (click instead of tap, browser navigation instead of the iOS "More" menu / simulator gestures). Test IDs are prefixed `W` and map 1:1 to their iOS counterpart (e.g. `WPS-01` ↔ `PS-01`) for parity tracking.
 
-**Status caveat:** EMI-5783 and EMI-5782 are filed as **FE - iOS**. As of this writing, neither the inline PoS expand/Skip/Request-now sub-flow (registration Products step) nor the Products/PoS management screens (Dashboard/Orders/Devices, Add Products) have been confirmed to exist on the web portal — the web Products step currently shows plain selectable product cards with no PoS-specific behavior, and `/products-management` (reached via the "Manage Products" sidebar link, which does exist today) has no verified PoS content. Treat every case below as **pending until the corresponding web feature ships**; run them as regression/acceptance checks once it does. Corresponding draft Playwright UI specs exist in [`RegistrationProductsPage.spec.ts`](../../BusinessTestCases/Registration/ui/RegistrationProductsPage.spec.ts) and [`ProductsManagementPage.spec.ts`](../../BusinessTestCases/products/ui/ProductsManagementPage.spec.ts) — they self-skip with a clear reason until the relevant elements appear.
+**Status caveat:** EMI-5783 and EMI-5782 are filed as **FE - iOS**. As of this writing, neither the inline PoS expand/Skip/Request-now sub-flow (registration Products step) nor the Products/PoS management screens (Dashboard/Orders/Devices, Add Products) have been confirmed to exist on the web portal — the web Products step currently shows plain selectable product cards with no PoS-specific behavior, and `/products-management` (reached via the "Manage Products" sidebar link, which does exist today) has no verified PoS content. Treat every case below as **pending until the corresponding web feature ships**; run them as regression/acceptance checks once it does. Corresponding draft Playwright UI specs exist in [`RegistrationProductsPage.spec.ts`](../../BusinessTestCases/Registration/ui/06-products/RegistrationProductsPage.spec.ts) and [`ProductsManagementPage.spec.ts`](../../BusinessTestCases/products/ui/ProductsManagementPage.spec.ts) — they self-skip with a clear reason until the relevant elements appear.
 
 Priority key: **P1** = blocks the release / core happy path, **P2** = important secondary behavior, **P3** = edge case / polish.
 
@@ -1088,7 +1088,7 @@ Context: web equivalent of the iOS "More" menu restructuring. On web, the closes
 
 ### Automated coverage note
 
-Draft Playwright UI specs for both tickets exist at [`RegistrationProductsPage.spec.ts`](../../BusinessTestCases/Registration/ui/RegistrationProductsPage.spec.ts) (EMI-5783 web) and [`ProductsManagementPage.spec.ts`](../../BusinessTestCases/products/ui/ProductsManagementPage.spec.ts) (EMI-5782 web). They were authored directly from the ticket acceptance criteria without live DOM verification (see the status caveat above) and use feature-detection gates that skip with a clear reason when the underlying element isn't found — so they're safe to run today (they'll no-op) and should self-activate once the feature ships. Reconcile their selectors against the real implementation on first genuine run.
+Draft Playwright UI specs for both tickets exist at [`RegistrationProductsPage.spec.ts`](../../BusinessTestCases/Registration/ui/06-products/RegistrationProductsPage.spec.ts) (EMI-5783 web) and [`ProductsManagementPage.spec.ts`](../../BusinessTestCases/products/ui/ProductsManagementPage.spec.ts) (EMI-5782 web). They were authored directly from the ticket acceptance criteria without live DOM verification (see the status caveat above) and use feature-detection gates that skip with a clear reason when the underlying element isn't found — so they're safe to run today (they'll no-op) and should self-activate once the feature ships. Reconcile their selectors against the real implementation on first genuine run.
 
 ---
 
@@ -1099,7 +1099,7 @@ Draft Playwright UI specs for both tickets exist at [`RegistrationProductsPage.s
 
 Source tickets: [EMI-5783](https://digitalcash.atlassian.net/browse/EMI-5783) (Onboarding PoS Request Flow) and [EMI-5782](https://digitalcash.atlassian.net/browse/EMI-5782) (Products Navigation & In-App PoS Request Flow).
 
-Both tickets are tagged **FE - iOS** (native Business app). There is no automation harness for the iOS app in this repository, so these are manual/exploratory test cases for QA execution on device/simulator. Where a piece of the flow is also reachable on the web portal (the registration Products step), it has been automated separately in [`RegistrationProductsFunctionality.spec.ts`](../../BusinessTestCases/Registration/functional/RegistrationProductsFunctionality.spec.ts).
+Both tickets are tagged **FE - iOS** (native Business app). There is no automation harness for the iOS app in this repository, so these are manual/exploratory test cases for QA execution on device/simulator. Where a piece of the flow is also reachable on the web portal (the registration Products step), it has been automated separately in [`RegistrationProducts.spec.ts`](../../BusinessTestCases/Registration/functional/06-products/RegistrationProducts.spec.ts).
 
 Priority key: **P1** = blocks the release / core happy path, **P2** = important secondary behavior, **P3** = edge case / polish.
 
@@ -1263,7 +1263,7 @@ Context: post-registration "More" menu restructuring — renames the old bill-re
 
 ### Automated coverage note
 
-The registration **Products step on the web portal** already has Playwright coverage in `RegistrationProductsFunctionality.spec.ts`, including a case added specifically for the POS Terminal product's distinct "5 SAR / annual" pricing (relevant to EMI-5783's PoS Terminals context). The richer inline expand/Skip/Request-now/Devices & Delivery/Review sub-flow described in EMI-5783, and the entire More-menu restructuring in EMI-5782, are iOS-native UI with no equivalent currently reachable on web — hence manual coverage only, above.
+The registration **Products step on the web portal** already has Playwright coverage in `RegistrationProducts.spec.ts`, including a case added specifically for the POS Terminal product's distinct "5 SAR / annual" pricing (relevant to EMI-5783's PoS Terminals context). The richer inline expand/Skip/Request-now/Devices & Delivery/Review sub-flow described in EMI-5783, and the entire More-menu restructuring in EMI-5782, are iOS-native UI with no equivalent currently reachable on web — hence manual coverage only, above.
 
 ---
 
@@ -1851,7 +1851,7 @@ Context: after submitting valid-looking credentials, a modal card appears showin
 
 ### D. OTP verification
 
-Context: when OTP is enabled for the account, a one-time password dialog appears after the validation card. OTP digits arrive via SMS (in dev environments the OTP is always `00000000`).
+Context: when OTP is enabled for the account, a one-time password dialog appears after the validation card. OTP digits arrive via SMS (in dev environments the OTP is always `918512`).
 
 | ID | Title | Steps | Expected Result | Priority |
 |---|---|---|---|---|
@@ -1866,7 +1866,7 @@ Context: when OTP is enabled for the account, a one-time password dialog appears
 | LG-72 | Cancel closes the OTP dialog | Click "Cancel" on the OTP dialog | OTP dialog closes | P1 |
 | LG-73 | Cancel returns to the login form | Click "Cancel" on the OTP dialog | User is returned to the login form with the "Log In" button visible | P1 |
 | LG-74 | Wrong OTP keeps user on the OTP dialog | Enter an incorrect OTP (e.g. `11111111`), click Verify | Dialog remains open (does not redirect); an error is expected to surface | P1 |
-| LG-75 | Correct OTP logs the user in | Enter the correct OTP (retrieved via SMS or, in dev, `00000000`), click Verify | User is redirected away from the login page to the dashboard | P1 |
+| LG-75 | Correct OTP logs the user in | Enter the correct OTP (retrieved via SMS or, in dev, `918512`), click Verify | User is redirected away from the login page to the dashboard | P1 |
 
 ---
 
@@ -2016,8 +2016,8 @@ This manual test suite mirrors the existing Playwright automation for the Login 
 - `BusinessTestCases/login/functional/LoginInvalidCredentials.spec.ts` — invalid credentials, account status errors, and edge cases (Sections F & G)
 - `BusinessTestCases/login/functional/LoginNavigation.spec.ts` — navigation links and already-authenticated redirect (Section H)
 - `BusinessTestCases/login/functional/LoginSecurity.spec.ts` — lockout, enumeration, XSS, POST-only, and error-detail checks (Section I)
-- `BusinessTestCases/login/api/LoginAPIFlow.spec.ts` — device/sign-in/OTP API contract (Section J)
-- `BusinessTestCases/login/api/LoginNafathWathiqExpiry.spec.ts` — NAFATH/WATHIQ document & TTL expiry, revalidation flows, and deactivation scope (Section K, EMI-5836). Document-expiry cases (LG-132, LG-133, LG-138) run against dedicated env-gated accounts (`NAFATH_EXPIRED_COMPANY/MOBILE`, `WATHIQ_EXPIRED_COMPANY/MOBILE` in `LoginHelper.ts`) and are skipped until those are provisioned in UAT. The remaining cases (TTL-only expiry, revalidation APIs, deactivation scope) are written as `test.skip(true, ...)` pending Redis-seeding access and confirmation of the renewal endpoint paths against the Emi Profile Service Swagger doc — see the file header for details.
+- `BusinessTestCases/Login/api/signin/*.spec.ts` — device/sign-in/OTP API contract (Section J)
+- `BusinessTestCases/Login/api/document-expiry/LoginNafathWathiqExpiry.spec.ts` — NAFATH/WATHIQ document & TTL expiry, revalidation flows, and deactivation scope (Section K, EMI-5836). Document-expiry cases (LG-132, LG-133, LG-138) run against dedicated env-gated accounts (`NAFATH_EXPIRED_COMPANY/MOBILE`, `WATHIQ_EXPIRED_COMPANY/MOBILE` in `LoginHelper.ts`) and are skipped until those are provisioned in UAT. The remaining cases (TTL-only expiry, revalidation APIs, deactivation scope) are written as `test.skip(true, ...)` pending Redis-seeding access and confirmation of the renewal endpoint paths against the Emi Profile Service Swagger doc — see the file header for details.
 
 Supporting helpers referenced by these specs: `BusinessTestCases/login/LoginHelper.ts` (test data, OTP retrieval via MongoDB, login helpers) and `BusinessTestCases/pageElements/LoginPage.ts` (the page object for all locators and actions used above).
 
@@ -2210,7 +2210,7 @@ Context: sending and verifying the mobile OTP that starts a registration session
 |---|---|---|---|---|
 | API-01 | Send mobile OTP for an unregistered number | `POST /emi-profile/api/v1/register/mobile/otp` with a fresh KSA mobile number | 200 OK. If `otpRequired` is `true`, a `requestId` is returned; if `false`, `sessionToken`/`refreshToken` objects are returned directly (EMI-5995/EMI-6059) | P1 |
 | API-02 | Read the OTP settings for registration | `GET /otp/otp-settings/q?operationCode=REGISTRATION` (public, no token) | 200 OK with `length`, `validityInSeconds`, `canResendOtpAfterInSeconds` | P2 |
-| API-03 | Verify the OTP | `POST /emi-profile/api/v1/register/verify/otp` with the mobile number and the correct OTP (dev/UAT accept a fixed `000000`) | 200 OK with a `sessionToken` object (`{token, expirationDuration}`) and a `refreshToken` object (EMI-5995/EMI-6059) | P1 |
+| API-03 | Verify the OTP | `POST /emi-profile/api/v1/register/verify/otp` with the mobile number and the correct OTP (dev/UAT accept a fixed `918512`) | 200 OK with a `sessionToken` object (`{token, expirationDuration}`) and a `refreshToken` object (EMI-5995/EMI-6059) | P1 |
 | API-04 | Resend the mobile OTP | `POST /emi-profile/api/v1/register/mobile/otp/resend` for a mobile that already requested one | 200 OK with a fresh `requestId` and `otpRequired: true` | P2 |
 | API-N1 | Reject an invalid mobile format | `POST /register/mobile/otp` with `mobileNumber: "123"` | 400 Bad Request | P2 |
 | API-N2 | Reject a wrong OTP | `POST /register/verify/otp` with a deliberately wrong 6-digit code | 400 Bad Request with an `errorCode` in the body | P1 |
@@ -2376,8 +2376,8 @@ Context: covers "Registration – Contract Submission (Mocked)".
 
 This manual test suite mirrors the existing Playwright automation for the Registration Contract Review step. The corresponding automated specs are:
 
-- `BusinessTestCases/Registration/ui/RegistrationContractPage.spec.ts` — page elements & layout
-- `BusinessTestCases/Registration/functional/RegistrationContractFunctionality.spec.ts` — agreement checkbox behavior (Live section) and mocked submission error/double-submit handling
+- `BusinessTestCases/Registration/ui/07-contract/RegistrationContractPage.spec.ts` — page elements & layout
+- `BusinessTestCases/Registration/functional/07-contract/RegistrationContract.spec.ts` — agreement checkbox behavior (Live section) and mocked submission error/double-submit handling
 
 Supporting helper: `BusinessTestCases/pageElements/Registration/RegistrationContractPage.ts`.
 
@@ -2436,8 +2436,8 @@ Context: covers "Registration — Auto-Approval, Auto-Activation & Activation Em
 
 This manual test suite mirrors the existing Playwright automation for cross-cutting Registration flows. The corresponding automated specs are:
 
-- `BusinessTestCases/Registration/functional/RegistrationE2EHappyPath.spec.ts` — the full UI journey through every step in one run
-- `BusinessTestCases/Registration/functional/RegistrationSprint71_TypeAndAutoApprove.spec.ts` — fixed-Merchant sign-up mode and auto-approval/auto-activation/activation-email behavior
+- `BusinessTestCases/Registration/functional/journeys/RegistrationE2EHappyPath.spec.ts` — the full UI journey through every step in one run
+- `BusinessTestCases/Registration/functional/journeys/RegistrationFixedMerchantAutoApprove.spec.ts` — fixed-Merchant sign-up mode and auto-approval/auto-activation/activation-email behavior
 
 Every other Registration part (Mobile, OTP, Business Info, Financial, Verification & Uploads, NAFATH, Products, Contract) has its own dedicated manual-test-case doc in this folder; this file only covers what those individually do not.
 
@@ -2564,8 +2564,8 @@ Context: covers "Registration - Financial & Business Functionality".
 
 This manual test suite mirrors the existing Playwright automation for the Registration Financial & Business step. The corresponding automated specs are:
 
-- `BusinessTestCases/Registration/ui/RegistrationFinancialPage.spec.ts` — page elements (read-only, stateful, and dedicated-asset sections)
-- `BusinessTestCases/Registration/functional/RegistrationFinancialFunctionality.spec.ts` — numeric field validation (boundaries, XSS/SQLi, negative/decimal/zero handling), Industries/Annual Income dropdown search, Next-button logic, and Back navigation
+- `BusinessTestCases/Registration/ui/03-financial/RegistrationFinancialPage.spec.ts` — page elements (read-only, stateful, and dedicated-asset sections)
+- `BusinessTestCases/Registration/functional/03-financial/RegistrationFinancial.spec.ts` — numeric field validation (boundaries, XSS/SQLi, negative/decimal/zero handling), Industries/Annual Income dropdown search, Next-button logic, and Back navigation
 
 Supporting helper: `BusinessTestCases/pageElements/Registration/RegistrationFinancialPage.ts`.
 
@@ -2851,8 +2851,8 @@ Context: covers "Registration – Continue/Resume Registration (EMI-5666, T03)".
 
 This manual test suite mirrors the existing Playwright automation for the Registration Business Info step. The corresponding automated specs are:
 
-- `BusinessTestCases/Registration/ui/RegistrationInfoPage.spec.ts` — page elements & layout (the `[ref_NN]` markers in the automated titles trace each assertion to a captured DOM snapshot reference, omitted here)
-- `BusinessTestCases/Registration/functional/RegistrationInfoFunctionality.spec.ts` — profile-type selection, CRN/National ID/Email field validation, Next-button enable logic, tab transitions, footer/language/theme chrome, tooltips, and resume-registration (EMI-5666)
+- `BusinessTestCases/Registration/ui/02-business-info/RegistrationInfoShell.spec.ts` — page elements & layout (the `[ref_NN]` markers in the automated titles trace each assertion to a captured DOM snapshot reference, omitted here)
+- `BusinessTestCases/Registration/functional/journeys/RegistrationResumeFromInfo.spec.ts` — profile-type selection, CRN/National ID/Email field validation, Next-button enable logic, tab transitions, footer/language/theme chrome, tooltips, and resume-registration (EMI-5666)
 
 Supporting helpers: `BusinessTestCases/Registration/RegistrationHelper.ts` (asset pools `CITIZEN_ASSETS`/`RESIDENT_ASSETS`, `goToInfoStep`) and `BusinessTestCases/pageElements/Registration/RegistrationInfoPage.ts`.
 
@@ -2923,8 +2923,8 @@ Context: covers "Registration - Mobile Number Functionality".
 
 This manual test suite mirrors the existing Playwright automation for the Registration Mobile step. The corresponding automated specs are:
 
-- `BusinessTestCases/Registration/ui/RegistrationMobilePage.spec.ts` — page elements & layout
-- `BusinessTestCases/Registration/functional/RegistrationMobileFunctionality.spec.ts` — field validation, XSS/SQLi inertness, and navigation
+- `BusinessTestCases/Registration/ui/01-entry/RegistrationMobilePage.spec.ts` — page elements & layout
+- `BusinessTestCases/Registration/functional/01-entry/RegistrationMobile.spec.ts` — field validation, XSS/SQLi inertness, and navigation
 
 Supporting helpers: `BusinessTestCases/Registration/RegistrationHelper.ts` and `BusinessTestCases/pageElements/Registration/RegistrationMobilePage.ts`.
 
@@ -2984,8 +2984,8 @@ Context: covers "Registration - Nafath Verification".
 
 This manual test suite mirrors the existing Playwright automation for the Registration NAFATH step. The corresponding automated specs are:
 
-- `BusinessTestCases/Registration/ui/RegistrationNafathPage.spec.ts` — page elements & layout
-- `BusinessTestCases/Registration/functional/RegistrationNafathFunctionality.spec.ts` — the redirect countdown and Verify-button enable timing (EMI-4895, EMI-4937)
+- `BusinessTestCases/Registration/ui/05-identity/RegistrationNafathPage.spec.ts` — page elements & layout
+- `BusinessTestCases/Registration/functional/05-identity/RegistrationNafath.spec.ts` — the redirect countdown and Verify-button enable timing (EMI-4895, EMI-4937)
 
 Supporting helper: `BusinessTestCases/pageElements/Registration/RegistrationNafathPage.ts`. NAFATH approval itself is out of scope — it requires the applicant's own NAFATH app.
 
@@ -3041,8 +3041,8 @@ Context: covers "Registration - OTP Functionality".
 
 This manual test suite mirrors the existing Playwright automation for the Registration OTP popup. The corresponding automated specs are:
 
-- `BusinessTestCases/Registration/ui/RegistrationOtpPopup.spec.ts` — page elements (skips cleanly when OTP is disabled for the environment)
-- `BusinessTestCases/Registration/functional/RegistrationOtpFunctionality.spec.ts` — input behavior, resend cooldown, wrong-OTP handling, Cancel flow
+- `BusinessTestCases/Registration/ui/01-entry/RegistrationOtpPopup.spec.ts` — page elements (skips cleanly when OTP is disabled for the environment)
+- `BusinessTestCases/Registration/functional/01-entry/RegistrationOtp.spec.ts` — input behavior, resend cooldown, wrong-OTP handling, Cancel flow
 
 Supporting helper: `BusinessTestCases/Registration/RegistrationHelper.ts` (`fillOTP`, `getOtpFromDb`).
 
@@ -3178,10 +3178,10 @@ Context: covers "Registration — Onboarding PoS Request Flow: submission error 
 
 This manual test suite mirrors the existing Playwright automation for the Registration Products step and its PoS Onboarding Setup sub-flow. The corresponding automated specs are:
 
-- `BusinessTestCases/Registration/ui/RegistrationProductsPage.spec.ts` — Products step page elements
-- `BusinessTestCases/Registration/ui/RegistrationProductsPoSSetup.spec.ts` — PoS Onboarding Setup panel elements (EMI-5783)
-- `BusinessTestCases/Registration/functional/RegistrationProductsFunctionality.spec.ts` — product selection/counter logic, and the PoS Devices & Delivery functional sub-flow
-- `BusinessTestCases/Registration/functional/RegistrationPoSOnboarding.spec.ts` — PoS order-request submission (TC-POS-026..028)
+- `BusinessTestCases/Registration/ui/06-products/RegistrationProductsPage.spec.ts` — Products step page elements
+- `BusinessTestCases/Registration/ui/06-products/RegistrationProductsPoSSetup.spec.ts` — PoS Onboarding Setup panel elements (EMI-5783)
+- `BusinessTestCases/Registration/functional/06-products/RegistrationProducts.spec.ts` — product selection/counter logic, and the PoS Devices & Delivery functional sub-flow
+- `BusinessTestCases/Registration/functional/06-products/RegistrationPoSOnboarding.spec.ts` — PoS order-request submission (TC-POS-026..028)
 
 Supporting helper: `BusinessTestCases/pageElements/Registration/RegistrationProductsPage.ts`.
 
@@ -3298,8 +3298,8 @@ Context: covers "File upload interactions".
 
 This manual test suite mirrors the existing Playwright automation for the Registration Verification & Uploads step. The corresponding automated specs are:
 
-- `BusinessTestCases/Registration/ui/RegistrationVerificationPage.spec.ts` — page elements (read-only)
-- `BusinessTestCases/Registration/functional/RegistrationVerificationUploads.spec.ts` — IBAN/VAT field validation (format, checksum, length, XSS/SQLi) and file-upload interactions (type, size, filename encoding, accept/reject)
+- `BusinessTestCases/Registration/ui/04-verification/RegistrationVerificationPage.spec.ts` — page elements (read-only)
+- `BusinessTestCases/Registration/functional/04-verification/RegistrationVerificationUploads.spec.ts` — IBAN/VAT field validation (format, checksum, length, XSS/SQLi) and file-upload interactions (type, size, filename encoding, accept/reject)
 
 Supporting helper: `BusinessTestCases/pageElements/Registration/RegistrationVerificationPage.ts`.
 
@@ -3721,7 +3721,7 @@ initiator-related) — this is a ledger/DB-level attribute, inspected the same w
 - **Reconciliation / EOD / Reversal / Adjustment** — all four are Finance/Ops and Admin Portal
   functions with **no Business Portal UI surface**, so unlike every other suite in this repo they have
   no page objects. Modeled as `request`-fixture API suites (same pattern as
-  `Login/api/LoginAPIFlow.spec.ts`), with every test `test.skip()`'d pending access to the
+  `Login/api/signin/`), with every test `test.skip()`'d pending access to the
   Admin Portal / Castlemock mock-server / Ops tooling these jobs actually run against in UAT — kept in
   the suite rather than omitted, same rationale as `BankTransferCommission.spec.ts`:
   - `BusinessTestCases/Reconciliation/api/ReconciliationFlow.spec.ts` (RCN-01–20)

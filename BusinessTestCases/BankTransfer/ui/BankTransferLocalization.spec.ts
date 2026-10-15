@@ -1,33 +1,35 @@
 import { test, expect, type Page } from '@playwright/test';
 import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
-import { DashboardPage } from '../../pageElements/Shared/DashboardPage';
 import { HomepageQuickActionsPage } from '../../pageElements/Shared/HomepageQuickActionsPage';
 import { BankTransferPage } from '../../pageElements/Shared/BankTransferPage';
-import { HOME_URL } from '../BankTransferHelper';
+import { HOME_URL, ensureNonZeroBalance } from '../BankTransferHelper';
 import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/LoginHelper';
 
-// Arabic-locale checks for the Bank Transfer flow. Per QA-DATA-TESTID-HANDOFF.md,
-// the frontend replaced text-based locators with `data-testid` specifically so
-// these controls resolve identically in English and Arabic — this file verifies
-// that promise: the flow still works when switched to Arabic, and the app
-// actually renders the documented Arabic copy (not just "some text").
+// Arabic-locale checks for the Bank Transfer flow. The app loads in Arabic by
+// default on dev/UAT, so this suite does NOT switch language — it verifies the
+// flow works as shipped and renders the documented Arabic copy. Per
+// QA-DATA-TESTID-HANDOFF.md the controls carry `data-testid` so they resolve
+// identically in either language; the label assertions here pin the Arabic copy.
 
 test.describe('BankTransfer — Arabic Localization', () => {
     test.describe.configure({ mode: 'serial' });
     test.setTimeout(90000);
 
     let page: Page;
-    let dashboard: DashboardPage;
     let quickActions: HomepageQuickActionsPage;
     let bt: BankTransferPage;
 
     test.beforeAll(async ({ browser }) => {
+        // Hooks don't inherit the describe-level test.setTimeout() above — it
+        // only extends tests. ensureNonZeroBalance's card-topup branch (OTP
+        // round-trip included) can push this hook past the config's default
+        // 60s hook timeout, so extend it here too.
+        test.setTimeout(90000);
         page = await browser.newPage();
 
         const loginPage = new LoginPage(page);
         const otp = new OtpPage(page);
-        dashboard = new DashboardPage(page);
         quickActions = new HomepageQuickActionsPage(page);
         bt = new BankTransferPage(page);
 
@@ -37,8 +39,11 @@ test.describe('BankTransfer — Arabic Localization', () => {
             await otp.fillAndVerify(await getOtpFromDb(VALID_MOBILE));
         }
         await page.waitForURL(url => !url.pathname.includes('/auth/'), { timeout: 30000 });
+        await ensureNonZeroBalance(page, VALID_MOBILE);
 
-        await dashboard.switchLanguage('ar');
+        // Every assertion below depends on the app defaulting to Arabic — fail
+        // fast with a clear signal here if that ever stops being true.
+        await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     });
 
     test.afterAll(async () => {

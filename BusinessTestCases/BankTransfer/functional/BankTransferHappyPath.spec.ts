@@ -3,7 +3,7 @@ import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { HomepageQuickActionsPage } from '../../pageElements/Shared/HomepageQuickActionsPage';
 import { BankTransferPage } from '../../pageElements/Shared/BankTransferPage';
-import { HOME_URL } from '../BankTransferHelper';
+import { HOME_URL, proceedToConfirmation, SUMMARY_LABEL, ensureNonZeroBalance } from '../BankTransferHelper';
 import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, VALID_OTP, getOtpFromDb } from '../../Login/LoginHelper';
 
 // Full successful Cashout flows and the Confirmation-summary math. Element
@@ -12,32 +12,6 @@ import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, VALID_OTP, getO
 // this file only owns "does the flow complete and is the money math right."
 
 const VAT_RATE = 0.15;
-
-/**
- * The Proceed click occasionally doesn't register on dev (the button stays
- * enabled on "proceed") — a hydration-timing flake independent of balance/
- * validation. Once it does register, the button goes disabled/"is-loading"
- * and the summary API can take well over 8s to resolve — observed anywhere
- * from ~1s to 45+s on this environment. So: retry the click only while the
- * button is still enabled (i.e. genuinely un-clicked), then wait out the
- * async summary calculation for as long as it takes.
- */
-async function proceedToConfirmation(page: Page, bt: BankTransferPage): Promise<void> {
-    const nextButton = page.getByRole('button', { name: /^next$/i });
-    await bt.clickProceedButton();
-
-    // Poll rather than retry once — on a slow/loaded dev backend a single
-    // extra click after a fixed wait isn't always enough.
-    const deadline = Date.now() + 90000;
-    while (Date.now() < deadline) {
-        if (await nextButton.isVisible().catch(() => false)) return;
-        await page.waitForTimeout(2000);
-        if (await bt.proceedButton.isEnabled().catch(() => false)) {
-            await bt.proceedButton.click().catch(() => {});
-        }
-    }
-    await expect(nextButton).toBeVisible({ timeout: 5000 });
-}
 
 test.describe('BankTransfer – Happy Path', () => {
     test.describe.configure({ mode: 'serial' });
@@ -49,7 +23,21 @@ test.describe('BankTransfer – Happy Path', () => {
     let quickActions: HomepageQuickActionsPage;
     let bt: BankTransferPage;
 
+    async function doLogin(): Promise<void> {
+        await loginPage.goto(LOGIN_URL);
+        await loginPage.fillAndSubmit(VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD);
+        if (await otp.isVisible()) {
+            await otp.fillAndVerify(await getOtpFromDb(VALID_MOBILE));
+        }
+        await page.waitForURL(url => !url.pathname.includes('/auth/'), { timeout: 30000 });
+    }
+
     test.beforeAll(async ({ browser }) => {
+        // Hooks don't inherit the describe-level test.setTimeout() above — it
+        // only extends tests. ensureNonZeroBalance's card-topup branch (OTP
+        // round-trip included) can push this hook past the config's default
+        // 60s hook timeout, so extend it here too.
+        test.setTimeout(150000);
         page = await browser.newPage();
 
         loginPage = new LoginPage(page);
@@ -57,17 +45,28 @@ test.describe('BankTransfer – Happy Path', () => {
         quickActions = new HomepageQuickActionsPage(page);
         bt = new BankTransferPage(page);
 
-        await loginPage.goto(LOGIN_URL);
-        await loginPage.fillAndSubmit(VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD);
-        if (await otp.isVisible()) {
-            await otp.fillAndVerify(await getOtpFromDb(VALID_MOBILE));
-        }
-        await page.waitForURL(url => !url.pathname.includes('/auth/'), { timeout: 30000 });
+        await doLogin();
+        await ensureNonZeroBalance(page, VALID_MOBILE);
     });
 
     test.beforeEach(async () => {
         await page.goto(HOME_URL);
         await page.waitForLoadState('domcontentloaded');
+
+        // The session opened once in beforeAll can time out partway through this
+        // long serial suite — the app then renders a "session expired" dialog
+        // instead of the shell. Re-authenticate and reload before proceeding.
+        const sessionExpired = await page
+            .getByText(/session.?expired|انتهت صلاحية الجلسة/i)
+            .waitFor({ state: 'visible', timeout: 3000 })
+            .then(() => true)
+            .catch(() => false);
+        if (sessionExpired) {
+            await doLogin();
+            await page.goto(HOME_URL);
+            await page.waitForLoadState('domcontentloaded');
+        }
+
         await quickActions.quickActionCashoutCard.click();
         await expect(bt.inputAmount).toBeVisible({ timeout: 15000 });
     });
@@ -88,7 +87,7 @@ test.describe('BankTransfer – Happy Path', () => {
         await otp.fillAndVerify(await getOtpFromDb(VALID_MOBILE));
         // The success modal can take longer than clickSuccessful_OkButton()'s own
         // 15s wait to render after OTP submission — wait for the heading first.
-        await expect(page.getByRole('heading', { name: /successful/i })).toBeVisible({ timeout: 20000 });
+        await expect(page.getByRole('heading', { name: /successful|ناجح|نجاح/i })).toBeVisible({ timeout: 20000 });
         await bt.clickSuccessful_OkButton();
         await page.reload();
         await bt.checkBalanceAfterBankTransfer('10.00');
@@ -106,7 +105,7 @@ test.describe('BankTransfer – Happy Path', () => {
         await otp.fillAndVerify(await getOtpFromDb(VALID_MOBILE));
         // The success modal can take longer than clickSuccessful_OkButton()'s own
         // 15s wait to render after OTP submission — wait for the heading first.
-        await expect(page.getByRole('heading', { name: /successful/i })).toBeVisible({ timeout: 20000 });
+        await expect(page.getByRole('heading', { name: /successful|ناجح|نجاح/i })).toBeVisible({ timeout: 20000 });
         await bt.clickSuccessful_OkButton();
         await page.reload();
         await bt.checkBalanceAfterBankTransferBySelectAmount();
@@ -124,7 +123,7 @@ test.describe('BankTransfer – Happy Path', () => {
         await otp.fillAndVerify(await getOtpFromDb(VALID_MOBILE));
         // The success modal can take longer than clickSuccessful_OkButton()'s own
         // 15s wait to render after OTP submission — wait for the heading first.
-        await expect(page.getByRole('heading', { name: /successful/i })).toBeVisible({ timeout: 20000 });
+        await expect(page.getByRole('heading', { name: /successful|ناجح|نجاح/i })).toBeVisible({ timeout: 20000 });
         await bt.clickSuccessful_OkButton();
         await page.reload();
         await bt.checkBalanceAfterBankTransfer('15.75');
@@ -142,7 +141,7 @@ test.describe('BankTransfer – Happy Path', () => {
         await otp.fillAndVerify(await getOtpFromDb(VALID_MOBILE));
         // The success modal can take longer than clickSuccessful_OkButton()'s own
         // 15s wait to render after OTP submission — wait for the heading first.
-        await expect(page.getByRole('heading', { name: /successful/i })).toBeVisible({ timeout: 20000 });
+        await expect(page.getByRole('heading', { name: /successful|ناجح|نجاح/i })).toBeVisible({ timeout: 20000 });
         await bt.clickSuccessful_OkButton();
         await page.reload();
         await bt.checkBalanceAfterBankTransfer('20.5');
@@ -162,14 +161,16 @@ test.describe('BankTransfer – Happy Path', () => {
         await proceedToConfirmation(page, bt);
         await bt.waitForSummaryToSettle();
 
-        await expect.soft(bt.getSummaryText('Transaction Type')).resolves.toMatch(/cashout/i);
-        await expect.soft(bt.getSummaryText('Bank')).resolves.toBe(expectedBank);
-        await expect.soft(bt.getSummaryText('IBAN')).resolves.toBe(expectedIban);
+        // The Cashout summary renders in Arabic by default on dev/UAT — match rows
+        // and the Transaction Type value bilingually.
+        await expect.soft(bt.getSummaryText(SUMMARY_LABEL.txnType)).resolves.toMatch(/cashout|سحب نقدي/i);
+        await expect.soft(bt.getSummaryText(SUMMARY_LABEL.bank)).resolves.toBe(expectedBank);
+        await expect.soft(bt.getSummaryText(SUMMARY_LABEL.iban)).resolves.toBe(expectedIban);
 
-        const original = await bt.getSummaryMoney('Original Amount');
-        const commission = await bt.getSummaryMoney('commission');
-        const vat = await bt.getSummaryMoney('VAT');
-        const total = await bt.getSummaryMoney('Total amount to be sent');
+        const original = await bt.getSummaryMoney(SUMMARY_LABEL.original);
+        const commission = await bt.getSummaryMoney(SUMMARY_LABEL.commission);
+        const vat = await bt.getSummaryMoney(SUMMARY_LABEL.vat);
+        const total = await bt.getSummaryMoney(SUMMARY_LABEL.total);
 
         expect(original).toBe(10);
         expect(vat).toBeCloseTo(commission * VAT_RATE, 2);
@@ -185,7 +186,7 @@ test.describe('BankTransfer – Happy Path', () => {
         await expect(otp.inputs.first()).toBeVisible({ timeout: 15000 });
 
         await otp.fillAndVerify(VALID_OTP);
-        await expect(page.getByRole('heading', { name: /successful/i })).toBeVisible({ timeout: 20000 });
+        await expect(page.getByRole('heading', { name: /successful|ناجح|نجاح/i })).toBeVisible({ timeout: 20000 });
         await bt.clickSuccessful_OkButton();
 
         await page.goto(HOME_URL);

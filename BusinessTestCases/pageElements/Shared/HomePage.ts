@@ -25,47 +25,62 @@ export class HomePage {
         // Locators mapped from Java FindBy elements - updated to handle release/v6.0.0 layout changes
         this.profileIcon = page.locator("button#userSettings-image-container")
             .or(page.locator("#userSettings-image-container"))
-            .or(page.locator("//*[@id='ddl_profile']/img"));
+            .or(page.locator("//*[@id='ddl_profile']/img"))
+            .first();
 
         this.logoutButton = page.locator("button#logout")
-            .or(page.locator("#btn_profile_logout"));
+            .or(page.locator("#btn_profile_logout"))
+            .first();
 
         this.TopupButton = page.locator("#quick-topup")
             .or(page.locator("#btn_top_up"))
             .or(page.getByRole('link', { name: /top up/i }))
-            .or(page.getByText(/top up/i));
+            .or(page.getByText(/top up/i))
+            .first();
 
         this.ManageUsers_NavButton = page.getByRole('button', { name: /manage accounts/i })
             .or(page.getByText(/manage accounts/i))
-            .or(page.locator("(//span[@class='icon'])[4]"));
+            .or(page.locator("(//span[@class='icon'])[4]"))
+            .first();
 
         this.Bills_NavButton = page.getByRole('button', { name: /^bills$/i })
             .or(page.getByText(/^bills$/i))
-            .or(page.locator("(//span[@class='icon'])[5]"));
+            .or(page.locator("(//span[@class='icon'])[5]"))
+            .first();
 
         this.BillPayment_NavButton = page.getByRole('link', { name: /bill payment/i })
             .or(page.getByText(/bill payment/i))
-            .or(page.locator("(//span[@class='mdc-list-item__content'])[11]"));
+            .or(page.locator("(//span[@class='mdc-list-item__content'])[11]"))
+            .first();
 
         this.BillReport_NavButton = page.getByRole('link', { name: /bill reports?/i })
             .or(page.getByText(/bill reports?/i))
-            .or(page.locator("(//span[@class='mdc-list-item__content'])[12]"));
+            .or(page.locator("(//span[@class='mdc-list-item__content'])[12]"))
+            .first();
 
         // Best-effort guess (EMI-183 Bill Management "Add New Bills") — no data-testid yet
         // per QA-DATA-TESTID-HANDOFF.md §5 and no prior nav entry existed for this screen.
         this.CreateBill_NavButton = page.getByRole('link', { name: /create bill|add bill/i })
-            .or(page.getByText(/create bill|add bill/i));
+            .or(page.getByText(/create bill|add bill/i))
+            .first();
 
         // Best-effort guess (EMI-834 Money Request) — no data-testid yet, no prior nav entry.
         this.MoneyRequest_NavButton = page.getByRole('button', { name: /request money|money request/i })
-            .or(page.getByText(/request money|money request/i));
+            .or(page.getByText(/request money|money request/i))
+            .first();
 
         this.Transactions_NavButton = page.locator('#sideNav-menu-item-1');
 
         this.transferButton = page.locator("#quick-bank");
         this.W2WTransferButton = page.locator('#quick-transfer')
-            .or(page.getByRole('button', { name: /wallet transfer/i }));
+            .or(page.getByRole('button', { name: /wallet transfer/i }))
+            .first();
 
+        // No .first() here on purpose (unlike the button locators above): getWalletBalance()
+        // reads textContent() off this and parses it as a number. If `.mp-bal-amount` ever
+        // matches more than one node (per-sub-wallet balances, responsive duplicates), the
+        // strict-mode error is the signal we want — .first() would silently return whichever
+        // node is first in DOM order and quietly compare balance deltas against the wrong figure.
         this.currentBalance = page.locator(".mp-bal-amount").or(page.locator("//div[@class='price']//span[@id='balance-amount']"));
     }
 

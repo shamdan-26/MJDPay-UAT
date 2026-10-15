@@ -13,6 +13,7 @@ import {
 // ─────────────────────────────────────────────────────────────────────────────
 
 test.describe('Payment Link Bugs — Update-Status No Longer 500s (TC-PL-013, EMI-5774)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('TC-PL-013: completing or cancelling a bill payment link transaction should not surface a 500 error', async ({ page }) => {
         await mockValidBillLink(page);
         await mockUpdateStatusSuccess(page);
@@ -29,6 +30,7 @@ test.describe('Payment Link Bugs — Update-Status No Longer 500s (TC-PL-013, EM
 });
 
 test.describe('Payment Link Bugs — Cancelled Link No Infinite Loading (TC-PL-014, EMI-5775)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('TC-PL-014: cancelling from the card payment page should show a result state, not spin forever', async ({ page }) => {
         await mockValidBillLink(page);
         await gotoPaymentLink(page, VALID_BILL_TOKEN);
@@ -36,15 +38,18 @@ test.describe('Payment Link Bugs — Cancelled Link No Infinite Loading (TC-PL-0
         await expect(link.summarySection).toBeVisible({ timeout: 15000 });
 
         const cancelButton = page.getByRole('button', { name: /cancel/i }).first();
-        if (await cancelButton.isVisible({ timeout: 5000 }).catch(() => false)) {
-            await cancelButton.click();
-            await expect(link.loadingIndicator).not.toBeVisible({ timeout: 15000 });
-            await expect(link.resultHeading.or(link.invalidLinkError).or(link.summarySection)).toBeVisible({ timeout: 10000 });
-        }
+        // Without actually clicking Cancel, the "no infinite loading" claim is
+        // never exercised — skip explicitly instead of silently passing.
+        const cancelVisible = await cancelButton.isVisible({ timeout: 5000 }).catch(() => false);
+        test.skip(!cancelVisible, 'Cancel button not shown for this link/environment');
+        await cancelButton.click();
+        await expect(link.loadingIndicator).not.toBeVisible({ timeout: 15000 });
+        await expect(link.resultHeading.or(link.invalidLinkError).or(link.summarySection)).toBeVisible({ timeout: 10000 });
     });
 });
 
 test.describe('Payment Link Bugs — Bill Link Does Not Redirect to Wallet (TC-PL-015, EMI-5814)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('TC-PL-015: opening a bill payment link should open bill payment, not wallet payment', async ({ page }) => {
         await mockValidBillLink(page);
         await gotoPaymentLink(page, VALID_BILL_TOKEN);

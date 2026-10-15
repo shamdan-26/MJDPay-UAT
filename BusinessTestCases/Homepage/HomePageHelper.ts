@@ -21,28 +21,29 @@ export const BASE_ORIGIN      = BASE_URL;
 /** Shared fallback password for all UAT test accounts below. */
 const DEFAULT_TEST_PASSWORD = testAccounts.defaultPassword;
 
-/** In ENV=dev the login button has no accessible "Log In" role name — same
- *  env split already established in pageElements/Shared/LoginPage.ts. */
+/** In ENV=dev the login button has no accessible "Log In" role name, and has
+ *  no data-testid either — same env split and testid-first fallback pattern
+ *  already established in pageElements/Shared/LoginPage.ts (QA-DATA-TESTID-
+ *  HANDOFF.md §4.1: `login-submit`). */
 function loginButton(page: Page): Locator {
     const env = process.env['ENV'] ?? 'dev';
-    return env === 'dev'
-        ? page.locator('#btn_login')
-        : page.getByRole('button', { name: 'Log In' });
+    return page.getByTestId('login-submit')
+        .or(env === 'dev' ? page.locator('#btn_login') : page.getByRole('button', { name: 'Log In' }));
 }
 
-export const VALID_COMPANY  = process.env['UAT_COMPANY'] ?? testAccounts.merchant.company;
-export const VALID_MOBILE   = process.env['UAT_MOBILE']  ?? testAccounts.merchant.mobile;
+export const VALID_COMPANY  = process.env['DEV_COMPANY'] ?? testAccounts.merchant.company;
+export const VALID_MOBILE   = process.env['DEV_MOBILE']  ?? testAccounts.merchant.mobile;
 export const VALID_PASSWORD = DEFAULT_TEST_PASSWORD;
 
 /** Second merchant account — used to spread homepage spec files across two
  *  sessions so parallel workers don't collide on the same account. */
-export const VALID_COMPANY_2  = process.env['UAT_COMPANY_2'] ?? testAccounts.merchant2.company;
-export const VALID_MOBILE_2   = process.env['UAT_MOBILE_2']  ?? testAccounts.merchant2.mobile;
-export const VALID_PASSWORD_2 = process.env['UAT_PASSWORD_2'] ?? DEFAULT_TEST_PASSWORD;
+export const VALID_COMPANY_2  = process.env['DEV_COMPANY_2'] ?? testAccounts.merchant2.company;
+export const VALID_MOBILE_2   = process.env['DEV_MOBILE_2']  ?? testAccounts.merchant2.mobile;
+export const VALID_PASSWORD_2 = process.env['DEV_PASSWORD_2'] ?? DEFAULT_TEST_PASSWORD;
 
-export const VALID_BILLER_COMPANY  = process.env['UAT_BILLER_COMPANY'] ?? testAccounts.biller.company;
-export const VALID_BILLER_MOBILE   = process.env['UAT_BILLER_MOBILE']  ?? testAccounts.biller.mobile;
-export const VALID_BILLER_PASSWORD = process.env['UAT_BILLER_PASSWORD'] ?? DEFAULT_TEST_PASSWORD;
+export const VALID_BILLER_COMPANY  = process.env['DEV_BILLER_COMPANY'] ?? testAccounts.biller.company;
+export const VALID_BILLER_MOBILE   = process.env['DEV_BILLER_MOBILE']  ?? testAccounts.biller.mobile;
+export const VALID_BILLER_PASSWORD = process.env['DEV_BILLER_PASSWORD'] ?? DEFAULT_TEST_PASSWORD;
 
 /** Pre-authenticated storage states for the two homepage merchant accounts,
  *  generated once by support/global-setup.ts. Spec files restore these via
@@ -54,7 +55,7 @@ export const ACCOUNT_2_STORAGE_STATE = 'playwright/.auth/homepage-account2.json'
 /** Pool of accounts homepage tests can be spread across, keyed so each parallel
  *  worker sticks to exactly one account for its whole run (no two workers ever
  *  share a session). Accounts 1 and 2 are always present; add a 3rd/4th/etc.
- *  by setting UAT_COMPANY_3/UAT_MOBILE_3/UAT_PASSWORD_3 (and so on) — the pool
+ *  by setting DEV_COMPANY_3/DEV_MOBILE_3/DEV_PASSWORD_3 (and so on) — the pool
  *  picks them up automatically, no code changes needed. Match playwright.config.ts's
  *  worker count with the number of accounts you provide to eliminate collisions
  *  entirely; with fewer accounts than workers, some sharing still happens but
@@ -72,13 +73,13 @@ export const homepageAccountPool: HomepageAccount[] = [
 ];
 
 for (let n = 3; ; n++) {
-    const company = process.env[`UAT_COMPANY_${n}`];
-    const mobile  = process.env[`UAT_MOBILE_${n}`];
+    const company = process.env[`DEV_COMPANY_${n}`];
+    const mobile  = process.env[`DEV_MOBILE_${n}`];
     if (!company || !mobile) break;
     homepageAccountPool.push({
         key: `ACCOUNT_${n}`,
         storageState: `playwright/.auth/homepage-account${n}.json`,
-        creds: { company, mobile, password: process.env[`UAT_PASSWORD_${n}`] ?? DEFAULT_TEST_PASSWORD },
+        creds: { company, mobile, password: process.env[`DEV_PASSWORD_${n}`] ?? DEFAULT_TEST_PASSWORD },
     });
 }
 
@@ -146,7 +147,7 @@ export interface HomepageSession {
 }
 
 /** Full login flow for a biller: credentials → OTP (fetched by email) → home page.
- *  Requires UAT_BILLER_COMPANY and UAT_BILLER_MOBILE env vars to be set.
+ *  Requires DEV_BILLER_COMPANY and DEV_BILLER_MOBILE env vars to be set.
  *  Note (AMB-HP-01): assumes biller uses the same /business/auth/login endpoint as merchant.
  */
 export async function loginAsBiller(page: Page): Promise<void> {
@@ -197,6 +198,14 @@ export async function loginAsMerchant(page: Page, creds?: MerchantCredentials): 
     const password = creds?.password ?? VALID_PASSWORD;
 
     const attemptLogin = async (): Promise<void> => {
+        // A cold/stale auth gateway can 404 the first hit after a deploy —
+        // only called from global-setup.ts's homepage-account-pool
+        // pre-authentication, which hit exactly this failure class (see
+        // global-setup.ts's own attemptSessionLogin, fixed the same way).
+        // A genuine hard refresh (CDP cache-disable) avoids it; a plain
+        // page.goto() alone can still be served a stale bundle.
+        const client = await page.context().newCDPSession(page);
+        await client.send('Network.setCacheDisabled', { cacheDisabled: true });
         await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
         await page.getByRole('textbox', { name: /Company number|رقم الشركة/ }).fill(company);
         await page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ }).fill(mobile);

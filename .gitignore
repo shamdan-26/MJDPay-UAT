@@ -12,5 +12,12 @@ bug-report-assets/
 .env
 .env.*
 
+# JMeter load testing
+/performance/results/
+*.jtl
+
 # temp only
 
+
+# Local agent working notes, not project documentation
+docs/.claude/

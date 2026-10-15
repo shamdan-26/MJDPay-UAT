@@ -73,14 +73,14 @@ Auto-mapped by title similarity (0.60–0.79): too uncertain to annotate automat
 | Registration | RegistrationContractPage.spec.ts | 67 | 1.0 | RVU-05 | should display the Switch theme button | Display the Switch theme button |
 | Registration | RegistrationContractPage.spec.ts | 85 | 1.0 | RP-09 | should display all four outer step labels: Business Info, NAFATH, Products, Contract | Display all four outer step labels: Business Info, NAFATH, Products, Contract |
 | Registration | RegistrationContractPage.spec.ts | 157 | 1.0 | RP-17 | should display the Cancel button | Display the Cancel button |
-| Registration | RegistrationFinancialFunctionality.spec.ts | 43 | 1.0 | RF-46 | should accept numeric input for Monthly Expected Number Of Bills | Accept numeric input for Monthly Expected Number Of Bills |
-| Registration | RegistrationFinancialFunctionality.spec.ts | 51 | 1.0 | RF-47 | should accept numeric input for Monthly Expected Sum Of Bills | Accept numeric input for Monthly Expected Sum Of Bills |
-| Registration | RegistrationFinancialFunctionality.spec.ts | 59 | 1.0 | RF-48 | should accept numeric input for Expected Monthly Withdrawal | Accept numeric input for Expected Monthly Withdrawal |
-| Registration | RegistrationFinancialFunctionality.spec.ts | 67 | 1.0 | RF-49 | should accept numeric input for Expected Monthly Deposit | Accept numeric input for Expected Monthly Deposit |
-| Registration | RegistrationFinancialFunctionality.spec.ts | 136 | 1.0 | RF-58 | should not execute an XSS payload entered in the Monthly Expected Number field | Not execute an XSS payload entered in the Monthly Expected Number field |
-| Registration | RegistrationFinancialFunctionality.spec.ts | 145 | 1.0 | RF-59 | should not execute an XSS payload entered in the Monthly Expected Sum field | Not execute an XSS payload entered in the Monthly Expected Sum field |
-| Registration | RegistrationFinancialFunctionality.spec.ts | 200 | 1.0 | RF-65 | should open the Industries dropdown when clicked | Open the Industries dropdown when clicked |
-| Registration | RegistrationFinancialFunctionality.spec.ts | 212 | 1.0 | RF-67 | should open the Annual Income dropdown when clicked | Open the Annual Income dropdown when clicked |
+| Registration | RegistrationFinancial.spec.ts | 43 | 1.0 | RF-46 | should accept numeric input for Monthly Expected Number Of Bills | Accept numeric input for Monthly Expected Number Of Bills |
+| Registration | RegistrationFinancial.spec.ts | 51 | 1.0 | RF-47 | should accept numeric input for Monthly Expected Sum Of Bills | Accept numeric input for Monthly Expected Sum Of Bills |
+| Registration | RegistrationFinancial.spec.ts | 59 | 1.0 | RF-48 | should accept numeric input for Expected Monthly Withdrawal | Accept numeric input for Expected Monthly Withdrawal |
+| Registration | RegistrationFinancial.spec.ts | 67 | 1.0 | RF-49 | should accept numeric input for Expected Monthly Deposit | Accept numeric input for Expected Monthly Deposit |
+| Registration | RegistrationFinancial.spec.ts | 136 | 1.0 | RF-58 | should not execute an XSS payload entered in the Monthly Expected Number field | Not execute an XSS payload entered in the Monthly Expected Number field |
+| Registration | RegistrationFinancial.spec.ts | 145 | 1.0 | RF-59 | should not execute an XSS payload entered in the Monthly Expected Sum field | Not execute an XSS payload entered in the Monthly Expected Sum field |
+| Registration | RegistrationFinancial.spec.ts | 200 | 1.0 | RF-65 | should open the Industries dropdown when clicked | Open the Industries dropdown when clicked |
+| Registration | RegistrationFinancial.spec.ts | 212 | 1.0 | RF-67 | should open the Annual Income dropdown when clicked | Open the Annual Income dropdown when clicked |
 | Registration | RegistrationFinancialPage.spec.ts | 35 | 1.0 | RVU-01 | should display the MJD Pay logo | Display the MJD Pay logo |
 | Registration | RegistrationFinancialPage.spec.ts | 39 | 1.0 | RVU-02 | should link the MJD Pay logo to the landing page | Link the MJD Pay logo to the landing page |
 | Registration | RegistrationFinancialPage.spec.ts | 43 | 1.0 | RVU-03 | should display the EN language button | Display the EN language button |
@@ -109,22 +109,22 @@ Auto-mapped by title similarity (0.60–0.79): too uncertain to annotate automat
 | Registration | RegistrationInfoFunctionality.spec.ts | 234 | 1.0 | RI-70 | should show the Clear button after a value is entered | Show the Clear button after a value is entered |
 | Registration | RegistrationInfoFunctionality.spec.ts | 247 | 1.0 | RI-72 | should hide the Clear button after the field is emptied via Clear | Hide the Clear button after the field is emptied via Clear |
 | Registration | RegistrationInfoFunctionality.spec.ts | 292 | 1.0 | RI-78 | should handle a 1000-character input without crashing | Handle a 1000-character input without crashing |
-| Registration | RegistrationInfoPage.spec.ts | 52 | 0.87 | RVU-01 | should display the MJD Pay logo [ref_3] | Display the MJD Pay logo |
-| Registration | RegistrationInfoPage.spec.ts | 56 | 0.91 | RVU-02 | should link the MJD Pay logo to the landing page [ref_2] | Link the MJD Pay logo to the landing page |
-| Registration | RegistrationInfoPage.spec.ts | 64 | 0.9 | RVU-03 | should display the EN language button [ref_5] | Display the EN language button |
-| Registration | RegistrationInfoPage.spec.ts | 68 | 0.91 | RVU-04 | should display the Arabic language button [ref_6] | Display the Arabic language button |
-| Registration | RegistrationInfoPage.spec.ts | 72 | 0.9 | RP-05 | should display the theme toggle button [ref_7] | Display the theme toggle button |
-| Registration | RegistrationInfoPage.spec.ts | 95 | 0.92 | RN-06 | should display the "Create Account" eyebrow text [ref_9] | Display the "Create Account" eyebrow text |
-| Registration | RegistrationInfoPage.spec.ts | 118 | 0.91 | RN-09 | should display "Products" as the third outer step [ref_14] | Display "Products" as the third outer step |
-| Registration | RegistrationInfoPage.spec.ts | 122 | 0.91 | RN-10 | should display "Contract" as the fourth outer step [ref_15] | Display "Contract" as the fourth outer step |
-| Registration | RegistrationInfoPage.spec.ts | 149 | 0.77 | RI-17 | should display Tab 3 — Products [ref_22, ref_23] | Display Tab 3 — Products |
-| Registration | RegistrationInfoPage.spec.ts | 153 | 0.77 | RI-18 | should display Tab 4 — Contract [ref_24, ref_25] | Display Tab 4 — Contract |
-| Registration | RegistrationInfoPage.spec.ts | 264 | 0.84 | RM-17 | should display the Next button [ref_53] | Display the Next button |
-| Registration | RegistrationInfoPage.spec.ts | 271 | 0.91 | RVU-71 | should display "Already have an account?" text [ref_54] | Display "Already have an account?" text |
-| Registration | RegistrationInfoPage.spec.ts | 275 | 0.82 | RVU-28 | should display the Log In link [ref_55] | Display the Log In link |
-| Registration | RegistrationInfoPage.spec.ts | 279 | 0.92 | RI-41 | should display "By continuing, you agree to our" text [ref_56] | Display "By continuing, you agree to our" text |
-| Registration | RegistrationInfoPage.spec.ts | 285 | 0.91 | RVU-29 | should display Terms & Conditions reference [ref_57] | Display Terms & Conditions reference |
-| Registration | RegistrationInfoPage.spec.ts | 289 | 0.9 | RVU-30 | should display Privacy Policy reference [ref_58] | Display Privacy Policy reference |
+| Registration | RegistrationInfoShell.spec.ts | 52 | 0.87 | RVU-01 | should display the MJD Pay logo [ref_3] | Display the MJD Pay logo |
+| Registration | RegistrationInfoShell.spec.ts | 56 | 0.91 | RVU-02 | should link the MJD Pay logo to the landing page [ref_2] | Link the MJD Pay logo to the landing page |
+| Registration | RegistrationInfoShell.spec.ts | 64 | 0.9 | RVU-03 | should display the EN language button [ref_5] | Display the EN language button |
+| Registration | RegistrationInfoShell.spec.ts | 68 | 0.91 | RVU-04 | should display the Arabic language button [ref_6] | Display the Arabic language button |
+| Registration | RegistrationInfoShell.spec.ts | 72 | 0.9 | RP-05 | should display the theme toggle button [ref_7] | Display the theme toggle button |
+| Registration | RegistrationInfoShell.spec.ts | 95 | 0.92 | RN-06 | should display the "Create Account" eyebrow text [ref_9] | Display the "Create Account" eyebrow text |
+| Registration | RegistrationInfoShell.spec.ts | 118 | 0.91 | RN-09 | should display "Products" as the third outer step [ref_14] | Display "Products" as the third outer step |
+| Registration | RegistrationInfoShell.spec.ts | 122 | 0.91 | RN-10 | should display "Contract" as the fourth outer step [ref_15] | Display "Contract" as the fourth outer step |
+| Registration | RegistrationInfoShell.spec.ts | 149 | 0.77 | RI-17 | should display Tab 3 — Products [ref_22, ref_23] | Display Tab 3 — Products |
+| Registration | RegistrationInfoShell.spec.ts | 153 | 0.77 | RI-18 | should display Tab 4 — Contract [ref_24, ref_25] | Display Tab 4 — Contract |
+| Registration | RegistrationInfoShell.spec.ts | 264 | 0.84 | RM-17 | should display the Next button [ref_53] | Display the Next button |
+| Registration | RegistrationInfoShell.spec.ts | 271 | 0.91 | RVU-71 | should display "Already have an account?" text [ref_54] | Display "Already have an account?" text |
+| Registration | RegistrationInfoShell.spec.ts | 275 | 0.82 | RVU-28 | should display the Log In link [ref_55] | Display the Log In link |
+| Registration | RegistrationInfoShell.spec.ts | 279 | 0.92 | RI-41 | should display "By continuing, you agree to our" text [ref_56] | Display "By continuing, you agree to our" text |
+| Registration | RegistrationInfoShell.spec.ts | 285 | 0.91 | RVU-29 | should display Terms & Conditions reference [ref_57] | Display Terms & Conditions reference |
+| Registration | RegistrationInfoShell.spec.ts | 289 | 0.9 | RVU-30 | should display Privacy Policy reference [ref_58] | Display Privacy Policy reference |
 | Registration | RegistrationMobilePage.spec.ts | 28 | 1.0 | RVU-01 | should display the MJD Pay logo | Display the MJD Pay logo |
 | Registration | RegistrationMobilePage.spec.ts | 43 | 1.0 | RVU-03 | should display the EN language button | Display the EN language button |
 | Registration | RegistrationMobilePage.spec.ts | 51 | 1.0 | RVU-04 | should display the Arabic language button | Display the Arabic language button |

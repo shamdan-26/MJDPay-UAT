@@ -1,0 +1,1012 @@
+{
+  "item": [
+    {
+      "id": "b95c2b57-7c9b-4120-a9eb-9a25e9011335",
+      "name": "mozn-event-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "fe836670-7e6d-4f76-859d-72a6e950376f",
+          "name": "evaluate Trust Device",
+          "request": {
+            "name": "evaluate Trust Device",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "mozn",
+                "events",
+                "trust-device"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/mozn/events/trust-device"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profileCode\": \"Lorem occaecat cupidatat\",\n  \"reference\": \"sed\",\n  \"timestamp\": 83107678,\n  \"customerReference\": \"cupidatat reprehenderit\",\n  \"deviceReference\": \"irure laboris qui\",\n  \"browser\": \"ipsum ex\",\n  \"os\": \"minim Duis des\",\n  \"deviceType\": \"dolore\",\n  \"fingerprintToken\": \"pariatur exercitation incididunt\",\n  \"unifiedNumber\": \"et reprehenderit in dol\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a1cd2aa5-c99b-425b-8c4e-d1cfd0d36df1",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "mozn",
+                    "events",
+                    "trust-device"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profileCode\": \"Lorem occaecat cupidatat\",\n  \"reference\": \"sed\",\n  \"timestamp\": 83107678,\n  \"customerReference\": \"cupidatat reprehenderit\",\n  \"deviceReference\": \"irure laboris qui\",\n  \"browser\": \"ipsum ex\",\n  \"os\": \"minim Duis des\",\n  \"deviceType\": \"dolore\",\n  \"fingerprintToken\": \"pariatur exercitation incididunt\",\n  \"unifiedNumber\": \"et reprehenderit in dol\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"state\": \"in dolore veniam\",\n  \"totalScore\": -71619867,\n  \"error\": \"proident cupidatat veniam\",\n  \"reasonType\": \"consequat do\",\n  \"listMatches\": [\n    {\n      \"listName\": \"amet qui Lorem fugiat nisi\",\n      \"matchedValue\": \"cupidatat esse\"\n    },\n    {\n      \"listName\": \"min\",\n      \"matchedValue\": \"voluptate fugiat commodo\"\n    }\n  ],\n  \"scoreBreakdown\": [\n    {\n      \"name\": \"consequat ut irure voluptate eu\",\n      \"score\": 49285183,\n      \"version\": \"magna mollit\",\n      \"metadata\": [\n        \"enim est\",\n        \"\"\n      ]\n    },\n    {\n      \"name\": \"eiusmod nulla occaecat consequat Lorem\",\n      \"score\": -71070656,\n      \"version\": \"ipsum in nostrud ut\",\n      \"metadata\": [\n        \"eu\",\n        \"in esse voluptate Ut\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "845e3881-5765-4a90-b88f-4bba2b6b937a",
+          "name": "evaluate Register",
+          "request": {
+            "name": "evaluate Register",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "mozn",
+                "events",
+                "register"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/mozn/events/register"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profileCode\": \"in amet aute consectetur\",\n  \"reference\": \"fugiat aliquip do\",\n  \"timestamp\": -3600786,\n  \"customerReference\": \"consequat\",\n  \"firstName\": \"magna proident\",\n  \"middleName\": \"proident\",\n  \"lastName\": \"nostrud et Duis ut\",\n  \"dateOfBirth\": \"nisi eiusmod in nulla\",\n  \"nationality\": \"labore non\",\n  \"countryOfBirth\": \"voluptate officia mollit occa\",\n  \"countryOfResidence\": \"eiusmo\",\n  \"email\": \"Duis\",\n  \"phoneNumber\": \"nulla Lorem eu\",\n  \"userName\": \"\",\n  \"customerType\": \"sed et\",\n  \"building\": \"elit Ut\",\n  \"street\": \"veniam\",\n  \"floor\": \"in \",\n  \"town\": \"reprehenderit irure cillum\",\n  \"countrySubDivision\": \"labore in sit\",\n  \"countryCode\": \"ea fugiat\",\n  \"postCode\": \"enim in\",\n  \"deviceReference\": \"sunt consequa\",\n  \"browser\": \"officia sint u\",\n  \"os\": \"elit pariatur\",\n  \"deviceType\": \"fugiat pariatur consequat\",\n  \"fingerprintToken\": \"Lorem fugiat sit\",\n  \"ip\": \"aute Lorem cupidatat elit\",\n  \"location\": \"dolor nostrud sed aliqua\",\n  \"unifiedNumber\": \"proident a\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "41fe8846-f8ed-47b1-b12e-54146afc6313",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "mozn",
+                    "events",
+                    "register"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profileCode\": \"in amet aute consectetur\",\n  \"reference\": \"fugiat aliquip do\",\n  \"timestamp\": -3600786,\n  \"customerReference\": \"consequat\",\n  \"firstName\": \"magna proident\",\n  \"middleName\": \"proident\",\n  \"lastName\": \"nostrud et Duis ut\",\n  \"dateOfBirth\": \"nisi eiusmod in nulla\",\n  \"nationality\": \"labore non\",\n  \"countryOfBirth\": \"voluptate officia mollit occa\",\n  \"countryOfResidence\": \"eiusmo\",\n  \"email\": \"Duis\",\n  \"phoneNumber\": \"nulla Lorem eu\",\n  \"userName\": \"\",\n  \"customerType\": \"sed et\",\n  \"building\": \"elit Ut\",\n  \"street\": \"veniam\",\n  \"floor\": \"in \",\n  \"town\": \"reprehenderit irure cillum\",\n  \"countrySubDivision\": \"labore in sit\",\n  \"countryCode\": \"ea fugiat\",\n  \"postCode\": \"enim in\",\n  \"deviceReference\": \"sunt consequa\",\n  \"browser\": \"officia sint u\",\n  \"os\": \"elit pariatur\",\n  \"deviceType\": \"fugiat pariatur consequat\",\n  \"fingerprintToken\": \"Lorem fugiat sit\",\n  \"ip\": \"aute Lorem cupidatat elit\",\n  \"location\": \"dolor nostrud sed aliqua\",\n  \"unifiedNumber\": \"proident a\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"state\": \"in dolore veniam\",\n  \"totalScore\": -71619867,\n  \"error\": \"proident cupidatat veniam\",\n  \"reasonType\": \"consequat do\",\n  \"listMatches\": [\n    {\n      \"listName\": \"amet qui Lorem fugiat nisi\",\n      \"matchedValue\": \"cupidatat esse\"\n    },\n    {\n      \"listName\": \"min\",\n      \"matchedValue\": \"voluptate fugiat commodo\"\n    }\n  ],\n  \"scoreBreakdown\": [\n    {\n      \"name\": \"consequat ut irure voluptate eu\",\n      \"score\": 49285183,\n      \"version\": \"magna mollit\",\n      \"metadata\": [\n        \"enim est\",\n        \"\"\n      ]\n    },\n    {\n      \"name\": \"eiusmod nulla occaecat consequat Lorem\",\n      \"score\": -71070656,\n      \"version\": \"ipsum in nostrud ut\",\n      \"metadata\": [\n        \"eu\",\n        \"in esse voluptate Ut\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9665da05-3fdb-4c99-9898-654f09743d5b",
+          "name": "evaluate Profile Update",
+          "request": {
+            "name": "evaluate Profile Update",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "mozn",
+                "events",
+                "profile-update"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/mozn/events/profile-update"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profileCode\": \"reprehenderit\",\n  \"reference\": \"eiusmod elit commodo sunt\",\n  \"timestamp\": -77606604,\n  \"customerReference\": \"et voluptate\",\n  \"firstName\": \"pariatur reprehenderit\",\n  \"lastName\": \"commodo pariatur et ut\",\n  \"email\": \"e\",\n  \"phoneNumber\": \"aute occaecat pariatur\",\n  \"userName\": \"Ut sed officia velit incididunt\",\n  \"building\": \"voluptate tempor quis do\",\n  \"street\": \"nulla Excepteur officia\",\n  \"floor\": \"minim Duis irure\",\n  \"town\": \"Ut deserunt\",\n  \"countrySubDivision\": \"cillum tempor dolore\",\n  \"countryCode\": \"dolor ipsum\",\n  \"postCode\": \"ad deserunt dolor laboris\",\n  \"deviceReference\": \"sed sint laboris enim\",\n  \"browser\": \"cillum non ut proident enim\",\n  \"os\": \"culpa\",\n  \"deviceType\": \"laboris anim\",\n  \"fingerprintToken\": \"nisi commod\",\n  \"ip\": \"qui \",\n  \"location\": \"fugiat sit ad\",\n  \"sessionReference\": \"in proident nu\",\n  \"unifiedNumber\": \"ullamco voluptate laborum id ad\",\n  \"operation\": \"Duis in occaecat veniam\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0a04b8d8-a0a9-48f0-b0f8-39ea53284342",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "mozn",
+                    "events",
+                    "profile-update"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profileCode\": \"reprehenderit\",\n  \"reference\": \"eiusmod elit commodo sunt\",\n  \"timestamp\": -77606604,\n  \"customerReference\": \"et voluptate\",\n  \"firstName\": \"pariatur reprehenderit\",\n  \"lastName\": \"commodo pariatur et ut\",\n  \"email\": \"e\",\n  \"phoneNumber\": \"aute occaecat pariatur\",\n  \"userName\": \"Ut sed officia velit incididunt\",\n  \"building\": \"voluptate tempor quis do\",\n  \"street\": \"nulla Excepteur officia\",\n  \"floor\": \"minim Duis irure\",\n  \"town\": \"Ut deserunt\",\n  \"countrySubDivision\": \"cillum tempor dolore\",\n  \"countryCode\": \"dolor ipsum\",\n  \"postCode\": \"ad deserunt dolor laboris\",\n  \"deviceReference\": \"sed sint laboris enim\",\n  \"browser\": \"cillum non ut proident enim\",\n  \"os\": \"culpa\",\n  \"deviceType\": \"laboris anim\",\n  \"fingerprintToken\": \"nisi commod\",\n  \"ip\": \"qui \",\n  \"location\": \"fugiat sit ad\",\n  \"sessionReference\": \"in proident nu\",\n  \"unifiedNumber\": \"ullamco voluptate laborum id ad\",\n  \"operation\": \"Duis in occaecat veniam\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"state\": \"in dolore veniam\",\n  \"totalScore\": -71619867,\n  \"error\": \"proident cupidatat veniam\",\n  \"reasonType\": \"consequat do\",\n  \"listMatches\": [\n    {\n      \"listName\": \"amet qui Lorem fugiat nisi\",\n      \"matchedValue\": \"cupidatat esse\"\n    },\n    {\n      \"listName\": \"min\",\n      \"matchedValue\": \"voluptate fugiat commodo\"\n    }\n  ],\n  \"scoreBreakdown\": [\n    {\n      \"name\": \"consequat ut irure voluptate eu\",\n      \"score\": 49285183,\n      \"version\": \"magna mollit\",\n      \"metadata\": [\n        \"enim est\",\n        \"\"\n      ]\n    },\n    {\n      \"name\": \"eiusmod nulla occaecat consequat Lorem\",\n      \"score\": -71070656,\n      \"version\": \"ipsum in nostrud ut\",\n      \"metadata\": [\n        \"eu\",\n        \"in esse voluptate Ut\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5aa6442b-fa84-4b2a-adea-c993a0ec3c8d",
+          "name": "evaluate Password Reset",
+          "request": {
+            "name": "evaluate Password Reset",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "mozn",
+                "events",
+                "password-reset"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/mozn/events/password-reset"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profileCode\": \"in\",\n  \"reference\": \"aliquip non\",\n  \"timestamp\": -9841996,\n  \"customerReference\": \"f\",\n  \"deviceReference\": \"non\",\n  \"browser\": \"in aliquip voluptate deserunt\",\n  \"os\": \"eiusmod consequat adipisicing incididunt\",\n  \"deviceType\": \"Ut ea\",\n  \"fingerprintToken\": \"sint\",\n  \"ip\": \"reprehenderi\",\n  \"location\": \"velit irure in\",\n  \"sessionReference\": \"dolor est\",\n  \"unifiedNumber\": \"nulla et\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e2a7f0f4-bc28-40e4-8542-2b84874f032f",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "mozn",
+                    "events",
+                    "password-reset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profileCode\": \"in\",\n  \"reference\": \"aliquip non\",\n  \"timestamp\": -9841996,\n  \"customerReference\": \"f\",\n  \"deviceReference\": \"non\",\n  \"browser\": \"in aliquip voluptate deserunt\",\n  \"os\": \"eiusmod consequat adipisicing incididunt\",\n  \"deviceType\": \"Ut ea\",\n  \"fingerprintToken\": \"sint\",\n  \"ip\": \"reprehenderi\",\n  \"location\": \"velit irure in\",\n  \"sessionReference\": \"dolor est\",\n  \"unifiedNumber\": \"nulla et\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"state\": \"in dolore veniam\",\n  \"totalScore\": -71619867,\n  \"error\": \"proident cupidatat veniam\",\n  \"reasonType\": \"consequat do\",\n  \"listMatches\": [\n    {\n      \"listName\": \"amet qui Lorem fugiat nisi\",\n      \"matchedValue\": \"cupidatat esse\"\n    },\n    {\n      \"listName\": \"min\",\n      \"matchedValue\": \"voluptate fugiat commodo\"\n    }\n  ],\n  \"scoreBreakdown\": [\n    {\n      \"name\": \"consequat ut irure voluptate eu\",\n      \"score\": 49285183,\n      \"version\": \"magna mollit\",\n      \"metadata\": [\n        \"enim est\",\n        \"\"\n      ]\n    },\n    {\n      \"name\": \"eiusmod nulla occaecat consequat Lorem\",\n      \"score\": -71070656,\n      \"version\": \"ipsum in nostrud ut\",\n      \"metadata\": [\n        \"eu\",\n        \"in esse voluptate Ut\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ef986fba-e073-4740-af73-786ed2974c89",
+          "name": "evaluate New Beneficiary",
+          "request": {
+            "name": "evaluate New Beneficiary",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "mozn",
+                "events",
+                "new-beneficiary"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/mozn/events/new-beneficiary"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profileCode\": \"fugiat\",\n  \"reference\": \"enim ut ex irure\",\n  \"timestamp\": -63093077,\n  \"customerReference\": \"laborum nostrud commodo\",\n  \"unifiedNumber\": \"in aliqua\",\n  \"deviceReference\": \"in anim enim\",\n  \"browser\": \"exercitation in ea culpa\",\n  \"os\": \"ad proident\",\n  \"deviceType\": \"velit\",\n  \"fingerprintToken\": \"aute nostrud\",\n  \"ip\": \"laboris in\",\n  \"location\": \"mollit eiusmod aliqua\",\n  \"sessionReference\": \"fugiat sunt exercitation sit veniam\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "22e0a70a-6715-4aba-ae49-7a0d395c8068",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "mozn",
+                    "events",
+                    "new-beneficiary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profileCode\": \"fugiat\",\n  \"reference\": \"enim ut ex irure\",\n  \"timestamp\": -63093077,\n  \"customerReference\": \"laborum nostrud commodo\",\n  \"unifiedNumber\": \"in aliqua\",\n  \"deviceReference\": \"in anim enim\",\n  \"browser\": \"exercitation in ea culpa\",\n  \"os\": \"ad proident\",\n  \"deviceType\": \"velit\",\n  \"fingerprintToken\": \"aute nostrud\",\n  \"ip\": \"laboris in\",\n  \"location\": \"mollit eiusmod aliqua\",\n  \"sessionReference\": \"fugiat sunt exercitation sit veniam\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"state\": \"in dolore veniam\",\n  \"totalScore\": -71619867,\n  \"error\": \"proident cupidatat veniam\",\n  \"reasonType\": \"consequat do\",\n  \"listMatches\": [\n    {\n      \"listName\": \"amet qui Lorem fugiat nisi\",\n      \"matchedValue\": \"cupidatat esse\"\n    },\n    {\n      \"listName\": \"min\",\n      \"matchedValue\": \"voluptate fugiat commodo\"\n    }\n  ],\n  \"scoreBreakdown\": [\n    {\n      \"name\": \"consequat ut irure voluptate eu\",\n      \"score\": 49285183,\n      \"version\": \"magna mollit\",\n      \"metadata\": [\n        \"enim est\",\n        \"\"\n      ]\n    },\n    {\n      \"name\": \"eiusmod nulla occaecat consequat Lorem\",\n      \"score\": -71070656,\n      \"version\": \"ipsum in nostrud ut\",\n      \"metadata\": [\n        \"eu\",\n        \"in esse voluptate Ut\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "375a7492-fdb1-4ea2-889c-8ecee0c4ba4e",
+          "name": "evaluate Login",
+          "request": {
+            "name": "evaluate Login",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "mozn",
+                "events",
+                "login"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/mozn/events/login"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profileCode\": \"ipsum sunt\",\n  \"reference\": \"enim\",\n  \"timestamp\": -19451406,\n  \"customerReference\": \"in nulla adipisicing est sed\",\n  \"userName\": \"sint\",\n  \"email\": \"incididunt ullamco\",\n  \"phoneNumber\": \"dolor \",\n  \"deviceReference\": \"dolore magna\",\n  \"browser\": \"in labore\",\n  \"os\": \"ea dolor dolore tempor\",\n  \"deviceType\": \"ullamco adipisicing pariatur sit sunt\",\n  \"fingerprintToken\": \"ad sint aliqua do\",\n  \"ip\": \"eu ut sunt\",\n  \"location\": \"est\",\n  \"sessionReference\": \"cupidatat in\",\n  \"unifiedNumber\": \"laboris culpa pariatu\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7cf89f70-ca3d-4645-9be4-782ff24f0a95",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "mozn",
+                    "events",
+                    "login"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profileCode\": \"ipsum sunt\",\n  \"reference\": \"enim\",\n  \"timestamp\": -19451406,\n  \"customerReference\": \"in nulla adipisicing est sed\",\n  \"userName\": \"sint\",\n  \"email\": \"incididunt ullamco\",\n  \"phoneNumber\": \"dolor \",\n  \"deviceReference\": \"dolore magna\",\n  \"browser\": \"in labore\",\n  \"os\": \"ea dolor dolore tempor\",\n  \"deviceType\": \"ullamco adipisicing pariatur sit sunt\",\n  \"fingerprintToken\": \"ad sint aliqua do\",\n  \"ip\": \"eu ut sunt\",\n  \"location\": \"est\",\n  \"sessionReference\": \"cupidatat in\",\n  \"unifiedNumber\": \"laboris culpa pariatu\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"state\": \"in dolore veniam\",\n  \"totalScore\": -71619867,\n  \"error\": \"proident cupidatat veniam\",\n  \"reasonType\": \"consequat do\",\n  \"listMatches\": [\n    {\n      \"listName\": \"amet qui Lorem fugiat nisi\",\n      \"matchedValue\": \"cupidatat esse\"\n    },\n    {\n      \"listName\": \"min\",\n      \"matchedValue\": \"voluptate fugiat commodo\"\n    }\n  ],\n  \"scoreBreakdown\": [\n    {\n      \"name\": \"consequat ut irure voluptate eu\",\n      \"score\": 49285183,\n      \"version\": \"magna mollit\",\n      \"metadata\": [\n        \"enim est\",\n        \"\"\n      ]\n    },\n    {\n      \"name\": \"eiusmod nulla occaecat consequat Lorem\",\n      \"score\": -71070656,\n      \"version\": \"ipsum in nostrud ut\",\n      \"metadata\": [\n        \"eu\",\n        \"in esse voluptate Ut\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "932b6857-ef6a-4159-8c92-7fe2ff2c1721",
+      "name": "aml-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "217eb472-ec02-4dae-8c17-c86b331ee464",
+          "name": "WS3Aml Check",
+          "request": {
+            "name": "WS3Aml Check",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "aml",
+                "ws3"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/aml/ws3"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request\": [\n    {\n      \"focusName\": \"anim proident\",\n      \"modelId\": -66424521,\n      \"focusTypeKey\": \"aliqua adipisicing ipsum\",\n      \"branchCode\": \"pariatur fugiat enim esse est\",\n      \"idRegDoc\": \"dolore Ut exercitation conse\",\n      \"yearsEstablished\": 32382080,\n      \"country\": \"laboris voluptate labore\",\n      \"city\": \"pariatur sit Lorem veniam\",\n      \"region\": \"veniam sint\",\n      \"businessActivity\": \"est voluptate officia\",\n      \"otherSourceOfIncome\": \"ea pari\",\n      \"industry\": \"officia\",\n      \"isPep\": \"commodo\",\n      \"isFamilyPep\": \"nulla\",\n      \"shareholderNationality\": \"do ea\",\n      \"authorizedPersonNationality\": \"elit in\",\n      \"annualIncome\": \"sed\",\n      \"isShareholderCompany\": \"ut occaecat\",\n      \"capital\": \"ex Ut cillum amet\",\n      \"natureOfBusiness\": \"magna Duis nulla culpa\"\n    },\n    {\n      \"focusName\": \"officia aute est sint Lorem\",\n      \"modelId\": 97585919,\n      \"focusTypeKey\": \"eiusmod\",\n      \"branchCode\": \"labore aliquip\",\n      \"idRegDoc\": \"fugiat Excepteur ex veniam\",\n      \"yearsEstablished\": -12258864,\n      \"country\": \"occaecat labore\",\n      \"city\": \"minim proident\",\n      \"region\": \"Lorem deserunt voluptate\",\n      \"businessActivity\": \"enim proident nostrud commodo\",\n      \"otherSourceOfIncome\": \"voluptate ipsum ex\",\n      \"industry\": \"et est magna\",\n      \"isPep\": \"est dolor cillum\",\n      \"isFamilyPep\": \"Lorem et velit ad\",\n      \"shareholderNationality\": \"id labore minim laboris magna\",\n      \"authorizedPersonNationality\": \"no\",\n      \"annualIncome\": \"ex ut\",\n      \"isShareholderCompany\": \"ut dolore\",\n      \"capital\": \"cillum ut veniam \",\n      \"natureOfBusiness\": \"dolor adipisicing\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1102ef16-ac35-42e3-8857-46a5868f394d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "aml",
+                    "ws3"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"request\": [\n    {\n      \"focusName\": \"voluptate mollit\",\n      \"modelId\": -20446374,\n      \"focusTypeKey\": \"nostrud in\",\n      \"branchCode\": \"non officia ut\",\n      \"idRegDoc\": \"dolore in ut minim\",\n      \"yearsEstablished\": 54352159,\n      \"country\": \"dolor adipisicing aliqua proident sint\",\n      \"city\": \"occaecat dolor esse\",\n      \"region\": \"sed velit ea et\",\n      \"businessActivity\": \"incididunt nulla cupidatat\",\n      \"otherSourceOfIncome\": \"Lorem do\",\n      \"industry\": \"sint minim\",\n      \"isPep\": \"ei\",\n      \"isFamilyPep\": \"dolor nulla commodo sunt\",\n      \"shareholderNationality\": \"enim dolore elit reprehenderit\",\n      \"authorizedPersonNationality\": \"sunt labore in in\",\n      \"annualIncome\": \"dolor ut eu dolor\",\n      \"isShareholderCompany\": \"aliquip sint\",\n      \"capital\": \"aliquip minim aliqua\",\n      \"natureOfBusiness\": \"ad ut magna\"\n    },\n    {\n      \"focusName\": \"sint minim elit velit\",\n      \"modelId\": 73287078,\n      \"focusTypeKey\": \"proident amet\",\n      \"branchCode\": \"laborum dolore\",\n      \"idRegDoc\": \"cillum id labo\",\n      \"yearsEstablished\": -41233645,\n      \"country\": \"anim\",\n      \"city\": \"consequat Ut\",\n      \"region\": \"laborum sit\",\n      \"businessActivity\": \"et occaecat\",\n      \"otherSourceOfIncome\": \"ex incididunt\",\n      \"industry\": \"cupidatat sed\",\n      \"isPep\": \"elit\",\n      \"isFamilyPep\": \"id Excepteur\",\n      \"shareholderNationality\": \"amet do sed proident ipsum\",\n      \"authorizedPersonNationality\": \"Excepteur\",\n      \"annualIncome\": \"officia reprehenderit in\",\n      \"isShareholderCompany\": \"esse\",\n      \"capital\": \"enim\",\n      \"natureOfBusiness\": \"deserunt anim\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"ResponseID\": -67220444,\n  \"AssessmentID\": \"irure ad proident eiusmod\",\n  \"Message\": \"Excepteur\",\n  \"RiskScore\": \"in Excepteur tempor\",\n  \"RiskLevel\": \"ut culpa nisi\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d8ce7cbf-ac0b-4120-8842-d7f75225402b",
+          "name": "WS1Aml Check",
+          "request": {
+            "name": "WS1Aml Check",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "aml",
+                "ws1"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/aml/ws1"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"anim occaecat in aliquip ex\",\n  \"entityID\": \"Lorem deserunt velit in dolor\",\n  \"country\": [\n    {\n      \"ISO2\": \"sit\",\n      \"ISO3\": \"aliquip\"\n    },\n    {\n      \"ISO2\": \"ut sint\",\n      \"ISO3\": \"minim ea laborum\"\n    }\n  ],\n  \"identityNumbers\": [\n    {\n      \"idregdesc\": \"s\",\n      \"idregdoc\": \"mollit ad ea\"\n    },\n    {\n      \"idregdesc\": \"mollit dolor sunt ullamco\",\n      \"idregdoc\": \"dolor dolore\"\n    }\n  ],\n  \"dob\": \"Duis proident elit\",\n  \"fixReference\": \"laboris fugiat laborum\",\n  \"systemInfo\": \"qui in occaecat\",\n  \"branchCode\": \"Excepteur dolore eu\",\n  \"category\": \"in dolore aliquip commodo\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "99ad6323-4a63-41c0-82ad-c1f5b9e02e3e",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "aml",
+                    "ws1"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerName\": \"ipsum aliqua Lorem\",\n  \"entityID\": \"exercitation reprehenderit proident in\",\n  \"country\": [\n    {\n      \"ISO2\": \"nostrud commodo fugiat\",\n      \"ISO3\": \"do\"\n    },\n    {\n      \"ISO2\": \"occaecat \",\n      \"ISO3\": \"consequat nostrud \"\n    }\n  ],\n  \"identityNumbers\": [\n    {\n      \"idregdesc\": \"sed Lorem\",\n      \"idregdoc\": \"aute Excepteur aliqua\"\n    },\n    {\n      \"idregdesc\": \"ut cillum sit anim\",\n      \"idregdoc\": \"cupidatat ut ad\"\n    }\n  ],\n  \"dob\": \"dolor ut amet\",\n  \"fixReference\": \"quis in\",\n  \"systemInfo\": \"in adipisicing\",\n  \"branchCode\": \"dolore labore\",\n  \"category\": \"dolor ipsum\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"ResponseID\": \"eius\",\n  \"Message\": \"consequat \",\n  \"AlertID\": \"est nisi ut adipisicing\",\n  \"AlertScore\": \"nulla qui\",\n  \"Error\": \"amet Ut aute\",\n  \"Matches\": [\n    {\n      \"MatchId\": \"ea fugiat sed veniam\",\n      \"EntityCategory\": \"Excepteur id Duis officia\",\n      \"EntityTypeID\": 45962985,\n      \"ScenarioName\": \"nulla veniam exercitation\",\n      \"Score\": 63205855.18364775,\n      \"TypeKey\": \"officia in\",\n      \"WLCategory\": \"aliquip sunt nostrud\",\n      \"WatchlistID\": \"cupidatat consequat\"\n    },\n    {\n      \"MatchId\": \"elit reprehenderit culpa\",\n      \"EntityCategory\": \"aliqua magna laborum et\",\n      \"EntityTypeID\": -72416929,\n      \"ScenarioName\": \"sunt tempor magna\",\n      \"Score\": -8726222.651731223,\n      \"TypeKey\": \"adipisicing laboris laborum\",\n      \"WLCategory\": \"sit occaecat\",\n      \"WatchlistID\": \"commodo incididunt tempor do ut\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "9854d68c-8cf1-4e3e-87d9-f63ff6eef03f",
+      "name": "aml-risk-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0d1e3280-595f-4c5b-8dab-afc640750629",
+          "name": "create Profile Risk Level",
+          "request": {
+            "name": "create Profile Risk Level",
+            "description": {},
+            "url": {
+              "path": [
+                "aml",
+                "risks",
+                "single"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/aml/risks/single"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerID\": \"tempor consequat eu\",\n  \"amlId\": \"sit velit nisi cillum\",\n  \"responseId\": 11329575,\n  \"maxScore\": \"cillum laboris nostrud non\",\n  \"moduleType\": \"cupidata\",\n  \"message\": \"incididunt enim magna non\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "73051ac6-9de6-4d93-9df7-9ba686b6e986",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aml",
+                    "risks",
+                    "single"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerID\": \"tempor consequat eu\",\n  \"amlId\": \"sit velit nisi cillum\",\n  \"responseId\": 11329575,\n  \"maxScore\": \"cillum laboris nostrud non\",\n  \"moduleType\": \"cupidata\",\n  \"message\": \"incididunt enim magna non\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7b01edbe-3353-42fd-b6c8-c744baf96a5b",
+          "name": "create Profiles Risk Level",
+          "request": {
+            "name": "create Profiles Risk Level",
+            "description": {},
+            "url": {
+              "path": [
+                "aml",
+                "risks",
+                "batch"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/aml/risks/batch"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"customerID\": \"mollit amet nostrud\",\n    \"amlId\": \"et\",\n    \"responseId\": 7970610,\n    \"maxScore\": \"et commodo\",\n    \"moduleType\": \"Excep\",\n    \"message\": \"in laboris Duis minim ea\"\n  },\n  {\n    \"customerID\": \"magna\",\n    \"amlId\": \"no\",\n    \"responseId\": -63162023,\n    \"maxScore\": \"non\",\n    \"moduleType\": \"minim elit mollit adipisicing\",\n    \"message\": \"ullamco adipisicing velit sint\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f98231d2-3dd6-4781-ac44-56b676b8c94b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aml",
+                    "risks",
+                    "batch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"customerID\": \"Ut dolor in\",\n    \"amlId\": \"veniam tempor in \",\n    \"responseId\": 49372325,\n    \"maxScore\": \"Excepteur sint in\",\n    \"moduleType\": \"eu cupidatat fugiat aliqua labore\",\n    \"message\": \"amet\"\n  },\n  {\n    \"customerID\": \"ut in minim\",\n    \"amlId\": \"ut nisi veniam\",\n    \"responseId\": 41527116,\n    \"maxScore\": \"ut sit nulla labore\",\n    \"moduleType\": \"Lorem nostrud sunt\",\n    \"message\": \"culpa deserunt nulla fugiat\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generated guard: a 5xx from any request is a gateway/service defect, not a test-data problem.",
+          "pm.test('no 5xx (' + pm.info.requestName + ')', function () {",
+          "  pm.expect(pm.response.code, (pm.response.text() || '').slice(0, 300)).to.be.below(500);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{gatewayBaseUrl}}/aml-integration-service",
+      "type": "string"
+    }
+  ],
+  "info": {
+    "_postman_id": "6ba6680b-392a-4871-a3d3-1959ffaa67b8",
+    "name": "Aml Integration Service - majdpay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Aml Integration Service (aml-integration-service) — 10 operations.\n\nGENERATED from the OpenAPI 3.1.0 spec published at the UAT gateway swagger-ui\n(Select a definition -> \"Aml Integration Service APIs\"). Request bodies are schema-derived placeholders (lorem-ipsum\nstrings, sample numbers) — replace with real values before sending.\n\nBase URL: {{gatewayBaseUrl}}/aml-integration-service  (gatewayBaseUrl lives in EMI-dev.postman_environment.json).\nSpec server: https://gateway-emiuat.dg-cash.app/aml-integration-service\n\nAUTH: the spec declares no security scheme, but the gateway front-doors every route with a bearer\ntoken. Set {{token}} in the environment (mint one with the Authentication Service collection's\nsign-in, or pass --env-var token=... to newman). Some back-office routes need an admin/service\ntoken rather than a merchant one.\n\nCompanion Playwright scaffold: BusinessTestCases/ServiceApis/AmlIntegrationService.generated.spec.ts\n"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

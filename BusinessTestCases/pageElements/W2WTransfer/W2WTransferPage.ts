@@ -22,9 +22,11 @@ export class W2WTransferPage {
      * Mirrored from Java: @FindBy(xpath = "//input[@id='floating-text-unified-number-4']")
      */
     get inputCRN(): Locator {
-        return this.page.locator(
-            '#w2w-unified-number, input#floating-text-unified-number-4, input[id*="crn"], input[id*="unified-number"]'
-        ).first();
+        return this.page.getByTestId('w2w-unified-number')
+            .or(this.page.locator(
+                '#w2w-unified-number, input#floating-text-unified-number-4, input[id*="crn"], input[id*="unified-number"]'
+            ))
+            .first();
     }
 
     /**
@@ -32,7 +34,7 @@ export class W2WTransferPage {
      * Mirrored from Java: @FindBy(xpath = "//input[@id='input_set_amount']")
      */
     get inputAmount(): Locator {
-        return this.page.locator('#input_set_amount');
+        return this.page.getByTestId('amount-input').or(this.page.locator('#input_set_amount')).first();
     }
 
     /**
@@ -40,9 +42,11 @@ export class W2WTransferPage {
      * Mirrored from Java: //*[@id='sa_button']//button[@class='col-3 p-0 btn recipient-button ...']
      */
     get checkRecipientButton(): Locator {
-        return this.page.locator('.mp-recipient-form__button')
+        return this.page.getByTestId('w2w-check-recipient-btn')
+            .or(this.page.locator('.mp-recipient-form__button'))
             .or(this.page.locator('#sa_button button.recipient-button'))
-            .or(this.page.locator('#sa_button button[class*="recipient-button"]'));
+            .or(this.page.locator('#sa_button button[class*="recipient-button"]'))
+            .first();
     }
 
     /**
@@ -58,9 +62,11 @@ export class W2WTransferPage {
      * Mirrored from Java: @FindBy(xpath = "//div/button[contains(text(), ' proceed ')]")
      */
     get proceedButton(): Locator {
-        return this.page.locator('button.mp-btn-cta:has-text("proceed")')
+        return this.page.getByTestId('w2w-proceed-btn')
+            .or(this.page.locator('button.mp-btn-cta:has-text("proceed")'))
             .or(this.page.locator('button:has-text("proceed")'))
-            .or(this.page.getByRole('button', { name: /proceed/i }));
+            .or(this.page.getByRole('button', { name: /proceed/i }))
+            .first();
     }
 
     /**
@@ -68,15 +74,21 @@ export class W2WTransferPage {
      * Mirrored from Java: @FindBy(xpath = "//button[@id='btn_submit_summary']")
      */
     get transferButton(): Locator {
-        return this.page.locator('button.btn-primary').filter({ hasText: /^\s*transfer\s*$/i });
+        // w2w-summary-transfer-btn covers both the inline summary and the modal
+        // variant (`summary-wallet-to-wallet`) per QA-DATA-TESTID-HANDOFF.md §4.3.
+        return this.page.getByTestId('w2w-summary-transfer-btn')
+            .or(this.page.locator('button.btn-primary').filter({ hasText: /^\s*transfer\s*$/i }))
+            .first();
     }
 
     /**
      * Ok button on the success message screen.
      */
     get okButton(): Locator {
-        return this.page.locator('button.mp-btn-wide:has-text("Ok")')
-            .or(this.page.getByRole('button', { name: /^Ok$/i }));
+        return this.page.getByTestId('w2w-result-ok-btn')
+            .or(this.page.locator('button.mp-btn-wide:has-text("Ok")'))
+            .or(this.page.getByRole('button', { name: /^Ok$/i }))
+            .first();
     }
 
     /**
@@ -91,16 +103,23 @@ export class W2WTransferPage {
      * Toast / snack-bar error message for insufficient fund scenarios.
      */
     get toastErrorMessage(): Locator {
-        return this.page.locator('.toast-snackbar__detail')
+        return this.page.getByTestId('toast-message')
+            .or(this.page.locator('.toast-snackbar__detail'))
             .or(this.page.locator('[data-pc-section="detail"]'))
-            .or(this.page.locator('.p-toast-detail'));
+            .or(this.page.locator('.p-toast-detail'))
+            .first();
     }
 
     /**
      * Predefined amount chips.
      */
     get predefinedAmountChips(): Locator {
-        return this.page.locator('.mp-amount-quick-chips .mp-amount-chip');
+        // Scoped to the quick-chips container on purpose: selectRandomPredefinedAmount()
+        // does .count() then .nth(i).click(), so a page-wide `[data-testid^="amount-chip-"]`
+        // would inflate the count with any amount-chip rendered elsewhere in the DOM
+        // (a retained prior step, a summary preset) and land .nth() on the wrong chip.
+        return this.page.locator('.mp-amount-quick-chips [data-testid^="amount-chip-"]')
+            .or(this.page.locator('.mp-amount-quick-chips .mp-amount-chip'));
     }
 
     // ============================================================
@@ -319,6 +338,20 @@ export class W2WTransferPage {
     async clickCheckRecipient() {
         await expect(this.checkRecipientButton).toBeEnabled({ timeout: 15000 });
         await this.checkRecipientButton.click();
+    }
+
+    /**
+     * Waits for the async recipient-check lookup triggered by clickCheckRecipient()
+     * to actually resolve — either the company name div gets populated (valid CRN)
+     * or the "No recipient found" toast appears (invalid CRN) — instead of a blind
+     * fixed sleep that can either race ahead of a slow response or pad every run
+     * with dead time on a fast one.
+     */
+    async waitForRecipientCheckToSettle(timeout = 10000): Promise<void> {
+        await Promise.race([
+            this.companyNameDiv.waitFor({ state: 'visible', timeout }).catch(() => {}),
+            this.toastErrorMessage.waitFor({ state: 'visible', timeout }).catch(() => {}),
+        ]);
     }
 
     /**
@@ -542,8 +575,14 @@ export class W2WTransferPage {
         await expect(this.toastErrorMessage).toBeVisible({ timeout: 15000 });
         const toastText = ((await this.toastErrorMessage.textContent()) ?? '').toLowerCase();
         console.log(`   Toast message text: "${toastText}"`);
+        // English-only fragments would miss this toast when the UI loads in Arabic
+        // (confirmed default elsewhere, e.g. LoginPage.ts) — no switchLanguage() call
+        // guards this flow, so either can appear. Arabic fragments are a best-effort
+        // match on "insufficient"/"balance" morphemes, not yet confirmed live against
+        // the real toast text — reconcile on first live run.
         expect(
-            toastText.includes('insufficient') || toastText.includes('balance') || toastText.includes('fund'),
+            toastText.includes('insufficient') || toastText.includes('balance') || toastText.includes('fund')
+                || /غير\s*كاف|الرصيد/.test(toastText),
             `Expected an insufficient fund error toast, but toast reads: "${toastText}"`
         ).toBeTruthy();
         console.log('   Assertion Passed: Insufficient fund toast error is displayed ✔');
@@ -556,7 +595,12 @@ export class W2WTransferPage {
         await expect(this.toastErrorMessage).toBeVisible({ timeout: 15000 });
         const toastText = ((await this.toastErrorMessage.textContent()) ?? '').toLowerCase();
         console.log(`   Toast message text: "${toastText}"`);
-        if (!toastText.includes('no recipient found')) {
+        // Same Arabic-default risk as assertInsufficientFundToastDisplayed above —
+        // Arabic fragment is a best-effort match on "recipient not found" morphemes,
+        // not yet confirmed live.
+        const matchesNoRecipient = toastText.includes('no recipient found')
+            || /لم\s*يتم\s*العثور|مستلم\s*غير\s*موجود/.test(toastText);
+        if (!matchesNoRecipient) {
             throw new Error(`Expected a 'No recipient found' toast, but toast reads: "${toastText}"`);
         }
         console.log('   Assertion Passed: "No recipient found" toast error is displayed ✔');

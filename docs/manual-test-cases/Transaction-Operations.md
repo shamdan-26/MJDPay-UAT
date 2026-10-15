@@ -204,7 +204,7 @@ initiator-related) — this is a ledger/DB-level attribute, inspected the same w
 - **Reconciliation / EOD / Reversal / Adjustment** — all four are Finance/Ops and Admin Portal
   functions with **no Business Portal UI surface**, so unlike every other suite in this repo they have
   no page objects. Modeled as `request`-fixture API suites (same pattern as
-  `Login/api/LoginAPIFlow.spec.ts`), with every test `test.skip()`'d pending access to the
+  `Login/api/signin/`), with every test `test.skip()`'d pending access to the
   Admin Portal / Castlemock mock-server / Ops tooling these jobs actually run against in UAT — kept in
   the suite rather than omitted, same rationale as `BankTransferCommission.spec.ts`:
   - `BusinessTestCases/Reconciliation/api/ReconciliationFlow.spec.ts` (RCN-01–20)

@@ -1,0 +1,5116 @@
+{
+  "item": [
+    {
+      "id": "ef549138-724d-4fe8-99cb-aa4f0db727d3",
+      "name": "partner-bank-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "cd00d821-25d9-4b89-bb2d-b4c0ff747d5e",
+          "name": "deactivate",
+          "request": {
+            "name": "deactivate",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "partner-banks",
+                ":id",
+                "deactivate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-7607240",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/partner-banks/:id/deactivate"
+            },
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "11827cb6-5b61-4a3f-bd34-9e53d8e7f508",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "partner-banks",
+                    ":id",
+                    "deactivate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-7607240",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b536536e-899e-41b0-80ab-6bdebcc23f9e",
+          "name": "activate",
+          "request": {
+            "name": "activate",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "partner-banks",
+                ":id",
+                "activate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-7607240",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/partner-banks/:id/activate"
+            },
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "22e6f801-2908-4a5c-9abc-f1e72edb9cf7",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "partner-banks",
+                    ":id",
+                    "activate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-7607240",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cad26ad4-1fb5-4c5d-8e4e-7a0d98040bfe",
+          "name": "set Default Bank",
+          "request": {
+            "name": "set Default Bank",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "partner-banks",
+                "default",
+                ":swiftCode"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "reprehenderit",
+                  "key": "swiftCode",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/partner-banks/default/:swiftCode"
+            },
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4adc8ac1-0777-46aa-ada9-7d3c8b813a27",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "partner-banks",
+                    "default",
+                    ":swiftCode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "reprehenderit",
+                      "key": "swiftCode",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d2897914-028f-4955-b8d7-e0a9a3fd0f76",
+          "name": "get Partner Banks",
+          "request": {
+            "name": "get Partner Banks",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "partner-banks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "96491605",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "-5086425",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "Excepteur eiusmod est cillum",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "iban",
+                  "value": "minim labore elit Ut",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "swiftCode",
+                  "value": "occaecat cupidatat deserunt",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "sortBy",
+                  "value": "Lorem et sint dolor",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "direction",
+                  "value": "officia sed tempor esse",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/partner-banks?page=96491605&size=-5086425&name=Excepteur eiusmod est cillum&iban=minim labore elit Ut&swiftCode=occaecat cupidatat deserunt&sortBy=Lorem et sint dolor&direction=officia sed tempor esse"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "da717a7f-6552-4d7e-b6de-d6963e40a572",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "partner-banks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "96491605"
+                    },
+                    {
+                      "key": "size",
+                      "value": "-5086425"
+                    },
+                    {
+                      "key": "name",
+                      "value": "Excepteur eiusmod est cillum"
+                    },
+                    {
+                      "key": "iban",
+                      "value": "minim labore elit Ut"
+                    },
+                    {
+                      "key": "swiftCode",
+                      "value": "occaecat cupidatat deserunt"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "Lorem et sint dolor"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "officia sed tempor esse"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": 84546851,\n  \"totalElements\": -56537369,\n  \"size\": -34607961,\n  \"content\": [\n    {\n      \"id\": 65683725,\n      \"name\": \"sit labor\",\n      \"nameAr\": \"laboris nisi\",\n      \"iban\": \"labore adipisicing cupidatat aliquip quis\",\n      \"swiftCode\": \"mollit nostrud\",\n      \"revenueIban\": \"an\",\n      \"expensesIban\": \"aliquip adipisicing veniam\",\n      \"dormantIban\": \"Duis fugiat irure consequat\",\n      \"vatIban\": \"pariatur deserunt esse eu\",\n      \"isActive\": true,\n      \"isDefault\": true\n    },\n    {\n      \"id\": -36904676,\n      \"name\": \"velit aute anim\",\n      \"nameAr\": \"sint\",\n      \"iban\": \"consectetur laborum veniam elit\",\n      \"swiftCode\": \"consequat proident Lorem officia Duis\",\n      \"revenueIban\": \"tempor ea cupidatat dolor\",\n      \"expensesIban\": \"aute nisi\",\n      \"dormantIban\": \"consequat\",\n      \"vatIban\": \"nisi deserunt exercitation\",\n      \"isActive\": false,\n      \"isDefault\": true\n    }\n  ],\n  \"number\": 93634596,\n  \"sort\": [\n    {\n      \"direction\": \"incididunt Excepteur dolor\",\n      \"nullHandling\": \"tempor dolore\",\n      \"ascending\": false,\n      \"property\": \"Ut veniam\",\n      \"ignoreCase\": true\n    },\n    {\n      \"direction\": \"sit\",\n      \"nullHandling\": \"in fugiat Ut\",\n      \"ascending\": true,\n      \"property\": \"Lorem commodo dolore\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"pageable\": {\n    \"offset\": 31028817,\n    \"sort\": [\n      {\n        \"direction\": \"consectetur fugiat amet quis sunt\",\n        \"nullHandling\": \"deserunt laborum\",\n        \"ascending\": false,\n        \"property\": \"labore ullamco\",\n        \"ignoreCase\": false\n      },\n      {\n        \"direction\": \"sint reprehenderit magna\",\n        \"nullHandling\": \"dolore\",\n        \"ascending\": false,\n        \"property\": \"dolor est Ut magna anim\",\n        \"ignoreCase\": false\n      }\n    ],\n    \"pageNumber\": 24363047,\n    \"pageSize\": -7901785,\n    \"paged\": false,\n    \"unpaged\": true\n  },\n  \"first\": true,\n  \"last\": false,\n  \"numberOfElements\": -71316889,\n  \"empty\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0011385c-dca2-4661-805c-868dfacd0c1b",
+          "name": "create",
+          "request": {
+            "name": "create",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "partner-banks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/partner-banks"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bankCode\": \"pariatur mollit aute Excepteur\",\n  \"iban\": \"ut incididunt laboris laborum\",\n  \"revenueIban\": \"aliquip \",\n  \"expensesIban\": \"culpa sunt ea aliquip\",\n  \"dormantIban\": \"non anim\",\n  \"vatIban\": \"magna a\",\n  \"isActive\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "834440a6-1b2e-426b-b0c4-b08572a98fe3",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "partner-banks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"bankCode\": \"pariatur mollit aute Excepteur\",\n  \"iban\": \"ut incididunt laboris laborum\",\n  \"revenueIban\": \"aliquip \",\n  \"expensesIban\": \"culpa sunt ea aliquip\",\n  \"dormantIban\": \"non anim\",\n  \"vatIban\": \"magna a\",\n  \"isActive\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 84671381,\n  \"name\": \"laboris nulla\",\n  \"nameAr\": \"anim tempor ex Excepteur\",\n  \"iban\": \"culpa officia in in tempor\",\n  \"swiftCode\": \"anim minim\",\n  \"revenueIban\": \"qui ut\",\n  \"expensesIban\": \"ullamco in aute\",\n  \"dormantIban\": \"eni\",\n  \"vatIban\": \"minim enim et\",\n  \"isActive\": true,\n  \"isDefault\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c2770f59-de0c-4c81-9489-c8be44bbde80",
+          "name": "get Partner Bank",
+          "request": {
+            "name": "get Partner Bank",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "partner-banks",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-7607240",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/partner-banks/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c4d3b37f-4fc9-4bcd-aaeb-6d34089b2789",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "partner-banks",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-7607240",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 84671381,\n  \"name\": \"laboris nulla\",\n  \"nameAr\": \"anim tempor ex Excepteur\",\n  \"iban\": \"culpa officia in in tempor\",\n  \"swiftCode\": \"anim minim\",\n  \"revenueIban\": \"qui ut\",\n  \"expensesIban\": \"ullamco in aute\",\n  \"dormantIban\": \"eni\",\n  \"vatIban\": \"minim enim et\",\n  \"isActive\": true,\n  \"isDefault\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b511476b-c0e5-407f-8422-da9e85fa44a4",
+          "name": "delete",
+          "request": {
+            "name": "delete",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "partner-banks",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-7607240",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/partner-banks/:id"
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "328be153-ca63-4155-b57f-e0c06f0d3eb4",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "partner-banks",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-7607240",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "175ccaff-1e34-4ae7-95ce-4a6719114e39",
+          "name": "generate Partner Bank Validation Report",
+          "request": {
+            "name": "generate Partner Bank Validation Report",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "partner-banks",
+                ":id",
+                "deactivate",
+                "deactivate-report"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-7607240",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/partner-banks/:id/deactivate/deactivate-report"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2fb78c66-6167-4faa-ae8e-2aa48818182b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "partner-banks",
+                    ":id",
+                    "deactivate",
+                    "deactivate-report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-7607240",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "reprehenderit",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9f448b01-fcd3-4aa7-9ba1-85940cf71ba3",
+          "name": "get All Partner Bank By Swift Codes",
+          "request": {
+            "name": "get All Partner Bank By Swift Codes",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "partner-banks",
+                "swifts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "swiftCodes",
+                  "value": "exercitation ",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "swiftCodes",
+                  "value": "eiusmod eu in aute",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/partner-banks/swifts?swiftCodes=exercitation &swiftCodes=eiusmod eu in aute"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "005c41c8-502a-45d9-aa0c-abea900e5d84",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "partner-banks",
+                    "swifts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "swiftCodes",
+                      "value": "tempor dolor in"
+                    },
+                    {
+                      "key": "swiftCodes",
+                      "value": "ea "
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -38466416,\n    \"name\": \"eu amet dolore\",\n    \"nameAr\": \"in ut minim elit nulla\",\n    \"iban\": \"aliqua dolore laborum par\",\n    \"swiftCode\": \"ex pariatur sed\",\n    \"revenueIban\": \"dolore incididunt pariatur\",\n    \"expensesIban\": \"dolor aute exercitation aliquip\",\n    \"dormantIban\": \"dolore\",\n    \"vatIban\": \"Excepteur cupidatat\",\n    \"isActive\": false,\n    \"isDefault\": false\n  },\n  {\n    \"id\": -78236076,\n    \"name\": \"aliquip et Duis proident\",\n    \"nameAr\": \"aute est\",\n    \"iban\": \"mollit laborum\",\n    \"swiftCode\": \"consectetur non aliquip\",\n    \"revenueIban\": \"sit velit ut cillum\",\n    \"expensesIban\": \"nostrud\",\n    \"dormantIban\": \"et exercitation sun\",\n    \"vatIban\": \"eu cillum commodo adipisicing nulla\",\n    \"isActive\": false,\n    \"isDefault\": false\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a5dd4647-d6ec-48d3-b385-d854e475a506",
+          "name": "get Partner Bank By Swift Code",
+          "request": {
+            "name": "get Partner Bank By Swift Code",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "partner-banks",
+                "swift",
+                ":swiftCode"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "reprehenderit",
+                  "key": "swiftCode",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/partner-banks/swift/:swiftCode"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "dbcc67f7-4de6-4455-bde5-ff8dbed1a0af",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "partner-banks",
+                    "swift",
+                    ":swiftCode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "reprehenderit",
+                      "key": "swiftCode",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 84671381,\n  \"name\": \"laboris nulla\",\n  \"nameAr\": \"anim tempor ex Excepteur\",\n  \"iban\": \"culpa officia in in tempor\",\n  \"swiftCode\": \"anim minim\",\n  \"revenueIban\": \"qui ut\",\n  \"expensesIban\": \"ullamco in aute\",\n  \"dormantIban\": \"eni\",\n  \"vatIban\": \"minim enim et\",\n  \"isActive\": true,\n  \"isDefault\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9650b5c7-01e5-4d08-a1df-d7daaecc8719",
+          "name": "get Partner Bank By Iban Internal",
+          "request": {
+            "name": "get Partner Bank By Iban Internal",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "partner-banks",
+                "iban"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "iban",
+                  "value": "reprehenderit",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/partner-banks/iban?iban=reprehenderit"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "66e692a3-ed12-4c18-ad63-561d7c5445b7",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "partner-banks",
+                    "iban"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "iban",
+                      "value": "reprehenderit"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 84671381,\n  \"name\": \"laboris nulla\",\n  \"nameAr\": \"anim tempor ex Excepteur\",\n  \"iban\": \"culpa officia in in tempor\",\n  \"swiftCode\": \"anim minim\",\n  \"revenueIban\": \"qui ut\",\n  \"expensesIban\": \"ullamco in aute\",\n  \"dormantIban\": \"eni\",\n  \"vatIban\": \"minim enim et\",\n  \"isActive\": true,\n  \"isDefault\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8c9d6cd1-73d4-44f8-b1fb-cde7c9c2acc9",
+          "name": "get Default Partner Bank",
+          "request": {
+            "name": "get Default Partner Bank",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "partner-banks",
+                "default"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/partner-banks/default"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3d85b956-c37d-4dd4-b31b-36933355387c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "partner-banks",
+                    "default"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 84671381,\n  \"name\": \"laboris nulla\",\n  \"nameAr\": \"anim tempor ex Excepteur\",\n  \"iban\": \"culpa officia in in tempor\",\n  \"swiftCode\": \"anim minim\",\n  \"revenueIban\": \"qui ut\",\n  \"expensesIban\": \"ullamco in aute\",\n  \"dormantIban\": \"eni\",\n  \"vatIban\": \"minim enim et\",\n  \"isActive\": true,\n  \"isDefault\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "95c0f666-38fc-4a50-bef6-2daef1fa51fb",
+          "name": "get Default Partner Bank 1",
+          "request": {
+            "name": "get Default Partner Bank 1",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "partner-banks",
+                "default",
+                "internally"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/partner-banks/default/internally"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ff14b574-a30c-4274-ae37-7313ebcce0e3",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "partner-banks",
+                    "default",
+                    "internally"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 84671381,\n  \"name\": \"laboris nulla\",\n  \"nameAr\": \"anim tempor ex Excepteur\",\n  \"iban\": \"culpa officia in in tempor\",\n  \"swiftCode\": \"anim minim\",\n  \"revenueIban\": \"qui ut\",\n  \"expensesIban\": \"ullamco in aute\",\n  \"dormantIban\": \"eni\",\n  \"vatIban\": \"minim enim et\",\n  \"isActive\": true,\n  \"isDefault\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "69cc5fbb-e59f-48df-9ec1-cc578eba27e3",
+          "name": "get Active Partner Banks",
+          "request": {
+            "name": "get Active Partner Banks",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "partner-banks",
+                "active"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/partner-banks/active"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9e812142-7eb2-4ed0-8863-0fdf1dd55546",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "partner-banks",
+                    "active"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  \"exercitation \",\n  \"eiusmod eu in aute\"\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "843b6d78-9f16-476b-a54c-ffd4b9c9b66f",
+      "name": "partner-bank-transfer-fee-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "aa00b322-38d8-474e-aa1c-15d11ad287f8",
+          "name": "get Partner Bank Transfer Fee",
+          "request": {
+            "name": "get Partner Bank Transfer Fee",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "partner-banks",
+                "transfer-fees",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-7607240",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/partner-banks/transfer-fees/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "246599df-6f5e-4731-b413-c1e7a446d1ce",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "partner-banks",
+                    "transfer-fees",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-7607240",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 1174105,\n  \"amount\": 92431245.70553473,\n  \"currency\": \"reprehen\",\n  \"destinationBankCode\": \"non in\",\n  \"countryCode\": \"et ex\",\n  \"partnerBankCode\": \"fugiat pariatur sed mollit\",\n  \"domestic\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "99d274e5-23ac-4959-8b47-ee6d169ed9c7",
+          "name": "update",
+          "request": {
+            "name": "update",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "partner-banks",
+                "transfer-fees",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-7607240",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/partner-banks/transfer-fees/:id"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 31400509.89951992,\n  \"currency\": \"dolor\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fee3c598-4ab9-43c3-be19-3b433067e493",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "partner-banks",
+                    "transfer-fees",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-7607240",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 31400509.89951992,\n  \"currency\": \"dolor\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 1174105,\n  \"amount\": 92431245.70553473,\n  \"currency\": \"reprehen\",\n  \"destinationBankCode\": \"non in\",\n  \"countryCode\": \"et ex\",\n  \"partnerBankCode\": \"fugiat pariatur sed mollit\",\n  \"domestic\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bf486a8f-f3b9-4f09-93c1-dbe3eed28eca",
+          "name": "delete 1",
+          "request": {
+            "name": "delete 1",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "partner-banks",
+                "transfer-fees",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-7607240",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/partner-banks/transfer-fees/:id"
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "bbcbc1bd-a6fd-417f-9d5a-99c140dcdec5",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "partner-banks",
+                    "transfer-fees",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-7607240",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8c24ffd1-e7c8-4d83-83f8-6db4046be546",
+          "name": "get Partner Bank Transfer Fees",
+          "request": {
+            "name": "get Partner Bank Transfer Fees",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "partner-banks",
+                "transfer-fees"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "-73355976",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "-23739867",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "partnerBankCode",
+                  "value": "ut nisi culpa",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "destinationBankCode",
+                  "value": "Ut labore est",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "countryCode",
+                  "value": "quis minim",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "sortBy",
+                  "value": "nulla aliqua",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "direction",
+                  "value": "sint anim Duis in",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "domestic",
+                  "value": "true",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/partner-banks/transfer-fees?page=-73355976&size=-23739867&partnerBankCode=ut nisi culpa&destinationBankCode=Ut labore est&countryCode=quis minim&sortBy=nulla aliqua&direction=sint anim Duis in&domestic=true"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "073934b8-07ed-4f28-aee1-c74f4cfb265b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "partner-banks",
+                    "transfer-fees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "-73355976"
+                    },
+                    {
+                      "key": "size",
+                      "value": "-23739867"
+                    },
+                    {
+                      "key": "partnerBankCode",
+                      "value": "ut nisi culpa"
+                    },
+                    {
+                      "key": "destinationBankCode",
+                      "value": "Ut labore est"
+                    },
+                    {
+                      "key": "countryCode",
+                      "value": "quis minim"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "nulla aliqua"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "sint anim Duis in"
+                    },
+                    {
+                      "key": "domestic",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": -31932005,\n  \"totalElements\": 47091543,\n  \"size\": -39555109,\n  \"content\": [\n    {\n      \"id\": 46778486,\n      \"amount\": -33727900.803222656,\n      \"currency\": \"dolor exercitation\",\n      \"destinationBankCode\": \"laboris Lorem\",\n      \"countryCode\": \"ut veniam\",\n      \"partnerBankCode\": \"ut\",\n      \"domestic\": true\n    },\n    {\n      \"id\": -94252611,\n      \"amount\": -82541231.04842259,\n      \"currency\": \"in nulla dolor commodo ipsum\",\n      \"destinationBankCode\": \"deserunt\",\n      \"countryCode\": \"in dolor consequat consectetur\",\n      \"partnerBankCode\": \"proident incididunt ut commodo\",\n      \"domestic\": false\n    }\n  ],\n  \"number\": 77294056,\n  \"sort\": [\n    {\n      \"direction\": \"eu veniam cupidata\",\n      \"nullHandling\": \"occaecat incididunt\",\n      \"ascending\": false,\n      \"property\": \"deserunt temp\",\n      \"ignoreCase\": true\n    },\n    {\n      \"direction\": \"aliqua ullamco elit sint\",\n      \"nullHandling\": \"amet sed ad id\",\n      \"ascending\": false,\n      \"property\": \"dolore\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"pageable\": {\n    \"offset\": 78755212,\n    \"sort\": [\n      {\n        \"direction\": \"officia deserunt in consequat\",\n        \"nullHandling\": \"in in\",\n        \"ascending\": true,\n        \"property\": \"irure sed occaecat non dolore\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"Duis velit in deserunt\",\n        \"nullHandling\": \"culpa magna velit\",\n        \"ascending\": true,\n        \"property\": \"Excepteur\",\n        \"ignoreCase\": true\n      }\n    ],\n    \"pageNumber\": -10537649,\n    \"pageSize\": -40206821,\n    \"paged\": false,\n    \"unpaged\": true\n  },\n  \"first\": true,\n  \"last\": true,\n  \"numberOfElements\": -16088135,\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "78c63428-6ba1-4712-b270-843feebd28ef",
+          "name": "create 1",
+          "request": {
+            "name": "create 1",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "partner-banks",
+                "transfer-fees"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/partner-banks/transfer-fees"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": -43365709.8754703,\n  \"currency\": \"dolor non\",\n  \"destinationBankCode\": \"occaecat adipisicin\",\n  \"partnerBankCode\": \"do fugiat irure anim Lorem\",\n  \"countryCode\": \"incididunt\",\n  \"domestic\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a936cfee-1026-40c2-bcfe-1046917c6bed",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "partner-banks",
+                    "transfer-fees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": -43365709.8754703,\n  \"currency\": \"dolor non\",\n  \"destinationBankCode\": \"occaecat adipisicin\",\n  \"partnerBankCode\": \"do fugiat irure anim Lorem\",\n  \"countryCode\": \"incididunt\",\n  \"domestic\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 1174105,\n  \"amount\": 92431245.70553473,\n  \"currency\": \"reprehen\",\n  \"destinationBankCode\": \"non in\",\n  \"countryCode\": \"et ex\",\n  \"partnerBankCode\": \"fugiat pariatur sed mollit\",\n  \"domestic\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "7d8c4b5e-02fd-45c7-94e3-724052c8790c",
+      "name": "bank-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6600d443-afae-4172-b6c5-8f4f770f48eb",
+          "name": "get Bank",
+          "request": {
+            "name": "get Bank",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "lookups",
+                "banks",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-7607240",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/lookups/banks/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6b5b16b7-d924-4df6-9a53-1255285cde21",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "lookups",
+                    "banks",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-7607240",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 74060125,\n  \"institutionNameEnglish\": \"commodo Duis adipisicing consequat\",\n  \"institutionNameArabic\": \"commodo dolore\",\n  \"swiftCode\": \"ex\",\n  \"code\": \"consequat\",\n  \"countryCode\": \"amet ut dolor\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "320024d1-f85f-4635-9d4c-0b03550ceb6c",
+          "name": "update Bank",
+          "request": {
+            "name": "update Bank",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "lookups",
+                "banks",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-7607240",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/lookups/banks/:id"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"institutionNameEnglish\": \"dolore et do\",\n  \"institutionNameArabic\": \"aute nostrud sunt dolore\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1dd5ef9f-c400-4737-a09c-0c8077928106",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "lookups",
+                    "banks",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-7607240",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"institutionNameEnglish\": \"dolore et do\",\n  \"institutionNameArabic\": \"aute nostrud sunt dolore\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 74060125,\n  \"institutionNameEnglish\": \"commodo Duis adipisicing consequat\",\n  \"institutionNameArabic\": \"commodo dolore\",\n  \"swiftCode\": \"ex\",\n  \"code\": \"consequat\",\n  \"countryCode\": \"amet ut dolor\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b831df37-0185-4012-a934-b66761ebc41f",
+          "name": "delete Bank",
+          "request": {
+            "name": "delete Bank",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "lookups",
+                "banks",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-7607240",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/lookups/banks/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6a577195-d724-45a8-aac3-0798501851f1",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "lookups",
+                    "banks",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-7607240",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 74060125,\n  \"institutionNameEnglish\": \"commodo Duis adipisicing consequat\",\n  \"institutionNameArabic\": \"commodo dolore\",\n  \"swiftCode\": \"ex\",\n  \"code\": \"consequat\",\n  \"countryCode\": \"amet ut dolor\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "18cea00a-fc59-41f0-872e-d8a11c90d986",
+          "name": "get All Banks",
+          "request": {
+            "name": "get All Banks",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "lookups",
+                "banks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "27622792",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "93578792",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "swiftCode",
+                  "value": "quis do nostrud",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "pariatur irure consectetur",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "countryCode",
+                  "value": "nisi ad",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/lookups/banks?page=27622792&size=93578792&swiftCode=quis do nostrud&name=pariatur irure consectetur&countryCode=nisi ad"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fcf930e0-0db0-429e-992c-86b50a20cbe9",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "lookups",
+                    "banks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "27622792"
+                    },
+                    {
+                      "key": "size",
+                      "value": "93578792"
+                    },
+                    {
+                      "key": "swiftCode",
+                      "value": "quis do nostrud"
+                    },
+                    {
+                      "key": "name",
+                      "value": "pariatur irure consectetur"
+                    },
+                    {
+                      "key": "countryCode",
+                      "value": "nisi ad"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": 92313712,\n  \"totalElements\": 25167901,\n  \"size\": -98414965,\n  \"content\": [\n    {\n      \"id\": -89960444,\n      \"institutionNameEnglish\": \"esse dolor\",\n      \"institutionNameArabic\": \"commodo do in in\",\n      \"swiftCode\": \"in ut in fugiat consectetur\",\n      \"code\": \"ipsum et occaecat veniam\",\n      \"countryCode\": \"dolore\"\n    },\n    {\n      \"id\": 2992475,\n      \"institutionNameEnglish\": \"in dolore\",\n      \"institutionNameArabic\": \"amet exercitation\",\n      \"swiftCode\": \"in proident\",\n      \"code\": \"in ipsum elit\",\n      \"countryCode\": \"dolor voluptate\"\n    }\n  ],\n  \"number\": 40798868,\n  \"sort\": [\n    {\n      \"direction\": \"adipisicing\",\n      \"nullHandling\": \"dolore qui\",\n      \"ascending\": false,\n      \"property\": \"ipsum cillum nostrud\",\n      \"ignoreCase\": true\n    },\n    {\n      \"direction\": \"Duis amet Lorem\",\n      \"nullHandling\": \"irure fugiat\",\n      \"ascending\": true,\n      \"property\": \"adipisicing voluptate anim\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"pageable\": {\n    \"offset\": 11358126,\n    \"sort\": [\n      {\n        \"direction\": \"deseru\",\n        \"nullHandling\": \"Lorem elit sunt non id\",\n        \"ascending\": false,\n        \"property\": \"laboris Dui\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"sit\",\n        \"nullHandling\": \"in\",\n        \"ascending\": false,\n        \"property\": \"deserunt\",\n        \"ignoreCase\": false\n      }\n    ],\n    \"pageNumber\": -32145079,\n    \"pageSize\": -77122784,\n    \"paged\": true,\n    \"unpaged\": true\n  },\n  \"first\": false,\n  \"last\": true,\n  \"numberOfElements\": -43619858,\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b2a0001d-ebfb-468e-a7d2-71e8ecd2f5cb",
+          "name": "create Bank",
+          "request": {
+            "name": "create Bank",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "lookups",
+                "banks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/lookups/banks"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"institutionNameArabic\": \"magna nostrud\",\n  \"institutionNameEnglish\": \"do\",\n  \"swiftCode\": \"velit fugiat et\",\n  \"countryCode\": \"cupidatat in aute\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "15c4a1c0-2fad-45d1-8aea-01edeaa2eb8a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "lookups",
+                    "banks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"institutionNameArabic\": \"magna nostrud\",\n  \"institutionNameEnglish\": \"do\",\n  \"swiftCode\": \"velit fugiat et\",\n  \"countryCode\": \"cupidatat in aute\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 74060125,\n  \"institutionNameEnglish\": \"commodo Duis adipisicing consequat\",\n  \"institutionNameArabic\": \"commodo dolore\",\n  \"swiftCode\": \"ex\",\n  \"code\": \"consequat\",\n  \"countryCode\": \"amet ut dolor\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "8c337a92-632c-4174-b310-0c49370b6d95",
+      "name": "payment-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "95e67049-4e9f-41f5-9012-52dc6b1a53a7",
+          "name": "pay Payment",
+          "request": {
+            "name": "pay Payment",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "payment"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/payment"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bankTransaction\": {\n    \"id\": -53286986,\n    \"externalReference\": \"tempor in anim\",\n    \"batchTransactionReference\": \"dolor nisi\",\n    \"sourceWalletCode\": \"anim\",\n    \"sourceVatAmount\": 65559814.76108506,\n    \"sourceWalletType\": \"Excepteur nulla dolore\",\n    \"destinationWalletCode\": \"id laboris nulla pariatur\",\n    \"destinationVatAmount\": -35253544.032126375,\n    \"destinationWalletType\": \"in veniam voluptate\",\n    \"sourceCommissionWalletCode\": \"est reprehenderit ut incididunt\",\n    \"sourceCommissionWalletType\": \"Ut sint eiusmod esse\",\n    \"sourceCommissionAmount\": -51306684.07615682,\n    \"destinationCommissionWalletCode\": \"irure officia commodo mollit\",\n    \"destinationCommissionWalletType\": \"magna aliqua labore in\",\n    \"destinationCommissionAmount\": 87639216.65629533,\n    \"sourceVatWalletCode\": \"nisi\",\n    \"sourceVatWalletType\": \"deserunt ea quis\",\n    \"destinationVatWalletCode\": \"aliqua nulla\",\n    \"destinationVatWalletType\": \"deserunt cillum\",\n    \"amount\": -16358658.700973988,\n    \"transactionType\": {\n      \"id\": 4313476,\n      \"code\": \"esse consequat\",\n      \"nameAR\": \"aliqua sun\",\n      \"nameEN\": \"officia\",\n      \"description\": \"tempor quis aute Ut\",\n      \"transactionCategory\": {\n        \"id\": 7729639,\n        \"code\": \"ad amet laboris\",\n        \"name\": \"in eiusmod\",\n        \"nameAr\": \"quis dolore pariatur occaecat laborum\",\n        \"description\": \"non in mollit\"\n      },\n      \"allowedSourceWalletType\": [\n        \"non\",\n        \"aute nisi ullamco dolor\"\n      ],\n      \"allowedDestinationWalletType\": [\n        \"laboris\",\n        \"dolore elit ad minim\"\n      ],\n      \"isActive\": true\n    },\n    \"platformType\": \"amet occaecat\",\n    \"status\": \"PROCESSED\",\n    \"failedReasons\": [\n      \"ex quis\",\n      \"tempor \"\n    ],\n    \"isOtpRequired\": false,\n    \"sourceProfileId\": 3504810,\n    \"destinationProfileId\": -22154322,\n    \"destinationIban\": \"ex in\",\n    \"beneficiaryBic\": \"laborum Lorem elit\",\n    \"beneficiaryName\": \"ea est id Lorem\",\n    \"beneficiaryAddress1\": \"in consectetur\",\n    \"beneficiaryAddress2\": \"in ex\",\n    \"beneficiaryAddress3\": \"dolor\",\n    \"narrative\": \"sunt non aute cillum\",\n    \"notes\": \"minim in occaecat est dolore\",\n    \"purposeOfTransfer\": {\n      \"code\": \"deserunt\",\n      \"description\": \"consectetur Ut sed\",\n      \"arabicDescription\": \"aliqua sint deserunt\"\n    }\n  },\n  \"locality\": \"LOCAL\",\n  \"integrationType\": \"OVER_THE_COUNTER\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "68351b5e-40e0-4162-9852-42205d025831",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "payment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"bankTransaction\": {\n    \"id\": -53286986,\n    \"externalReference\": \"tempor in anim\",\n    \"batchTransactionReference\": \"dolor nisi\",\n    \"sourceWalletCode\": \"anim\",\n    \"sourceVatAmount\": 65559814.76108506,\n    \"sourceWalletType\": \"Excepteur nulla dolore\",\n    \"destinationWalletCode\": \"id laboris nulla pariatur\",\n    \"destinationVatAmount\": -35253544.032126375,\n    \"destinationWalletType\": \"in veniam voluptate\",\n    \"sourceCommissionWalletCode\": \"est reprehenderit ut incididunt\",\n    \"sourceCommissionWalletType\": \"Ut sint eiusmod esse\",\n    \"sourceCommissionAmount\": -51306684.07615682,\n    \"destinationCommissionWalletCode\": \"irure officia commodo mollit\",\n    \"destinationCommissionWalletType\": \"magna aliqua labore in\",\n    \"destinationCommissionAmount\": 87639216.65629533,\n    \"sourceVatWalletCode\": \"nisi\",\n    \"sourceVatWalletType\": \"deserunt ea quis\",\n    \"destinationVatWalletCode\": \"aliqua nulla\",\n    \"destinationVatWalletType\": \"deserunt cillum\",\n    \"amount\": -16358658.700973988,\n    \"transactionType\": {\n      \"id\": 4313476,\n      \"code\": \"esse consequat\",\n      \"nameAR\": \"aliqua sun\",\n      \"nameEN\": \"officia\",\n      \"description\": \"tempor quis aute Ut\",\n      \"transactionCategory\": {\n        \"id\": 7729639,\n        \"code\": \"ad amet laboris\",\n        \"name\": \"in eiusmod\",\n        \"nameAr\": \"quis dolore pariatur occaecat laborum\",\n        \"description\": \"non in mollit\"\n      },\n      \"allowedSourceWalletType\": [\n        \"non\",\n        \"aute nisi ullamco dolor\"\n      ],\n      \"allowedDestinationWalletType\": [\n        \"laboris\",\n        \"dolore elit ad minim\"\n      ],\n      \"isActive\": true\n    },\n    \"platformType\": \"amet occaecat\",\n    \"status\": \"PROCESSED\",\n    \"failedReasons\": [\n      \"ex quis\",\n      \"tempor \"\n    ],\n    \"isOtpRequired\": false,\n    \"sourceProfileId\": 3504810,\n    \"destinationProfileId\": -22154322,\n    \"destinationIban\": \"ex in\",\n    \"beneficiaryBic\": \"laborum Lorem elit\",\n    \"beneficiaryName\": \"ea est id Lorem\",\n    \"beneficiaryAddress1\": \"in consectetur\",\n    \"beneficiaryAddress2\": \"in ex\",\n    \"beneficiaryAddress3\": \"dolor\",\n    \"narrative\": \"sunt non aute cillum\",\n    \"notes\": \"minim in occaecat est dolore\",\n    \"purposeOfTransfer\": {\n      \"code\": \"deserunt\",\n      \"description\": \"consectetur Ut sed\",\n      \"arabicDescription\": \"aliqua sint deserunt\"\n    }\n  },\n  \"locality\": \"LOCAL\",\n  \"integrationType\": \"OVER_THE_COUNTER\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": \"aliqua\",\n  \"sequenceNumber\": \"Excepteur fugiat dolore id aute\",\n  \"transactionReferenceNumber\": \"irure et mollit aliquip\",\n  \"status\": \"FAILED\",\n  \"reason\": \"exercitation adipisicing\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c58c69a1-d7f8-4f86-b604-a5d98add45ce",
+          "name": "get Payment",
+          "request": {
+            "name": "get Payment",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "payment",
+                ":bank-bic",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "reprehenderit",
+                  "key": "id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "reprehenderit",
+                  "key": "bank-bic",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/payment/:bank-bic/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a7c1045b-7df7-4771-95d4-4bc8c7edf079",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "payment",
+                    ":bank-bic",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "reprehenderit",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "reprehenderit",
+                      "key": "bank-bic",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": \"labore cillum\",\n  \"sequenceNumber\": \"pariatur incididunt irure sit\",\n  \"transactionReferenceNumber\": \"magna Ut Excepteur in\",\n  \"externalReferenceNumber\": \"Ut con\",\n  \"status\": \"nulla ut Duis quis\",\n  \"exchangeRate\": \"aute\",\n  \"createdAt\": \"mollit laborum culpa\",\n  \"updatedAt\": \"Excepteur in\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "8db1bfad-3109-4f62-b80a-54ae6e7ac80f",
+      "name": "otc-callback-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6fed0cb4-12d9-450f-824d-21bd0300ee01",
+          "name": "otc Callback",
+          "request": {
+            "name": "otc Callback",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "otc-callback"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/otc-callback"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transactionId\": \"exercitation in\",\n  \"status\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9dd26a74-05a1-4130-aadc-11d68e9d6e02",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "otc-callback"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transactionId\": \"exercitation in\",\n  \"status\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "6fa55a53-5ff4-4034-8a08-9cd7ff19e084",
+      "name": "file-generator-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "fdb61890-5993-490d-a6c2-d98788248b39",
+          "name": "upload Bank Fees File",
+          "request": {
+            "name": "upload Bank Fees File",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "bank-fees",
+                "upload"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/bank-fees/upload"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bankFeesExcel\": \"laborum\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9040c206-9cb9-42ad-ba03-777f2523e6f0",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "bank-fees",
+                    "upload"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"bankFeesExcel\": \"laborum\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"refNumber\": \"3c525bcc-8ea9-b165-ebd3-a2f3ec4c4f53\",\n  \"initiatorProfileCode\": \"reprehenderit laboris dolore sit\",\n  \"signature\": \"magna\",\n  \"generatedDate\": \"2016-05-14T13:54:17.881Z\",\n  \"ftpFileToken\": \"non elit in Ut\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "417d8167-7584-48a1-a5b3-f1fd03098c29",
+          "name": "generate Excel Sheet",
+          "request": {
+            "name": "generate Excel Sheet",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "bank-fees",
+                "generate",
+                "excel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/bank-fees/generate/excel"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "394ca52b-d264-4666-8358-9bef815e0fcf",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "bank-fees",
+                    "generate",
+                    "excel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"fileName\": \"adipisicing amet\",\n  \"fileExtension\": \"id ut deser\",\n  \"extensionCode\": \"nostrud ve\",\n  \"fileBytes\": [\n    \"esse in tempor laboris\",\n    \"Duis irure Lorem anim\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "d4664a29-5181-4fd7-bcbc-d813cd5be51c",
+      "name": "bank-violation-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a7dbee01-661b-4d6b-ac3a-852975a73726",
+          "name": "get Bank Violation By Code",
+          "request": {
+            "name": "get Bank Violation By Code",
+            "description": {},
+            "url": {
+              "path": [
+                "bank-violations",
+                ":code"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "reprehenderit",
+                  "key": "code",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/bank-violations/:code"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6f5ce861-a192-4b06-aa24-60f58fb67dfc",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bank-violations",
+                    ":code"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "reprehenderit",
+                      "key": "code",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -20054241,\n  \"code\": \"Excepteur\",\n  \"nameEn\": \"incididun\",\n  \"nameAr\": \"ea nisi magna nostrud aute\",\n  \"description\": \"non nostrud laborum\",\n  \"partnerBank\": {\n    \"id\": -24082750,\n    \"name\": \"laborum est re\",\n    \"nameAr\": \"ut\",\n    \"iban\": \"aliqua Excepteur consequat ut nulla\",\n    \"swiftCode\": \"tempor magna occaecat\",\n    \"revenueIban\": \"Ut veniam\",\n    \"expensesIban\": \"dolor officia deserunt esse sunt\",\n    \"dormantIban\": \"proident irure\",\n    \"vatIban\": \"ad \",\n    \"isActive\": false,\n    \"isDefault\": true\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5324f41b-c1b6-4e27-b21a-a13992834be9",
+          "name": "get Bank Violation By Code Bulk",
+          "request": {
+            "name": "get Bank Violation By Code Bulk",
+            "description": {},
+            "url": {
+              "path": [
+                "bank-violations",
+                "bulk"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "codes",
+                  "value": "tempor Lorem velit",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "codes",
+                  "value": "est irure consequat nisi ut",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/bank-violations/bulk?codes=tempor Lorem velit&codes=est irure consequat nisi ut"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0b2d8817-7cd7-46b4-a027-09e494cb9936",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bank-violations",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "codes",
+                      "value": "Duis"
+                    },
+                    {
+                      "key": "codes",
+                      "value": "incididunt elit cillum ut"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": 90434610,\n    \"code\": \"commodo voluptate eu\",\n    \"nameEn\": \"pariatur\",\n    \"nameAr\": \"dolor minim aliqua offici\",\n    \"description\": \"ut mollit\",\n    \"partnerBank\": {\n      \"id\": -78434666,\n      \"name\": \"ea aute ut laboris reprehenderit\",\n      \"nameAr\": \"minim enim Lorem adipisicing amet\",\n      \"iban\": \"do non\",\n      \"swiftCode\": \"consectetur laboris Duis dolor\",\n      \"revenueIban\": \"Excepteur reprehenderit cupidatat\",\n      \"expensesIban\": \"elit\",\n      \"dormantIban\": \"esse do\",\n      \"vatIban\": \"dolore cillum anim\",\n      \"isActive\": true,\n      \"isDefault\": false\n    }\n  },\n  {\n    \"id\": -7171113,\n    \"code\": \"qui labore ut est officia\",\n    \"nameEn\": \"proident laborum sunt commodo es\",\n    \"nameAr\": \"ad amet est in sint\",\n    \"description\": \"veniam nulla aute fugiat\",\n    \"partnerBank\": {\n      \"id\": 37820367,\n      \"name\": \"dolor esse\",\n      \"nameAr\": \"esse\",\n      \"iban\": \"consectetur adipisicing fugiat irure pariatur\",\n      \"swiftCode\": \"elit magna nulla\",\n      \"revenueIban\": \"in ipsum in\",\n      \"expensesIban\": \"ut\",\n      \"dormantIban\": \"des\",\n      \"vatIban\": \"laborum ut commodo ut eu\",\n      \"isActive\": true,\n      \"isDefault\": true\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "a298f532-71b8-4c2f-a6ac-ed68e05c1aa6",
+      "name": "bank-check-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bfe51887-602c-4dd0-9f68-b59d2e45725a",
+          "name": "transaction Check",
+          "request": {
+            "name": "transaction Check",
+            "description": {},
+            "url": {
+              "path": [
+                "bank-violations",
+                "transaction",
+                ":customerId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "reprehenderit",
+                  "key": "customerId",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/bank-violations/transaction/:customerId"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "555142ae-c8fd-42d6-ab90-acaef8355115",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bank-violations",
+                    "transaction",
+                    ":customerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "reprehenderit",
+                      "key": "customerId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  \"tempor Lorem velit\",\n  \"est irure consequat nisi ut\"\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a4ad4c6d-02ea-4ef3-907f-67daac2ff4c6",
+          "name": "check",
+          "request": {
+            "name": "check",
+            "description": {},
+            "url": {
+              "path": [
+                "bank-violations",
+                "registration",
+                ":customerId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "reprehenderit",
+                  "key": "customerId",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/bank-violations/registration/:customerId"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6982650c-44b7-4336-af67-35e29bafed3b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bank-violations",
+                    "registration",
+                    ":customerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "reprehenderit",
+                      "key": "customerId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  \"tempor Lorem velit\",\n  \"est irure consequat nisi ut\"\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "789ee645-4038-43bd-8d0c-67e02a22e28a",
+      "name": "lookup-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b619366c-351a-4f2f-a9e1-efe69715253e",
+          "name": "Purpose Transfer Codes",
+          "request": {
+            "name": "Purpose Transfer Codes",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "lookup",
+                "purpose-transfer"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/lookup/purpose-transfer"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "53627c73-b77f-4718-a170-110aa1235eba",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "lookup",
+                    "purpose-transfer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"code\": \"aliquip in\",\n    \"description\": \"occae\",\n    \"arabicDescription\": \"labore magna reprehenderit\"\n  },\n  {\n    \"code\": \"tempor velit pariatur in\",\n    \"description\": \"ipsum aute deserunt\",\n    \"arabicDescription\": \"amet Duis Ut\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "55605ff9-b69e-4885-8338-c59210daf5a9",
+          "name": "get Currency By Id",
+          "request": {
+            "name": "get Currency By Id",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "lookup",
+                "currency",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-7607240",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/lookup/currency/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "780a14e4-5832-4681-ba2c-08fda0f23d50",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "lookup",
+                    "currency",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-7607240",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -28925626,\n  \"nameAr\": \"amet id voluptate Lorem ut\",\n  \"nameEn\": \"nulla quis pa\",\n  \"code\": \"sit adipisicing Excepteur eu voluptate\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8a6852ca-cad9-48a3-bf89-297d1b82c05c",
+          "name": "get All Currencies",
+          "request": {
+            "name": "get All Currencies",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "lookup",
+                "currencies"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/lookup/currencies"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a5d7c9ad-d75e-4e5a-8979-b4319dfdf814",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "lookup",
+                    "currencies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -40283288,\n    \"nameAr\": \"enim\",\n    \"nameEn\": \"velit sed deserunt\",\n    \"code\": \"eli\"\n  },\n  {\n    \"id\": 29542748,\n    \"nameAr\": \"est pariatur ea\",\n    \"nameEn\": \"veniam sunt officia commodo\",\n    \"code\": \"ipsum in quis\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e1e3aea4-5fca-4559-b9d2-ed81abe8f47f",
+          "name": "get Currencies",
+          "request": {
+            "name": "get Currencies",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "lookup",
+                "currencies",
+                ":countryId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-7607240",
+                  "key": "countryId",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/lookup/currencies/:countryId"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3330de97-6978-423e-a2c6-32d23be69443",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "lookup",
+                    "currencies",
+                    ":countryId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-7607240",
+                      "key": "countryId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -40283288,\n    \"nameAr\": \"enim\",\n    \"nameEn\": \"velit sed deserunt\",\n    \"code\": \"eli\"\n  },\n  {\n    \"id\": 29542748,\n    \"nameAr\": \"est pariatur ea\",\n    \"nameEn\": \"veniam sunt officia commodo\",\n    \"code\": \"ipsum in quis\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "38cf0f0b-41cb-4e12-8694-7a802a25a19a",
+          "name": "countries",
+          "request": {
+            "name": "countries",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "lookup",
+                "countries"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/lookup/countries"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7c359030-f7d6-4fb5-87ec-b40810dcabc8",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "lookup",
+                    "countries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -40283288,\n    \"nameAr\": \"enim\",\n    \"nameEn\": \"velit sed deserunt\",\n    \"code\": \"eli\"\n  },\n  {\n    \"id\": 29542748,\n    \"nameAr\": \"est pariatur ea\",\n    \"nameEn\": \"veniam sunt officia commodo\",\n    \"code\": \"ipsum in quis\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "730bca51-f66b-467c-bc0c-57a0f8de019f",
+          "name": "get Country By Code",
+          "request": {
+            "name": "get Country By Code",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "lookup",
+                "countries",
+                ":code"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "reprehenderit",
+                  "key": "code",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/lookup/countries/:code"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5d9f9117-29aa-4afe-a041-7158786c6aff",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "lookup",
+                    "countries",
+                    ":code"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "reprehenderit",
+                      "key": "code",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -28925626,\n  \"nameAr\": \"amet id voluptate Lorem ut\",\n  \"nameEn\": \"nulla quis pa\",\n  \"code\": \"sit adipisicing Excepteur eu voluptate\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c5fb26e6-e245-4794-a5e1-719433586c77",
+          "name": "countries International",
+          "request": {
+            "name": "countries International",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "lookup",
+                "countries",
+                "international"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/lookup/countries/international"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d2fe0fab-8c52-475a-b639-5e82e24c241d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "lookup",
+                    "countries",
+                    "international"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -40283288,\n    \"nameAr\": \"enim\",\n    \"nameEn\": \"velit sed deserunt\",\n    \"code\": \"eli\"\n  },\n  {\n    \"id\": 29542748,\n    \"nameAr\": \"est pariatur ea\",\n    \"nameEn\": \"veniam sunt officia commodo\",\n    \"code\": \"ipsum in quis\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fdeb727a-9a4d-4231-b58d-609473286c73",
+          "name": "bank Codes",
+          "request": {
+            "name": "bank Codes",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "lookup",
+                "banks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "countryCode",
+                  "value": "SA"
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/lookup/banks?countryCode=SA"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1ddab615-0028-4a8c-bcc2-793b42ab19e5",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "lookup",
+                    "banks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "countryCode",
+                      "value": "SA"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -12605237,\n    \"institutionNameEnglish\": \"est eu quis velit Excepteur\",\n    \"institutionNameArabic\": \"proident consequat sint\",\n    \"swiftCode\": \"ullamco\",\n    \"code\": \"eu minim\",\n    \"countryCode\": \"irure mollit ullamco\"\n  },\n  {\n    \"id\": 53155730,\n    \"institutionNameEnglish\": \"ea reprehenderit Duis tempor exercitation\",\n    \"institutionNameArabic\": \"enim sit\",\n    \"swiftCode\": \"dolor est culpa aute\",\n    \"code\": \"aute voluptate ut eiusmod\",\n    \"countryCode\": \"quis est enim reprehenderit\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3680447a-150d-4e10-b599-07fa2c31ea33",
+          "name": "get Bank By BIC",
+          "request": {
+            "name": "get Bank By BIC",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "lookup",
+                "banks",
+                ":bic"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "reprehenderit",
+                  "key": "bic",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/lookup/banks/:bic"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "acb8e964-afce-49f2-8524-6f2fca570fc2",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "lookup",
+                    "banks",
+                    ":bic"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "reprehenderit",
+                      "key": "bic",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 74060125,\n  \"institutionNameEnglish\": \"commodo Duis adipisicing consequat\",\n  \"institutionNameArabic\": \"commodo dolore\",\n  \"swiftCode\": \"ex\",\n  \"code\": \"consequat\",\n  \"countryCode\": \"amet ut dolor\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7a1c6e69-2d0f-4a3b-aa21-760a6dcd3531",
+          "name": "get Bank By Id",
+          "request": {
+            "name": "get Bank By Id",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "lookup",
+                "banks",
+                "ids",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-7607240",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/lookup/banks/ids/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2e51fa02-fd98-476e-b769-4910a6b0d672",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "lookup",
+                    "banks",
+                    "ids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-7607240",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 74060125,\n  \"institutionNameEnglish\": \"commodo Duis adipisicing consequat\",\n  \"institutionNameArabic\": \"commodo dolore\",\n  \"swiftCode\": \"ex\",\n  \"code\": \"consequat\",\n  \"countryCode\": \"amet ut dolor\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "2a86cbc4-a86d-4b00-b03d-d5a134085f56",
+      "name": "job-starter-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "dbd62238-9c60-4310-908e-0b42dfbba42a",
+          "name": "run Pos Payments",
+          "request": {
+            "name": "run Pos Payments",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "job",
+                "pos-payments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/job/pos-payments"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "93e66708-0625-4a54-a558-92a11693a218",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "job",
+                    "pos-payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "54124709-b14c-4264-b757-e80a58024df1",
+          "name": "run Incoming Bank Statements",
+          "request": {
+            "name": "run Incoming Bank Statements",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "job",
+                "incoming-bank-statements"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/job/incoming-bank-statements"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "82a1d1f5-a9a3-4584-80c4-c64863c4a322",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "job",
+                    "incoming-bank-statements"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "11628f66-b543-47fe-aa58-bff11d3ea084",
+          "name": "run Incoming Bank Payments",
+          "request": {
+            "name": "run Incoming Bank Payments",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "job",
+                "incoming-bank-payments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/job/incoming-bank-payments"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2b00a8cf-ae6d-40e7-a7f9-6fbc7ea9edf7",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "job",
+                    "incoming-bank-payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6840302f-3b37-46df-a489-90fe4742d40f",
+          "name": "get Bank Transactions",
+          "request": {
+            "name": "get Bank Transactions",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "job",
+                "bank-transactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/job/bank-transactions"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9a892f70-f89a-4ac9-92f0-f77d527b1eb9",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "job",
+                    "bank-transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "053c5618-57c9-4428-aeaa-2a2f12676e91",
+          "name": "get Account Balance",
+          "request": {
+            "name": "get Account Balance",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "job",
+                "account-balance"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/job/account-balance"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e6bc602a-96a6-41be-82c5-5dafa29b0bda",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "job",
+                    "account-balance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "e04ad40b-38bc-4bfa-8d5b-a65d6f85c12e",
+      "name": "internal-partner-bank-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0278a56f-61bd-46a3-9941-2da1290508a5",
+          "name": "get Partner Bank Transfer Fees 1",
+          "request": {
+            "name": "get Partner Bank Transfer Fees 1",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "internal",
+                "partner-banks",
+                "transfer-fees"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/internal/partner-banks/transfer-fees"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6762e94e-c654-4c03-8209-9cb3f17a16b3",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "internal",
+                    "partner-banks",
+                    "transfer-fees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -9394944,\n    \"amount\": -65172026.29723493,\n    \"currency\": \"amet enim\",\n    \"destinationBankCode\": \"occaecat enim\",\n    \"countryCode\": \"reprehenderit l\",\n    \"partnerBankCode\": \"sed nostrud do\",\n    \"domestic\": false\n  },\n  {\n    \"id\": -34219575,\n    \"amount\": -34891378.091984145,\n    \"currency\": \"veniam nulla\",\n    \"destinationBankCode\": \"aliqua adipisicing voluptate Ut\",\n    \"countryCode\": \"non reprehenderit ame\",\n    \"partnerBankCode\": \"do\",\n    \"domestic\": false\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "47d21e04-78e9-401c-8b60-7179fb375594",
+          "name": "get Partner Bank Codes",
+          "request": {
+            "name": "get Partner Bank Codes",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "internal",
+                "partner-banks",
+                "codes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/internal/partner-banks/codes"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6b498fd0-9f9f-49d2-9e4a-69340a107978",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "internal",
+                    "partner-banks",
+                    "codes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  \"tempor Lorem velit\",\n  \"est irure consequat nisi ut\"\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "116f512e-6512-4c57-83d3-65b6e3b054a9",
+      "name": "internal-end-of-day-statement-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a88f58b7-55a0-4088-89b0-4736b51f253f",
+          "name": "get End Of Day Statements",
+          "request": {
+            "name": "get End Of Day Statements",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "internal",
+                "end-of-day-statements"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "date",
+                  "value": "1968-07-02",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "accountNumbers",
+                  "value": "exercitation ",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "accountNumbers",
+                  "value": "eiusmod eu in aute",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/internal/end-of-day-statements?date=1968-07-02&accountNumbers=exercitation &accountNumbers=eiusmod eu in aute"
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "X-Client-Id",
+                "value": "reprehenderit"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "X-Client-Secret",
+                "value": "reprehenderit"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d7f59e50-68fe-499a-bf7c-ff00df2d203c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "internal",
+                    "end-of-day-statements"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "1968-07-02"
+                    },
+                    {
+                      "key": "accountNumbers",
+                      "value": "tempor dolor in"
+                    },
+                    {
+                      "key": "accountNumbers",
+                      "value": "ea "
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "X-Client-Id",
+                    "value": "reprehenderit"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "X-Client-Secret",
+                    "value": "reprehenderit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"transactions\": [\n    {\n      \"transactionReference\": \"Duis aliqua ullamco\",\n      \"amount\": -33547470.978846624,\n      \"status\": \"Duis non enim\",\n      \"iban\": \"anim commodo\",\n      \"partTrnType\": \"et adipisicing occaecat ipsum amet\",\n      \"datetime\": \"2015-01-02T16:23:05.973Z\",\n      \"narrative1\": \"et sed sint anim\",\n      \"narrative2\": \"sit\",\n      \"narrative3\": \"laboris sunt\"\n    },\n    {\n      \"transactionReference\": \"sed commodo cupidatat\",\n      \"amount\": -86051345.9326233,\n      \"status\": \"id pariatur\",\n      \"iban\": \"fugiat enim\",\n      \"partTrnType\": \"magna sunt\",\n      \"datetime\": \"1992-08-23T14:27:37.512Z\",\n      \"narrative1\": \"laboris dolor\",\n      \"narrative2\": \"labore amet ipsum\",\n      \"narrative3\": \"ad Duis labore\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "5bf9044c-933d-41a0-bc61-77b03667aac6",
+      "name": "iban-generator-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d62aadf4-8dca-48bf-a78c-cb44ae095d94",
+          "name": "generate Iban",
+          "request": {
+            "name": "generate Iban",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "iban"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/iban"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6f86ec3f-0c18-4959-aaac-d1871997254b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "iban"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "reprehenderit",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "d69c1cab-7220-456b-8523-93ce01927819",
+      "name": "bts-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e71f1d9a-c0ed-4b57-b80e-367d6e2883f2",
+          "name": "ingest",
+          "request": {
+            "name": "ingest",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "bts",
+                "statement"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "date",
+                  "value": "1968-07-02",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "clientId",
+                  "value": "reprehenderit",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "clientSecret",
+                  "value": "reprehenderit",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/bts/statement?date=1968-07-02&clientId=reprehenderit&clientSecret=reprehenderit"
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "x-cif",
+                "value": "reprehenderit"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c81552ef-1ebd-456a-b3d5-d6271851ac22",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "bts",
+                    "statement"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "1968-07-02"
+                    },
+                    {
+                      "key": "clientId",
+                      "value": "reprehenderit"
+                    },
+                    {
+                      "key": "clientSecret",
+                      "value": "reprehenderit"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "x-cif",
+                    "value": "reprehenderit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"metadata\": {\n    \"fileName\": \"labore laborum aliqua\",\n    \"contentHash\": \"consequat\",\n    \"businessDate\": \"2019-04-17T03:24:45.153Z\",\n    \"pullWindowAt\": \"1977-02-07T05:20:13.659Z\",\n    \"entryCountDeclared\": -73588834,\n    \"entryCountActual\": 6699056,\n    \"grossTotalDeclared\": -81404486.65050612,\n    \"grossTotalActual\": -39943819.45177874,\n    \"checksum\": \"proident dolore aliquip\",\n    \"exceptionCode\": \"eu non\",\n    \"archiveUri\": \"minim est nisi qui eu\",\n    \"receivedAt\": \"1951-11-23T20:50:37.042Z\"\n  },\n  \"btsStatements\": [\n    {\n      \"lineNumber\": -31674747,\n      \"terminalId\": \"est aliqua incididunt exercitation\",\n      \"merchantId\": \"ex sed aliquip ea\",\n      \"account\": \"tempor in proident dolore\",\n      \"scheme\": \"aliqua minim\",\n      \"localDate\": \"mollit qui in ipsum\",\n      \"time\": \"fugiat Ut dolor\",\n      \"cardMasked\": \"nulla laboris ad mollit\",\n      \"amount\": 58585967.674190134,\n      \"currency\": \"adipisicing\",\n      \"trCashBack\": 56772325.71872929,\n      \"trCom\": -87726396.06064132,\n      \"trVat\": -34255843.33166622,\n      \"trFee\": 97921871.28739813,\n      \"totalAmount\": -55080573.699541315,\n      \"txnType\": \"quis culpa\",\n      \"channel\": \"culpa non\",\n      \"trArf\": \"ullamco cupidatat id\",\n      \"arn\": \"officia est nisi\",\n      \"merchantName\": \"fugiat dolore incididunt\",\n      \"authNum\": \"aliqua Duis incididunt\",\n      \"postingDate\": \"dolore\",\n      \"secure\": \"eiusmod ullamco sed\",\n      \"paymentId\": \"voluptate eiusmod\",\n      \"paymentType\": \"ad in non ipsum\",\n      \"trSchImg\": \"enim elit irure Excepteur labore\",\n      \"trAcquirerData\": \"sit nisi aute\",\n      \"base\": \"Duis irure enim\",\n      \"reconciliationKey\": \"eu voluptate Excepteur\",\n      \"extras\": \"in fugiat\",\n      \"rawRow\": {\n        \"ex05e\": \"aliqua eiusmod\"\n      }\n    },\n    {\n      \"lineNumber\": -34552161,\n      \"terminalId\": \"ut irure\",\n      \"merchantId\": \"ipsum irure pariatur commodo\",\n      \"account\": \"ut quis\",\n      \"scheme\": \"dolore sint quis\",\n      \"localDate\": \"ullamco\",\n      \"time\": \"enim laborum quis aute\",\n      \"cardMasked\": \"irure officia consequat amet\",\n      \"amount\": -75274778.87543613,\n      \"currency\": \"ea nulla magna labore\",\n      \"trCashBack\": 13582465.958605766,\n      \"trCom\": -44189129.17208109,\n      \"trVat\": -6214746.616478339,\n      \"trFee\": -34239264.051890835,\n      \"totalAmount\": -58344253.83368827,\n      \"txnType\": \"dolor do tempor ipsum\",\n      \"channel\": \"est sed Ut minim\",\n      \"trArf\": \"deserunt et\",\n      \"arn\": \"consequat exercitation\",\n      \"merchantName\": \"anim nostrud\",\n      \"authNum\": \"fugiat sint ad quis\",\n      \"postingDate\": \"ex laboris officia mollit\",\n      \"secure\": \"cillum enim ame\",\n      \"paymentId\": \"voluptate laboris ea tempor\",\n      \"paymentType\": \"eu ea aliqua\",\n      \"trSchImg\": \"Duis quis\",\n      \"trAcquirerData\": \"Duis commodo nisi elit\",\n      \"base\": \"incididunt Lorem\",\n      \"reconciliationKey\": \"volu\",\n      \"extras\": \"officia ex nisi dolor\",\n      \"rawRow\": {\n        \"pariatur_221\": \"incididunt Lorem\"\n      }\n    }\n  ],\n  \"errorCode\": \"TERMINAL_ID_ABSENT_FROM_TERMINAL_REGISTRY\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generated guard: a 5xx from any request is a gateway/service defect, not a test-data problem.",
+          "pm.test('no 5xx (' + pm.info.requestName + ')', function () {",
+          "  pm.expect(pm.response.code, (pm.response.text() || '').slice(0, 300)).to.be.below(500);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{gatewayBaseUrl}}/bank-integration",
+      "type": "string"
+    }
+  ],
+  "info": {
+    "_postman_id": "407f9c55-0620-4e6b-80ec-90527e49ad88",
+    "name": "Anb Bank Integration Service - majdpay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Anb Bank Integration Service (bank-integration) — 53 operations.\n\nGENERATED from the OpenAPI 3.1.0 spec published at the UAT gateway swagger-ui\n(Select a definition -> \"Anb Bank Integration Service APIs\"). Request bodies are schema-derived placeholders (lorem-ipsum\nstrings, sample numbers) — replace with real values before sending.\n\nBase URL: {{gatewayBaseUrl}}/bank-integration  (gatewayBaseUrl lives in EMI-dev.postman_environment.json).\nSpec server: https://gateway-emiuat.dg-cash.app/bank-integration\n\nAUTH: the spec declares no security scheme, but the gateway front-doors every route with a bearer\ntoken. Set {{token}} in the environment (mint one with the Authentication Service collection's\nsign-in, or pass --env-var token=... to newman). Some back-office routes need an admin/service\ntoken rather than a merchant one.\n\nCompanion Playwright scaffold: BusinessTestCases/ServiceApis/BankIntegration.generated.spec.ts\n"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

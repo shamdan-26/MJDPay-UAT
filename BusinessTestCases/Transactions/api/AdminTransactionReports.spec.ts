@@ -15,6 +15,7 @@ import { test } from '@playwright/test';
 const PENDING = 'pending Admin Portal transaction-reporting automation access';
 
 test.describe('Admin Transaction Reports – Download', () => {
+    test.describe.configure({ mode: 'serial' });
     test('AR-01: downloading a transaction report returns a file rather than a 500 (EMI-5537)', async ({ request }) => {
         test.skip(true, `${PENDING} (EMI-5537)`);
     });
@@ -33,6 +34,7 @@ test.describe('Admin Transaction Reports – Download', () => {
 });
 
 test.describe('Admin Transaction Reports – Data Integrity', () => {
+    test.describe.configure({ mode: 'serial' });
     test('AR-05: running the Payment TTL job does not insert duplicate transaction_failed_reasons rows (EMI-5165)', async ({ request }) => {
         test.skip(true, `${PENDING} (EMI-5165)`);
     });

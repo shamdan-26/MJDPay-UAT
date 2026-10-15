@@ -42,6 +42,7 @@ test.describe('Payment Links — Token Resolution (TC-PL-001, TC-PL-002, TC-PL-0
 });
 
 test.describe('Payment Links — Payer Info Form (TC-PL-004)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('TC-PL-004: should validate payer info fields and allow payment method selection', async ({ page }) => {
         await mockValidBillLink(page);
         await mockPayerInfoSubmitSuccess(page);
@@ -49,24 +50,29 @@ test.describe('Payment Links — Payer Info Form (TC-PL-004)', () => {
         const link = new PaymentLinkPage(page);
         await expect(link.summarySection).toBeVisible({ timeout: 15000 });
 
-        if (await link.payerInfoSection.isVisible({ timeout: 5000 }).catch(() => false)) {
-            await link.mobileInput.fill('500021788');
-            await link.emailInput.fill('payer@example.com');
-            await link.nameInput.fill('Test Payer');
-            await link.nationalIdInput.fill('1234567890');
-            await expect(link.mobileInput).toHaveValue('500021788');
-            await expect(link.emailInput).toHaveValue('payer@example.com');
+        // The payer-info form is being retired in favor of server-resolved
+        // checkout (see PaymentLinkPayerInfoRemoval.spec.ts) — skip explicitly
+        // once that ships rather than silently asserting nothing.
+        const payerInfoVisible = await link.payerInfoSection.isVisible({ timeout: 5000 }).catch(() => false);
+        test.skip(!payerInfoVisible, 'Payer info form retired in favor of server-resolved checkout');
 
-            if (await link.paymentMethodGroup.isVisible({ timeout: 3000 }).catch(() => false)) {
-                const firstMethod = link.paymentMethodGroup.getByRole('radio').first();
-                await firstMethod.click();
-                await expect(firstMethod).toBeChecked();
-            }
-        }
+        await link.mobileInput.fill('500021788');
+        await link.emailInput.fill('payer@example.com');
+        await link.nameInput.fill('Test Payer');
+        await link.nationalIdInput.fill('1234567890');
+        await expect(link.mobileInput).toHaveValue('500021788');
+        await expect(link.emailInput).toHaveValue('payer@example.com');
+
+        const paymentMethodVisible = await link.paymentMethodGroup.isVisible({ timeout: 3000 }).catch(() => false);
+        test.skip(!paymentMethodVisible, 'Payment method selection not shown for this link/environment');
+        const firstMethod = link.paymentMethodGroup.getByRole('radio').first();
+        await firstMethod.click();
+        await expect(firstMethod).toBeChecked();
     });
 });
 
 test.describe('Payment Links — Wallet Link Amount Validation (TC-PL-005, TC-PL-006)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.beforeEach(async ({ page }) => {
         await mockValidWalletLink(page);
         await gotoPaymentLink(page, VALID_WALLET_TOKEN);
@@ -88,6 +94,7 @@ test.describe('Payment Links — Wallet Link Amount Validation (TC-PL-005, TC-PL
 });
 
 test.describe('Payment Links — OTP Step (TC-PL-007)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('TC-PL-007: should send and display OTP verification after payer info is completed', async ({ page }) => {
         await mockValidBillLink(page);
         await mockPayerInfoSubmitSuccess(page);
@@ -95,19 +102,24 @@ test.describe('Payment Links — OTP Step (TC-PL-007)', () => {
         const link = new PaymentLinkPage(page);
         const otp = new OtpPage(page);
 
-        if (await link.payerInfoSection.isVisible({ timeout: 5000 }).catch(() => false)) {
-            await link.mobileInput.fill('500021788');
-            await link.emailInput.fill('payer@example.com');
-            await link.nameInput.fill('Test Payer');
-            await link.continueButton.click();
-            const otpVisible = await otp.isVisible();
-            test.skip(!otpVisible, 'OTP step not configured for this link/environment');
-            await expect(otp.heading).toBeVisible();
-        }
+        // The payer-info form is being retired in favor of server-resolved
+        // checkout (see PaymentLinkPayerInfoRemoval.spec.ts) — skip explicitly
+        // once that ships rather than silently asserting nothing.
+        const payerInfoVisible = await link.payerInfoSection.isVisible({ timeout: 5000 }).catch(() => false);
+        test.skip(!payerInfoVisible, 'Payer info form retired in favor of server-resolved checkout');
+
+        await link.mobileInput.fill('500021788');
+        await link.emailInput.fill('payer@example.com');
+        await link.nameInput.fill('Test Payer');
+        await link.continueButton.click();
+        const otpVisible = await otp.isVisible();
+        test.skip(!otpVisible, 'OTP step not configured for this link/environment');
+        await expect(otp.heading).toBeVisible();
     });
 });
 
 test.describe('Payment Links — Full Navigation Flow (TC-PL-008)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('TC-PL-008: should transition Link Entry → Summary → Payer Info → OTP → Payment → Result with proper state', async ({ page }) => {
         await mockValidBillLink(page);
         await mockPayerInfoSubmitSuccess(page);
@@ -117,15 +129,21 @@ test.describe('Payment Links — Full Navigation Flow (TC-PL-008)', () => {
 
         await expect(link.summarySection).toBeVisible({ timeout: 15000 });
 
-        if (await link.payerInfoSection.isVisible({ timeout: 5000 }).catch(() => false)) {
-            await link.mobileInput.fill('500021788');
-            await link.emailInput.fill('payer@example.com');
-            await link.nameInput.fill('Test Payer');
-            await link.continueButton.click();
+        // This test's title describes the old payer-info navigation specifically;
+        // the new server-resolved checkout's equivalent full-navigation coverage
+        // lives in PaymentLinkPayerInfoRemoval.spec.ts (TC-PL-009/010). Skip
+        // explicitly once the payer-info form is retired rather than silently
+        // asserting nothing about the navigation this test claims to cover.
+        const payerInfoVisible = await link.payerInfoSection.isVisible({ timeout: 5000 }).catch(() => false);
+        test.skip(!payerInfoVisible, 'Payer info form retired in favor of server-resolved checkout — see PaymentLinkPayerInfoRemoval.spec.ts');
 
-            if (await otp.isVisible()) {
-                await otp.fillAndVerify('00000000');
-            }
+        await link.mobileInput.fill('500021788');
+        await link.emailInput.fill('payer@example.com');
+        await link.nameInput.fill('Test Payer');
+        await link.continueButton.click();
+
+        if (await otp.isVisible()) {
+            await otp.fillAndVerify('918512');
         }
 
         await expect(link.resultHeading.or(link.summarySection)).toBeVisible({ timeout: 15000 });

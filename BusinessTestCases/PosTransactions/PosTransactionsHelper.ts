@@ -1,6 +1,7 @@
 import type { APIRequestContext, Page } from '@playwright/test';
 import { VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD } from '../Login/LoginHelper';
 import { waitForToastClear } from '../toastMessages';
+import { ADMIN_BASE_URL } from '../pageElements/Shared/AdminOtpConfigPage';
 
 /**
  * POS Transactions, Ledger, ACH Transfers and Terminal Callback — shared API helpers.
@@ -31,7 +32,7 @@ import { waitForToastClear } from '../toastMessages';
  *  back to dev regardless of ENV — the same known gap that affects
  *  Login/Registration/ForgotPassword `*APIFlow.spec.ts`. Add it to `.env.uat` /
  *  `.env.preprod` before trusting a non-dev run of this suite. */
-export const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev.majdpay.com';
+export const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev-emi.dg-cash.app';
 
 /** The web portal origin, for the two POS screens added by EMI-6011 / EMI-6013 /
  *  EMI-6015. Distinct from API_BASE, which is the gateway. */
@@ -124,7 +125,7 @@ let cachedBusinessToken: string | null = null;
 
 /**
  * Signs in with the standard business test account and returns its access token.
- * Mirrors the 3-step chain proven in Login/api/LoginAPIFlow.spec.ts, minus the
+ * Mirrors the 3-step chain proven in Login/api/signin/, minus the
  * device pre-registration, which sign-in does not require.
  * Returns '' rather than throwing so callers can skip cleanly.
  */
@@ -491,8 +492,8 @@ export function isFullPan(value: unknown): boolean {
 // because the repo convention is one `<Feature>Helper.ts` per feature folder.
 
 export const POS_BUSINESS_TRANSACTIONS_URL = `${BASE_URL_WEB}/business/main/pos-transactions`;
-export const POS_ADMIN_TRANSACTIONS_URL    = `${BASE_URL_WEB}/admin/main/pos-transactions`;
-export const ACH_RECORDS_URL               = `${BASE_URL_WEB}/admin/main/ach-records`;
+export const POS_ADMIN_TRANSACTIONS_URL    = `${ADMIN_BASE_URL}/admin/main/pos-transactions`;
+export const ACH_RECORDS_URL               = `${ADMIN_BASE_URL}/admin/main/ach-records`;
 
 export const POS_TRANSACTIONS_ROUTE = '**/api/v1/**pos/transactions**';
 export const POS_ADMIN_TRANSACTIONS_ROUTE = '**/api/v1/admin/pos/transactions**';

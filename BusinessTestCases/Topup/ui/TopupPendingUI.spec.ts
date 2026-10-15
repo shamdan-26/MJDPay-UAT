@@ -98,7 +98,7 @@ test.describe('Topup – Payment Pending UI', { tag: ['@topup', '@ui'], annotati
 
     // KNOWN BUG (accessibility): the aria-live="polite" region is empty on every
     // result screen, so the pending status is never announced. Un-skip once fixed.
-    test.skip('the pending message is announced through the aria-live region', async () => {
+    test('the pending message is announced through the aria-live region', async () => {
         const { topup } = session;
         await expect(topup.resultLiveRegion.filter({ hasText: PENDING_TITLE })).toHaveCount(1);
     });

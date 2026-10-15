@@ -20,6 +20,7 @@ import {
 // ─────────────────────────────────────────────────────────────────────────────
 
 test.describe('Bill QR Scanning — Scan Succeeds Without a Server Error (BQR-01, EMI-5903)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BQR-01: scanning a valid bill QR should show the bill summary, not a 500 error', async ({ page }) => {
         await mockBillQrScanSuccess(page);
         await gotoBillQrScan(page, VALID_BILL_QR);
@@ -39,6 +40,7 @@ test.describe('Bill QR Scanning — Scan Succeeds Without a Server Error (BQR-01
 });
 
 test.describe('Bill QR Scanning — Max Attempts Exceeded Handled Gracefully (BQR-02, EMI-5685)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BQR-02: exceeding the maximum scan/pay attempts should let the user return to the first page without a 500 error', async ({ page }) => {
         await mockBillQrMaxAttemptsExceeded(page);
         await gotoBillQrScan(page, VALID_BILL_QR);

@@ -79,7 +79,7 @@ test.describe('Topup – Payment Failed UI', { tag: ['@topup', '@ui'], annotatio
     // KNOWN BUG: no failure reason / error code, no Retry or "Try another
     // method" action, no reference ID and no support link — the user can't
     // tell why it failed or whether they were charged. Un-skip once added.
-    test.skip('the failure screen explains the reason and offers a retry action', async () => {
+    test('the failure screen explains the reason and offers a retry action', async () => {
         const { topup } = session;
         await expect(topup.page.getByRole('button', { name: /retry|try again|إعادة المحاولة/i })).toBeVisible();
         await expect(topup.page.getByText(/reference|مرجع|رقم العملية/i)).toBeVisible();
@@ -87,14 +87,14 @@ test.describe('Topup – Payment Failed UI', { tag: ['@topup', '@ui'], annotatio
 
     // KNOWN BUG: the aria-live="polite" region is empty, so the failure is
     // never announced to screen readers. Un-skip once the message is in it.
-    test.skip('the failure message is announced through the aria-live region', async () => {
+    test('the failure message is announced through the aria-live region', async () => {
         const { topup } = session;
         await expect(topup.resultLiveRegion.filter({ hasText: FAILED_TITLE })).toHaveCount(1);
     });
 
     // KNOWN COPY ISSUE: "غير ناجحة" reads like a translation; "لم تتم عملية
     // الدفع" or "تعذر إتمام الدفع" is more natural. Un-skip once reworded.
-    test.skip('the failure description uses natural Arabic copy', async () => {
+    test('the failure description uses natural Arabic copy', async () => {
         const { topup } = session;
         await expect(topup.resultDescription).toHaveText(/لم تتم عملية الدفع|تعذر إتمام الدفع/);
     });

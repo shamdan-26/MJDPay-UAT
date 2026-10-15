@@ -1,0 +1,1585 @@
+{
+  "item": [
+    {
+      "id": "cbbf1a51-5da2-45d5-8a00-2953f9ece532",
+      "name": "wallet-controls-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6ae384b5-4bd1-433c-a109-e4f9483dd153",
+          "name": "set Wallet Controls",
+          "request": {
+            "name": "set Wallet Controls",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "wallet-config",
+                ":walletCode",
+                "configuration"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "culpa adipisicing minim enim",
+                  "key": "walletCode",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/wallet-config/:walletCode/configuration"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"parentRuleId\": 97473024,\n  \"platformType\": \"Lorem sit\",\n  \"disallowedUnifiedNumbers\": [\n    \"Excepteur in aute\",\n    \"dolore ad\"\n  ],\n  \"allowedChannels\": [\n    \"enim in\",\n    \"sint dolore Lorem amet sed\"\n  ],\n  \"allowedRegions\": [\n    {\n      \"id\": 78477445,\n      \"encodedGeoPoints\": \"mollit Ut consectetur est\",\n      \"countryCode\": \"velit eu\"\n    },\n    {\n      \"id\": 3812468,\n      \"encodedGeoPoints\": \"dolore veniam nisi in sunt\",\n      \"countryCode\": \"commo\"\n    }\n  ],\n  \"walletLimitation\": {\n    \"minBalance\": 36286118.08476508,\n    \"maxBalance\": 69677371.67686695\n  },\n  \"allowTransactionTypeCode\": [\n    \"Ut enim quis ut elit\",\n    \"magna dolore\"\n  ],\n  \"disallowedMerchantCategoryCode\": [\n    \"qui\",\n    \"nostrud ut\"\n  ],\n  \"transactionLimitationRequests\": [\n    {\n      \"min\": 97649592.37602973,\n      \"max\": 32653648.47705315,\n      \"hourlyPeriodAmount\": 9520669.689151838,\n      \"dailyPeriodAmount\": -52611120.203742325,\n      \"monthlyPeriodAmount\": -92360382.50571185,\n      \"yearlyPeriodAmount\": -60987840.180128396,\n      \"transactionTypeCode\": \"labore et proident veniam\"\n    },\n    {\n      \"min\": -30971482.51150143,\n      \"max\": -60908852.3334699,\n      \"hourlyPeriodAmount\": 78577540.16873154,\n      \"dailyPeriodAmount\": 3827323.3852537274,\n      \"monthlyPeriodAmount\": -23948243.901832923,\n      \"yearlyPeriodAmount\": -28478085.296863526,\n      \"transactionTypeCode\": \"in et officia laborum Excepteur\"\n    }\n  ],\n  \"transactionCountLimitationRequests\": [\n    {\n      \"hourlyPeriodCount\": -72541929,\n      \"dailyPeriodCount\": 11650726,\n      \"monthlyPeriodCount\": 56795760,\n      \"yearlyPeriodCount\": 96348928,\n      \"transactionTypeCode\": \"ad ut veniam velit\"\n    },\n    {\n      \"hourlyPeriodCount\": -818223,\n      \"dailyPeriodCount\": -71933512,\n      \"monthlyPeriodCount\": -46139184,\n      \"yearlyPeriodCount\": -78475631,\n      \"transactionTypeCode\": \"in do quis magna\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3b3829b0-bb87-4fea-a76d-b214186f4080",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "wallet-config",
+                    ":walletCode",
+                    "configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "culpa adipisicing minim enim",
+                      "key": "walletCode",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "culpa adipisicing minim enim"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parentRuleId\": -61994659,\n  \"platformType\": \"in\",\n  \"disallowedUnifiedNumbers\": [\n    \"sit\",\n    \"quis et\"\n  ],\n  \"allowedChannels\": [\n    \"labore eiu\",\n    \"incididunt est\"\n  ],\n  \"allowedRegions\": [\n    {\n      \"id\": 19406789,\n      \"encodedGeoPoints\": \"elit consectetur\",\n      \"countryCode\": \"ad laboris commodo cillum\"\n    },\n    {\n      \"id\": -42300580,\n      \"encodedGeoPoints\": \"pariatur dolor et proident enim\",\n      \"countryCode\": \"anim consectetur\"\n    }\n  ],\n  \"walletLimitation\": {\n    \"minBalance\": -91267632.6442011,\n    \"maxBalance\": 38666634.500753075\n  },\n  \"allowTransactionTypeCode\": [\n    \"nulla deserunt sit incididunt\",\n    \"ea id eu ullamco\"\n  ],\n  \"disallowedMerchantCategoryCode\": [\n    \"pariatur in minim incididunt\",\n    \"eiusmod qui dolor enim culpa\"\n  ],\n  \"transactionLimitationRequests\": [\n    {\n      \"min\": -92189613.46156502,\n      \"max\": -57178580.20780959,\n      \"hourlyPeriodAmount\": -11250753.340636343,\n      \"dailyPeriodAmount\": 35997370.91355646,\n      \"monthlyPeriodAmount\": -91654245.17041627,\n      \"yearlyPeriodAmount\": 90958233.64640138,\n      \"transactionTypeCode\": \"qui\"\n    },\n    {\n      \"min\": -6574424.111804172,\n      \"max\": 27771815.363718018,\n      \"hourlyPeriodAmount\": -52729904.25663475,\n      \"dailyPeriodAmount\": 87565410.85939366,\n      \"monthlyPeriodAmount\": 18903611.334906146,\n      \"yearlyPeriodAmount\": -89361705.10947797,\n      \"transactionTypeCode\": \"laborum Excepteur enim sint\"\n    }\n  ],\n  \"transactionCountLimitationRequests\": [\n    {\n      \"hourlyPeriodCount\": 61628407,\n      \"dailyPeriodCount\": 13726275,\n      \"monthlyPeriodCount\": -55963850,\n      \"yearlyPeriodCount\": 93210821,\n      \"transactionTypeCode\": \"in\"\n    },\n    {\n      \"hourlyPeriodCount\": -69625069,\n      \"dailyPeriodCount\": -78787865,\n      \"monthlyPeriodCount\": -47913843,\n      \"yearlyPeriodCount\": 64787593,\n      \"transactionTypeCode\": \"consequat a\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 74786707,\n  \"walletCode\": \"ullamco\",\n  \"parentRuleId\": -8123446,\n  \"platformType\": \"consequat esse\",\n  \"disallowedUnifiedNumbers\": [\n    \"nisi laboris\",\n    \"anim ea\"\n  ],\n  \"allowedChannels\": [\n    {\n      \"id\": 62830820,\n      \"code\": \"officia\",\n      \"description\": \"consequa\",\n      \"nameAr\": \"est dolor\",\n      \"nameEn\": \"dolor incididunt fugiat qui occaecat\"\n    },\n    {\n      \"id\": 20265675,\n      \"code\": \"sint in\",\n      \"description\": \"aliqua aliquip\",\n      \"nameAr\": \"anim ut nulla labore in\",\n      \"nameEn\": \"amet ea non U\"\n    }\n  ],\n  \"allowedRegions\": [\n    {\n      \"id\": -65165781,\n      \"country\": {\n        \"id\": 75081071,\n        \"nameAr\": \"culpa mollit\",\n        \"nameEn\": \"occaecat ut\",\n        \"code\": \"consectetur\"\n      },\n      \"encodedGeoPoints\": \"ad aute qui\"\n    },\n    {\n      \"id\": 97453358,\n      \"country\": {\n        \"id\": 7988055,\n        \"nameAr\": \"quis dolore aliqua\",\n        \"nameEn\": \"est aliqua nisi tempor\",\n        \"code\": \"deserunt sunt\"\n      },\n      \"encodedGeoPoints\": \"aliquip nulla enim\"\n    }\n  ],\n  \"walletLimitation\": {\n    \"minBalance\": 22242299.045842275,\n    \"maxBalance\": 39178305.682992846,\n    \"riskLevel\": \"cupidatat\",\n    \"walletCode\": \"adipisicing ut tempor dolor\"\n  },\n  \"allowTransactionTypeCode\": [\n    \"amet cillum ex in pariatur\",\n    \"ullamco reprehenderit ex sit\"\n  ],\n  \"disallowedMerchantCategoryCode\": [\n    {\n      \"id\": 62411800,\n      \"merchantCategoryCode\": \"et nulla\",\n      \"nameEn\": \"deserunt consequat in in\",\n      \"nameAr\": \"sit nostrud labore Ut\",\n      \"description\": \"dolor consectetur esse ut amet\",\n      \"active\": false\n    },\n    {\n      \"id\": 23163682,\n      \"merchantCategoryCode\": \"nostrud Duis veniam\",\n      \"nameEn\": \"proident Duis cillum\",\n      \"nameAr\": \"esse dolore ea exercitation\",\n      \"description\": \"nulla proident aliqua\",\n      \"active\": true\n    }\n  ],\n  \"transactionLimitationRequests\": [\n    {\n      \"id\": -56002746,\n      \"min\": -11968953.903774306,\n      \"max\": 18602842.43505463,\n      \"riskLevel\": \"proident\",\n      \"walletCode\": \"nulla ullamco ut labore culpa\",\n      \"transactionTypes\": [\n        \"magna dolo\",\n        \"in\"\n      ],\n      \"channels\": [\n        {\n          \"id\": 80962423,\n          \"code\": \"nisi sed eu\",\n          \"description\": \"nulla magna dolore\",\n          \"nameAr\": \"in adipisicing proident sunt\",\n          \"nameEn\": \"aliquip reprehenderit aliqua\"\n        },\n        {\n          \"id\": -7118466,\n          \"code\": \"ullamco occaecat labore dolor\",\n          \"description\": \"adipisicing nostrud eu\",\n          \"nameAr\": \"culpa Excepteur\",\n          \"nameEn\": \"consequat Duis ex\"\n        }\n      ],\n      \"platformType\": {\n        \"id\": -96042602,\n        \"code\": \"sit\",\n        \"nameAr\": \"in enim labore mollit sit\",\n        \"nameEn\": \"aute Duis adipisicing\",\n        \"description\": \"eu non voluptate fugiat ullamco\"\n      },\n      \"period\": {\n        \"id\": 8680967,\n        \"code\": \"Lorem cillum quis esse\",\n        \"nameAr\": \"nostrud n\",\n        \"nameEn\": \"nulla et Excepteur aliqu\",\n        \"description\": \"pariatur sed Duis voluptate\"\n      }\n    },\n    {\n      \"id\": 13011690,\n      \"min\": -53257034.769875824,\n      \"max\": 17173836.55765499,\n      \"riskLevel\": \"do exercitation\",\n      \"walletCode\": \"laboris ullamco ipsum dolore adipisicing\",\n      \"transactionTypes\": [\n        \"do et ut consectetur\",\n        \"minim ex\"\n      ],\n      \"channels\": [\n        {\n          \"id\": -86291471,\n          \"code\": \"est nulla ipsum ex\",\n          \"description\": \"non culpa do ullamco cillum\",\n          \"nameAr\": \"Duis ullamco\",\n          \"nameEn\": \"in ex elit\"\n        },\n        {\n          \"id\": -13610548,\n          \"code\": \"nisi tempor pariatur consequat\",\n          \"description\": \"minim cupidatat\",\n          \"nameAr\": \"ut\",\n          \"nameEn\": \"et elit veniam\"\n        }\n      ],\n      \"platformType\": {\n        \"id\": 57227790,\n        \"code\": \"dolor adipisicing proident fugiat eiusmod\",\n        \"nameAr\": \"id ullamco ut\",\n        \"nameEn\": \"tempor irure in incididunt Ut\",\n        \"description\": \"consequat in eiusmod\"\n      },\n      \"period\": {\n        \"id\": 856709,\n        \"code\": \"dolore\",\n        \"nameAr\": \"qui irure\",\n        \"nameEn\": \"ipsum aliquip\",\n        \"description\": \"velit cupidatat non dolore do\"\n      }\n    }\n  ],\n  \"transactionCountLimitationRequests\": [\n    {\n      \"id\": 85440393,\n      \"transactionCount\": 12012170,\n      \"riskLevel\": \"ullamco occaecat\",\n      \"channels\": [\n        {\n          \"id\": 9436353,\n          \"code\": \"amet\",\n          \"description\": \"esse elit fugiat sunt\",\n          \"nameAr\": \"deserunt occaecat ut consequat\",\n          \"nameEn\": \"non ipsum ex labore in\"\n        },\n        {\n          \"id\": 51637876,\n          \"code\": \"eu laboris\",\n          \"description\": \"qui consequat\",\n          \"nameAr\": \"minim sit aliqua\",\n          \"nameEn\": \"minim aliquip\"\n        }\n      ],\n      \"transactionTypes\": [\n        \"ea consequ\",\n        \"ad veniam dolore\"\n      ],\n      \"platformType\": {\n        \"id\": -87872404,\n        \"code\": \"eu\",\n        \"nameAr\": \"magna fugiat enim\",\n        \"nameEn\": \"do ut\",\n        \"description\": \"voluptate occaecat\"\n      },\n      \"period\": {\n        \"id\": -16744766,\n        \"code\": \"laboris nulla commodo\",\n        \"nameAr\": \"labore laboris commodo\",\n        \"nameEn\": \"anim in do\",\n        \"description\": \"non Duis sit\"\n      },\n      \"walletCode\": \"non ullamco\"\n    },\n    {\n      \"id\": 23039199,\n      \"transactionCount\": 31431098,\n      \"riskLevel\": \"fugiat laborum ut ipsum\",\n      \"channels\": [\n        {\n          \"id\": -6503936,\n          \"code\": \"incididunt consectetur\",\n          \"description\": \"dolore do qui\",\n          \"nameAr\": \"labore laborum eu\",\n          \"nameEn\": \"velit sint adipisicing proident\"\n        },\n        {\n          \"id\": 6017792,\n          \"code\": \"nostrud tempor u\",\n          \"description\": \"pariatur laboris\",\n          \"nameAr\": \"nulla\",\n          \"nameEn\": \"Ut eiusmod\"\n        }\n      ],\n      \"transactionTypes\": [\n        \"dolore\",\n        \"laborum aute\"\n      ],\n      \"platformType\": {\n        \"id\": 21153060,\n        \"code\": \"eu\",\n        \"nameAr\": \"nisi non aliqua\",\n        \"nameEn\": \"occaeca\",\n        \"description\": \"exercitation\"\n      },\n      \"period\": {\n        \"id\": 43632485,\n        \"code\": \"eu officia ullamco dolore\",\n        \"nameAr\": \"dolore ea laboris non mag\",\n        \"nameEn\": \"eiusmod mollit labore sint ex\",\n        \"description\": \"veniam enim\"\n      },\n      \"walletCode\": \"id\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "24337b07-803e-4e99-a10a-f9b116d6c22b",
+          "name": "set Sub Wallet Controls",
+          "request": {
+            "name": "set Sub Wallet Controls",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "wallet-config",
+                "sub-wallet",
+                ":walletCode",
+                "configuration"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "culpa adipisicing minim enim",
+                  "key": "walletCode",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/wallet-config/sub-wallet/:walletCode/configuration"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"parentRuleId\": 97473024,\n  \"platformType\": \"Lorem sit\",\n  \"disallowedUnifiedNumbers\": [\n    \"Excepteur in aute\",\n    \"dolore ad\"\n  ],\n  \"allowedChannels\": [\n    \"enim in\",\n    \"sint dolore Lorem amet sed\"\n  ],\n  \"allowedRegions\": [\n    {\n      \"id\": 78477445,\n      \"encodedGeoPoints\": \"mollit Ut consectetur est\",\n      \"countryCode\": \"velit eu\"\n    },\n    {\n      \"id\": 3812468,\n      \"encodedGeoPoints\": \"dolore veniam nisi in sunt\",\n      \"countryCode\": \"commo\"\n    }\n  ],\n  \"walletLimitation\": {\n    \"minBalance\": 36286118.08476508,\n    \"maxBalance\": 69677371.67686695\n  },\n  \"allowTransactionTypeCode\": [\n    \"Ut enim quis ut elit\",\n    \"magna dolore\"\n  ],\n  \"disallowedMerchantCategoryCode\": [\n    \"qui\",\n    \"nostrud ut\"\n  ],\n  \"transactionLimitationRequests\": [\n    {\n      \"min\": 97649592.37602973,\n      \"max\": 32653648.47705315,\n      \"hourlyPeriodAmount\": 9520669.689151838,\n      \"dailyPeriodAmount\": -52611120.203742325,\n      \"monthlyPeriodAmount\": -92360382.50571185,\n      \"yearlyPeriodAmount\": -60987840.180128396,\n      \"transactionTypeCode\": \"labore et proident veniam\"\n    },\n    {\n      \"min\": -30971482.51150143,\n      \"max\": -60908852.3334699,\n      \"hourlyPeriodAmount\": 78577540.16873154,\n      \"dailyPeriodAmount\": 3827323.3852537274,\n      \"monthlyPeriodAmount\": -23948243.901832923,\n      \"yearlyPeriodAmount\": -28478085.296863526,\n      \"transactionTypeCode\": \"in et officia laborum Excepteur\"\n    }\n  ],\n  \"transactionCountLimitationRequests\": [\n    {\n      \"hourlyPeriodCount\": -72541929,\n      \"dailyPeriodCount\": 11650726,\n      \"monthlyPeriodCount\": 56795760,\n      \"yearlyPeriodCount\": 96348928,\n      \"transactionTypeCode\": \"ad ut veniam velit\"\n    },\n    {\n      \"hourlyPeriodCount\": -818223,\n      \"dailyPeriodCount\": -71933512,\n      \"monthlyPeriodCount\": -46139184,\n      \"yearlyPeriodCount\": -78475631,\n      \"transactionTypeCode\": \"in do quis magna\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a61e0331-c0d0-4ecb-a65e-91dbeaab3c18",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "wallet-config",
+                    "sub-wallet",
+                    ":walletCode",
+                    "configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "culpa adipisicing minim enim",
+                      "key": "walletCode",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "culpa adipisicing minim enim"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parentRuleId\": -61994659,\n  \"platformType\": \"in\",\n  \"disallowedUnifiedNumbers\": [\n    \"sit\",\n    \"quis et\"\n  ],\n  \"allowedChannels\": [\n    \"labore eiu\",\n    \"incididunt est\"\n  ],\n  \"allowedRegions\": [\n    {\n      \"id\": 19406789,\n      \"encodedGeoPoints\": \"elit consectetur\",\n      \"countryCode\": \"ad laboris commodo cillum\"\n    },\n    {\n      \"id\": -42300580,\n      \"encodedGeoPoints\": \"pariatur dolor et proident enim\",\n      \"countryCode\": \"anim consectetur\"\n    }\n  ],\n  \"walletLimitation\": {\n    \"minBalance\": -91267632.6442011,\n    \"maxBalance\": 38666634.500753075\n  },\n  \"allowTransactionTypeCode\": [\n    \"nulla deserunt sit incididunt\",\n    \"ea id eu ullamco\"\n  ],\n  \"disallowedMerchantCategoryCode\": [\n    \"pariatur in minim incididunt\",\n    \"eiusmod qui dolor enim culpa\"\n  ],\n  \"transactionLimitationRequests\": [\n    {\n      \"min\": -92189613.46156502,\n      \"max\": -57178580.20780959,\n      \"hourlyPeriodAmount\": -11250753.340636343,\n      \"dailyPeriodAmount\": 35997370.91355646,\n      \"monthlyPeriodAmount\": -91654245.17041627,\n      \"yearlyPeriodAmount\": 90958233.64640138,\n      \"transactionTypeCode\": \"qui\"\n    },\n    {\n      \"min\": -6574424.111804172,\n      \"max\": 27771815.363718018,\n      \"hourlyPeriodAmount\": -52729904.25663475,\n      \"dailyPeriodAmount\": 87565410.85939366,\n      \"monthlyPeriodAmount\": 18903611.334906146,\n      \"yearlyPeriodAmount\": -89361705.10947797,\n      \"transactionTypeCode\": \"laborum Excepteur enim sint\"\n    }\n  ],\n  \"transactionCountLimitationRequests\": [\n    {\n      \"hourlyPeriodCount\": 61628407,\n      \"dailyPeriodCount\": 13726275,\n      \"monthlyPeriodCount\": -55963850,\n      \"yearlyPeriodCount\": 93210821,\n      \"transactionTypeCode\": \"in\"\n    },\n    {\n      \"hourlyPeriodCount\": -69625069,\n      \"dailyPeriodCount\": -78787865,\n      \"monthlyPeriodCount\": -47913843,\n      \"yearlyPeriodCount\": 64787593,\n      \"transactionTypeCode\": \"consequat a\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 74786707,\n  \"walletCode\": \"ullamco\",\n  \"parentRuleId\": -8123446,\n  \"platformType\": \"consequat esse\",\n  \"disallowedUnifiedNumbers\": [\n    \"nisi laboris\",\n    \"anim ea\"\n  ],\n  \"allowedChannels\": [\n    {\n      \"id\": 62830820,\n      \"code\": \"officia\",\n      \"description\": \"consequa\",\n      \"nameAr\": \"est dolor\",\n      \"nameEn\": \"dolor incididunt fugiat qui occaecat\"\n    },\n    {\n      \"id\": 20265675,\n      \"code\": \"sint in\",\n      \"description\": \"aliqua aliquip\",\n      \"nameAr\": \"anim ut nulla labore in\",\n      \"nameEn\": \"amet ea non U\"\n    }\n  ],\n  \"allowedRegions\": [\n    {\n      \"id\": -65165781,\n      \"country\": {\n        \"id\": 75081071,\n        \"nameAr\": \"culpa mollit\",\n        \"nameEn\": \"occaecat ut\",\n        \"code\": \"consectetur\"\n      },\n      \"encodedGeoPoints\": \"ad aute qui\"\n    },\n    {\n      \"id\": 97453358,\n      \"country\": {\n        \"id\": 7988055,\n        \"nameAr\": \"quis dolore aliqua\",\n        \"nameEn\": \"est aliqua nisi tempor\",\n        \"code\": \"deserunt sunt\"\n      },\n      \"encodedGeoPoints\": \"aliquip nulla enim\"\n    }\n  ],\n  \"walletLimitation\": {\n    \"minBalance\": 22242299.045842275,\n    \"maxBalance\": 39178305.682992846,\n    \"riskLevel\": \"cupidatat\",\n    \"walletCode\": \"adipisicing ut tempor dolor\"\n  },\n  \"allowTransactionTypeCode\": [\n    \"amet cillum ex in pariatur\",\n    \"ullamco reprehenderit ex sit\"\n  ],\n  \"disallowedMerchantCategoryCode\": [\n    {\n      \"id\": 62411800,\n      \"merchantCategoryCode\": \"et nulla\",\n      \"nameEn\": \"deserunt consequat in in\",\n      \"nameAr\": \"sit nostrud labore Ut\",\n      \"description\": \"dolor consectetur esse ut amet\",\n      \"active\": false\n    },\n    {\n      \"id\": 23163682,\n      \"merchantCategoryCode\": \"nostrud Duis veniam\",\n      \"nameEn\": \"proident Duis cillum\",\n      \"nameAr\": \"esse dolore ea exercitation\",\n      \"description\": \"nulla proident aliqua\",\n      \"active\": true\n    }\n  ],\n  \"transactionLimitationRequests\": [\n    {\n      \"id\": -56002746,\n      \"min\": -11968953.903774306,\n      \"max\": 18602842.43505463,\n      \"riskLevel\": \"proident\",\n      \"walletCode\": \"nulla ullamco ut labore culpa\",\n      \"transactionTypes\": [\n        \"magna dolo\",\n        \"in\"\n      ],\n      \"channels\": [\n        {\n          \"id\": 80962423,\n          \"code\": \"nisi sed eu\",\n          \"description\": \"nulla magna dolore\",\n          \"nameAr\": \"in adipisicing proident sunt\",\n          \"nameEn\": \"aliquip reprehenderit aliqua\"\n        },\n        {\n          \"id\": -7118466,\n          \"code\": \"ullamco occaecat labore dolor\",\n          \"description\": \"adipisicing nostrud eu\",\n          \"nameAr\": \"culpa Excepteur\",\n          \"nameEn\": \"consequat Duis ex\"\n        }\n      ],\n      \"platformType\": {\n        \"id\": -96042602,\n        \"code\": \"sit\",\n        \"nameAr\": \"in enim labore mollit sit\",\n        \"nameEn\": \"aute Duis adipisicing\",\n        \"description\": \"eu non voluptate fugiat ullamco\"\n      },\n      \"period\": {\n        \"id\": 8680967,\n        \"code\": \"Lorem cillum quis esse\",\n        \"nameAr\": \"nostrud n\",\n        \"nameEn\": \"nulla et Excepteur aliqu\",\n        \"description\": \"pariatur sed Duis voluptate\"\n      }\n    },\n    {\n      \"id\": 13011690,\n      \"min\": -53257034.769875824,\n      \"max\": 17173836.55765499,\n      \"riskLevel\": \"do exercitation\",\n      \"walletCode\": \"laboris ullamco ipsum dolore adipisicing\",\n      \"transactionTypes\": [\n        \"do et ut consectetur\",\n        \"minim ex\"\n      ],\n      \"channels\": [\n        {\n          \"id\": -86291471,\n          \"code\": \"est nulla ipsum ex\",\n          \"description\": \"non culpa do ullamco cillum\",\n          \"nameAr\": \"Duis ullamco\",\n          \"nameEn\": \"in ex elit\"\n        },\n        {\n          \"id\": -13610548,\n          \"code\": \"nisi tempor pariatur consequat\",\n          \"description\": \"minim cupidatat\",\n          \"nameAr\": \"ut\",\n          \"nameEn\": \"et elit veniam\"\n        }\n      ],\n      \"platformType\": {\n        \"id\": 57227790,\n        \"code\": \"dolor adipisicing proident fugiat eiusmod\",\n        \"nameAr\": \"id ullamco ut\",\n        \"nameEn\": \"tempor irure in incididunt Ut\",\n        \"description\": \"consequat in eiusmod\"\n      },\n      \"period\": {\n        \"id\": 856709,\n        \"code\": \"dolore\",\n        \"nameAr\": \"qui irure\",\n        \"nameEn\": \"ipsum aliquip\",\n        \"description\": \"velit cupidatat non dolore do\"\n      }\n    }\n  ],\n  \"transactionCountLimitationRequests\": [\n    {\n      \"id\": 85440393,\n      \"transactionCount\": 12012170,\n      \"riskLevel\": \"ullamco occaecat\",\n      \"channels\": [\n        {\n          \"id\": 9436353,\n          \"code\": \"amet\",\n          \"description\": \"esse elit fugiat sunt\",\n          \"nameAr\": \"deserunt occaecat ut consequat\",\n          \"nameEn\": \"non ipsum ex labore in\"\n        },\n        {\n          \"id\": 51637876,\n          \"code\": \"eu laboris\",\n          \"description\": \"qui consequat\",\n          \"nameAr\": \"minim sit aliqua\",\n          \"nameEn\": \"minim aliquip\"\n        }\n      ],\n      \"transactionTypes\": [\n        \"ea consequ\",\n        \"ad veniam dolore\"\n      ],\n      \"platformType\": {\n        \"id\": -87872404,\n        \"code\": \"eu\",\n        \"nameAr\": \"magna fugiat enim\",\n        \"nameEn\": \"do ut\",\n        \"description\": \"voluptate occaecat\"\n      },\n      \"period\": {\n        \"id\": -16744766,\n        \"code\": \"laboris nulla commodo\",\n        \"nameAr\": \"labore laboris commodo\",\n        \"nameEn\": \"anim in do\",\n        \"description\": \"non Duis sit\"\n      },\n      \"walletCode\": \"non ullamco\"\n    },\n    {\n      \"id\": 23039199,\n      \"transactionCount\": 31431098,\n      \"riskLevel\": \"fugiat laborum ut ipsum\",\n      \"channels\": [\n        {\n          \"id\": -6503936,\n          \"code\": \"incididunt consectetur\",\n          \"description\": \"dolore do qui\",\n          \"nameAr\": \"labore laborum eu\",\n          \"nameEn\": \"velit sint adipisicing proident\"\n        },\n        {\n          \"id\": 6017792,\n          \"code\": \"nostrud tempor u\",\n          \"description\": \"pariatur laboris\",\n          \"nameAr\": \"nulla\",\n          \"nameEn\": \"Ut eiusmod\"\n        }\n      ],\n      \"transactionTypes\": [\n        \"dolore\",\n        \"laborum aute\"\n      ],\n      \"platformType\": {\n        \"id\": 21153060,\n        \"code\": \"eu\",\n        \"nameAr\": \"nisi non aliqua\",\n        \"nameEn\": \"occaeca\",\n        \"description\": \"exercitation\"\n      },\n      \"period\": {\n        \"id\": 43632485,\n        \"code\": \"eu officia ullamco dolore\",\n        \"nameAr\": \"dolore ea laboris non mag\",\n        \"nameEn\": \"eiusmod mollit labore sint ex\",\n        \"description\": \"veniam enim\"\n      },\n      \"walletCode\": \"id\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c4fb8f50-874b-4c25-a8a3-419669c5c3a7",
+          "name": "get Wallet Controls",
+          "request": {
+            "name": "get Wallet Controls",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "wallet-config",
+                ":walletCode"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "culpa adipisicing minim enim",
+                  "key": "walletCode",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/wallet-config/:walletCode"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0f22f4a7-e309-4361-a784-359f89046f62",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "wallet-config",
+                    ":walletCode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "culpa adipisicing minim enim",
+                      "key": "walletCode",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "culpa adipisicing minim enim"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 74786707,\n  \"walletCode\": \"ullamco\",\n  \"parentRuleId\": -8123446,\n  \"platformType\": \"consequat esse\",\n  \"disallowedUnifiedNumbers\": [\n    \"nisi laboris\",\n    \"anim ea\"\n  ],\n  \"allowedChannels\": [\n    {\n      \"id\": 62830820,\n      \"code\": \"officia\",\n      \"description\": \"consequa\",\n      \"nameAr\": \"est dolor\",\n      \"nameEn\": \"dolor incididunt fugiat qui occaecat\"\n    },\n    {\n      \"id\": 20265675,\n      \"code\": \"sint in\",\n      \"description\": \"aliqua aliquip\",\n      \"nameAr\": \"anim ut nulla labore in\",\n      \"nameEn\": \"amet ea non U\"\n    }\n  ],\n  \"allowedRegions\": [\n    {\n      \"id\": -65165781,\n      \"country\": {\n        \"id\": 75081071,\n        \"nameAr\": \"culpa mollit\",\n        \"nameEn\": \"occaecat ut\",\n        \"code\": \"consectetur\"\n      },\n      \"encodedGeoPoints\": \"ad aute qui\"\n    },\n    {\n      \"id\": 97453358,\n      \"country\": {\n        \"id\": 7988055,\n        \"nameAr\": \"quis dolore aliqua\",\n        \"nameEn\": \"est aliqua nisi tempor\",\n        \"code\": \"deserunt sunt\"\n      },\n      \"encodedGeoPoints\": \"aliquip nulla enim\"\n    }\n  ],\n  \"walletLimitation\": {\n    \"minBalance\": 22242299.045842275,\n    \"maxBalance\": 39178305.682992846,\n    \"riskLevel\": \"cupidatat\",\n    \"walletCode\": \"adipisicing ut tempor dolor\"\n  },\n  \"allowTransactionTypeCode\": [\n    \"amet cillum ex in pariatur\",\n    \"ullamco reprehenderit ex sit\"\n  ],\n  \"disallowedMerchantCategoryCode\": [\n    {\n      \"id\": 62411800,\n      \"merchantCategoryCode\": \"et nulla\",\n      \"nameEn\": \"deserunt consequat in in\",\n      \"nameAr\": \"sit nostrud labore Ut\",\n      \"description\": \"dolor consectetur esse ut amet\",\n      \"active\": false\n    },\n    {\n      \"id\": 23163682,\n      \"merchantCategoryCode\": \"nostrud Duis veniam\",\n      \"nameEn\": \"proident Duis cillum\",\n      \"nameAr\": \"esse dolore ea exercitation\",\n      \"description\": \"nulla proident aliqua\",\n      \"active\": true\n    }\n  ],\n  \"transactionLimitationRequests\": [\n    {\n      \"id\": -56002746,\n      \"min\": -11968953.903774306,\n      \"max\": 18602842.43505463,\n      \"riskLevel\": \"proident\",\n      \"walletCode\": \"nulla ullamco ut labore culpa\",\n      \"transactionTypes\": [\n        \"magna dolo\",\n        \"in\"\n      ],\n      \"channels\": [\n        {\n          \"id\": 80962423,\n          \"code\": \"nisi sed eu\",\n          \"description\": \"nulla magna dolore\",\n          \"nameAr\": \"in adipisicing proident sunt\",\n          \"nameEn\": \"aliquip reprehenderit aliqua\"\n        },\n        {\n          \"id\": -7118466,\n          \"code\": \"ullamco occaecat labore dolor\",\n          \"description\": \"adipisicing nostrud eu\",\n          \"nameAr\": \"culpa Excepteur\",\n          \"nameEn\": \"consequat Duis ex\"\n        }\n      ],\n      \"platformType\": {\n        \"id\": -96042602,\n        \"code\": \"sit\",\n        \"nameAr\": \"in enim labore mollit sit\",\n        \"nameEn\": \"aute Duis adipisicing\",\n        \"description\": \"eu non voluptate fugiat ullamco\"\n      },\n      \"period\": {\n        \"id\": 8680967,\n        \"code\": \"Lorem cillum quis esse\",\n        \"nameAr\": \"nostrud n\",\n        \"nameEn\": \"nulla et Excepteur aliqu\",\n        \"description\": \"pariatur sed Duis voluptate\"\n      }\n    },\n    {\n      \"id\": 13011690,\n      \"min\": -53257034.769875824,\n      \"max\": 17173836.55765499,\n      \"riskLevel\": \"do exercitation\",\n      \"walletCode\": \"laboris ullamco ipsum dolore adipisicing\",\n      \"transactionTypes\": [\n        \"do et ut consectetur\",\n        \"minim ex\"\n      ],\n      \"channels\": [\n        {\n          \"id\": -86291471,\n          \"code\": \"est nulla ipsum ex\",\n          \"description\": \"non culpa do ullamco cillum\",\n          \"nameAr\": \"Duis ullamco\",\n          \"nameEn\": \"in ex elit\"\n        },\n        {\n          \"id\": -13610548,\n          \"code\": \"nisi tempor pariatur consequat\",\n          \"description\": \"minim cupidatat\",\n          \"nameAr\": \"ut\",\n          \"nameEn\": \"et elit veniam\"\n        }\n      ],\n      \"platformType\": {\n        \"id\": 57227790,\n        \"code\": \"dolor adipisicing proident fugiat eiusmod\",\n        \"nameAr\": \"id ullamco ut\",\n        \"nameEn\": \"tempor irure in incididunt Ut\",\n        \"description\": \"consequat in eiusmod\"\n      },\n      \"period\": {\n        \"id\": 856709,\n        \"code\": \"dolore\",\n        \"nameAr\": \"qui irure\",\n        \"nameEn\": \"ipsum aliquip\",\n        \"description\": \"velit cupidatat non dolore do\"\n      }\n    }\n  ],\n  \"transactionCountLimitationRequests\": [\n    {\n      \"id\": 85440393,\n      \"transactionCount\": 12012170,\n      \"riskLevel\": \"ullamco occaecat\",\n      \"channels\": [\n        {\n          \"id\": 9436353,\n          \"code\": \"amet\",\n          \"description\": \"esse elit fugiat sunt\",\n          \"nameAr\": \"deserunt occaecat ut consequat\",\n          \"nameEn\": \"non ipsum ex labore in\"\n        },\n        {\n          \"id\": 51637876,\n          \"code\": \"eu laboris\",\n          \"description\": \"qui consequat\",\n          \"nameAr\": \"minim sit aliqua\",\n          \"nameEn\": \"minim aliquip\"\n        }\n      ],\n      \"transactionTypes\": [\n        \"ea consequ\",\n        \"ad veniam dolore\"\n      ],\n      \"platformType\": {\n        \"id\": -87872404,\n        \"code\": \"eu\",\n        \"nameAr\": \"magna fugiat enim\",\n        \"nameEn\": \"do ut\",\n        \"description\": \"voluptate occaecat\"\n      },\n      \"period\": {\n        \"id\": -16744766,\n        \"code\": \"laboris nulla commodo\",\n        \"nameAr\": \"labore laboris commodo\",\n        \"nameEn\": \"anim in do\",\n        \"description\": \"non Duis sit\"\n      },\n      \"walletCode\": \"non ullamco\"\n    },\n    {\n      \"id\": 23039199,\n      \"transactionCount\": 31431098,\n      \"riskLevel\": \"fugiat laborum ut ipsum\",\n      \"channels\": [\n        {\n          \"id\": -6503936,\n          \"code\": \"incididunt consectetur\",\n          \"description\": \"dolore do qui\",\n          \"nameAr\": \"labore laborum eu\",\n          \"nameEn\": \"velit sint adipisicing proident\"\n        },\n        {\n          \"id\": 6017792,\n          \"code\": \"nostrud tempor u\",\n          \"description\": \"pariatur laboris\",\n          \"nameAr\": \"nulla\",\n          \"nameEn\": \"Ut eiusmod\"\n        }\n      ],\n      \"transactionTypes\": [\n        \"dolore\",\n        \"laborum aute\"\n      ],\n      \"platformType\": {\n        \"id\": 21153060,\n        \"code\": \"eu\",\n        \"nameAr\": \"nisi non aliqua\",\n        \"nameEn\": \"occaeca\",\n        \"description\": \"exercitation\"\n      },\n      \"period\": {\n        \"id\": 43632485,\n        \"code\": \"eu officia ullamco dolore\",\n        \"nameAr\": \"dolore ea laboris non mag\",\n        \"nameEn\": \"eiusmod mollit labore sint ex\",\n        \"description\": \"veniam enim\"\n      },\n      \"walletCode\": \"id\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "52a08905-9b4a-4e13-92cb-c2bc7741585d",
+      "name": "internal-wallet-controls-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5e7b1320-09a0-4714-9c16-0cf13cf56954",
+          "name": "copy Wallet Controls",
+          "request": {
+            "name": "copy Wallet Controls",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "internal",
+                "wallet-config",
+                "copy"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/internal/wallet-config/copy"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"parentWalletCode\": \"amet\",\n  \"walletCode\": \"ut aliqua reprehenderit\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "70032adf-ea66-4f6f-b829-a3216b8eee86",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "internal",
+                    "wallet-config",
+                    "copy"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parentWalletCode\": \"amet\",\n  \"walletCode\": \"ut aliqua reprehenderit\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e040816b-36b9-4283-b385-8b87f7aeac31",
+          "name": "get Wallet Controls 1",
+          "request": {
+            "name": "get Wallet Controls 1",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "internal",
+                "wallet-config",
+                ":walletCode"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "riskLevel",
+                  "value": "culpa adipisicing minim enim",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "culpa adipisicing minim enim",
+                  "key": "walletCode",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/internal/wallet-config/:walletCode?riskLevel=culpa adipisicing minim enim"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "bec61df9-5865-4a52-88d3-22f4f53b882f",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "internal",
+                    "wallet-config",
+                    ":walletCode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "riskLevel",
+                      "value": "culpa adipisicing minim enim"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "culpa adipisicing minim enim",
+                      "key": "walletCode",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"walletCode\": \"mollit sit fug\",\n  \"parentRuleId\": -97455313,\n  \"platformType\": \"aute commodo esse Excepteur\",\n  \"disallowedCrnList\": [\n    \"labo\",\n    \"dolor deserunt dolor nostrud\"\n  ],\n  \"allowedRegions\": [\n    {\n      \"id\": 13189067,\n      \"country\": {\n        \"id\": 52349614,\n        \"nameAr\": \"ut ullamco velit sed\",\n        \"nameEn\": \"labore mollit e\",\n        \"code\": \"enim qui\"\n      },\n      \"encodedGeoPoints\": \"minim sint\"\n    },\n    {\n      \"id\": -76030527,\n      \"country\": {\n        \"id\": -11707148,\n        \"nameAr\": \"officia cupidatat consectetur Ut\",\n        \"nameEn\": \"reprehenderit sit sed amet irure\",\n        \"code\": \"quis voluptate eiusmod\"\n      },\n      \"encodedGeoPoints\": \"in esse ut\"\n    }\n  ],\n  \"walletLimitation\": {\n    \"minBalance\": 23128453.397470668,\n    \"maxBalance\": -86138678.1710251,\n    \"riskLevel\": \"ipsum sed\"\n  },\n  \"allowTransactionTypeCodes\": [\n    \"ea Duis elit mollit\",\n    \"ad\"\n  ],\n  \"disallowedMerchantCategoryCodes\": [\n    \"aliquip id Lorem est\",\n    \"sint Duis\"\n  ],\n  \"transactionLimitationRequests\": [\n    {\n      \"min\": 37268683.45356965,\n      \"max\": 53563772.36664942,\n      \"riskLevel\": \"nulla labore nisi\",\n      \"transactionTypes\": [\n        \"aute\",\n        \"sit fugiat culpa exercitation\"\n      ],\n      \"channelCodes\": [\n        \"voluptate Duis elit\",\n        \"esse in\"\n      ],\n      \"platformTypeCode\": \"adipisicing exercitation\",\n      \"periodCode\": \"in enim pariatur\"\n    },\n    {\n      \"min\": -97506921.5097696,\n      \"max\": -58288699.41803327,\n      \"riskLevel\": \"ut ut\",\n      \"transactionTypes\": [\n        \"Ut culpa sint\",\n        \"officia nisi Duis enim\"\n      ],\n      \"channelCodes\": [\n        \"nulla non ea\",\n        \"Lorem culpa ut nostrud\"\n      ],\n      \"platformTypeCode\": \"labore proident est culpa minim\",\n      \"periodCode\": \"ipsum commodo sit\"\n    }\n  ],\n  \"transactionCountLimitationRequests\": [\n    {\n      \"transactionCount\": 63181706,\n      \"riskLevel\": \"esse ipsum aute\",\n      \"channelCode\": [\n        \"id ad exercitation est\",\n        \"eiusmod est\"\n      ],\n      \"transactionTypes\": [\n        \"labore ullamco\",\n        \"proident voluptate enim reprehenderit\"\n      ],\n      \"platformTypeCode\": \"anim id\",\n      \"periodCode\": \"in amet\",\n      \"walletCode\": \"Lorem aute\"\n    },\n    {\n      \"transactionCount\": -47376960,\n      \"riskLevel\": \"consequat cillum culpa Duis ex\",\n      \"channelCode\": [\n        \"reprehenderit deserunt eiusmod\",\n        \"laborum dolor et cupidatat velit\"\n      ],\n      \"transactionTypes\": [\n        \"id\",\n        \"aliquip Ut dolore aliqua anim\"\n      ],\n      \"platformTypeCode\": \"ut anim\",\n      \"periodCode\": \"ipsum aliqua enim commodo\",\n      \"walletCode\": \"esse officia in\"\n    }\n  ],\n  \"channelCodes\": [\n    \"in labore\",\n    \"ea sint\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "d45f6a29-45fd-4b83-84a2-0e8d2bece130",
+      "name": "country-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b3f152c8-dd58-4439-b15a-0c028496482f",
+          "name": "get All Countries",
+          "request": {
+            "name": "get All Countries",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "countries"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/countries"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4c7565b2-610d-47b4-a66e-059a2558eb33",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "countries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -92569720,\n    \"nameAr\": \"pariatur ut sed Ut\",\n    \"nameEn\": \"aliquip in adipisicing laboris\",\n    \"code\": \"dolor sunt in officia\"\n  },\n  {\n    \"id\": 81243887,\n    \"nameAr\": \"adipis\",\n    \"nameEn\": \"\",\n    \"code\": \"esse dolore do\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f2ebb1a2-a3e3-4eca-8eec-97ee73f7381a",
+          "name": "create Country",
+          "request": {
+            "name": "create Country",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "countries"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/countries"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": -72633828,\n  \"nameAr\": \"minim nostrud deserunt\",\n  \"nameEn\": \"ipsum laborum dolor\",\n  \"code\": \"sunt veniam nis\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1bd65331-f7f4-4942-a45a-aa4048015728",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "countries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": -72633828,\n  \"nameAr\": \"minim nostrud deserunt\",\n  \"nameEn\": \"ipsum laborum dolor\",\n  \"code\": \"sunt veniam nis\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -72633828,\n  \"nameAr\": \"minim nostrud deserunt\",\n  \"nameEn\": \"ipsum laborum dolor\",\n  \"code\": \"sunt veniam nis\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "006f2179-99a1-49cf-94fb-591eba2ea74f",
+          "name": "get Country By Code",
+          "request": {
+            "name": "get Country By Code",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "countries",
+                ":code"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "culpa adipisicing minim enim",
+                  "key": "code",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/countries/:code"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3f3c57b1-68e6-4a8c-a453-a11a2e6e5264",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "countries",
+                    ":code"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "culpa adipisicing minim enim",
+                      "key": "code",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -72633828,\n  \"nameAr\": \"minim nostrud deserunt\",\n  \"nameEn\": \"ipsum laborum dolor\",\n  \"code\": \"sunt veniam nis\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ad5fae6b-0791-4666-9c9d-8e84d494789d",
+          "name": "delete Country",
+          "request": {
+            "name": "delete Country",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "countries",
+                ":code"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "culpa adipisicing minim enim",
+                  "key": "code",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/countries/:code"
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0157c142-e87c-4955-b9bf-8ae1beb571fb",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "countries",
+                    ":code"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "culpa adipisicing minim enim",
+                      "key": "code",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "fd9ee63e-a710-4c3a-87c8-d373ae362a4b",
+      "name": "merchant-category-code-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5f38b6a1-5325-4c5a-b28a-d505a4a23731",
+          "name": "get All Merchant Category Code",
+          "request": {
+            "name": "get All Merchant Category Code",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "merchant-category-code"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/merchant-category-code"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d0f79f77-4697-4725-a94b-ff9ce7909a1a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "merchant-category-code"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -31911590,\n    \"merchantCategoryCode\": \"veniam cillum\",\n    \"nameEn\": \"aliqua minim laboris est\",\n    \"nameAr\": \"in in exercitation nisi\",\n    \"description\": \"qui exercitation Lorem officia\",\n    \"active\": true\n  },\n  {\n    \"id\": -41636809,\n    \"merchantCategoryCode\": \"dolore occaecat exercitation\",\n    \"nameEn\": \"quis cupidatat\",\n    \"nameAr\": \"reprehenderit esse aliquip\",\n    \"description\": \"dolore minim laborum amet culpa\",\n    \"active\": false\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "787f7e6a-c680-456d-a90c-9167a088db23",
+          "name": "get Merchant Category Code By Code",
+          "request": {
+            "name": "get Merchant Category Code By Code",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "merchant-category-code",
+                ":code"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "culpa adipisicing minim enim",
+                  "key": "code",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/merchant-category-code/:code"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "14ff0d85-159b-4a9d-add9-9444ca49112d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "merchant-category-code",
+                    ":code"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "culpa adipisicing minim enim",
+                      "key": "code",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 74554437,\n  \"merchantCategoryCode\": \"occaec\",\n  \"nameEn\": \"qui ea fugiat esse tempor\",\n  \"nameAr\": \"consectetur mollit commodo minim\",\n  \"description\": \"et ut\",\n  \"active\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "b589befc-cdef-41db-a71e-64101e112f9d",
+      "name": "default-wallet-limitation-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "00c9f574-52fe-4775-8aeb-0dffd8fb584e",
+          "name": "get Default Limitations",
+          "request": {
+            "name": "get Default Limitations",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "default-limitations",
+                "wallet"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "walletCode",
+                  "value": "culpa adipisicing minim enim",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/default-limitations/wallet?walletCode=culpa adipisicing minim enim"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cc9db11d-8265-4d2b-ac36-dce9b1f61e39",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "default-limitations",
+                    "wallet"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "walletCode",
+                      "value": "culpa adipisicing minim enim"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "culpa adipisicing minim enim"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"minBalance\": 7762860.529877022,\n  \"maxBalance\": -8224409.9146140665\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d0eecbad-fcb1-4925-8589-a2c06da725ca",
+          "name": "get Default Transaction Limitations",
+          "request": {
+            "name": "get Default Transaction Limitations",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "default-limitations",
+                "transaction"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "transactionTypeCodes",
+                  "value": "dolore id eu in"
+                },
+                {
+                  "disabled": false,
+                  "key": "transactionTypeCodes",
+                  "value": "laboris non ex"
+                },
+                {
+                  "disabled": false,
+                  "key": "platformTypeCode",
+                  "value": "culpa adipisicing minim enim",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/default-limitations/transaction?transactionTypeCodes=dolore id eu in&transactionTypeCodes=laboris non ex&platformTypeCode=culpa adipisicing minim enim"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1ac421fd-8427-4fd0-89d5-929f3bbb4216",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "default-limitations",
+                    "transaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "transactionTypeCodes",
+                      "value": "in anim"
+                    },
+                    {
+                      "key": "transactionTypeCodes",
+                      "value": "in eni"
+                    },
+                    {
+                      "key": "platformTypeCode",
+                      "value": "culpa adipisicing minim enim"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "culpa adipisicing minim enim"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"defaultTransactionAmountLimitations\": [\n    {\n      \"min\": -71877683.82072127,\n      \"max\": 56608748.761565864,\n      \"period\": {\n        \"id\": -38655588,\n        \"code\": \"commodo minim\",\n        \"nameAr\": \"consequat sit\",\n        \"nameEn\": \"pariatur aliqua quis esse\",\n        \"description\": \"veniam irure pariatur\"\n      }\n    },\n    {\n      \"min\": 52808337.943283975,\n      \"max\": 22309424.916541845,\n      \"period\": {\n        \"id\": 2131410,\n        \"code\": \"ullamco cill\",\n        \"nameAr\": \"commodo ex laboris\",\n        \"nameEn\": \"minim laboris\",\n        \"description\": \"consectetur ad\"\n      }\n    }\n  ],\n  \"defaultTransactionCountLimitations\": [\n    {\n      \"transactionCount\": -73968458,\n      \"period\": {\n        \"id\": -51813987,\n        \"code\": \"ad Ut mollit ali\",\n        \"nameAr\": \"et sed do incididunt\",\n        \"nameEn\": \"irure est amet in\",\n        \"description\": \"aute laboris\"\n      }\n    },\n    {\n      \"transactionCount\": -82973081,\n      \"period\": {\n        \"id\": -36415055,\n        \"code\": \"ut do sint\",\n        \"nameAr\": \"eu ex voluptate\",\n        \"nameEn\": \"nulla Excepteur l\",\n        \"description\": \"cillum in veniam ut\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bcd03bb6-7142-4297-87b1-04420de99cc3",
+          "name": "get Sub Wallet Default Limitations",
+          "request": {
+            "name": "get Sub Wallet Default Limitations",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "default-limitations",
+                "sub-wallet"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "walletCode",
+                  "value": "culpa adipisicing minim enim",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/default-limitations/sub-wallet?walletCode=culpa adipisicing minim enim"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "12cfda38-c724-46e4-a650-eea7652a269b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "default-limitations",
+                    "sub-wallet"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "walletCode",
+                      "value": "culpa adipisicing minim enim"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "culpa adipisicing minim enim"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"minBalance\": 7762860.529877022,\n  \"maxBalance\": -8224409.9146140665\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "de54092e-ad2f-4090-9ed6-4aa24fac20a2",
+      "name": "channel-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e9ebdca1-f7ec-42ff-a218-65c3e581d5cd",
+          "name": "get All Channels",
+          "request": {
+            "name": "get All Channels",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "channels"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/channels"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "01099847-687e-4ac6-b0af-01762d7e2084",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "channels"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -201080,\n    \"code\": \"ipsum aute labore\",\n    \"description\": \"mollit paria\",\n    \"nameAr\": \"tempor ea dolore irure\",\n    \"nameEn\": \"eiusmod exercitation pariatur\"\n  },\n  {\n    \"id\": 75367542,\n    \"code\": \"labore\",\n    \"description\": \"incididunt in eiusmod\",\n    \"nameAr\": \"nulla non cillum tempor\",\n    \"nameEn\": \"cupidat\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1570206d-ee8d-4886-84ec-9d7e5f5d021e",
+          "name": "get Channel By Code",
+          "request": {
+            "name": "get Channel By Code",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "channels",
+                ":code"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "culpa adipisicing minim enim",
+                  "key": "code",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/channels/:code"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2b7d95fe-b60c-4091-9a81-1fe44e3ce37c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "channels",
+                    ":code"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "culpa adipisicing minim enim",
+                      "key": "code",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -2815493,\n  \"code\": \"consectetur tempor\",\n  \"description\": \"officia\",\n  \"nameAr\": \"id\",\n  \"nameEn\": \"proident\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generated guard: a 5xx from any request is a gateway/service defect, not a test-data problem.",
+          "pm.test('no 5xx (' + pm.info.requestName + ')', function () {",
+          "  pm.expect(pm.response.code, (pm.response.text() || '').slice(0, 300)).to.be.below(500);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{gatewayBaseUrl}}/controls-rules-service",
+      "type": "string"
+    }
+  ],
+  "info": {
+    "_postman_id": "8c9972ec-ed42-4f3d-863c-a4f716590134",
+    "name": "Controls Rules Service - majdpay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Controls Rules Service (controls-rules-service) — 16 operations.\n\nGENERATED from the OpenAPI 3.1.0 spec published at the UAT gateway swagger-ui\n(Select a definition -> \"Controls Rules Service APIs\"). Request bodies are schema-derived placeholders (lorem-ipsum\nstrings, sample numbers) — replace with real values before sending.\n\nBase URL: {{gatewayBaseUrl}}/controls-rules-service  (gatewayBaseUrl lives in EMI-dev.postman_environment.json).\nSpec server: https://gateway-emiuat.dg-cash.app/controls-rules-service\n\nAUTH: the spec declares no security scheme, but the gateway front-doors every route with a bearer\ntoken. Set {{token}} in the environment (mint one with the Authentication Service collection's\nsign-in, or pass --env-var token=... to newman). Some back-office routes need an admin/service\ntoken rather than a merchant one.\n\nCompanion Playwright scaffold: BusinessTestCases/ServiceApis/ControlsRulesService.generated.spec.ts\n"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

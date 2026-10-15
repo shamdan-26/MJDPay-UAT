@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+import { waitForToastClear } from '../toastMessages';
 
 /**
  * Transactions — summary display, validation, and OTP handling.
@@ -83,6 +84,7 @@ export async function fetchJson(
 export async function gotoTransactions(page: Page): Promise<void> {
     await page.goto(TRANSACTIONS_URL);
     await page.waitForLoadState('domcontentloaded');
+    await waitForToastClear(page);
 }
 
 export async function mockTransactionList(page: Page, summaries: TransactionSummary[]): Promise<void> {
@@ -219,6 +221,156 @@ export async function mockOtpMaxAttemptsExceeded(page: Page): Promise<void> {
             status: 400,
             contentType: 'application/json',
             body: JSON.stringify({ messageCode: 'OTP_MAX_ATTEMPTS_EXCEEDED', plainText: 'Maximum OTP attempts exceeded' }),
+        })
+    );
+}
+
+// ═════════════════════════════════════════════════════════════════════════
+// Amount composition — EMI-6020 / EMI-5970
+// ═════════════════════════════════════════════════════════════════════════
+//
+// EMI-6020 changes the stored transaction amount for every type EXCEPT
+// Cash-Out and VIBAN to:
+//
+//     transaction amount + commission amount + VAT amount
+//
+// and requires it to stay consistent across the base transaction row, the
+// transaction log, and whatever is sent to each external party (HyperPay,
+// Bank, OTC). Commission and VAT must not be added twice anywhere in the flow.
+//
+// EMI-5970 is the concrete miscalculation that motivated it: an external wallet
+// payment of 100 with 10 + 10 commission and 1.5 + 1.5 VAT reported
+// totalAmount 88.5 and drove the control wallet to -111.5.
+
+/** The two types EMI-6020 explicitly exempts from the new composition. */
+export const AMOUNT_COMPOSITION_EXEMPT_TYPES = ['CASH_OUT', 'VIBAN'] as const;
+
+/** Types the new composition does apply to. */
+export const AMOUNT_COMPOSITION_TYPES = [
+    'W2W_TRANSFER', 'TOPUP', 'BILL_PAYMENT', 'QR_PAYMENT', 'BANK_TRANSFER', 'EXTERNAL_WALLET_PAYMENT',
+] as const;
+
+export interface AmountBreakdown {
+    transactionTypeCode: string;
+    amount: number;
+    sourceCommissionAmount: number;
+    destinationCommissionAmount: number;
+    sourceVatAmount: number;
+    destinationVatAmount: number;
+    totalAmount: number;
+}
+
+/**
+ * The EMI-6020 formula. Kept as one function so the spec, the log check and
+ * the external-party check all assert against the same definition rather than
+ * three hand-inlined sums that could drift apart.
+ */
+export function expectedTotal(breakdown: Omit<AmountBreakdown, 'totalAmount'>): number {
+    const commission = breakdown.sourceCommissionAmount + breakdown.destinationCommissionAmount;
+    const vat        = breakdown.sourceVatAmount + breakdown.destinationVatAmount;
+    return round2(breakdown.amount + commission + vat);
+}
+
+/** Money comparisons in this service are 2dp; raw JS addition is not. */
+export function round2(value: number): number {
+    return Math.round(value * 100) / 100;
+}
+
+/** The exact figures from the EMI-5970 repro. */
+export const EXTERNAL_WALLET_BREAKDOWN: Omit<AmountBreakdown, 'totalAmount'> = {
+    transactionTypeCode: 'EXTERNAL_WALLET_PAYMENT',
+    amount: 100,
+    sourceCommissionAmount: 10,
+    destinationCommissionAmount: 10,
+    sourceVatAmount: 1.5,
+    destinationVatAmount: 1.5,
+};
+
+/** EMI-5970 observed value — commission and VAT were SUBTRACTED, not added. */
+export const EMI_5970_OBSERVED_TOTAL = 88.5;
+
+export const AMOUNT_API = '**/api/v1/**transaction**';
+export const TRANSACTION_LOG_API = '**/api/v1/**transaction-log**';
+
+function withTotal(breakdown: Omit<AmountBreakdown, 'totalAmount'>, total: number): AmountBreakdown {
+    return { ...breakdown, totalAmount: total, receiverCurrency: 'SAR' } as AmountBreakdown;
+}
+
+/** EMI-6020 fixed behaviour: totalAmount = amount + commission + VAT. */
+export async function mockTransactionAmountComposed(
+    page: Page,
+    breakdown: Omit<AmountBreakdown, 'totalAmount'> = EXTERNAL_WALLET_BREAKDOWN
+): Promise<void> {
+    const body = withTotal(breakdown, expectedTotal(breakdown));
+    await page.route(TRANSFER_API, route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) })
+    );
+}
+
+/** EMI-5970 pre-fix state: commission and VAT were netted off instead of added. */
+export async function mockTransactionAmountMiscalculated(page: Page): Promise<void> {
+    const body = withTotal(EXTERNAL_WALLET_BREAKDOWN, EMI_5970_OBSERVED_TOTAL);
+    await page.route(TRANSFER_API, route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) })
+    );
+}
+
+/**
+ * EMI-6020: Cash-Out and VIBAN keep the bare transaction amount — adding
+ * commission there would be the double-charge the ticket warns about.
+ */
+export async function mockExemptTransactionAmount(page: Page, transactionTypeCode: 'CASH_OUT' | 'VIBAN'): Promise<void> {
+    const breakdown = { ...EXTERNAL_WALLET_BREAKDOWN, transactionTypeCode };
+    const body = withTotal(breakdown, breakdown.amount);
+    await page.route(TRANSFER_API, route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) })
+    );
+}
+
+/** EMI-6020 pre-fix risk: an exempt type gets commission added anyway. */
+export async function mockExemptTransactionAmountWithCommission(page: Page, transactionTypeCode: 'CASH_OUT' | 'VIBAN'): Promise<void> {
+    const breakdown = { ...EXTERNAL_WALLET_BREAKDOWN, transactionTypeCode };
+    const body = withTotal(breakdown, expectedTotal(breakdown));
+    await page.route(TRANSFER_API, route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) })
+    );
+}
+
+/**
+ * The transaction log and the external-party payload must both carry the same
+ * figure as the base row (EMI-6020's consistency AC). `logAmount` and
+ * `externalPartyAmount` are separately settable so a drift can be reproduced.
+ */
+export async function mockTransactionLog(
+    page: Page,
+    options: { amount: number; externalPartyAmount?: number }
+): Promise<void> {
+    const { amount, externalPartyAmount = options.amount } = options;
+    await page.route(TRANSACTION_LOG_API, route =>
+        route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({
+                content: [{
+                    transactionTypeCode: EXTERNAL_WALLET_BREAKDOWN.transactionTypeCode,
+                    amount,
+                    externalParty: { name: 'HYPERPAY', amountSent: externalPartyAmount },
+                }],
+                totalElements: 1,
+            }),
+        })
+    );
+}
+
+/** EMI-5970: the control wallet must not be driven negative by the miscalculation. */
+export const CONTROL_WALLET_API = '**/api/v1/**wallet**control**';
+
+export async function mockControlWalletBalance(page: Page, balance: number): Promise<void> {
+    await page.route(CONTROL_WALLET_API, route =>
+        route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({ availableBalance: balance, currentBalance: balance, walletCode: 'CONTROL' }),
         })
     );
 }

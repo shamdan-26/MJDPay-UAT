@@ -176,7 +176,7 @@ test.describe('Topup – UI – Sidebar, header and profile menu', { tag: ['@top
 
     // KNOWN BUG (accessibility): the notifications bell has no aria-label, so
     // screen readers can't name it. Un-skip once it has an accessible name.
-    test.skip('the notifications bell has an accessible name', async () => {
+    test('the notifications bell has an accessible name', async () => {
         const { shell } = session;
         await expect(shell.notificationsBell).toHaveAttribute('aria-label', /.+/);
     });

@@ -3,7 +3,7 @@ import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { HomepageQuickActionsPage } from '../../pageElements/Shared/HomepageQuickActionsPage';
 import { BankTransferPage } from '../../pageElements/Shared/BankTransferPage';
-import { HOME_URL } from '../BankTransferHelper';
+import { HOME_URL, ensureNonZeroBalance } from '../BankTransferHelper';
 import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/LoginHelper';
 
 // Hourly/daily/monthly/yearly transaction-limit enforcement, both by cumulative
@@ -27,6 +27,11 @@ test.describe('BankTransfer – Transaction Limits', () => {
     let bt: BankTransferPage;
 
     test.beforeAll(async ({ browser }) => {
+        // Hooks don't inherit the describe-level test.setTimeout() above — it
+        // only extends tests. ensureNonZeroBalance's card-topup branch (OTP
+        // round-trip included) can push this hook past the config's default
+        // 60s hook timeout, so extend it here too.
+        test.setTimeout(150000);
         page = await browser.newPage();
 
         loginPage = new LoginPage(page);
@@ -40,6 +45,7 @@ test.describe('BankTransfer – Transaction Limits', () => {
             await otp.fillAndVerify(await getOtpFromDb(VALID_MOBILE));
         }
         await page.waitForURL(url => !url.pathname.includes('/auth/'), { timeout: 30000 });
+        await ensureNonZeroBalance(page, VALID_MOBILE);
     });
 
     test.beforeEach(async () => {

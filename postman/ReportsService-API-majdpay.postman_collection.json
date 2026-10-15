@@ -1,0 +1,2554 @@
+{
+  "item": [
+    {
+      "id": "3571f237-b891-44f3-8b66-4a6364078e94",
+      "name": "report-generator-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bd18a29d-c5ca-4dae-8eda-7de6de103600",
+          "name": "wallet Report",
+          "request": {
+            "name": "wallet Report",
+            "description": {},
+            "url": {
+              "path": [
+                "reports-generator",
+                "wallet-report"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/reports-generator/wallet-report"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fileType\": \"XML\",\n  \"page\": 79981557,\n  \"size\": -58263911\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e99a89be-e879-4fdd-a024-9a4e093297c7",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports-generator",
+                    "wallet-report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fileType\": \"XML\",\n  \"page\": 79981557,\n  \"size\": -58263911\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "qui dolore proident officia magna",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "533e7dad-2dce-470e-950d-2a6ddef7cd50",
+          "name": "wallet Details Report",
+          "request": {
+            "name": "wallet Details Report",
+            "description": {},
+            "url": {
+              "path": [
+                "reports-generator",
+                "wallet-report",
+                ":id",
+                "details"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-92393740",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/reports-generator/wallet-report/:id/details"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fileType\": \"XML\",\n  \"page\": 79981557,\n  \"size\": -58263911\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fdb9b18e-3a1b-4b02-9f2b-7a9632887f7f",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports-generator",
+                    "wallet-report",
+                    ":id",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-92393740",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fileType\": \"XML\",\n  \"page\": 79981557,\n  \"size\": -58263911\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "qui dolore proident officia magna",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f704d67c-c030-40c1-a6a0-44c5b9d128b4",
+          "name": "generate Transactions Report",
+          "request": {
+            "name": "generate Transactions Report",
+            "description": {},
+            "url": {
+              "path": [
+                "reports-generator",
+                "transactions-report"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/reports-generator/transactions-report"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 73424207,\n  \"createdAt\": \"2002-10-28T10:06:31.660Z\",\n  \"lastModifiedAt\": \"2014-04-09T00:07:54.495Z\",\n  \"createdBy\": 18625146,\n  \"lastModifiedBy\": -5874273,\n  \"deletedAt\": \"1955-02-21T15:28:39.250Z\",\n  \"deletedBy\": -43903948,\n  \"status\": \"SUCCESS_REVERSED\",\n  \"startDate\": \"1954-09-13\",\n  \"endDate\": \"2008-08-25\",\n  \"transactionsTypeCode\": \"sed\",\n  \"fileType\": \"DOC\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b5555e44-2eac-4dbe-b749-17d12b553119",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports-generator",
+                    "transactions-report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": 73424207,\n  \"createdAt\": \"2002-10-28T10:06:31.660Z\",\n  \"lastModifiedAt\": \"2014-04-09T00:07:54.495Z\",\n  \"createdBy\": 18625146,\n  \"lastModifiedBy\": -5874273,\n  \"deletedAt\": \"1955-02-21T15:28:39.250Z\",\n  \"deletedBy\": -43903948,\n  \"status\": \"SUCCESS_REVERSED\",\n  \"startDate\": \"1954-09-13\",\n  \"endDate\": \"2008-08-25\",\n  \"transactionsTypeCode\": \"sed\",\n  \"fileType\": \"DOC\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "qui dolore proident officia magna",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9bdb9ed5-6d72-4a94-8455-eb7124402bb9",
+          "name": "generate Transactions Excel Report",
+          "request": {
+            "name": "generate Transactions Excel Report",
+            "description": {},
+            "url": {
+              "path": [
+                "reports-generator",
+                "transactions-excel-report"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/reports-generator/transactions-excel-report"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 73424207,\n  \"createdAt\": \"2002-10-28T10:06:31.660Z\",\n  \"lastModifiedAt\": \"2014-04-09T00:07:54.495Z\",\n  \"createdBy\": 18625146,\n  \"lastModifiedBy\": -5874273,\n  \"deletedAt\": \"1955-02-21T15:28:39.250Z\",\n  \"deletedBy\": -43903948,\n  \"status\": \"SUCCESS_REVERSED\",\n  \"startDate\": \"1954-09-13\",\n  \"endDate\": \"2008-08-25\",\n  \"transactionsTypeCode\": \"sed\",\n  \"fileType\": \"DOC\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b284c8ea-2c8b-466d-b08b-c72b9658334e",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports-generator",
+                    "transactions-excel-report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": 73424207,\n  \"createdAt\": \"2002-10-28T10:06:31.660Z\",\n  \"lastModifiedAt\": \"2014-04-09T00:07:54.495Z\",\n  \"createdBy\": 18625146,\n  \"lastModifiedBy\": -5874273,\n  \"deletedAt\": \"1955-02-21T15:28:39.250Z\",\n  \"deletedBy\": -43903948,\n  \"status\": \"SUCCESS_REVERSED\",\n  \"startDate\": \"1954-09-13\",\n  \"endDate\": \"2008-08-25\",\n  \"transactionsTypeCode\": \"sed\",\n  \"fileType\": \"DOC\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"fileName\": \"et laboris voluptate aliquip mollit\",\n  \"fileExtension\": \"occaecat eiusmod\",\n  \"extensionCode\": \"est minim Ut\",\n  \"fileBytes\": \"in cillum Duis occaecat\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "46a30b5c-d9cc-4649-adfd-c31346e2d86e",
+          "name": "external Report",
+          "request": {
+            "name": "external Report",
+            "description": {},
+            "url": {
+              "path": [
+                "reports-generator",
+                "external-report"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "token",
+                  "value": "qui dolore proident officia magna",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/reports-generator/external-report?token=qui dolore proident officia magna"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fileType\": \"XML\",\n  \"page\": 79981557,\n  \"size\": -58263911\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "aa8e99a0-fda0-4cc6-a592-55af64842c09",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports-generator",
+                    "external-report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "token",
+                      "value": "qui dolore proident officia magna"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fileType\": \"XML\",\n  \"page\": 79981557,\n  \"size\": -58263911\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "qui dolore proident officia magna",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2635bded-613d-45b6-bbec-1126362c25a9",
+          "name": "external Details Report",
+          "request": {
+            "name": "external Details Report",
+            "description": {},
+            "url": {
+              "path": [
+                "reports-generator",
+                "external-report",
+                ":id",
+                "details"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-92393740",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/reports-generator/external-report/:id/details"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fileType\": \"XML\",\n  \"page\": 79981557,\n  \"size\": -58263911\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "15e8ab40-fbc3-474a-ae43-c0ad83a7dd24",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports-generator",
+                    "external-report",
+                    ":id",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-92393740",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fileType\": \"XML\",\n  \"page\": 79981557,\n  \"size\": -58263911\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "qui dolore proident officia magna",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b9785d99-f1f6-433e-8813-24f7467ba897",
+          "name": "collection Report",
+          "request": {
+            "name": "collection Report",
+            "description": {},
+            "url": {
+              "path": [
+                "reports-generator",
+                "collection"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "token",
+                  "value": "qui dolore proident officia magna",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/reports-generator/collection?token=qui dolore proident officia magna"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fileType\": \"XML\",\n  \"page\": 79981557,\n  \"size\": -58263911\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0e9b4450-6e25-43e4-9f56-ff60843d6710",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports-generator",
+                    "collection"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "token",
+                      "value": "qui dolore proident officia magna"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fileType\": \"XML\",\n  \"page\": 79981557,\n  \"size\": -58263911\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "qui dolore proident officia magna",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "772b9473-02fd-4cca-8da5-6905a45229da",
+          "name": "collection Details Report",
+          "request": {
+            "name": "collection Details Report",
+            "description": {},
+            "url": {
+              "path": [
+                "reports-generator",
+                "collection-report",
+                ":id",
+                "details"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-92393740",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/reports-generator/collection-report/:id/details"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fileType\": \"XML\",\n  \"page\": 79981557,\n  \"size\": -58263911\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "93997a66-e364-4aa2-9994-bbb395722168",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports-generator",
+                    "collection-report",
+                    ":id",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-92393740",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fileType\": \"XML\",\n  \"page\": 79981557,\n  \"size\": -58263911\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "qui dolore proident officia magna",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2486c0b4-1a00-4c8c-b2b0-89386f8402c3",
+          "name": "generate Bills Report",
+          "request": {
+            "name": "generate Bills Report",
+            "description": {},
+            "url": {
+              "path": [
+                "reports-generator",
+                "bills-report"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/reports-generator/bills-report"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"issueDateFrom\": \"1948-05-17T14:40:11.709Z\",\n  \"issueDateTo\": \"1997-04-29T20:09:20.005Z\",\n  \"expiryDateFrom\": \"1948-06-01T08:46:22.181Z\",\n  \"expiryDateTo\": \"1971-11-07T13:17:33.607Z\",\n  \"status\": \"laboris elit\",\n  \"fileType\": \"CSV\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4cee5dc1-0d86-4c9a-b09e-047d23b57aa7",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports-generator",
+                    "bills-report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"issueDateFrom\": \"1948-05-17T14:40:11.709Z\",\n  \"issueDateTo\": \"1997-04-29T20:09:20.005Z\",\n  \"expiryDateFrom\": \"1948-06-01T08:46:22.181Z\",\n  \"expiryDateTo\": \"1971-11-07T13:17:33.607Z\",\n  \"status\": \"laboris elit\",\n  \"fileType\": \"CSV\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"fileName\": \"et laboris voluptate aliquip mollit\",\n  \"fileExtension\": \"occaecat eiusmod\",\n  \"extensionCode\": \"est minim Ut\",\n  \"fileBytes\": \"in cillum Duis occaecat\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fcc737e2-9fe0-48e4-9a2d-a673a2c90972",
+          "name": "wallet Reconciliation Report 1",
+          "request": {
+            "name": "wallet Reconciliation Report 1",
+            "description": {},
+            "url": {
+              "path": [
+                "reports-generator",
+                "wallet-reconciliation-report"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "createdAt",
+                  "value": "1978-12-02",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "fileType",
+                  "value": "XLSX",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/reports-generator/wallet-reconciliation-report?createdAt=1978-12-02&fileType=XLSX"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "59c79c74-9389-4d0a-812a-48978a6079e1",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports-generator",
+                    "wallet-reconciliation-report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "createdAt",
+                      "value": "1978-12-02"
+                    },
+                    {
+                      "key": "fileType",
+                      "value": "XLSX"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"fileName\": \"et laboris voluptate aliquip mollit\",\n  \"fileExtension\": \"occaecat eiusmod\",\n  \"extensionCode\": \"est minim Ut\",\n  \"fileBytes\": \"in cillum Duis occaecat\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d9f42c86-de88-439b-9f83-49c2ba0d8f18",
+          "name": "generate Bills Statistic Report",
+          "request": {
+            "name": "generate Bills Statistic Report",
+            "description": {},
+            "url": {
+              "path": [
+                "reports-generator",
+                "statistic-report"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "issueDateFrom",
+                  "value": "1978-12-02",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "issueDateTo",
+                  "value": "1978-12-02",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "fileType",
+                  "value": "XLSX",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10"
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/reports-generator/statistic-report?issueDateFrom=1978-12-02&issueDateTo=1978-12-02&fileType=XLSX&page=0&size=10"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "22761072-15e4-44d6-86ec-c16f9f095e42",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports-generator",
+                    "statistic-report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "issueDateFrom",
+                      "value": "1978-12-02"
+                    },
+                    {
+                      "key": "issueDateTo",
+                      "value": "1978-12-02"
+                    },
+                    {
+                      "key": "fileType",
+                      "value": "XLSX"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"fileName\": \"et laboris voluptate aliquip mollit\",\n  \"fileExtension\": \"occaecat eiusmod\",\n  \"extensionCode\": \"est minim Ut\",\n  \"fileBytes\": \"in cillum Duis occaecat\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3053732a-df42-4087-adef-514e40d870c1",
+          "name": "running Balance Report",
+          "request": {
+            "name": "running Balance Report",
+            "description": {},
+            "url": {
+              "path": [
+                "reports-generator",
+                "running-balance-report"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "walletRef",
+                  "value": "qui dolore proident officia magna"
+                },
+                {
+                  "disabled": false,
+                  "key": "startDate",
+                  "value": "1978-12-02",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "endDate",
+                  "value": "1978-12-02",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "fileType",
+                  "value": "XLSX",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/reports-generator/running-balance-report?walletRef=qui dolore proident officia magna&startDate=1978-12-02&endDate=1978-12-02&fileType=XLSX"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b0955e9e-f16c-4149-9581-7014740cfb73",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports-generator",
+                    "running-balance-report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "walletRef",
+                      "value": "qui dolore proident officia magna"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "1978-12-02"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "1978-12-02"
+                    },
+                    {
+                      "key": "fileType",
+                      "value": "XLSX"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"fileName\": \"Ut consequat\",\n  \"fileType\": \"DOC\",\n  \"fileBytes\": \"et velit amet\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "215525bf-6dcc-42c6-8d86-5198db5642c9",
+          "name": "external Reconciliation Report",
+          "request": {
+            "name": "external Reconciliation Report",
+            "description": {},
+            "url": {
+              "path": [
+                "reports-generator",
+                "external-reconciliation-report"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "createdAt",
+                  "value": "1978-12-02",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/reports-generator/external-reconciliation-report?createdAt=1978-12-02"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1591592f-72fb-4cd8-a893-1b2613e2c61b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports-generator",
+                    "external-reconciliation-report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "createdAt",
+                      "value": "1978-12-02"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"fileName\": \"et laboris voluptate aliquip mollit\",\n  \"fileExtension\": \"occaecat eiusmod\",\n  \"extensionCode\": \"est minim Ut\",\n  \"fileBytes\": \"in cillum Duis occaecat\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d0458041-ac39-43ca-9e06-346cf5d021fa",
+          "name": "collection Reconciliation Report",
+          "request": {
+            "name": "collection Reconciliation Report",
+            "description": {},
+            "url": {
+              "path": [
+                "reports-generator",
+                "collection-reconciliation-report"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "createdAt",
+                  "value": "1978-12-02",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "fileType",
+                  "value": "XLSX",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/reports-generator/collection-reconciliation-report?createdAt=1978-12-02&fileType=XLSX"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d3abe15b-1495-401e-b596-47b61ac69482",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports-generator",
+                    "collection-reconciliation-report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "createdAt",
+                      "value": "1978-12-02"
+                    },
+                    {
+                      "key": "fileType",
+                      "value": "XLSX"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"fileName\": \"et laboris voluptate aliquip mollit\",\n  \"fileExtension\": \"occaecat eiusmod\",\n  \"extensionCode\": \"est minim Ut\",\n  \"fileBytes\": \"in cillum Duis occaecat\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "4dd2c99d-876e-4d3b-a0bd-1a9e76dc3344",
+      "name": "job-starter-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ea9a3da7-c6bb-40f7-a0d6-547702c88d91",
+          "name": "wallet Report 1",
+          "request": {
+            "name": "wallet Report 1",
+            "description": {},
+            "url": {
+              "path": [
+                "job",
+                "reconciliation"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/job/reconciliation"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"beforeDays\": 69274223\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fb16c871-0716-465c-9490-c12773a6e779",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "job",
+                    "reconciliation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"beforeDays\": 69274223\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a870e766-6393-4726-86a3-5c01d916611a",
+          "name": "rebuild Running Balance",
+          "request": {
+            "name": "rebuild Running Balance",
+            "description": {},
+            "url": {
+              "path": [
+                "job",
+                "rebuild"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/job/rebuild"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fromDate\": \"1980-11-13T13:51:51.204Z\",\n  \"toDate\": \"1990-12-23T10:36:37.947Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5f998bb7-7bbf-459d-98ea-384b3262a38e",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "job",
+                    "rebuild"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fromDate\": \"1980-11-13T13:51:51.204Z\",\n  \"toDate\": \"1990-12-23T10:36:37.947Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "b0cc8bc7-0252-4895-81a4-32648781fb4b",
+      "name": "reports-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a237a30c-1a84-498e-8f62-c9fa03cb567e",
+          "name": "wallet Report 2",
+          "request": {
+            "name": "wallet Report 2",
+            "description": {},
+            "url": {
+              "path": [
+                "reports",
+                "wallet-report"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10"
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/reports/wallet-report?page=0&size=10"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e4f6b783-003b-4535-aacb-e39add830581",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports",
+                    "wallet-report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": 84503307,\n  \"totalElements\": -66429907,\n  \"size\": -90495919,\n  \"content\": [\n    {\n      \"id\": -41431801,\n      \"totalMismatch\": 83094844,\n      \"totalMatched\": -48382931,\n      \"reconciliationDate\": \"1966-11-01T12:17:39.567Z\",\n      \"walletReportDetails\": [\n        {\n          \"id\": 94920412,\n          \"walletCode\": \"reprehenderit esse\",\n          \"transactionLogCredit\": -62308972.19718798,\n          \"transactionLogDebit\": 19707943.152744606,\n          \"runningBalanceCredit\": -3509136.1440428197,\n          \"runningBalanceDebit\": 13184290.278806299,\n          \"reconciliationAmount\": -55147963.75350241,\n          \"isValid\": false\n        },\n        {\n          \"id\": -56848190,\n          \"walletCode\": \"do aliqua Lorem irure proident\",\n          \"transactionLogCredit\": 85032210.13736624,\n          \"transactionLogDebit\": 64409336.67708334,\n          \"runningBalanceCredit\": 53360763.391189784,\n          \"runningBalanceDebit\": 72198983.56852937,\n          \"reconciliationAmount\": -40367866.913441986,\n          \"isValid\": true\n        }\n      ]\n    },\n    {\n      \"id\": -16070497,\n      \"totalMismatch\": -50444661,\n      \"totalMatched\": 50299241,\n      \"reconciliationDate\": \"1957-11-26T15:23:45.038Z\",\n      \"walletReportDetails\": [\n        {\n          \"id\": 83411352,\n          \"walletCode\": \"ea reprehenderit in mollit labore\",\n          \"transactionLogCredit\": -29374422.981573597,\n          \"transactionLogDebit\": -20412637.12406479,\n          \"runningBalanceCredit\": 98235438.68040869,\n          \"runningBalanceDebit\": -25031011.710731566,\n          \"reconciliationAmount\": -39145831.06889513,\n          \"isValid\": true\n        },\n        {\n          \"id\": 21468372,\n          \"walletCode\": \"labore dolor in\",\n          \"transactionLogCredit\": -80200294.43400805,\n          \"transactionLogDebit\": -19625058.933469757,\n          \"runningBalanceCredit\": -24790426.06197825,\n          \"runningBalanceDebit\": -40005816.165954396,\n          \"reconciliationAmount\": -95641756.2570858,\n          \"isValid\": true\n        }\n      ]\n    }\n  ],\n  \"number\": 7301991,\n  \"sort\": [\n    {\n      \"direction\": \"do amet minim laborum ut\",\n      \"nullHandling\": \"magna minim\",\n      \"ascending\": true,\n      \"property\": \"pariatur conseq\",\n      \"ignoreCase\": true\n    },\n    {\n      \"direction\": \"aliqua dolore\",\n      \"nullHandling\": \"ad laboris\",\n      \"ascending\": false,\n      \"property\": \"ex nisi ad\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"pageable\": {\n    \"offset\": 55643720,\n    \"sort\": [\n      {\n        \"direction\": \"irure incididunt\",\n        \"nullHandling\": \"qui magna\",\n        \"ascending\": false,\n        \"property\": \"incididunt aute Except\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"magna aut\",\n        \"nullHandling\": \"dolore dolor laboris\",\n        \"ascending\": false,\n        \"property\": \"est culpa\",\n        \"ignoreCase\": true\n      }\n    ],\n    \"pageNumber\": -77070162,\n    \"pageSize\": -55519543,\n    \"paged\": false,\n    \"unpaged\": false\n  },\n  \"last\": true,\n  \"first\": true,\n  \"numberOfElements\": -87761528,\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3145fa28-15ea-4d3a-aee0-f6d3088c4314",
+          "name": "collection Report 1",
+          "request": {
+            "name": "collection Report 1",
+            "description": {},
+            "url": {
+              "path": [
+                "reports",
+                "wallet-report",
+                ":id",
+                "details"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-92393740",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/reports/wallet-report/:id/details?page=0&size=10"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "dcb26112-c3bb-4b51-9820-5e731698df9b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports",
+                    "wallet-report",
+                    ":id",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-92393740",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": 84036837,\n  \"totalElements\": -76495788,\n  \"size\": 20825419,\n  \"content\": [\n    {\n      \"id\": 13349433,\n      \"walletCode\": \"velit id deserunt dolore\",\n      \"transactionLogCredit\": -28152931.021328136,\n      \"transactionLogDebit\": -79693459.43077166,\n      \"runningBalanceCredit\": 81471878.0894078,\n      \"runningBalanceDebit\": -49085608.33090807,\n      \"reconciliationAmount\": -25814605.758557647,\n      \"isValid\": false\n    },\n    {\n      \"id\": 35210194,\n      \"walletCode\": \"id reprehenderit\",\n      \"transactionLogCredit\": 47903324.04054153,\n      \"transactionLogDebit\": -34185416.602175556,\n      \"runningBalanceCredit\": -5511535.635333955,\n      \"runningBalanceDebit\": -84091930.81524733,\n      \"reconciliationAmount\": 63362663.49515355,\n      \"isValid\": false\n    }\n  ],\n  \"number\": 48114128,\n  \"sort\": [\n    {\n      \"direction\": \"cupidatat officia\",\n      \"nullHandling\": \"dolor minim velit\",\n      \"ascending\": false,\n      \"property\": \"non\",\n      \"ignoreCase\": true\n    },\n    {\n      \"direction\": \"qui ea proident\",\n      \"nullHandling\": \"do veniam\",\n      \"ascending\": true,\n      \"property\": \"ad pariatur\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"pageable\": {\n    \"offset\": -5010564,\n    \"sort\": [\n      {\n        \"direction\": \"voluptate\",\n        \"nullHandling\": \"in occaecat id consequat\",\n        \"ascending\": false,\n        \"property\": \"dolore\",\n        \"ignoreCase\": false\n      },\n      {\n        \"direction\": \"pariatur qui\",\n        \"nullHandling\": \"in ut laborum\",\n        \"ascending\": false,\n        \"property\": \"Duis consequat\",\n        \"ignoreCase\": true\n      }\n    ],\n    \"pageNumber\": 19611397,\n    \"pageSize\": 50060710,\n    \"paged\": true,\n    \"unpaged\": true\n  },\n  \"last\": false,\n  \"first\": false,\n  \"numberOfElements\": 20949571,\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a3343be7-9cb3-421c-9f25-470a3a992fc5",
+          "name": "wallet Reconciliation Report",
+          "request": {
+            "name": "wallet Reconciliation Report",
+            "description": {},
+            "url": {
+              "path": [
+                "reports",
+                "wallet-reconciliation-report"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "createdAt",
+                  "value": "1954-05-25T04:00:51.034Z",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/reports/wallet-reconciliation-report?createdAt=1954-05-25T04:00:51.034Z"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "33be6103-a7ac-40da-9c61-0128991d1393",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports",
+                    "wallet-reconciliation-report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "createdAt",
+                      "value": "1954-05-25T04:00:51.034Z"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 11010032,\n  \"totalMismatch\": 94584038,\n  \"totalMatched\": -92070924,\n  \"reconciliationDate\": \"1968-04-18T21:13:32.669Z\",\n  \"walletReportDetails\": [\n    {\n      \"id\": 32700674,\n      \"walletCode\": \"labore et exercitation do\",\n      \"transactionLogCredit\": -85542622.57665107,\n      \"transactionLogDebit\": -96624832.18780872,\n      \"runningBalanceCredit\": -43961566.08743484,\n      \"runningBalanceDebit\": -20687867.63699837,\n      \"reconciliationAmount\": -56725626.34906944,\n      \"isValid\": true\n    },\n    {\n      \"id\": 26733667,\n      \"walletCode\": \"reprehenderit i\",\n      \"transactionLogCredit\": -66942229.73522488,\n      \"transactionLogDebit\": -19560768.518593296,\n      \"runningBalanceCredit\": 10485036.036001146,\n      \"runningBalanceDebit\": 45339480.27405009,\n      \"reconciliationAmount\": 76943311.25113976,\n      \"isValid\": true\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "28ecb87c-fd46-4cfd-ac34-74e25299283c",
+          "name": "external Report 1",
+          "request": {
+            "name": "external Report 1",
+            "description": {},
+            "url": {
+              "path": [
+                "reports",
+                "external-report"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10"
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/reports/external-report?page=0&size=10"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "dfbce304-88ef-4fb2-9bce-023a78215e89",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports",
+                    "external-report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": -40011973,\n  \"totalElements\": -74804569,\n  \"size\": 56782619,\n  \"content\": [\n    {\n      \"id\": 51337989,\n      \"totalEmiMissing\": 68661412,\n      \"totalBankMissing\": 81777253,\n      \"totalMismatch\": -20217165,\n      \"totalMatched\": 31484984,\n      \"reconciliationDate\": \"1979-09-20T19:30:38.201Z\",\n      \"externalReportDetails\": [\n        {\n          \"id\": 48774185,\n          \"status\": \"ex amet labore\",\n          \"transactionReference\": \"cillum exercitation eiusmod\",\n          \"statusMismatch\": true,\n          \"amountMismatch\": true,\n          \"timeMismatch\": false,\n          \"emiMissing\": false,\n          \"bankMissing\": true\n        },\n        {\n          \"id\": -69152020,\n          \"status\": \"deserunt ea aute tempor\",\n          \"transactionReference\": \"reprehenderit\",\n          \"statusMismatch\": false,\n          \"amountMismatch\": true,\n          \"timeMismatch\": false,\n          \"emiMissing\": false,\n          \"bankMissing\": true\n        }\n      ]\n    },\n    {\n      \"id\": -72987855,\n      \"totalEmiMissing\": 87923094,\n      \"totalBankMissing\": -25363286,\n      \"totalMismatch\": -10585746,\n      \"totalMatched\": 20580545,\n      \"reconciliationDate\": \"1999-12-12T06:33:05.676Z\",\n      \"externalReportDetails\": [\n        {\n          \"id\": 45294766,\n          \"status\": \"magna culpa\",\n          \"transactionReference\": \"est cupidatat adipisicing\",\n          \"statusMismatch\": true,\n          \"amountMismatch\": true,\n          \"timeMismatch\": true,\n          \"emiMissing\": true,\n          \"bankMissing\": true\n        },\n        {\n          \"id\": 50252984,\n          \"status\": \"sed exercitation deserunt sint esse\",\n          \"transactionReference\": \"incididunt ea in commodo\",\n          \"statusMismatch\": true,\n          \"amountMismatch\": false,\n          \"timeMismatch\": true,\n          \"emiMissing\": true,\n          \"bankMissing\": false\n        }\n      ]\n    }\n  ],\n  \"number\": 25514758,\n  \"sort\": [\n    {\n      \"direction\": \"consectetur esse tempor cillum\",\n      \"nullHandling\": \"Excepteur adipisicing dolor\",\n      \"ascending\": true,\n      \"property\": \"id officia dolor ad\",\n      \"ignoreCase\": false\n    },\n    {\n      \"direction\": \"eu magna\",\n      \"nullHandling\": \"sint\",\n      \"ascending\": true,\n      \"property\": \"dolore cupidat\",\n      \"ignoreCase\": true\n    }\n  ],\n  \"pageable\": {\n    \"offset\": 8846969,\n    \"sort\": [\n      {\n        \"direction\": \"in id sunt\",\n        \"nullHandling\": \"laboris pariatur Duis\",\n        \"ascending\": false,\n        \"property\": \"nulla\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"eu ullamco dolore sint\",\n        \"nullHandling\": \"aliquip veniam culpa\",\n        \"ascending\": true,\n        \"property\": \"dolore commodo\",\n        \"ignoreCase\": true\n      }\n    ],\n    \"pageNumber\": 98778958,\n    \"pageSize\": -87292327,\n    \"paged\": false,\n    \"unpaged\": true\n  },\n  \"last\": true,\n  \"first\": false,\n  \"numberOfElements\": 43349989,\n  \"empty\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "12262c5d-3dc1-49d0-88af-70c8211adc5f",
+          "name": "external Report 2",
+          "request": {
+            "name": "external Report 2",
+            "description": {},
+            "url": {
+              "path": [
+                "reports",
+                "external-report",
+                ":id",
+                "details"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-92393740",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/reports/external-report/:id/details?page=0&size=10"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1e0662c4-3fb1-40f9-8e63-dcd77e7366fd",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports",
+                    "external-report",
+                    ":id",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-92393740",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": -24706230,\n  \"totalElements\": 54658137,\n  \"size\": -33003837,\n  \"content\": [\n    {\n      \"id\": -48290773,\n      \"status\": \"voluptate sint aliquip\",\n      \"transactionReference\": \"proident enim ul\",\n      \"statusMismatch\": true,\n      \"amountMismatch\": false,\n      \"timeMismatch\": true,\n      \"emiMissing\": false,\n      \"bankMissing\": false\n    },\n    {\n      \"id\": 68072825,\n      \"status\": \"ipsum laboris officia\",\n      \"transactionReference\": \"nostrud aute\",\n      \"statusMismatch\": false,\n      \"amountMismatch\": true,\n      \"timeMismatch\": false,\n      \"emiMissing\": true,\n      \"bankMissing\": false\n    }\n  ],\n  \"number\": 20206297,\n  \"sort\": [\n    {\n      \"direction\": \"velit do\",\n      \"nullHandling\": \"Ut\",\n      \"ascending\": true,\n      \"property\": \"nostrud consectetur sit cupidatat anim\",\n      \"ignoreCase\": true\n    },\n    {\n      \"direction\": \"ex\",\n      \"nullHandling\": \"consectetur amet\",\n      \"ascending\": false,\n      \"property\": \"dolore non ut ullamco Ut\",\n      \"ignoreCase\": true\n    }\n  ],\n  \"pageable\": {\n    \"offset\": -14616147,\n    \"sort\": [\n      {\n        \"direction\": \"commodo veniam dolor\",\n        \"nullHandling\": \"ipsum elit\",\n        \"ascending\": true,\n        \"property\": \"mollit culpa ut veniam\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"nos\",\n        \"nullHandling\": \"eiusmod Lorem\",\n        \"ascending\": true,\n        \"property\": \"commodo eiusmod nisi dolor\",\n        \"ignoreCase\": false\n      }\n    ],\n    \"pageNumber\": -32304873,\n    \"pageSize\": 10271505,\n    \"paged\": false,\n    \"unpaged\": true\n  },\n  \"last\": true,\n  \"first\": false,\n  \"numberOfElements\": 25256388,\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d48892fc-1912-40c7-8f61-42a5c8c40d1f",
+          "name": "collection Report 2",
+          "request": {
+            "name": "collection Report 2",
+            "description": {},
+            "url": {
+              "path": [
+                "reports",
+                "collection-report"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10"
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/reports/collection-report?page=0&size=10"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a532b2c0-dee0-41ba-b96a-620606e8b891",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports",
+                    "collection-report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": -87710700,\n  \"totalElements\": -6925150,\n  \"size\": -70351723,\n  \"content\": [\n    {\n      \"id\": -57058584,\n      \"totalMismatch\": 94002638,\n      \"totalMatched\": -812449,\n      \"reconciliationDate\": \"1984-01-11T04:11:02.318Z\",\n      \"collectionReportDetails\": [\n        {\n          \"id\": 58398478,\n          \"controlWalletCode\": \"la\",\n          \"controlWalletAmount\": -83602623.63954805,\n          \"childWalletsAmount\": -27570167.00488928,\n          \"reconciliationAmount\": 61430067.93289733,\n          \"isValid\": true\n        },\n        {\n          \"id\": -94482077,\n          \"controlWalletCode\": \"eu tempor dol\",\n          \"controlWalletAmount\": -73716798.50622135,\n          \"childWalletsAmount\": -87851607.63588654,\n          \"reconciliationAmount\": 62802296.587565124,\n          \"isValid\": false\n        }\n      ]\n    },\n    {\n      \"id\": 65668395,\n      \"totalMismatch\": -79977903,\n      \"totalMatched\": 4624646,\n      \"reconciliationDate\": \"1961-01-19T06:21:19.364Z\",\n      \"collectionReportDetails\": [\n        {\n          \"id\": -63849238,\n          \"controlWalletCode\": \"cupidatat aliqua ullamco\",\n          \"controlWalletAmount\": -9263619.204066038,\n          \"childWalletsAmount\": -567716.3895377368,\n          \"reconciliationAmount\": -14705463.110598415,\n          \"isValid\": true\n        },\n        {\n          \"id\": 19441117,\n          \"controlWalletCode\": \"elit tempor ut\",\n          \"controlWalletAmount\": -20944043.60207957,\n          \"childWalletsAmount\": 42692054.247636676,\n          \"reconciliationAmount\": -29537934.74506712,\n          \"isValid\": true\n        }\n      ]\n    }\n  ],\n  \"number\": 8398059,\n  \"sort\": [\n    {\n      \"direction\": \"magna in quis consectetur do\",\n      \"nullHandling\": \"sed\",\n      \"ascending\": true,\n      \"property\": \"dolore irure sunt sit\",\n      \"ignoreCase\": true\n    },\n    {\n      \"direction\": \"deserunt dolor\",\n      \"nullHandling\": \"eu Ut sed deserunt\",\n      \"ascending\": false,\n      \"property\": \"officia\",\n      \"ignoreCase\": true\n    }\n  ],\n  \"pageable\": {\n    \"offset\": 673290,\n    \"sort\": [\n      {\n        \"direction\": \"do sunt\",\n        \"nullHandling\": \"deserunt est\",\n        \"ascending\": false,\n        \"property\": \"ipsum ea Duis mollit aute\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"occaecat nulla\",\n        \"nullHandling\": \"labore exercitation\",\n        \"ascending\": true,\n        \"property\": \"eiusmod\",\n        \"ignoreCase\": true\n      }\n    ],\n    \"pageNumber\": -6594451,\n    \"pageSize\": -26366720,\n    \"paged\": true,\n    \"unpaged\": false\n  },\n  \"last\": false,\n  \"first\": false,\n  \"numberOfElements\": 48970434,\n  \"empty\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7808fce7-1116-49a7-962f-91c3df6cee6b",
+          "name": "wallet Report 3",
+          "request": {
+            "name": "wallet Report 3",
+            "description": {},
+            "url": {
+              "path": [
+                "reports",
+                "collection-report",
+                ":id",
+                "details"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-92393740",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/reports/collection-report/:id/details?page=0&size=10"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "666759d8-3210-43ed-a12a-2ed9f1b870c9",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports",
+                    "collection-report",
+                    ":id",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-92393740",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": -91472140,\n  \"totalElements\": 66709518,\n  \"size\": 49739138,\n  \"content\": [\n    {\n      \"id\": 81930905,\n      \"controlWalletCode\": \"l\",\n      \"controlWalletAmount\": 71684996.59821469,\n      \"childWalletsAmount\": -94343785.67682627,\n      \"reconciliationAmount\": -63361579.464534,\n      \"isValid\": true\n    },\n    {\n      \"id\": -92829927,\n      \"controlWalletCode\": \"elit veniam aliquip\",\n      \"controlWalletAmount\": -80009166.51453988,\n      \"childWalletsAmount\": -80915399.1304439,\n      \"reconciliationAmount\": -55951094.760983385,\n      \"isValid\": false\n    }\n  ],\n  \"number\": 86412528,\n  \"sort\": [\n    {\n      \"direction\": \"sunt\",\n      \"nullHandling\": \"non ipsum dolore magna minim\",\n      \"ascending\": true,\n      \"property\": \"enim\",\n      \"ignoreCase\": false\n    },\n    {\n      \"direction\": \"minim\",\n      \"nullHandling\": \"magna eu do qui minim\",\n      \"ascending\": false,\n      \"property\": \"dolor elit\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"pageable\": {\n    \"offset\": 62723910,\n    \"sort\": [\n      {\n        \"direction\": \"magna est\",\n        \"nullHandling\": \"of\",\n        \"ascending\": true,\n        \"property\": \"et\",\n        \"ignoreCase\": false\n      },\n      {\n        \"direction\": \"sed tempor pariatur\",\n        \"nullHandling\": \"commodo veniam\",\n        \"ascending\": true,\n        \"property\": \"consequat Excepteur\",\n        \"ignoreCase\": true\n      }\n    ],\n    \"pageNumber\": -9950487,\n    \"pageSize\": 78978096,\n    \"paged\": true,\n    \"unpaged\": true\n  },\n  \"last\": false,\n  \"first\": false,\n  \"numberOfElements\": -99901585,\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "202a340f-3842-4cc1-b2d6-645469139ea3",
+          "name": "balance Report",
+          "request": {
+            "name": "balance Report",
+            "description": {},
+            "url": {
+              "path": [
+                "reports",
+                "balance-report"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10"
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/reports/balance-report?page=0&size=10"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c9e12440-6301-4d80-b1c2-d691d5d69792",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reports",
+                    "balance-report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "qui dolore proident officia magna"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": -49090855,\n  \"totalElements\": 7882531,\n  \"size\": 6218468,\n  \"content\": [\n    {\n      \"id\": 66833953,\n      \"createdAt\": \"1982-06-23T05:03:45.607Z\",\n      \"accountNumber\": \"sunt in\",\n      \"walletBalance\": 40169148.74364939,\n      \"bankAccountBalance\": 46099670.17804307,\n      \"status\": \"est Excepteur adipisicing consequat non\"\n    },\n    {\n      \"id\": 75836863,\n      \"createdAt\": \"1991-01-05T20:56:31.987Z\",\n      \"accountNumber\": \"nostrud consectetu\",\n      \"walletBalance\": 26991562.54057616,\n      \"bankAccountBalance\": 3792996.16761373,\n      \"status\": \"sed nulla pariatur\"\n    }\n  ],\n  \"number\": -15833058,\n  \"sort\": [\n    {\n      \"direction\": \"tempor voluptate laborum\",\n      \"nullHandling\": \"incididunt ut\",\n      \"ascending\": true,\n      \"property\": \"incididunt dolore nulla\",\n      \"ignoreCase\": false\n    },\n    {\n      \"direction\": \"ad sit\",\n      \"nullHandling\": \"exercitation non\",\n      \"ascending\": true,\n      \"property\": \"minim non ipsum\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"pageable\": {\n    \"offset\": 36265296,\n    \"sort\": [\n      {\n        \"direction\": \"Ut non\",\n        \"nullHandling\": \"qui\",\n        \"ascending\": false,\n        \"property\": \"ad amet\",\n        \"ignoreCase\": false\n      },\n      {\n        \"direction\": \"tempor proident\",\n        \"nullHandling\": \"ipsum tempor consequat labo\",\n        \"ascending\": true,\n        \"property\": \"sed mollit\",\n        \"ignoreCase\": true\n      }\n    ],\n    \"pageNumber\": -33156620,\n    \"pageSize\": -91784194,\n    \"paged\": true,\n    \"unpaged\": true\n  },\n  \"last\": true,\n  \"first\": true,\n  \"numberOfElements\": -46927554,\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generated guard: a 5xx from any request is a gateway/service defect, not a test-data problem.",
+          "pm.test('no 5xx (' + pm.info.requestName + ')', function () {",
+          "  pm.expect(pm.response.code, (pm.response.text() || '').slice(0, 300)).to.be.below(500);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{gatewayBaseUrl}}/reports",
+      "type": "string"
+    }
+  ],
+  "info": {
+    "_postman_id": "7e3275a2-f706-4168-b9e4-183925ad7762",
+    "name": "Reports Service - majdpay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Reports Service (reports-service) — 24 operations.\n\nGENERATED from the OpenAPI 3.1.0 spec published at the UAT gateway swagger-ui\n(Select a definition -> \"Reports Service APIs\"). Request bodies are schema-derived placeholders (lorem-ipsum\nstrings, sample numbers) — replace with real values before sending.\n\nBase URL: {{gatewayBaseUrl}}/reports  (gatewayBaseUrl lives in EMI-dev.postman_environment.json).\nSpec server: https://gateway-emiuat.dg-cash.app/reports\n\nAUTH: the spec declares no security scheme, but the gateway front-doors every route with a bearer\ntoken. Set {{token}} in the environment (mint one with the Authentication Service collection's\nsign-in, or pass --env-var token=... to newman). Some back-office routes need an admin/service\ntoken rather than a merchant one.\n\nCompanion Playwright scaffold: BusinessTestCases/ServiceApis/ReportsService.generated.spec.ts\n"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

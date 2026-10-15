@@ -3,7 +3,7 @@ import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { HomePage } from '../../pageElements/Shared/HomePage';
 import { BillsPage } from '../../pageElements/PayBill/BillsPage';
-import { BILL_COMPANY, BILL_MOBILE, BILL_PASSWORD } from '../PayBillHelper';
+import { BILL_COMPANY, BILL_MOBILE, BILL_PASSWORD, BILL_LOOKUP_NUMBER } from '../PayBillHelper';
 import { LOGIN_URL, getOtpFromDb } from '../../Login/LoginHelper';
 
 // Bill QR Code scanning — Business/merchant app (BQR-03, BQR-04). EMI-5144
@@ -54,8 +54,12 @@ test.describe('Pay Bill – QR Scan and Manual Bill Lookup', () => {
     });
 
     test('BQR-04: entering a bill number manually should retrieve the bill, not "Something went wrong" (EMI-5143)', async () => {
-        await billsPage.searchBillByNumber('1041');
+        await billsPage.searchBillByNumber(BILL_LOOKUP_NUMBER);
         await expect(page.getByText(/something went wrong/i)).not.toBeVisible({ timeout: 15000 });
         await expect(billsPage.billLookupError).not.toBeVisible();
+        // Positive assertion: BILL_LOOKUP_NUMBER must actually resolve to a real
+        // bill, not just fail to show an error banner — otherwise this test would
+        // still pass if the bill number stops existing in UAT data.
+        await expect(billsPage.billLookupResult).toBeVisible({ timeout: 15000 });
     });
 });

@@ -1,5 +1,5 @@
 import { type Page, type Locator, expect } from '@playwright/test';
-import { AdminOtpConfigPage } from '../Shared/AdminOtpConfigPage';
+import { AdminOtpConfigPage, ADMIN_BASE_URL } from '../Shared/AdminOtpConfigPage';
 
 /**
  * Admin Portal → Commission Management → Default Commission
@@ -31,10 +31,9 @@ import { AdminOtpConfigPage } from '../Shared/AdminOtpConfigPage';
  * reuse it rather than duplicating the login flow here.
  */
 
-const BASE_URL = process.env['BASE_URL'] ?? 'https://dev.majdpay.com';
-const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev.majdpay.com';
+const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev-emi.dg-cash.app';
 
-export const DEFAULT_COMMISSION_URL = `${BASE_URL}/admin/main/commission/defult-commission`;
+export const DEFAULT_COMMISSION_URL = `${ADMIN_BASE_URL}/admin/main/commission/defult-commission`;
 
 /**
  * Admin Portal → Commission Management → Accounts Commission
@@ -61,7 +60,7 @@ export const DEFAULT_COMMISSION_URL = `${BASE_URL}/admin/main/commission/defult-
  * account) — see that method's own header comment for why earlier attempts
  * at this wrongly concluded the filter itself was broken.
  */
-export const ACCOUNTS_LIST_URL = `${BASE_URL}/admin/main/commission/accounts-list`;
+export const ACCOUNTS_LIST_URL = `${ADMIN_BASE_URL}/admin/main/commission/accounts-list`;
 
 /**
  * Raw shape of one entry from `GET /api/v1/default-commissions` (confirmed
@@ -79,6 +78,20 @@ export interface DefaultCommissionApiEntry {
     max: number;
     transactionTypeCode: string;
     platformType: string; // lowercase: 'web' | 'app' | 'system'
+    type: string; // 'PERCENTAGE' | 'FIXED'
+    isActive: boolean;
+}
+
+/** Raw shape of one entry from `GET /api/v1/commissions/{profileCode}` (confirmed live 2026-10-03). */
+export interface AccountCommissionApiEntry {
+    id: number;
+    amountValue: number;
+    min: number;
+    max: number;
+    effectiveDate: string | null;
+    transactionTypeCode: string;
+    platformType: string;
+    profileCode: string;
     type: string; // 'PERCENTAGE' | 'FIXED'
     isActive: boolean;
 }
@@ -269,6 +282,77 @@ export class AdminCommissionManagementPage {
     async apiFindCommission(transactionTypeCode: string, platform: 'WEB' | 'APP' | 'SYSTEM'): Promise<DefaultCommissionApiEntry | null> {
         const all = await this.apiFetchAllCommissions();
         return all.find(e => e.transactionTypeCode === transactionTypeCode && e.platformType.toUpperCase() === platform) ?? null;
+    }
+
+    /**
+     * Raw authenticated GET against the gateway, for API tests that need
+     * to assert status codes and query-param behaviour directly. Pass the
+     * path plus query string, e.g. `/api/v1/default-commissions?page=0&size=10`.
+     * `withAuth: false` sends no Authorization header (for 401 checks).
+     */
+    async apiGet(pathWithQuery: string, opts: { withAuth?: boolean } = {}): Promise<{ status: number; json: unknown }> {
+        const headers = opts.withAuth === false ? {} : await this.ensureApiHeaders();
+        const res = await this.page.request.get(`${API_BASE}${pathWithQuery}`, { headers });
+        const json = await res.json().catch(() => null);
+        return { status: res.status(), json };
+    }
+
+    /** Account-level override rows for one business profile, from `GET /api/v1/commissions/{profileCode}`. */
+    async apiFetchAccountCommissions(profileCode: string): Promise<AccountCommissionApiEntry[]> {
+        const { status, json } = await this.apiGet(`/api/v1/commissions/${encodeURIComponent(profileCode)}?page=0&size=50`);
+        if (status !== 200) throw new Error(`GET /api/v1/commissions/${profileCode} failed: ${status}`);
+        return (json as { content: AccountCommissionApiEntry[] }).content;
+    }
+
+    /**
+     * Raw authenticated PUT to `/api/v1/default-commissions/{id}` — the same
+     * body contract the Default Commission edit form sends (confirmed live
+     * 2026-10-03). Returns status and parsed body without throwing, so tests
+     * can assert on rejections as well as successes.
+     */
+    async apiPutDefaultCommission(id: number, body: Record<string, unknown>, opts: { withAuth?: boolean } = {}): Promise<{ status: number; json: unknown }> {
+        const headers = opts.withAuth === false ? { 'content-type': 'application/json' } : { ...(await this.ensureApiHeaders()), 'content-type': 'application/json' };
+        const res = await this.page.request.put(`${API_BASE}/api/v1/default-commissions/${id}`, { headers, data: body });
+        const json = await res.json().catch(() => null);
+        return { status: res.status(), json };
+    }
+
+    /**
+     * Raw authenticated POST to `/api/v1/default-commissions` — the create
+     * contract is an array of one object (confirmed live 2026-10-03 by
+     * aborting the request in the browser). Returns status and body without
+     * throwing so tests can assert on rejections.
+     */
+    async apiPostDefaultCommissions(body: unknown, opts: { withAuth?: boolean } = {}): Promise<{ status: number; json: unknown }> {
+        const headers = opts.withAuth === false ? { 'content-type': 'application/json' } : { ...(await this.ensureApiHeaders()), 'content-type': 'application/json' };
+        const res = await this.page.request.post(`${API_BASE}/api/v1/default-commissions`, { headers, data: body });
+        const json = await res.json().catch(() => null);
+        return { status: res.status(), json };
+    }
+
+    /**
+     * Raw authenticated POST to `/api/v1/commissions` — the account-level
+     * create contract is an array of one object carrying `profileCode`
+     * (confirmed live 2026-10-03 by aborting the request in the browser).
+     */
+    async apiPostAccountCommissions(body: unknown, opts: { withAuth?: boolean } = {}): Promise<{ status: number; json: unknown }> {
+        const headers = opts.withAuth === false ? { 'content-type': 'application/json' } : { ...(await this.ensureApiHeaders()), 'content-type': 'application/json' };
+        const res = await this.page.request.post(`${API_BASE}/api/v1/commissions`, { headers, data: body });
+        const json = await res.json().catch(() => null);
+        return { status: res.status(), json };
+    }
+
+    /**
+     * Raw authenticated PUT to `/api/v1/commissions` — the account-level edit
+     * contract is a single object with `id` and `minValue`/`maxValue`
+     * (confirmed live 2026-10-03). Note the body carries `isActive` as the
+     * row's current state; the edit form does not change status.
+     */
+    async apiPutAccountCommission(body: Record<string, unknown>, opts: { withAuth?: boolean } = {}): Promise<{ status: number; json: unknown }> {
+        const headers = opts.withAuth === false ? { 'content-type': 'application/json' } : { ...(await this.ensureApiHeaders()), 'content-type': 'application/json' };
+        const res = await this.page.request.put(`${API_BASE}/api/v1/commissions`, { headers, data: body });
+        const json = await res.json().catch(() => null);
+        return { status: res.status(), json };
     }
 
     /** Activates or deactivates a commission by id via its own dedicated endpoint — no body, no UI dropdown. */

@@ -70,3 +70,18 @@ export function expectedItemTotal(unitPrice: number, quantity: number, discount 
         : unitPrice * (1 - discount / 100);
     return Math.max(0, unitAfterDiscount) * quantity;
 }
+
+/**
+ * The *alternative* EMI-4121 interpretation: the discount applied to the line
+ * total (unitPrice x quantity) rather than to the unit price:
+ *   (unitPrice x quantity) - fixedDiscount
+ * Exists so BI-26 in BillItems.spec.ts can record which interpretation the
+ * app currently implements without presuming EMI-4121's still-open answer.
+ */
+export function expectedItemTotalLineDiscount(unitPrice: number, quantity: number, discount = 0, discountType: 'FIXED' | 'PERCENTAGE' = 'FIXED'): number {
+    const lineTotal = unitPrice * quantity;
+    const afterDiscount = discountType === 'FIXED'
+        ? lineTotal - discount
+        : lineTotal * (1 - discount / 100);
+    return Math.max(0, afterDiscount);
+}

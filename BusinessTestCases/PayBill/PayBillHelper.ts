@@ -22,3 +22,7 @@ export const BILL_COMPANY  = process.env['BILL_PAYMENT_COMPANY']  ?? testAccount
 export const BILL_MOBILE   = process.env['BILL_PAYMENT_MOBILE']   ?? testAccounts.moduleAccounts.payBill.mobile;
 export const BILL_PASSWORD = process.env['BILL_PAYMENT_PASSWORD'] ?? testAccounts.defaultPassword;
 export const BILL_STATUS   = primary.billStatus;
+
+// Known-good bill number in UAT used by PayBillQrAndSearch.spec.ts's manual-lookup
+// positive assertion (BQR-04) — override via env if this fixture bill rotates out.
+export const BILL_LOOKUP_NUMBER = process.env['BILL_LOOKUP_NUMBER'] ?? '1041';

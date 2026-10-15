@@ -1,0 +1,1296 @@
+{
+  "item": [
+    {
+      "id": "192fb3e1-4ba2-4f46-afee-e189588e3bae",
+      "name": "risk-level-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f441e5b0-3948-46ef-8af9-2874bb290989",
+          "name": "change Status",
+          "request": {
+            "name": "change Status",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "risk-levels",
+                "q",
+                "codes",
+                ":code"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "isActive",
+                  "value": "true",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "occaecat aliquip mollit",
+                  "key": "code",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/risk-levels/q/codes/:code?isActive=true"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "43bdd746-bf0f-4686-9bbf-441e2f98bb78",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "risk-levels",
+                    "q",
+                    "codes",
+                    ":code"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "isActive",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "occaecat aliquip mollit",
+                      "key": "code",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"code\": \"ad\",\n  \"nameAr\": \"ut\",\n  \"nameEn\": \"in Duis sed ipsum\",\n  \"description\": \"nisi dolore officia\",\n  \"isActive\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0bfe5b21-7ad2-4e23-be93-f499e86cdce7",
+          "name": "change Risk Level",
+          "request": {
+            "name": "change Risk Level",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "risk-levels",
+                "codes",
+                ":unifiedNumber"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "occaecat aliquip mollit",
+                  "key": "unifiedNumber",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/risk-levels/codes/:unifiedNumber"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "occaecat aliquip mollit",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2b971f52-673b-47e6-a0b3-b5fb8dbe2432",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "risk-levels",
+                    "codes",
+                    ":unifiedNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "occaecat aliquip mollit",
+                      "key": "unifiedNumber",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "occaecat aliquip mollit",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"code\": \"ad\",\n  \"nameAr\": \"ut\",\n  \"nameEn\": \"in Duis sed ipsum\",\n  \"description\": \"nisi dolore officia\",\n  \"isActive\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "debdc1bd-8a88-470a-919c-491d70089d19",
+          "name": "get All Risk Levels",
+          "request": {
+            "name": "get All Risk Levels",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "risk-levels"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/risk-levels"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7a46f1fd-7f33-4f1f-8f25-620d4a8cab31",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "risk-levels"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"code\": \"cillum labore ea officia enim\",\n    \"nameAr\": \"consequat officia dolor\",\n    \"nameEn\": \"ut laboris ad cupidatat ut\",\n    \"description\": \"sunt Duis in\",\n    \"isActive\": true\n  },\n  {\n    \"code\": \"labore elit deserunt irure\",\n    \"nameAr\": \"lab\",\n    \"nameEn\": \"Ut irure consectetur\",\n    \"description\": \"cupidatat ut in\",\n    \"isActive\": true\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7eeec6dd-b323-48d5-8594-16e90cfd1b05",
+          "name": "get Risk Level By Id",
+          "request": {
+            "name": "get Risk Level By Id",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "risk-levels",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-50479339",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/risk-levels/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0d72fd97-5035-4b5e-933e-80db7aad0e26",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "risk-levels",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-50479339",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"code\": \"ad\",\n  \"nameAr\": \"ut\",\n  \"nameEn\": \"in Duis sed ipsum\",\n  \"description\": \"nisi dolore officia\",\n  \"isActive\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5e9b0a9c-faef-40e4-9c78-3676a763fdaa",
+          "name": "get Risk Level By Code",
+          "request": {
+            "name": "get Risk Level By Code",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "risk-levels",
+                "codes",
+                ":code"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "occaecat aliquip mollit",
+                  "key": "code",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/risk-levels/codes/:code"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7cb535c6-7622-42c6-8d55-f9122e3e38cd",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "risk-levels",
+                    "codes",
+                    ":code"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "occaecat aliquip mollit",
+                      "key": "code",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"code\": \"ad\",\n  \"nameAr\": \"ut\",\n  \"nameEn\": \"in Duis sed ipsum\",\n  \"description\": \"nisi dolore officia\",\n  \"isActive\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "65a423bf-55c7-4520-a46e-c4a3a73b0a4e",
+      "name": "scenario-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "dbf4b23f-7d31-43ab-9f9a-1bd447880c06",
+          "name": "get Scenarios",
+          "request": {
+            "name": "get Scenarios",
+            "description": {},
+            "url": {
+              "path": [
+                "scenarios"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10"
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/scenarios?page=0&size=10"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3db8c0f7-9120-489c-bbc8-8c207795066d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "scenarios"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "occaecat aliquip mollit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": 83775411,\n  \"totalElements\": -25322286,\n  \"size\": -62128359,\n  \"content\": [\n    {\n      \"scenarioKey\": \"nisi\",\n      \"actions\": [\n        {\n          \"id\": 81642062,\n          \"beanName\": \"non labore et\",\n          \"description\": \"Lorem id\",\n          \"isActive\": true\n        },\n        {\n          \"id\": 47458932,\n          \"beanName\": \"sunt minim ullamco\",\n          \"description\": \"esse\",\n          \"isActive\": false\n        }\n      ],\n      \"isActive\": true\n    },\n    {\n      \"scenarioKey\": \"sed et\",\n      \"actions\": [\n        {\n          \"id\": -59896152,\n          \"beanName\": \"nostrud\",\n          \"description\": \"consectetur est elit mollit\",\n          \"isActive\": true\n        },\n        {\n          \"id\": -21594252,\n          \"beanName\": \"eiusmod aliqua fugiat\",\n          \"description\": \"elit non occaecat\",\n          \"isActive\": false\n        }\n      ],\n      \"isActive\": false\n    }\n  ],\n  \"number\": 64774533,\n  \"sort\": [\n    {\n      \"direction\": \"et Ut amet commodo Duis\",\n      \"nullHandling\": \"non minim quis\",\n      \"ascending\": true,\n      \"property\": \"elit\",\n      \"ignoreCase\": false\n    },\n    {\n      \"direction\": \"veniam ex Duis\",\n      \"nullHandling\": \"reprehenderit consequat ad Duis aliquip\",\n      \"ascending\": false,\n      \"property\": \"occaecat eu in\",\n      \"ignoreCase\": true\n    }\n  ],\n  \"pageable\": {\n    \"offset\": -22817777,\n    \"sort\": [\n      {\n        \"direction\": \"occaecat Ut velit aliqua\",\n        \"nullHandling\": \"officia adipisicing cillum consectetur\",\n        \"ascending\": false,\n        \"property\": \"enim\",\n        \"ignoreCase\": false\n      },\n      {\n        \"direction\": \"occaecat proident exercitation\",\n        \"nullHandling\": \"ipsum qui \",\n        \"ascending\": true,\n        \"property\": \"laboris Duis labore\",\n        \"ignoreCase\": true\n      }\n    ],\n    \"pageNumber\": 60275836,\n    \"pageSize\": 46237713,\n    \"paged\": true,\n    \"unpaged\": false\n  },\n  \"first\": true,\n  \"last\": false,\n  \"numberOfElements\": 30811822,\n  \"empty\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d936dfb1-9deb-485e-97d1-fea5b56e4fc5",
+          "name": "create Scenario",
+          "request": {
+            "name": "create Scenario",
+            "description": {},
+            "url": {
+              "path": [
+                "scenarios"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/scenarios"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"actionIds\": [\n    -95570776,\n    45471526\n  ],\n  \"isActive\": false,\n  \"scenarioKey\": \"qui commodo irure\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2cd0715e-87a6-4832-a676-aae603d8c6b3",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "scenarios"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "occaecat aliquip mollit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"actionIds\": [\n    -99659786,\n    -41549966\n  ],\n  \"isActive\": false,\n  \"scenarioKey\": \"occaecat ea\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"scenarioKey\": \"esse ut repreh\",\n  \"actions\": [\n    {\n      \"id\": 2441821,\n      \"beanName\": \"reprehenderit aliquip\",\n      \"description\": \"exercitatio\",\n      \"isActive\": true\n    },\n    {\n      \"id\": -18850527,\n      \"beanName\": \"consectetur commodo incididunt ullamco\",\n      \"description\": \"ipsum aliquip\",\n      \"isActive\": true\n    }\n  ],\n  \"isActive\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "660b520b-ce26-4b6a-b38b-93ca2cc04d2c",
+          "name": "get Scenario By Id",
+          "request": {
+            "name": "get Scenario By Id",
+            "description": {},
+            "url": {
+              "path": [
+                "scenarios",
+                ":scenarioKey"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "occaecat aliquip mollit",
+                  "key": "scenarioKey",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/scenarios/:scenarioKey"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c4746f38-1eb9-43ff-bf07-488b739bf5a4",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "scenarios",
+                    ":scenarioKey"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "occaecat aliquip mollit",
+                      "key": "scenarioKey",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "occaecat aliquip mollit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"scenarioKey\": \"esse ut repreh\",\n  \"actions\": [\n    {\n      \"id\": 2441821,\n      \"beanName\": \"reprehenderit aliquip\",\n      \"description\": \"exercitatio\",\n      \"isActive\": true\n    },\n    {\n      \"id\": -18850527,\n      \"beanName\": \"consectetur commodo incididunt ullamco\",\n      \"description\": \"ipsum aliquip\",\n      \"isActive\": true\n    }\n  ],\n  \"isActive\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "afdd5b1f-1abf-481f-8439-dece95fadd15",
+      "name": "command-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b496bb8a-c31e-4d7b-be93-eac710cbb81f",
+          "name": "execute Command",
+          "request": {
+            "name": "execute Command",
+            "description": {},
+            "url": {
+              "path": [
+                "commands"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "scenarioKey",
+                  "value": "occaecat aliquip mollit",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "data",
+                  "value": "occaecat aliquip mollit",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/commands?scenarioKey=occaecat aliquip mollit&data=occaecat aliquip mollit"
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7d5abf4f-04d0-4a1f-bd8e-0b9b9be15a68",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "commands"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "scenarioKey",
+                      "value": "occaecat aliquip mollit"
+                    },
+                    {
+                      "key": "data",
+                      "value": "occaecat aliquip mollit"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "57e43368-5b76-4989-bbfe-2e3d58367dfd",
+      "name": "aml-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f577c683-1f0c-4e3d-aae7-ea6e09492beb",
+          "name": "WS3Aml Check",
+          "request": {
+            "name": "WS3Aml Check",
+            "description": {},
+            "url": {
+              "path": [
+                "aml",
+                "ws3"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/aml/ws3"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request\": [\n    {\n      \"focusName\": \"commodo ipsum dolore quis\",\n      \"modelId\": -61530990,\n      \"focusTypeKey\": \"labore\",\n      \"branchCode\": \"laboris\",\n      \"idRegDoc\": \"ut dolore nisi sit\",\n      \"yearsEstablished\": -25018291,\n      \"country\": \"ipsum min\",\n      \"city\": \"magna Excepteur irure\",\n      \"region\": \"cillum sed quis\",\n      \"businessActivity\": \"Ut elit laboris\",\n      \"otherSourceOfIncome\": \"consect\",\n      \"industry\": \"aliquip anim velit Lorem\",\n      \"isPep\": \"laborum labore Duis\",\n      \"isFamilyPep\": \"laboris cupidatat est\",\n      \"shareholderNationality\": \"amet ex irure in\",\n      \"authorizedPersonNationality\": \"laborum ex\",\n      \"annualIncome\": \"dolor\",\n      \"isShareholderCompany\": \"ullamco eiusmod nostrud dolor\",\n      \"capital\": \"et labore mollit\",\n      \"natureOfBusiness\": \"qui ipsum officia\"\n    },\n    {\n      \"focusName\": \"ullamco inci\",\n      \"modelId\": -83220250,\n      \"focusTypeKey\": \"ad aliqua deserunt eiusmod\",\n      \"branchCode\": \"sed veniam\",\n      \"idRegDoc\": \"et labore\",\n      \"yearsEstablished\": 74242333,\n      \"country\": \"ea voluptate aute\",\n      \"city\": \"pariatur sunt anim adipisicing cupidatat\",\n      \"region\": \"c\",\n      \"businessActivity\": \"sunt irure nostrud\",\n      \"otherSourceOfIncome\": \"nulla aliquip veniam\",\n      \"industry\": \"Duis veniam laborum\",\n      \"isPep\": \"exercitation elit\",\n      \"isFamilyPep\": \"consequat Lorem in\",\n      \"shareholderNationality\": \"nisi anim fugiat eu\",\n      \"authorizedPersonNationality\": \"nisi ut\",\n      \"annualIncome\": \"id tempor occaecat\",\n      \"isShareholderCompany\": \"reprehenderit qui dolore \",\n      \"capital\": \"esse labo\",\n      \"natureOfBusiness\": \"aute\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "27aa7741-b3d1-4a6b-bd35-3914cfbe8b60",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aml",
+                    "ws3"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"request\": [\n    {\n      \"focusName\": \"eiusmod dolor\",\n      \"modelId\": 48968794,\n      \"focusTypeKey\": \"enim consectetur amet in est\",\n      \"branchCode\": \"ut culpa\",\n      \"idRegDoc\": \"velit ex\",\n      \"yearsEstablished\": 69519140,\n      \"country\": \"sit officia Lorem ex\",\n      \"city\": \"laborum reprehenderit\",\n      \"region\": \"ex exercitation ut pariatur\",\n      \"businessActivity\": \"consectetur officia\",\n      \"otherSourceOfIncome\": \"proident minim ut dolor nulla\",\n      \"industry\": \"consectetur sit Lorem ad\",\n      \"isPep\": \"irure\",\n      \"isFamilyPep\": \"Lorem\",\n      \"shareholderNationality\": \"qui sed\",\n      \"authorizedPersonNationality\": \"adipisicing laborum in qu\",\n      \"annualIncome\": \"voluptate ullamco exercitation sit consectetur\",\n      \"isShareholderCompany\": \"enim ullamco do elit\",\n      \"capital\": \"adipisicing proident in id\",\n      \"natureOfBusiness\": \"sit cupidatat irure\"\n    },\n    {\n      \"focusName\": \"ullamco esse minim\",\n      \"modelId\": -87837762,\n      \"focusTypeKey\": \"elit pariatur\",\n      \"branchCode\": \"pariatur eu ipsum in\",\n      \"idRegDoc\": \"incididunt id dolore enim\",\n      \"yearsEstablished\": -4260375,\n      \"country\": \"anim culpa ut occaecat\",\n      \"city\": \"qui ullamco Du\",\n      \"region\": \"culpa exercitation elit aliquip tempor\",\n      \"businessActivity\": \"occaecat deserunt sunt\",\n      \"otherSourceOfIncome\": \"minim\",\n      \"industry\": \"do ullamco elit\",\n      \"isPep\": \"deserunt Ut id nostrud\",\n      \"isFamilyPep\": \"cupidatat ea\",\n      \"shareholderNationality\": \"sit anim nulla\",\n      \"authorizedPersonNationality\": \"Ut cillum nisi\",\n      \"annualIncome\": \"cillum eiusmod sint\",\n      \"isShareholderCompany\": \"Excepteur voluptate\",\n      \"capital\": \"dolore irure in amet\",\n      \"natureOfBusiness\": \"commodo\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "occaecat aliquip mollit",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7d316aca-7257-4d69-b245-71a78bc7f10f",
+          "name": "WS1Aml Check",
+          "request": {
+            "name": "WS1Aml Check",
+            "description": {},
+            "url": {
+              "path": [
+                "aml",
+                "ws1"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/aml/ws1"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"ullamco cillum Excepteur est\",\n  \"entityID\": \"sunt in esse\",\n  \"country\": [\n    {\n      \"ISO2\": \"eu sit aliquip\",\n      \"ISO3\": \"ut sunt\"\n    },\n    {\n      \"ISO2\": \"fugiat do\",\n      \"ISO3\": \"ve\"\n    }\n  ],\n  \"identityNumbers\": [\n    {\n      \"idregdesc\": \"occaecat irure in\",\n      \"idregdoc\": \"irure ex elit\"\n    },\n    {\n      \"idregdesc\": \"qu\",\n      \"idregdoc\": \"magna pariatur Ut labore non\"\n    }\n  ],\n  \"dob\": \"consequat\",\n  \"fixReference\": \"amet irure enim\",\n  \"systemInfo\": \"irur\",\n  \"branchCode\": \"aliquip officia tempor incididunt\",\n  \"category\": \"laboris adipisicing\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "26712749-802c-4ea5-b1d8-846ea95fed6f",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aml",
+                    "ws1"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerName\": \"velit do quis commodo\",\n  \"entityID\": \"proident aute Lorem irure ad\",\n  \"country\": [\n    {\n      \"ISO2\": \"ad irure ut qui\",\n      \"ISO3\": \"aliqua voluptate nostrud\"\n    },\n    {\n      \"ISO2\": \"commodo velit\",\n      \"ISO3\": \"quis sint laboris Duis\"\n    }\n  ],\n  \"identityNumbers\": [\n    {\n      \"idregdesc\": \"ut qui aute eu\",\n      \"idregdoc\": \"tempor culpa\"\n    },\n    {\n      \"idregdesc\": \"anim aliqua\",\n      \"idregdoc\": \"aute proident dolo\"\n    }\n  ],\n  \"dob\": \"aut\",\n  \"fixReference\": \"esse amet nulla\",\n  \"systemInfo\": \"aute occaecat dolor\",\n  \"branchCode\": \"Ut anim dolor\",\n  \"category\": \"sunt do voluptate\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "occaecat aliquip mollit",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "3b0b3943-822e-4ffa-b864-caebff3e5d74",
+      "name": "action-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "976cb215-8f4e-44d7-8c0f-f22f47d658fd",
+          "name": "get Actions",
+          "request": {
+            "name": "get Actions",
+            "description": {},
+            "url": {
+              "path": [
+                "actions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10"
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/actions?page=0&size=10"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0ba57ae2-cac9-41e9-ad3d-48f0a7623304",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "actions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "occaecat aliquip mollit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": 6748868,\n  \"totalElements\": -56352509,\n  \"size\": 17598898,\n  \"content\": [\n    {\n      \"id\": -56090100,\n      \"beanName\": \"dolor\",\n      \"description\": \"in reprehenderit\",\n      \"isActive\": false\n    },\n    {\n      \"id\": 81797030,\n      \"beanName\": \"amet magna cillum Lorem enim\",\n      \"description\": \"non ad\",\n      \"isActive\": true\n    }\n  ],\n  \"number\": 93509089,\n  \"sort\": [\n    {\n      \"direction\": \"et anim\",\n      \"nullHandling\": \"dolor Duis mollit\",\n      \"ascending\": true,\n      \"property\": \"ad Lorem\",\n      \"ignoreCase\": false\n    },\n    {\n      \"direction\": \"labore nulla\",\n      \"nullHandling\": \"et\",\n      \"ascending\": true,\n      \"property\": \"deserunt magna sint aliquip Lorem\",\n      \"ignoreCase\": true\n    }\n  ],\n  \"pageable\": {\n    \"offset\": 39085089,\n    \"sort\": [\n      {\n        \"direction\": \"anim reprehenderit\",\n        \"nullHandling\": \"tempor qui\",\n        \"ascending\": false,\n        \"property\": \"adipisicing laborum sed\",\n        \"ignoreCase\": false\n      },\n      {\n        \"direction\": \"eiusmod sit enim \",\n        \"nullHandling\": \"reprehenderit ad veniam\",\n        \"ascending\": false,\n        \"property\": \"est proident\",\n        \"ignoreCase\": true\n      }\n    ],\n    \"pageNumber\": -40248321,\n    \"pageSize\": -13548756,\n    \"paged\": true,\n    \"unpaged\": false\n  },\n  \"first\": false,\n  \"last\": true,\n  \"numberOfElements\": -25851238,\n  \"empty\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fe1054ae-d4d6-4b64-a998-1325ba22ab42",
+          "name": "get Action By Id",
+          "request": {
+            "name": "get Action By Id",
+            "description": {},
+            "url": {
+              "path": [
+                "actions",
+                ":actionId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-50479339",
+                  "key": "actionId",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/actions/:actionId"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9d577499-0dac-434f-80b2-c42fad67d2b2",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "actions",
+                    ":actionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-50479339",
+                      "key": "actionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "occaecat aliquip mollit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 1198227,\n  \"beanName\": \"Excepteur\",\n  \"description\": \"laboris ut consectetur cillum quis\",\n  \"isActive\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generated guard: a 5xx from any request is a gateway/service defect, not a test-data problem.",
+          "pm.test('no 5xx (' + pm.info.requestName + ')', function () {",
+          "  pm.expect(pm.response.code, (pm.response.text() || '').slice(0, 300)).to.be.below(500);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{gatewayBaseUrl}}/risk-management-service",
+      "type": "string"
+    }
+  ],
+  "info": {
+    "_postman_id": "5df7c09a-8899-43cd-bd62-b1924e1df311",
+    "name": "Risk Management Service - majdpay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Risk Management Service (risk-management-service) — 13 operations.\n\nGENERATED from the OpenAPI 3.1.0 spec published at the UAT gateway swagger-ui\n(Select a definition -> \"Risk Management Service APIs\"). Request bodies are schema-derived placeholders (lorem-ipsum\nstrings, sample numbers) — replace with real values before sending.\n\nBase URL: {{gatewayBaseUrl}}/risk-management-service  (gatewayBaseUrl lives in EMI-dev.postman_environment.json).\nSpec server: https://gateway-emiuat.dg-cash.app/risk-management-service\n\nAUTH: the spec declares no security scheme, but the gateway front-doors every route with a bearer\ntoken. Set {{token}} in the environment (mint one with the Authentication Service collection's\nsign-in, or pass --env-var token=... to newman). Some back-office routes need an admin/service\ntoken rather than a merchant one.\n\nCompanion Playwright scaffold: BusinessTestCases/ServiceApis/RiskManagementService.generated.spec.ts\n"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

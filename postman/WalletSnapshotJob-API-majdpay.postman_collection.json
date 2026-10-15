@@ -1,0 +1,235 @@
+{
+  "info": {
+    "_postman_id": "a3c5e8d1-2f4b-4a6c-9e7d-walletsnapjob1",
+    "name": "Wallet Snapshot Job API - majdpay (dev)",
+    "description": "EMI-6115 (BE - Create and Prepare Wallet Snapshot Job): the on-demand trigger for the wallet-snapshot pipeline. See docs/business-knowledge/EMI-6115-Refined-Ticket.md and docs/business-knowledge/Wallet-Snapshot-Pipeline-Architecture.md for the full contract and architecture.\n\nHost: http://10.243.128.20:9094 in dev - an INTERNAL address, not the public gateway (gateway-dev.majdpay.com). Confirmed unreachable from outside the internal network in this session (same subnet as the dev SQL Server). Confirmed live that the public gateway answers 404 for this path (folder 3, request 1) - the trigger genuinely is not exposed there.\n\nAUTH: deliberately NOT set at the collection level, and every request below explicitly sets auth: noauth rather than inheriting anything. Two independent sources - this suite's own live captures (zero headers, including no Authorization, and the call still ran) and EMI-6115's own implementing engineer's comment (\"no @RequiresSession (or other auth annotation) on this controller - appears open/internal as written, unverified\") - agree the endpoint has no application-level authentication today. Do not add a bearer token here; if the real behavior ever changes, that is itself the finding to report, not something to quietly work around by adding auth back.\n\nCAUTION - every request in folders 1-2 MUTATES real data (it runs an actual snapshot job). Never run this collection unattended/in CI. Folder 3 (gateway routing check) is the only read-only, always-safe part.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": { "type": "noauth" },
+  "variable": [
+    { "key": "jobsBaseUrl", "value": "http://10.243.128.20:9094" },
+    { "key": "gatewayBaseUrl", "value": "https://gateway-dev.majdpay.com" },
+    { "key": "cutoffTime", "value": "2026-09-27T13:49:29+03:00" },
+    { "key": "adminToken", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "1. Trigger the job",
+      "item": [
+        {
+          "name": "1. POST trigger with a valid cutoffTime - CAUTION: real mutating job (WSJ-01)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": { "type": "noauth" },
+            "url": {
+              "raw": "{{jobsBaseUrl}}/api/v1/wallet-snapshot-jobs?cutoffTime={{cutoffTime}}",
+              "host": [ "{{jobsBaseUrl}}" ],
+              "path": [ "api", "v1", "wallet-snapshot-jobs" ],
+              "query": [ { "key": "cutoffTime", "value": "{{cutoffTime}}" } ]
+            },
+            "description": "CAUTION - mutates real data. Success is 200 with an empty body. This does not prove the run did anything - see folder 2 to confirm the outcome via EMI-6127's GET endpoints."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Body is empty', () => pm.expect(pm.response.text()).to.eql(''));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. POST trigger with no cutoffTime - expect 400 (WSJ-02)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": { "type": "noauth" },
+            "url": {
+              "raw": "{{jobsBaseUrl}}/api/v1/wallet-snapshot-jobs",
+              "host": [ "{{jobsBaseUrl}}" ],
+              "path": [ "api", "v1", "wallet-snapshot-jobs" ]
+            },
+            "description": "cutoffTime is required. No local exception handler exists in this service, so the error is Spring's default 400 shape, not a designed contract."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3. POST trigger with malformed cutoffTime - expect 400 (WSJ-03)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": { "type": "noauth" },
+            "url": {
+              "raw": "{{jobsBaseUrl}}/api/v1/wallet-snapshot-jobs?cutoffTime=not-a-date",
+              "host": [ "{{jobsBaseUrl}}" ],
+              "path": [ "api", "v1", "wallet-snapshot-jobs" ],
+              "query": [ { "key": "cutoffTime", "value": "not-a-date" } ]
+            },
+            "description": "An unparseable cutoffTime must be rejected, not silently accepted and run anyway."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "4. SECURITY: trigger with a garbage Authorization header - CAUTION: real mutating job (WSJ-05)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer not-a-real-token" }
+            ],
+            "auth": { "type": "noauth" },
+            "url": {
+              "raw": "{{jobsBaseUrl}}/api/v1/wallet-snapshot-jobs?cutoffTime={{cutoffTime}}",
+              "host": [ "{{jobsBaseUrl}}" ],
+              "path": [ "api", "v1", "wallet-snapshot-jobs" ],
+              "query": [ { "key": "cutoffTime", "value": "{{cutoffTime}}" } ]
+            },
+            "description": "SECURITY CHECK, not a smoke test. auth is explicitly noauth at both the request and collection level - the Authorization header here is a literal, deliberately-garbage header, not real auth. If this still returns 200 identically to request 1, that confirms (a third time) the endpoint has no application-level authentication. Escalate to the ticket owner rather than treating this as expected/fine."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('SECURITY FINDING if 200: a garbage Authorization header did not change the outcome', () => {",
+                  "  console.log('Status with garbage Authorization header:', pm.response.code);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "5. Re-trigger the same cutoffTime - undocumented idempotency/generation behavior (WSJ-07)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": { "type": "noauth" },
+            "url": {
+              "raw": "{{jobsBaseUrl}}/api/v1/wallet-snapshot-jobs?cutoffTime={{cutoffTime}}",
+              "host": [ "{{jobsBaseUrl}}" ],
+              "path": [ "api", "v1", "wallet-snapshot-jobs" ],
+              "query": [ { "key": "cutoffTime", "value": "{{cutoffTime}}" } ]
+            },
+            "description": "Run request 1 first, confirm the outcome via folder 2, then send this exact same request again for the same cutoffTime. Document what actually happens (new generation, populated supersedes, duplicate, or no-op) - none of this is documented today."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200 again (repeat cutoffTime is not rejected outright)', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. Confirm the outcome (via EMI-6127)",
+      "item": [
+        {
+          "name": "1. GET the triggered snapshot back - CONFIRMS the run actually did something (WSJ-04)",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Accept", "value": "application/json" } ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [ { "key": "token", "value": "{{adminToken}}", "type": "string" } ]
+            },
+            "url": {
+              "raw": "{{gatewayBaseUrl}}/api/v1/admin/wallet-snapshots?fromDate=2026-09-27&toDate=2026-09-27",
+              "host": [ "{{gatewayBaseUrl}}" ],
+              "path": [ "api", "v1", "admin", "wallet-snapshots" ],
+              "query": [
+                { "key": "fromDate", "value": "2026-09-27" },
+                { "key": "toDate", "value": "2026-09-27" }
+              ]
+            },
+            "description": "Needs a real ADMIN_GET_WALLET_SNAPSHOTS-scoped {{adminToken}} - this is the ONE request in this collection that legitimately needs a bearer token, since it hits EMI-6127's endpoint on the public gateway, not the unauthenticated internal job host. Set it explicitly per-request (as done here) - do not add it at the collection level, since folder 1's requests must never accidentally inherit it."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('at least one row exists for the triggered cutoff date', () => {",
+                  "  pm.expect((b.content || []).length).to.be.greaterThan(0);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3. Gateway routing check (safe, read-only, confirmed live)",
+      "item": [
+        {
+          "name": "1. POST the same path via the PUBLIC gateway - confirmed 404, not routed here (WSJ-06)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": { "type": "noauth" },
+            "url": {
+              "raw": "{{gatewayBaseUrl}}/api/v1/wallet-snapshot-jobs?cutoffTime={{cutoffTime}}",
+              "host": [ "{{gatewayBaseUrl}}" ],
+              "path": [ "api", "v1", "wallet-snapshot-jobs" ],
+              "query": [ { "key": "cutoffTime", "value": "{{cutoffTime}}" } ]
+            },
+            "description": "Confirmed live (2026-10) against gateway-dev.majdpay.com: 404. Proves the trigger is genuinely internal-only, not just undocumented on the public surface. Safe to run anytime - no mutation happens on a 404."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 404 (public gateway does not route this path)', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

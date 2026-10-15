@@ -1,0 +1,1530 @@
+{
+  "item": [
+    {
+      "id": "c7b6a271-6d83-4b85-be74-346cc9a90d66",
+      "name": "job-configuration-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "14bc32e0-89d6-4b71-a908-33fbdcaa4da3",
+          "name": "update Configuration",
+          "request": {
+            "name": "update Configuration",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "jobs",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "53423550",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/jobs/:id"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"runTime\": {\n    \"hour\": 56293748,\n    \"minute\": 39738803,\n    \"second\": 92299158,\n    \"nano\": -47504042\n  },\n  \"cron\": \"commodo aliqua\",\n  \"active\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "935d2261-dc29-44b9-a07d-f0f8e817d69e",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "jobs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "53423550",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit sint eiusmod"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"runTime\": {\n    \"hour\": 56293748,\n    \"minute\": 39738803,\n    \"second\": 92299158,\n    \"nano\": -47504042\n  },\n  \"cron\": \"commodo aliqua\",\n  \"active\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -61585668,\n  \"name\": \"deserunt proident mollit ea ipsum\",\n  \"nameAr\": \"laboris sint\",\n  \"runTime\": {\n    \"hour\": -52474712,\n    \"minute\": 19526133,\n    \"second\": -48342949,\n    \"nano\": -32931670\n  },\n  \"cron\": \"ut velit dolore\",\n  \"active\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0052b5a2-962f-4605-a004-ceda59fd6d37",
+          "name": "get All Configuration",
+          "request": {
+            "name": "get All Configuration",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "jobs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10"
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/jobs?page=0&size=10"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ea11bbff-f9bf-4648-a5c1-8982d8c0bc7c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "jobs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalElements\": -54189224,\n  \"totalPages\": -60811387,\n  \"size\": 47843761,\n  \"content\": [\n    {\n      \"id\": -31007050,\n      \"name\": \"dolore mollit amet deserunt ex\",\n      \"nameAr\": \"et Duis\",\n      \"runTime\": {\n        \"hour\": 8292550,\n        \"minute\": 61059658,\n        \"second\": -73250716,\n        \"nano\": 24029210\n      },\n      \"cron\": \"cupidatat in\",\n      \"active\": true\n    },\n    {\n      \"id\": 71122659,\n      \"name\": \"velit\",\n      \"nameAr\": \"labore commodo\",\n      \"runTime\": {\n        \"hour\": -50622272,\n        \"minute\": -34030627,\n        \"second\": 8041994,\n        \"nano\": 29237557\n      },\n      \"cron\": \"amet\",\n      \"active\": true\n    }\n  ],\n  \"number\": 83458785,\n  \"sort\": [\n    {\n      \"direction\": \"consectetur nostru\",\n      \"nullHandling\": \"ex\",\n      \"ascending\": true,\n      \"property\": \"cillum\",\n      \"ignoreCase\": false\n    },\n    {\n      \"direction\": \"dolore ullamco sit cillum\",\n      \"nullHandling\": \"culpa\",\n      \"ascending\": false,\n      \"property\": \"cupidatat Lorem\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"last\": false,\n  \"first\": true,\n  \"numberOfElements\": 89729983,\n  \"pageable\": {\n    \"offset\": -75579760,\n    \"sort\": [\n      {\n        \"direction\": \"do pariatur\",\n        \"nullHandling\": \"in mollit\",\n        \"ascending\": false,\n        \"property\": \"laboris quis\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"mollit in dolo\",\n        \"nullHandling\": \"nulla minim dolor ipsum\",\n        \"ascending\": false,\n        \"property\": \"proident voluptate sit consectetur\",\n        \"ignoreCase\": true\n      }\n    ],\n    \"paged\": false,\n    \"unpaged\": true,\n    \"pageSize\": 26754576,\n    \"pageNumber\": -99814971\n  },\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "17736129-3e10-4ff8-8960-28b3c1c69f29",
+          "name": "create Configuration",
+          "request": {
+            "name": "create Configuration",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "jobs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/jobs"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"et consectetur\",\n  \"runTime\": {\n    \"hour\": -82888931,\n    \"minute\": -17073962,\n    \"second\": 73896175,\n    \"nano\": 81395146\n  },\n  \"cron\": \"laboris consectetur Excepteur\",\n  \"active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fdccf44c-f766-47ac-a4d1-a4307f7a8ff5",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "jobs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit sint eiusmod"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"et consectetur\",\n  \"runTime\": {\n    \"hour\": -82888931,\n    \"minute\": -17073962,\n    \"second\": 73896175,\n    \"nano\": 81395146\n  },\n  \"cron\": \"laboris consectetur Excepteur\",\n  \"active\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -61585668,\n  \"name\": \"deserunt proident mollit ea ipsum\",\n  \"nameAr\": \"laboris sint\",\n  \"runTime\": {\n    \"hour\": -52474712,\n    \"minute\": 19526133,\n    \"second\": -48342949,\n    \"nano\": -32931670\n  },\n  \"cron\": \"ut velit dolore\",\n  \"active\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ffbd4fca-e3af-4a09-afcd-da43265cfd5e",
+          "name": "get Job Configuration By Name",
+          "request": {
+            "name": "get Job Configuration By Name",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "jobs",
+                ":name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "reprehenderit sint eiusmod",
+                  "key": "name",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/jobs/:name"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2890f8d5-b661-45c4-ae8e-2bded8a3e990",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "jobs",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "reprehenderit sint eiusmod",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -61585668,\n  \"name\": \"deserunt proident mollit ea ipsum\",\n  \"nameAr\": \"laboris sint\",\n  \"runTime\": {\n    \"hour\": -52474712,\n    \"minute\": 19526133,\n    \"second\": -48342949,\n    \"nano\": -32931670\n  },\n  \"cron\": \"ut velit dolore\",\n  \"active\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "422871de-444d-4785-9749-9f4404c68b2b",
+      "name": "configuration-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7e626d15-c5b6-4b55-afec-29a551954086",
+          "name": "update Configuration 1",
+          "request": {
+            "name": "update Configuration 1",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "configurations",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "53423550",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/configurations/:id"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"key\": \"tempor\",\n  \"value\": \"id amet est irure\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b0a05d9f-1797-4726-ae31-fd7deb3ab3ed",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "configurations",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "53423550",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit sint eiusmod"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"key\": \"tempor\",\n  \"value\": \"id amet est irure\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -88278991,\n  \"key\": \"ad deserunt\",\n  \"value\": \"deserunt\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fd2b994a-6e35-4ae1-bfd8-2d70d858dd09",
+          "name": "delete Configuration",
+          "request": {
+            "name": "delete Configuration",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "configurations",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "53423550",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/configurations/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "92577bc3-0dc6-4e4f-9241-41d158489cac",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "configurations",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "53423550",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit sint eiusmod"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -88278991,\n  \"key\": \"ad deserunt\",\n  \"value\": \"deserunt\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1dcf9d10-0b44-4f94-932b-494ba02f47e2",
+          "name": "get All Configuration 1",
+          "request": {
+            "name": "get All Configuration 1",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "configurations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10"
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/configurations?page=0&size=10"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e1566d7f-605e-450e-ab69-905c2fb2dcf0",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "configurations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalElements\": -27560025,\n  \"totalPages\": 49305287,\n  \"size\": -72907533,\n  \"content\": [\n    {\n      \"id\": -95336277,\n      \"key\": \"et minim laboris\",\n      \"value\": \"fugiat culpa dolor Ut tempor\"\n    },\n    {\n      \"id\": 19051569,\n      \"key\": \"cillum do sunt\",\n      \"value\": \"Ut\"\n    }\n  ],\n  \"number\": -56656313,\n  \"sort\": [\n    {\n      \"direction\": \"esse\",\n      \"nullHandling\": \"Lorem dolor\",\n      \"ascending\": false,\n      \"property\": \"Ut exercitation eu amet\",\n      \"ignoreCase\": true\n    },\n    {\n      \"direction\": \"\",\n      \"nullHandling\": \"est ut\",\n      \"ascending\": true,\n      \"property\": \"quis irure Excepteur\",\n      \"ignoreCase\": true\n    }\n  ],\n  \"last\": true,\n  \"first\": true,\n  \"numberOfElements\": -81080651,\n  \"pageable\": {\n    \"offset\": 72966715,\n    \"sort\": [\n      {\n        \"direction\": \"sint ea laborum\",\n        \"nullHandling\": \"velit aliqua anim \",\n        \"ascending\": true,\n        \"property\": \"est eiusmod in\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"in\",\n        \"nullHandling\": \"enim consectetur\",\n        \"ascending\": true,\n        \"property\": \"do\",\n        \"ignoreCase\": true\n      }\n    ],\n    \"paged\": true,\n    \"unpaged\": true,\n    \"pageSize\": 31680499,\n    \"pageNumber\": -90503900\n  },\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ba534460-0c21-4bce-b0cb-57c4925a2d4b",
+          "name": "create Configuration 1",
+          "request": {
+            "name": "create Configuration 1",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "configurations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/configurations"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"key\": \"tempor\",\n  \"value\": \"id amet est irure\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "37548ecd-accd-41bd-8af2-64bb0f5581db",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "configurations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit sint eiusmod"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"key\": \"tempor\",\n  \"value\": \"id amet est irure\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -88278991,\n  \"key\": \"ad deserunt\",\n  \"value\": \"deserunt\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c1e257d3-b973-4c17-b2f5-1a9e37f0eed9",
+          "name": "get Configuration By Key",
+          "request": {
+            "name": "get Configuration By Key",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "configurations",
+                ":configurationKey"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "reprehenderit sint eiusmod",
+                  "key": "configurationKey",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/configurations/:configurationKey"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ed96784f-d59c-4d5c-bece-e384ff8eaf12",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "configurations",
+                    ":configurationKey"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "reprehenderit sint eiusmod",
+                      "key": "configurationKey",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -88278991,\n  \"key\": \"ad deserunt\",\n  \"value\": \"deserunt\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "4232d19e-af17-4d08-9c30-ef5638229452",
+      "name": "system-configuration-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f9ff7925-0c0d-4814-b08a-cb9b1fa2795b",
+          "name": "get Password Configuration",
+          "request": {
+            "name": "get Password Configuration",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "configurations",
+                "password"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/configurations/password"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6d2dacba-f62b-40cf-a42c-929ecb5c629f",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "configurations",
+                    "password"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit sint eiusmod"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"minLength\": \"est dolo\",\n  \"maxLength\": \"nisi sit cillum\",\n  \"expiry\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aad00bfe-6a7e-4359-bdac-aa33ff270c18",
+          "name": "update Password Configuration",
+          "request": {
+            "name": "update Password Configuration",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "configurations",
+                "password"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/configurations/password"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"minLength\": \"est dolo\",\n  \"maxLength\": \"nisi sit cillum\",\n  \"expiry\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "dd7a1232-10a4-464d-b1c0-d6f42eaf86fb",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "configurations",
+                    "password"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit sint eiusmod"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"minLength\": \"est dolo\",\n  \"maxLength\": \"nisi sit cillum\",\n  \"expiry\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -43019399,\n    \"key\": \"pariatur exercitation rep\",\n    \"value\": \"sunt enim e\"\n  },\n  {\n    \"id\": 91018709,\n    \"key\": \"nisi\",\n    \"value\": \"veniam fugiat aute tempor labore\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9b9bd594-0f0a-438e-9e84-d721e89d1a06",
+          "name": "add Password Configuration",
+          "request": {
+            "name": "add Password Configuration",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "configurations",
+                "password"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/configurations/password"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"minLength\": \"est dolo\",\n  \"maxLength\": \"nisi sit cillum\",\n  \"expiry\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2acf43ad-b1ac-4d8c-b80d-36232cb48cfe",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "configurations",
+                    "password"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit sint eiusmod"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"minLength\": \"est dolo\",\n  \"maxLength\": \"nisi sit cillum\",\n  \"expiry\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -43019399,\n    \"key\": \"pariatur exercitation rep\",\n    \"value\": \"sunt enim e\"\n  },\n  {\n    \"id\": 91018709,\n    \"key\": \"nisi\",\n    \"value\": \"veniam fugiat aute tempor labore\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "14f1f097-f6e9-4058-b1bc-34984d8498a9",
+          "name": "get Idle Configuration",
+          "request": {
+            "name": "get Idle Configuration",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "configurations",
+                "idle"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/configurations/idle"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a9dee491-ef5f-4751-bd03-48bb12242f2a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "configurations",
+                    "idle"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit sint eiusmod"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -43019399,\n    \"key\": \"pariatur exercitation rep\",\n    \"value\": \"sunt enim e\"\n  },\n  {\n    \"id\": 91018709,\n    \"key\": \"nisi\",\n    \"value\": \"veniam fugiat aute tempor labore\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ff47aeab-b208-462a-ae88-9e87ca2c5522",
+          "name": "update Idle Configuration",
+          "request": {
+            "name": "update Idle Configuration",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "configurations",
+                "idle"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/configurations/idle"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"duration\": \"Ut labore consectetur\",\n  \"platformDto\": {\n    \"id\": 49825165,\n    \"code\": \"dolore aliqua sunt\",\n    \"nameAr\": \"amet proident eu do in\",\n    \"nameEn\": \"dolor\",\n    \"description\": \"magna\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7c330dad-e611-4f70-9f9e-0b49a671eaa2",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "configurations",
+                    "idle"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit sint eiusmod"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"duration\": \"Ut labore consectetur\",\n  \"platformDto\": {\n    \"id\": 49825165,\n    \"code\": \"dolore aliqua sunt\",\n    \"nameAr\": \"amet proident eu do in\",\n    \"nameEn\": \"dolor\",\n    \"description\": \"magna\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -88278991,\n  \"key\": \"ad deserunt\",\n  \"value\": \"deserunt\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c879eebf-d0b9-43cf-9b4d-7ce6690b2168",
+          "name": "add Idle Configuration",
+          "request": {
+            "name": "add Idle Configuration",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "configurations",
+                "idle"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/configurations/idle"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"duration\": \"Ut labore consectetur\",\n  \"platformDto\": {\n    \"id\": 49825165,\n    \"code\": \"dolore aliqua sunt\",\n    \"nameAr\": \"amet proident eu do in\",\n    \"nameEn\": \"dolor\",\n    \"description\": \"magna\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d8af4e0d-0f8e-450d-8993-98e6e6f0517a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "configurations",
+                    "idle"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "reprehenderit sint eiusmod"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"duration\": \"Ut labore consectetur\",\n  \"platformDto\": {\n    \"id\": 49825165,\n    \"code\": \"dolore aliqua sunt\",\n    \"nameAr\": \"amet proident eu do in\",\n    \"nameEn\": \"dolor\",\n    \"description\": \"magna\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -88278991,\n  \"key\": \"ad deserunt\",\n  \"value\": \"deserunt\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generated guard: a 5xx from any request is a gateway/service defect, not a test-data problem.",
+          "pm.test('no 5xx (' + pm.info.requestName + ')', function () {",
+          "  pm.expect(pm.response.code, (pm.response.text() || '').slice(0, 300)).to.be.below(500);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{gatewayBaseUrl}}/configuration-management-service",
+      "type": "string"
+    }
+  ],
+  "info": {
+    "_postman_id": "99663f75-96eb-4fe1-90d2-e7c6bd5aaa01",
+    "name": "Configuration Management Service - majdpay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Configuration Management Service (configuration-management-service) — 15 operations.\n\nGENERATED from the OpenAPI 3.1.0 spec published at the UAT gateway swagger-ui\n(Select a definition -> \"Configuration Management Service APIs\"). Request bodies are schema-derived placeholders (lorem-ipsum\nstrings, sample numbers) — replace with real values before sending.\n\nBase URL: {{gatewayBaseUrl}}/configuration-management-service  (gatewayBaseUrl lives in EMI-dev.postman_environment.json).\nSpec server: https://gateway-emiuat.dg-cash.app/configuration-management-service\n\nAUTH: the spec declares no security scheme, but the gateway front-doors every route with a bearer\ntoken. Set {{token}} in the environment (mint one with the Authentication Service collection's\nsign-in, or pass --env-var token=... to newman). Some back-office routes need an admin/service\ntoken rather than a merchant one.\n\nCompanion Playwright scaffold: BusinessTestCases/ServiceApis/ConfigurationManagementService.generated.spec.ts\n"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

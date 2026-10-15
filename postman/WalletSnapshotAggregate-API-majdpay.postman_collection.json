@@ -1,0 +1,184 @@
+{
+  "info": {
+    "_postman_id": "d7e9f1a3-4c6b-4d8e-9f1a-walletsnapagg1",
+    "name": "Wallet Snapshot Aggregate API - majdpay (dev)",
+    "description": "EMI-6124 (BE - Aggregate the Complete Wallet Snapshot Logic): end-to-end verification of WalletSnapshotFacade.start(cutoff), the composition root over EMI-6116-6123/6126. See docs/business-knowledge/EMI-6124-Refined-Ticket.md and docs/business-knowledge/Wallet-Snapshot-Pipeline-Architecture.md.\n\nThis is NOT a collection of new endpoints - EMI-6124 has none of its own. It chains EMI-6115's trigger endpoint (folder 1, internal-only host, no auth) with EMI-6127's read endpoint (folder 2, public gateway, bearer token) specifically to exercise composition and cross-wallet consistency - the two things only observable across a full run, not from any single sub-ticket's own endpoint in isolation.\n\nAUTH: no auth is set at the collection level (matching folder 1's real contract - see WalletSnapshotJob-API-majdpay.postman_collection.json for why). Folder 2's requests set a real bearer token explicitly, per-request only, never inherited - the same lesson learned the hard way while debugging a duplicate-Authorization-header 500 in WalletSnapshotAdmin-API earlier in this epic.\n\nCAUTION: folder 1 mutates real data (runs an actual snapshot job). Never run this collection unattended/in CI.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": { "type": "noauth" },
+  "variable": [
+    { "key": "jobsBaseUrl", "value": "http://10.243.128.20:9094" },
+    { "key": "gatewayBaseUrl", "value": "https://gateway-dev.majdpay.com" },
+    { "key": "cutoffTime", "value": "2026-09-27T13:49:29+03:00" },
+    { "key": "adminToken", "value": "" },
+    { "key": "walletA", "value": "WALLET-001" },
+    { "key": "walletB", "value": "WALLET-002" }
+  ],
+  "item": [
+    {
+      "name": "1. Trigger a run covering mixed wallet states",
+      "item": [
+        {
+          "name": "1. POST trigger the snapshot job - CAUTION: real mutating job",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": { "type": "noauth" },
+            "url": {
+              "raw": "{{jobsBaseUrl}}/api/v1/wallet-snapshot-jobs?cutoffTime={{cutoffTime}}",
+              "host": [ "{{jobsBaseUrl}}" ],
+              "path": [ "api", "v1", "wallet-snapshot-jobs" ],
+              "query": [ { "key": "cutoffTime", "value": "{{cutoffTime}}" } ]
+            },
+            "description": "CAUTION - mutates real data. Before sending, set {{walletA}}/{{walletB}} to wallets you have arranged to cover the mixed states WAG-01 needs (normal, provisional-opening, no-running-balance-zero-ledger, no-running-balance-non-zero-ledger/DRIFT), and a matched pair for WAG-02's consistency check."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. WAG-01 - Read back and confirm composed rules (needs adminToken)",
+      "item": [
+        {
+          "name": "1. GET snapshots for the cutoff date - inspect each wallet's composed fields",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Accept", "value": "application/json" } ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [ { "key": "token", "value": "{{adminToken}}", "type": "string" } ]
+            },
+            "url": {
+              "raw": "{{gatewayBaseUrl}}/api/v1/admin/wallet-snapshots?fromDate=2026-09-27&toDate=2026-09-27&size=100",
+              "host": [ "{{gatewayBaseUrl}}" ],
+              "path": [ "api", "v1", "admin", "wallet-snapshots" ],
+              "query": [
+                { "key": "fromDate", "value": "2026-09-27" },
+                { "key": "toDate", "value": "2026-09-27" },
+                { "key": "size", "value": "100" }
+              ]
+            },
+            "description": "{{adminToken}} is set on THIS request only - never at the collection level, so folder 1's unauthenticated trigger never accidentally inherits it. Inspect the response manually for WAG-01: confirm each fixture wallet shows the expected status/provisionalOpening/flags combination for its intended state."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('at least one snapshot row exists for this cutoff', () => pm.expect((b.content || []).length).to.be.greaterThan(0));",
+                  "console.log('Snapshot rows for WAG-01 manual inspection:', JSON.stringify(b.content, null, 2));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3. WAG-02 - Cross-wallet consistency (needs adminToken)",
+      "item": [
+        {
+          "name": "1. GET wallet A's snapshot - captures its computed fields",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Accept", "value": "application/json" } ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [ { "key": "token", "value": "{{adminToken}}", "type": "string" } ]
+            },
+            "url": {
+              "raw": "{{gatewayBaseUrl}}/api/v1/admin/wallet-snapshots?walletCode={{walletA}}&fromDate=2026-09-27&toDate=2026-09-27",
+              "host": [ "{{gatewayBaseUrl}}" ],
+              "path": [ "api", "v1", "admin", "wallet-snapshots" ],
+              "query": [
+                { "key": "walletCode", "value": "{{walletA}}" },
+                { "key": "fromDate", "value": "2026-09-27" },
+                { "key": "toDate", "value": "2026-09-27" }
+              ]
+            },
+            "description": "{{walletA}} and {{walletB}} must be two wallets with structurally identical ledger histories (same amounts, same transaction types) for this comparison to be meaningful."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "const row = (b.content || [])[0];",
+                  "pm.test('a snapshot row exists for walletA', () => pm.expect(row).to.not.be.undefined);",
+                  "if (row) {",
+                  "  const comparable = { ...row };",
+                  "  delete comparable.id; delete comparable.walletCode;",
+                  "  pm.collectionVariables.set('walletAComparable', JSON.stringify(comparable));",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. GET wallet B's snapshot - compares against wallet A's captured fields",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Accept", "value": "application/json" } ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [ { "key": "token", "value": "{{adminToken}}", "type": "string" } ]
+            },
+            "url": {
+              "raw": "{{gatewayBaseUrl}}/api/v1/admin/wallet-snapshots?walletCode={{walletB}}&fromDate=2026-09-27&toDate=2026-09-27",
+              "host": [ "{{gatewayBaseUrl}}" ],
+              "path": [ "api", "v1", "admin", "wallet-snapshots" ],
+              "query": [
+                { "key": "walletCode", "value": "{{walletB}}" },
+                { "key": "fromDate", "value": "2026-09-27" },
+                { "key": "toDate", "value": "2026-09-27" }
+              ]
+            },
+            "description": "Run request 1 (wallet A) immediately before this one in the same run - Postman's collection variables persist across requests in a single run."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "const row = (b.content || [])[0];",
+                  "pm.test('a snapshot row exists for walletB', () => pm.expect(row).to.not.be.undefined);",
+                  "pm.test('WAG-02: walletB\\'s computed fields exactly match walletA\\'s (aside from id/walletCode)', () => {",
+                  "  const expected = JSON.parse(pm.collectionVariables.get('walletAComparable') || 'null');",
+                  "  pm.expect(expected, 'run request 1 (wallet A) first in this same run').to.not.be.null;",
+                  "  const actual = { ...row };",
+                  "  delete actual.id; delete actual.walletCode;",
+                  "  pm.expect(JSON.stringify(actual)).to.eql(JSON.stringify(expected));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

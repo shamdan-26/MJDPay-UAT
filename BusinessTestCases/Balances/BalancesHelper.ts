@@ -32,7 +32,7 @@
  * tooling access, the same convention Reconciliation/ uses.
  */
 
-export const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev.majdpay.com';
+export const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev-emi.dg-cash.app';
 
 /** Flip once the epic ships and the endpoints below are real. */
 export const BALANCES_IMPLEMENTED = (process.env['BALANCES_IMPLEMENTED'] ?? '').toLowerCase() === 'true';

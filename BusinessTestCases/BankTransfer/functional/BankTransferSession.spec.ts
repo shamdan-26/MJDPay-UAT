@@ -3,7 +3,7 @@ import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { HomepageQuickActionsPage } from '../../pageElements/Shared/HomepageQuickActionsPage';
 import { BankTransferPage } from '../../pageElements/Shared/BankTransferPage';
-import { HOME_URL } from '../BankTransferHelper';
+import { HOME_URL, proceedToConfirmation, SUMMARY_LABEL, ensureNonZeroBalance } from '../BankTransferHelper';
 import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/LoginHelper';
 
 // Abandon/cancel flows and cross-step state persistence. The legacy suite had
@@ -11,29 +11,6 @@ import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } 
 // screen's Cancel button, one via the older screen) — consolidated here into
 // the single, more robust version (waits for the async summary to settle
 // before cancelling, then confirms the Amount step is back).
-
-/**
- * The Proceed click occasionally doesn't register on dev (the button stays
- * enabled on "proceed") — a hydration-timing flake independent of balance/
- * validation. Retry the click only while the button is still enabled (i.e.
- * genuinely un-clicked), then wait out the async summary calculation.
- */
-async function proceedToConfirmation(page: Page, bt: BankTransferPage): Promise<void> {
-    const nextButton = page.getByRole('button', { name: /^next$/i });
-    await bt.clickProceedButton();
-
-    // Poll rather than retry once — on a slow/loaded dev backend a single
-    // extra click after a fixed wait isn't always enough.
-    const deadline = Date.now() + 90000;
-    while (Date.now() < deadline) {
-        if (await nextButton.isVisible().catch(() => false)) return;
-        await page.waitForTimeout(2000);
-        if (await bt.proceedButton.isEnabled().catch(() => false)) {
-            await bt.proceedButton.click().catch(() => {});
-        }
-    }
-    await expect(nextButton).toBeVisible({ timeout: 5000 });
-}
 
 test.describe('BankTransfer – Session & Cancellation', () => {
     test.describe.configure({ mode: 'serial' });
@@ -46,6 +23,11 @@ test.describe('BankTransfer – Session & Cancellation', () => {
     let bt: BankTransferPage;
 
     test.beforeAll(async ({ browser }) => {
+        // Hooks don't inherit the describe-level test.setTimeout() above — it
+        // only extends tests. ensureNonZeroBalance's card-topup branch (OTP
+        // round-trip included) can push this hook past the config's default
+        // 60s hook timeout, so extend it here too.
+        test.setTimeout(150000);
         page = await browser.newPage();
 
         loginPage = new LoginPage(page);
@@ -59,6 +41,7 @@ test.describe('BankTransfer – Session & Cancellation', () => {
             await otp.fillAndVerify(await getOtpFromDb(VALID_MOBILE));
         }
         await page.waitForURL(url => !url.pathname.includes('/auth/'), { timeout: 30000 });
+        await ensureNonZeroBalance(page, VALID_MOBILE);
     });
 
     test.beforeEach(async () => {
@@ -105,17 +88,21 @@ test.describe('BankTransfer – Session & Cancellation', () => {
         await bt.checkBalanceRemainsUnchanged();
     });
 
+    // NOTE: the Confirmation summary has only "Cancel" and "Next" — there is no
+    // separate "Back" control (handoff §4.4's bank-confirm-back-btn is not
+    // rendered). Returning from the summary to the Amount step is covered by the
+    // Cancel test above.
+
     test('should carry the same masked IBAN and total from Confirmation through to the OTP step', async () => {
         await bt.enterAmount('10');
         await proceedToConfirmation(page, bt);
         await bt.waitForSummaryToSettle();
 
-        const confirmationIban = await bt.getSummaryText('IBAN');
-        const confirmationTotal = await bt.getSummaryMoney('Total amount to be sent');
+        const confirmationIban = await bt.getSummaryText(SUMMARY_LABEL.iban);
+        const confirmationTotal = await bt.getSummaryMoney(SUMMARY_LABEL.total);
 
         await bt.clickProceedButtonInSummary();
         await expect(otp.inputs.first()).toBeVisible({ timeout: 15000 });
-
         await expect(bt.otpRecapIban).toHaveText(confirmationIban);
         const otpTotal = parseFloat((await bt.otpRecapTotal.innerText()).trim());
         expect(otpTotal).toBeCloseTo(confirmationTotal, 2);

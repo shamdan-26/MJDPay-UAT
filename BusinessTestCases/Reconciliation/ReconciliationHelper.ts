@@ -8,12 +8,12 @@
  * W2W/PayBill/Topup this suite has no page objects. It's modeled as API-level
  * checks against the job endpoints the tickets themselves reference (see
  * EMI-5771's repro steps), following the same `request`-fixture pattern as
- * `Login/api/LoginAPIFlow.spec.ts`. Every test is `test.skip()`'d pending
+ * `Login/api/signin/`. Every test is `test.skip()`'d pending
  * access to the Castlemock mock server + Admin Portal / Ops tooling these
  * jobs run against in UAT — remove test.skip() once that access exists.
  */
 
-export const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev.majdpay.com';
+export const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev-emi.dg-cash.app';
 
 // Endpoint referenced directly in EMI-5771's repro steps.
 export const INCOMING_BANK_TRANSACTIONS_JOB = `${API_BASE}/api/v1/job/incoming-bank-transactions`;

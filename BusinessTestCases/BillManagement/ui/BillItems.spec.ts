@@ -54,6 +54,7 @@ async function loginAndOpenDetailedBill(page: Page): Promise<{ createBill: Creat
 }
 
 test.describe('Bill Items UI — Item Info Step Controls (BI-U01, BI-U02)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BI-U01: each item row in the Item Info step should expose edit and delete icons (EMI-3631)', async ({ page }) => {
         const { items } = await loginAndOpenDetailedBill(page);
 
@@ -80,6 +81,7 @@ test.describe('Bill Items UI — Item Info Step Controls (BI-U01, BI-U02)', () =
 });
 
 test.describe('Bill Items UI — Item Table Scrolling (BI-U03)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BI-U03: the item tables in the Add Items and Item Info steps should scroll vertically (EMI-3630)', async ({ page }) => {
         const { items } = await loginAndOpenDetailedBill(page);
 
@@ -97,6 +99,7 @@ test.describe('Bill Items UI — Item Table Scrolling (BI-U03)', () => {
 });
 
 test.describe('Bill Items UI — Discount Amount Display (BI-U04)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BI-U04: Discount Amount should be visible in both the bill summary and the item details view (EMI-3270)', async ({ page }) => {
         const loginPage = new LoginPage(page);
         const otp = new OtpPage(page);

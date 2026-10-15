@@ -1,0 +1,415 @@
+{
+  "info": {
+    "_postman_id": "b7e2c9a4-1d3f-4e5a-9c02-topupapi0001",
+    "name": "Topup API - majdpay (dev)",
+    "description": "Card top-up (Cash-in) flow behind the Business portal's Topup screen, captured live against gateway-dev.majdpay.com. Feeds the wallet's Reserved Credit / Available / Current buckets per EMI-6120's 'Account wallet as destination' rule (BusinessTestCases/Topup/, docs/business-knowledge/EMI-6120-Refined-Ticket.md) and is what BusinessTestCases/Topup/functional/{TopupHappyPath,TopupNegative}.spec.ts exercise end to end through the UI.\n\nBase URL: https://gateway-dev.majdpay.com\n\nRun folders 1-6 in order for one full top-up pass: list payment methods -> open the summary -> initiate the payment (id captured) -> read OTP settings -> verify the OTP (txnReference captured) -> resolve the card-entry outcome via update-status (this is the call TU-API-02/03/04/05 in docs/manual-test-cases/audit-additions.json verify). Folder 7 (Balance) can be run before and after folder 6 to see the Available/Current delta the outcome produced.\n\n{{otp}} defaults to '918512' — dev accepts a fixed all-zero OTP (see Login/LoginHelper.ts getOtpFromDb). {{token}} must be a real Bearer JWT for an authenticated business account (e.g. the Q9557/597389429 Biller account TopupHelper.ts logs into) — mint one by signing in through the UI/LoginPage or the Authentication Service collection, then paste it in. Step 6's actual card-entry (HyperPay/3-D-Secure widget) traffic never reaches this gateway, so {{checkoutId}} must come from a real run of folder 5 against a live sandbox card, or be pasted in from a browser capture.\n\nConfirmed live findings worth keeping in mind while editing requests here:\n- amount is a NUMBER in request 2 (summary/open) but a STRING in request 3 (/payments) — this asymmetry is deliberately preserved below rather than 'fixed', since it is what the real API expects; see TU-API-06 for the negative case this motivates.\n- The transaction type's description text and its category disagree on transfer direction (Merchant->Control wallet described, Control-wallet-as-source implied by category) — a data/label defect, not a request-shape issue.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{token}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://gateway-dev.majdpay.com" },
+    { "key": "token", "value": "" },
+    { "key": "deviceFingerPrint", "value": "" },
+    { "key": "tosterId", "value": "" },
+    { "key": "locale", "value": "en" },
+    { "key": "acceptLanguage", "value": "en" },
+    { "key": "amount", "value": "50" },
+    { "key": "paymentMethodId", "value": "2" },
+    { "key": "otp", "value": "918512" },
+    { "key": "paymentId", "value": "" },
+    { "key": "isOtpRequired", "value": "" },
+    { "key": "checkoutId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "1. Payment Methods",
+      "item": [
+        {
+          "name": "1. GET payment methods",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "toster_ID", "value": "{{tosterId}}" },
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "Accept-Language", "value": "{{acceptLanguage}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payment-method",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "payment-method"]
+            },
+            "description": "List of selectable card methods, e.g. {id, code, nameEn}: 1 = MADA, 2 = VISA, 3 = MASTER. {{paymentMethodId}} defaults to 2 (VISA)."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('response is a non-empty array of methods', () => {",
+                  "  pm.expect(Array.isArray(b)).to.be.true;",
+                  "  pm.expect(b.length).to.be.greaterThan(0);",
+                  "  pm.expect(b[0]).to.have.property('id');",
+                  "  pm.expect(b[0]).to.have.property('code');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. Summary",
+      "item": [
+        {
+          "name": "2. POST open payment summary",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "toster_ID", "value": "{{tosterId}}" },
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "Accept-Language", "value": "{{acceptLanguage}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payments/summary/open",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "payments", "summary", "open"]
+            },
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"amount\": {{amount}},\n  \"platformType\": \"web\"\n}"
+            },
+            "description": "amount is a NUMBER here — confirmed live. Response carries the commission/VAT-inclusive summaryDto (sourceProfileCode, destinationProfileCode, transactionType.code, totalAmount, receiverCurrency)."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "pm.test('summaryDto present with expected shape', () => {",
+                  "  pm.expect(b).to.have.property('summaryDto');",
+                  "  pm.expect(b.summaryDto).to.have.property('amount');",
+                  "  pm.expect(b.summaryDto).to.have.property('countryCode', 'SA');",
+                  "  pm.expect(b.summaryDto).to.have.property('transactionType');",
+                  "});",
+                  "pm.test('totalAmount and receiverCurrency present', () => {",
+                  "  pm.expect(b).to.have.property('totalAmount');",
+                  "  pm.expect(b).to.have.property('receiverCurrency', 'SAR');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3. Initiate Payment",
+      "item": [
+        {
+          "name": "3. POST initiate payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "toster_ID", "value": "{{tosterId}}" },
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "Accept-Language", "value": "{{acceptLanguage}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payments",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "payments"]
+            },
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"amount\": \"{{amount}}\",\n  \"isDeductCommissionFromAmount\": true,\n  \"platformType\": \"web\",\n  \"paymentMethodId\": {{paymentMethodId}}\n}"
+            },
+            "description": "amount is a STRING here, unlike request 2's numeric amount — confirmed live, deliberately kept as-is. This is the call that both creates the PENDING ledger row and triggers the OTP send (see EMI-6120's account-wallet-as-destination PENDING rule: it credits Reserved Credit only). Response id is captured as {{paymentId}} for reference; isOtpRequired is captured for folder 4."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "pm.test('status is PENDING and isOtpRequired is boolean', () => {",
+                  "  pm.expect(b).to.have.property('status', 'PENDING');",
+                  "  pm.expect(typeof b.isOtpRequired).to.eql('boolean');",
+                  "});",
+                  "pm.collectionVariables.set('paymentId', String(b.id));",
+                  "pm.collectionVariables.set('isOtpRequired', String(!!b.isOtpRequired));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "4. OTP Settings",
+      "item": [
+        {
+          "name": "4. GET OTP settings for top-up",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "Accept-Language", "value": "{{acceptLanguage}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/otp/otp-settings/q?operationCode=102",
+              "host": ["{{baseUrl}}"],
+              "path": ["otp", "otp-settings", "q"],
+              "query": [{ "key": "operationCode", "value": "102" }]
+            },
+            "description": "operationCode=102 matches the 102xxx transaction-type-code family seen on the top-up's ledger rows. Returns length/validityInSeconds/canResendOtpAfterInSeconds."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('has length/validityInSeconds/canResendOtpAfterInSeconds', () => {",
+                  "  pm.expect(b).to.have.property('length');",
+                  "  pm.expect(b).to.have.property('validityInSeconds');",
+                  "  pm.expect(b).to.have.property('canResendOtpAfterInSeconds');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "5. Verify OTP",
+      "item": [
+        {
+          "name": "5. POST verify payment OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "toster_ID", "value": "{{tosterId}}" },
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "Accept-Language", "value": "{{acceptLanguage}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payments/verify",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "payments", "verify"]
+            },
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"paymentMethodId\": {{paymentMethodId}},\n  \"paymentId\": {{paymentId}},\n  \"otp\": \"{{otp}}\"\n}"
+            },
+            "description": "paymentId is request 3's captured id. On success the payment's status moves to POSTED (base_transaction's own vocabulary — distinct from the terminal SUCCESS/FAILED transaction_log status) and txnReference is filled in; that reference is what request 6 sends back as checkoutId."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "pm.test('status is POSTED and txnReference present', () => {",
+                  "  pm.expect(b).to.have.property('status', 'POSTED');",
+                  "  pm.expect(b).to.have.property('txnReference');",
+                  "  pm.expect(b.txnReference).to.not.be.null;",
+                  "});",
+                  "if (b.txnReference) { pm.collectionVariables.set('checkoutId', String(b.txnReference)); }"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "6. Update Status",
+      "item": [
+        {
+          "name": "6. POST update payment status",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "toster_ID", "value": "{{tosterId}}" },
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "Accept-Language", "value": "{{acceptLanguage}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payments/update-status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "payments", "update-status"]
+            },
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"paymentMethodId\": {{paymentMethodId}},\n  \"checkoutId\": \"{{checkoutId}}\"\n}"
+            },
+            "description": "This is the call that actually resolves the card-entry step's real outcome (SUCCESS / a failure status / pending) into the ledger — it queries the payment provider by {{checkoutId}} rather than accepting a caller-supplied outcome, so the response reflects whatever the sandbox card in the widget actually produced. This is TU-API-05 in docs/manual-test-cases/audit-additions.json, and TU-API-02/03/04 assert the resulting emi_transaction.transaction_log / wallet-bucket movement per EMI-6120's rule after this call resolves to SUCCESS/FAILED/PENDING respectively. {{checkoutId}} cannot be produced by Postman alone — the card-entry widget traffic does not go through this gateway — so it must come from a real browser/Playwright run of the full flow (see BusinessTestCases/Topup/TopupHelper.ts) or be pasted in."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('status is a real terminal/pending outcome, not empty', () => {",
+                  "  pm.expect(b).to.have.property('status');",
+                  "  pm.expect(['SUCCESS', 'FAILED', 'PENDING']).to.include(b.status);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "7. Balance",
+      "item": [
+        {
+          "name": "7a. GET wallet user",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "Accept-Language", "value": "{{acceptLanguage}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/wallets/user",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "wallets", "user"]
+            },
+            "description": "Refreshes the authenticated user's wallet identity/context after a top-up."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "7b. GET wallet balance",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "Accept-Language", "value": "{{acceptLanguage}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/wallets/balance",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "wallets", "balance"]
+            },
+            "description": "Run once before folder 3 and once after folder 6 resolves to SUCCESS to see Available/Current move by exactly {{amount}} (TU-API-02); after a FAILED/PENDING resolution neither should move (TU-API-03/04)."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('balance response has a numeric balance field', () => {",
+                  "  const hasBalance = typeof b.balance === 'number' || typeof b.availableBalance === 'number' || typeof b.currentBalance === 'number';",
+                  "  pm.expect(hasBalance).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "8. Negative",
+      "item": [
+        {
+          "name": "8. POST initiate payment with a malformed amount",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "toster_ID", "value": "{{tosterId}}" },
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "Accept-Language", "value": "{{acceptLanguage}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payments",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "payments"]
+            },
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"amount\": \"50.005\",\n  \"isDeductCommissionFromAmount\": true,\n  \"platformType\": \"web\",\n  \"paymentMethodId\": {{paymentMethodId}}\n}"
+            },
+            "description": "TU-API-06 (see docs/manual-test-cases/audit-additions.json): checks whether /payments validates its string amount the same way summary/open validates its numeric one. Run request 2 first with the same amount so there is a summary to initiate against. Expect a 400 naming the amount field — if this instead returns 201, the two steps' validation has quietly diverged."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('a 3-decimal amount is rejected, not silently accepted', () => {",
+                  "  pm.expect(pm.response.code).to.be.oneOf([400, 422]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

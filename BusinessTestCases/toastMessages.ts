@@ -31,12 +31,14 @@ export async function waitForToastClear(
  * expects an error/warning toast from the API.
  *
  * @param page - Playwright Page
- * @param expectedText - optional substring the toast detail must contain
+ * @param expectedText - optional substring (case-insensitive) or RegExp the
+ *   toast detail must match. Pass a bilingual RegExp on screens that render in
+ *   Arabic by default on dev/UAT, e.g. `/insufficient funds|لا توجد أموال/i`.
  * @param timeout - ms to wait for the toast to appear (default 10 000)
  */
 export async function assertToast(
     page: Page,
-    expectedText?: string,
+    expectedText?: string | RegExp,
     timeout = 10000,
 ): Promise<void> {
     // `toast-message` is the QA-DATA-TESTID-HANDOFF.md §3 shared-component
@@ -44,7 +46,10 @@ export async function assertToast(
     // a fallback for any screen not yet confirmed to render the new testid.
     const detail = page.getByTestId('toast-message').or(page.locator('.toast-snackbar__detail'));
     await expect(detail).toBeVisible({ timeout });
-    if (expectedText) {
-        await expect(detail).toContainText(expectedText, { ignoreCase: true });
+    if (expectedText !== undefined) {
+        await expect(detail).toContainText(
+            expectedText,
+            typeof expectedText === 'string' ? { ignoreCase: true } : undefined,
+        );
     }
 }

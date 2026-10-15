@@ -1,0 +1,141 @@
+{
+  "item": [
+    {
+      "id": "58b8ca59-ce3b-4691-9c63-920bd2a41a55",
+      "name": "bank-transaction-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b39f6e6e-442f-4fa8-b6b8-6f2f1c00957e",
+          "name": "create Transactions",
+          "request": {
+            "name": "create Transactions",
+            "description": {},
+            "url": {
+              "path": [
+                "batch"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/batch"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transactions\": [\n    {\n      \"transactionReference\": \"qui eiusmod cupidatat\",\n      \"amount\": 33790272.1661997,\n      \"status\": \"aliquip commodo Lorem\",\n      \"iban\": \"est laboris fugiat eiusmod cupidatat\",\n      \"partTrnType\": \"laboru\"\n    },\n    {\n      \"transactionReference\": \"aute eu nisi\",\n      \"amount\": 10674916.195439324,\n      \"status\": \"ipsum ea dolor\",\n      \"iban\": \"sit dolor\",\n      \"partTrnType\": \"id officia commodo\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6c0c6ea7-4a2e-4cb6-adc5-1baed2c2de2d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "batch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transactions\": [\n    {\n      \"transactionReference\": \"in ad dolor qui eiusmod\",\n      \"amount\": 62177937.03862399,\n      \"status\": \"Duis\",\n      \"iban\": \"anim mollit et tempor ut\",\n      \"partTrnType\": \"commodo\"\n    },\n    {\n      \"transactionReference\": \"ex esse aliqua culpa\",\n      \"amount\": -83293070.47216679,\n      \"status\": \"sed pariatur\",\n      \"iban\": \"ad Ut\",\n      \"partTrnType\": \"cillum dolor proident laborum ulla\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -8731234,\n    \"transactionReference\": \"dolor est\",\n    \"amount\": 45505185.96248153,\n    \"status\": \"ipsum labore ea\",\n    \"iban\": \"amet elit e\",\n    \"partTrnType\": \"fugiat proident labore\"\n  },\n  {\n    \"id\": 1666179,\n    \"transactionReference\": \"Lorem\",\n    \"amount\": 93364188.36339167,\n    \"status\": \"ipsum elit sunt\",\n    \"iban\": \"mollit\",\n    \"partTrnType\": \"enim nisi in sed\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generated guard: a 5xx from any request is a gateway/service defect, not a test-data problem.",
+          "pm.test('no 5xx (' + pm.info.requestName + ')', function () {",
+          "  pm.expect(pm.response.code, (pm.response.text() || '').slice(0, 300)).to.be.below(500);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{gatewayBaseUrl}}/middleware",
+      "type": "string"
+    }
+  ],
+  "info": {
+    "_postman_id": "62a79488-f0d0-4a46-b89d-0ba520763b81",
+    "name": "Middleware Service - majdpay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Middleware Service (middleware-service) — 1 operations.\n\nGENERATED from the OpenAPI 3.1.0 spec published at the UAT gateway swagger-ui\n(Select a definition -> \"Middleware Service\"). Request bodies are schema-derived placeholders (lorem-ipsum\nstrings, sample numbers) — replace with real values before sending.\n\nBase URL: {{gatewayBaseUrl}}/middleware  (gatewayBaseUrl lives in EMI-dev.postman_environment.json).\nSpec server: https://gateway-emiuat.dg-cash.app/middleware\n\nAUTH: the spec declares no security scheme, but the gateway front-doors every route with a bearer\ntoken. Set {{token}} in the environment (mint one with the Authentication Service collection's\nsign-in, or pass --env-var token=... to newman). Some back-office routes need an admin/service\ntoken rather than a merchant one.\n\nCompanion Playwright scaffold: BusinessTestCases/ServiceApis/MiddlewareService.generated.spec.ts\n"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

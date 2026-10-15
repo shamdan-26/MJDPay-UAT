@@ -38,6 +38,9 @@ export class BankTransferPage {
     readonly quickAmountLabel: Locator;
     readonly presetAmountChips: Locator;
 
+    // ---------- IBAN reveal control (must NOT exist) ----------
+    readonly ibanViewFullToggle: Locator;
+
     // ---------- Variables ----------
     public balanceBeforeBankTransferVar = 0;
     private selectedAmount = 0;
@@ -50,14 +53,37 @@ export class BankTransferPage {
         this.inputAmount = page.getByTestId('amount-input').or(page.locator('#input_set_amount'));
         this.proceedButton = page.getByTestId('bank-amount-proceed-btn')
             .or(page.locator('button.mp-btn-cta, #sa_button button, button:has-text("Proceed")')).first();
+        // bank-summary-next-btn (inline summary) / bank-confirm-proceed-btn
+        // (Confirmation step) — QA-DATA-TESTID-HANDOFF.md §4.4. The visible
+        // label is localized ("Next" / "التالي") and the accessible name can
+        // carry a trailing bidi/whitespace mark on the Arabic build, so the
+        // role fallback is an unanchored bilingual match.
         this.proceedButtonInSummary = page.getByTestId('bank-summary-next-btn')
-            .or(page.getByRole('button', { name: /Next/i }))
+            .or(page.getByTestId('bank-confirm-proceed-btn'))
+            .or(page.getByRole('button', { name: /next|التالي/i }))
             .or(page.locator('button:has-text("Next")')).first();
         this.summaryCancelButton = page.getByTestId('bank-summary-cancel-btn')
             .or(page.locator('button.btn-outline-primary:has-text("Cancel")'))
             .or(page.locator('button.btn.btn-outline-primary.custom-btn', { hasText: 'Cancel' }));
-        this.Successful_OkButton = page.locator('button.mp-btn-wide:has-text("Ok")')
-            .or(page.locator('button#submit_btn_info', { hasText: 'Ok' })); this.useFullBalanceToggle = page.locator('#use-full-balance-toggle');
+        // bank-amount-ok-btn (Amount-step result) / bank-confirm-ok-btn (Confirmation-step
+        // result) — QA-DATA-TESTID-HANDOFF.md §4.4. Both are covered since the same "Ok"
+        // button appears after either step's OTP depending on which flow variant is live.
+        this.Successful_OkButton = page.getByTestId('bank-amount-ok-btn')
+            .or(page.getByTestId('bank-confirm-ok-btn'))
+            .or(page.locator('button.mp-btn-wide:has-text("Ok")'))
+            .or(page.locator('button#submit_btn_info', { hasText: 'Ok' }))
+            .first();
+        // §3 shared Amount-field component. DOM is <app-toggle-button
+        // id="use-full-balance-toggle"><input data-testid="amount-full-balance-
+        // toggle">...</app-toggle-button> — the outer element is the visible
+        // custom control, the inner <input> is its (visually hidden) native
+        // backing input. Match the visible wrapper first so .toBeVisible()
+        // checks the real control, with the testid input as a fallback; both
+        // can match at once (nested), so per the .or()-chain convention this
+        // ends in .first() to avoid a strict-mode violation.
+        this.useFullBalanceToggle = page.locator('app-toggle-button#use-full-balance-toggle')
+            .or(page.getByTestId('amount-full-balance-toggle'))
+            .first();
 
         this.ibanCardValue = page.locator('.mp-iban-card__value');
         this.ibanCardBank  = page.locator('.mp-iban-card__bank');
@@ -72,8 +98,12 @@ export class BankTransferPage {
         this.balanceAmount         = page.locator('.mp-bal-amount');
         this.balanceWalletCode     = page.locator('.mp-bal-code');
         this.balanceTopupButton    = page.locator('#btn_top_up_compact');
-        this.balanceQrButton       = page.locator('button[aria-label="generate QR Code"]');
-        this.balanceSettingsButton = page.locator('button[aria-label="wallet settings"]');
+        // aria-label is localized too (confirmed via the accessibility tree on a
+        // live Arabic-default dev run: "إنشاء رمز QR" / "إعدادات المحفظة") — match
+        // by accessible name with a bilingual regex rather than an exact
+        // English attribute value.
+        this.balanceQrButton       = page.getByRole('button', { name: /generate QR Code|إنشاء رمز QR/i });
+        this.balanceSettingsButton = page.getByRole('button', { name: /wallet settings|إعدادات المحفظة/i });
         this.sectionStepBadge      = page.locator('.mp-sec-num');
         this.sectionTitle          = page.locator('.mp-sec-title');
         this.sectionDescription    = page.locator('.mp-sec-desc');
@@ -81,7 +111,20 @@ export class BankTransferPage {
         this.fullBalanceToggleLabel = page.locator('.mp-amount-toggle-label');
         this.amountCurrencyIcon    = page.locator('.mp-amount-currency');
         this.quickAmountLabel      = page.locator('.mp-amount-quick-label');
-        this.presetAmountChips     = page.locator('.mp-amount-chip');
+        // amount-chip-<value> — §3 shared Amount-field component; attribute-prefix match
+        // keeps the whole collection since a specific value isn't known up front here.
+        this.presetAmountChips     = page.locator('[data-testid^="amount-chip-"]')
+            .or(page.locator('.mp-amount-chip'));
+
+        // The IBAN is always shown masked (SAxx**xxxx) and the full number must
+        // NEVER be exposed to the user — there is deliberately no "view full IBAN"
+        // affordance. This locator exists only to assert its ABSENCE, so it's a
+        // tight accessible-name match (bilingual — the flow loads in Arabic by
+        // default on dev/UAT) with no broad button fallback that could catch an
+        // unrelated control.
+        this.ibanViewFullToggle = page.getByRole('button', {
+            name: /view full iban|show full iban|reveal iban|unmask iban|عرض(?:\s|.)*الآيبان(?:\s|.)*الكامل|إظهار(?:\s|.)*الآيبان/i,
+        });
 
         // Instantiate TransactionsPage just like `TransactionsPage tnxp = new TransactionsPage(driver);`
         this.tnxp = new TransactionsPage(page);
@@ -155,23 +198,30 @@ export class BankTransferPage {
 
 
     // ---------- Confirmation summary (Transaction Type / Bank / IBAN / Original Amount / commission / VAT / Total) ----------
-    private summaryRow(label: string): Locator {
+    // The Cashout flow loads in Arabic by default on dev/UAT (same reason the
+    // page hero / balance-card locators above are bilingual), so the row label
+    // is localized. Callers pass a bilingual RegExp; a plain string is still
+    // accepted and anchored/exact-matched as before.
+    private summaryRow(label: string | RegExp): Locator {
+        const labelPattern = label instanceof RegExp
+            ? label
+            : new RegExp(`^\\s*${label}\\s*$`, 'i');
         return this.page.locator('.mp-sum-row').filter({
-            has: this.page.locator('span', { hasText: new RegExp(`^\\s*${label}\\s*$`, 'i') }),
+            has: this.page.locator('span', { hasText: labelPattern }),
         });
     }
 
-    async getSummaryText(label: string): Promise<string> {
+    async getSummaryText(label: string | RegExp): Promise<string> {
         const row = this.summaryRow(label);
         await expect(row).toBeVisible({ timeout: 15000 });
         return (await row.locator('span').last().innerText()).trim();
     }
 
-    async getSummaryMoney(label: string): Promise<number> {
+    async getSummaryMoney(label: string | RegExp): Promise<number> {
         const row = this.summaryRow(label);
         const moneyAmount = row.locator('.money-amount');
         await expect(moneyAmount).toBeVisible({ timeout: 15000 });
-        return parseFloat((await moneyAmount.innerText()).trim());
+        return parseFloat((await moneyAmount.innerText()).trim().replace(/,/g, ''));
     }
 
     /**
@@ -186,7 +236,9 @@ export class BankTransferPage {
         let previous = Number.NaN;
         let stableCount = 0;
         for (let attempt = 0; attempt < maxAttempts; attempt++) {
-            const current = await this.getSummaryMoney('Total amount to be sent');
+            const current = await this.getSummaryMoney(
+                /^\s*(Total amount to be sent|إجمالي المبلغ المراد إرساله)\s*$/i,
+            );
             stableCount = current === previous ? stableCount + 1 : 1;
             previous = current;
             if (stableCount >= 3) return;

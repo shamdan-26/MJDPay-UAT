@@ -40,6 +40,7 @@ import {
 // ─────────────────────────────────────────────────────────────────────────────
 
 test.describe('Manage Users Bugs — New User Appears In List (MUB-01, EMI-4742)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('MUB-01: a newly created user appears in the list with all four columns populated', async ({ page }) => {
@@ -75,6 +76,7 @@ test.describe('Manage Users Bugs — New User Appears In List (MUB-01, EMI-4742)
 });
 
 test.describe('Manage Users Bugs — Full Name Renders (MUB-02, EMI-5000)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('MUB-02: the Full Name column never renders "Undefined Undefined"', async ({ page }) => {
@@ -101,6 +103,7 @@ test.describe('Manage Users Bugs — Full Name Renders (MUB-02, EMI-5000)', () =
 });
 
 test.describe('Manage Users Bugs — Status Filter Works (MUB-03, EMI-4812 / EMI-4683)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('MUB-03: selecting a status sends statusCode to the API and narrows the list', async ({ page }) => {
@@ -135,6 +138,7 @@ test.describe('Manage Users Bugs — Status Filter Works (MUB-03, EMI-4812 / EMI
 });
 
 test.describe('Manage Users Bugs — List Endpoint Stable (MUB-04, EMI-5285)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('MUB-04: loading Manage Users returns 200 and renders the table', async ({ page }) => {
@@ -159,6 +163,7 @@ test.describe('Manage Users Bugs — List Endpoint Stable (MUB-04, EMI-5285)', (
 });
 
 test.describe('Manage Users Bugs — Create User Endpoint Stable (MUB-05, EMI-5815)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('MUB-05: creating a user returns 200 and no server-error toast', async ({ page }) => {
@@ -188,6 +193,7 @@ test.describe('Manage Users Bugs — Create User Endpoint Stable (MUB-05, EMI-58
 });
 
 test.describe('Manage Users Bugs — Edit User Group Stable (MUB-06, EMI-5816)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('MUB-06: changing a user group returns 200 and confirms with a success message', async ({ page }) => {
@@ -219,6 +225,7 @@ test.describe('Manage Users Bugs — Edit User Group Stable (MUB-06, EMI-5816)',
 });
 
 test.describe('Manage Users Bugs — Groups Render On The Edit Screen (MUB-07, EMI-5583 / EMI-5584)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('MUB-07: opening a user for edit shows the group list populated, not empty', async ({ page }) => {
@@ -249,6 +256,7 @@ test.describe('Manage Users Bugs — Groups Render On The Edit Screen (MUB-07, E
 });
 
 test.describe('Manage Users Bugs — Privileges Are Not Inherited (MUB-08, EMI-4997)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('MUB-08: a user created with a group but no explicit privileges gets only the assigned set', async ({ page }) => {
@@ -274,6 +282,7 @@ test.describe('Manage Users Bugs — Privileges Are Not Inherited (MUB-08, EMI-4
 });
 
 test.describe('Manage Users Bugs — Activate / Deactivate Allowed With Privilege (MUB-09, EMI-5085 / EMI-5078)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('MUB-09: deactivating a staff user with the privilege granted succeeds without an authorisation error', async ({ page }) => {
@@ -309,6 +318,7 @@ test.describe('Manage Users Bugs — Activate / Deactivate Allowed With Privileg
 });
 
 test.describe('Manage Users Bugs — Reset Password Completes (MUB-10, EMI-5817)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('MUB-10: resetting a user password succeeds and does not land on Forbidden', async ({ page }) => {
@@ -341,6 +351,7 @@ test.describe('Manage Users Bugs — Reset Password Completes (MUB-10, EMI-5817)
 });
 
 test.describe('Manage Users Bugs — Add Staff Never Hangs (MUB-11, EMI-5092 / EMI-5112)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     // Both tickets are mobile (Android / iOS), but the same defect class —

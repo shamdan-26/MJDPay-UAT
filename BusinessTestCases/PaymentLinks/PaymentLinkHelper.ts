@@ -299,3 +299,41 @@ export async function mockBillDetailsUnauthorized(page: Page, billId: string | n
 export async function mockBillLinkSummaryWithAmount(page: Page, token: string, amount: number): Promise<void> {
     await mockValidLink(page, token, { type: 'BILL', amount, ownerProfileComplete: true });
 }
+
+// ── Settled link reflected in transactions (EMI-5967) ────────────────────
+
+/**
+ * EMI-5967 fixed behaviour: once a bill payment link settles, it appears in the
+ * payer's transactions list. The settle call and the list call are mocked
+ * together because the defect was precisely that the first succeeded and the
+ * second stayed empty.
+ */
+export async function mockSettledLinkInTransactions(page: Page): Promise<void> {
+    const settled = {
+        transactionId: 'TXN-LINK-0001',
+        transactionTypeCode: 'BILL_PAYMENT_LINK',
+        status: 'SETTLED',
+        amount: 175,
+        referenceNumber: PAID_BILL_REF,
+    };
+    await page.route('**/api/v1/payment-links/settle**', route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ settled: true }) })
+    );
+    await page.route('**/api/v1/transactions**', route =>
+        route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({ content: [settled], totalElements: 1 }),
+        })
+    );
+}
+
+/** EMI-5967 pre-fix state: the link settles, but the transactions list stays empty. */
+export async function mockSettledLinkMissingFromTransactions(page: Page): Promise<void> {
+    await page.route('**/api/v1/payment-links/settle**', route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ settled: true }) })
+    );
+    await page.route('**/api/v1/transactions**', route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ content: [], totalElements: 0 }) })
+    );
+}

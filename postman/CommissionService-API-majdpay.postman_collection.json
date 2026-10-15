@@ -1,0 +1,1352 @@
+{
+  "item": [
+    {
+      "id": "a52d4843-6ba4-43af-8b60-f5454179bc8e",
+      "name": "default-commission-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bfda3af1-4e25-4908-8db2-74a9d59b45ba",
+          "name": "update Default Commission",
+          "request": {
+            "name": "update Default Commission",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "default-commissions",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "23924057",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/default-commissions/:id"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transactionTypeCode\": \"exe\",\n  \"platformType\": \"velit non\",\n  \"min\": 19270093.6363516,\n  \"max\": -22453208.18890682,\n  \"isActive\": false,\n  \"amountValue\": -62576998.63169708,\n  \"commissionType\": \"PERCENTAGE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f81a3ae4-7ac0-4f48-96b9-88f4b24d5806",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "default-commissions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "23924057",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "ad laborum"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transactionTypeCode\": \"exe\",\n  \"platformType\": \"velit non\",\n  \"min\": 19270093.6363516,\n  \"max\": -22453208.18890682,\n  \"isActive\": false,\n  \"amountValue\": -62576998.63169708,\n  \"commissionType\": \"PERCENTAGE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 45866035,\n  \"amountValue\": -94078654.9706225,\n  \"min\": 52903695.14152315,\n  \"max\": -78734666.90324518,\n  \"effectiveDate\": \"proident culpa ut non\",\n  \"transactionTypeCode\": \"culpa\",\n  \"platformType\": \"ea esse occaecat eu\",\n  \"type\": \"dolor id reprehenderit ex magna\",\n  \"isActive\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "40fb4b8b-cd91-4165-b86b-f5cc818d310d",
+          "name": "deactivate Commission",
+          "request": {
+            "name": "deactivate Commission",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "default-commissions",
+                ":id",
+                "deactivate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "23924057",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/default-commissions/:id/deactivate"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "da82be2b-05ae-42ab-b52f-f4b14fa6e0cb",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "default-commissions",
+                    ":id",
+                    "deactivate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "23924057",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "ad laborum"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "ad laborum",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c06afdf8-9acc-45fb-8ff9-a546ea28d268",
+          "name": "activate Commission",
+          "request": {
+            "name": "activate Commission",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "default-commissions",
+                ":id",
+                "activate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "23924057",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/default-commissions/:id/activate"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b707b25d-3621-4df4-93b5-1f894f4c6bcd",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "default-commissions",
+                    ":id",
+                    "activate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "23924057",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "ad laborum"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "ad laborum",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "81aff7e3-6f88-4ebc-952c-7c17b7adf954",
+          "name": "get Default Commission",
+          "request": {
+            "name": "get Default Commission",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "default-commissions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "transactionTypeCode",
+                  "value": "aute aliqua irure",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "platformType",
+                  "value": "pariatur consequat tempor officia",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "types",
+                  "value": "[\"cillum consectetur ad quis\",\"in dolor\"]",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "isActive",
+                  "value": "true",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "-59089468",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "-77268968",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/default-commissions?transactionTypeCode=aute aliqua irure&platformType=pariatur consequat tempor officia&types=[\"cillum consectetur ad quis\",\"in dolor\"]&isActive=true&page=-59089468&size=-77268968"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1aadde8a-54c3-42ec-87e0-ee2dc94dd7b2",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "default-commissions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "transactionTypeCode",
+                      "value": "aute aliqua irure"
+                    },
+                    {
+                      "key": "platformType",
+                      "value": "pariatur consequat tempor officia"
+                    },
+                    {
+                      "key": "types",
+                      "value": "cillum consectetur ad quis,in dolor"
+                    },
+                    {
+                      "key": "isActive",
+                      "value": "true"
+                    },
+                    {
+                      "key": "page",
+                      "value": "-59089468"
+                    },
+                    {
+                      "key": "size",
+                      "value": "-77268968"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "ad laborum"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": 63958262,\n  \"totalElements\": 51443885,\n  \"size\": 76543500,\n  \"content\": [\n    {\n      \"id\": -43653474,\n      \"amountValue\": -80526771.0528449,\n      \"min\": 14872895.163426653,\n      \"max\": -54630911.51878634,\n      \"effectiveDate\": \"Duis sunt\",\n      \"transactionTypeCode\": \"\",\n      \"platformType\": \"minim exercitation eu reprehenderit\",\n      \"type\": \"adipisicing reprehenderit\",\n      \"isActive\": false\n    },\n    {\n      \"id\": 97900363,\n      \"amountValue\": -12688984.596724764,\n      \"min\": -30907915.64203985,\n      \"max\": -71462293.87709111,\n      \"effectiveDate\": \"sunt\",\n      \"transactionTypeCode\": \"Lorem\",\n      \"platformType\": \"in culpa consequat commodo\",\n      \"type\": \"nisi nulla\",\n      \"isActive\": true\n    }\n  ],\n  \"number\": 26275516,\n  \"sort\": [\n    {\n      \"direction\": \"Ut magna elit adipisicing officia\",\n      \"nullHandling\": \"Lorem mollit aliqua Duis ad\",\n      \"ascending\": false,\n      \"property\": \"Duis sint enim consectetur\",\n      \"ignoreCase\": true\n    },\n    {\n      \"direction\": \"fugiat dolor\",\n      \"nullHandling\": \"sunt proident\",\n      \"ascending\": false,\n      \"property\": \"et consequat pariatur tempor commodo\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"pageable\": {\n    \"offset\": 63786687,\n    \"sort\": [\n      {\n        \"direction\": \"ea nisi aliqua culpa\",\n        \"nullHandling\": \"eiusmod sit sunt\",\n        \"ascending\": true,\n        \"property\": \"occaecat dolor\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"enim proident exercitation\",\n        \"nullHandling\": \"sunt mollit eu laboris\",\n        \"ascending\": false,\n        \"property\": \"off\",\n        \"ignoreCase\": true\n      }\n    ],\n    \"pageNumber\": 88210219,\n    \"pageSize\": -71623885,\n    \"paged\": false,\n    \"unpaged\": false\n  },\n  \"first\": false,\n  \"last\": true,\n  \"numberOfElements\": -98784247,\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "98414cb4-50da-45ce-8850-a1e76b628c32",
+          "name": "create Default Commissions",
+          "request": {
+            "name": "create Default Commissions",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "default-commissions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/default-commissions"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"transactionTypeCode\": \"proident officia Ut\",\n    \"platformType\": \"do Excepteur ullamco in\",\n    \"min\": -31989427.128094822,\n    \"max\": -21267970.3310356,\n    \"isActive\": false,\n    \"amountValue\": 11212364.097860083,\n    \"commissionType\": \"PERCENTAGE\"\n  },\n  {\n    \"transactionTypeCode\": \"aute voluptate\",\n    \"platformType\": \"ut adipisicing voluptate officia\",\n    \"min\": 35669959.81778157,\n    \"max\": 90598869.64474824,\n    \"isActive\": false,\n    \"amountValue\": 79706138.53547531,\n    \"commissionType\": \"FIXED\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5cccc39f-c3ef-44cc-b94d-0f574ca1398a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "default-commissions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "ad laborum"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"transactionTypeCode\": \"mollit ut\",\n    \"platformType\": \"anim laboris eiusmod\",\n    \"min\": 74340336.06528977,\n    \"max\": -50582430.60244872,\n    \"isActive\": false,\n    \"amountValue\": -52133630.465862654,\n    \"commissionType\": \"PERCENTAGE\"\n  },\n  {\n    \"transactionTypeCode\": \"cillum cupidatat\",\n    \"platformType\": \"cupidatat sunt\",\n    \"min\": -90614481.5938976,\n    \"max\": 41219836.55572215,\n    \"isActive\": false,\n    \"amountValue\": -83707043.19649342,\n    \"commissionType\": \"PERCENTAGE\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -6402943,\n    \"amountValue\": 40541692.69342646,\n    \"min\": 27398469.782511175,\n    \"max\": -26106711.660294637,\n    \"effectiveDate\": \"incididunt\",\n    \"transactionTypeCode\": \"magna consectetur velit\",\n    \"platformType\": \"amet \",\n    \"type\": \"consequat ea pariatur officia consectetur\",\n    \"isActive\": false\n  },\n  {\n    \"id\": 5813811,\n    \"amountValue\": 73106839.6831848,\n    \"min\": 38190463.11469966,\n    \"max\": 20979575.026412457,\n    \"effectiveDate\": \"Excepteur qui officia aliqua dolore\",\n    \"transactionTypeCode\": \"aliquip esse\",\n    \"platformType\": \"culpa ut in occaecat aliqua\",\n    \"type\": \"quis volu\",\n    \"isActive\": true\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "a67f0fa7-26cc-49e9-aab8-3408146725fe",
+      "name": "commission-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8bfaab24-a722-40b4-9fc7-6e3413379fa1",
+          "name": "get Commissions",
+          "request": {
+            "name": "get Commissions",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "commissions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10"
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/commissions?page=0&size=10"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e5d3e7e9-1982-4d60-a48b-d0234afd737c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "commissions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "ad laborum"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": 22964644,\n  \"totalElements\": -71321331,\n  \"size\": -19606309,\n  \"content\": [\n    {\n      \"id\": 33828114,\n      \"amountValue\": 5593123.393955916,\n      \"min\": 2862940.9639959037,\n      \"max\": -87122182.37508452,\n      \"effectiveDate\": \"tempor ut sint ea voluptate\",\n      \"transactionTypeCode\": \"id minim\",\n      \"platformType\": \"pariatur amet ut qui Ut\",\n      \"profileCode\": \"eu quis consequat\",\n      \"type\": \"in\",\n      \"isActive\": false\n    },\n    {\n      \"id\": -79174030,\n      \"amountValue\": -28384271.207197756,\n      \"min\": 27303427.772999108,\n      \"max\": -96473717.87046288,\n      \"effectiveDate\": \"qui cupidatat\",\n      \"transactionTypeCode\": \"sed anim\",\n      \"platformType\": \"dolore anim in\",\n      \"profileCode\": \"ullamco veniam\",\n      \"type\": \"Duis cupidatat enim minim\",\n      \"isActive\": true\n    }\n  ],\n  \"number\": 45286249,\n  \"sort\": [\n    {\n      \"direction\": \"quis reprehenderit et non culpa\",\n      \"nullHandling\": \"proident labore minim\",\n      \"ascending\": true,\n      \"property\": \"consequat cillum dolor ad\",\n      \"ignoreCase\": true\n    },\n    {\n      \"direction\": \"dolor culpa eiusmod qui\",\n      \"nullHandling\": \"nostrud reprehenderit dolor\",\n      \"ascending\": false,\n      \"property\": \"quis\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"pageable\": {\n    \"offset\": 11352348,\n    \"sort\": [\n      {\n        \"direction\": \"laboris ad quis\",\n        \"nullHandling\": \"Duis dolor deserunt occaecat\",\n        \"ascending\": true,\n        \"property\": \"adipisicing ad\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"sunt labore\",\n        \"nullHandling\": \"in minim in veniam laboris\",\n        \"ascending\": false,\n        \"property\": \"aliqua occaecat\",\n        \"ignoreCase\": false\n      }\n    ],\n    \"pageNumber\": 56284356,\n    \"pageSize\": 2860312,\n    \"paged\": true,\n    \"unpaged\": true\n  },\n  \"first\": false,\n  \"last\": false,\n  \"numberOfElements\": 75141742,\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a4cda5bf-43ca-4981-9584-f2e86d5b3448",
+          "name": "update Commission",
+          "request": {
+            "name": "update Commission",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "commissions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/commissions"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amountValue\": -26638474.734786913,\n  \"minValue\": -41449858.56487979,\n  \"maxValue\": 2565730.0083431005,\n  \"effectiveDate\": \"1991-08-13T05:36:27.304Z\",\n  \"transactionTypeCode\": \"ea velit cupidatat\",\n  \"platformType\": \"dolor cupidatat fugiat exercitation \",\n  \"isActive\": false,\n  \"id\": 51692831\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "016b6998-e3d6-4574-9ac4-dab814fa9879",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "commissions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "ad laborum"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amountValue\": -26638474.734786913,\n  \"minValue\": -41449858.56487979,\n  \"maxValue\": 2565730.0083431005,\n  \"effectiveDate\": \"1991-08-13T05:36:27.304Z\",\n  \"transactionTypeCode\": \"ea velit cupidatat\",\n  \"platformType\": \"dolor cupidatat fugiat exercitation \",\n  \"isActive\": false,\n  \"id\": 51692831\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 89047911,\n  \"amountValue\": -76123162.37617083,\n  \"min\": 10575204.741783813,\n  \"max\": 35204815.433112025,\n  \"effectiveDate\": \"sunt pariatur anim in commodo\",\n  \"transactionTypeCode\": \"est ad ut in culpa\",\n  \"platformType\": \"ipsum incididunt aliquip reprehenderit fugiat\",\n  \"profileCode\": \"eiusmod exercitation pariatur comm\",\n  \"type\": \"et veniam cillum nostrud\",\n  \"isActive\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6df2bca9-beb2-47d4-9dbd-b44387452833",
+          "name": "create Commissions",
+          "request": {
+            "name": "create Commissions",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "commissions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/commissions"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"amountValue\": 91059565.49905819,\n    \"minValue\": 37210895.463516176,\n    \"maxValue\": -89208860.77956153,\n    \"effectiveDate\": \"1967-05-14T00:45:13.256Z\",\n    \"transactionTypeCode\": \"consectetur id ex officia nul\",\n    \"platformType\": \"Ut\",\n    \"isActive\": true,\n    \"profileCode\": \"ex exercitation enim non\",\n    \"commissionType\": \"FIXED\"\n  },\n  {\n    \"amountValue\": -55338271.81862629,\n    \"minValue\": 89018395.92881799,\n    \"maxValue\": 61561686.94210085,\n    \"effectiveDate\": \"1981-07-11T02:25:26.640Z\",\n    \"transactionTypeCode\": \"aliquip ut non\",\n    \"platformType\": \"laborum cupidatat ad incididunt\",\n    \"isActive\": true,\n    \"profileCode\": \"tempor\",\n    \"commissionType\": \"FIXED\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a9d12a38-a2c6-4557-a6e3-6a7b89a7d149",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "commissions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "ad laborum"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"amountValue\": -58487971.36422326,\n    \"minValue\": 51827215.63523492,\n    \"maxValue\": -20314381.849949732,\n    \"effectiveDate\": \"2018-05-04T04:19:04.986Z\",\n    \"transactionTypeCode\": \"tempor irure\",\n    \"platformType\": \"enim pariatur deserunt mollit\",\n    \"isActive\": true,\n    \"profileCode\": \"occaecat\",\n    \"commissionType\": \"FIXED\"\n  },\n  {\n    \"amountValue\": 41958874.21452695,\n    \"minValue\": -27842632.992143244,\n    \"maxValue\": 91100709.03356743,\n    \"effectiveDate\": \"1978-11-13T12:19:03.734Z\",\n    \"transactionTypeCode\": \"Lorem Excepteur do id\",\n    \"platformType\": \"cupidatat ullamco\",\n    \"isActive\": false,\n    \"profileCode\": \"id dolore pariatur\",\n    \"commissionType\": \"FIXED\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6cc39207-bc38-4e5f-a408-e97fb589127c",
+          "name": "deactivate Commission 1",
+          "request": {
+            "name": "deactivate Commission 1",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "commissions",
+                ":id",
+                "deactivate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "23924057",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/commissions/:id/deactivate"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9e7782f8-5a65-454b-91f0-e0f0ffc8a66b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "commissions",
+                    ":id",
+                    "deactivate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "23924057",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "ad laborum"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "ad laborum",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "40394ba9-2662-453a-a39f-d3356d55b4ba",
+          "name": "activate Commission 1",
+          "request": {
+            "name": "activate Commission 1",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "commissions",
+                ":id",
+                "activate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "23924057",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/commissions/:id/activate"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1824d0eb-a56e-4f61-8b27-a8eadeaf951c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "commissions",
+                    ":id",
+                    "activate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "23924057",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "ad laborum"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "ad laborum",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c603904e-d3a7-4dc0-b07d-ada1df816715",
+          "name": "calculate Commission",
+          "request": {
+            "name": "calculate Commission",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "commissions",
+                "calculate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/commissions/calculate"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sourceProfileCode\": \"quis sunt Duis\",\n  \"destinationProfileCode\": \"in aute aliquip\",\n  \"trxAmount\": 15812314.247986346,\n  \"trxTypeCode\": \"dolore velit\",\n  \"platformType\": \"in quis labore\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2e51140b-670f-45f5-b56f-b5f5938144ed",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "commissions",
+                    "calculate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sourceProfileCode\": \"quis sunt Duis\",\n  \"destinationProfileCode\": \"in aute aliquip\",\n  \"trxAmount\": 15812314.247986346,\n  \"trxTypeCode\": \"dolore velit\",\n  \"platformType\": \"in quis labore\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"transactions\": {\n    \"proidentc\": {\n      \"profileCode\": \"Excepteur\",\n      \"commissionAmount\": -69516410.31034423,\n      \"type\": \"COMMISSION\"\n    },\n    \"quis_\": {\n      \"profileCode\": \"amet aute est sint\",\n      \"commissionAmount\": 92544450.51183257,\n      \"type\": \"COMMISSION\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1129dfe3-a5a6-483b-aa2b-1f6d0fe14e29",
+          "name": "get Commission By User Code",
+          "request": {
+            "name": "get Commission By User Code",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "commissions",
+                ":profileCode"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "transactionTypeCode",
+                  "value": "aute aliqua irure",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "platformType",
+                  "value": "pariatur consequat tempor officia",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "types",
+                  "value": "[\"cillum consectetur ad quis\",\"in dolor\"]",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "isActive",
+                  "value": "true",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "-59089468",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "-77268968",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "ad laborum",
+                  "key": "profileCode",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/commissions/:profileCode?transactionTypeCode=aute aliqua irure&platformType=pariatur consequat tempor officia&types=[\"cillum consectetur ad quis\",\"in dolor\"]&isActive=true&page=-59089468&size=-77268968"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b765efdc-6e22-4741-bb3b-b11579f7f60c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "commissions",
+                    ":profileCode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "transactionTypeCode",
+                      "value": "aute aliqua irure"
+                    },
+                    {
+                      "key": "platformType",
+                      "value": "pariatur consequat tempor officia"
+                    },
+                    {
+                      "key": "types",
+                      "value": "cillum consectetur ad quis,in dolor"
+                    },
+                    {
+                      "key": "isActive",
+                      "value": "true"
+                    },
+                    {
+                      "key": "page",
+                      "value": "-59089468"
+                    },
+                    {
+                      "key": "size",
+                      "value": "-77268968"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "ad laborum",
+                      "key": "profileCode",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "ad laborum"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": 22964644,\n  \"totalElements\": -71321331,\n  \"size\": -19606309,\n  \"content\": [\n    {\n      \"id\": 33828114,\n      \"amountValue\": 5593123.393955916,\n      \"min\": 2862940.9639959037,\n      \"max\": -87122182.37508452,\n      \"effectiveDate\": \"tempor ut sint ea voluptate\",\n      \"transactionTypeCode\": \"id minim\",\n      \"platformType\": \"pariatur amet ut qui Ut\",\n      \"profileCode\": \"eu quis consequat\",\n      \"type\": \"in\",\n      \"isActive\": false\n    },\n    {\n      \"id\": -79174030,\n      \"amountValue\": -28384271.207197756,\n      \"min\": 27303427.772999108,\n      \"max\": -96473717.87046288,\n      \"effectiveDate\": \"qui cupidatat\",\n      \"transactionTypeCode\": \"sed anim\",\n      \"platformType\": \"dolore anim in\",\n      \"profileCode\": \"ullamco veniam\",\n      \"type\": \"Duis cupidatat enim minim\",\n      \"isActive\": true\n    }\n  ],\n  \"number\": 45286249,\n  \"sort\": [\n    {\n      \"direction\": \"quis reprehenderit et non culpa\",\n      \"nullHandling\": \"proident labore minim\",\n      \"ascending\": true,\n      \"property\": \"consequat cillum dolor ad\",\n      \"ignoreCase\": true\n    },\n    {\n      \"direction\": \"dolor culpa eiusmod qui\",\n      \"nullHandling\": \"nostrud reprehenderit dolor\",\n      \"ascending\": false,\n      \"property\": \"quis\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"pageable\": {\n    \"offset\": 11352348,\n    \"sort\": [\n      {\n        \"direction\": \"laboris ad quis\",\n        \"nullHandling\": \"Duis dolor deserunt occaecat\",\n        \"ascending\": true,\n        \"property\": \"adipisicing ad\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"sunt labore\",\n        \"nullHandling\": \"in minim in veniam laboris\",\n        \"ascending\": false,\n        \"property\": \"aliqua occaecat\",\n        \"ignoreCase\": false\n      }\n    ],\n    \"pageNumber\": 56284356,\n    \"pageSize\": 2860312,\n    \"paged\": true,\n    \"unpaged\": true\n  },\n  \"first\": false,\n  \"last\": false,\n  \"numberOfElements\": 75141742,\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generated guard: a 5xx from any request is a gateway/service defect, not a test-data problem.",
+          "pm.test('no 5xx (' + pm.info.requestName + ')', function () {",
+          "  pm.expect(pm.response.code, (pm.response.text() || '').slice(0, 300)).to.be.below(500);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{gatewayBaseUrl}}/commission-service",
+      "type": "string"
+    }
+  ],
+  "info": {
+    "_postman_id": "3af0a94c-02e0-4d1b-8af2-bf3fb34ed3fa",
+    "name": "Commission Service - majdpay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Commission Service (commission-service) — 12 operations.\n\nGENERATED from the OpenAPI 3.1.0 spec published at the UAT gateway swagger-ui\n(Select a definition -> \"Commission Service APIs\"). Request bodies are schema-derived placeholders (lorem-ipsum\nstrings, sample numbers) — replace with real values before sending.\n\nBase URL: {{gatewayBaseUrl}}/commission-service  (gatewayBaseUrl lives in EMI-dev.postman_environment.json).\nSpec server: https://gateway-emiuat.dg-cash.app/commission-service\n\nAUTH: the spec declares no security scheme, but the gateway front-doors every route with a bearer\ntoken. Set {{token}} in the environment (mint one with the Authentication Service collection's\nsign-in, or pass --env-var token=... to newman). Some back-office routes need an admin/service\ntoken rather than a merchant one.\n\nCompanion Playwright scaffold: BusinessTestCases/ServiceApis/CommissionService.generated.spec.ts\n"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

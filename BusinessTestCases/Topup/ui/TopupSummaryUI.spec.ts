@@ -139,19 +139,17 @@ test.describe('Topup – UI – Add Funds Summary (step 2)', { tag: ['@topup', '
         const fee      = await topup.getSummaryMoney(SUMMARY_LABEL.commission);
         const vat      = await topup.getSummaryMoney(SUMMARY_LABEL.vat);
         const total    = await topup.getSummaryMoney(SUMMARY_LABEL.total);
-        // The formula is unconfirmed: "Total to receive" implies fees come OUT
-        // of the amount, but the old label said "to be sent" (fees on top).
-        // Accept either direction; reject anything else.
-        const deducted = +(original - fee - vat).toFixed(2);
-        const added    = +(original + fee + vat).toFixed(2);
-        expect([deducted, added]).toContain(+total.toFixed(2));
+        // Business rule (confirmed 2026-10-13): Total = amount − commission, and the VAT row is the VAT part INSIDE
+        // the commission (commission × 15/115), so it is not deducted a second time.
+        expect(+total.toFixed(2)).toBe(+(original - fee).toFixed(2));
+        expect(vat).toBeCloseTo(fee * 0.15 / 1.15, 2);
         await topup.clickSummaryCancelButton();
     });
 
     // KNOWN BUG: the summary renders amounts without decimals ("50", "0")
     // while the balance card shows "0.00". Every amount should be 2dp.
     // Un-skip once the app formats summary amounts consistently.
-    test.skip('Summary amounts are formatted with 2 decimals (0.00), matching the balance card', async () => {
+    test('Summary amounts are formatted with 2 decimals (0.00), matching the balance card', async () => {
         const { topup } = session;
         await reachSummary('visa', '50');
         await expect(topup.summaryMoneyAmounts).toHaveCount(4);
@@ -163,7 +161,7 @@ test.describe('Topup – UI – Add Funds Summary (step 2)', { tag: ['@topup', '
 
     // KNOWN BUG: the subtitle reads "راجع التفصيل قبل المتابعة إلى الدفع." —
     // "التفصيل" (singular) should be "التفاصيل" (details). Un-skip once fixed.
-    test.skip('Summary subtitle uses the correct spelling "التفاصيل"', async () => {
+    test('Summary subtitle uses the correct spelling "التفاصيل"', async () => {
         const { topup } = session;
         await reachSummary();
         await expect(topup.pageSubtitle).toContainText('التفاصيل');

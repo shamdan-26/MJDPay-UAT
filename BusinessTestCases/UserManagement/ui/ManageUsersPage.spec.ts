@@ -15,6 +15,7 @@ import { gotoManageUsers, mockUserList, mockGroupList } from '../UserManagementH
 // ─────────────────────────────────────────────────────────────────────────────
 
 test.describe('Manage Users UI — Page Chrome (MUU-01, MUU-02, MUU-03)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test.beforeEach(async ({ page }) => {
@@ -50,6 +51,7 @@ test.describe('Manage Users UI — Page Chrome (MUU-01, MUU-02, MUU-03)', () => 
 });
 
 test.describe('Manage Users UI — Add User Form (MUU-04, MUU-05)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test.beforeEach(async ({ page }) => {

@@ -1,0 +1,620 @@
+{
+  "info": {
+    "_postman_id": "f4a1c7d3-9b2e-4f68-8e4a-walletsnap0127",
+    "name": "Wallet Snapshot Admin API - majdpay (dev)",
+    "description": "EMI-6127 (BE - Create Wallet Snapshot Admin Page): two read-only Admin-portal endpoints over the existing wallet-snapshot subsystem (wallet_snapshots / wallet_snapshot_events / wallet_snapshot_verifications). See docs/business-knowledge/EMI-6127-Refined-Ticket.md for the full refinement and gap list, and docs/business-knowledge/Wallet-Snapshot-Pipeline-Architecture.md for the full 13-ticket epic this belongs to.\n\nThe on-demand snapshot job-trigger endpoint (EMI-6115) used to live here as a fourth folder - it has since moved to its own dedicated collection, postman/WalletSnapshotJob-API-majdpay.postman_collection.json, since it lives on a different host with a different auth posture entirely (no auth at all, vs. this collection's bearer token). Use that collection for anything related to triggering a snapshot run.\n\nBase URL: https://gateway-dev.majdpay.com. Both GET routes confirmed LIVE and reachable in dev as of 2026-09-29 (unauthenticated calls answered 401, not 404). Required privilege: ADMIN_GET_WALLET_SNAPSHOTS.\n\nHeaders are an EXACT match to a real captured Admin Portal browser request against gateway-dev.majdpay.com/api/v1/admin/wallet-snapshots (2026-10), including the browser-injected ones (Connection, Origin, Referer, Sec-Fetch-*, User-Agent, sec-ch-ua*) - not just the app-level subset. {{token}} must be a real Bearer JWT for an admin user holding ADMIN_GET_WALLET_SNAPSHOTS - mint one by signing in through the Admin Portal (BusinessTestCases/pageElements/Shared/AdminOtpConfigPage.ts) and pasting the resulting token, since no pure-API admin sign-in contract is confirmed yet (the business-portal /auth/signin + tenantNumber flow returns 401 for admin credentials - it is a separate auth realm). A captured token typically lives ~18 minutes (iat to exp) - paste a fresh one right before running folders 1-2, a stale one will 401 exactly like no token at all. {{deviceFingerPrint}} is left empty by design: the real value is generated client-side per session and itself embeds the current access token, so it cannot be a static committed value - capture a fresh one from a live browser session if a request needs it to pass, or leave it empty.\n\nTwo known defects on the GET endpoints, deliberately encoded as failing assertions below rather than as passing ones (regression tripwires, not smoke tests):\n1. openingBalances/movementBalances (list and detail) put the available balance into the 'current' field and leave 'available' null. closingBalances is unaffected.\n2. detail's validationDetails[].verificationSteps is always null (DTO field name 'verificationSteps' vs entity field 'verifications', no MapStruct mapping between them).\n\nFolder 3 (Negative / Auth) sends every header above EXCEPT Authorization (empty/omitted) and needs no token - it is the part of this collection already confirmed live (401, not 404).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{token}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://gateway-dev.majdpay.com" },
+    { "key": "token", "value": "" },
+    { "key": "acceptLanguage", "value": "en_uk" },
+    { "key": "locale", "value": "en_uk" },
+    { "key": "platform", "value": "web" },
+    { "key": "platformType", "value": "web" },
+    { "key": "channel", "value": "ONLINE" },
+    { "key": "tosterId", "value": "toster_ID_00000000" },
+    { "key": "deviceFingerPrint", "value": "" },
+    { "key": "latitude", "value": "32.023868354717514" },
+    { "key": "longitude", "value": "35.887239083362864" },
+    { "key": "connection", "value": "keep-alive" },
+    { "key": "origin", "value": "https://dev.majdpay.com" },
+    { "key": "referer", "value": "https://dev.majdpay.com/" },
+    { "key": "userAgent", "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" },
+    { "key": "secFetchDest", "value": "empty" },
+    { "key": "secFetchMode", "value": "cors" },
+    { "key": "secFetchSite", "value": "same-site" },
+    { "key": "secChUa", "value": "\"Chromium\";v=\"152\", \"Not?A_Brand\";v=\"24\", \"Google Chrome\";v=\"152\"" },
+    { "key": "secChUaMobile", "value": "?0" },
+    { "key": "secChUaPlatform", "value": "\"Windows\"" },
+    { "key": "walletCode", "value": "WALLET-001" },
+    { "key": "fromDate", "value": "2026-09-01" },
+    { "key": "toDate", "value": "2026-09-28" },
+    { "key": "status", "value": "SEALED" },
+    { "key": "page", "value": "0" },
+    { "key": "size", "value": "20" },
+    { "key": "snapshotId", "value": "101" },
+    { "key": "missingSnapshotId", "value": "999999999" }
+  ],
+  "item": [
+    {
+      "name": "1. List Wallet Snapshots",
+      "item": [
+        {
+          "name": "1. GET wallet snapshots - default pagination, no filters",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "*/*" },
+              { "key": "Accept-Language", "value": "{{acceptLanguage}}" },
+              { "key": "Connection", "value": "{{connection}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Origin", "value": "{{origin}}" },
+              { "key": "Referer", "value": "{{referer}}" },
+              { "key": "Sec-Fetch-Dest", "value": "{{secFetchDest}}" },
+              { "key": "Sec-Fetch-Mode", "value": "{{secFetchMode}}" },
+              { "key": "Sec-Fetch-Site", "value": "{{secFetchSite}}" },
+              { "key": "User-Agent", "value": "{{userAgent}}" },
+              { "key": "channel", "value": "{{channel}}" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "latitude", "value": "{{latitude}}" },
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "longitude", "value": "{{longitude}}" },
+              { "key": "platform", "value": "{{platform}}" },
+              { "key": "platformType", "value": "{{platformType}}" },
+              { "key": "sec-ch-ua", "value": "{{secChUa}}" },
+              { "key": "sec-ch-ua-mobile", "value": "{{secChUaMobile}}" },
+              { "key": "sec-ch-ua-platform", "value": "{{secChUaPlatform}}" },
+              { "key": "toster_ID", "value": "{{tosterId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/wallet-snapshots",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "v1", "admin", "wallet-snapshots" ]
+            },
+            "description": "Verified default: page=0, size=20 when both are omitted. Header set is an exact match to the real captured curl."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('paged envelope shape', () => {",
+                  "  pm.expect(b).to.have.property('content');",
+                  "  pm.expect(b).to.have.property('totalElements');",
+                  "  pm.expect(b).to.have.property('totalPages');",
+                  "  pm.expect(b.number).to.eql(0);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. GET wallet snapshots - filter by status",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "*/*" },
+              { "key": "Accept-Language", "value": "{{acceptLanguage}}" },
+              { "key": "Connection", "value": "{{connection}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Origin", "value": "{{origin}}" },
+              { "key": "Referer", "value": "{{referer}}" },
+              { "key": "Sec-Fetch-Dest", "value": "{{secFetchDest}}" },
+              { "key": "Sec-Fetch-Mode", "value": "{{secFetchMode}}" },
+              { "key": "Sec-Fetch-Site", "value": "{{secFetchSite}}" },
+              { "key": "User-Agent", "value": "{{userAgent}}" },
+              { "key": "channel", "value": "{{channel}}" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "latitude", "value": "{{latitude}}" },
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "longitude", "value": "{{longitude}}" },
+              { "key": "platform", "value": "{{platform}}" },
+              { "key": "platformType", "value": "{{platformType}}" },
+              { "key": "sec-ch-ua", "value": "{{secChUa}}" },
+              { "key": "sec-ch-ua-mobile", "value": "{{secChUaMobile}}" },
+              { "key": "sec-ch-ua-platform", "value": "{{secChUaPlatform}}" },
+              { "key": "toster_ID", "value": "{{tosterId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/wallet-snapshots?status={{status}}&page={{page}}&size={{size}}",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "v1", "admin", "wallet-snapshots" ],
+              "query": [
+                { "key": "status", "value": "{{status}}" },
+                { "key": "page", "value": "{{page}}" },
+                { "key": "size", "value": "{{size}}" }
+              ]
+            },
+            "description": "status is an exact match. Valid values: COMPUTED, VERIFIED, REPAIR_QUEUED, VARIANCE_PENDING, FAILED, SEALED. Change {{status}} and re-run for each value."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('every row matches the requested status', () => {",
+                  "  const status = pm.collectionVariables.get('status');",
+                  "  (b.content || []).forEach((row) => pm.expect(row.status).to.eql(status));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3. GET wallet snapshots - filter by wallet code (exact, no wildcard)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "*/*" },
+              { "key": "Accept-Language", "value": "{{acceptLanguage}}" },
+              { "key": "Connection", "value": "{{connection}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Origin", "value": "{{origin}}" },
+              { "key": "Referer", "value": "{{referer}}" },
+              { "key": "Sec-Fetch-Dest", "value": "{{secFetchDest}}" },
+              { "key": "Sec-Fetch-Mode", "value": "{{secFetchMode}}" },
+              { "key": "Sec-Fetch-Site", "value": "{{secFetchSite}}" },
+              { "key": "User-Agent", "value": "{{userAgent}}" },
+              { "key": "channel", "value": "{{channel}}" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "latitude", "value": "{{latitude}}" },
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "longitude", "value": "{{longitude}}" },
+              { "key": "platform", "value": "{{platform}}" },
+              { "key": "platformType", "value": "{{platformType}}" },
+              { "key": "sec-ch-ua", "value": "{{secChUa}}" },
+              { "key": "sec-ch-ua-mobile", "value": "{{secChUaMobile}}" },
+              { "key": "sec-ch-ua-platform", "value": "{{secChUaPlatform}}" },
+              { "key": "toster_ID", "value": "{{tosterId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/wallet-snapshots?walletCode={{walletCode}}",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "v1", "admin", "wallet-snapshots" ],
+              "query": [ { "key": "walletCode", "value": "{{walletCode}}" } ]
+            },
+            "description": "Case-insensitive LIKE, but the repository does not add its own '%' - plain input behaves as an exact match. Re-run with walletCode={{walletCode}}%25 (a literal '%') to see wildcard behavior instead."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('every row is an exact case-insensitive match', () => {",
+                  "  const wc = pm.collectionVariables.get('walletCode').toLowerCase();",
+                  "  (b.content || []).forEach((row) => pm.expect(row.walletCode.toLowerCase()).to.eql(wc));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "4. GET wallet snapshots - date range is inclusive on both ends",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "*/*" },
+              { "key": "Accept-Language", "value": "{{acceptLanguage}}" },
+              { "key": "Connection", "value": "{{connection}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Origin", "value": "{{origin}}" },
+              { "key": "Referer", "value": "{{referer}}" },
+              { "key": "Sec-Fetch-Dest", "value": "{{secFetchDest}}" },
+              { "key": "Sec-Fetch-Mode", "value": "{{secFetchMode}}" },
+              { "key": "Sec-Fetch-Site", "value": "{{secFetchSite}}" },
+              { "key": "User-Agent", "value": "{{userAgent}}" },
+              { "key": "channel", "value": "{{channel}}" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "latitude", "value": "{{latitude}}" },
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "longitude", "value": "{{longitude}}" },
+              { "key": "platform", "value": "{{platform}}" },
+              { "key": "platformType", "value": "{{platformType}}" },
+              { "key": "sec-ch-ua", "value": "{{secChUa}}" },
+              { "key": "sec-ch-ua-mobile", "value": "{{secChUaMobile}}" },
+              { "key": "sec-ch-ua-platform", "value": "{{secChUaPlatform}}" },
+              { "key": "toster_ID", "value": "{{tosterId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/wallet-snapshots?fromDate={{fromDate}}&toDate={{toDate}}",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "v1", "admin", "wallet-snapshots" ],
+              "query": [
+                { "key": "fromDate", "value": "{{fromDate}}" },
+                { "key": "toDate", "value": "{{toDate}}" }
+              ]
+            },
+            "description": "A snapshot dated exactly fromDate or exactly toDate must be included, not excluded as an open-interval bound would."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('every row falls within [fromDate, toDate] inclusive', () => {",
+                  "  const from = pm.collectionVariables.get('fromDate');",
+                  "  const to = pm.collectionVariables.get('toDate');",
+                  "  (b.content || []).forEach((row) => {",
+                  "    pm.expect(row.snapshotDate >= from).to.be.true;",
+                  "    pm.expect(row.snapshotDate <= to).to.be.true;",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "5. KNOWN DEFECT - openingBalances/movementBalances swap current<->available",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "*/*" },
+              { "key": "Accept-Language", "value": "{{acceptLanguage}}" },
+              { "key": "Connection", "value": "{{connection}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Origin", "value": "{{origin}}" },
+              { "key": "Referer", "value": "{{referer}}" },
+              { "key": "Sec-Fetch-Dest", "value": "{{secFetchDest}}" },
+              { "key": "Sec-Fetch-Mode", "value": "{{secFetchMode}}" },
+              { "key": "Sec-Fetch-Site", "value": "{{secFetchSite}}" },
+              { "key": "User-Agent", "value": "{{userAgent}}" },
+              { "key": "channel", "value": "{{channel}}" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "latitude", "value": "{{latitude}}" },
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "longitude", "value": "{{longitude}}" },
+              { "key": "platform", "value": "{{platform}}" },
+              { "key": "platformType", "value": "{{platformType}}" },
+              { "key": "sec-ch-ua", "value": "{{secChUa}}" },
+              { "key": "sec-ch-ua-mobile", "value": "{{secChUaMobile}}" },
+              { "key": "sec-ch-ua-platform", "value": "{{secChUaPlatform}}" },
+              { "key": "toster_ID", "value": "{{tosterId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/wallet-snapshots?walletCode={{walletCode}}&size=1",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "v1", "admin", "wallet-snapshots" ],
+              "query": [
+                { "key": "walletCode", "value": "{{walletCode}}" },
+                { "key": "size", "value": "1" }
+              ]
+            },
+            "description": "KNOWN DEFECT (see collection description). This test asserts the CORRECT mapping and is expected to FAIL today: the mapper currently puts the available balance into 'current' and leaves 'available' null, for openingBalances and movementBalances only. closingBalances is correctly populated. Do not 'fix' this test to match the buggy response - it is a tripwire."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "const row = (b.content || [])[0];",
+                  "pm.test('EXPECTED TO FAIL until fixed: openingBalances.available is populated, not null', () => {",
+                  "  pm.expect(row && row.openingBalances && row.openingBalances.available).to.not.be.null;",
+                  "});",
+                  "pm.test('EXPECTED TO FAIL until fixed: movementBalances.available is populated, not null', () => {",
+                  "  pm.expect(row && row.movementBalances && row.movementBalances.available).to.not.be.null;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. Wallet Snapshot Detail",
+      "item": [
+        {
+          "name": "1. GET wallet snapshot by id - happy path",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "*/*" },
+              { "key": "Accept-Language", "value": "{{acceptLanguage}}" },
+              { "key": "Connection", "value": "{{connection}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Origin", "value": "{{origin}}" },
+              { "key": "Referer", "value": "{{referer}}" },
+              { "key": "Sec-Fetch-Dest", "value": "{{secFetchDest}}" },
+              { "key": "Sec-Fetch-Mode", "value": "{{secFetchMode}}" },
+              { "key": "Sec-Fetch-Site", "value": "{{secFetchSite}}" },
+              { "key": "User-Agent", "value": "{{userAgent}}" },
+              { "key": "channel", "value": "{{channel}}" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "latitude", "value": "{{latitude}}" },
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "longitude", "value": "{{longitude}}" },
+              { "key": "platform", "value": "{{platform}}" },
+              { "key": "platformType", "value": "{{platformType}}" },
+              { "key": "sec-ch-ua", "value": "{{secChUa}}" },
+              { "key": "sec-ch-ua-mobile", "value": "{{secChUaMobile}}" },
+              { "key": "sec-ch-ua-platform", "value": "{{secChUaPlatform}}" },
+              { "key": "toster_ID", "value": "{{tosterId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/wallet-snapshots/{{snapshotId}}",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "v1", "admin", "wallet-snapshots", "{{snapshotId}}" ]
+            },
+            "description": "Detail adds discrepancies and validationDetails on top of the list row shape. Header set is an exact match to the real captured curl."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('detail shape includes discrepancies and validationDetails', () => {",
+                  "  pm.expect(b).to.have.property('discrepancies');",
+                  "  pm.expect(b).to.have.property('validationDetails');",
+                  "  pm.expect(Array.isArray(b.validationDetails)).to.be.true;",
+                  "});",
+                  "pm.test('validationDetails is ordered by occurredAt ascending', () => {",
+                  "  const steps = b.validationDetails || [];",
+                  "  for (let i = 1; i < steps.length; i++) {",
+                  "    pm.expect(new Date(steps[i].occurredAt).getTime()).to.be.at.least(new Date(steps[i - 1].occurredAt).getTime());",
+                  "  }",
+                  "});",
+                  "pm.test('every validationDetails entry shares this snapshot\\'s runId', () => {",
+                  "  const steps = b.validationDetails || [];",
+                  "  if (steps.length > 0) {",
+                  "    const runId = steps[0].runId;",
+                  "    steps.forEach((s) => pm.expect(s.runId).to.eql(runId));",
+                  "  }",
+                  "});",
+                  "pm.test('reason equals the latest non-null event reason, or null if none', () => {",
+                  "  const steps = (b.validationDetails || []).filter((s) => s.reason !== null && s.reason !== undefined);",
+                  "  if (steps.length === 0) {",
+                  "    pm.expect(b.reason).to.be.null;",
+                  "  } else {",
+                  "    const latest = steps.reduce((a, c) => new Date(c.occurredAt) > new Date(a.occurredAt) ? c : a);",
+                  "    pm.expect(b.reason).to.eql(latest.reason);",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. GET wallet snapshot by id - not found (404 WALLET_SNAPSHOT_NOT_FOUND)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "*/*" },
+              { "key": "Accept-Language", "value": "{{acceptLanguage}}" },
+              { "key": "Connection", "value": "{{connection}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Origin", "value": "{{origin}}" },
+              { "key": "Referer", "value": "{{referer}}" },
+              { "key": "Sec-Fetch-Dest", "value": "{{secFetchDest}}" },
+              { "key": "Sec-Fetch-Mode", "value": "{{secFetchMode}}" },
+              { "key": "Sec-Fetch-Site", "value": "{{secFetchSite}}" },
+              { "key": "User-Agent", "value": "{{userAgent}}" },
+              { "key": "channel", "value": "{{channel}}" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "latitude", "value": "{{latitude}}" },
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "longitude", "value": "{{longitude}}" },
+              { "key": "platform", "value": "{{platform}}" },
+              { "key": "platformType", "value": "{{platformType}}" },
+              { "key": "sec-ch-ua", "value": "{{secChUa}}" },
+              { "key": "sec-ch-ua-mobile", "value": "{{secChUaMobile}}" },
+              { "key": "sec-ch-ua-platform", "value": "{{secChUaPlatform}}" },
+              { "key": "toster_ID", "value": "{{tosterId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/wallet-snapshots/{{missingSnapshotId}}",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "v1", "admin", "wallet-snapshots", "{{missingSnapshotId}}" ]
+            },
+            "description": "Per the ticket's tech notes this is currently only proven by a MOCKED integration test - this request is the live confirmation still owed (see docs/business-knowledge/EMI-6127-Refined-Ticket.md, Gap 7)."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 404', () => pm.response.to.have.status(404));",
+                  "const b = pm.response.json();",
+                  "pm.test('error code is WALLET_SNAPSHOT_NOT_FOUND', () => {",
+                  "  const code = b.code || b.errorCode || b.error;",
+                  "  pm.expect(String(code)).to.include('WALLET_SNAPSHOT_NOT_FOUND');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3. KNOWN DEFECT - validationDetails[].verificationSteps is always null",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "*/*" },
+              { "key": "Accept-Language", "value": "{{acceptLanguage}}" },
+              { "key": "Connection", "value": "{{connection}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Origin", "value": "{{origin}}" },
+              { "key": "Referer", "value": "{{referer}}" },
+              { "key": "Sec-Fetch-Dest", "value": "{{secFetchDest}}" },
+              { "key": "Sec-Fetch-Mode", "value": "{{secFetchMode}}" },
+              { "key": "Sec-Fetch-Site", "value": "{{secFetchSite}}" },
+              { "key": "User-Agent", "value": "{{userAgent}}" },
+              { "key": "channel", "value": "{{channel}}" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "latitude", "value": "{{latitude}}" },
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "longitude", "value": "{{longitude}}" },
+              { "key": "platform", "value": "{{platform}}" },
+              { "key": "platformType", "value": "{{platformType}}" },
+              { "key": "sec-ch-ua", "value": "{{secChUa}}" },
+              { "key": "sec-ch-ua-mobile", "value": "{{secChUaMobile}}" },
+              { "key": "sec-ch-ua-platform", "value": "{{secChUaPlatform}}" },
+              { "key": "toster_ID", "value": "{{tosterId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/wallet-snapshots/{{snapshotId}}",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "v1", "admin", "wallet-snapshots", "{{snapshotId}}" ]
+            },
+            "description": "KNOWN DEFECT (see collection description). Requires {{snapshotId}} to point at a snapshot whose event genuinely has verification-step data recorded. Expected to FAIL today: verificationSteps is always null due to the verificationSteps/verifications MapStruct name mismatch. Do not 'fix' this test to match the buggy response - it is a tripwire."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "const steps = b.validationDetails || [];",
+                  "pm.test('EXPECTED TO FAIL until fixed: at least one validationDetails entry has non-null verificationSteps', () => {",
+                  "  pm.expect(steps.some((s) => s.verificationSteps !== null && s.verificationSteps !== undefined)).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3. Negative / Auth (no token needed - confirmed live)",
+      "item": [
+        {
+          "name": "1. GET list - unauthenticated is rejected",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "*/*" },
+              { "key": "Accept-Language", "value": "{{acceptLanguage}}" },
+              { "key": "Connection", "value": "{{connection}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Origin", "value": "{{origin}}" },
+              { "key": "Referer", "value": "{{referer}}" },
+              { "key": "Sec-Fetch-Dest", "value": "{{secFetchDest}}" },
+              { "key": "Sec-Fetch-Mode", "value": "{{secFetchMode}}" },
+              { "key": "Sec-Fetch-Site", "value": "{{secFetchSite}}" },
+              { "key": "User-Agent", "value": "{{userAgent}}" },
+              { "key": "channel", "value": "{{channel}}" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "latitude", "value": "{{latitude}}" },
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "longitude", "value": "{{longitude}}" },
+              { "key": "platform", "value": "{{platform}}" },
+              { "key": "platformType", "value": "{{platformType}}" },
+              { "key": "sec-ch-ua", "value": "{{secChUa}}" },
+              { "key": "sec-ch-ua-mobile", "value": "{{secChUaMobile}}" },
+              { "key": "sec-ch-ua-platform", "value": "{{secChUaPlatform}}" },
+              { "key": "toster_ID", "value": "{{tosterId}}" }
+            ],
+            "auth": { "type": "noauth" },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/wallet-snapshots",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "v1", "admin", "wallet-snapshots" ]
+            },
+            "description": "Confirmed live against dev on 2026-09-29: answers 401 (not 404), proving the route is deployed in this environment. Every header except Authorization is still sent, matching a real client exactly - only the token is withheld."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 401 (route deployed, auth required - not 404)', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. GET detail - unauthenticated is rejected",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "*/*" },
+              { "key": "Accept-Language", "value": "{{acceptLanguage}}" },
+              { "key": "Connection", "value": "{{connection}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Origin", "value": "{{origin}}" },
+              { "key": "Referer", "value": "{{referer}}" },
+              { "key": "Sec-Fetch-Dest", "value": "{{secFetchDest}}" },
+              { "key": "Sec-Fetch-Mode", "value": "{{secFetchMode}}" },
+              { "key": "Sec-Fetch-Site", "value": "{{secFetchSite}}" },
+              { "key": "User-Agent", "value": "{{userAgent}}" },
+              { "key": "channel", "value": "{{channel}}" },
+              { "key": "device-finger-print", "value": "{{deviceFingerPrint}}" },
+              { "key": "latitude", "value": "{{latitude}}" },
+              { "key": "locale", "value": "{{locale}}" },
+              { "key": "longitude", "value": "{{longitude}}" },
+              { "key": "platform", "value": "{{platform}}" },
+              { "key": "platformType", "value": "{{platformType}}" },
+              { "key": "sec-ch-ua", "value": "{{secChUa}}" },
+              { "key": "sec-ch-ua-mobile", "value": "{{secChUaMobile}}" },
+              { "key": "sec-ch-ua-platform", "value": "{{secChUaPlatform}}" },
+              { "key": "toster_ID", "value": "{{tosterId}}" }
+            ],
+            "auth": { "type": "noauth" },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/wallet-snapshots/{{snapshotId}}",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "v1", "admin", "wallet-snapshots", "{{snapshotId}}" ]
+            },
+            "description": "Confirmed live against dev on 2026-09-29: answers 401 (not 404), proving the route is deployed in this environment. Every header except Authorization is still sent, matching a real client exactly - only the token is withheld."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 401 (route deployed, auth required - not 404)', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

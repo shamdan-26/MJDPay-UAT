@@ -63,6 +63,7 @@ test.describe('Transaction Summary — Commission and VAT Display (TS-01, TS-02,
 });
 
 test.describe('Transaction Summary — Top-Up Commission and VAT (TS-03, EMI-5621)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('TS-03: a top-up transaction summary should display commission and VAT', async ({ page }) => {

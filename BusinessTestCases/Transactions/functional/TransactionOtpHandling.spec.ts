@@ -55,6 +55,7 @@ test.describe('Transaction OTP — Configuration Update Persists (TO-01, EMI-562
 });
 
 test.describe('Transaction OTP — Max Attempts Restarts The Flow (TO-02, EMI-5560)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('TO-02: exceeding max OTP attempts should surface a clear message, not a raw server error', async ({ page }) => {
@@ -64,7 +65,7 @@ test.describe('Transaction OTP — Max Attempts Restarts The Flow (TO-02, EMI-55
 
         const { status, body } = await fetchJson(page, '/api/v1/otp/verify', {
             method: 'POST',
-            body: { otp: '000000', transactionTypeCode: '101003' },
+            body: { otp: '918512', transactionTypeCode: '101003' },
         });
 
         expect(status).toBe(400);

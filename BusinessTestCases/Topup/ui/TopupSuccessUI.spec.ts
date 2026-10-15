@@ -80,7 +80,7 @@ test.describe('Topup – Payment Success UI', { tag: ['@topup', '@ui'], annotati
     // reference/transaction ID, date, payment method or updated balance — so
     // the user can't confirm what they paid and QA can't trace it from here.
     // Un-skip once those details are added (and add locators for each).
-    test.skip('the success screen shows the amount and a transaction reference', async () => {
+    test('the success screen shows the amount and a transaction reference', async () => {
         const { topup } = session;
         const data = findTopupCase('VISA');
         await expect(topup.page.getByText(new RegExp(data.amount))).toBeVisible();
@@ -90,7 +90,7 @@ test.describe('Topup – Payment Success UI', { tag: ['@topup', '@ui'], annotati
     // KNOWN BUG: the page has an aria-live="polite" region but it is empty, so
     // the success message is never announced to screen readers. Un-skip once
     // the result message is rendered inside it.
-    test.skip('the success message is announced through the aria-live region', async () => {
+    test('the success message is announced through the aria-live region', async () => {
         const { topup } = session;
         await expect(topup.resultLiveRegion.filter({ hasText: /دفعة ناجحة|successful payment/i })).toHaveCount(1);
     });

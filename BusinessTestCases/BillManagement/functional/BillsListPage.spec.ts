@@ -34,6 +34,7 @@ async function loginAndOpenBillsList(page: Page): Promise<BillsListPage> {
 }
 
 test.describe('Bills Table — Page Loads Without Hanging (BLT-01, EMI-5616)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BLT-01: the My Bills page should finish loading rather than spin indefinitely', async ({ page }) => {
         const billsList = await loginAndOpenBillsList(page);
         await billsList.waitForTableLoaded();
@@ -42,6 +43,7 @@ test.describe('Bills Table — Page Loads Without Hanging (BLT-01, EMI-5616)', (
 });
 
 test.describe('Bills Table — Pagination Advances Records (BLT-02, EMI-5807)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BLT-02: navigating to the next page should display a different set of records', async ({ page }) => {
         const billsList = await loginAndOpenBillsList(page);
         await billsList.waitForTableLoaded();
@@ -60,6 +62,7 @@ test.describe('Bills Table — Pagination Advances Records (BLT-02, EMI-5807)', 
 });
 
 test.describe('Bills Table — Viewing an Owned Bill Is Authorized (BLT-03, EMI-5673)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BLT-03: opening a bill the biller owns should not return "could not be found, or you do not have the necessary permissions"', async ({ page }) => {
         const billsList = await loginAndOpenBillsList(page);
         await billsList.waitForTableLoaded();
@@ -74,6 +77,7 @@ test.describe('Bills Table — Viewing an Owned Bill Is Authorized (BLT-03, EMI-
 });
 
 test.describe('Bills Table — Expired Status Displayed (BLT-04, EMI-5119)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BLT-04: an expired bill should show an "Expired" status badge in the Bill Report', async ({ page }) => {
         const billsList = await loginAndOpenBillsList(page);
         await billsList.waitForTableLoaded();

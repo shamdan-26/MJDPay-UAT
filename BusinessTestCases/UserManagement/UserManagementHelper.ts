@@ -1,4 +1,6 @@
 import type { Page } from '@playwright/test';
+import { waitForToastClear } from '../toastMessages';
+import { ADMIN_BASE_URL } from '../pageElements/Shared/AdminOtpConfigPage';
 
 /**
  * Manage Accounts → Manage Users (Business web portal).
@@ -99,31 +101,33 @@ export function mockUser(overrides: Partial<MockUser> & { firstName: string; las
 export async function fetchJson(
     page: Page,
     path: string,
-    options: { method?: string; body?: unknown } = {}
+    options: { method?: string; body?: unknown; headers?: Record<string, string> } = {}
 ): Promise<{ status: number; body: unknown }> {
     const url = `${BASE_URL}${path}`;
     return page.evaluate(
-        async ({ url, method, body }) => {
+        async ({ url, method, body, headers }) => {
             const res = await fetch(url, {
                 method: method ?? 'GET',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', ...(headers ?? {}) },
                 body: body !== undefined ? JSON.stringify(body) : undefined,
             });
             const parsedBody = await res.json().catch(() => null);
             return { status: res.status, body: parsedBody };
         },
-        { url, method: options.method, body: options.body }
+        { url, method: options.method, body: options.body, headers: options.headers }
     );
 }
 
 export async function gotoManageUsers(page: Page): Promise<void> {
     await page.goto(MANAGE_USERS_URL);
     await page.waitForLoadState('domcontentloaded');
+    await waitForToastClear(page);
 }
 
 export async function gotoGroupsAndRoles(page: Page): Promise<void> {
     await page.goto(GROUPS_ROLES_URL);
     await page.waitForLoadState('domcontentloaded');
+    await waitForToastClear(page);
 }
 
 // ── Users list ───────────────────────────────────────────────────────────
@@ -428,4 +432,348 @@ export async function mockResetPasswordForbidden(page: Page): Promise<void> {
     await page.route('**/api/v1/**reset-password**', route =>
         route.fulfill({ status: 403, contentType: 'application/json', body: JSON.stringify({ message: { plainText: 'Forbidden' } }) })
     );
+}
+
+// ═════════════════════════════════════════════════════════════════════════
+// Scope-aware RBAC — EMI-5956 (FE Web Business) / EMI-5957 (FE Web Admin)
+// ═════════════════════════════════════════════════════════════════════════
+//
+// EMI-5956 and EMI-5957 moved Groups / Roles / Privileges off the generic
+// `/api/v1/{groups,roles}` paths used higher up in this file and onto
+// scope-specific ones. Unlike that older block, every path below IS confirmed —
+// each is quoted verbatim in a ticket description or curl repro:
+//
+//   GET    /custom/groups?page&size                   EMI-6029, EMI-6004
+//   GET    /custom/roles?page&size                    EMI-6029, EMI-6005, EMI-6004
+//   GET    /groups/roles/custom/privileges?page&size  EMI-6027, EMI-6016  (tenant scope)
+//   GET    /groups/roles/privileges?page&size         EMI-5999, EMI-6016  (system scope)
+//   GET    /emi-profile/api/v1/groups/admin/staff     EMI-6066
+//   PUT    /groups/{groupId}/roles                    EMI-6000
+//   PUT    /groups/{groupId}/roles/remove             EMI-6000
+//   DELETE /groups/{groupId}                          EMI-6001, EMI-5986
+//   DELETE /groups/roles/{roleId}                     EMI-6001, EMI-5985
+//
+// Screen under test is `/business/main/groups-management` (EMI-6026, EMI-6029) —
+// note this is NOT the `/business/main/groups-roles` path GROUPS_ROLES_URL
+// still points at. Both are kept: the older specs were written against the
+// older route, and no ticket says the old one 404s.
+
+export const GROUPS_MANAGEMENT_URL = `${BASE_URL}/business/main/groups-management`;
+export const ADMIN_EXTERNAL_PARTY_URL = `${ADMIN_BASE_URL}/admin/main/external-part`;
+export const ADMIN_USERS_URL = `${ADMIN_BASE_URL}/admin/main/manage-users`;
+
+export const CUSTOM_GROUPS_API      = '**/custom/groups**';
+export const CUSTOM_ROLES_API       = '**/custom/roles**';
+export const CUSTOM_PRIVILEGES_API  = '**/groups/roles/custom/privileges**';
+export const SYSTEM_PRIVILEGES_API  = '**/groups/roles/privileges**';
+export const ADMIN_STAFF_GROUPS_API = '**/emi-profile/api/v1/groups/admin/staff**';
+export const GROUP_ROLES_ASSIGN_API = '**/groups/*/roles';
+export const GROUP_ROLES_REMOVE_API = '**/groups/*/roles/remove';
+export const GROUP_DELETE_API       = '**/groups/*';
+export const ROLE_DELETE_API        = '**/groups/roles/*';
+export const EXTERNAL_PARTY_ROLES_API = '**/external-part**role**';
+
+/** Privilege code EMI-6026 names as the gate on the Create Group action. */
+export const CREATE_GROUP_PRIVILEGE = 'CREATE_BUSINESS_GROUP';
+/** Obsolete privilege EMI-5999 requires to disappear from the system list. */
+export const OBSOLETE_PRIVILEGE = { id: 220, name: 'Get Groups Settings', code: 'GET_GROUPS_SETTINGS' };
+
+/**
+ * A group/role row carrying BOTH locales. EMI-6004 requires `descriptionAr` on
+ * every listing DTO; EMI-6005 requires the Arabic table to render `nameAr`;
+ * EMI-5972 is the same defect surfacing as a blank Name column in Arabic.
+ */
+export interface LocalizedEntity {
+    id: number;
+    name: string;
+    nameAr: string | null;
+    description: string;
+    descriptionAr: string | null;
+    isSystem: boolean;
+    usersCount?: number;
+}
+
+export function localizedGroups(): LocalizedEntity[] {
+    return [
+        { id: 1, name: 'Biller checker', nameAr: 'مدقق الفواتير', description: 'Biller checker', descriptionAr: 'مدقق الفواتير', isSystem: false, usersCount: 3 },
+        { id: 2, name: 'FINANCE',        nameAr: 'المالية',       description: 'Finance group', descriptionAr: 'مجموعة المالية', isSystem: false, usersCount: 1 },
+        { id: 3, name: 'System Admins',  nameAr: 'مدراء النظام',  description: 'System group',  descriptionAr: 'مجموعة النظام',  isSystem: true,  usersCount: 2 },
+    ];
+}
+
+export function localizedRoles(): LocalizedEntity[] {
+    return [
+        { id: 11, name: 'Maker',       nameAr: 'المُنشئ',      description: 'Creates requests',  descriptionAr: 'ينشئ الطلبات',  isSystem: false, usersCount: 2 },
+        { id: 12, name: 'Checker',     nameAr: 'المُدقق',      description: 'Approves requests', descriptionAr: 'يعتمد الطلبات', isSystem: false, usersCount: 1 },
+        { id: 13, name: 'Super Admin', nameAr: 'المدير العام', description: 'System role',       descriptionAr: 'دور النظام',    isSystem: true,  usersCount: 1 },
+    ];
+}
+
+function pageBody(content: unknown[]): string {
+    return JSON.stringify({ content, totalElements: content.length, totalPages: 1, size: 10, number: 0 });
+}
+
+// ── Scoped listings (EMI-5956 / EMI-5957, EMI-6004, EMI-6005, EMI-5972) ──
+
+export async function mockCustomGroupsAndRoles(
+    page: Page,
+    groups: LocalizedEntity[] = localizedGroups(),
+    roles: LocalizedEntity[] = localizedRoles()
+): Promise<void> {
+    await page.route(CUSTOM_GROUPS_API, route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(groups) })
+    );
+    await page.route(CUSTOM_ROLES_API, route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(roles) })
+    );
+}
+
+/**
+ * EMI-6004 pre-fix state: the listing DTOs carry `description` but drop
+ * `descriptionAr` — and, per EMI-5972 / EMI-6005, `nameAr` — entirely, so an
+ * Arabic UI has nothing to render and shows a blank Name column.
+ */
+export async function mockCustomListingsWithoutArabicFields(page: Page): Promise<void> {
+    const strip = (rows: LocalizedEntity[]) =>
+        rows.map(({ id, name, description, isSystem, usersCount }) => ({ id, name, description, isSystem, usersCount }));
+    await page.route(CUSTOM_GROUPS_API, route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(strip(localizedGroups())) })
+    );
+    await page.route(CUSTOM_ROLES_API, route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(strip(localizedRoles())) })
+    );
+}
+
+/**
+ * Counts how many times a glob was requested. EMI-6029 (a tab switch fires each
+ * listing twice) and EMI-6000 (Save fires both add- and remove-roles) are both
+ * "how many calls went out", not "what came back" — so the counter sits in front
+ * of the mock and hands off with `route.fallback()`.
+ *
+ * Register this AFTER the mock that fulfils. page.route() handlers run
+ * last-registered-first, so the counter has to be the NEWEST registration to
+ * see the request at all; it then hands off with route.fallback() to the
+ * earlier-registered handler that actually responds. Registering it first
+ * means the fulfilling mock answers and the counter never runs, silently
+ * reading zero.
+ */
+export function countRequests(page: Page, glob: string): { count: () => number } {
+    let seen = 0;
+    void page.route(glob, async route => {
+        seen += 1;
+        await route.fallback();
+    });
+    return { count: () => seen };
+}
+
+// ── Privilege scoping (EMI-6016, EMI-6027, EMI-5999) ─────────────────────
+
+const ALL_PRIVILEGES = [
+    { id: 101, name: 'Create Bill',        code: 'CREATE_BILL' },
+    { id: 102, name: 'Get All Privileges', code: 'GET_ALL_PRIVILEGES' },
+    { id: 103, name: 'Create Group',       code: CREATE_GROUP_PRIVILEGE },
+    { id: 104, name: 'Delete Group',       code: 'DELETE_BUSINESS_GROUP' },
+];
+
+/**
+ * EMI-6016 fixed behaviour: the privileges list is filtered to what the caller
+ * actually holds, so a restricted user cannot grant themselves — or anyone
+ * else — a privilege they do not have (privilege escalation).
+ */
+export async function mockPrivilegesScopedToCaller(page: Page, held: string[]): Promise<void> {
+    const content = ALL_PRIVILEGES.filter(p => held.includes(p.code));
+    for (const glob of [CUSTOM_PRIVILEGES_API, SYSTEM_PRIVILEGES_API]) {
+        await page.route(glob, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(content) })
+        );
+    }
+}
+
+/** EMI-6016 pre-fix state: the full system privilege list, unfiltered. */
+export async function mockPrivilegesUnscoped(page: Page): Promise<void> {
+    for (const glob of [CUSTOM_PRIVILEGES_API, SYSTEM_PRIVILEGES_API]) {
+        await page.route(glob, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(ALL_PRIVILEGES) })
+        );
+    }
+}
+
+/** EMI-6027 fixed behaviour: no "Get All privilege" -> 403 UNAUTHORIZED_USER. */
+export async function mockCustomPrivilegesForbidden(page: Page): Promise<void> {
+    await page.route(CUSTOM_PRIVILEGES_API, route =>
+        route.fulfill({
+            status: 403,
+            contentType: 'application/json',
+            body: JSON.stringify([{
+                httpStatusCode: 403,
+                message: { messageCode: 'UNAUTHORIZED_USER', plainText: 'You are not authorized to perform this action' },
+            }]),
+        })
+    );
+}
+
+/** EMI-6027 pre-fix state: 200 OK, full privilege list leaked to an unauthorised caller. */
+export async function mockCustomPrivilegesLeaked(page: Page): Promise<void> {
+    await page.route(CUSTOM_PRIVILEGES_API, route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(ALL_PRIVILEGES) })
+    );
+}
+
+/** EMI-5999 pre-fix state: the retired "Get Groups Settings" (id 220) is still assignable. */
+export async function mockSystemPrivilegesIncludingObsolete(page: Page): Promise<void> {
+    await page.route(SYSTEM_PRIVILEGES_API, route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: pageBody([...ALL_PRIVILEGES, OBSOLETE_PRIVILEGE]) })
+    );
+}
+
+/**
+ * Drives the UI's own privilege gate (EMI-6026). The Create Group control must
+ * be hidden or disabled when CREATE_BUSINESS_GROUP is absent — it must never
+ * open the modal and then fail with an error toast.
+ */
+export async function mockCallerPrivileges(page: Page, held: string[]): Promise<void> {
+    await page.route(PRIVILEGES_API, route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ privileges: held }) })
+    );
+}
+
+// ── Group / role deletion (EMI-5985, EMI-5986, EMI-6001) ─────────────────
+
+export async function mockDeleteGroupSuccess(page: Page): Promise<void> {
+    await page.route(GROUP_DELETE_API, route => {
+        if (route.request().method() !== 'DELETE') return route.fallback();
+        return route.fulfill({ status: 204, body: '' });
+    });
+}
+
+/** EMI-5986 pre-fix state: DELETE /groups/{id} blew up with a 500. */
+export async function mockDeleteGroupServerError(page: Page): Promise<void> {
+    await page.route(GROUP_DELETE_API, route => {
+        if (route.request().method() !== 'DELETE') return route.fallback();
+        return route.fulfill({
+            status: 500,
+            contentType: 'application/json',
+            body: JSON.stringify([{
+                httpStatusCode: 500,
+                message: { messageCode: 'INTERNAL_SERVER_ERROR', plainText: 'Failed to process your request.Please contact support.' },
+            }]),
+        });
+    });
+}
+
+export async function mockDeleteRoleSuccess(page: Page): Promise<void> {
+    await page.route(ROLE_DELETE_API, route => {
+        if (route.request().method() !== 'DELETE') return route.fallback();
+        return route.fulfill({ status: 204, body: '' });
+    });
+}
+
+/**
+ * EMI-6001: a system entity (isSystem = true) must not be deletable. If the UI
+ * ever does fire the call, the backend answers with
+ * SystemEntityCannotBeModifiedException rather than deleting it.
+ */
+export async function mockDeleteSystemEntityRejected(page: Page): Promise<void> {
+    for (const glob of [GROUP_DELETE_API, ROLE_DELETE_API]) {
+        await page.route(glob, route => {
+            if (route.request().method() !== 'DELETE') return route.fallback();
+            return route.fulfill({
+                status: 400,
+                contentType: 'application/json',
+                body: JSON.stringify([{
+                    httpStatusCode: 400,
+                    message: { messageCode: 'SYSTEM_ENTITY_CANNOT_BE_MODIFIED', plainText: 'System groups/roles cannot be modified or deleted' },
+                }]),
+            });
+        });
+    }
+}
+
+// ── Group role assignment diffing (EMI-6000) ─────────────────────────────
+
+export async function mockGroupRoleAssignmentSuccess(page: Page): Promise<void> {
+    // Remove is registered first so the more specific /roles/remove glob is
+    // matched by the later, narrower handler — Playwright runs the most
+    // recently registered handler first.
+    await page.route(GROUP_ROLES_ASSIGN_API, route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ assigned: true }) })
+    );
+    await page.route(GROUP_ROLES_REMOVE_API, route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ removed: true }) })
+    );
+}
+
+// ── Admin staff groups & external parties (EMI-6066, EMI-6067) ───────────
+
+export async function mockAdminStaffGroups(page: Page, groups = localizedGroups()): Promise<void> {
+    await page.route(ADMIN_STAFF_GROUPS_API, route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(groups) })
+    );
+}
+
+/** EMI-6066 pre-fix state: GET /groups/admin/staff 500s, so the Group dropdown is empty. */
+export async function mockAdminStaffGroupsServerError(page: Page): Promise<void> {
+    await page.route(ADMIN_STAFF_GROUPS_API, route =>
+        route.fulfill({
+            status: 500,
+            contentType: 'application/json',
+            body: JSON.stringify([{
+                httpStatusCode: 500,
+                message: { messageCode: 'INTERNAL_SERVER_ERROR', plainText: 'Failed to process your request.Please contact support.' },
+            }]),
+        })
+    );
+}
+
+export async function mockExternalPartyRoles(page: Page, roles = localizedRoles()): Promise<void> {
+    await page.route(EXTERNAL_PARTY_ROLES_API, route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(roles) })
+    );
+    // EMI-6067 does not name the endpoint the modal reads from, only that the
+    // dropdown is empty. Serving the standard Admin role source too means the
+    // test passes whichever of the two the modal actually calls.
+    await page.route(CUSTOM_ROLES_API, route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(roles) })
+    );
+}
+
+/** EMI-6067 pre-fix state: the Role dropdown source returns nothing at all. */
+export async function mockExternalPartyRolesEmpty(page: Page): Promise<void> {
+    for (const glob of [EXTERNAL_PARTY_ROLES_API, CUSTOM_ROLES_API]) {
+        await page.route(glob, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: pageBody([]) })
+        );
+    }
+}
+
+/**
+ * EMI-6038 pre-fix state: POST /users returns the created user, but the
+ * follow-up list call comes back empty so the new row never appears.
+ */
+export async function mockCreateUserThenEmptyList(page: Page): Promise<void> {
+    const created = mockUser({ firstName: 'New', lastName: 'Staff' });
+    await page.route(USERS_API, route => {
+        if (route.request().method() === 'POST') {
+            return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(created) });
+        }
+        return route.fulfill({ status: 200, contentType: 'application/json', body: pageBody([]) });
+    });
+}
+
+export async function gotoGroupsManagement(page: Page): Promise<void> {
+    await page.goto(GROUPS_MANAGEMENT_URL);
+    await page.waitForLoadState('domcontentloaded');
+    await waitForToastClear(page);
+}
+
+export async function gotoAdminExternalParties(page: Page): Promise<void> {
+    await page.goto(ADMIN_EXTERNAL_PARTY_URL);
+    await page.waitForLoadState('domcontentloaded');
+    await waitForToastClear(page);
+}
+
+export async function gotoAdminUsers(page: Page): Promise<void> {
+    await page.goto(ADMIN_USERS_URL);
+    await page.waitForLoadState('domcontentloaded');
+    await waitForToastClear(page);
 }

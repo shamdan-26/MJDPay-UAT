@@ -102,7 +102,7 @@ Three things follow:
 
 3. **412 suggests the device fingerprint is validated against the platform's
    secret key.** The placeholder `test-fingerprint-hash-api-testing` inherited
-   from `Login/api/LoginAPIFlow.spec.ts` is accepted by the auth endpoints but
+   from `Login/api/signin/` is accepted by the auth endpoints but
    probably not by the POS routes — a real provisioned fingerprint may be needed
    via `POS_DEVICE_FINGERPRINT`.
 

@@ -14,6 +14,7 @@ import {
     uniqueItemName,
     parseMoney,
     expectedItemTotal,
+    expectedItemTotalLineDiscount,
 } from '../BillManagementHelper';
 import { LOGIN_URL, getOtpFromDb } from '../../Login/LoginHelper';
 
@@ -96,6 +97,7 @@ async function loginAndOpenExistingBillForEdit(page: Page): Promise<{ createBill
  * ------------------------------------------------------------------ */
 
 test.describe('Bill Items — At Least One Item Required (BI-01, BI-02)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BI-01: creating a Detailed Bill after deleting every item should be blocked with a validation error (EMI-4069)', async ({ page }) => {
         const { createBill, items } = await loginAndOpenDetailedBill(page);
 
@@ -135,6 +137,7 @@ test.describe('Bill Items — At Least One Item Required (BI-01, BI-02)', () => 
  * ------------------------------------------------------------------ */
 
 test.describe('Bill Items — Calculation Correctness (BI-03, BI-04, BI-05, BI-06)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BI-03: an item with a Fixed discount should total (unitPrice - discount) x quantity (EMI-4123)', async ({ page }) => {
         const { items } = await loginAndOpenDetailedBill(page);
 
@@ -186,6 +189,9 @@ test.describe('Bill Items — Calculation Correctness (BI-03, BI-04, BI-05, BI-0
         const { items } = await loginAndOpenDetailedBill(page);
 
         await items.addItem({ name: uniqueItemName(), quantity: '3', unitPrice: '25' });
+        await items.goToItemInfoStep();
+        const totalBefore = parseMoney(await items.summaryTotalAmount.textContent());
+        await items.backButton.click();
 
         const failedCalls: number[] = [];
         page.on('response', res => {
@@ -196,6 +202,45 @@ test.describe('Bill Items — Calculation Correctness (BI-03, BI-04, BI-05, BI-0
         await expect(items.itemRows).toHaveCount(1, { timeout: 10000 });
 
         expect(failedCalls, `/bills/calculate returned server errors: ${failedCalls.join(', ')}`).toHaveLength(0);
+
+        // Positive assertion: the absence of a 500 isn't proof the edit actually
+        // took effect — confirm the discount is reflected in the recomputed total.
+        await items.goToItemInfoStep();
+        await expect
+            .poll(async () => parseMoney(await items.summaryTotalAmount.textContent()), { timeout: 10000 })
+            .not.toBe(totalBefore);
+    });
+
+    test('BI-26: characterizes which EMI-4121 discount interpretation is currently live (unit-price vs. line-total)', async ({ page }) => {
+        const { items } = await loginAndOpenDetailedBill(page);
+
+        // unit price 20, qty 3, fixed discount 5:
+        //   unit-price interpretation (current expectedItemTotal):        (20-5) x 3 = 45
+        //   line-total interpretation (expectedItemTotalLineDiscount):  (20x3) - 5  = 55
+        // These deliberately differ so the actual total pins down which one the
+        // app implements today — EMI-4121 is still an open inquiry, so this test
+        // documents current behavior rather than asserting either is "correct".
+        // If this starts failing, the app's behavior changed and BOTH
+        // expectedItemTotal() and BI-03/BI-04's hard-coded expectations need
+        // revisiting, not just this test.
+        await items.addItem({
+            name: uniqueItemName(),
+            quantity: '3',
+            unitPrice: '20',
+            discountType: 'Fixed',
+            discountValue: '5',
+        });
+
+        const total = parseMoney(await items.getItemTotal(0));
+        const unitPriceInterpretation = expectedItemTotal(20, 3, 5, 'FIXED');
+        const lineTotalInterpretation = expectedItemTotalLineDiscount(20, 3, 5, 'FIXED');
+
+        expect(
+            total === unitPriceInterpretation || total === lineTotalInterpretation,
+            `Item total ${total} matches neither EMI-4121 interpretation ` +
+            `(unit-price: ${unitPriceInterpretation}, line-total: ${lineTotalInterpretation})`
+        ).toBe(true);
+        expect(total).toBe(unitPriceInterpretation); // current implementation — see comment above
     });
 
     test('BI-06: a bill with more than two items should total the sum of every item, not a subset (EMI-2952)', async ({ page }) => {
@@ -218,6 +263,7 @@ test.describe('Bill Items — Calculation Correctness (BI-03, BI-04, BI-05, BI-0
  * ------------------------------------------------------------------ */
 
 test.describe('Bill Items — Discount Behaviour (BI-07, BI-08, BI-09, BI-10, BI-11)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BI-07: editing an item discount should update the total bill amount immediately (EMI-3965)', async ({ page }) => {
         const { items } = await loginAndOpenDetailedBill(page);
 
@@ -307,6 +353,7 @@ test.describe('Bill Items — Discount Behaviour (BI-07, BI-08, BI-09, BI-10, BI
  * ------------------------------------------------------------------ */
 
 test.describe('Bill Items — VAT Field (BI-12)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BI-12: VAT should stay optional when editing an item, exactly as it is when adding one (EMI-3957)', async ({ page }) => {
         const { items } = await loginAndOpenDetailedBill(page);
 
@@ -326,6 +373,7 @@ test.describe('Bill Items — VAT Field (BI-12)', () => {
  * ------------------------------------------------------------------ */
 
 test.describe('Bill Items — Deletion (BI-13, BI-14, BI-15, BI-16, BI-17)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BI-13: deleting the last remaining item should raise a confirmation dialog, and confirming should remove it (EMI-1988, EMI-2590)', async ({ page }) => {
         const { items } = await loginAndOpenDetailedBill(page);
 
@@ -416,6 +464,7 @@ test.describe('Bill Items — Deletion (BI-13, BI-14, BI-15, BI-16, BI-17)', () 
  * ------------------------------------------------------------------ */
 
 test.describe('Bill Items — Editing an Existing Bill (BI-18, BI-19, BI-20)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BI-18: adding an item while editing a bill should compute its total and preserve the existing items (EMI-3305)', async ({ page }) => {
         const { createBill, items, billsList } = await loginAndOpenExistingBillForEdit(page);
 
@@ -472,6 +521,7 @@ test.describe('Bill Items — Editing an Existing Bill (BI-18, BI-19, BI-20)', (
  * ------------------------------------------------------------------ */
 
 test.describe('Bill Items — Add Item Form Validation (BI-21, BI-22)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BI-21: leaving Discount Type and Discount empty should still allow the item to be added (EMI-1930)', async ({ page }) => {
         const { items } = await loginAndOpenDetailedBill(page);
 
@@ -505,6 +555,7 @@ test.describe('Bill Items — Add Item Form Validation (BI-21, BI-22)', () => {
  * ------------------------------------------------------------------ */
 
 test.describe('Bill Items — Edit-Bill Server Errors (BI-23, BI-24)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BI-23: adding an item in the Edit Item step and returning to Edit Bill should not return a 500 (EMI-1912)', async ({ page }) => {
         const { items, billsList } = await loginAndOpenExistingBillForEdit(page);
 
@@ -520,12 +571,18 @@ test.describe('Bill Items — Edit-Bill Server Errors (BI-23, BI-24)', () => {
         });
 
         await items.goToEditItemStep();
-        await items.addItem({ name: uniqueItemName('QA-500'), quantity: '1', unitPrice: '30' });
+        const newItemName = uniqueItemName('QA-500');
+        await items.addItem({ name: newItemName, quantity: '1', unitPrice: '30' });
 
         // The bug fired here: the item saved fine, then this navigation 500'd.
         await items.goToEditBillStep();
 
         expect(serverErrors, `Server errors during edit-item -> edit-bill: ${serverErrors.join(', ')}`).toHaveLength(0);
+
+        // Positive assertion: the absence of a 500 isn't proof the added item
+        // actually persisted — reopen Edit Item and confirm it's still there.
+        await items.goToEditItemStep();
+        await expect(items.itemRowByName(newItemName)).toBeVisible({ timeout: 10000 });
     });
 
     test('BI-24: editing an existing item with a valid discount should not be blocked by discount validation (EMI-1709)', async ({ page }) => {
@@ -554,6 +611,7 @@ test.describe('Bill Items — Edit-Bill Server Errors (BI-23, BI-24)', () => {
  * ------------------------------------------------------------------ */
 
 test.describe('Bill Items — Product As Item (BI-25)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('BI-25: picking a saved product in the create-bill step should add it as a priced line item (EMI-3060)', async ({ page }) => {
         const { items } = await loginAndOpenDetailedBill(page);
 
@@ -572,6 +630,7 @@ test.describe('Bill Items — Product As Item (BI-25)', () => {
  * ------------------------------------------------------------------ */
 
 test.describe('Bill Items — Get Bill By ID Response (BI-26)', () => {
+    test.describe.configure({ mode: 'serial' });
     // Asserted against the browser's own GET /bills/{id} call rather than in an
     // api/ folder: the bills endpoints need a Biller accessToken, and the repo
     // has no token helper for the BillManagement fixture account (LoginAPIFlow

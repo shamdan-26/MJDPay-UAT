@@ -1,0 +1,2164 @@
+{
+  "item": [
+    {
+      "id": "ad2c9173-b127-444b-82ce-cea496df35ef",
+      "name": "type-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "30d60f9c-e9d0-4308-9486-975f26c22512",
+          "name": "get All",
+          "request": {
+            "name": "get All",
+            "description": {},
+            "url": {
+              "path": [
+                "types"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/types"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1f9ae385-558f-4604-8500-deda0b9b62ee",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "c"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -36681333,\n    \"name\": \"incididunt in Lorem\",\n    \"code\": \"in Excepteur\",\n    \"description\": \"tempor culpa dolor\"\n  },\n  {\n    \"id\": -17231814,\n    \"name\": \"veniam exercitation\",\n    \"code\": \"in exercitation nulla\",\n    \"description\": \"cillum aliqua\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "78dd00ae-1682-4f6f-ac59-01c0ebf725db",
+          "name": "update",
+          "request": {
+            "name": "update",
+            "description": {},
+            "url": {
+              "path": [
+                "types"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/types"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"aliquip\",\n  \"code\": \"nostrud sed et exercitation Excepteur\",\n  \"description\": \"sunt\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "64f2bc07-4757-4e5e-afd8-5f24083342c6",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "c"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"aliquip\",\n  \"code\": \"nostrud sed et exercitation Excepteur\",\n  \"description\": \"sunt\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -53775007,\n  \"name\": \"Ut amet dolore\",\n  \"code\": \"Ut enim\",\n  \"description\": \"occaecat ut nisi\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ab920f32-7d7f-4252-a3a1-1061a44a5a17",
+          "name": "create",
+          "request": {
+            "name": "create",
+            "description": {},
+            "url": {
+              "path": [
+                "types"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/types"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"aliquip\",\n  \"code\": \"nostrud sed et exercitation Excepteur\",\n  \"description\": \"sunt\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7cb49acb-1eb3-4504-90ab-c268a5af15ec",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "c"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"aliquip\",\n  \"code\": \"nostrud sed et exercitation Excepteur\",\n  \"description\": \"sunt\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -53775007,\n  \"name\": \"Ut amet dolore\",\n  \"code\": \"Ut enim\",\n  \"description\": \"occaecat ut nisi\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "474d99d9-f489-446a-9b20-230f483512a3",
+          "name": "get By Id",
+          "request": {
+            "name": "get By Id",
+            "description": {},
+            "url": {
+              "path": [
+                "types",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-11166112",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/types/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "15da3f1d-dbf9-4b15-96b9-99d35cbba564",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "types",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-11166112",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "c"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -53775007,\n  \"name\": \"Ut amet dolore\",\n  \"code\": \"Ut enim\",\n  \"description\": \"occaecat ut nisi\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b6e43cdb-8fb6-487e-be32-4d122a753ec3",
+          "name": "delete",
+          "request": {
+            "name": "delete",
+            "description": {},
+            "url": {
+              "path": [
+                "types",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-11166112",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/types/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b644e921-8899-4392-a4f7-c68d85a9d41e",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "types",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-11166112",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "c"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "28691440-f60a-496d-bbdc-4fcfb61fe046",
+      "name": "settings-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a1b9c370-9556-4af2-86c3-3c928d3c7a95",
+          "name": "get By Id 1",
+          "request": {
+            "name": "get By Id 1",
+            "description": {},
+            "url": {
+              "path": [
+                "settings",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-11166112",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/settings/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "88ff1674-624c-4f89-903c-8c8e6b6faaeb",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-11166112",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "c"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -32254775,\n  \"maxAllowedSize\": -79461599,\n  \"directoryPattern\": \"pariatur non\",\n  \"type\": {\n    \"id\": -83514215,\n    \"name\": \"dolore Ut id ut D\",\n    \"code\": \"et cillum sed\",\n    \"description\": \"eu adipisicing consectetur cillum\"\n  },\n  \"extensions\": [\n    {\n      \"id\": -1601788,\n      \"name\": \"id\",\n      \"code\": \"mollit Duis laborum ipsum\",\n      \"description\": \"aute veniam occaecat nulla\"\n    },\n    {\n      \"id\": 26912853,\n      \"name\": \"amet magna esse enim\",\n      \"code\": \"aliquip do dolor\",\n      \"description\": \"ullamco proident ex ea\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b68a8bf9-cead-4afa-b8cb-19be49c33ddb",
+          "name": "update 1",
+          "request": {
+            "name": "update 1",
+            "description": {},
+            "url": {
+              "path": [
+                "settings",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-11166112",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/settings/:id"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"maxAllowedSize\": 83602783,\n  \"directoryPattern\": \"do in dolor\",\n  \"type\": {\n    \"name\": \"labore dolore minim\",\n    \"code\": \"in consectetur\",\n    \"description\": \"velit\"\n  },\n  \"extensions\": [\n    {\n      \"name\": \"culpa occaecat aliqua deserunt ut\",\n      \"code\": \"minim Lorem amet\",\n      \"description\": \"tempor sit\"\n    },\n    {\n      \"name\": \"labore aliqua\",\n      \"code\": \"consequat do cillum in sint\",\n      \"description\": \"Ut do ad\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bfa02ccf-8dda-41e3-8da5-dd90c94a3ce4",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-11166112",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "c"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"maxAllowedSize\": 45836904,\n  \"directoryPattern\": \"sed sunt in\",\n  \"type\": {\n    \"name\": \"aliqua irure\",\n    \"code\": \"Ut dolor nisi consectetur\",\n    \"description\": \"do culpa in eiusmod\"\n  },\n  \"extensions\": [\n    {\n      \"name\": \"culpa minim reprehenderit\",\n      \"code\": \"ipsum\",\n      \"description\": \"dolor Excepteur labor\"\n    },\n    {\n      \"name\": \"qui off\",\n      \"code\": \"ut\",\n      \"description\": \"aliqua incididunt\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -32254775,\n  \"maxAllowedSize\": -79461599,\n  \"directoryPattern\": \"pariatur non\",\n  \"type\": {\n    \"id\": -83514215,\n    \"name\": \"dolore Ut id ut D\",\n    \"code\": \"et cillum sed\",\n    \"description\": \"eu adipisicing consectetur cillum\"\n  },\n  \"extensions\": [\n    {\n      \"id\": -1601788,\n      \"name\": \"id\",\n      \"code\": \"mollit Duis laborum ipsum\",\n      \"description\": \"aute veniam occaecat nulla\"\n    },\n    {\n      \"id\": 26912853,\n      \"name\": \"amet magna esse enim\",\n      \"code\": \"aliquip do dolor\",\n      \"description\": \"ullamco proident ex ea\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d202c227-9cb2-467b-b1de-1aaf233f8b05",
+          "name": "delete 1",
+          "request": {
+            "name": "delete 1",
+            "description": {},
+            "url": {
+              "path": [
+                "settings",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-11166112",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/settings/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6452ea6d-a4db-45f1-87a3-fa1c5dd607d8",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-11166112",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "c"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "241f292d-4e7f-4a9a-bca7-f34da3b02430",
+          "name": "get All 1",
+          "request": {
+            "name": "get All 1",
+            "description": {},
+            "url": {
+              "path": [
+                "settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/settings"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5a7c7687-6766-485e-a101-e32e556653e9",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "c"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -18188354,\n    \"maxAllowedSize\": -92658751,\n    \"directoryPattern\": \"Ut quis\",\n    \"type\": {\n      \"id\": -67381936,\n      \"name\": \"labore ad ea\",\n      \"code\": \"eu non adipisicing est\",\n      \"description\": \"reprehenderit nisi dolor\"\n    },\n    \"extensions\": [\n      {\n        \"id\": 22788711,\n        \"name\": \"ut\",\n        \"code\": \"deserunt laboris consectetur ad cupidatat\",\n        \"description\": \"est eiusmod do in\"\n      },\n      {\n        \"id\": -78569529,\n        \"name\": \"aliquip ullamco minim labore\",\n        \"code\": \"minim ipsum d\",\n        \"description\": \"aliqua culpa laboris quis\"\n      }\n    ]\n  },\n  {\n    \"id\": 29505806,\n    \"maxAllowedSize\": 68559933,\n    \"directoryPattern\": \"laborum do dolor occaecat nostrud\",\n    \"type\": {\n      \"id\": 57627398,\n      \"name\": \"ullamco quis\",\n      \"code\": \"elit ma\",\n      \"description\": \"incididunt tempor exercitation cup\"\n    },\n    \"extensions\": [\n      {\n        \"id\": 73931918,\n        \"name\": \"in do ipsum commodo\",\n        \"code\": \"exercitation aliquip in cupidatat\",\n        \"description\": \"eu mollit anim\"\n      },\n      {\n        \"id\": -62654505,\n        \"name\": \"velit pariatur do sunt\",\n        \"code\": \"nisi nostrud qui minim dolore\",\n        \"description\": \"nulla\"\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2150fc1f-18c9-406d-8167-29f94bb02a48",
+          "name": "create 1",
+          "request": {
+            "name": "create 1",
+            "description": {},
+            "url": {
+              "path": [
+                "settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/settings"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"maxAllowedSize\": 83602783,\n  \"directoryPattern\": \"do in dolor\",\n  \"type\": {\n    \"name\": \"labore dolore minim\",\n    \"code\": \"in consectetur\",\n    \"description\": \"velit\"\n  },\n  \"extensions\": [\n    {\n      \"name\": \"culpa occaecat aliqua deserunt ut\",\n      \"code\": \"minim Lorem amet\",\n      \"description\": \"tempor sit\"\n    },\n    {\n      \"name\": \"labore aliqua\",\n      \"code\": \"consequat do cillum in sint\",\n      \"description\": \"Ut do ad\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b9817615-00e5-4ef9-892d-2c2549e30680",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "c"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"maxAllowedSize\": 45836904,\n  \"directoryPattern\": \"sed sunt in\",\n  \"type\": {\n    \"name\": \"aliqua irure\",\n    \"code\": \"Ut dolor nisi consectetur\",\n    \"description\": \"do culpa in eiusmod\"\n  },\n  \"extensions\": [\n    {\n      \"name\": \"culpa minim reprehenderit\",\n      \"code\": \"ipsum\",\n      \"description\": \"dolor Excepteur labor\"\n    },\n    {\n      \"name\": \"qui off\",\n      \"code\": \"ut\",\n      \"description\": \"aliqua incididunt\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -32254775,\n  \"maxAllowedSize\": -79461599,\n  \"directoryPattern\": \"pariatur non\",\n  \"type\": {\n    \"id\": -83514215,\n    \"name\": \"dolore Ut id ut D\",\n    \"code\": \"et cillum sed\",\n    \"description\": \"eu adipisicing consectetur cillum\"\n  },\n  \"extensions\": [\n    {\n      \"id\": -1601788,\n      \"name\": \"id\",\n      \"code\": \"mollit Duis laborum ipsum\",\n      \"description\": \"aute veniam occaecat nulla\"\n    },\n    {\n      \"id\": 26912853,\n      \"name\": \"amet magna esse enim\",\n      \"code\": \"aliquip do dolor\",\n      \"description\": \"ullamco proident ex ea\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "856234e3-8089-46b5-82be-9792612cd58a",
+      "name": "extension-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b9e216c4-0dc2-4731-9fa0-c8a0c3c845a2",
+          "name": "get By Id 2",
+          "request": {
+            "name": "get By Id 2",
+            "description": {},
+            "url": {
+              "path": [
+                "extensions",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-11166112",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/extensions/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4be190a3-7305-4376-a5df-591b2a956aa8",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "extensions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-11166112",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "c"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -53775007,\n  \"name\": \"Ut amet dolore\",\n  \"code\": \"Ut enim\",\n  \"description\": \"occaecat ut nisi\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6b9279b4-e3ba-48ef-8bcc-9843dca06ab9",
+          "name": "update 2",
+          "request": {
+            "name": "update 2",
+            "description": {},
+            "url": {
+              "path": [
+                "extensions",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-11166112",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/extensions/:id"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"aliquip\",\n  \"code\": \"nostrud sed et exercitation Excepteur\",\n  \"description\": \"sunt\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "080746c1-fd24-4981-bbd8-a40d680c24fc",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "extensions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-11166112",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "c"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"aliquip\",\n  \"code\": \"nostrud sed et exercitation Excepteur\",\n  \"description\": \"sunt\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -53775007,\n  \"name\": \"Ut amet dolore\",\n  \"code\": \"Ut enim\",\n  \"description\": \"occaecat ut nisi\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cde4b20d-d444-4d66-91a9-6772d298f767",
+          "name": "delete 2",
+          "request": {
+            "name": "delete 2",
+            "description": {},
+            "url": {
+              "path": [
+                "extensions",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-11166112",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/extensions/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9c85798d-d05a-48fd-9d3b-415703083ff2",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "extensions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-11166112",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "c"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "45d2f98c-8491-4c48-ae91-70358e2e2461",
+          "name": "get All 2",
+          "request": {
+            "name": "get All 2",
+            "description": {},
+            "url": {
+              "path": [
+                "extensions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/extensions"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ac192acd-93a1-43a0-b1d1-f59af62d8b0a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "extensions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "c"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -36681333,\n    \"name\": \"incididunt in Lorem\",\n    \"code\": \"in Excepteur\",\n    \"description\": \"tempor culpa dolor\"\n  },\n  {\n    \"id\": -17231814,\n    \"name\": \"veniam exercitation\",\n    \"code\": \"in exercitation nulla\",\n    \"description\": \"cillum aliqua\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4709f1ef-3bb1-4d41-9fdf-f264c87fc332",
+          "name": "create 2",
+          "request": {
+            "name": "create 2",
+            "description": {},
+            "url": {
+              "path": [
+                "extensions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/extensions"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"aliquip\",\n  \"code\": \"nostrud sed et exercitation Excepteur\",\n  \"description\": \"sunt\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f7778954-6e5b-4c46-a940-75e344ece8cc",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "extensions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "c"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"aliquip\",\n  \"code\": \"nostrud sed et exercitation Excepteur\",\n  \"description\": \"sunt\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -53775007,\n  \"name\": \"Ut amet dolore\",\n  \"code\": \"Ut enim\",\n  \"description\": \"occaecat ut nisi\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "8a518198-5963-4307-a176-2bc1cb572a47",
+      "name": "ftp-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "66f96c40-c52a-4cb3-a259-b6006e265ebe",
+          "name": "upload File",
+          "request": {
+            "name": "upload File",
+            "description": {},
+            "url": {
+              "path": [
+                "file",
+                "upload"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fileName",
+                  "value": "c",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "fileType",
+                  "value": "c",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/file/upload?fileName=c&fileType=c"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"file\": \"sed e\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4c7603bb-28b9-4505-a559-a9777ff81a8a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "file",
+                    "upload"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fileName",
+                      "value": "c"
+                    },
+                    {
+                      "key": "fileType",
+                      "value": "c"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"file\": \"sed e\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"fileToken\": \"ullamco eiusmod consectetur qui ut\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "795982fb-7211-4349-9989-30259703453e",
+          "name": "upload File 1",
+          "request": {
+            "name": "upload File 1",
+            "description": {},
+            "url": {
+              "path": [
+                "file",
+                "attachment",
+                "upload"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "all",
+                  "value": "{\"aliqua73\":\"qui sed do\",\"aute576\":\"in ad veniam eu\",\"aliqua_dad\":\"minim\"}",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "empty",
+                  "value": "true",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "Lorem2",
+                  "value": "[\"ullamco laboris fugiat anim velit\",\"elit cillum\"]",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/file/attachment/upload?all={\"aliqua73\":\"qui sed do\",\"aute576\":\"in ad veniam eu\",\"aliqua_dad\":\"minim\"}&empty=true&Lorem2=[\"ullamco laboris fugiat anim velit\",\"elit cillum\"]"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"file\": \"sed e\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "56c5a206-f482-4680-ae89-9cf4fa64cee5",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "file",
+                    "attachment",
+                    "upload"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "all",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "empty",
+                      "value": "true"
+                    },
+                    {
+                      "key": "Lorem2",
+                      "value": "ullamco laboris fugiat anim velit,elit cillum"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"file\": \"sed e\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"fileToken\": \"ullamco eiusmod consectetur qui ut\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8b69f486-eb51-41f8-9175-460b861ffe6c",
+          "name": "generate Token For File",
+          "request": {
+            "name": "generate Token For File",
+            "description": {},
+            "url": {
+              "path": [
+                "file",
+                "attachment",
+                "token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/file/attachment/token"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"entityId\": \"exercitation in\",\n  \"requesterId\": 98322315\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1669fda9-5721-4943-97fd-4da03048fa44",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "file",
+                    "attachment",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"entityId\": \"exercitation in\",\n  \"requesterId\": 98322315\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "c",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2244752e-0193-402a-a590-ac88af93137f",
+          "name": "file Exists",
+          "request": {
+            "name": "file Exists",
+            "description": {},
+            "url": {
+              "path": [
+                "file"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fileToken",
+                  "value": "c",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "fileType",
+                  "value": "c",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/file?fileToken=c&fileType=c"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1ebea3f9-9014-4742-a129-fa6cbc4a5027",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "file"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fileToken",
+                      "value": "c"
+                    },
+                    {
+                      "key": "fileType",
+                      "value": "c"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "false",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a9eed489-8f53-4afb-9734-51f5a0eeb68b",
+          "name": "view File",
+          "request": {
+            "name": "view File",
+            "description": {},
+            "url": {
+              "path": [
+                "file",
+                "view"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fileToken",
+                  "value": "c",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "fileType",
+                  "value": "c",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/file/view?fileToken=c&fileType=c"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "471d52f6-de83-45bf-bb81-e8a91b073ebe",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "file",
+                    "view"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fileToken",
+                      "value": "c"
+                    },
+                    {
+                      "key": "fileType",
+                      "value": "c"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  \"nulla id laborum ex\",\n  \"reprehenderit aliquip\"\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1eab3479-a979-4f2f-9f36-c72cc48f953a",
+          "name": "view File Contents",
+          "request": {
+            "name": "view File Contents",
+            "description": {},
+            "url": {
+              "path": [
+                "file",
+                "view",
+                "contents"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fileToken",
+                  "value": "c",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "fileType",
+                  "value": "c",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/file/view/contents?fileToken=c&fileType=c"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "42ecdd28-5975-42ab-a8c2-21e753371359",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "file",
+                    "view",
+                    "contents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fileToken",
+                      "value": "c"
+                    },
+                    {
+                      "key": "fileType",
+                      "value": "c"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"fileData\": \"occaecat dolore in sunt cillum\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fe2cf396-0f22-40f8-b41e-9b4672c02956",
+          "name": "get File Attachment",
+          "request": {
+            "name": "get File Attachment",
+            "description": {},
+            "url": {
+              "path": [
+                "file",
+                "attachment"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fileToken",
+                  "value": "c",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "fileType",
+                  "value": "c",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/file/attachment?fileToken=c&fileType=c"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c808f790-16dc-427d-880d-ec7c2770bb3e",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "file",
+                    "attachment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fileToken",
+                      "value": "c"
+                    },
+                    {
+                      "key": "fileType",
+                      "value": "c"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -87399112,\n  \"fileName\": \"exercitation nulla in\",\n  \"filePath\": \"et ad incididunt\",\n  \"fileSize\": -74248369,\n  \"token\": \"\",\n  \"type\": {\n    \"id\": -43210301,\n    \"name\": \"proident velit ad\",\n    \"code\": \"enim\",\n    \"description\": \"sint sit do fugiat\"\n  },\n  \"extension\": {\n    \"id\": -13952454,\n    \"name\": \"occaecat culpa dolor\",\n    \"code\": \"laborum nisi\",\n    \"description\": \"tempor officia dolor\"\n  },\n  \"fileBytes\": [\n    \"eu minim magna\",\n    \"ea ut\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generated guard: a 5xx from any request is a gateway/service defect, not a test-data problem.",
+          "pm.test('no 5xx (' + pm.info.requestName + ')', function () {",
+          "  pm.expect(pm.response.code, (pm.response.text() || '').slice(0, 300)).to.be.below(500);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{gatewayBaseUrl}}/attachment-service",
+      "type": "string"
+    }
+  ],
+  "info": {
+    "_postman_id": "71b38938-8c53-4845-8520-8f5f5e8c15d8",
+    "name": "Attachment Service - majdpay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Attachment Service (attachment-service) — 22 operations.\n\nGENERATED from the OpenAPI 3.1.0 spec published at the UAT gateway swagger-ui\n(Select a definition -> \"Attachment Service APIs\"). Request bodies are schema-derived placeholders (lorem-ipsum\nstrings, sample numbers) — replace with real values before sending.\n\nBase URL: {{gatewayBaseUrl}}/attachment-service  (gatewayBaseUrl lives in EMI-dev.postman_environment.json).\nSpec server: https://gateway-emiuat.dg-cash.app/attachment-service\n\nAUTH: the spec declares no security scheme, but the gateway front-doors every route with a bearer\ntoken. Set {{token}} in the environment (mint one with the Authentication Service collection's\nsign-in, or pass --env-var token=... to newman). Some back-office routes need an admin/service\ntoken rather than a merchant one.\n\nCompanion Playwright scaffold: BusinessTestCases/ServiceApis/AttachmentService.generated.spec.ts\n"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

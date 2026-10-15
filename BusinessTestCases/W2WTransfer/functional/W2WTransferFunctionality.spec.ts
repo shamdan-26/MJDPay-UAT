@@ -5,6 +5,7 @@ import { W2WTransferPage } from '../../pageElements/W2WTransfer/W2WTransferPage'
 import { TransactionsPage } from '../../pageElements/Shared/TransactionsPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { performLogin, type W2WTestData } from '../W2WTransferHelper';
+import { waitForToastClear } from '../../toastMessages';
 import w2wData from '../../../data/w2wTransferData.json';
 
 const dataSets = w2wData as W2WTestData[];
@@ -16,6 +17,7 @@ test.describe('MajdPay W2W Transfer Tests', () => {
     // ── Suite 1: Balance Update (Merchant DEBIT + Biller CREDIT) ──────────────
 
     test.describe('W2W Transfer — Verify Merchant & Biller Balance Update', () => {
+        test.describe.configure({ mode: 'serial' });
         const balanceUpdateTests = dataSets.filter(d => d.suite === 'balance_update');
 
         for (const data of balanceUpdateTests) {
@@ -38,19 +40,17 @@ test.describe('MajdPay W2W Transfer Tests', () => {
 
                 await w2wMerchant.enterCRN(data.receiverCRN);
                 await w2wMerchant.clickCheckRecipient();
-                await page.waitForTimeout(4000);
+                await w2wMerchant.waitForRecipientCheckToSettle();
 
                 await w2wMerchant.enterAmount(data.amount);
                 await w2wMerchant.selectRandomPurposeOfTransfer();
-                await page.waitForTimeout(4000);
-
                 await w2wMerchant.clickAmountInput();
-                await page.waitForTimeout(4000);
 
+                // clickProceedButton()/clickTransferButton() already wait for their
+                // own button to become visible+enabled before clicking, so no extra
+                // fixed sleep is needed between them.
                 await w2wMerchant.clickProceedButton();
-                await page.waitForTimeout(1500);
                 await w2wMerchant.clickTransferButton();
-                await page.waitForTimeout(3000);
 
                 const otp = new OtpPage(page);
                 if (await otp.isVisible()) {
@@ -71,6 +71,7 @@ test.describe('MajdPay W2W Transfer Tests', () => {
     // ── Suite 2: Transaction Table Verification ───────────────────────────────
 
     test.describe('W2W Transfer — Transaction Appears in Transaction Table', () => {
+        test.describe.configure({ mode: 'serial' });
         const txnTableTests = dataSets.filter(d => d.suite === 'transaction_table');
 
         for (const data of txnTableTests) {
@@ -85,19 +86,16 @@ test.describe('MajdPay W2W Transfer Tests', () => {
                 await homePage.clickW2WTransferButton();
                 await w2w.enterCRN(data.receiverCRN);
                 await w2w.clickCheckRecipient();
-                await page.waitForTimeout(6000);
+                await w2w.waitForRecipientCheckToSettle();
 
                 await w2w.enterAmount(data.amount);
                 await w2w.selectSpecificPurposeOfTransfer(data.purposeOfTransfer || 'Item purchases');
-                await page.waitForTimeout(4000);
-
                 await w2w.clickAmountInput();
-                await page.waitForTimeout(4000);
 
+                // clickProceedButton()/clickTransferButton() already wait for their
+                // own button to become visible+enabled before clicking.
                 await w2w.clickProceedButton();
-                await page.waitForTimeout(1500);
                 await w2w.clickTransferButton();
-                await page.waitForTimeout(3000);
 
                 const otp = new OtpPage(page);
                 if (await otp.isVisible()) {
@@ -105,10 +103,9 @@ test.describe('MajdPay W2W Transfer Tests', () => {
                 }
 
                 await w2w.clickOkButton();
-                await page.waitForTimeout(4000);
 
                 await homePage.clicTransactions_NavButton();
-                await page.waitForTimeout(3000);
+                await page.waitForLoadState('networkidle').catch(() => {});
                 await page.reload({ waitUntil: 'networkidle' }).catch(() => null);
 
                 const transactionsPage = new TransactionsPage(page);
@@ -153,6 +150,10 @@ test.describe('MajdPay W2W Transfer Tests', () => {
             if (!data.execute) continue;
 
             test(`${data.testName} | CRN Type: ${data.crnType}`, async () => {
+                // Reset to a known baseline before each data row — a toast or
+                // stuck-disabled button left over from the previous row's
+                // assertion should never leak into this one.
+                await waitForToastClear(sharedPage);
                 await w2w.inputCRN.clear();
                 await w2w.enterCRN(data.receiverCRN);
                 await w2w.clickCheckRecipient();
@@ -160,7 +161,7 @@ test.describe('MajdPay W2W Transfer Tests', () => {
                 if (data.testName === 'W2W_Transfer_InvalidCRN_NonExistent' || data.testName.includes('IsSame_For_Sender_And_Receiver')) {
                     await w2w.assertNoRecipientFoundToast();
                 } else {
-                    await sharedPage.waitForTimeout(6000);
+                    await w2w.waitForRecipientCheckToSettle();
                     await w2w.inputAmount.clear();
                     await w2w.enterAmount(data.amount);
                     await w2w.assertCompanyNameIsEmpty();
@@ -199,7 +200,7 @@ test.describe('MajdPay W2W Transfer Tests', () => {
             await w2w.inputCRN.clear();
             await w2w.enterCRN(baseData.receiverCRN);
             await w2w.clickCheckRecipient();
-            await sharedPage.waitForTimeout(4000);
+            await w2w.waitForRecipientCheckToSettle();
             await w2w.selectRandomPurposeOfTransfer();
         });
 
@@ -236,6 +237,7 @@ test.describe('MajdPay W2W Transfer Tests', () => {
     // ── Suite 5: Insufficient Fund ────────────────────────────────────────────
 
     test.describe('W2W Transfer — Insufficient Fund', () => {
+        test.describe.configure({ mode: 'serial' });
         const insufficientFundTests = dataSets.filter(d => d.suite === 'insufficient_fund');
 
         for (const data of insufficientFundTests) {
@@ -254,14 +256,14 @@ test.describe('MajdPay W2W Transfer Tests', () => {
 
                 await w2w.enterCRN(data.receiverCRN);
                 await w2w.clickCheckRecipient();
-                await page.waitForTimeout(4000);
+                await w2w.waitForRecipientCheckToSettle();
 
                 await w2w.enterAmount(amountToTransfer);
                 await w2w.selectRandomPurposeOfTransfer();
-                await page.waitForTimeout(2000);
 
+                // clickProceedButton()/clickTransferButton() already wait for their
+                // own button to become visible+enabled before clicking.
                 await w2w.clickProceedButton();
-                await page.waitForTimeout(1500);
                 await w2w.clickTransferButton();
 
                 await w2w.assertInsufficientFundToastDisplayed();
@@ -295,6 +297,10 @@ test.describe('MajdPay W2W Transfer Tests', () => {
             if (!data.execute) continue;
 
             test(`${data.testName} | Validation Type: ${data.crnType}`, async () => {
+                // Reset to a known baseline before each data row — a toast or
+                // stuck-disabled button left over from the previous row's
+                // assertion should never leak into this one.
+                await waitForToastClear(sharedPage);
                 await w2wTransferPage.inputCRN.clear();
                 if (data.receiverCRN) {
                     await w2wTransferPage.inputCRN.pressSequentially(data.receiverCRN, { delay: 50 });

@@ -257,17 +257,14 @@ test.describe('Topup – Happy Path', { tag: ['@topup', '@functional'], annotati
     }
 
     test('should top up with a VISA card and credit the wallet with the exact amount', async () => {
-        test.skip(true, 'VPN access to SQL Server/Mongo is currently unavailable — this test\'s DB/Mongo assertions cannot run until that\'s restored.');
         await runTopupScenario('visa');
     });
 
     test('should top up with a MASTER card and credit the wallet with the exact amount', async () => {
-        test.skip(true, 'VPN access to SQL Server/Mongo is currently unavailable — this test\'s DB/Mongo assertions cannot run until that\'s restored.');
         await runTopupScenario('master');
     });
 
     test('should top up with a MADA card and credit the wallet with the exact amount', async () => {
-        test.skip(true, 'VPN access to SQL Server/Mongo is currently unavailable — this test\'s DB/Mongo assertions cannot run until that\'s restored.');
         await runTopupScenario('mada');
     });
 });

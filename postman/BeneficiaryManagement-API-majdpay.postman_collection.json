@@ -1,0 +1,2726 @@
+{
+  "item": [
+    {
+      "id": "7b6961c1-af93-4300-933a-7df4f41e0f45",
+      "name": "beneficiary-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "64706713-60a0-4f9e-90af-1fc035923ef3",
+          "name": "reject Beneficiary",
+          "request": {
+            "name": "reject Beneficiary",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "beneficiary",
+                "reject"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/beneficiary/reject"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"beneficiaryId\": 41763802\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d7e08c5b-6627-4418-9852-a00200716e30",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "beneficiary",
+                    "reject"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"beneficiaryId\": 41763802\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 61022750,\n  \"beneficiaryAlias\": \"nisi Lorem dolore laborum\",\n  \"beneficiaryName\": \"aliquip enim culpa\",\n  \"beneficiaryProfileCode\": \"deserunt\",\n  \"beneficiaryIdentifier\": \"aliqua sed est ullamco\",\n  \"billerProfileCode\": \"eiusmod\",\n  \"beneficiaryStatus\": {\n    \"code\": \"velit magna consequat laborum\",\n    \"nameAr\": \"velit Excepteur\",\n    \"nameEn\": \"voluptate et enim\"\n  },\n  \"agreementToken\": \"veniam laborum\",\n  \"beneficiaryProfileType\": \"veniam\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b6bf23f8-54c8-4a51-ac3f-cdf0ffa3f735",
+          "name": "approve Beneficiary",
+          "request": {
+            "name": "approve Beneficiary",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "beneficiary",
+                "approve"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/beneficiary/approve"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"beneficiaryId\": 41763802\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "627bf79c-2739-437b-895b-a4000a98f527",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "beneficiary",
+                    "approve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"beneficiaryId\": 41763802\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 61022750,\n  \"beneficiaryAlias\": \"nisi Lorem dolore laborum\",\n  \"beneficiaryName\": \"aliquip enim culpa\",\n  \"beneficiaryProfileCode\": \"deserunt\",\n  \"beneficiaryIdentifier\": \"aliqua sed est ullamco\",\n  \"billerProfileCode\": \"eiusmod\",\n  \"beneficiaryStatus\": {\n    \"code\": \"velit magna consequat laborum\",\n    \"nameAr\": \"velit Excepteur\",\n    \"nameEn\": \"voluptate et enim\"\n  },\n  \"agreementToken\": \"veniam laborum\",\n  \"beneficiaryProfileType\": \"veniam\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "76aa6249-31a8-4fbb-a8d2-28aad0689db8",
+          "name": "get Biller Beneficiary",
+          "request": {
+            "name": "get Biller Beneficiary",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "beneficiary"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "-71884135",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "-76365734",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "statusCode",
+                  "value": "magna ullamco cillum",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "alias",
+                  "value": "Lorem labore",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "velit",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "identifier",
+                  "value": "id ex irure Lorem ullamco",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/beneficiary?page=-71884135&size=-76365734&statusCode=magna ullamco cillum&alias=Lorem labore&name=velit&identifier=id ex irure Lorem ullamco"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "df0c09b1-cdda-4b72-8494-37e0471b4b41",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "beneficiary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "-71884135"
+                    },
+                    {
+                      "key": "size",
+                      "value": "-76365734"
+                    },
+                    {
+                      "key": "statusCode",
+                      "value": "magna ullamco cillum"
+                    },
+                    {
+                      "key": "alias",
+                      "value": "Lorem labore"
+                    },
+                    {
+                      "key": "name",
+                      "value": "velit"
+                    },
+                    {
+                      "key": "identifier",
+                      "value": "id ex irure Lorem ullamco"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": -26545298,\n  \"totalElements\": -99160080,\n  \"size\": 83732388,\n  \"content\": [\n    {\n      \"id\": 71698938,\n      \"beneficiaryAlias\": \"occaecat in enim\",\n      \"beneficiaryName\": \"Ut nulla \",\n      \"beneficiaryProfileCode\": \"nulla exercitation ad ex mollit\",\n      \"beneficiaryIdentifier\": \"reprehenderit enim in\",\n      \"billerProfileCode\": \"tempor sunt qu\",\n      \"beneficiaryStatus\": {\n        \"code\": \"ullamco ea \",\n        \"nameAr\": \"ex officia sunt\",\n        \"nameEn\": \"anim eiusmod ven\"\n      },\n      \"agreementToken\": \"est laborum et\",\n      \"beneficiaryProfileType\": \"dolor ut ips\"\n    },\n    {\n      \"id\": -52538446,\n      \"beneficiaryAlias\": \"irure adipisicing aute\",\n      \"beneficiaryName\": \"est minim irure\",\n      \"beneficiaryProfileCode\": \"fugiat\",\n      \"beneficiaryIdentifier\": \"reprehenderit velit dolore irure nisi\",\n      \"billerProfileCode\": \"nostrud esse\",\n      \"beneficiaryStatus\": {\n        \"code\": \"deserunt anim nostrud\",\n        \"nameAr\": \"Ut sed ex ullamco\",\n        \"nameEn\": \"ut ipsum ullamc\"\n      },\n      \"agreementToken\": \"magna tempor non dolor\",\n      \"beneficiaryProfileType\": \"voluptate reprehenderit\"\n    }\n  ],\n  \"number\": -74273865,\n  \"sort\": [\n    {\n      \"direction\": \"ut eu\",\n      \"nullHandling\": \"dol\",\n      \"ascending\": false,\n      \"property\": \"sed anim laborum\",\n      \"ignoreCase\": true\n    },\n    {\n      \"direction\": \"dolore ex\",\n      \"nullHandling\": \"Lorem consequat commodo labore\",\n      \"ascending\": true,\n      \"property\": \"eu dolore sed Ut\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"pageable\": {\n    \"offset\": -8525041,\n    \"sort\": [\n      {\n        \"direction\": \"ipsum sunt amet sit\",\n        \"nullHandling\": \"et non aliquip\",\n        \"ascending\": false,\n        \"property\": \"commodo Lorem velit veniam ex\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"sint deserunt minim\",\n        \"nullHandling\": \"sunt cons\",\n        \"ascending\": false,\n        \"property\": \"ut fugiat\",\n        \"ignoreCase\": false\n      }\n    ],\n    \"pageNumber\": 69591155,\n    \"pageSize\": -64739464,\n    \"paged\": false,\n    \"unpaged\": true\n  },\n  \"last\": false,\n  \"first\": false,\n  \"numberOfElements\": 25230261,\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "41f74e66-f902-4adc-8641-e7bcfc2699b4",
+          "name": "create Beneficiary",
+          "request": {
+            "name": "create Beneficiary",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "beneficiary"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/beneficiary"
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "User-Agent",
+                "value": "dolor Excepteur"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "locale",
+                "value": "dolor Excepteur"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profileCode\": \"in consectetur\",\n  \"alias\": \"anim reprehenderit ad\",\n  \"otp\": \"dolore ea\",\n  \"agreementToken\": \"nisi ad ullamco voluptate\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "41056119-f586-481f-8fec-3a014b763f59",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "beneficiary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "User-Agent",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "locale",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profileCode\": \"in consectetur\",\n  \"alias\": \"anim reprehenderit ad\",\n  \"otp\": \"dolore ea\",\n  \"agreementToken\": \"nisi ad ullamco voluptate\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 61022750,\n  \"beneficiaryAlias\": \"nisi Lorem dolore laborum\",\n  \"beneficiaryName\": \"aliquip enim culpa\",\n  \"beneficiaryProfileCode\": \"deserunt\",\n  \"beneficiaryIdentifier\": \"aliqua sed est ullamco\",\n  \"billerProfileCode\": \"eiusmod\",\n  \"beneficiaryStatus\": {\n    \"code\": \"velit magna consequat laborum\",\n    \"nameAr\": \"velit Excepteur\",\n    \"nameEn\": \"voluptate et enim\"\n  },\n  \"agreementToken\": \"veniam laborum\",\n  \"beneficiaryProfileType\": \"veniam\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "09aac111-ce27-4cf4-b607-1cc368a20409",
+          "name": "is Exist Biller Beneficiary By Crn",
+          "request": {
+            "name": "is Exist Biller Beneficiary By Crn",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "beneficiary",
+                ":billerProfileCode",
+                ":unifiedNumber"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "dolor Excepteur",
+                  "key": "billerProfileCode",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "dolor Excepteur",
+                  "key": "unifiedNumber",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/beneficiary/:billerProfileCode/:unifiedNumber"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "71d14cfa-3b9a-4c64-9404-ee937c325e86",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "beneficiary",
+                    ":billerProfileCode",
+                    ":unifiedNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "dolor Excepteur",
+                      "key": "billerProfileCode",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "dolor Excepteur",
+                      "key": "unifiedNumber",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "false",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "31c44ac8-a235-4307-b414-ffc2eda4e59f",
+          "name": "is Exist Biller Beneficiary",
+          "request": {
+            "name": "is Exist Biller Beneficiary",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "beneficiary",
+                ":billerProfileCode",
+                ":beneficiaryProfileCode",
+                "exist",
+                "internal"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "dolor Excepteur",
+                  "key": "billerProfileCode",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "dolor Excepteur",
+                  "key": "beneficiaryProfileCode",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/beneficiary/:billerProfileCode/:beneficiaryProfileCode/exist/internal"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "441de402-eee3-442a-9308-5fd8f0f74f4d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "beneficiary",
+                    ":billerProfileCode",
+                    ":beneficiaryProfileCode",
+                    "exist",
+                    "internal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "dolor Excepteur",
+                      "key": "billerProfileCode",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "dolor Excepteur",
+                      "key": "beneficiaryProfileCode",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "true",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c0771606-65f7-42c5-8087-f8d08c7cd591",
+          "name": "get All Beneficiaries",
+          "request": {
+            "name": "get All Beneficiaries",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "beneficiary",
+                "all"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "-71884135",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "-76365734",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "statusCode",
+                  "value": "magna ullamco cillum",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "alias",
+                  "value": "Lorem labore",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "velit",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "identifier",
+                  "value": "id ex irure Lorem ullamco",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/beneficiary/all?page=-71884135&size=-76365734&statusCode=magna ullamco cillum&alias=Lorem labore&name=velit&identifier=id ex irure Lorem ullamco"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "85ccd24e-af45-4093-91c2-61efb65c2c72",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "beneficiary",
+                    "all"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "-71884135"
+                    },
+                    {
+                      "key": "size",
+                      "value": "-76365734"
+                    },
+                    {
+                      "key": "statusCode",
+                      "value": "magna ullamco cillum"
+                    },
+                    {
+                      "key": "alias",
+                      "value": "Lorem labore"
+                    },
+                    {
+                      "key": "name",
+                      "value": "velit"
+                    },
+                    {
+                      "key": "identifier",
+                      "value": "id ex irure Lorem ullamco"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": -26545298,\n  \"totalElements\": -99160080,\n  \"size\": 83732388,\n  \"content\": [\n    {\n      \"id\": 71698938,\n      \"beneficiaryAlias\": \"occaecat in enim\",\n      \"beneficiaryName\": \"Ut nulla \",\n      \"beneficiaryProfileCode\": \"nulla exercitation ad ex mollit\",\n      \"beneficiaryIdentifier\": \"reprehenderit enim in\",\n      \"billerProfileCode\": \"tempor sunt qu\",\n      \"beneficiaryStatus\": {\n        \"code\": \"ullamco ea \",\n        \"nameAr\": \"ex officia sunt\",\n        \"nameEn\": \"anim eiusmod ven\"\n      },\n      \"agreementToken\": \"est laborum et\",\n      \"beneficiaryProfileType\": \"dolor ut ips\"\n    },\n    {\n      \"id\": -52538446,\n      \"beneficiaryAlias\": \"irure adipisicing aute\",\n      \"beneficiaryName\": \"est minim irure\",\n      \"beneficiaryProfileCode\": \"fugiat\",\n      \"beneficiaryIdentifier\": \"reprehenderit velit dolore irure nisi\",\n      \"billerProfileCode\": \"nostrud esse\",\n      \"beneficiaryStatus\": {\n        \"code\": \"deserunt anim nostrud\",\n        \"nameAr\": \"Ut sed ex ullamco\",\n        \"nameEn\": \"ut ipsum ullamc\"\n      },\n      \"agreementToken\": \"magna tempor non dolor\",\n      \"beneficiaryProfileType\": \"voluptate reprehenderit\"\n    }\n  ],\n  \"number\": -74273865,\n  \"sort\": [\n    {\n      \"direction\": \"ut eu\",\n      \"nullHandling\": \"dol\",\n      \"ascending\": false,\n      \"property\": \"sed anim laborum\",\n      \"ignoreCase\": true\n    },\n    {\n      \"direction\": \"dolore ex\",\n      \"nullHandling\": \"Lorem consequat commodo labore\",\n      \"ascending\": true,\n      \"property\": \"eu dolore sed Ut\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"pageable\": {\n    \"offset\": -8525041,\n    \"sort\": [\n      {\n        \"direction\": \"ipsum sunt amet sit\",\n        \"nullHandling\": \"et non aliquip\",\n        \"ascending\": false,\n        \"property\": \"commodo Lorem velit veniam ex\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"sint deserunt minim\",\n        \"nullHandling\": \"sunt cons\",\n        \"ascending\": false,\n        \"property\": \"ut fugiat\",\n        \"ignoreCase\": false\n      }\n    ],\n    \"pageNumber\": 69591155,\n    \"pageSize\": -64739464,\n    \"paged\": false,\n    \"unpaged\": true\n  },\n  \"last\": false,\n  \"first\": false,\n  \"numberOfElements\": 25230261,\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3501b21e-4075-49c2-a5fe-4b67fe6a8a14",
+          "name": "delete Beneficiary",
+          "request": {
+            "name": "delete Beneficiary",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "beneficiary",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "24741577",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/beneficiary/:id"
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a9dde506-bca3-4b49-acd6-fe2340b4f8a2",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "beneficiary",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "24741577",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "dolor Excepteur"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "981c38f8-affa-43c8-973f-3267bb0ad4b1",
+      "name": "customer-beneficiary-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c3895f97-32c3-4f8a-8d2d-c8e4951b4250",
+          "name": "get Wallet Beneficiaries",
+          "request": {
+            "name": "get Wallet Beneficiaries",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "customer",
+                "beneficiary",
+                "wallet"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "25188674",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "27829088",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "beneficiaryMobileNumber",
+                  "value": "Ut dolore",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "beneficiaryName",
+                  "value": "do deserunt",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/customer/beneficiary/wallet?page=25188674&size=27829088&beneficiaryMobileNumber=Ut dolore&beneficiaryName=do deserunt"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0f5ee6cf-850c-41a0-b2b8-b4e020471f79",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "customer",
+                    "beneficiary",
+                    "wallet"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "25188674"
+                    },
+                    {
+                      "key": "size",
+                      "value": "27829088"
+                    },
+                    {
+                      "key": "beneficiaryMobileNumber",
+                      "value": "Ut dolore"
+                    },
+                    {
+                      "key": "beneficiaryName",
+                      "value": "do deserunt"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": 80771536,\n  \"totalElements\": -38226565,\n  \"size\": -33204320,\n  \"content\": [\n    {\n      \"id\": -66166463,\n      \"customerProfileCode\": \"sunt ullamco cillum velit aliqua\",\n      \"beneficiaryAlias\": \"adipisicing esse\",\n      \"type\": \"nulla anim eu consequat in\",\n      \"beneficiaryProfileCode\": -29672717,\n      \"beneficiaryMobileNumber\": \"exercitation reprehenderit\",\n      \"beneficiaryFullNameEn\": \"eu Ut ea \",\n      \"beneficiaryFullNameAr\": \"amet velit sunt labore occaecat\"\n    },\n    {\n      \"id\": -21467143,\n      \"customerProfileCode\": \"aute cupidatat\",\n      \"beneficiaryAlias\": \"reprehenderit aute dolore dolor esse\",\n      \"type\": \"ad sunt sed cillum\",\n      \"beneficiaryProfileCode\": 63391995,\n      \"beneficiaryMobileNumber\": \"aliquip ullamco in\",\n      \"beneficiaryFullNameEn\": \"consequat deserunt in aute eiusmod\",\n      \"beneficiaryFullNameAr\": \"co\"\n    }\n  ],\n  \"number\": -32244714,\n  \"sort\": [\n    {\n      \"direction\": \"adipisicing elit nostrud aliquip\",\n      \"nullHandling\": \"ea magna\",\n      \"ascending\": true,\n      \"property\": \"consectetur dolor do\",\n      \"ignoreCase\": false\n    },\n    {\n      \"direction\": \"id cillum fugiat in aliquip\",\n      \"nullHandling\": \"ipsum si\",\n      \"ascending\": false,\n      \"property\": \"non voluptate et\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"pageable\": {\n    \"offset\": -94163216,\n    \"sort\": [\n      {\n        \"direction\": \"tempor\",\n        \"nullHandling\": \"enim incididunt minim\",\n        \"ascending\": true,\n        \"property\": \"id in\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"ullamco ut elit dolore\",\n        \"nullHandling\": \"Excepteur cup\",\n        \"ascending\": true,\n        \"property\": \"incididunt \",\n        \"ignoreCase\": false\n      }\n    ],\n    \"pageNumber\": -69227983,\n    \"pageSize\": 1249183,\n    \"paged\": true,\n    \"unpaged\": true\n  },\n  \"last\": false,\n  \"first\": true,\n  \"numberOfElements\": 99555463,\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6a17dd01-5151-46f7-b5ba-c49e3d70f1f7",
+          "name": "add Wallet Beneficiary",
+          "request": {
+            "name": "add Wallet Beneficiary",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "customer",
+                "beneficiary",
+                "wallet"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/customer/beneficiary/wallet"
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "User-Agent",
+                "value": "dolor Excepteur"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"otp\": \"quis sed occaecat\",\n  \"beneficiaryAlias\": \"voluptate anim\",\n  \"beneficiaryProfileCode\": \"cillum Excepteur\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "33aa7d4b-8666-4104-89aa-c29c8b508ad9",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "customer",
+                    "beneficiary",
+                    "wallet"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "User-Agent",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"otp\": \"quis sed occaecat\",\n  \"beneficiaryAlias\": \"voluptate anim\",\n  \"beneficiaryProfileCode\": \"cillum Excepteur\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 99643763,\n  \"customerProfileCode\": \"minim ea ullamco ut s\",\n  \"beneficiaryAlias\": \"et do in ad\",\n  \"type\": \"et\",\n  \"beneficiaryProfileCode\": -9013387,\n  \"beneficiaryMobileNumber\": \"in dolore aute et\",\n  \"beneficiaryFullNameEn\": \"nisi in\",\n  \"beneficiaryFullNameAr\": \"fugiat in ips\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "47b06cd9-6fc8-42f1-ba3c-2c5f0ea084f2",
+          "name": "get Otc Beneficiaries",
+          "request": {
+            "name": "get Otc Beneficiaries",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "customer",
+                "beneficiary",
+                "otc"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "61387750",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "84064128",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "beneficiaryName",
+                  "value": "culpa aute elit",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "beneficiaryIdNumber",
+                  "value": "minim Lorem",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "relationCode",
+                  "value": "veniam pariatur proident",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/customer/beneficiary/otc?page=61387750&size=84064128&beneficiaryName=culpa aute elit&beneficiaryIdNumber=minim Lorem&relationCode=veniam pariatur proident"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9b2d76be-f8c3-4ad5-a46d-bc4a6a2f2533",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "customer",
+                    "beneficiary",
+                    "otc"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "61387750"
+                    },
+                    {
+                      "key": "size",
+                      "value": "84064128"
+                    },
+                    {
+                      "key": "beneficiaryName",
+                      "value": "culpa aute elit"
+                    },
+                    {
+                      "key": "beneficiaryIdNumber",
+                      "value": "minim Lorem"
+                    },
+                    {
+                      "key": "relationCode",
+                      "value": "veniam pariatur proident"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": 33739201,\n  \"totalElements\": 9217914,\n  \"size\": 70824573,\n  \"content\": [\n    {\n      \"id\": 76587845,\n      \"customerProfileCode\": \"cillum\",\n      \"beneficiaryAlias\": \"fugiat ea\",\n      \"type\": \"ullamco id consectetur\",\n      \"beneficiaryFirstName\": \"ut fugiat minim mollit\",\n      \"beneficiaryFatherName\": \"ullamco eiusmod exercitation do\",\n      \"beneficiaryLastName\": \"adipisicing voluptate Lorem\",\n      \"beneficiaryIdNumber\": \"fugiat velit\",\n      \"relationCode\": \"sint mollit\",\n      \"relationNameAr\": \"dolore do\",\n      \"relationNameEn\": \"pariatur aliquip in officia\",\n      \"currencyNameAr\": \"consectetur eiusmod voluptate Lorem incididunt\",\n      \"currencyNameEn\": \"Lore\",\n      \"currencyCode\": \"reprehenderit irure aliquip\",\n      \"fullAddress\": \"cillum reprehenderit in sit\",\n      \"countryCode\": \"non mollit magna\",\n      \"countryNameAr\": \"in minim\",\n      \"countryNameEn\": \"magna incididunt deserunt\",\n      \"agreedTermsAndConditions\": false,\n      \"knowsBeneficiaryNationality\": false,\n      \"knowsBeneficiaryAge\": true\n    },\n    {\n      \"id\": -20168298,\n      \"customerProfileCode\": \"in ut ipsum\",\n      \"beneficiaryAlias\": \"dolor commodo\",\n      \"type\": \"cillum sed\",\n      \"beneficiaryFirstName\": \"enim id Duis deserunt ipsum\",\n      \"beneficiaryFatherName\": \"Excepteur reprehenderit Ut\",\n      \"beneficiaryLastName\": \"amet in sed ipsum reprehenderit\",\n      \"beneficiaryIdNumber\": \"enim anim commodo\",\n      \"relationCode\": \"non consequat\",\n      \"relationNameAr\": \"in velit dolor\",\n      \"relationNameEn\": \"exercitation dolore in\",\n      \"currencyNameAr\": \"ad ea sunt mollit\",\n      \"currencyNameEn\": \"esse ullamco ea dolore\",\n      \"currencyCode\": \"nulla non laboris occaecat eiusmod\",\n      \"fullAddress\": \"dolore\",\n      \"countryCode\": \"proident labore ex ullamco\",\n      \"countryNameAr\": \"adipisicing magna quis\",\n      \"countryNameEn\": \"anim\",\n      \"agreedTermsAndConditions\": true,\n      \"knowsBeneficiaryNationality\": false,\n      \"knowsBeneficiaryAge\": true\n    }\n  ],\n  \"number\": -4223009,\n  \"sort\": [\n    {\n      \"direction\": \"labore officia aliquip do\",\n      \"nullHandling\": \"aliqua ex\",\n      \"ascending\": true,\n      \"property\": \"in in\",\n      \"ignoreCase\": true\n    },\n    {\n      \"direction\": \"sed Ut eu dolore\",\n      \"nullHandling\": \"ullamco aliqua nu\",\n      \"ascending\": true,\n      \"property\": \"sunt in do\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"pageable\": {\n    \"offset\": -8456666,\n    \"sort\": [\n      {\n        \"direction\": \"aliquip id exercitation ullamco\",\n        \"nullHandling\": \"in ipsum do\",\n        \"ascending\": true,\n        \"property\": \"cupidatat aute et Ut\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"sint velit ve\",\n        \"nullHandling\": \"dolore minim\",\n        \"ascending\": true,\n        \"property\": \"deserunt sed enim\",\n        \"ignoreCase\": true\n      }\n    ],\n    \"pageNumber\": 38057421,\n    \"pageSize\": 96438742,\n    \"paged\": false,\n    \"unpaged\": true\n  },\n  \"last\": true,\n  \"first\": false,\n  \"numberOfElements\": -86005530,\n  \"empty\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3d135213-b9cd-419c-8dc4-ea8799518222",
+          "name": "add Otc Beneficiary",
+          "request": {
+            "name": "add Otc Beneficiary",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "customer",
+                "beneficiary",
+                "otc"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/customer/beneficiary/otc"
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "User-Agent",
+                "value": "dolor Excepteur"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"otp\": \"aliquip in aliqua\",\n  \"beneficiaryAlias\": \"dolor \",\n  \"beneficiaryFirstName\": \"do elit in exercitation\",\n  \"beneficiaryLastName\": \"veniam\",\n  \"beneficiaryFatherName\": \"ipsum sunt velit nostrud\",\n  \"beneficiaryIdNumber\": \"et ipsum\",\n  \"relationCode\": \"quis do sit\",\n  \"currencyId\": -9996468,\n  \"fullAddress\": \"ipsum et dolore ex\",\n  \"countryCode\": \"in ut\",\n  \"agreedTermsAndConditions\": false,\n  \"knowsBeneficiaryNationality\": false,\n  \"knowsBeneficiaryAge\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "442dd40e-cc59-41be-b9cd-209d58db7254",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "customer",
+                    "beneficiary",
+                    "otc"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "User-Agent",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"otp\": \"aliquip in aliqua\",\n  \"beneficiaryAlias\": \"dolor \",\n  \"beneficiaryFirstName\": \"do elit in exercitation\",\n  \"beneficiaryLastName\": \"veniam\",\n  \"beneficiaryFatherName\": \"ipsum sunt velit nostrud\",\n  \"beneficiaryIdNumber\": \"et ipsum\",\n  \"relationCode\": \"quis do sit\",\n  \"currencyId\": -9996468,\n  \"fullAddress\": \"ipsum et dolore ex\",\n  \"countryCode\": \"in ut\",\n  \"agreedTermsAndConditions\": false,\n  \"knowsBeneficiaryNationality\": false,\n  \"knowsBeneficiaryAge\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 49420379,\n  \"customerProfileCode\": \"ipsum magna in nostrud cillum\",\n  \"beneficiaryAlias\": \"sint ullamco sed\",\n  \"type\": \"tempor minim esse\",\n  \"beneficiaryFirstName\": \"sunt quis in sit\",\n  \"beneficiaryFatherName\": \"ullamco consequat\",\n  \"beneficiaryLastName\": \"Excepteur amet Ut qui\",\n  \"beneficiaryIdNumber\": \"Ut\",\n  \"relationCode\": \"ut commodo\",\n  \"relationNameAr\": \"sint mollit ullamco\",\n  \"relationNameEn\": \"consectetur nisi aliqua pariatur\",\n  \"currencyNameAr\": \"deserunt incididunt officia\",\n  \"currencyNameEn\": \"laboris dolore\",\n  \"currencyCode\": \"cillum sint\",\n  \"fullAddress\": \"in consectetur reprehenderit\",\n  \"countryCode\": \"eu ut et\",\n  \"countryNameAr\": \"consequat\",\n  \"countryNameEn\": \"non\",\n  \"agreedTermsAndConditions\": true,\n  \"knowsBeneficiaryNationality\": true,\n  \"knowsBeneficiaryAge\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8a3bcc48-db9a-4694-866d-efb46ab3315c",
+          "name": "get Local Bank Beneficiaries",
+          "request": {
+            "name": "get Local Bank Beneficiaries",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "customer",
+                "beneficiary",
+                "local-bank"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "-93250595",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "-61363332",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "iban",
+                  "value": "amet fugiat sed incididunt",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "relationCode",
+                  "value": "dolore nisi et ad exercitation",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "bankName",
+                  "value": "velit sit esse elit",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "beneficiaryName",
+                  "value": "dolor incididunt",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/customer/beneficiary/local-bank?page=-93250595&size=-61363332&iban=amet fugiat sed incididunt&relationCode=dolore nisi et ad exercitation&bankName=velit sit esse elit&beneficiaryName=dolor incididunt"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "87153726-d5a7-41a3-9129-4a66259ac6c0",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "customer",
+                    "beneficiary",
+                    "local-bank"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "-93250595"
+                    },
+                    {
+                      "key": "size",
+                      "value": "-61363332"
+                    },
+                    {
+                      "key": "iban",
+                      "value": "amet fugiat sed incididunt"
+                    },
+                    {
+                      "key": "relationCode",
+                      "value": "dolore nisi et ad exercitation"
+                    },
+                    {
+                      "key": "bankName",
+                      "value": "velit sit esse elit"
+                    },
+                    {
+                      "key": "beneficiaryName",
+                      "value": "dolor incididunt"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": 6111034,\n  \"totalElements\": 72562751,\n  \"size\": -56657729,\n  \"content\": [\n    {\n      \"id\": 2781644,\n      \"customerProfileCode\": \"tempor\",\n      \"beneficiaryAlias\": \"voluptate\",\n      \"type\": \"ut cillum eiusmod consectetur velit\",\n      \"relationCode\": \"ut amet adipisicing dolor\",\n      \"iban\": \"anim mollit do voluptate\",\n      \"bic\": \"co\",\n      \"bankNameAr\": \"id irure eu\",\n      \"bankNameEn\": \"pariatur dolor dolore\",\n      \"relationNameAr\": \"ullamco ad fugiat consectetur in\",\n      \"relationNameEn\": \"proident ut Ut\",\n      \"addressLine1\": \"in\",\n      \"addressLine2\": \"ea magna et\",\n      \"beneficiaryFirstName\": \"Excepteur adipisicing aute\",\n      \"beneficiaryFatherName\": \"aute ut\",\n      \"beneficiaryLastName\": \"cillum deserunt est non\"\n    },\n    {\n      \"id\": 47242846,\n      \"customerProfileCode\": \"cupi\",\n      \"beneficiaryAlias\": \"sunt laboris\",\n      \"type\": \"dolor in\",\n      \"relationCode\": \"laborum dolore\",\n      \"iban\": \"ex quis eu\",\n      \"bic\": \"in Duis enim nostrud\",\n      \"bankNameAr\": \"Lorem nostrud\",\n      \"bankNameEn\": \"proident veniam\",\n      \"relationNameAr\": \"Ut sunt\",\n      \"relationNameEn\": \"exercitation nulla laboris\",\n      \"addressLine1\": \"est ea cillum ex\",\n      \"addressLine2\": \"dolor ut\",\n      \"beneficiaryFirstName\": \"laborum cupidatat sed mollit sint\",\n      \"beneficiaryFatherName\": \"tempor nostrud in Ut do\",\n      \"beneficiaryLastName\": \"ut anim in\"\n    }\n  ],\n  \"number\": 59398902,\n  \"sort\": [\n    {\n      \"direction\": \"proident in exercitation\",\n      \"nullHandling\": \"amet\",\n      \"ascending\": false,\n      \"property\": \"nulla enim elit occaecat\",\n      \"ignoreCase\": true\n    },\n    {\n      \"direction\": \"occaecat quis\",\n      \"nullHandling\": \"Ut ex\",\n      \"ascending\": true,\n      \"property\": \"tempor non cillum exercitation\",\n      \"ignoreCase\": true\n    }\n  ],\n  \"pageable\": {\n    \"offset\": 89989506,\n    \"sort\": [\n      {\n        \"direction\": \"ut dolor commodo in cillum\",\n        \"nullHandling\": \"cupidatat proident\",\n        \"ascending\": false,\n        \"property\": \"eu laborum\",\n        \"ignoreCase\": false\n      },\n      {\n        \"direction\": \"velit sed laborum labore\",\n        \"nullHandling\": \"\",\n        \"ascending\": true,\n        \"property\": \"labore ex deserunt\",\n        \"ignoreCase\": true\n      }\n    ],\n    \"pageNumber\": 23333902,\n    \"pageSize\": -57614586,\n    \"paged\": false,\n    \"unpaged\": false\n  },\n  \"last\": false,\n  \"first\": true,\n  \"numberOfElements\": -63810487,\n  \"empty\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dda01ab1-f5db-486f-866a-f703f2e00df7",
+          "name": "add Local Bank Beneficiary",
+          "request": {
+            "name": "add Local Bank Beneficiary",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "customer",
+                "beneficiary",
+                "local-bank"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/customer/beneficiary/local-bank"
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "User-Agent",
+                "value": "dolor Excepteur"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"otp\": \"deserunt exercitation\",\n  \"beneficiaryAlias\": \"enim Lorem sit\",\n  \"iban\": \"in irure magna\",\n  \"relationCode\": \"reprehenderit\",\n  \"bankId\": 38989815,\n  \"addressLine1\": \"eiusmod\",\n  \"addressLine2\": \"adipisicing nisi\",\n  \"beneficiaryFirstName\": \"veniam dolor\",\n  \"beneficiaryFatherName\": \"molli\",\n  \"beneficiaryLastName\": \"mollit labore incididunt\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ee778796-a7e9-47ae-826d-841cf72afe83",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "customer",
+                    "beneficiary",
+                    "local-bank"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "User-Agent",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"otp\": \"deserunt exercitation\",\n  \"beneficiaryAlias\": \"enim Lorem sit\",\n  \"iban\": \"in irure magna\",\n  \"relationCode\": \"reprehenderit\",\n  \"bankId\": 38989815,\n  \"addressLine1\": \"eiusmod\",\n  \"addressLine2\": \"adipisicing nisi\",\n  \"beneficiaryFirstName\": \"veniam dolor\",\n  \"beneficiaryFatherName\": \"molli\",\n  \"beneficiaryLastName\": \"mollit labore incididunt\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 8305029,\n  \"customerProfileCode\": \"laboris proident consectetur\",\n  \"beneficiaryAlias\": \"eu in et in in\",\n  \"type\": \"nostrud non dolore\",\n  \"relationCode\": \"ut Duis\",\n  \"iban\": \"ipsum ut sed do\",\n  \"bic\": \"ullamco ipsum id deserunt\",\n  \"bankNameAr\": \"id\",\n  \"bankNameEn\": \"aliqua exercitation tempor sunt\",\n  \"relationNameAr\": \"irure est dolor id\",\n  \"relationNameEn\": \"sunt velit fugiat esse\",\n  \"addressLine1\": \"pariatur in aliqua magna\",\n  \"addressLine2\": \"ex non irure ipsum proident\",\n  \"beneficiaryFirstName\": \"Ut proident\",\n  \"beneficiaryFatherName\": \"ipsum tempor in ad reprehenderit\",\n  \"beneficiaryLastName\": \"ad consequat\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2b27c5cc-41dc-49b6-aa69-0f941f0d6ea0",
+          "name": "get International Beneficiaries",
+          "request": {
+            "name": "get International Beneficiaries",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "customer",
+                "beneficiary",
+                "international-bank"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "57937924",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "60957974",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "iban",
+                  "value": "dolore et commodo ex",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "countryCode",
+                  "value": "nostrud voluptate ex",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "relationCode",
+                  "value": "ut sit anim Duis aliqua",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "bankName",
+                  "value": "consequa",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "beneficiaryName",
+                  "value": "nostrud ea Lorem l",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/customer/beneficiary/international-bank?page=57937924&size=60957974&iban=dolore et commodo ex&countryCode=nostrud voluptate ex&relationCode=ut sit anim Duis aliqua&bankName=consequa&beneficiaryName=nostrud ea Lorem l"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1d9d05e2-fd9b-4948-85d2-d30645e69682",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "customer",
+                    "beneficiary",
+                    "international-bank"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "57937924"
+                    },
+                    {
+                      "key": "size",
+                      "value": "60957974"
+                    },
+                    {
+                      "key": "iban",
+                      "value": "dolore et commodo ex"
+                    },
+                    {
+                      "key": "countryCode",
+                      "value": "nostrud voluptate ex"
+                    },
+                    {
+                      "key": "relationCode",
+                      "value": "ut sit anim Duis aliqua"
+                    },
+                    {
+                      "key": "bankName",
+                      "value": "consequa"
+                    },
+                    {
+                      "key": "beneficiaryName",
+                      "value": "nostrud ea Lorem l"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": -38082771,\n  \"totalElements\": -36576853,\n  \"size\": -94291232,\n  \"content\": [\n    {\n      \"id\": -26983623,\n      \"customerProfileCode\": \"dolore\",\n      \"beneficiaryAlias\": \"non Excepteur labore laboris in\",\n      \"type\": \"labore consequat ipsum qui\",\n      \"relationCode\": \"in est voluptate\",\n      \"iban\": \"paria\",\n      \"bic\": \"ut Excepteur \",\n      \"bankNameAr\": \"in est\",\n      \"bankNameEn\": \"occaecat Excepteur\",\n      \"countryCode\": \"in\",\n      \"countryNameAr\": \"in te\",\n      \"countryNameEn\": \"ex in\",\n      \"relationNameAr\": \"mollit velit est occaecat qui\",\n      \"relationNameEn\": \"qui officia\",\n      \"addressLine1\": \"ad Ut est\",\n      \"addressLine2\": \"ullamco non\",\n      \"currencyNameAr\": \"cillum dolore ad ex\",\n      \"currencyCode\": \"ex Excepteur magna\",\n      \"currencyNameEn\": \"n\",\n      \"beneficiaryFirstName\": \"sit culpa\",\n      \"beneficiaryFatherName\": \"anim proident\",\n      \"beneficiaryLastName\": \"ex labore\",\n      \"agreedTermsAndConditions\": false\n    },\n    {\n      \"id\": -89637827,\n      \"customerProfileCode\": \"elit deserunt velit\",\n      \"beneficiaryAlias\": \"in ad\",\n      \"type\": \"fugiat\",\n      \"relationCode\": \"non Lorem ex\",\n      \"iban\": \"Excepteur ut est\",\n      \"bic\": \"aute labore\",\n      \"bankNameAr\": \"consequat\",\n      \"bankNameEn\": \"Ut aliqua eiusmod\",\n      \"countryCode\": \"laborum\",\n      \"countryNameAr\": \"incididunt ad ess\",\n      \"countryNameEn\": \"Duis tempor\",\n      \"relationNameAr\": \"ut\",\n      \"relationNameEn\": \"c\",\n      \"addressLine1\": \"fugiat cupidatat veniam aute\",\n      \"addressLine2\": \"reprehenderit anim dolore\",\n      \"currencyNameAr\": \"consequat est sed\",\n      \"currencyCode\": \"ut qui mollit non\",\n      \"currencyNameEn\": \"pariatur iru\",\n      \"beneficiaryFirstName\": \"magna in\",\n      \"beneficiaryFatherName\": \"quis sunt fugiat\",\n      \"beneficiaryLastName\": \"do\",\n      \"agreedTermsAndConditions\": false\n    }\n  ],\n  \"number\": 58680093,\n  \"sort\": [\n    {\n      \"direction\": \"aliquip sed do\",\n      \"nullHandling\": \"sit aute nostrud anim\",\n      \"ascending\": false,\n      \"property\": \"anim cupidatat pariatur minim\",\n      \"ignoreCase\": false\n    },\n    {\n      \"direction\": \"anim qui non sit\",\n      \"nullHandling\": \"elit qui\",\n      \"ascending\": false,\n      \"property\": \"dolor occaecat\",\n      \"ignoreCase\": true\n    }\n  ],\n  \"pageable\": {\n    \"offset\": 5412537,\n    \"sort\": [\n      {\n        \"direction\": \"in sunt nisi\",\n        \"nullHandling\": \"cillum in reprehenderit laboris\",\n        \"ascending\": true,\n        \"property\": \"veniam velit nulla commodo\",\n        \"ignoreCase\": false\n      },\n      {\n        \"direction\": \"cillum in cupidatat velit\",\n        \"nullHandling\": \"fugiat do\",\n        \"ascending\": false,\n        \"property\": \"aute culpa non \",\n        \"ignoreCase\": false\n      }\n    ],\n    \"pageNumber\": 25613140,\n    \"pageSize\": 96377792,\n    \"paged\": false,\n    \"unpaged\": false\n  },\n  \"last\": true,\n  \"first\": true,\n  \"numberOfElements\": -58465552,\n  \"empty\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b96896a3-aaf9-4bf0-882f-757b941258b0",
+          "name": "add International Bank Beneficiary",
+          "request": {
+            "name": "add International Bank Beneficiary",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "customer",
+                "beneficiary",
+                "international-bank"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/customer/beneficiary/international-bank"
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "User-Agent",
+                "value": "dolor Excepteur"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"otp\": \"officia ut quis est commodo\",\n  \"beneficiaryAlias\": \"ipsum\",\n  \"iban\": \"dolor Duis labore sed\",\n  \"countryCode\": \"Lorem non ex\",\n  \"relationCode\": \"Lorem fugiat \",\n  \"bankId\": -27766230,\n  \"addressLine1\": \"velit non voluptate\",\n  \"addressLine2\": \"aliquip quis Ut\",\n  \"currencyId\": -61311665,\n  \"beneficiaryFirstName\": \"ipsum aute dolore\",\n  \"beneficiaryFatherName\": \"do tempor cupidatat\",\n  \"beneficiaryLastName\": \"cillum non ipsum et exercitation\",\n  \"agreedTermsAndConditions\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "821f0b8e-e4c8-4676-97c7-c6c2194f03e8",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "customer",
+                    "beneficiary",
+                    "international-bank"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "User-Agent",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"otp\": \"officia ut quis est commodo\",\n  \"beneficiaryAlias\": \"ipsum\",\n  \"iban\": \"dolor Duis labore sed\",\n  \"countryCode\": \"Lorem non ex\",\n  \"relationCode\": \"Lorem fugiat \",\n  \"bankId\": -27766230,\n  \"addressLine1\": \"velit non voluptate\",\n  \"addressLine2\": \"aliquip quis Ut\",\n  \"currencyId\": -61311665,\n  \"beneficiaryFirstName\": \"ipsum aute dolore\",\n  \"beneficiaryFatherName\": \"do tempor cupidatat\",\n  \"beneficiaryLastName\": \"cillum non ipsum et exercitation\",\n  \"agreedTermsAndConditions\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 83108615,\n  \"customerProfileCode\": \"aute velit et\",\n  \"beneficiaryAlias\": \"Excepteur eu sit\",\n  \"type\": \"nisi elit ullamco\",\n  \"relationCode\": \"\",\n  \"iban\": \"irure Excepteur officia adipisicing\",\n  \"bic\": \"ea in\",\n  \"bankNameAr\": \"irure ea ipsum quis\",\n  \"bankNameEn\": \"mollit ut\",\n  \"countryCode\": \"eu do dolor\",\n  \"countryNameAr\": \"in minim Duis Ut Excepteur\",\n  \"countryNameEn\": \"quis\",\n  \"relationNameAr\": \"in reprehenderit aliquip\",\n  \"relationNameEn\": \"amet ex sed\",\n  \"addressLine1\": \"velit \",\n  \"addressLine2\": \"nulla Excepteur aute reprehenderit\",\n  \"currencyNameAr\": \"sint quis aute in aliqua\",\n  \"currencyCode\": \"in elit occaecat\",\n  \"currencyNameEn\": \"sed enim dolor\",\n  \"beneficiaryFirstName\": \"adipisicing sit irure\",\n  \"beneficiaryFatherName\": \"dolore adipisicing sunt Ut\",\n  \"beneficiaryLastName\": \"ut velit voluptate Excepteur minim\",\n  \"agreedTermsAndConditions\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5868921f-45f5-49c3-bf84-4c6a39b2fa7c",
+          "name": "get Customer Beneficiary By Id Internal",
+          "request": {
+            "name": "get Customer Beneficiary By Id Internal",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "customer",
+                "beneficiary",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "24741577",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/customer/beneficiary/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "44b8e25a-a052-4c5d-98ea-10ae569a8b99",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "customer",
+                    "beneficiary",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "24741577",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 53610320,\n  \"customerProfileCode\": \"dolor aliqua aliquip Lorem\",\n  \"beneficiaryAlias\": \"incididunt Ut\",\n  \"type\": \"dolore velit veniam\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "597630e8-fe4a-48fb-a235-796940308569",
+          "name": "delete Customer Beneficiary",
+          "request": {
+            "name": "delete Customer Beneficiary",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "customer",
+                "beneficiary",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "24741577",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/customer/beneficiary/:id"
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c87a315c-515d-4c16-a44f-407ca445b103",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "customer",
+                    "beneficiary",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "24741577",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "dolor Excepteur"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "95df7016-ba86-4bfe-ac58-e44360fc8ad5",
+      "name": "otp-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "18e73d12-804b-493b-9573-07bb6b4f17c8",
+          "name": "create Beneficiary Otp",
+          "request": {
+            "name": "create Beneficiary Otp",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "beneficiary-otp"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/beneficiary-otp"
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "Accept-Language",
+                "value": "dolor Excepteur"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "76e13127-fed2-4296-9756-54364aad8a83",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "beneficiary-otp"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Accept-Language",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"required\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7cca13f7-67e1-4efc-8dae-56f5c6d8dce0",
+          "name": "resend Otp",
+          "request": {
+            "name": "resend Otp",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "beneficiary-otp",
+                "resend"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/beneficiary-otp/resend"
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "Accept-Language",
+                "value": "dolor Excepteur"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "83cbb635-8fb5-4d68-9f2a-1af125be6109",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "beneficiary-otp",
+                    "resend"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Accept-Language",
+                    "value": "dolor Excepteur"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "69921dc5-79cc-4918-bb83-cd3a29d1d449",
+      "name": "external-beneficiary-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "684f3c69-ab0b-4b97-96a7-aa38519aaaa7",
+          "name": "get Beneficiary By Unified Number",
+          "request": {
+            "name": "get Beneficiary By Unified Number",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "external",
+                "beneficiaries",
+                ":unifiedNumber"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "dolor Excepteur",
+                  "key": "unifiedNumber",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/external/beneficiaries/:unifiedNumber"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "440292b3-a874-44e3-acbe-ba76d29e64d4",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "external",
+                    "beneficiaries",
+                    ":unifiedNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "dolor Excepteur",
+                      "key": "unifiedNumber",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "dolor Excepteur"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 61022750,\n  \"beneficiaryAlias\": \"nisi Lorem dolore laborum\",\n  \"beneficiaryName\": \"aliquip enim culpa\",\n  \"beneficiaryProfileCode\": \"deserunt\",\n  \"beneficiaryIdentifier\": \"aliqua sed est ullamco\",\n  \"billerProfileCode\": \"eiusmod\",\n  \"beneficiaryStatus\": {\n    \"code\": \"velit magna consequat laborum\",\n    \"nameAr\": \"velit Excepteur\",\n    \"nameEn\": \"voluptate et enim\"\n  },\n  \"agreementToken\": \"veniam laborum\",\n  \"beneficiaryProfileType\": \"veniam\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "e2171494-6ff5-479a-8554-441ef01b4da5",
+      "name": "beneficiary-status-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c270820b-590d-4380-a86a-941c21c614dd",
+          "name": "get All Beneficiary Status",
+          "request": {
+            "name": "get All Beneficiary Status",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "beneficiary",
+                "statuses"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/beneficiary/statuses"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "823e4b32-ca31-4f61-a399-a5ba379d9c6c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "beneficiary",
+                    "statuses"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"code\": \"officia et Excepteur aliqua id\",\n    \"nameAr\": \"commodo reprehenderit anim cupidatat adipisicing\",\n    \"nameEn\": \"dolore eu\"\n  },\n  {\n    \"code\": \"et\",\n    \"nameAr\": \"veniam ex amet pariatur consequat\",\n    \"nameEn\": \"est fugiat\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7a1c1468-1869-4eb0-83cb-0872ce06b5d1",
+          "name": "get Beneficiary Status By Code",
+          "request": {
+            "name": "get Beneficiary Status By Code",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "beneficiary",
+                "status",
+                ":code"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "dolor Excepteur",
+                  "key": "code",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/beneficiary/status/:code"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d26d8370-0f78-4e37-b2e9-bf49f554acce",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "beneficiary",
+                    "status",
+                    ":code"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "dolor Excepteur",
+                      "key": "code",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"code\": \"fugiat dolore reprehenderit\",\n  \"nameAr\": \"minim dolor nostrud occaecat\",\n  \"nameEn\": \"aliquip magna est\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "314aff24-56d3-4aa1-a690-32de147ff949",
+      "name": "lookup-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "704d6ba1-6a06-4115-ace7-01347aa5f4c0",
+          "name": "relations",
+          "request": {
+            "name": "relations",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "beneficiary",
+                "lookup",
+                "relations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/beneficiary/lookup/relations"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f1762253-1496-48be-a6a7-eadee839f5c2",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "beneficiary",
+                    "lookup",
+                    "relations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": 75958541,\n    \"relationEn\": \"commodo\",\n    \"relationAr\": \"ut tempor anim non ex\",\n    \"code\": \"nulla adipisicing\"\n  },\n  {\n    \"id\": 75153947,\n    \"relationEn\": \"do ut sit sunt\",\n    \"relationAr\": \"ut ipsum in anim\",\n    \"code\": \"occaecat sit aliquip\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generated guard: a 5xx from any request is a gateway/service defect, not a test-data problem.",
+          "pm.test('no 5xx (' + pm.info.requestName + ')', function () {",
+          "  pm.expect(pm.response.code, (pm.response.text() || '').slice(0, 300)).to.be.below(500);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{gatewayBaseUrl}}/beneficiary-management",
+      "type": "string"
+    }
+  ],
+  "info": {
+    "_postman_id": "460d1073-e4b0-4969-be89-6784d83ea19d",
+    "name": "Beneficiary Service - majdpay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Beneficiary Service (beneficiary-management) — 24 operations.\n\nGENERATED from the OpenAPI 3.1.0 spec published at the UAT gateway swagger-ui\n(Select a definition -> \"Beneficiary Service APIs\"). Request bodies are schema-derived placeholders (lorem-ipsum\nstrings, sample numbers) — replace with real values before sending.\n\nBase URL: {{gatewayBaseUrl}}/beneficiary-management  (gatewayBaseUrl lives in EMI-dev.postman_environment.json).\nSpec server: https://gateway-emiuat.dg-cash.app/beneficiary-management\n\nAUTH: the spec declares no security scheme, but the gateway front-doors every route with a bearer\ntoken. Set {{token}} in the environment (mint one with the Authentication Service collection's\nsign-in, or pass --env-var token=... to newman). Some back-office routes need an admin/service\ntoken rather than a merchant one.\n\nCompanion Playwright scaffold: BusinessTestCases/ServiceApis/BeneficiaryManagement.generated.spec.ts\n\nNOTE: BusinessTestCases/BeneficiaryManagement/ already has curated functional coverage of this surface."
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

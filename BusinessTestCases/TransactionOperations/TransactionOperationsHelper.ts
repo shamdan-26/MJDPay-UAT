@@ -4,7 +4,7 @@
  * actions on existing transactions. No Business Portal UI surface for either.
  */
 
-export const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev.majdpay.com';
+export const API_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev-emi.dg-cash.app';
 
 export function commonHeaders(): Record<string, string> {
     return {

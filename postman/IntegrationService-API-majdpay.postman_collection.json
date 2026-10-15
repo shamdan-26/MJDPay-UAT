@@ -1,0 +1,1517 @@
+{
+  "item": [
+    {
+      "id": "02e3138d-8664-4bc7-bf44-d97b984b7cf5",
+      "name": "upload-file-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "aad3686a-52f6-466f-b1df-0ada26a945db",
+          "name": "upload File",
+          "request": {
+            "name": "upload File",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "file",
+                "upload"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fileType",
+                  "value": "se",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/file/upload?fileType=se"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"file\": \"esse nostrud\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "85e7ba0c-39a1-426c-98b4-e3c7d95d6d24",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "file",
+                    "upload"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fileType",
+                      "value": "se"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"file\": \"esse nostrud\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"fileToken\": \"est sint esse\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "b4552b37-25ce-492d-b219-a6cbc3ba2b9f",
+      "name": "external-party-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a8a5a5da-cdf4-4bd4-ac09-4ae9ce6666cd",
+          "name": "generate Api Key",
+          "request": {
+            "name": "generate Api Key",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "external_party_integration",
+                ":id",
+                "api-key"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-50539187",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/external_party_integration/:id/api-key"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f7d8969b-1796-485e-bfb4-2eb93418db67",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "external_party_integration",
+                    ":id",
+                    "api-key"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-50539187",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"apiKey\": \"consectetur pariatur Duis in incididunt\",\n  \"clientId\": \"quis Lorem occaecat elit do\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f3a2fa66-0db3-4fdf-b230-22b061898aee",
+          "name": "refresh Api Key",
+          "request": {
+            "name": "refresh Api Key",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "external_party_integration",
+                "refresh",
+                "api-key"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/external_party_integration/refresh/api-key"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clientId\": \"Excepteur elit labor\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3fb308b6-0c1e-4002-90a2-21d323ae552d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "external_party_integration",
+                    "refresh",
+                    "api-key"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"clientId\": \"Excepteur elit labor\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"apiKey\": \"consectetur pariatur Duis in incididunt\",\n  \"clientId\": \"quis Lorem occaecat elit do\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5981d437-fe37-468a-84b1-be9ee6fc6afd",
+          "name": "create External Party",
+          "request": {
+            "name": "create External Party",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "external_party_integration",
+                "add"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/external_party_integration/add"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"et ex cupidatat\",\n  \"mobileNumber\": \"dolor\",\n  \"description\": \"commodo Excepteur\",\n  \"unifiedNumber\": \"magna\",\n  \"status\": 13485425\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "41137367-7bce-4b8c-a193-77b4fb79743d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "external_party_integration",
+                    "add"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"et ex cupidatat\",\n  \"mobileNumber\": \"dolor\",\n  \"description\": \"commodo Excepteur\",\n  \"unifiedNumber\": \"magna\",\n  \"status\": 13485425\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -43912646,\n  \"name\": \"ipsum tempor et\",\n  \"clientId\": \"nulla magna aliqua tempor\",\n  \"mobileNumber\": \"amet laboris ex occaecat\",\n  \"description\": \"officia in Duis aute\",\n  \"apiKey\": \"deserunt eu minim magna\",\n  \"secretKey\": \"in ea do ipsum\",\n  \"unifiedNumber\": \"cupidatat anim ipsum qui\",\n  \"status\": {\n    \"id\": -46939591,\n    \"nameEn\": \"minim incididun\",\n    \"nameAr\": \"ipsum nostrud amet\",\n    \"description\": \"ut\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3d78b2ab-0b4c-4441-b599-22bc45be5b93",
+          "name": "change Status",
+          "request": {
+            "name": "change Status",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "external_party_integration",
+                ":id",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-50539187",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/external_party_integration/:id/status"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "-50539187",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f11d9a23-001e-406e-bf99-d9677887a1cf",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "external_party_integration",
+                    ":id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-50539187",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "-50539187",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -43912646,\n  \"name\": \"ipsum tempor et\",\n  \"clientId\": \"nulla magna aliqua tempor\",\n  \"mobileNumber\": \"amet laboris ex occaecat\",\n  \"description\": \"officia in Duis aute\",\n  \"apiKey\": \"deserunt eu minim magna\",\n  \"secretKey\": \"in ea do ipsum\",\n  \"unifiedNumber\": \"cupidatat anim ipsum qui\",\n  \"status\": {\n    \"id\": -46939591,\n    \"nameEn\": \"minim incididun\",\n    \"nameAr\": \"ipsum nostrud amet\",\n    \"description\": \"ut\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dcb1eb13-3198-4db9-a38a-8c7b5c0a0e1b",
+          "name": "get External Party By Id",
+          "request": {
+            "name": "get External Party By Id",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "external_party_integration",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-50539187",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/external_party_integration/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "62fa5001-027a-485a-89c4-006a3998501f",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "external_party_integration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-50539187",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -43912646,\n  \"name\": \"ipsum tempor et\",\n  \"clientId\": \"nulla magna aliqua tempor\",\n  \"mobileNumber\": \"amet laboris ex occaecat\",\n  \"description\": \"officia in Duis aute\",\n  \"apiKey\": \"deserunt eu minim magna\",\n  \"secretKey\": \"in ea do ipsum\",\n  \"unifiedNumber\": \"cupidatat anim ipsum qui\",\n  \"status\": {\n    \"id\": -46939591,\n    \"nameEn\": \"minim incididun\",\n    \"nameAr\": \"ipsum nostrud amet\",\n    \"description\": \"ut\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "958baeb8-ee2d-43e9-be2f-13f702d54855",
+          "name": "delete External Party",
+          "request": {
+            "name": "delete External Party",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "external_party_integration",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-50539187",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/external_party_integration/:id"
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1f546335-c90f-4f0b-b795-87fc3c3681b9",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "external_party_integration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-50539187",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1e92d5f6-40ec-4fc2-815e-3cdd03fc2281",
+          "name": "get All External Parties",
+          "request": {
+            "name": "get All External Parties",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "external_party_integration",
+                "getAll"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10"
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/external_party_integration/getAll?page=0&size=10"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8d7e17dd-70f5-406a-9f33-6b965df94b41",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "external_party_integration",
+                    "getAll"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": -77587072,\n  \"totalElements\": 64056748,\n  \"size\": 32864746,\n  \"content\": [\n    {\n      \"id\": 77389383,\n      \"name\": \"sunt do Lorem\",\n      \"clientId\": \"exercitation consequat\",\n      \"mobileNumber\": \"laborum\",\n      \"description\": \"enim eiusmod do ea\",\n      \"apiKey\": \"labore id\",\n      \"secretKey\": \"non dolore pariatur\",\n      \"unifiedNumber\": \"sunt Lorem est in\",\n      \"status\": {\n        \"id\": 45025684,\n        \"nameEn\": \"consectetur\",\n        \"nameAr\": \"nulla aliq\",\n        \"description\": \"Excepteur Lorem\"\n      }\n    },\n    {\n      \"id\": -98063586,\n      \"name\": \"ea reprehenderit dolor amet\",\n      \"clientId\": \"magna\",\n      \"mobileNumber\": \"reprehenderit fugiat ad\",\n      \"description\": \"aliquip ut fugiat\",\n      \"apiKey\": \"anim sunt\",\n      \"secretKey\": \"commodo ut\",\n      \"unifiedNumber\": \"voluptate officia laboris\",\n      \"status\": {\n        \"id\": 70855208,\n        \"nameEn\": \"Duis ad ut id\",\n        \"nameAr\": \"aliquip nulla pariatur\",\n        \"description\": \"minim sint\"\n      }\n    }\n  ],\n  \"number\": 66307978,\n  \"sort\": [\n    {\n      \"direction\": \"exercita\",\n      \"nullHandling\": \"in d\",\n      \"ascending\": true,\n      \"property\": \"est adipisicing occaecat cillum\",\n      \"ignoreCase\": true\n    },\n    {\n      \"direction\": \"eiusmod laboris ut do\",\n      \"nullHandling\": \"sint ut\",\n      \"ascending\": true,\n      \"property\": \"ci\",\n      \"ignoreCase\": true\n    }\n  ],\n  \"pageable\": {\n    \"offset\": 5731244,\n    \"sort\": [\n      {\n        \"direction\": \"culpa sit commodo est\",\n        \"nullHandling\": \"minim voluptate aliquip consequat ipsum\",\n        \"ascending\": false,\n        \"property\": \"officia eiusmod anim nisi\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"adipisici\",\n        \"nullHandling\": \"aliquip\",\n        \"ascending\": true,\n        \"property\": \"do\",\n        \"ignoreCase\": true\n      }\n    ],\n    \"pageNumber\": -5601804,\n    \"pageSize\": 95862290,\n    \"paged\": false,\n    \"unpaged\": true\n  },\n  \"first\": false,\n  \"last\": true,\n  \"numberOfElements\": 27105519,\n  \"empty\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "30b99965-b92b-4b7a-b4de-a1c60ac1fc51",
+          "name": "get External Party By Name",
+          "request": {
+            "name": "get External Party By Name",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "external_party_integration",
+                "by-name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "se",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/external_party_integration/by-name?name=se"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "45b832c7-d6ba-4c7c-a6d0-3508fabff82e",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "external_party_integration",
+                    "by-name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "se"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -43912646,\n  \"name\": \"ipsum tempor et\",\n  \"clientId\": \"nulla magna aliqua tempor\",\n  \"mobileNumber\": \"amet laboris ex occaecat\",\n  \"description\": \"officia in Duis aute\",\n  \"apiKey\": \"deserunt eu minim magna\",\n  \"secretKey\": \"in ea do ipsum\",\n  \"unifiedNumber\": \"cupidatat anim ipsum qui\",\n  \"status\": {\n    \"id\": -46939591,\n    \"nameEn\": \"minim incididun\",\n    \"nameAr\": \"ipsum nostrud amet\",\n    \"description\": \"ut\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a9f55d69-1991-4fcc-bd23-59ac38d62b00",
+          "name": "get External Party By Api Key",
+          "request": {
+            "name": "get External Party By Api Key",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "external_party_integration",
+                "by-api-key"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "api-key",
+                  "value": "se",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/external_party_integration/by-api-key?api-key=se"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "69c4a86a-04fc-4781-b207-331f9b0b05d6",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "external_party_integration",
+                    "by-api-key"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-key",
+                      "value": "se"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -43912646,\n  \"name\": \"ipsum tempor et\",\n  \"clientId\": \"nulla magna aliqua tempor\",\n  \"mobileNumber\": \"amet laboris ex occaecat\",\n  \"description\": \"officia in Duis aute\",\n  \"apiKey\": \"deserunt eu minim magna\",\n  \"secretKey\": \"in ea do ipsum\",\n  \"unifiedNumber\": \"cupidatat anim ipsum qui\",\n  \"status\": {\n    \"id\": -46939591,\n    \"nameEn\": \"minim incididun\",\n    \"nameAr\": \"ipsum nostrud amet\",\n    \"description\": \"ut\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "54dc3447-db19-486e-b83b-e833c6c94460",
+      "name": "authentication-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "09b2189c-ae42-4201-a09b-d23802ee3e7e",
+          "name": "create Session",
+          "request": {
+            "name": "create Session",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "createSession"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/auth/createSession"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"apiKey\": \"sed anim est\",\n  \"clientId\": \"aute aliqua ea\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d82a3889-676f-4b01-bb2b-7e3ec73972f0",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "createSession"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"apiKey\": \"sed anim est\",\n  \"clientId\": \"aute aliqua ea\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"token\": \"in\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2ca658e2-168b-4053-9b65-1b4c8c971bc8",
+          "name": "validate Session",
+          "request": {
+            "name": "validate Session",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "validateSession"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/auth/validateSession"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f7adc218-53d6-4619-a3a8-60c9883e83d6",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "validateSession"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "se"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"token\": \"commodo sunt consequat Lorem\",\n  \"clientId\": \"reprehenderit quis Ut\",\n  \"profileCode\": \"cillum mollit irure\",\n  \"userId\": \"occaecat ut in\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "39af7abd-db14-4fed-a287-6a39a65c8119",
+      "name": "external-party-status-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b089f66f-9469-4255-990f-a5c69cf4ef8f",
+          "name": "get All Statuses",
+          "request": {
+            "name": "get All Statuses",
+            "description": {},
+            "url": {
+              "path": [
+                "external-user-statuses"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/external-user-statuses"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b4091599-2bc6-46b5-8ba3-c44dd4a9d088",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "external-user-statuses"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "se"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": -7197389,\n    \"nameEn\": \"ipsum cupidatat\",\n    \"nameAr\": \"reprehenderit consectetur\",\n    \"description\": \"laboris reprehen\"\n  },\n  {\n    \"id\": 95272913,\n    \"nameEn\": \"ut\",\n    \"nameAr\": \"laboris Duis esse\",\n    \"description\": \"tempor dolor\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d645f9d7-897b-4791-888d-767b420f09a8",
+          "name": "get Status By Id",
+          "request": {
+            "name": "get Status By Id",
+            "description": {},
+            "url": {
+              "path": [
+                "external-user-statuses",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "-50539187",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/external-user-statuses/:id"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f30fc52f-3e27-4698-b675-d1f7d64aed56",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "external-user-statuses",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "-50539187",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 93833256,\n  \"nameEn\": \"m\",\n  \"nameAr\": \"non ullamco cillum ut\",\n  \"description\": \"nulla ea tempor magna pariatur\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "622e4183-0493-46cc-8532-ef29bf45f842",
+      "name": "lookup-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9592fc02-5ee6-4955-a8e5-77171462c93a",
+          "name": "industry Name",
+          "request": {
+            "name": "industry Name",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "lookup",
+                "industries"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/lookup/industries"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7f862451-2760-48d4-b931-0934562dcc5f",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "lookup",
+                    "industries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"industryName\": \"velit irure eiusmod\",\n    \"code\": \"in nostrud occaecat proident reprehenderit\"\n  },\n  {\n    \"industryName\": \"sed \",\n    \"code\": \"cul\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9b42fc08-187c-414c-a7c5-2e2feed83cb0",
+          "name": "bank Codes",
+          "request": {
+            "name": "bank Codes",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "lookup",
+                "banks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/lookup/banks"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5126fec7-cdbc-4e3f-b70c-ac54eb179fb9",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "lookup",
+                    "banks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"institutionNameEnglish\": \"laborum consequat et elit\",\n    \"swiftCode\": \"proid\",\n    \"code\": \"ad fugiat velit veniam\"\n  },\n  {\n    \"institutionNameEnglish\": \"laborum mollit\",\n    \"swiftCode\": \"eiusmod anim laboris\",\n    \"code\": \"esse ad eiusmod\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generated guard: a 5xx from any request is a gateway/service defect, not a test-data problem.",
+          "pm.test('no 5xx (' + pm.info.requestName + ')', function () {",
+          "  pm.expect(pm.response.code, (pm.response.text() || '').slice(0, 300)).to.be.below(500);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{gatewayBaseUrl}}/integration-service",
+      "type": "string"
+    }
+  ],
+  "info": {
+    "_postman_id": "cd96129b-756a-4049-a47b-92ceb3110bcf",
+    "name": "Integration Service - majdpay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Integration Service (integration-service) — 16 operations.\n\nGENERATED from the OpenAPI 3.1.0 spec published at the UAT gateway swagger-ui\n(Select a definition -> \"Integration Service APIs\"). Request bodies are schema-derived placeholders (lorem-ipsum\nstrings, sample numbers) — replace with real values before sending.\n\nBase URL: {{gatewayBaseUrl}}/integration-service  (gatewayBaseUrl lives in EMI-dev.postman_environment.json).\nSpec server: https://gateway-emiuat.dg-cash.app/integration-service\n\nAUTH: the spec declares no security scheme, but the gateway front-doors every route with a bearer\ntoken. Set {{token}} in the environment (mint one with the Authentication Service collection's\nsign-in, or pass --env-var token=... to newman). Some back-office routes need an admin/service\ntoken rather than a merchant one.\n\nCompanion Playwright scaffold: BusinessTestCases/ServiceApis/IntegrationService.generated.spec.ts\n"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

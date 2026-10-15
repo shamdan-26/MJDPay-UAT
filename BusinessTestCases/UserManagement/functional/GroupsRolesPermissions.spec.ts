@@ -27,6 +27,7 @@ import {
 // ─────────────────────────────────────────────────────────────────────────────
 
 test.describe('Groups & Roles — Listing (GR-01, GR-02)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('GR-01: the Groups tab lists every group with its name, description and assigned-user count', async ({ page }) => {
@@ -56,6 +57,7 @@ test.describe('Groups & Roles — Listing (GR-01, GR-02)', () => {
 });
 
 test.describe('Groups & Roles — Edit Name And Description (GR-03, EMI-5210 / EMI-5613)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('GR-03: editing a role name and description saves successfully', async ({ page }) => {
@@ -99,6 +101,7 @@ test.describe('Groups & Roles — Edit Name And Description (GR-03, EMI-5210 / E
 });
 
 test.describe('Groups & Roles — Delete (GR-04, EMI-5240)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('GR-04: an authorised admin can delete a non-system group', async ({ page }) => {
@@ -126,6 +129,7 @@ test.describe('Groups & Roles — Delete (GR-04, EMI-5240)', () => {
 });
 
 test.describe('Groups & Roles — System Groups Are Protected (GR-05, EMI-5897)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('GR-05: a group flagged isSystem is not offered Edit or Delete actions', async ({ page }) => {
@@ -143,6 +147,7 @@ test.describe('Groups & Roles — System Groups Are Protected (GR-05, EMI-5897)'
 });
 
 test.describe('Groups & Roles — Assign / Unassign Validation (GR-06, GR-07, EMI-5234 / EMI-5899)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('GR-06: assigning a user who is already in the group is rejected', async ({ page }) => {
@@ -193,6 +198,7 @@ test.describe('Groups & Roles — Assign / Unassign Validation (GR-06, GR-07, EM
 });
 
 test.describe('Groups & Roles — Assigned User Count Is Accurate (GR-08, SAL-4799)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('GR-08: the user count on a role matches the number of users actually assigned to it', async ({ page }) => {

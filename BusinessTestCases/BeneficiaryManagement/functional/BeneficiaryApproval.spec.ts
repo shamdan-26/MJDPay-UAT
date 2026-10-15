@@ -32,6 +32,7 @@ import {
 // ─────────────────────────────────────────────────────────────────────────────
 
 test.describe('Beneficiary Approval — Privileged Staff (BA-01, BA-02, EMI-4435 / EMI-4436)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('BA-01: a user with BILLER_APPROVE_BENEFICIARIES can approve a pending beneficiary', async ({ page }) => {
@@ -66,6 +67,7 @@ test.describe('Beneficiary Approval — Privileged Staff (BA-01, BA-02, EMI-4435
 });
 
 test.describe('Beneficiary Approval — Unprivileged Staff Refused (BA-03, EMI-4435)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('BA-03: the approve endpoint refuses a user without the privilege — the API enforces it, not just the hidden button', async ({ page }) => {
@@ -98,6 +100,7 @@ test.describe('Beneficiary Approval — Unprivileged Staff Refused (BA-03, EMI-4
 });
 
 test.describe('Beneficiary Approval — Actions Hidden Once Approved (BA-04, EMI-4436)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('BA-04: an already-approved beneficiary offers no Approve or Reject action', async ({ page }) => {
@@ -117,6 +120,7 @@ test.describe('Beneficiary Approval — Actions Hidden Once Approved (BA-04, EMI
 });
 
 test.describe('Beneficiary Approval — Bill Creation Gate (BA-05, BA-06, EMI-4009 / EMI-4905)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('BA-05: creating a bill with an APPROVED beneficiary succeeds', async ({ page }) => {
@@ -163,6 +167,7 @@ test.describe('Beneficiary Approval — Bill Creation Gate (BA-05, BA-06, EMI-40
 });
 
 test.describe('Beneficiary Approval — Select Beneficiary List Excludes Rejected (BA-07, BA-08, EMI-4805 / EMI-4905)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('BA-07: the APPROVED-only query never returns a REJECTED or PENDING beneficiary', async ({ page }) => {

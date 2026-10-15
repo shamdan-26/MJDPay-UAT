@@ -1,0 +1,208 @@
+{
+  "item": [
+    {
+      "id": "c215168b-479c-4b4b-8018-1d16315673a0",
+      "name": "notification-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "72fb6708-5cd4-417e-9a96-5d1bb422d7c0",
+          "name": "get All Notification",
+          "request": {
+            "name": "get All Notification",
+            "description": {},
+            "url": {
+              "path": [
+                "notifications"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "notificationType",
+                  "value": "incididunt aliqua",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "recipient",
+                  "value": "nisi ad ullamco reprehenderit sed",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "title",
+                  "value": "proident quis sunt ame",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "message",
+                  "value": "Duis esse",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "startDate",
+                  "value": "1954-12-29T04:31:27.017Z",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "endDate",
+                  "value": "2003-07-17T13:13:04.215Z",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "9829057",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "81354615",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/notifications?notificationType=incididunt aliqua&recipient=nisi ad ullamco reprehenderit sed&title=proident quis sunt ame&message=Duis esse&startDate=1954-12-29T04:31:27.017Z&endDate=2003-07-17T13:13:04.215Z&page=9829057&size=81354615"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "23531bc4-25c9-4d5d-bf4d-b3f918f6c06b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "notifications"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "notificationType",
+                      "value": "incididunt aliqua"
+                    },
+                    {
+                      "key": "recipient",
+                      "value": "nisi ad ullamco reprehenderit sed"
+                    },
+                    {
+                      "key": "title",
+                      "value": "proident quis sunt ame"
+                    },
+                    {
+                      "key": "message",
+                      "value": "Duis esse"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "1954-12-29T04:31:27.017Z"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2003-07-17T13:13:04.215Z"
+                    },
+                    {
+                      "key": "page",
+                      "value": "9829057"
+                    },
+                    {
+                      "key": "size",
+                      "value": "81354615"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "mollit qui ipsum tempor"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": -10467373,\n  \"totalElements\": -99784071,\n  \"size\": 74172662,\n  \"content\": [\n    {\n      \"id\": {\n        \"timestamp\": -3796941,\n        \"date\": \"2001-07-29T17:34:49.428Z\"\n      },\n      \"userId\": -87482475,\n      \"profileCode\": \"laborum\",\n      \"subject\": \"anim in Excepteur\",\n      \"createdAt\": \"1958-04-26T22:44:42.854Z\",\n      \"recipient\": \"Duis quis Ut\",\n      \"message\": \"non dolor\",\n      \"notificationType\": \"PUSH\",\n      \"errorMessage\": \"do culpa cillum\",\n      \"hashingRequired\": true,\n      \"hashingRegex\": \"irure\",\n      \"successfullySent\": false\n    },\n    {\n      \"id\": {\n        \"timestamp\": -1179258,\n        \"date\": \"1990-04-09T19:53:32.454Z\"\n      },\n      \"userId\": 3979188,\n      \"profileCode\": \"in irure\",\n      \"subject\": \"et dolor commodo sed\",\n      \"createdAt\": \"2025-01-27T23:48:55.637Z\",\n      \"recipient\": \"dolor officia\",\n      \"message\": \"adipisicing in deserunt\",\n      \"notificationType\": \"EMAIL\",\n      \"errorMessage\": \"magna cons\",\n      \"hashingRequired\": true,\n      \"hashingRegex\": \"magn\",\n      \"successfullySent\": true\n    }\n  ],\n  \"number\": -23891714,\n  \"sort\": [\n    {\n      \"direction\": \"ex\",\n      \"nullHandling\": \"enim exercitation\",\n      \"ascending\": false,\n      \"property\": \"do\",\n      \"ignoreCase\": false\n    },\n    {\n      \"direction\": \"non fugiat consequat dolore nulla\",\n      \"nullHandling\": \"proident in irure\",\n      \"ascending\": false,\n      \"property\": \"velit Excepteur reprehenderit\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"first\": false,\n  \"last\": false,\n  \"numberOfElements\": 17606677,\n  \"pageable\": {\n    \"offset\": -23257659,\n    \"sort\": [\n      {\n        \"direction\": \"irure\",\n        \"nullHandling\": \"consectetur\",\n        \"ascending\": true,\n        \"property\": \"ipsum voluptate deserunt\",\n        \"ignoreCase\": false\n      },\n      {\n        \"direction\": \"consequat deserunt mollit tempor\",\n        \"nullHandling\": \"dolor id\",\n        \"ascending\": true,\n        \"property\": \"minim elit\",\n        \"ignoreCase\": true\n      }\n    ],\n    \"pageSize\": -31902907,\n    \"paged\": false,\n    \"pageNumber\": -99275696,\n    \"unpaged\": true\n  },\n  \"empty\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generated guard: a 5xx from any request is a gateway/service defect, not a test-data problem.",
+          "pm.test('no 5xx (' + pm.info.requestName + ')', function () {",
+          "  pm.expect(pm.response.code, (pm.response.text() || '').slice(0, 300)).to.be.below(500);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{gatewayBaseUrl}}/notifications-log",
+      "type": "string"
+    }
+  ],
+  "info": {
+    "_postman_id": "623613e9-3c94-42d9-b7f9-5fc4944c6348",
+    "name": "Notification Log - majdpay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Notification Log (notifications-log) — 1 operations.\n\nGENERATED from the OpenAPI 3.1.0 spec published at the UAT gateway swagger-ui\n(Select a definition -> \"Notification Log APIs\"). Request bodies are schema-derived placeholders (lorem-ipsum\nstrings, sample numbers) — replace with real values before sending.\n\nBase URL: {{gatewayBaseUrl}}/notifications-log  (gatewayBaseUrl lives in EMI-dev.postman_environment.json).\nSpec server: https://gateway-emiuat.dg-cash.app/notifications-log\n\nAUTH: the spec declares no security scheme, but the gateway front-doors every route with a bearer\ntoken. Set {{token}} in the environment (mint one with the Authentication Service collection's\nsign-in, or pass --env-var token=... to newman). Some back-office routes need an admin/service\ntoken rather than a merchant one.\n\nCompanion Playwright scaffold: BusinessTestCases/ServiceApis/NotificationsLog.generated.spec.ts\n"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

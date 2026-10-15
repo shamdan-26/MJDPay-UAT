@@ -91,7 +91,7 @@ test.describe('Topup – UI – Amount form (step 1)', { tag: ['@topup', '@ui'],
     // KNOWN BUG: entering "0" shows no inline validation error — the field is
     // silently left empty (confirmed on dev, Arabic UI). Un-skip once the app
     // shows an error; update the regex to the real (Arabic) copy at that point.
-    test.skip('a zero amount shows an inline error and keeps Proceed disabled', { annotation: [{ type: 'testcase', description: "TUP-12: Inline error text for zero amount" }] }, async () => {
+    test('a zero amount shows an inline error and keeps Proceed disabled', { annotation: [{ type: 'testcase', description: "TUP-12: Inline error text for zero amount" }] }, async () => {
         const { topup, page } = session;
         await topup.selectPaymentMethod('mada');
         await topup.enterAmount('0');
@@ -116,7 +116,7 @@ test.describe('Topup – UI – Amount form (step 1)', { tag: ['@topup', '@ui'],
     // KNOWN BUG (accessibility): the amount field has no visible label and no
     // aria-label — it relies on its placeholder, so screen readers can't name
     // it. Un-skip once it has an accessible name.
-    test.skip('the amount field has an accessible name', async () => {
+    test('the amount field has an accessible name', async () => {
         const { page } = session;
         await expect(page.getByRole('textbox', { name: /.+/ })).toBeVisible();
     });
@@ -284,7 +284,7 @@ test.describe('Topup – UI – Amount form (step 1)', { tag: ['@topup', '@ui'],
     // as typed ("٠١٢٣" stays "٠١٢٣") instead of normalising them to Latin
     // digits or rejecting them. Un-skip once the app handles them — and confirm
     // with the product owner that this is the intended behaviour first.
-    test.skip('Arabic-Indic digits are either normalised to Latin digits or rejected', async () => {
+    test('Arabic-Indic digits are either normalised to Latin digits or rejected', async () => {
         const { topup } = session;
         await topup.selectPaymentMethod('visa');
         await topup.enterAmount('٠١٢٣');

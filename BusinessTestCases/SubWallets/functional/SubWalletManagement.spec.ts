@@ -63,6 +63,7 @@ test.describe('Sub-Wallets — Create Flow (SW-01, SW-02, SW-03)', () => {
 });
 
 test.describe('Sub-Wallets — Edit Constraints (SW-04)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('SW-04: currency should not be editable in edit mode', async ({ page }) => {
@@ -136,6 +137,7 @@ test.describe('Sub-Wallets — Detail View and N-Level Nesting (SW-05, SW-06, SW
 });
 
 test.describe('Sub-Wallets — Close Cascade Validation (SW-08, SW-09, EMI-5275)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('SW-08: closing a wallet whose children all pass validation should succeed', async ({ page }) => {

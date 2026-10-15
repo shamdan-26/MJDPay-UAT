@@ -89,10 +89,10 @@ test.describe('Topup – Negative', { tag: ['@topup', '@functional'], annotation
     });
 
     /**
-     * "000000" is NOT a safe "wrong code" to use here — confirmed live
+     * "918512" is NOT a safe "wrong code" to use here — confirmed live
      * 2026-09-22 that it was ACCEPTED and opened the gateway popup, meaning
      * ENV=dev's documented OTP bypass (CLAUDE.md: "the OTP is always
-     * 00000000" for login) applies to this 6-digit transaction OTP too, just
+     * 918512" for login) applies to this 6-digit transaction OTP too, just
      * at its own digit count. A non-zero code avoids that fallback.
      *
      * A guessed `otp.errorMessage` assertion previously stalled this test
@@ -135,7 +135,6 @@ test.describe('Topup – Negative', { tag: ['@topup', '@functional'], annotation
      * section for why a literal CDC-replay test isn't possible from here).
      */
     test('a "User canceled" gateway result shows a failure result and leaves the balance unchanged', { annotation: [{ type: 'testcase', description: "TU-04: Declined/failed payment shows clear error" }] }, async () => {
-        test.skip(true, 'VPN access to SQL Server/Mongo is currently unavailable — this test\'s DB assertions cannot run until that\'s restored.');
         const { page, topup } = session;
         const data = findTopupCase('VISA');
 

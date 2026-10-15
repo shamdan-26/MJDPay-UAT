@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+import { waitForToastClear } from '../toastMessages';
 
 /**
  * Bill Beneficiary Management (EMI-185, epic EMI-2192 / EMI-4382) — admin users
@@ -111,6 +112,7 @@ export async function fetchJson(
 export async function gotoBeneficiaries(page: Page): Promise<void> {
     await page.goto(BENEFICIARY_URL);
     await page.waitForLoadState('domcontentloaded');
+    await waitForToastClear(page);
 }
 
 // ── List & status filter ─────────────────────────────────────────────────

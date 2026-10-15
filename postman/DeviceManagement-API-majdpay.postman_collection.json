@@ -1,0 +1,1498 @@
+{
+  "item": [
+    {
+      "id": "3db26a1f-0d58-47cd-9f7b-0e857b6544ef",
+      "name": "device-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "55c3a876-b0fc-4bc1-af6f-5140e0a1ff6d",
+          "name": "get Devices",
+          "request": {
+            "name": "get Devices",
+            "description": {},
+            "url": {
+              "path": [
+                "devices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "userId",
+                  "value": "-4233771",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "ipAddress",
+                  "value": "minim quis in occaecat",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "firstLogin",
+                  "value": "1989-05-13T17:13:54.467Z",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "lastLogin",
+                  "value": "2014-01-25T20:25:20.883Z",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "platform",
+                  "value": "Ut",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "numberOfLogins",
+                  "value": "49152385",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "deviceId",
+                  "value": "in reprehenderit",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "applicationId",
+                  "value": "laborum commodo laboris",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "osVersion",
+                  "value": "in et officia",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "manufacturerName",
+                  "value": "culpa qui nisi ad",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "osName",
+                  "value": "id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "model",
+                  "value": "adipisicing ea consequat",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "lat",
+                  "value": "-20763212.157466725",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "lng",
+                  "value": "61689907.069882035",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "uuid",
+                  "value": "magn",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "-34104001",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "57363707",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/devices?userId=-4233771&ipAddress=minim quis in occaecat&firstLogin=1989-05-13T17:13:54.467Z&lastLogin=2014-01-25T20:25:20.883Z&platform=Ut&numberOfLogins=49152385&deviceId=in reprehenderit&applicationId=laborum commodo laboris&osVersion=in et officia&manufacturerName=culpa qui nisi ad&osName=id&model=adipisicing ea consequat&lat=-20763212.157466725&lng=61689907.069882035&uuid=magn&page=-34104001&size=57363707"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9bf1454a-93b0-4295-b180-d424b27f823a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "devices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "-4233771"
+                    },
+                    {
+                      "key": "ipAddress",
+                      "value": "minim quis in occaecat"
+                    },
+                    {
+                      "key": "firstLogin",
+                      "value": "1989-05-13T17:13:54.467Z"
+                    },
+                    {
+                      "key": "lastLogin",
+                      "value": "2014-01-25T20:25:20.883Z"
+                    },
+                    {
+                      "key": "platform",
+                      "value": "Ut"
+                    },
+                    {
+                      "key": "numberOfLogins",
+                      "value": "49152385"
+                    },
+                    {
+                      "key": "deviceId",
+                      "value": "in reprehenderit"
+                    },
+                    {
+                      "key": "applicationId",
+                      "value": "laborum commodo laboris"
+                    },
+                    {
+                      "key": "osVersion",
+                      "value": "in et officia"
+                    },
+                    {
+                      "key": "manufacturerName",
+                      "value": "culpa qui nisi ad"
+                    },
+                    {
+                      "key": "osName",
+                      "value": "id"
+                    },
+                    {
+                      "key": "model",
+                      "value": "adipisicing ea consequat"
+                    },
+                    {
+                      "key": "lat",
+                      "value": "-20763212.157466725"
+                    },
+                    {
+                      "key": "lng",
+                      "value": "61689907.069882035"
+                    },
+                    {
+                      "key": "uuid",
+                      "value": "magn"
+                    },
+                    {
+                      "key": "page",
+                      "value": "-34104001"
+                    },
+                    {
+                      "key": "size",
+                      "value": "57363707"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "nostrud irure"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": 173108,\n  \"totalElements\": 52692875,\n  \"size\": -15945875,\n  \"content\": [\n    {\n      \"deviceDto\": {\n        \"userId\": 68216005,\n        \"ipAddress\": \"voluptate sit non esse\",\n        \"firstLogin\": \"2016-01-18T03:49:16.385Z\",\n        \"lastLogin\": \"1975-01-30T10:03:23.043Z\",\n        \"numberOfLogins\": -58130080,\n        \"platform\": \"dolore in amet occaecat fugiat\",\n        \"deviceId\": \"aute ipsum d\",\n        \"applicationId\": \"nulla\",\n        \"osVersion\": \"dolore id eu occaecat\",\n        \"manufacturerName\": \"dolor pariatur velit in\",\n        \"osName\": \"incididunt\",\n        \"model\": \"dolore ea\",\n        \"lat\": 99701121.87259677,\n        \"lng\": -548988.8415742815,\n        \"token\": \"nulla reprehenderit culpa volu\",\n        \"status\": \"UNKNOWN\",\n        \"uuid\": \"dolor reprehenderit deserunt qui\",\n        \"profileId\": 24573460,\n        \"profileCode\": \"amet in nostrud dolor eiusmod\",\n        \"isBanned\": false\n      },\n      \"ban\": true\n    },\n    {\n      \"deviceDto\": {\n        \"userId\": 24869309,\n        \"ipAddress\": \"dolore cupidatat pariatur magn\",\n        \"firstLogin\": \"1987-02-05T15:41:49.043Z\",\n        \"lastLogin\": \"2026-01-08T18:20:54.653Z\",\n        \"numberOfLogins\": -41889917,\n        \"platform\": \"volupt\",\n        \"deviceId\": \"laborum dolore eu\",\n        \"applicationId\": \"ullamco minim esse veniam\",\n        \"osVersion\": \"exercitation consequat elit\",\n        \"manufacturerName\": \"dolore mollit do\",\n        \"osName\": \"quis ad sed nostrud\",\n        \"model\": \"ut adipisicing enim consequat\",\n        \"lat\": 65645041.488075465,\n        \"lng\": -46380957.133419365,\n        \"token\": \"velit laboris Duis ipsum\",\n        \"status\": \"INACTIVE\",\n        \"uuid\": \"nisi in est proident tempor\",\n        \"profileId\": -46425848,\n        \"profileCode\": \"sunt voluptate eu enim\",\n        \"isBanned\": false\n      },\n      \"ban\": true\n    }\n  ],\n  \"number\": -24386737,\n  \"sort\": [\n    {\n      \"direction\": \"Duis ipsum\",\n      \"nullHandling\": \"ut non\",\n      \"ascending\": false,\n      \"property\": \"laborum deserunt dolore\",\n      \"ignoreCase\": true\n    },\n    {\n      \"direction\": \"Duis cillu\",\n      \"nullHandling\": \"Duis aliqua tempor\",\n      \"ascending\": false,\n      \"property\": \"incididunt officia eiusmod\",\n      \"ignoreCase\": true\n    }\n  ],\n  \"pageable\": {\n    \"offset\": 64344773,\n    \"sort\": [\n      {\n        \"direction\": \"nisi adipisicing dolore qui in\",\n        \"nullHandling\": \"id in irure mollit\",\n        \"ascending\": false,\n        \"property\": \"irure dolor nisi\",\n        \"ignoreCase\": false\n      },\n      {\n        \"direction\": \"aute Lorem\",\n        \"nullHandling\": \"ex sit mollit dolor\",\n        \"ascending\": false,\n        \"property\": \"consequat magna nisi amet\",\n        \"ignoreCase\": true\n      }\n    ],\n    \"pageNumber\": -36712741,\n    \"paged\": true,\n    \"pageSize\": -52069799,\n    \"unpaged\": false\n  },\n  \"first\": false,\n  \"last\": true,\n  \"numberOfElements\": -34770036,\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5d58c72a-0c4a-4727-8f34-c5ebdd231e10",
+          "name": "update Device",
+          "request": {
+            "name": "update Device",
+            "description": {},
+            "url": {
+              "path": [
+                "devices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/devices"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deviceId\": \"culpa ad eiusmod sed incididunt\",\n  \"userId\": 60568220,\n  \"profileCode\": \"id sint\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "34945183-b93f-409c-82a5-f3774c71e4c7",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "devices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"deviceId\": \"culpa ad eiusmod sed incididunt\",\n  \"userId\": 60568220,\n  \"profileCode\": \"id sint\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"userId\": -13814658,\n  \"ipAddress\": \"eiusmod in dolore id\",\n  \"firstLogin\": \"1991-12-08T02:05:59.098Z\",\n  \"lastLogin\": \"2008-06-05T02:29:12.902Z\",\n  \"numberOfLogins\": 27958475,\n  \"platform\": \"commodo tempor\",\n  \"deviceId\": \"volup\",\n  \"applicationId\": \"eu aute laborum do\",\n  \"osVersion\": \"officia deserunt Ut occaecat\",\n  \"manufacturerName\": \"sunt sit deserunt enim ipsum\",\n  \"osName\": \"ipsum Excepteur\",\n  \"model\": \"Excepteur\",\n  \"lat\": -59884191.651761755,\n  \"lng\": 94628458.20283002,\n  \"token\": \"cillum sed adipisicing am\",\n  \"status\": \"INACTIVE\",\n  \"uuid\": \"reprehenderit do\",\n  \"profileId\": 33878146,\n  \"profileCode\": \"in in\",\n  \"isBanned\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5661e65d-b12f-4e83-ab96-67db796844a9",
+          "name": "un Assign User To Device",
+          "request": {
+            "name": "un Assign User To Device",
+            "description": {},
+            "url": {
+              "path": [
+                "devices",
+                "users",
+                "unassign"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/devices/users/unassign"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deviceId\": \"culpa ad eiusmod sed incididunt\",\n  \"userId\": 60568220,\n  \"profileCode\": \"id sint\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ffd5f0c4-32a4-4baf-895e-6158315a4651",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "devices",
+                    "users",
+                    "unassign"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"deviceId\": \"culpa ad eiusmod sed incididunt\",\n  \"userId\": 60568220,\n  \"profileCode\": \"id sint\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"userId\": -13814658,\n  \"ipAddress\": \"eiusmod in dolore id\",\n  \"firstLogin\": \"1991-12-08T02:05:59.098Z\",\n  \"lastLogin\": \"2008-06-05T02:29:12.902Z\",\n  \"numberOfLogins\": 27958475,\n  \"platform\": \"commodo tempor\",\n  \"deviceId\": \"volup\",\n  \"applicationId\": \"eu aute laborum do\",\n  \"osVersion\": \"officia deserunt Ut occaecat\",\n  \"manufacturerName\": \"sunt sit deserunt enim ipsum\",\n  \"osName\": \"ipsum Excepteur\",\n  \"model\": \"Excepteur\",\n  \"lat\": -59884191.651761755,\n  \"lng\": 94628458.20283002,\n  \"token\": \"cillum sed adipisicing am\",\n  \"status\": \"INACTIVE\",\n  \"uuid\": \"reprehenderit do\",\n  \"profileId\": 33878146,\n  \"profileCode\": \"in in\",\n  \"isBanned\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d4456140-cb50-4360-8d4e-5d0478b7999b",
+          "name": "generate UUID",
+          "request": {
+            "name": "generate UUID",
+            "description": {},
+            "url": {
+              "path": [
+                "devices",
+                "uuid"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/devices/uuid"
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "User-Agent",
+                "value": "nostrud irure",
+                "description": ""
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ipAddress\": \"enim sint reprehenderit officia sunt\",\n  \"platform\": \"pariatur Duis officia\",\n  \"deviceId\": \"amet consequat\",\n  \"applicationId\": \"eiusmod eu ipsum\",\n  \"osVersion\": \"labore velit adipisicing aliquip\",\n  \"manufacturerName\": \"ut\",\n  \"osName\": \"consectetur cupidatat aliquip officia\",\n  \"model\": \"eiusmod proident\",\n  \"token\": \"dolor laborum\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9f4b9a78-d1fa-466d-b124-07f5db45eb87",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "devices",
+                    "uuid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "key": "User-Agent",
+                    "value": "nostrud irure",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ipAddress\": \"enim sint reprehenderit officia sunt\",\n  \"platform\": \"pariatur Duis officia\",\n  \"deviceId\": \"amet consequat\",\n  \"applicationId\": \"eiusmod eu ipsum\",\n  \"osVersion\": \"labore velit adipisicing aliquip\",\n  \"manufacturerName\": \"ut\",\n  \"osName\": \"consectetur cupidatat aliquip officia\",\n  \"model\": \"eiusmod proident\",\n  \"token\": \"dolor laborum\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"uuid\": \"elit sint et dolore\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4720cdc5-c40c-4b97-bb63-342d225a18f9",
+          "name": "get Ip Address",
+          "request": {
+            "name": "get Ip Address",
+            "description": {},
+            "url": {
+              "path": [
+                "devices",
+                "ip-address"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/devices/ip-address"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9ef62089-b5d8-4149-9855-f2ff33415b6f",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "devices",
+                    "ip-address"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"ipAddress\": \"ea est Ut sint velit\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0e1c047b-f866-4469-829a-8354ad47ddda",
+          "name": "get All Devices Internally",
+          "request": {
+            "name": "get All Devices Internally",
+            "description": {},
+            "url": {
+              "path": [
+                "devices",
+                "internal"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/devices/internal"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ebe4d543-cfcc-467d-8341-1ce7a1aa7ab9",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "devices",
+                    "internal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"userId\": -77085533,\n    \"ipAddress\": \"quis occaecat\",\n    \"firstLogin\": \"1968-12-02T00:40:26.666Z\",\n    \"lastLogin\": \"2005-12-02T03:02:25.875Z\",\n    \"numberOfLogins\": 3871076,\n    \"platform\": \"nostrud in\",\n    \"deviceId\": \"incididunt\",\n    \"applicationId\": \"consequat\",\n    \"osVersion\": \"consequat ex enim mollit\",\n    \"manufacturerName\": \"labore mollit\",\n    \"osName\": \"ut\",\n    \"model\": \"dolore qui\",\n    \"lat\": 15945715.790161237,\n    \"lng\": -29543033.141115323,\n    \"token\": \"minim sunt\",\n    \"status\": \"ACTIVE\",\n    \"uuid\": \"dolor dolore\",\n    \"profileId\": 41011172,\n    \"profileCode\": \"ut id adipisicing\",\n    \"isBanned\": true\n  },\n  {\n    \"userId\": -77374013,\n    \"ipAddress\": \"occaecat quis\",\n    \"firstLogin\": \"1974-10-16T20:33:58.133Z\",\n    \"lastLogin\": \"1977-09-29T23:13:17.387Z\",\n    \"numberOfLogins\": -13512852,\n    \"platform\": \"est nostrud Ut Lorem\",\n    \"deviceId\": \"nisi\",\n    \"applicationId\": \"qui cillum ullamco\",\n    \"osVersion\": \"aliqua et\",\n    \"manufacturerName\": \"voluptate consequat\",\n    \"osName\": \"dolor\",\n    \"model\": \"fugiat sunt\",\n    \"lat\": -45801953.085952476,\n    \"lng\": 76519187.85087669,\n    \"token\": \"nulla commodo in non\",\n    \"status\": \"ACTIVE\",\n    \"uuid\": \"aliqua culpa veniam sit Excepteur\",\n    \"profileId\": 4420846,\n    \"profileCode\": \"minim ad\",\n    \"isBanned\": true\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "49597c47-d3eb-48e1-9a5d-ad3c91f16b2b",
+          "name": "is Exist",
+          "request": {
+            "name": "is Exist",
+            "description": {},
+            "url": {
+              "path": [
+                "devices",
+                "internal",
+                "user",
+                ":userId",
+                ":deviceId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "99995465",
+                  "key": "userId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "nostrud irure",
+                  "key": "deviceId",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/devices/internal/user/:userId/:deviceId"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ba1d01d1-627f-411f-a299-6e21965aefbc",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "devices",
+                    "internal",
+                    "user",
+                    ":userId",
+                    ":deviceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "99995465",
+                      "key": "userId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "nostrud irure",
+                      "key": "deviceId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "false",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "37fe7df2-645b-4503-9dc1-e811f58bb5bb",
+          "name": "get Active Device By Profile Code",
+          "request": {
+            "name": "get Active Device By Profile Code",
+            "description": {},
+            "url": {
+              "path": [
+                "devices",
+                "internal",
+                "profile",
+                ":profileCode"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "nostrud irure",
+                  "key": "profileCode",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/devices/internal/profile/:profileCode"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "066ef84b-cb26-47c4-a33f-523ccd79695a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "devices",
+                    "internal",
+                    "profile",
+                    ":profileCode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "nostrud irure",
+                      "key": "profileCode",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"userId\": -13814658,\n  \"ipAddress\": \"eiusmod in dolore id\",\n  \"firstLogin\": \"1991-12-08T02:05:59.098Z\",\n  \"lastLogin\": \"2008-06-05T02:29:12.902Z\",\n  \"numberOfLogins\": 27958475,\n  \"platform\": \"commodo tempor\",\n  \"deviceId\": \"volup\",\n  \"applicationId\": \"eu aute laborum do\",\n  \"osVersion\": \"officia deserunt Ut occaecat\",\n  \"manufacturerName\": \"sunt sit deserunt enim ipsum\",\n  \"osName\": \"ipsum Excepteur\",\n  \"model\": \"Excepteur\",\n  \"lat\": -59884191.651761755,\n  \"lng\": 94628458.20283002,\n  \"token\": \"cillum sed adipisicing am\",\n  \"status\": \"INACTIVE\",\n  \"uuid\": \"reprehenderit do\",\n  \"profileId\": 33878146,\n  \"profileCode\": \"in in\",\n  \"isBanned\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "172b1ba4-1fb3-4c4d-9408-f9266a603248",
+          "name": "get Fcm Tokens By Token",
+          "request": {
+            "name": "get Fcm Tokens By Token",
+            "description": {},
+            "url": {
+              "path": [
+                "devices",
+                "fcms"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "profileId",
+                  "value": "99995465",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/devices/fcms?profileId=99995465"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "52e5cc6e-e025-44e5-89f3-93627f1f2c9d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "devices",
+                    "fcms"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "profileId",
+                      "value": "99995465"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  \"ul\",\n  \"Excepteur \"\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b2109473-db36-42ff-881f-c0f2325fe1bd",
+          "name": "get By Device Id",
+          "request": {
+            "name": "get By Device Id",
+            "description": {},
+            "url": {
+              "path": [
+                "devices",
+                "details",
+                ":deviceId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "nostrud irure",
+                  "key": "deviceId",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/devices/details/:deviceId"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e3180da3-1767-4081-8b04-f799c9a599ef",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "devices",
+                    "details",
+                    ":deviceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "nostrud irure",
+                      "key": "deviceId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"userId\": -13814658,\n  \"ipAddress\": \"eiusmod in dolore id\",\n  \"firstLogin\": \"1991-12-08T02:05:59.098Z\",\n  \"lastLogin\": \"2008-06-05T02:29:12.902Z\",\n  \"numberOfLogins\": 27958475,\n  \"platform\": \"commodo tempor\",\n  \"deviceId\": \"volup\",\n  \"applicationId\": \"eu aute laborum do\",\n  \"osVersion\": \"officia deserunt Ut occaecat\",\n  \"manufacturerName\": \"sunt sit deserunt enim ipsum\",\n  \"osName\": \"ipsum Excepteur\",\n  \"model\": \"Excepteur\",\n  \"lat\": -59884191.651761755,\n  \"lng\": 94628458.20283002,\n  \"token\": \"cillum sed adipisicing am\",\n  \"status\": \"INACTIVE\",\n  \"uuid\": \"reprehenderit do\",\n  \"profileId\": 33878146,\n  \"profileCode\": \"in in\",\n  \"isBanned\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7ce62f2a-3bff-455f-a110-cacd36ed4a4c",
+          "name": "get Active Fcm Tokens",
+          "request": {
+            "name": "get Active Fcm Tokens",
+            "description": {},
+            "url": {
+              "path": [
+                "devices",
+                "active",
+                "fcm"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "userId",
+                  "value": "99995465",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/devices/active/fcm?userId=99995465"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f82f9a2a-77d2-444b-8b40-d7a790753342",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "devices",
+                    "active",
+                    "fcm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "99995465"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "nostrud irure",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "75f3a6b5-7fb0-41d0-ae84-f866e25051aa",
+      "name": "banned-device-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4b50caf7-fdfb-4d0d-bd43-5bb6320773d1",
+          "name": "Un Banned Device",
+          "request": {
+            "name": "Un Banned Device",
+            "description": {},
+            "url": {
+              "path": [
+                "devices",
+                "unbanned"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "deviceId",
+                  "value": "nostrud irure",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/devices/unbanned?deviceId=nostrud irure"
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "32463808-67b4-4ca7-be64-062def93d535",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "devices",
+                    "unbanned"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "deviceId",
+                      "value": "nostrud irure"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "nostrud irure"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9cc0d22f-872b-4e82-833f-af9d0196d5ad",
+          "name": "banned Device",
+          "request": {
+            "name": "banned Device",
+            "description": {},
+            "url": {
+              "path": [
+                "devices",
+                "banned"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "deviceId",
+                  "value": "nostrud irure",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/devices/banned?deviceId=nostrud irure"
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "33556867-febf-45ec-8ab6-97a9dd4c6026",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "devices",
+                    "banned"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "deviceId",
+                      "value": "nostrud irure"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "nostrud irure"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "be7dcaa0-6c0c-4712-8867-da521565ce3e",
+          "name": "banned Device Internal",
+          "request": {
+            "name": "banned Device Internal",
+            "description": {},
+            "url": {
+              "path": [
+                "devices",
+                "banned",
+                "internal"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "deviceId",
+                  "value": "nostrud irure",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/devices/banned/internal?deviceId=nostrud irure"
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3c494439-873f-44c8-ad22-fb0bb54097bc",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "devices",
+                    "banned",
+                    "internal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "deviceId",
+                      "value": "nostrud irure"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d3254c12-4579-4c97-b7a9-8bd963609845",
+          "name": "is Banned Device",
+          "request": {
+            "name": "is Banned Device",
+            "description": {},
+            "url": {
+              "path": [
+                "devices",
+                ":deviceId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "nostrud irure",
+                  "key": "deviceId",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/devices/:deviceId"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b13699a8-266e-4e9a-a7f6-4e14fc9e6869",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "devices",
+                    ":deviceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "nostrud irure",
+                      "key": "deviceId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "false",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generated guard: a 5xx from any request is a gateway/service defect, not a test-data problem.",
+          "pm.test('no 5xx (' + pm.info.requestName + ')', function () {",
+          "  pm.expect(pm.response.code, (pm.response.text() || '').slice(0, 300)).to.be.below(500);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{gatewayBaseUrl}}/device-management",
+      "type": "string"
+    }
+  ],
+  "info": {
+    "_postman_id": "5265f1d3-59e9-48df-b3b0-bc20e948e7b4",
+    "name": "Device Management - majdpay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Device Management (device-management) — 15 operations.\n\nGENERATED from the OpenAPI 3.1.0 spec published at the UAT gateway swagger-ui\n(Select a definition -> \"Device Management APIs\"). Request bodies are schema-derived placeholders (lorem-ipsum\nstrings, sample numbers) — replace with real values before sending.\n\nBase URL: {{gatewayBaseUrl}}/device-management  (gatewayBaseUrl lives in EMI-dev.postman_environment.json).\nSpec server: https://gateway-emiuat.dg-cash.app/device-management\n\nAUTH: the spec declares no security scheme, but the gateway front-doors every route with a bearer\ntoken. Set {{token}} in the environment (mint one with the Authentication Service collection's\nsign-in, or pass --env-var token=... to newman). Some back-office routes need an admin/service\ntoken rather than a merchant one.\n\nCompanion Playwright scaffold: BusinessTestCases/ServiceApis/DeviceManagement.generated.spec.ts\n"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

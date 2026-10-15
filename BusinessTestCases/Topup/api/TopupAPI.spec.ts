@@ -12,7 +12,7 @@ import { findTopupCase, loginToTopup, gotoTopupScreen, reachOtpScreen, clickSumm
 // Split out from Happy Path / UI / Negative / Security — see
 // TopupHelper.ts's shared setup (loginToTopup/gotoTopupScreen/findTopupCase).
 
-const GATEWAY_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev.majdpay.com';
+const GATEWAY_BASE = process.env['API_BASE_URL'] ?? 'https://gateway-dev-emi.dg-cash.app';
 
 test.describe('Topup – API', { tag: ['@topup', '@api'], annotation: [{ type: 'feature', description: 'Topup' }, { type: 'layer', description: 'api' }] }, () => {
     test.describe.configure({ mode: 'serial' });

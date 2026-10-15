@@ -1,0 +1,715 @@
+{
+  "item": [
+    {
+      "id": "098d824c-4c72-4e89-b9a0-a9e200456975",
+      "name": "migration-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1e8f8270-da2c-4bc6-9ac5-eb6325e9d487",
+          "name": "failed Transaction",
+          "request": {
+            "name": "failed Transaction",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "transactions-query-log",
+                "migrate",
+                "failed-transactions",
+                "q"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/transactions-query-log/migrate/failed-transactions/q"
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "635ca3e3-f5a5-417f-b94b-43ce3b4c29be",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactions-query-log",
+                    "migrate",
+                    "failed-transactions",
+                    "q"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e6e031ca-cf33-4ec6-8047-5fa16c47b972",
+          "name": "generate Meta Data",
+          "request": {
+            "name": "generate Meta Data",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "transactions-query-log",
+                "migrate",
+                "sender-receiver-name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/transactions-query-log/migrate/sender-receiver-name"
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9b180b5a-3204-46aa-a241-19ec512be45f",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactions-query-log",
+                    "migrate",
+                    "sender-receiver-name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "c576a198-243d-4491-ad0f-4d07c3707709",
+      "name": "transaction-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9f8ee841-53a1-435b-8a19-62979c0a8049",
+          "name": "get Transactions Summary",
+          "request": {
+            "name": "get Transactions Summary",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "transactions-query-log",
+                "summary"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "-15685026",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "-8736408",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "transactionReference",
+                  "value": "Ut in",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "transactionTypeCode",
+                  "value": "eu consectetur",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "fromDate",
+                  "value": "1991-12-20T06:18:17.161Z",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "toDate",
+                  "value": "1960-07-05T03:49:52.819Z",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "[\"in eu Lorem\",\"sunt in anim esse\"]",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/transactions-query-log/summary?page=-15685026&size=-8736408&transactionReference=Ut in&transactionTypeCode=eu consectetur&fromDate=1991-12-20T06:18:17.161Z&toDate=1960-07-05T03:49:52.819Z&statuses=[\"in eu Lorem\",\"sunt in anim esse\"]"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8afbc9b1-1ebc-4e11-bd51-821658ac919c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactions-query-log",
+                    "summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "transactionReference",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transactionTypeCode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "minim velit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": 83049491,\n  \"totalElements\": -43293756,\n  \"size\": 11229892,\n  \"content\": [\n    {\n      \"batchTransactionReference\": \"incididunt dolore commodo\",\n      \"txnTypeName\": \"magna pariatur qui ipsum\",\n      \"amount\": -53927705.114505775,\n      \"currency\": \"dolor elit ipsum eu\",\n      \"status\": \"CANCELED\",\n      \"date\": \"1952-08-01T17:56:55.823Z\",\n      \"transactionDirection\": \"CREDIT\",\n      \"vat\": 87877930.37419406,\n      \"vatAmount\": -81635921.56120105,\n      \"commission\": -71088516.30975863,\n      \"entries\": [\n        {\n          \"batchTransactionReference\": \"reprehenderit elit\",\n          \"internalReference\": \"dolore officia\",\n          \"destinationAmount\": 1882568.922070682,\n          \"destinationCurrency\": \"quis do\",\n          \"sourceAmount\": -662415.5671621561,\n          \"sourceCurrency\": \"dolor ea officia veniam\",\n          \"txnType\": \"veniam cupidatat dolore\",\n          \"txnTypeName\": \"dol\",\n          \"status\": \"SUCCESS_REVERSED\",\n          \"initiator\": \"fugiat deserunt in Excepteur\",\n          \"date\": \"2026-02-12T12:01:43.232Z\",\n          \"externalReference\": \"id consequat cupidatat reprehenderit\",\n          \"senderWalletCode\": \"consectetur dolore est\",\n          \"senderWalletType\": \"anim tempor in Duis\",\n          \"senderName\": \"enim irure eu ex\",\n          \"senderAccount\": \"ipsum dolor veniam eiusmod\",\n          \"receiverWalletCode\": \"in\",\n          \"receiverWalletType\": \"Ut sunt\",\n          \"receiverName\": \"nulla tempor\",\n          \"receiverAccount\": \"incididunt\",\n          \"extraTransactionMetadata\": {\n            \"platform\": \"sed dolore fugiat\",\n            \"transactionMedium\": \"nisi sit et Lorem\",\n            \"hasCommission\": false,\n            \"swiftCode\": \"officia quis Ut ad\"\n          },\n          \"reasons\": [\n            \"incididunt amet\",\n            \"minim\"\n          ],\n          \"reservedBalanceAffected\": false,\n          \"reversalOf\": \"eu officia minim\",\n          \"adjustmentOf\": \"dolor dolor\",\n          \"createdAt\": \"1970-09-26T21:10:27.436Z\"\n        },\n        {\n          \"batchTransactionReference\": \"est adipisicing anim esse\",\n          \"internalReference\": \"in do\",\n          \"destinationAmount\": 8700280.295853019,\n          \"destinationCurrency\": \"Ut reprehenderi\",\n          \"sourceAmount\": 6303317.916021451,\n          \"sourceCurrency\": \"aute volup\",\n          \"txnType\": \"in in\",\n          \"txnTypeName\": \"officia Duis ullamco\",\n          \"status\": \"PENDING_REVERSED\",\n          \"initiator\": \"minim velit enim\",\n          \"date\": \"1995-02-01T06:57:20.345Z\",\n          \"externalReference\": \"deserunt tempor commodo\",\n          \"senderWalletCode\": \"sunt dolore\",\n          \"senderWalletType\": \"laborum ea\",\n          \"senderName\": \"sint aliquip voluptate in\",\n          \"senderAccount\": \"nostrud\",\n          \"receiverWalletCode\": \"qui cupidatat dolor id\",\n          \"receiverWalletType\": \"voluptate elit ex\",\n          \"receiverName\": \"id officia ullamco in\",\n          \"receiverAccount\": \"consectetur ex quis d\",\n          \"extraTransactionMetadata\": {\n            \"platform\": \"elit laborum\",\n            \"transactionMedium\": \"irure mollit minim enim\",\n            \"hasCommission\": true,\n            \"swiftCode\": \"officia mo\"\n          },\n          \"reasons\": [\n            \"occaecat incididunt quis\",\n            \"quis officia\"\n          ],\n          \"reservedBalanceAffected\": true,\n          \"reversalOf\": \"cillum\",\n          \"adjustmentOf\": \"velit eiusmod\",\n          \"createdAt\": \"2019-10-05T04:00:03.385Z\"\n        }\n      ]\n    },\n    {\n      \"batchTransactionReference\": \"et minim enim\",\n      \"txnTypeName\": \"sunt esse dolor est\",\n      \"amount\": -55588872.34440839,\n      \"currency\": \"consectetur magna et aliqu\",\n      \"status\": \"CANCELED\",\n      \"date\": \"1965-08-24T07:58:52.611Z\",\n      \"transactionDirection\": \"DEBIT\",\n      \"vat\": 47334831.502945155,\n      \"vatAmount\": 67998991.56374857,\n      \"commission\": -84298406.76764378,\n      \"entries\": [\n        {\n          \"batchTransactionReference\": \"est culpa esse do\",\n          \"internalReference\": \"sunt ulla\",\n          \"destinationAmount\": -36615160.84296934,\n          \"destinationCurrency\": \"labore\",\n          \"sourceAmount\": -14268726.643682748,\n          \"sourceCurrency\": \"adipisicing dolore\",\n          \"txnType\": \"sunt laborum\",\n          \"txnTypeName\": \"est mollit Excepteur\",\n          \"status\": \"PROCESSED\",\n          \"initiator\": \"reprehenderit\",\n          \"date\": \"1992-04-25T06:53:15.659Z\",\n          \"externalReference\": \"dolor dolore\",\n          \"senderWalletCode\": \"sunt laborum fugiat exercitation\",\n          \"senderWalletType\": \"exercitation ut adipisicing\",\n          \"senderName\": \"qui et culpa sunt\",\n          \"senderAccount\": \"dolo\",\n          \"receiverWalletCode\": \"mollit\",\n          \"receiverWalletType\": \"in occaecat culpa\",\n          \"receiverName\": \"Dui\",\n          \"receiverAccount\": \"dolor occaecat velit aute\",\n          \"extraTransactionMetadata\": {\n            \"platform\": \"ipsum Lorem occaecat\",\n            \"transactionMedium\": \"Duis dolor laboris est nisi\",\n            \"hasCommission\": true,\n            \"swiftCode\": \"Duis\"\n          },\n          \"reasons\": [\n            \"veniam velit sit\",\n            \"reprehenderit irure in\"\n          ],\n          \"reservedBalanceAffected\": true,\n          \"reversalOf\": \"in exercitation aute laboris cupidatat\",\n          \"adjustmentOf\": \"velit Excepteur esse\",\n          \"createdAt\": \"1999-10-14T01:12:49.300Z\"\n        },\n        {\n          \"batchTransactionReference\": \"amet veni\",\n          \"internalReference\": \"veniam id eu\",\n          \"destinationAmount\": -32117372.46324873,\n          \"destinationCurrency\": \"non eiusmod fugiat\",\n          \"sourceAmount\": 61548497.122452736,\n          \"sourceCurrency\": \"mollit\",\n          \"txnType\": \"ut magna enim cillum\",\n          \"txnTypeName\": \"Duis \",\n          \"status\": \"PENDING_REVERSED\",\n          \"initiator\": \"eiusmod est\",\n          \"date\": \"2020-07-22T02:15:28.277Z\",\n          \"externalReference\": \"dolor dolor in\",\n          \"senderWalletCode\": \"ea sed\",\n          \"senderWalletType\": \"dolore\",\n          \"senderName\": \"cillum\",\n          \"senderAccount\": \"culpa magna\",\n          \"receiverWalletCode\": \"aliquip nisi dolore p\",\n          \"receiverWalletType\": \"quis labore reprehenderit nostrud\",\n          \"receiverName\": \"in reprehenderit\",\n          \"receiverAccount\": \"Ut minim laborum reprehenderit occaecat\",\n          \"extraTransactionMetadata\": {\n            \"platform\": \"Excepteur deserunt amet\",\n            \"transactionMedium\": \"ut sint eu do\",\n            \"hasCommission\": false,\n            \"swiftCode\": \"dolore consectetur\"\n          },\n          \"reasons\": [\n            \"enim\",\n            \"Excepteur id do ad Duis\"\n          ],\n          \"reservedBalanceAffected\": false,\n          \"reversalOf\": \"aute est cupidatat veniam\",\n          \"adjustmentOf\": \"est labore aliquip reprehenderit\",\n          \"createdAt\": \"2024-12-10T03:01:15.468Z\"\n        }\n      ]\n    }\n  ],\n  \"number\": -65483033,\n  \"sort\": [\n    {\n      \"direction\": \"occaecat\",\n      \"nullHandling\": \"in consequat nulla pariatur eu\",\n      \"ascending\": true,\n      \"property\": \"velit ea amet\",\n      \"ignoreCase\": true\n    },\n    {\n      \"direction\": \"nulla\",\n      \"nullHandling\": \"velit consequat nulla laborum veniam\",\n      \"ascending\": true,\n      \"property\": \"ut enim sunt\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"last\": true,\n  \"first\": true,\n  \"numberOfElements\": -42292980,\n  \"pageable\": {\n    \"offset\": 39004264,\n    \"sort\": [\n      {\n        \"direction\": \"irure pariatur exerci\",\n        \"nullHandling\": \"adipisicing\",\n        \"ascending\": false,\n        \"property\": \"ullamco\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"in cupidatat velit incididunt\",\n        \"nullHandling\": \"cillum dolor\",\n        \"ascending\": true,\n        \"property\": \"adipisicing tempor sunt\",\n        \"ignoreCase\": false\n      }\n    ],\n    \"pageSize\": -75371781,\n    \"pageNumber\": 77079787,\n    \"paged\": true,\n    \"unpaged\": true\n  },\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9b4001d8-267c-4907-99f2-02b0f06e6203",
+          "name": "get Transactions By Batch Reference",
+          "request": {
+            "name": "get Transactions By Batch Reference",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "transactions-query-log",
+                "summary",
+                ":batchReference"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "minim velit",
+                  "key": "batchReference",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/transactions-query-log/summary/:batchReference?page=0&size=10"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "88d9277a-3216-4ff2-8d52-f6a4b8a3031b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactions-query-log",
+                    "summary",
+                    ":batchReference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "minim velit",
+                      "key": "batchReference",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "minim velit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": 70265803,\n  \"totalElements\": 62385405,\n  \"size\": 66753774,\n  \"content\": [\n    {\n      \"batchTransactionReference\": \"veniam et\",\n      \"internalReference\": \"l\",\n      \"destinationAmount\": -22010621.76454027,\n      \"destinationCurrency\": \"dolor commodo dolore Duis\",\n      \"sourceAmount\": -43344762.42545335,\n      \"sourceCurrency\": \"reprehenderit anim esse\",\n      \"txnType\": \"est tempor nisi non\",\n      \"txnTypeName\": \"incididunt elit laborum\",\n      \"status\": \"PROCESSED\",\n      \"initiator\": \"nisi\",\n      \"date\": \"1984-08-01T01:51:48.451Z\",\n      \"externalReference\": \"id incididunt Ut\",\n      \"senderWalletCode\": \"culpa\",\n      \"senderWalletType\": \"anim a\",\n      \"senderName\": \"reprehenderit id consectetur in ut\",\n      \"senderAccount\": \"n\",\n      \"receiverWalletCode\": \"ut sun\",\n      \"receiverWalletType\": \"magna\",\n      \"receiverName\": \"sunt culpa\",\n      \"receiverAccount\": \"Lorem Duis commodo aliqua\",\n      \"extraTransactionMetadata\": {\n        \"platform\": \"voluptate labore\",\n        \"transactionMedium\": \"do sit et pariatur voluptate\",\n        \"hasCommission\": true,\n        \"swiftCode\": \"anim ex aute officia do\"\n      },\n      \"reasons\": [\n        \"tempor sit in \",\n        \"consectetur exercitation sit id amet\"\n      ],\n      \"reservedBalanceAffected\": false,\n      \"reversalOf\": \"et officia\",\n      \"adjustmentOf\": \"nulla dolor \",\n      \"createdAt\": \"1976-06-27T18:12:54.692Z\",\n      \"vatAmount\": -4592390.25244613,\n      \"commission\": 64667289.40481952\n    },\n    {\n      \"batchTransactionReference\": \"velit laborum cupidatat\",\n      \"internalReference\": \"consequat mollit\",\n      \"destinationAmount\": 22582532.89070107,\n      \"destinationCurrency\": \"ullamco dolore reprehenderit est consequat\",\n      \"sourceAmount\": -28550644.285349235,\n      \"sourceCurrency\": \"id\",\n      \"txnType\": \"dolor id sed dolore Lorem\",\n      \"txnTypeName\": \"nisi irure nostrud\",\n      \"status\": \"SUCCESS\",\n      \"initiator\": \"aliqua dolor\",\n      \"date\": \"1959-10-08T05:48:00.118Z\",\n      \"externalReference\": \"mollit magna\",\n      \"senderWalletCode\": \"ad deserunt\",\n      \"senderWalletType\": \"est exercitation reprehenderit pariatur\",\n      \"senderName\": \"sed anim Ut in\",\n      \"senderAccount\": \"fugiat ullamco aute\",\n      \"receiverWalletCode\": \"ad quis Duis dolor\",\n      \"receiverWalletType\": \"ea do mollit exercitation\",\n      \"receiverName\": \"occaecat\",\n      \"receiverAccount\": \"aliqua deserunt\",\n      \"extraTransactionMetadata\": {\n        \"platform\": \"ex mollit esse\",\n        \"transactionMedium\": \"commodo do\",\n        \"hasCommission\": true,\n        \"swiftCode\": \"id\"\n      },\n      \"reasons\": [\n        \"nostrud do\",\n        \"ipsum deserunt ut ut\"\n      ],\n      \"reservedBalanceAffected\": true,\n      \"reversalOf\": \"velit consectetur nulla dolore\",\n      \"adjustmentOf\": \"culpa ut\",\n      \"createdAt\": \"2022-10-07T00:12:00.679Z\",\n      \"vatAmount\": -43326453.740173765,\n      \"commission\": 12358758.074053839\n    }\n  ],\n  \"number\": -43112440,\n  \"sort\": [\n    {\n      \"direction\": \"commodo tempor nisi\",\n      \"nullHandling\": \"commodo elit quis\",\n      \"ascending\": false,\n      \"property\": \"magna Lorem Excepteur voluptate\",\n      \"ignoreCase\": false\n    },\n    {\n      \"direction\": \"reprehenderit nostrud\",\n      \"nullHandling\": \"fugiat pariatur quis voluptate i\",\n      \"ascending\": false,\n      \"property\": \"consequat et ad in nisi\",\n      \"ignoreCase\": true\n    }\n  ],\n  \"last\": false,\n  \"first\": true,\n  \"numberOfElements\": 96247719,\n  \"pageable\": {\n    \"offset\": -85609242,\n    \"sort\": [\n      {\n        \"direction\": \"Duis ex esse\",\n        \"nullHandling\": \"culpa est esse\",\n        \"ascending\": true,\n        \"property\": \"eu dolore laborum ut\",\n        \"ignoreCase\": false\n      },\n      {\n        \"direction\": \"qui sint\",\n        \"nullHandling\": \"ipsum in dolore sed\",\n        \"ascending\": true,\n        \"property\": \"officia\",\n        \"ignoreCase\": true\n      }\n    ],\n    \"pageSize\": 60565279,\n    \"pageNumber\": 31792628,\n    \"paged\": true,\n    \"unpaged\": false\n  },\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "46a65c57-8cff-4881-8f37-043b4774092b",
+          "name": "get Transactions Detail",
+          "request": {
+            "name": "get Transactions Detail",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "transactions-query-log",
+                "summary",
+                "entry",
+                ":txnCode"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "minim velit",
+                  "key": "txnCode",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/api/v1/transactions-query-log/summary/entry/:txnCode"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b31dc6ef-0f9f-4025-8dae-55d246844cbb",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactions-query-log",
+                    "summary",
+                    "entry",
+                    ":txnCode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "minim velit",
+                      "key": "txnCode",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "minim velit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"batchTransactionReference\": \"in sed in\",\n  \"internalReference\": \"laborum Lorem occaecat Excepteur\",\n  \"destinationAmount\": -66400147.9724126,\n  \"destinationCurrency\": \"reprehenderit\",\n  \"sourceAmount\": -64401276.92633359,\n  \"sourceCurrency\": \"pariatur cillum cupidatat\",\n  \"txnType\": \"officia sed ea\",\n  \"txnTypeName\": \"ipsum Duis\",\n  \"status\": \"PENDING\",\n  \"initiator\": \"dolore consequat in consectetur\",\n  \"date\": \"2019-04-21T19:59:20.398Z\",\n  \"externalReference\": \"velit adipisicing minim consequat\",\n  \"senderWalletCode\": \"ad sit commodo\",\n  \"senderWalletType\": \"ea\",\n  \"senderName\": \"quis nostrud elit dolore\",\n  \"senderAccount\": \"enim occaecat\",\n  \"receiverWalletCode\": \"Excepteur\",\n  \"receiverWalletType\": \"deserunt aliquip adipisicing\",\n  \"receiverName\": \"esse\",\n  \"receiverAccount\": \"minim Lorem ex\",\n  \"extraTransactionMetadata\": {\n    \"platform\": \"Duis ad amet sunt\",\n    \"transactionMedium\": \"anim fugiat mollit in\",\n    \"hasCommission\": true,\n    \"swiftCode\": \"in velit\"\n  },\n  \"reasons\": [\n    \"incididunt ea\",\n    \"aute amet anim\"\n  ],\n  \"reservedBalanceAffected\": true,\n  \"reversalOf\": \"quis aliqua eiusmod\",\n  \"adjustmentOf\": \"laborum adipisicing irure ad\",\n  \"createdAt\": \"1986-06-20T03:08:47.623Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bb329ab8-1a68-4332-8e74-a59015ae4dbd",
+          "name": "get Transactions Detail 1",
+          "request": {
+            "name": "get Transactions Detail 1",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "transactions-query-log",
+                "detail"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "64160056",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "-11691698",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "txnType",
+                  "value": "est ex dolore",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "walletCode",
+                  "value": "elit adipisicing fugiat",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "fromDate",
+                  "value": "1992-08-21T13:33:48.654Z",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "toDate",
+                  "value": "2020-11-02T05:37:00.618Z",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "in mollit cillum proident",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/api/v1/transactions-query-log/detail?page=64160056&size=-11691698&txnType=est ex dolore&walletCode=elit adipisicing fugiat&fromDate=1992-08-21T13:33:48.654Z&toDate=2020-11-02T05:37:00.618Z&status=in mollit cillum proident"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d4e60109-32ce-445e-b285-f9cc3d38e0dd",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactions-query-log",
+                    "detail"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "txnType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "walletCode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "minim velit"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": 14830626,\n  \"totalElements\": 6017338,\n  \"size\": -48523360,\n  \"content\": [\n    {\n      \"batchTransactionReference\": \"et nisi officia\",\n      \"internalReference\": \"culpa reprehenderit\",\n      \"destinationAmount\": -26114600.207619086,\n      \"destinationCurrency\": \"in\",\n      \"sourceAmount\": 7019951.70305562,\n      \"sourceCurrency\": \"veniam pariatur aliquip do\",\n      \"txnType\": \"proident\",\n      \"txnTypeName\": \"proident qui\",\n      \"status\": \"PROCESSED\",\n      \"initiator\": \"occaecat aliquip\",\n      \"date\": \"1983-11-23T10:29:01.843Z\",\n      \"externalReference\": \"velit Ut\",\n      \"senderWalletCode\": \"consectetur nulla exercitation\",\n      \"senderWalletType\": \"ullamco\",\n      \"senderName\": \"ipsum Ut non ea\",\n      \"senderAccount\": \"labore magna\",\n      \"receiverWalletCode\": \"pariatur laboris in\",\n      \"receiverWalletType\": \"aute dolor sit ut in\",\n      \"receiverName\": \"ipsum amet quis\",\n      \"receiverAccount\": \"occaecat culpa ut commodo proident\",\n      \"extraTransactionMetadata\": {\n        \"platform\": \"Excepteur consequat culpa\",\n        \"transactionMedium\": \"culpa labore ipsum non\",\n        \"hasCommission\": true,\n        \"swiftCode\": \"in nulla Duis\"\n      },\n      \"reasons\": [\n        \"deserunt consequat adipisicing occaecat aliqua\",\n        \"ut laborum laboris sit\"\n      ],\n      \"reservedBalanceAffected\": true,\n      \"reversalOf\": \"exercitation cupidatat dolore occaecat ut\",\n      \"adjustmentOf\": \"deserunt\",\n      \"createdAt\": \"2003-04-04T23:33:25.571Z\"\n    },\n    {\n      \"batchTransactionReference\": \"cupidatat ex nostrud\",\n      \"internalReference\": \"tempor exercitation nulla Duis\",\n      \"destinationAmount\": 22905710.495054215,\n      \"destinationCurrency\": \"dolore \",\n      \"sourceAmount\": 27336153.909650117,\n      \"sourceCurrency\": \"laborum veniam sunt\",\n      \"txnType\": \"ullamco culpa cillum\",\n      \"txnTypeName\": \"nisi pariatur ullamc\",\n      \"status\": \"FAILED_REVERSED\",\n      \"initiator\": \"ad aliquip in\",\n      \"date\": \"1948-08-01T05:44:05.354Z\",\n      \"externalReference\": \"do Lorem\",\n      \"senderWalletCode\": \"dolore elit in pariatur consequat\",\n      \"senderWalletType\": \"sit non elit\",\n      \"senderName\": \"commodo\",\n      \"senderAccount\": \"adipisicing qui enim esse\",\n      \"receiverWalletCode\": \"voluptate ullamco incididunt\",\n      \"receiverWalletType\": \"sed in\",\n      \"receiverName\": \"velit in deserunt\",\n      \"receiverAccount\": \"quis\",\n      \"extraTransactionMetadata\": {\n        \"platform\": \"do laborum et Duis\",\n        \"transactionMedium\": \"sunt esse dolore exercitation dolore\",\n        \"hasCommission\": false,\n        \"swiftCode\": \"reprehenderit laborum\"\n      },\n      \"reasons\": [\n        \"reprehenderit\",\n        \"sunt amet\"\n      ],\n      \"reservedBalanceAffected\": true,\n      \"reversalOf\": \"ut esse tempor commodo\",\n      \"adjustmentOf\": \"aliquip Excepteur culpa cillum\",\n      \"createdAt\": \"1968-07-20T22:00:32.012Z\"\n    }\n  ],\n  \"number\": -68870816,\n  \"sort\": [\n    {\n      \"direction\": \"ullamco in\",\n      \"nullHandling\": \"reprehenderit aute esse\",\n      \"ascending\": false,\n      \"property\": \"anim Ut qui officia\",\n      \"ignoreCase\": false\n    },\n    {\n      \"direction\": \"incididunt ipsu\",\n      \"nullHandling\": \"commodo cillum ad\",\n      \"ascending\": false,\n      \"property\": \"do dolor\",\n      \"ignoreCase\": true\n    }\n  ],\n  \"last\": true,\n  \"first\": false,\n  \"numberOfElements\": 55801354,\n  \"pageable\": {\n    \"offset\": -8835723,\n    \"sort\": [\n      {\n        \"direction\": \"magna\",\n        \"nullHandling\": \"nostrud Duis\",\n        \"ascending\": true,\n        \"property\": \"non proident eu amet labore\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"sit do magna dolore consequat\",\n        \"nullHandling\": \"est ullamco commodo\",\n        \"ascending\": true,\n        \"property\": \"Ut tempor non exercitation\",\n        \"ignoreCase\": false\n      }\n    ],\n    \"pageSize\": 24433865,\n    \"pageNumber\": -29849246,\n    \"paged\": true,\n    \"unpaged\": true\n  },\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generated guard: a 5xx from any request is a gateway/service defect, not a test-data problem.",
+          "pm.test('no 5xx (' + pm.info.requestName + ')', function () {",
+          "  pm.expect(pm.response.code, (pm.response.text() || '').slice(0, 300)).to.be.below(500);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{gatewayBaseUrl}}/profile-service",
+      "type": "string"
+    }
+  ],
+  "info": {
+    "_postman_id": "9b03c956-4903-40dc-97fe-35e71d5f0e61",
+    "name": "Transaction Query Log Service - majdpay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Transaction Query Log Service (transaction-query-log-service) — 6 operations.\n\nGENERATED from the OpenAPI 3.0.1 spec published at the UAT gateway swagger-ui\n(Select a definition -> \"Transaction Query Log Service\"). Request bodies are schema-derived placeholders (lorem-ipsum\nstrings, sample numbers) — replace with real values before sending.\n\nBase URL: {{gatewayBaseUrl}}/profile-service  (gatewayBaseUrl lives in EMI-dev.postman_environment.json).\nSpec server: https://gateway-emiuat.dg-cash.app/profile-service\n\nAUTH: the spec declares no security scheme, but the gateway front-doors every route with a bearer\ntoken. Set {{token}} in the environment (mint one with the Authentication Service collection's\nsign-in, or pass --env-var token=... to newman). Some back-office routes need an admin/service\ntoken rather than a merchant one.\n\nCompanion Playwright scaffold: BusinessTestCases/ServiceApis/TransactionQueryLogService.generated.spec.ts\n"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

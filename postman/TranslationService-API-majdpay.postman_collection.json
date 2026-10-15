@@ -1,0 +1,2160 @@
+{
+  "item": [
+    {
+      "id": "e5248406-24b5-471e-b739-da1cb1181b8b",
+      "name": "message-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e1bbbd49-8fec-4674-882c-704e6502a321",
+          "name": "get Messages",
+          "request": {
+            "name": "get Messages",
+            "description": {},
+            "url": {
+              "path": [
+                "messages"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "85516990",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "85516990",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/messages?page=85516990&size=85516990"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8f03fd75-725b-4cb3-b592-1514c0f405d5",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "85516990"
+                    },
+                    {
+                      "key": "size",
+                      "value": "85516990"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": -56389399,\n  \"totalElements\": -37744554,\n  \"size\": 30676982,\n  \"content\": [\n    {\n      \"messageCode\": \"commodo reprehenderit sit occaecat\",\n      \"messageType\": \"ERROR\",\n      \"originalText\": \"elit consequat quis\",\n      \"languageCode\": \"commodo non pariatur mollit proident\",\n      \"languageName\": \"o\",\n      \"title\": \"fugiat\",\n      \"id\": 27949352,\n      \"plainText\": \"occaecat est fugiat ut\"\n    },\n    {\n      \"messageCode\": \"aliqua commodo sunt\",\n      \"messageType\": \"EMAIL\",\n      \"originalText\": \"quis proident anim dolor nisi\",\n      \"languageCode\": \"sit aliquip\",\n      \"languageName\": \"dolor et nisi\",\n      \"title\": \"consectetur qui est\",\n      \"id\": -8529032,\n      \"plainText\": \"consectetur ut eu\"\n    }\n  ],\n  \"number\": -87549880,\n  \"sort\": [\n    {\n      \"direction\": \"velit nisi do mollit\",\n      \"nullHandling\": \"cillum est labore\",\n      \"ascending\": true,\n      \"property\": \"est ipsum ex\",\n      \"ignoreCase\": false\n    },\n    {\n      \"direction\": \"cupidatat\",\n      \"nullHandling\": \"laborum veniam esse Ut\",\n      \"ascending\": false,\n      \"property\": \"ipsum pariatur reprehenderit Excepteur commodo\",\n      \"ignoreCase\": true\n    }\n  ],\n  \"pageable\": {\n    \"offset\": 19916771,\n    \"sort\": [\n      {\n        \"direction\": \"eiusmod esse ad aliqua\",\n        \"nullHandling\": \"nostrud cupidatat\",\n        \"ascending\": true,\n        \"property\": \"Lorem\",\n        \"ignoreCase\": false\n      },\n      {\n        \"direction\": \"reprehenderit deserunt laborum Excepteur\",\n        \"nullHandling\": \"mollit qui\",\n        \"ascending\": true,\n        \"property\": \"adipisicing nulla Duis do\",\n        \"ignoreCase\": true\n      }\n    ],\n    \"pageNumber\": 37080549,\n    \"pageSize\": -96613443,\n    \"paged\": true,\n    \"unpaged\": false\n  },\n  \"last\": false,\n  \"first\": true,\n  \"numberOfElements\": 84428026,\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0e22cddc-31bd-49bb-ba6a-f012e1b98fd4",
+          "name": "update Messages",
+          "request": {
+            "name": "update Messages",
+            "description": {},
+            "url": {
+              "path": [
+                "messages"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/messages"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"messageType\": \"EMAIL\",\n    \"originalText\": \"ex magna qui\",\n    \"languageCode\": \"anim ut\",\n    \"title\": \"mollit ut qui Excepteur\",\n    \"messageId\": -40323554\n  },\n  {\n    \"messageType\": \"LABEL\",\n    \"originalText\": \"in labore\",\n    \"languageCode\": \"irure occaecat\",\n    \"title\": \"magna in aute\",\n    \"messageId\": -91152498\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d93e90cf-93fb-4ec7-a9ab-d23a31594542",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"messageType\": \"SMS\",\n    \"originalText\": \"minim amet enim elit ut\",\n    \"languageCode\": \"veniam est\",\n    \"title\": \"cupidatat sit consectetur nulla\",\n    \"messageId\": 86933430\n  },\n  {\n    \"messageType\": \"PAGE\",\n    \"originalText\": \"et ut do\",\n    \"languageCode\": \"ut cillum\",\n    \"title\": \"velit ut culpa\",\n    \"messageId\": -40029677\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"messageCode\": \"cupidatat cillum qui\",\n    \"messageType\": \"ABOUT_US\",\n    \"originalText\": \"id nisi quis\",\n    \"languageCode\": \"sed do adipisicing Lorem u\",\n    \"languageName\": \"quis\",\n    \"title\": \"incididunt ea sit\",\n    \"id\": 98322788,\n    \"plainText\": \"amet mollit occaecat eu\"\n  },\n  {\n    \"messageCode\": \"aliqua exercitation minim\",\n    \"messageType\": \"CATEGORY\",\n    \"originalText\": \"aliqua et\",\n    \"languageCode\": \"aute ut est\",\n    \"languageName\": \"mollit eiusmod\",\n    \"title\": \"cillum sed mollit\",\n    \"id\": -23556959,\n    \"plainText\": \"occaecat dolore\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8e8ee4d3-9ee0-44c4-aebf-8ab42225a8a5",
+          "name": "create Message",
+          "request": {
+            "name": "create Message",
+            "description": {},
+            "url": {
+              "path": [
+                "messages"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/messages"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messageCode\": \"exercitation sint\",\n  \"messageType\": \"LABEL\",\n  \"originalText\": \"ut incididunt dolor\",\n  \"languageCode\": \"ex\",\n  \"languageName\": \"Ut dolore laboris sunt\",\n  \"title\": \"a\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2f51e825-5100-46ca-8ddc-7052129f66f3",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messageCode\": \"exercitation sint\",\n  \"messageType\": \"LABEL\",\n  \"originalText\": \"ut incididunt dolor\",\n  \"languageCode\": \"ex\",\n  \"languageName\": \"Ut dolore laboris sunt\",\n  \"title\": \"a\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"messageCode\": \"mollit\",\n  \"messageType\": \"LABEL\",\n  \"originalText\": \"commodo laboris ex irure\",\n  \"languageCode\": \"minim et sunt\",\n  \"languageName\": \"Ut in amet est\",\n  \"title\": \"aliquip mollit dolor dolor culpa\",\n  \"id\": -5644057,\n  \"plainText\": \"cupidatat eu\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "67784e80-07a0-415b-9449-1dbbc4ac7977",
+          "name": "update Message",
+          "request": {
+            "name": "update Message",
+            "description": {},
+            "url": {
+              "path": [
+                "messages",
+                ":messageId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "60827310",
+                  "key": "messageId",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/messages/:messageId"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messageType\": \"INFO\",\n  \"originalText\": \"ad ut dolor laboris\",\n  \"languageCode\": \"ullamco Ut aute ipsum\",\n  \"title\": \"sed pariatur in velit\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "786c47a6-4405-4dd3-8cf5-0d9d80b70707",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":messageId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "60827310",
+                      "key": "messageId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messageType\": \"INFO\",\n  \"originalText\": \"ad ut dolor laboris\",\n  \"languageCode\": \"ullamco Ut aute ipsum\",\n  \"title\": \"sed pariatur in velit\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"messageCode\": \"mollit\",\n  \"messageType\": \"LABEL\",\n  \"originalText\": \"commodo laboris ex irure\",\n  \"languageCode\": \"minim et sunt\",\n  \"languageName\": \"Ut in amet est\",\n  \"title\": \"aliquip mollit dolor dolor culpa\",\n  \"id\": -5644057,\n  \"plainText\": \"cupidatat eu\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c5649de2-8ed6-4ef7-93e4-e0da5561623d",
+          "name": "delete Message",
+          "request": {
+            "name": "delete Message",
+            "description": {},
+            "url": {
+              "path": [
+                "messages",
+                ":messageId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "60827310",
+                  "key": "messageId",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/messages/:messageId"
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "23b9fdd1-2dcc-47f9-9f18-6faab743dd75",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":messageId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "60827310",
+                      "key": "messageId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "646214f3-6e68-4375-a4d0-88036d95c9bc",
+          "name": "get Message",
+          "request": {
+            "name": "get Message",
+            "description": {},
+            "url": {
+              "path": [
+                "messages",
+                ":messageType"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "mollit ad esse occaecat Lorem",
+                  "key": "messageType",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/messages/:messageType"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fa75a4a4-0dd4-4b0f-bd26-a5f0a60a411a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":messageType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "mollit ad esse occaecat Lorem",
+                      "key": "messageType",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"messageCode\": \"cupidatat cillum qui\",\n    \"messageType\": \"ABOUT_US\",\n    \"originalText\": \"id nisi quis\",\n    \"languageCode\": \"sed do adipisicing Lorem u\",\n    \"languageName\": \"quis\",\n    \"title\": \"incididunt ea sit\",\n    \"id\": 98322788,\n    \"plainText\": \"amet mollit occaecat eu\"\n  },\n  {\n    \"messageCode\": \"aliqua exercitation minim\",\n    \"messageType\": \"CATEGORY\",\n    \"originalText\": \"aliqua et\",\n    \"languageCode\": \"aute ut est\",\n    \"languageName\": \"mollit eiusmod\",\n    \"title\": \"cillum sed mollit\",\n    \"id\": -23556959,\n    \"plainText\": \"occaecat dolore\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2382fb21-3b75-4a6f-ac74-37799ea4a7bd",
+          "name": "get Message 1",
+          "request": {
+            "name": "get Message 1",
+            "description": {},
+            "url": {
+              "path": [
+                "messages",
+                ":locale",
+                ":messageCode"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "all",
+                  "value": "{\"ut__1d\":\"<string>\"}",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "empty",
+                  "value": "<boolean>",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "mollit ad esse occaecat Lorem",
+                  "key": "locale",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "mollit ad esse occaecat Lorem",
+                  "key": "messageCode",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/messages/:locale/:messageCode?all={\"ut__1d\":\"<string>\"}&empty=<boolean>"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f7b2b32d-4944-426a-be44-b32eed713ba9",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":locale",
+                    ":messageCode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "all",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "empty",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "mollit ad esse occaecat Lorem",
+                      "key": "locale",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "mollit ad esse occaecat Lorem",
+                      "key": "messageCode",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"messageCode\": \"mollit\",\n  \"messageType\": \"LABEL\",\n  \"originalText\": \"commodo laboris ex irure\",\n  \"languageCode\": \"minim et sunt\",\n  \"languageName\": \"Ut in amet est\",\n  \"title\": \"aliquip mollit dolor dolor culpa\",\n  \"id\": -5644057,\n  \"plainText\": \"cupidatat eu\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "50db4c72-97fc-4ac5-9c6c-ca6049f57e79",
+          "name": "get Messages By Code",
+          "request": {
+            "name": "get Messages By Code",
+            "description": {},
+            "url": {
+              "path": [
+                "messages",
+                ":code",
+                "all"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "mollit ad esse occaecat Lorem",
+                  "key": "code",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/messages/:code/all"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "295509d8-89d9-498b-b98e-399becdba7d6",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":code",
+                    "all"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "mollit ad esse occaecat Lorem",
+                      "key": "code",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"messageCode\": \"dolore laboris sit\",\n    \"messageType\": \"ERROR\",\n    \"originalText\": \"consectetur ullamco in null\",\n    \"languageCode\": \"do ad\",\n    \"languageName\": \"labore \",\n    \"title\": \"deserunt labore exercitation irure\",\n    \"id\": -7881953,\n    \"plainText\": \"offi\"\n  },\n  {\n    \"messageCode\": \"ullamco mollit veniam fugiat\",\n    \"messageType\": \"SMS\",\n    \"originalText\": \"Ut aliqua ad\",\n    \"languageCode\": \"sunt nisi elit est\",\n    \"languageName\": \"ea ullamco eu enim\",\n    \"title\": \"nulla dolore sit consectetur\",\n    \"id\": 31994288,\n    \"plainText\": \"deserunt occaecat\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d6ab60da-ef86-43ea-afc6-05798d4130b4",
+          "name": "get Page Content",
+          "request": {
+            "name": "get Page Content",
+            "description": {},
+            "url": {
+              "path": [
+                "messages",
+                "pages",
+                ":messageId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "60827310",
+                  "key": "messageId",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/messages/pages/:messageId"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d719b7a9-5e4a-4669-a36d-0c0677622732",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    "pages",
+                    ":messageId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "60827310",
+                      "key": "messageId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "mollit ad esse occaecat Lorem",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "71418406-ce31-488a-aa57-e342e442e5e5",
+          "name": "get Combined Message",
+          "request": {
+            "name": "get Combined Message",
+            "description": {},
+            "url": {
+              "path": [
+                "messages",
+                "combined",
+                ":messageCode"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "languages",
+                  "value": "ar_SA"
+                },
+                {
+                  "disabled": false,
+                  "key": "languages",
+                  "value": "en_UK"
+                },
+                {
+                  "disabled": false,
+                  "key": "all",
+                  "value": "{\"ut__1d\":\"<string>\"}",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "empty",
+                  "value": "<boolean>",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "mollit ad esse occaecat Lorem",
+                  "key": "messageCode",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/messages/combined/:messageCode?languages=ar_SA&languages=en_UK&all={\"ut__1d\":\"<string>\"}&empty=<boolean>"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fdb63bb9-844c-4f84-b14f-0e7e83890bda",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    "combined",
+                    ":messageCode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "languages",
+                      "value": "ar_SA"
+                    },
+                    {
+                      "key": "languages",
+                      "value": "en_UK"
+                    },
+                    {
+                      "key": "all",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "empty",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "mollit ad esse occaecat Lorem",
+                      "key": "messageCode",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"messagesDtos\": [\n    {\n      \"messageCode\": \"est fugiat\",\n      \"messageType\": \"NOTIFICATION\",\n      \"originalText\": \"aliquip sunt cupidat\",\n      \"languageCode\": \"amet esse\",\n      \"languageName\": \"aliqua velit\",\n      \"title\": \"Ut elit\",\n      \"id\": -39457815,\n      \"plainText\": \"aliquip do\"\n    },\n    {\n      \"messageCode\": \"reprehenderit cillum do incididunt\",\n      \"messageType\": \"PAGE\",\n      \"originalText\": \"culpa dolore\",\n      \"languageCode\": \"deserunt voluptate\",\n      \"languageName\": \"dolor quis\",\n      \"title\": \"cillu\",\n      \"id\": 55325288,\n      \"plainText\": \"officia proident pariatur elit\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "2d7ffcd6-350d-4b11-aa57-15f6e9dbf1ee",
+      "name": "language-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6ab95542-87d5-4a14-bda5-1a62aed13db4",
+          "name": "update Language",
+          "request": {
+            "name": "update Language",
+            "description": {},
+            "url": {
+              "path": [
+                "language",
+                ":code",
+                "value",
+                ":name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "mollit ad esse occaecat Lorem",
+                  "key": "code",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "mollit ad esse occaecat Lorem",
+                  "key": "name",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/language/:code/value/:name"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e17625a7-8af8-4c3d-971a-760e06670dd6",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "language",
+                    ":code",
+                    "value",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "mollit ad esse occaecat Lorem",
+                      "key": "code",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "mollit ad esse occaecat Lorem",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "mollit ad esse occaecat Lorem"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 28223398,\n  \"language\": \"esse ea\",\n  \"code\": \"proident irure exercitation officia sunt\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fabd9390-8292-4eef-95dc-a63034bd2c23",
+          "name": "get Languages",
+          "request": {
+            "name": "get Languages",
+            "description": {},
+            "url": {
+              "path": [
+                "language"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "code",
+                  "value": "mollit ad esse occaecat Lorem"
+                },
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "mollit ad esse occaecat Lorem"
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/language?code=mollit ad esse occaecat Lorem&name=mollit ad esse occaecat Lorem"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d20e6d86-4b5c-44e4-ad8d-7cf4f27c863b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "language"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "code",
+                      "value": "mollit ad esse occaecat Lorem"
+                    },
+                    {
+                      "key": "name",
+                      "value": "mollit ad esse occaecat Lorem"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"code\": \"consequat esse eu laboris\",\n    \"name\": \"aliqua in \",\n    \"noMessages\": -52638037\n  },\n  {\n    \"code\": \"do\",\n    \"name\": \"est velit\",\n    \"noMessages\": 97241426\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "edc25064-c404-45bf-a1c6-6ec70eb0f7b1",
+          "name": "add New Language",
+          "request": {
+            "name": "add New Language",
+            "description": {},
+            "url": {
+              "path": [
+                "language"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/language"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"language\": \"labore\",\n  \"code\": \"magna non dolor Ut\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d12554c9-5f3d-4b8a-a5f8-a59c75f1c592",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "language"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "mollit ad esse occaecat Lorem"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"language\": \"labore\",\n  \"code\": \"magna non dolor Ut\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 28223398,\n  \"language\": \"esse ea\",\n  \"code\": \"proident irure exercitation officia sunt\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "137c31ef-11d4-451d-a6c6-1f97e5fcca35",
+          "name": "delete Language",
+          "request": {
+            "name": "delete Language",
+            "description": {},
+            "url": {
+              "path": [
+                "language",
+                ":code"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "mollit ad esse occaecat Lorem",
+                  "key": "code",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/language/:code"
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9989b8d7-11d5-496f-be90-214afb8f9588",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "language",
+                    ":code"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "mollit ad esse occaecat Lorem",
+                      "key": "code",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "mollit ad esse occaecat Lorem"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "6b26836e-bcbc-48c7-bf2d-0cd5f327bd92",
+      "name": "error-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c693779d-bc2f-4071-8634-d40fa7d8c699",
+          "name": "update Error Message",
+          "request": {
+            "name": "update Error Message",
+            "description": {},
+            "url": {
+              "path": [
+                "errors",
+                ":errorId",
+                "value",
+                ":httpStatusCode"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "85516990",
+                  "key": "httpStatusCode",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "60827310",
+                  "key": "errorId",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/errors/:errorId/value/:httpStatusCode"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b4bb327c-8a47-44c4-9076-d52a5b3b751a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "errors",
+                    ":errorId",
+                    "value",
+                    ":httpStatusCode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "85516990",
+                      "key": "httpStatusCode",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "60827310",
+                      "key": "errorId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 30037782,\n  \"httpStatusCode\": 5333151,\n  \"message\": {\n    \"messageCode\": \"Ut\",\n    \"messageType\": \"PRIVACY_POLICY\",\n    \"originalText\": \"cupidatat proident\",\n    \"languageCode\": \"do\",\n    \"languageName\": \"incididunt dolor eu laborum\",\n    \"title\": \"nulla aliqua dolo\",\n    \"id\": 66076841,\n    \"plainText\": \"dolor cillum culpa\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ae502938-8224-4581-a330-084b256638e5",
+          "name": "get Errors",
+          "request": {
+            "name": "get Errors",
+            "description": {},
+            "url": {
+              "path": [
+                "errors"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "85516990",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "85516990",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/errors?page=85516990&size=85516990"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "63584369-3bcd-4322-8263-1549b01debd4",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "errors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "85516990"
+                    },
+                    {
+                      "key": "size",
+                      "value": "85516990"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": -89633228,\n  \"totalElements\": 1063431,\n  \"size\": 89066344,\n  \"content\": [\n    {\n      \"id\": 26211872,\n      \"httpStatusCode\": -62434543,\n      \"message\": {\n        \"messageCode\": \"laboris ut ex\",\n        \"messageType\": \"NOTIFICATION\",\n        \"originalText\": \"labore sint\",\n        \"languageCode\": \"aliqua Duis esse aute\",\n        \"languageName\": \"Duis consequat occaecat est\",\n        \"title\": \"dolor ipsum esse\",\n        \"id\": 38997711,\n        \"plainText\": \"officia Excepteur amet\"\n      }\n    },\n    {\n      \"id\": 44178007,\n      \"httpStatusCode\": -99385794,\n      \"message\": {\n        \"messageCode\": \"in\",\n        \"messageType\": \"ABOUT_US\",\n        \"originalText\": \"minim reprehenderit dolore\",\n        \"languageCode\": \"ea labore id non\",\n        \"languageName\": \"ut et minim eiusmo\",\n        \"title\": \"dolore \",\n        \"id\": 51090013,\n        \"plainText\": \"sit\"\n      }\n    }\n  ],\n  \"number\": -21325317,\n  \"sort\": [\n    {\n      \"direction\": \"pariatur\",\n      \"nullHandling\": \"nostrud exercitation proident minim\",\n      \"ascending\": false,\n      \"property\": \"ut velit \",\n      \"ignoreCase\": false\n    },\n    {\n      \"direction\": \"occaecat do\",\n      \"nullHandling\": \"cupidatat Ut id elit sunt\",\n      \"ascending\": false,\n      \"property\": \"s\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"pageable\": {\n    \"offset\": -45411062,\n    \"sort\": [\n      {\n        \"direction\": \"anim ipsum tempor ea ut\",\n        \"nullHandling\": \"occaecat ad cupidatat dolor esse\",\n        \"ascending\": false,\n        \"property\": \"non Lorem velit mollit veniam\",\n        \"ignoreCase\": true\n      },\n      {\n        \"direction\": \"anim ad cillum\",\n        \"nullHandling\": \"voluptate Ut occaecat in ut\",\n        \"ascending\": true,\n        \"property\": \"aute\",\n        \"ignoreCase\": false\n      }\n    ],\n    \"pageNumber\": -56127341,\n    \"pageSize\": 19995712,\n    \"paged\": true,\n    \"unpaged\": true\n  },\n  \"last\": true,\n  \"first\": true,\n  \"numberOfElements\": 42776896,\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b5d744c7-a1de-4212-a8e5-22cc95afd897",
+          "name": "create Error Message",
+          "request": {
+            "name": "create Error Message",
+            "description": {},
+            "url": {
+              "path": [
+                "errors"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{baseUrl}}/errors"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messageCodeId\": 51386664,\n  \"httpStatusCode\": -95511933\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ad4ee4e8-487c-4581-8d66-eb1b2ae744db",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "errors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messageCodeId\": 51386664,\n  \"httpStatusCode\": -95511933\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 30037782,\n  \"httpStatusCode\": 5333151,\n  \"message\": {\n    \"messageCode\": \"Ut\",\n    \"messageType\": \"PRIVACY_POLICY\",\n    \"originalText\": \"cupidatat proident\",\n    \"languageCode\": \"do\",\n    \"languageName\": \"incididunt dolor eu laborum\",\n    \"title\": \"nulla aliqua dolo\",\n    \"id\": 66076841,\n    \"plainText\": \"dolor cillum culpa\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2f003b1d-7358-4aba-96d0-0b24df26ac8b",
+          "name": "get Message 2",
+          "request": {
+            "name": "get Message 2",
+            "description": {},
+            "url": {
+              "path": [
+                "errors",
+                ":locale",
+                ":messageCode"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "all",
+                  "value": "{\"dolore_5\":\"amet eu magna dolor\",\"labore__2a\":\"eu fugiat culpa\"}",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "empty",
+                  "value": "true",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "etf9",
+                  "value": "[\"ex laboris dolor\",\"in ea id qui\"]",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "mollit ad esse occaecat Lorem",
+                  "key": "locale",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "mollit ad esse occaecat Lorem",
+                  "key": "messageCode",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/errors/:locale/:messageCode?all={\"dolore_5\":\"amet eu magna dolor\",\"labore__2a\":\"eu fugiat culpa\"}&empty=true&etf9=[\"ex laboris dolor\",\"in ea id qui\"]"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3c66484c-e2f5-4ab8-9d29-4b4ceb0658e1",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "errors",
+                    ":locale",
+                    ":messageCode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "all",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "empty",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "mollit ad esse occaecat Lorem",
+                      "key": "locale",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "mollit ad esse occaecat Lorem",
+                      "key": "messageCode",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": 30037782,\n  \"httpStatusCode\": 5333151,\n  \"message\": {\n    \"messageCode\": \"Ut\",\n    \"messageType\": \"PRIVACY_POLICY\",\n    \"originalText\": \"cupidatat proident\",\n    \"languageCode\": \"do\",\n    \"languageName\": \"incididunt dolor eu laborum\",\n    \"title\": \"nulla aliqua dolo\",\n    \"id\": 66076841,\n    \"plainText\": \"dolor cillum culpa\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "a4f21a45-cf83-40ec-8831-562914fc38dc",
+      "name": "message-code-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a5f8ed37-55df-4a9d-a006-bfe38d81d970",
+          "name": "update Message 1",
+          "request": {
+            "name": "update Message 1",
+            "description": {},
+            "url": {
+              "path": [
+                "code",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "60827310",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ],
+              "raw": "{{baseUrl}}/code/:id"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messageType\": \"NOTIFICATION\",\n  \"description\": \"ut amet Lorem id enim\",\n  \"statusCode\": 90138724\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d089fbf3-3ee7-4bd4-b485-bba13d9ec9e9",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "code",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "60827310",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "mollit ad esse occaecat Lorem"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messageType\": \"NOTIFICATION\",\n  \"description\": \"ut amet Lorem id enim\",\n  \"statusCode\": 90138724\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"id\": -12821079,\n  \"messageCode\": \"sunt deserunt consectetur consequat\",\n  \"count\": 42261724,\n  \"description\": \"proi\",\n  \"messageType\": \"TERMS_CONDITION\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "80fa6a9b-98ac-4ded-9d66-51624b2684f4",
+          "name": "get Message Codes",
+          "request": {
+            "name": "get Message Codes",
+            "description": {},
+            "url": {
+              "path": [
+                "code"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "code",
+                  "value": "mollit ad esse occaecat Lorem"
+                },
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "ABOUT_US"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "85516990"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "85516990"
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/code?code=mollit ad esse occaecat Lorem&type=ABOUT_US&page=85516990&size=85516990"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "328175c6-4d95-492f-9769-201530143a9e",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "code"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "code",
+                      "value": "mollit ad esse occaecat Lorem"
+                    },
+                    {
+                      "key": "type",
+                      "value": "ABOUT_US"
+                    },
+                    {
+                      "key": "page",
+                      "value": "85516990"
+                    },
+                    {
+                      "key": "size",
+                      "value": "85516990"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Authorization",
+                    "value": "mollit ad esse occaecat Lorem"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"totalPages\": 54174768,\n  \"totalElements\": 69206018,\n  \"size\": -2124256,\n  \"content\": [\n    {\n      \"id\": 12980385,\n      \"messageCode\": \"sit proident nostrud aliqua eiusmod\",\n      \"count\": 11199994,\n      \"description\": \"Lorem Ut eu velit\",\n      \"messageType\": \"PRIVACY_POLICY\"\n    },\n    {\n      \"id\": -88250458,\n      \"messageCode\": \"velit ex\",\n      \"count\": -39119875,\n      \"description\": \"enim Duis\",\n      \"messageType\": \"LABEL\"\n    }\n  ],\n  \"number\": -67844086,\n  \"sort\": [\n    {\n      \"direction\": \"in ut\",\n      \"nullHandling\": \"aute amet\",\n      \"ascending\": true,\n      \"property\": \"in adipisicing\",\n      \"ignoreCase\": false\n    },\n    {\n      \"direction\": \"sint eu\",\n      \"nullHandling\": \"mollit labore elit nulla laborum\",\n      \"ascending\": true,\n      \"property\": \"esse laborum fugiat Lorem\",\n      \"ignoreCase\": false\n    }\n  ],\n  \"pageable\": {\n    \"offset\": 60459983,\n    \"sort\": [\n      {\n        \"direction\": \"consectetur nisi nulla\",\n        \"nullHandling\": \"ut non culpa\",\n        \"ascending\": false,\n        \"property\": \"aliquip ex dolor reprehenderit\",\n        \"ignoreCase\": false\n      },\n      {\n        \"direction\": \"Excepteur\",\n        \"nullHandling\": \"dolore sunt aute adipisicing\",\n        \"ascending\": true,\n        \"property\": \"qui adipisicing laboris esse eu\",\n        \"ignoreCase\": false\n      }\n    ],\n    \"pageNumber\": -63470045,\n    \"pageSize\": -86830858,\n    \"paged\": true,\n    \"unpaged\": true\n  },\n  \"last\": false,\n  \"first\": false,\n  \"numberOfElements\": 90567479,\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "5bf14113-dbe6-485f-bc65-872ca6964996",
+      "name": "message-parameter-controller",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "48de3a7f-a80e-46c1-81e1-19695f031d78",
+          "name": "get Message Parameter",
+          "request": {
+            "name": "get Message Parameter",
+            "description": {},
+            "url": {
+              "path": [
+                "message-parameters"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "code",
+                  "value": "mollit ad esse occaecat Lorem"
+                },
+                {
+                  "disabled": false,
+                  "key": "parameterName",
+                  "value": "mollit ad esse occaecat Lorem"
+                }
+              ],
+              "variable": [],
+              "raw": "{{baseUrl}}/message-parameters?code=mollit ad esse occaecat Lorem&parameterName=mollit ad esse occaecat Lorem"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d336d31b-1a07-448f-8fe9-3234d6dde36c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "message-parameters"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "code",
+                      "value": "mollit ad esse occaecat Lorem"
+                    },
+                    {
+                      "key": "parameterName",
+                      "value": "mollit ad esse occaecat Lorem"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "[\n  {\n    \"code\": \"in in nostrud sit\",\n    \"params\": [\n      {\n        \"name\": \"fugiat cupidatat\",\n        \"type\": \"id nulla s\"\n      },\n      {\n        \"name\": \"velit commodo minim voluptate\",\n        \"type\": \"Excepteur fugiat esse occaecat\"\n      }\n    ]\n  },\n  {\n    \"code\": \"nulla\",\n    \"params\": [\n      {\n        \"name\": \"eiusmod dolore in tempor\",\n        \"type\": \"Duis sit Ut\"\n      },\n      {\n        \"name\": \"enim sit veniam Lorem\",\n        \"type\": \"nisi deserunt ex\"\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generated guard: a 5xx from any request is a gateway/service defect, not a test-data problem.",
+          "pm.test('no 5xx (' + pm.info.requestName + ')', function () {",
+          "  pm.expect(pm.response.code, (pm.response.text() || '').slice(0, 300)).to.be.below(500);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{gatewayBaseUrl}}/translation-service",
+      "type": "string"
+    }
+  ],
+  "info": {
+    "_postman_id": "5f023999-b552-4918-9e90-be70a4a832f6",
+    "name": "Translation Service - majdpay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Translation Service (translation-service) — 21 operations.\n\nGENERATED from the OpenAPI 3.0.1 spec published at the UAT gateway swagger-ui\n(Select a definition -> \"Translation Service APIs\"). Request bodies are schema-derived placeholders (lorem-ipsum\nstrings, sample numbers) — replace with real values before sending.\n\nBase URL: {{gatewayBaseUrl}}/translation-service  (gatewayBaseUrl lives in EMI-dev.postman_environment.json).\nSpec server: http://10.42.0.135\n\nAUTH: the spec declares no security scheme, but the gateway front-doors every route with a bearer\ntoken. Set {{token}} in the environment (mint one with the Authentication Service collection's\nsign-in, or pass --env-var token=... to newman). Some back-office routes need an admin/service\ntoken rather than a merchant one.\n\nCompanion Playwright scaffold: BusinessTestCases/ServiceApis/TranslationService.generated.spec.ts\n"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

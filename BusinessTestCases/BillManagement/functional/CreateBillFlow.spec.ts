@@ -37,6 +37,7 @@ async function loginAndOpenCreateBill(page: Page): Promise<CreateBillPage> {
 }
 
 test.describe('Create Bill — Single Entry (CB-01, CB-02)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('CB-01: should create a bill with only the required fields', async ({ page }) => {
         const createBill = await loginAndOpenCreateBill(page);
         await createBill.openSingleBillEntry();
@@ -69,6 +70,7 @@ test.describe('Create Bill — Single Entry (CB-01, CB-02)', () => {
 });
 
 test.describe('Create Bill — Discount Type Behavior (CB-03, CB-04, CB-05)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('CB-03: "No discount" should be the default and hide the discount amount field', async ({ page }) => {
         const createBill = await loginAndOpenCreateBill(page);
         await createBill.openSingleBillEntry();
@@ -104,6 +106,7 @@ test.describe('Create Bill — Discount Type Behavior (CB-03, CB-04, CB-05)', ()
 });
 
 test.describe('Create Bill — Detailed Entry with Items (CB-06, CB-07)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('CB-06: should add multiple items and reflect them in the confirmation summary', async ({ page }) => {
         const createBill = await loginAndOpenCreateBill(page);
         await createBill.openDetailedBillEntry();
@@ -123,6 +126,7 @@ test.describe('Create Bill — Detailed Entry with Items (CB-06, CB-07)', () => 
 });
 
 test.describe('Create Bill — Predefined Products (CB-09, CB-11, CB-12)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('CB-09: selecting a saved product should add it as a pre-filled line item', async ({ page }) => {
         const createBill = await loginAndOpenCreateBill(page);
         await createBill.openDetailedBillEntry();
@@ -134,6 +138,7 @@ test.describe('Create Bill — Predefined Products (CB-09, CB-11, CB-12)', () =>
 });
 
 test.describe('Create Bill — Optional Expiry (CB-08)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('CB-08: leaving expiry empty should create a bill that never expires', async ({ page }) => {
         const createBill = await loginAndOpenCreateBill(page);
         await createBill.openSingleBillEntry();
@@ -150,6 +155,7 @@ test.describe('Create Bill — Optional Expiry (CB-08)', () => {
 });
 
 test.describe('Create Bill — Required Field Validation (CB-27)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('CB-27: submitting without a Bill Ref. or Amount should be blocked', async ({ page }) => {
         const createBill = await loginAndOpenCreateBill(page);
         await createBill.openSingleBillEntry();
@@ -160,6 +166,7 @@ test.describe('Create Bill — Required Field Validation (CB-27)', () => {
 });
 
 test.describe('Create Bill — Bulk Upload via Excel (CB-14, CB-15, CB-16, CB-17)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('CB-14: uploading a valid Excel file should create all bills in it', async ({ page }) => {
         const createBill = await loginAndOpenCreateBill(page);
         await createBill.openBulkUpload();
@@ -198,6 +205,7 @@ test.describe('Create Bill — Bulk Upload via Excel (CB-14, CB-15, CB-16, CB-17
 // via Excel" convention. Each fixture referenced below follows CB-14..CB-16's
 // pattern: maintain the file in data/fixtures/ locally, not committed by this suite.
 test.describe('Create Bill — Bulk Upload Edge Cases (CB-18, CB-19, CB-20, CB-21)', () => {
+    test.describe.configure({ mode: 'serial' });
     test('CB-18: uploading an Excel row with a MERCHANT payer type should not be rejected with INVALID_PAYER_TYPE', async ({ page }) => {
         const createBill = await loginAndOpenCreateBill(page);
         await createBill.openBulkUpload();

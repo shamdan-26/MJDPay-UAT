@@ -30,6 +30,7 @@ import {
 // ─────────────────────────────────────────────────────────────────────────────
 
 test.describe('Sub-Wallet Bugs — Create No Longer Errors (SWB-01, EMI-5571)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('SWB-01: creating a sub-wallet should not surface a wallet-config/copy 500', async ({ page }) => {
@@ -72,6 +73,7 @@ test.describe('Sub-Wallet Bugs — Create No Longer Errors (SWB-01, EMI-5571)', 
 });
 
 test.describe('Sub-Wallet Bugs — Configuration Request No Longer 500s (SWB-02, EMI-5417)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('SWB-02: requesting a sub-wallet configuration should return 200', async ({ page }) => {
@@ -102,6 +104,7 @@ test.describe('Sub-Wallet Bugs — Configuration Request No Longer 500s (SWB-02,
 });
 
 test.describe('Sub-Wallet Bugs — Duplicate Names Rejected (SWB-03, EMI-5248)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('SWB-03: creating a second sub-wallet with an existing name should be rejected', async ({ page }) => {
@@ -136,6 +139,7 @@ test.describe('Sub-Wallet Bugs — Duplicate Names Rejected (SWB-03, EMI-5248)',
 });
 
 test.describe('Sub-Wallet Bugs — Details Stay Visible On Click (SWB-04, EMI-5249)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('SWB-04: clicking a sub-wallet should reveal its details, not hide them', async ({ page }) => {

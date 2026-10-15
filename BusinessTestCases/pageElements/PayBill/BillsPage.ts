@@ -28,6 +28,7 @@ export class BillsPage {
     readonly billNumberInput: Locator;
     readonly getBillInfoButton: Locator;
     readonly billLookupError: Locator;
+    readonly billLookupResult: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -54,6 +55,16 @@ export class BillsPage {
         this.billNumberInput = page.getByLabel(/bill number/i).or(page.getByPlaceholder(/bill number/i));
         this.getBillInfoButton = page.getByTestId('bill-get-info-btn');
         this.billLookupError = page.getByText(/something went wrong|bill (could not be found|not found)/i).first();
+        // Positive counterpart to billLookupError — an element that only renders once
+        // the lookup resolves to a real, payable bill: the summary submit button
+        // (#btn_submit_summary) or a "Pay" action button in the returned bill detail.
+        // A bare page-wide `.money-amount` is deliberately NOT used here — it also
+        // matches wallet-balance / template widgets, so it would let the BQR-04
+        // positive assertion pass on a failed lookup. Best-effort, same caveat as
+        // the rest of this section.
+        this.billLookupResult = this.summaryPayButton
+            .or(page.getByRole('button', { name: /^pay$/i }))
+            .first();
     }
 
     async searchBillByNumber(billNumber: string): Promise<void> {
@@ -70,6 +81,20 @@ export class BillsPage {
     async goToReceivedBills(): Promise<void> {
         await expect(this.receivedBillsTab).toBeVisible({ timeout: 15000 });
         await this.receivedBillsTab.click();
+    }
+
+    /** Whether at least one bill card matching `status` is currently available, without throwing if not. */
+    async hasBillWithStatus(status = 'Approved'): Promise<boolean> {
+        const hasAny = await this.billCards.first().waitFor({ state: 'attached', timeout: 15000 }).then(() => true).catch(() => false);
+        if (!hasAny) return false;
+
+        const billCard = this.billCards
+            .filter({ has: this.page.locator('.grid-item-data', { hasText: new RegExp(status, 'i') }) })
+            .first();
+        // Locator.isVisible() ignores its `timeout` option (it's a synchronous poll),
+        // so use waitFor() to actually give a slow-rendering card time to paint —
+        // otherwise this returns false for a card that initiateQuickPayment() would find.
+        return billCard.waitFor({ state: 'visible', timeout: 5000 }).then(() => true).catch(() => false);
     }
 
     /** Clicks Pay on the first bill card matching `status` and returns its amount. */

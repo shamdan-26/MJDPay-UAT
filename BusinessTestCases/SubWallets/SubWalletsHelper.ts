@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+import { waitForToastClear } from '../toastMessages';
 
 /**
  * Sub-Wallets Management (EMI-5185 FE-Web, EMI-5186 BE, EMI-5215 CRUD APIs,
@@ -84,6 +85,7 @@ export async function fetchJson(
 export async function gotoSubWallets(page: Page): Promise<void> {
     await page.goto(SUB_WALLETS_URL);
     await page.waitForLoadState('domcontentloaded');
+    await waitForToastClear(page);
 }
 
 /** A populated root list, including one nested child for the N-level tests. */

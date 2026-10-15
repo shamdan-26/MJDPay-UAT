@@ -42,6 +42,7 @@ import {
 // ─────────────────────────────────────────────────────────────────────────────
 
 test.describe('Beneficiary Bugs — Duplicate Rejected (BMB-01, EMI-3686 / EMI-4414)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('BMB-01: adding a beneficiary whose CRN is already registered shows an "already added" message, not success', async ({ page }) => {
@@ -87,6 +88,7 @@ test.describe('Beneficiary Bugs — Duplicate Rejected (BMB-01, EMI-3686 / EMI-4
 });
 
 test.describe('Beneficiary Bugs — Add By Individual And Company (BMB-02, EMI-4741 / EMI-5448 / EMI-4432)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('BMB-02: adding an individual by phone number succeeds', async ({ page }) => {
@@ -130,6 +132,7 @@ test.describe('Beneficiary Bugs — Add By Individual And Company (BMB-02, EMI-4
 });
 
 test.describe('Beneficiary Bugs — OTP Is Issued And Resendable (BMB-03, EMI-5864 / EMI-5692 / EMI-5769 / EMI-5800)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('BMB-03: submitting the add-beneficiary form triggers POST /beneficiary-otp with a 200', async ({ page }) => {
@@ -179,6 +182,7 @@ test.describe('Beneficiary Bugs — OTP Is Issued And Resendable (BMB-03, EMI-58
 });
 
 test.describe('Beneficiary Bugs — Status Filter Works (BMB-04, EMI-4812)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('BMB-04: selecting a status sends statusCode and narrows the list to that status', async ({ page }) => {
@@ -205,6 +209,7 @@ test.describe('Beneficiary Bugs — Status Filter Works (BMB-04, EMI-4812)', () 
 });
 
 test.describe('Beneficiary Bugs — Identifier Is Returned And Rendered (BMB-05, EMI-5652 / EMI-5376 / EMI-5128)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('BMB-05: every beneficiary row carries a non-empty identifier', async ({ page }) => {
@@ -232,6 +237,7 @@ test.describe('Beneficiary Bugs — Identifier Is Returned And Rendered (BMB-05,
 });
 
 test.describe('Beneficiary Bugs — Alias Shown Instead Of Company Name (BMB-06, EMI-5142)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('BMB-06: the list shows the alias the user chose, not the resolved company/brand name', async ({ page }) => {
@@ -249,6 +255,7 @@ test.describe('Beneficiary Bugs — Alias Shown Instead Of Company Name (BMB-06,
 });
 
 test.describe('Beneficiary Bugs — Contract Upload Size Message (BMB-07, EMI-5153 / EMI-5073)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('BMB-07: a 413 on contract upload surfaces the real size limit, not "Something Went Wrong!"', async ({ page }) => {
@@ -268,6 +275,7 @@ test.describe('Beneficiary Bugs — Contract Upload Size Message (BMB-07, EMI-51
 });
 
 test.describe('Beneficiary Bugs — Contract Attachment Opens (BMB-08, EMI-4791)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('BMB-08: the stored contract attachment is retrievable', async ({ page }) => {
@@ -295,6 +303,7 @@ test.describe('Beneficiary Bugs — Contract Attachment Opens (BMB-08, EMI-4791)
 });
 
 test.describe('Beneficiary Bugs — Maker Can View Admin Beneficiaries (BMB-09, EMI-5130)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('BMB-09: a user holding the view privilege gets the full beneficiary list, not a 403', async ({ page }) => {
@@ -317,6 +326,7 @@ test.describe('Beneficiary Bugs — Maker Can View Admin Beneficiaries (BMB-09, 
 });
 
 test.describe('Beneficiary Bugs — List Layout (BMB-10, EMI-4882)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('BMB-10: the status action button and the delete icon do not overlap in the list', async ({ page }) => {
@@ -344,6 +354,7 @@ test.describe('Beneficiary Bugs — List Layout (BMB-10, EMI-4882)', () => {
 });
 
 test.describe('Beneficiary Bugs — Details Screen Fields (BMB-11, EMI-5376 / EMI-5142)', () => {
+    test.describe.configure({ mode: 'serial' });
     test.use({ storageState: SESSION_PATH });
 
     test('BMB-11: the details screen shows both the identifier and the alias', async ({ page }) => {
@@ -358,5 +369,50 @@ test.describe('Beneficiary Bugs — Details Screen Fields (BMB-11, EMI-5376 / EM
 
         await expect(details.identifierValue).not.toBeEmpty();
         await expect(details.aliasValue).toContainText('QA-DETAILS');
+    });
+});
+
+test.describe('Beneficiary Bugs — Add Beneficiary Succeeds (BMB-12, EMI-6040)', () => {
+    test.describe.configure({ mode: 'serial' });
+    test.use({ storageState: SESSION_PATH });
+
+    test('BMB-12: submitting a complete beneficiary form creates it instead of 500-ing', async ({ page }) => {
+        const alias = uniqueAlias();
+        await mockAddBeneficiarySuccess(page, mockBeneficiary({ alias }));
+        await gotoBeneficiaries(page);
+
+        const { status } = await fetchJson(page, '/api/v1/beneficiary', {
+            method: 'POST',
+            body: { alias, identifier: KNOWN_INDIVIDUAL_MOBILE },
+        });
+
+        expect(status, 'adding a beneficiary returned a server error').toBeLessThan(400);
+    });
+
+    test('BMB-12b: the generic processing message is not shown on a successful add', async ({ page }) => {
+        const alias = uniqueAlias();
+        await mockAddBeneficiarySuccess(page, mockBeneficiary({ alias }));
+        await gotoBeneficiaries(page);
+
+        const beneficiary = new BeneficiaryManagementPage(page);
+        await beneficiary.waitForList();
+
+        // The exact string quoted in EMI-6040.
+        await expect(
+            page.getByText(/something went wrong while processing the beneficiary request/i)
+        ).not.toBeVisible({ timeout: 5000 });
+    });
+
+    test('BMB-12 (regression guard, EMI-6040): the pre-fix mock reproduces the 500 on add', async ({ page }) => {
+        await mockBeneficiaryList(page, defaultBeneficiaries());
+        await mockAddBeneficiaryServerError(page);
+        await gotoBeneficiaries(page);
+
+        const { status } = await fetchJson(page, '/api/v1/beneficiary', {
+            method: 'POST',
+            body: { alias: uniqueAlias(), identifier: KNOWN_INDIVIDUAL_MOBILE },
+        });
+
+        expect(status).toBe(500);
     });
 });
