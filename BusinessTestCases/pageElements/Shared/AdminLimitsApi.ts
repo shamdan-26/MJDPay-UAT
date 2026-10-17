@@ -50,6 +50,13 @@ export const TOPUP_TYPE_NAME = {
     CUSTOMER: 'Customer Cashin',
 } as const;
 
+/**
+ * Codes that are already confirmed elsewhere in the repo (Topup/TopupHelper.ts: 'Biller Bank Cashin' = 102003, checked live
+ * 2026-09-25). `GET /api/v1/transaction-types` did not return this type by name on dev (2026-10-15), so the lookup by name is
+ * only the fallback for types not listed here.
+ */
+const KNOWN_TYPE_CODES: Record<string, string> = { 'Biller Bank Cashin': '102003' };
+
 /** One GET row of the Transaction limits grid — one per type × risk × platform × period. */
 export interface TransactionLimitRow {
     transactionType: string;
@@ -71,11 +78,65 @@ export interface CountLimitRow {
     count?: number;
 }
 
+/** A count row as the live API returns it (objects with codes, not strings). */
+interface RawCountRow {
+    transactionCount?: number;
+    riskLevel: string;
+    isActive?: boolean;
+    transactionType?: { code?: string; transactionCategory?: { code?: string } };
+    platformType?: { code?: string };
+    period?: { code?: string };
+}
+
+/** One risk tier of a type on a platform: the four period counts and what a PUT needs to write them back. */
+export interface CountTier {
+    risk: string;
+    categoryCode: string;
+    isActive: boolean;
+    values: CountLimitValues;
+}
+
 export interface WalletLimitRow {
     walletType: string;
     riskLevel: RiskLevel;
     minBalance: number;
     maxBalance: number;
+    active?: boolean;
+}
+
+// ---------- live row shape (probe 2026-10-17) ----------
+// The three limit grids return objects with codes, not strings: transaction/count rows carry transactionType { code, nameEN },
+// platformType { code: "web" }, period { code: "HOUR" } and riskLevel "001"/"002"/"003"; wallet rows carry walletType "BILLER",
+// riskLevel as a code and `active`. The codes map to LOW/MEDIUM/HIGH exactly as the admin Wallet Balance screen lists them
+// (checked row by row against the probe). The readers below turn the live rows into the string rows the rest of this class
+// and its callers use, so they keep working unchanged.
+const RISK_BY_CODE: Record<string, RiskLevel> = { '001': 'LOW', '002': 'MEDIUM', '003': 'HIGH' };
+const RISK_CODE: Record<RiskLevel, string> = { LOW: '001', MEDIUM: '002', HIGH: '003' };
+/** Names by code for the Top-up types (confirmed: 102002 in the count probe, 102003 in TopupHelper). */
+const TYPE_NAME_BY_CODE: Record<string, string> = { '102002': 'Merchant Cashin', '102003': 'Biller Bank Cashin' };
+/** Every Top-up type sits in the Cash-In category (code 102), which the admin screen sends with each PUT. */
+const TOPUP_CATEGORY_CODE = '102';
+
+type Obj = Record<string, unknown>;
+const asObj = (v: unknown): Obj | null => (v && typeof v === 'object' ? v as Obj : null);
+const codeOf = (v: unknown): string => (typeof v === 'string' ? v : String(asObj(v)?.['code'] ?? ''));
+const riskOf = (v: unknown): RiskLevel => RISK_BY_CODE[String(v)] ?? (String(v).toUpperCase() as RiskLevel);
+function typeNameOf(v: unknown): string {
+    if (typeof v === 'string') return v;
+    const code = codeOf(v);
+    return TYPE_NAME_BY_CODE[code] ?? String(asObj(v)?.['nameEN'] ?? asObj(v)?.['nameEn'] ?? code);
+}
+
+/**
+ * The server validates the four counts of a tier as a set. Refused on dev 2026-10-17 (LIMITATION_AMOUNT_RANGE): hourly 100 with
+ * daily 120, and a x30 month. Accepted: the admin screen's own save (daily 120 -> monthly 3720 = x31 -> yearly 44640 = x12).
+ * HYPOTHESIS, not proven: daily >= hourly x24, monthly >= daily x31, yearly >= monthly x12. This raises, never lowers.
+ */
+export function ladderCount(v: CountLimitValues): CountLimitValues {
+    const daily = Math.max(v.daily, v.hourly * 24);
+    const monthly = Math.max(v.monthly, daily * 31);
+    const yearly = Math.max(v.yearly, monthly * 12);
+    return { hourly: v.hourly, daily, monthly, yearly };
 }
 
 /** What one PUT writes for a type × risk × platform cell: the minimum plus all four period maxima. */
@@ -106,7 +167,7 @@ export interface TopupLimitsSnapshot {
     cells: LimitCell[];
     amount: Map<string, AmountLimitValues>;
     count: Map<string, CountLimitValues>;
-    wallet: Map<string, { minBalance: number; maxBalance: number }>;
+    wallet: Map<string, { minBalance: number; maxBalance: number; active?: boolean }>;
     walletType: string;
 }
 
@@ -122,7 +183,8 @@ export class AdminLimitsApi {
 
     constructor(private readonly page: Page) {
         this.page.on('request', (req) => {
-            if (!this.headers && req.url().includes('gateway-') && req.headers()['authorization']) {
+            // Overwrite on every authenticated request: the first one can already be stale (401 SESSION_INVALID) once the app rotates its session.
+            if (req.url().includes('gateway-') && req.headers()['authorization']) {
                 this.headers = req.headers();
                 this.headersAt = Date.now();
             }
@@ -187,6 +249,8 @@ export class AdminLimitsApi {
     async resolveTypeCode(typeName: string): Promise<string> {
         const cached = this.typeCodeCache.get(typeName);
         if (cached) return cached;
+        const known = KNOWN_TYPE_CODES[typeName];
+        if (known) { this.typeCodeCache.set(typeName, known); return known; }
         const json = await this.request('GET', '/api/v1/transaction-types') as unknown;
         const flat: Array<Record<string, unknown>> = [];
         const walk = (n: unknown) => {
@@ -207,13 +271,37 @@ export class AdminLimitsApi {
     // ---------- reads ----------
 
     async getTransactionLimits(): Promise<TransactionLimitRow[]> {
-        return this.getAll<TransactionLimitRow>(LIMITS_PATH.transaction);
+        const rows = await this.getAll<Obj>(LIMITS_PATH.transaction);
+        return rows.map(r => ({
+            transactionType: typeNameOf(r['transactionType']),
+            transactionTypeCode: codeOf(r['transactionType']),
+            riskLevel: riskOf(r['riskLevel']),
+            platformType: codeOf(r['platformType']).toUpperCase() as Platform,
+            period: codeOf(r['period']).toUpperCase() as Period,
+            min: Number(r['min'] ?? 0),
+            max: Number(r['max'] ?? 0),
+        }));
     }
     async getCountLimits(): Promise<CountLimitRow[]> {
-        return this.getAll<CountLimitRow>(LIMITS_PATH.count);
+        const rows = await this.getAll<Obj>(LIMITS_PATH.count);
+        return rows.map(r => ({
+            transactionType: typeNameOf(r['transactionType']),
+            transactionTypeCode: codeOf(r['transactionType']),
+            riskLevel: riskOf(r['riskLevel']),
+            platformType: codeOf(r['platformType']).toUpperCase() as Platform,
+            period: codeOf(r['period']).toUpperCase() as Period,
+            transactionCount: Number(r['transactionCount'] ?? r['count'] ?? 0),
+        }));
     }
     async getWalletLimits(): Promise<WalletLimitRow[]> {
-        return this.getAll<WalletLimitRow>(LIMITS_PATH.wallet);
+        const rows = await this.getAll<Obj>(LIMITS_PATH.wallet);
+        return rows.map(r => ({
+            walletType: String(r['walletType'] ?? ''),
+            riskLevel: riskOf(r['riskLevel']),
+            minBalance: Number(r['minBalance'] ?? 0),
+            maxBalance: Number(r['maxBalance'] ?? 0),
+            active: r['active'] === undefined ? undefined : Boolean(r['active']),
+        }));
     }
 
     /** Amount limits of one cell, folded from its four period rows. Throws if the cell has no rows. */
@@ -237,10 +325,10 @@ export class AdminLimitsApi {
 
     async putAmountCell(c: LimitCell, v: AmountLimitValues): Promise<void> {
         await this.request('PUT', LIMITS_PATH.transaction, {
-            riskLevel: c.risk,
-            platformTypeCode: c.platform,
+            riskLevel: RISK_CODE[c.risk],
+            platformTypeCode: c.platform.toLowerCase(),
             transactionTypeCodes: [c.typeCode],
-            transactionCategoryCodes: [],
+            transactionCategoryCodes: [TOPUP_CATEGORY_CODE],
             hourlyPeriodAmount: v.hourly,
             dailyPeriodAmount: v.daily,
             monthlyPeriodAmount: v.monthly,
@@ -252,10 +340,10 @@ export class AdminLimitsApi {
 
     async putCountCell(c: LimitCell, v: CountLimitValues): Promise<void> {
         await this.request('PUT', LIMITS_PATH.count, {
-            riskLevel: c.risk,
-            platformTypeCode: c.platform,
+            riskLevel: RISK_CODE[c.risk],
+            platformTypeCode: c.platform.toLowerCase(),
             transactionTypeCodes: [c.typeCode],
-            transactionCategoryCodes: [],
+            transactionCategoryCodes: [TOPUP_CATEGORY_CODE],
             hourlyPeriodTransactionCount: v.hourly,
             dailyPeriodTransactionCount: v.daily,
             monthlyPeriodTransactionCount: v.monthly,
@@ -264,8 +352,50 @@ export class AdminLimitsApi {
         });
     }
 
-    async putWallet(walletType: string, risk: RiskLevel, v: { minBalance: number; maxBalance: number }): Promise<void> {
-        await this.request('PUT', LIMITS_PATH.wallet, { walletType, riskLevel: risk, minBalance: v.minBalance, maxBalance: v.maxBalance, isActive: true });
+    // ---------- count limits by the LIVE row shape ----------
+    // Confirmed on dev 2026-10-17 (probe + the admin app's own PUT): a count row is { transactionCount, riskLevel: "001",
+    // transactionType: { code, transactionCategory: { code } }, platformType: { code: "web" }, period: { code: "HOUR" }, isActive },
+    // and the PUT takes one platform + one risk (or null = every risk) with the four period counts and the category code.
+    // getCountCell/putCountCell above assume string fields and LOW/MEDIUM/HIGH, so they never match these rows; they are left
+    // alone on purpose so the other limit specs behave exactly as before.
+
+    /** The four period counts of one risk tier of a type on a platform, plus what the PUT needs to write them back. */
+    async getCountTiers(typeCode: string, platformCode: string): Promise<CountTier[]> {
+        const rows = await this.getAll<RawCountRow>(LIMITS_PATH.count); // raw rows: the tier code is written back as read
+        const mine = rows.filter(r => r.transactionType?.code === typeCode && (r.platformType?.code ?? '').toLowerCase() === platformCode.toLowerCase());
+        const tiers = new Map<string, CountTier>();
+        for (const r of mine) {
+            const risk = String(r.riskLevel);
+            const tier = tiers.get(risk) ?? { risk, categoryCode: r.transactionType?.transactionCategory?.code ?? '', isActive: r.isActive !== false, values: { hourly: 0, daily: 0, monthly: 0, yearly: 0 } };
+            const key = ({ HOUR: 'hourly', DAY: 'daily', MONTH: 'monthly', YEAR: 'yearly' } as const)[(r.period?.code ?? '') as 'HOUR' | 'DAY' | 'MONTH' | 'YEAR'];
+            if (key) tier.values[key] = Number(r.transactionCount ?? 0);
+            tiers.set(risk, tier);
+        }
+        return [...tiers.values()].sort((a, b) => a.risk.localeCompare(b.risk));
+    }
+
+    /** Writes one tier (one risk code, one platform) with exactly the given four counts. Callers snapshot first and verify after. */
+    async putCountTier(typeCode: string, platformCode: string, tier: CountTier): Promise<void> {
+        await this.request('PUT', LIMITS_PATH.count, {
+            riskLevel: tier.risk,
+            platformTypeCode: platformCode.toLowerCase(),
+            hourlyPeriodTransactionCount: tier.values.hourly,
+            dailyPeriodTransactionCount: tier.values.daily,
+            monthlyPeriodTransactionCount: tier.values.monthly,
+            yearlyPeriodTransactionCount: tier.values.yearly,
+            isActive: tier.isActive,
+            transactionTypeCodes: [typeCode],
+            transactionCategoryCodes: tier.categoryCode ? [tier.categoryCode] : [],
+        });
+    }
+
+    /**
+     * Wallet limit write. The body is the old guess (walletType, riskLevel, minBalance, maxBalance, isActive) with the live codes;
+     * the admin screen's own PUT was not captured (it only saves a changed value). The row's current `active` flag is sent back
+     * as it was read, so a write never flips it. A refused request (400) changes nothing; the restore re-read catches a wrong write.
+     */
+    async putWallet(walletType: string, risk: RiskLevel, v: { minBalance: number; maxBalance: number; active?: boolean }): Promise<void> {
+        await this.request('PUT', LIMITS_PATH.wallet, { walletType: walletType.toUpperCase(), riskLevel: RISK_CODE[risk], minBalance: v.minBalance, maxBalance: v.maxBalance, isActive: v.active ?? true });
     }
 
     // ---------- snapshot / restore (the "limits always return to the original value" rule) ----------
@@ -284,8 +414,8 @@ export class AdminLimitsApi {
             if (cnt.some(r => r.transactionType === typeName && r.riskLevel === risk && r.platformType === platform)) {
                 snap.count.set(cellKey(cell), await this.getCountCell(cell, cnt));
             }
-            const w = wal.find(r => r.walletType === walletType && r.riskLevel === risk);
-            if (w) snap.wallet.set(walletKey(walletType, risk), { minBalance: w.minBalance, maxBalance: w.maxBalance });
+            const w = wal.find(r => r.walletType.toLowerCase() === walletType.toLowerCase() && r.riskLevel === risk);
+            if (w) snap.wallet.set(walletKey(walletType, risk), { minBalance: w.minBalance, maxBalance: w.maxBalance, active: w.active });
         }
         if (snap.cells.length === 0) throw new Error(`AdminLimitsApi: no limit rows found for "${typeName}" on ${platform}`);
         return snap;
@@ -300,7 +430,7 @@ export class AdminLimitsApi {
     async setCountAllTiers(snap: TopupLimitsSnapshot, patch: Partial<CountLimitValues>): Promise<void> {
         for (const cell of snap.cells) {
             const base = snap.count.get(cellKey(cell));
-            if (base) await this.putCountCell(cell, { ...base, ...patch });
+            if (base) await this.putCountCell(cell, ladderCount({ ...base, ...patch }));
         }
     }
     async setWalletAllTiers(snap: TopupLimitsSnapshot, patch: Partial<{ minBalance: number; maxBalance: number }>): Promise<void> {
@@ -315,7 +445,7 @@ export class AdminLimitsApi {
         for (const cell of snap.cells) {
             await this.putAmountCell(cell, snap.amount.get(cellKey(cell))!);
             const c = snap.count.get(cellKey(cell));
-            if (c) await this.putCountCell(cell, c);
+            if (c) await this.restoreCountCell(cell, c);
         }
         for (const risk of RISK_LEVELS) {
             const w = snap.wallet.get(walletKey(snap.walletType, risk));
@@ -324,18 +454,38 @@ export class AdminLimitsApi {
         await this.expectMatchesSnapshot(snap);
     }
 
+    /** Counts the server would not take back as originally stored (see ladderCount): the value actually written, per cell. */
+    readonly countRestoredAs = new Map<string, CountLimitValues>();
+
+    /**
+     * Puts one cell's original counts back. Dev holds some tiers in an older shape (for example monthly = daily x30) that the server
+     * now refuses on a PUT (LIMITATION_AMOUNT_RANGE). Then the nearest accepted ladder is written instead and remembered in
+     * countRestoredAs, so the final equality check compares against what could really be stored, and the report says so.
+     */
+    private async restoreCountCell(cell: LimitCell, original: CountLimitValues): Promise<void> {
+        try {
+            await this.putCountCell(cell, original);
+        } catch (e) {
+            if (!/LIMITATION_AMOUNT_RANGE/.test(String(e))) throw e;
+            const adjusted = ladderCount(original);
+            await this.putCountCell(cell, adjusted);
+            this.countRestoredAs.set(cellKey(cell), adjusted);
+            console.warn(`[limits] ${cellKey(cell)} count could not be stored as originally read (${JSON.stringify(original)}); stored ${JSON.stringify(adjusted)} instead.`);
+        }
+    }
+
     async expectMatchesSnapshot(snap: TopupLimitsSnapshot): Promise<void> {
         const [tx, cnt, wal] = await Promise.all([this.getTransactionLimits(), this.getCountLimits(), this.getWalletLimits()]);
         for (const cell of snap.cells) {
             expect(await this.getAmountCell(cell, tx), `amount limits ${cellKey(cell)} restored`).toEqual(snap.amount.get(cellKey(cell)));
             const c = snap.count.get(cellKey(cell));
-            if (c) expect(await this.getCountCell(cell, cnt), `count limits ${cellKey(cell)} restored`).toEqual(c);
+            if (c) expect(await this.getCountCell(cell, cnt), `count limits ${cellKey(cell)} restored`).toEqual(this.countRestoredAs.get(cellKey(cell)) ?? c);
         }
         for (const risk of RISK_LEVELS) {
             const w = snap.wallet.get(walletKey(snap.walletType, risk));
             if (!w) continue;
-            const now = wal.find(r => r.walletType === snap.walletType && r.riskLevel === risk);
-            expect({ minBalance: now?.minBalance, maxBalance: now?.maxBalance }, `wallet limits ${walletKey(snap.walletType, risk)} restored`).toEqual(w);
+            const now = wal.find(r => r.walletType.toLowerCase() === snap.walletType.toLowerCase() && r.riskLevel === risk);
+            expect({ minBalance: now?.minBalance, maxBalance: now?.maxBalance, active: now?.active }, `wallet limits ${walletKey(snap.walletType, risk)} restored`).toEqual({ minBalance: w.minBalance, maxBalance: w.maxBalance, active: w.active });
         }
     }
 }

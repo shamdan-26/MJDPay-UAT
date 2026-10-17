@@ -58,14 +58,14 @@ test.describe('Forgot Password — OTP Verification Flow', () => {
     test('should remain on OTP dialog after submitting wrong OTP', async () => {
         const count = await otp.inputs.count();
         for (let i = 0; i < count; i++) await otp.inputs.nth(i).fill(INVALID_OTP[i] ?? '1');
-        await otp.verifyButton.click({ timeout: 5000 }).catch(() => { /* widget may auto-submit on the last digit */ });
+        await otp.verify();
         await expect(otp.modalContainer).toBeVisible();
     });
 
     test('should display an error message after submitting wrong OTP', async ({ page }) => {
         const count = await otp.inputs.count();
         for (let i = 0; i < count; i++) await otp.inputs.nth(i).fill(INVALID_OTP[i] ?? '1');
-        await otp.verifyButton.click({ timeout: 5000 }).catch(() => { /* widget may auto-submit on the last digit */ });
+        await otp.verify();
         const errorIndicator = otp.modalContainer.locator('[role="alert"], [class*="error"], [class*="invalid"]').first();
         await expect(errorIndicator).toBeVisible({ timeout: 5000 });
     });
@@ -73,7 +73,7 @@ test.describe('Forgot Password — OTP Verification Flow', () => {
     test('should not expose technical details in the wrong-OTP error message', async () => {
         const count = await otp.inputs.count();
         for (let i = 0; i < count; i++) await otp.inputs.nth(i).fill(INVALID_OTP[i] ?? '1');
-        await otp.verifyButton.click({ timeout: 5000 }).catch(() => { /* widget may auto-submit on the last digit */ });
+        await otp.verify();
         const errorIndicator = otp.modalContainer.locator('[role="alert"], [class*="error"], [class*="invalid"]').first();
         await expect(errorIndicator).toBeVisible({ timeout: 5000 });
         const text = await errorIndicator.textContent() ?? '';
@@ -83,7 +83,7 @@ test.describe('Forgot Password — OTP Verification Flow', () => {
     test('should clear the wrong-OTP error indicator once the inputs are corrected and resubmitted', async () => {
         const count = await otp.inputs.count();
         for (let i = 0; i < count; i++) await otp.inputs.nth(i).fill(INVALID_OTP[i] ?? '1');
-        await otp.verifyButton.click({ timeout: 5000 }).catch(() => { /* widget may auto-submit on the last digit */ });
+        await otp.verify();
         const errorIndicator = otp.modalContainer.locator('[role="alert"], [class*="error"], [class*="invalid"]').first();
         await expect(errorIndicator).toBeVisible({ timeout: 5000 });
 

@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+import { FIXED_OTP } from '../../support/otp';
 import { waitForToastClear } from '../toastMessages';
 import { LoginPage } from '../pageElements/Shared/LoginPage';
 import testAccounts from '../../data/testAccounts.json';
@@ -34,7 +35,7 @@ export const WRONG_PASSWORD = testAccounts.wrongPassword;
 export const FIRST_LOGIN_DEFAULT_PASSWORD = testAccounts.firstLoginDefaultPassword;
 
 // DEV-only OTP bypass — in UAT use getOtpFromDb() instead.
-export const VALID_OTP   = testAccounts.validOtp;
+export const VALID_OTP   = FIXED_OTP;
 export const INVALID_OTP = testAccounts.invalidOtp;
 
 // Dedicated accounts for account-status and lockout tests (set via env vars).

@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { FIXED_OTP } from '../../../support/otp';
 import { nextResidentAsset, generateFreshKSAMobile } from '../RegistrationHelper';
 import { REGISTRATION_API, registrationHeaders, postRegistration, toApiMobile, openRegistrationSession } from '../helpers/registrationApi';
 
@@ -164,7 +165,7 @@ test.describe('Registration API – Session-bound abuse', { tag: ['@registration
     test('a used OTP should not verify twice', { annotation: [{ type: 'testcase', description: "RG-APISEC-11: A used OTP should not verify twice" }] }, async ({ request }) => {
         test.skip(!token, 'Could not open a registration session (OTP unreadable)');
         // The session above consumed the OTP; replaying any code for the same mobile must not mint a new session.
-        const res = await postRegistration(request, '/register/verify/otp', { mobileNumber: toApiMobile(asset.mobile), otp: '918512' });
+        const res = await postRegistration(request, '/register/verify/otp', { mobileNumber: toApiMobile(asset.mobile), otp: FIXED_OTP });
         const body = await res.json().catch(() => ({}));
         expect(Boolean(body?.sessionToken), `Replayed OTP minted a session: ${JSON.stringify(body)}`).toBe(false);
     });

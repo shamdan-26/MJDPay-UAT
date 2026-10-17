@@ -1,4 +1,4 @@
-import { type Page, type Locator } from '@playwright/test';
+import { expect, type Page, type Locator } from '@playwright/test';
 
 export class OtpPage {
     readonly page: Page;
@@ -96,27 +96,22 @@ export class OtpPage {
         }
     }
 
+    /**
+     * Most OTP widgets (transfer, top-up, bill payment, QR) AUTO-SUBMIT on the last digit; the login and forgot-password
+     * screens do not (seen live: all 6 digits typed, Verify still enabled, nothing sent). So: give the auto-submit a few
+     * seconds to show itself (button gone, disabled or loading) and never click in that case; only when nothing happened
+     * press the idle, enabled button once.
+     */
     async verify(): Promise<void> {
-        // The OTP widgets in this app AUTO-SUBMIT once the final digit is entered
-        // (Bank transfer / W2W / Top-up / Bill payment / QR — confirmed on dev):
-        // the request fires on its own and the button goes disabled + "is-loading"
-        // then detaches. A blind click there retries on the disabled button until
-        // the test timeout. So: let the auto-submit fire, and only fall back to an
-        // explicit click for a screen that does NOT auto-submit (e.g. login /
-        // forgot-password), and only while the button is idle + enabled.
-        await this.page.waitForTimeout(700);
-
-        const deadline = Date.now() + 3000;
-        while (Date.now() < deadline) {
-            if (!(await this.verifyButton.isVisible().catch(() => false))) return;        // auto-submitted / advanced
+        const inFlight = async (): Promise<boolean> => {
+            if (!(await this.verifyButton.isVisible().catch(() => false))) return true;      // advanced to the next step
             const cls = (await this.verifyButton.getAttribute('class').catch(() => null)) ?? '';
-            if (/\b(is-loading|processing|loading|submitting)\b/i.test(cls)) return;       // submit already in flight
-            if (await this.verifyButton.isEnabled().catch(() => false)) {
-                await this.verifyButton.click({ timeout: 5000 }).catch(() => { /* auto-submitted mid-click */ });
-                return;
-            }
-            await this.page.waitForTimeout(200);
-        }
+            if (/(is-loading|processing|loading|submitting)/i.test(cls)) return true;   // request in flight
+            return !(await this.verifyButton.isEnabled().catch(() => true));                  // disabled after submit
+        };
+        const autoSubmitted = await expect.poll(inFlight, { timeout: 3000 }).toBe(true).then(() => true).catch(() => false);
+        if (autoSubmitted) return;
+        await this.verifyButton.click({ timeout: 5000 }).catch(() => { /* auto-submitted mid-click */ });
     }
 
     async fillAndVerify(otp: string): Promise<void> {

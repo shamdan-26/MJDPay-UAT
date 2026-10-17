@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { FIXED_OTP } from '../../../support/otp';
 import { SESSION_PATH } from '../../Login/LoginHelper';
 import {
     fetchJson,
@@ -65,7 +66,7 @@ test.describe('Transaction OTP — Max Attempts Restarts The Flow (TO-02, EMI-55
 
         const { status, body } = await fetchJson(page, '/api/v1/otp/verify', {
             method: 'POST',
-            body: { otp: '918512', transactionTypeCode: '101003' },
+            body: { otp: FIXED_OTP, transactionTypeCode: '101003' },
         });
 
         expect(status).toBe(400);

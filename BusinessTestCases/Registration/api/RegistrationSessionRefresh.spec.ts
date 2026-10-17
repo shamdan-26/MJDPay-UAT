@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { FIXED_OTP } from '../../../support/otp';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Registration session refresh token (RSR-01..RSR-07)
@@ -109,7 +110,7 @@ test.describe('Registration Session Refresh — Response Shapes (RSR-01, EMI-599
 
         const res = await request.post(`${API_BASE}${VERIFY_OTP_PATH}`, {
             headers: headers({ Authorization: `Bearer ${SESSION_TOKEN}` }),
-            data: { otp: process.env['REGISTRATION_OTP'] ?? '918512' },
+            data: { otp: FIXED_OTP },
         });
         test.skip(!res.ok(), `verify OTP returned ${res.status()} — the session may already be consumed`);
 

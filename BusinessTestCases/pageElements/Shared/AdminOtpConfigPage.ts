@@ -1,4 +1,5 @@
 import { type Page, type Locator, type Browser, type BrowserContext, expect } from '@playwright/test';
+import { FIXED_OTP } from '../../../support/otp';
 import { OtpPage } from './OtpPage';
 
 /**
@@ -39,7 +40,7 @@ export const ADMIN_PASSWORD = process.env['ADMIN_PASSWORD'] ?? 'Aa#1234567';
 // Same dev-environment all-zeros bypass CLAUDE.md documents for the merchant
 // login's 8-digit OTP, confirmed separately for Topup's 6-digit transaction
 // OTP (TopupNegative.spec.ts) — this is the 6-digit form of the same bypass.
-export const ADMIN_OTP_CODE = process.env['ADMIN_OTP_CODE'] ?? '918512';
+export const ADMIN_OTP_CODE = FIXED_OTP;
 
 /** OTP operation codes as they appear in the name field id suffix. */
 export const OTP_OPERATION = {

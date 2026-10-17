@@ -1,7 +1,8 @@
 import { Page } from '@playwright/test';
+import { FIXED_OTP } from '../../../support/otp';
 
 /** Every environment accepts this fixed OTP for any mobile — no mailbox/DB round trip needed. */
-export const FIXED_OTP = '918512';
+export { FIXED_OTP };
 
 /** Parameters are kept only so existing callers keep compiling. */
 export async function getOtpFromDb(_mobile?: string, _maxAttempts?: number, _delayMs?: number): Promise<string> {

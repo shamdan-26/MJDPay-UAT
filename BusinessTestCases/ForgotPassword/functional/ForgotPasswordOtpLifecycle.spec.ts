@@ -15,7 +15,7 @@ const OTP_PATTERN = /Use this/i;
 
 async function enterCode(otp: OtpPage, code: string) {
     await otp.fill(code);
-    await otp.verifyButton.click({ timeout: 5000 }).catch(() => { /* widget may auto-submit on the last digit */ });
+    await otp.verify();
 }
 
 test.describe('Forgot Password — OTP Lifecycle', tags, () => {

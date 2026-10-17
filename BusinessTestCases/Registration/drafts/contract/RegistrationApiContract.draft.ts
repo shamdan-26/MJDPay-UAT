@@ -7,6 +7,7 @@
 // Prerequisites : capture fixtures (see docs/manual-test-cases/Registration-Backlog-Draft.md, "Fixtures to capture first").
 // Safety        : read-only apart from one OTP request per run.
 import { test, expect } from '@playwright/test';
+import { FIXED_OTP } from '../../../../support/otp';
 import { postRegistration, toApiMobile } from '../../helpers/registrationApi';
 import { generateFreshKSAMobile } from '../../RegistrationHelper';
 
@@ -52,7 +53,7 @@ test.describe('Registration API – contract (DRAFT)', { tag: ['@registration', 
     });
 
     test('error responses use the gateway error envelope', async ({ request }) => {
-        const res = await postRegistration(request, '/register/verify/otp', { mobileNumber: toApiMobile(generateFreshKSAMobile()), otp: '918512', requestId: 'does-not-exist' });
+        const res = await postRegistration(request, '/register/verify/otp', { mobileNumber: toApiMobile(generateFreshKSAMobile()), otp: FIXED_OTP, requestId: 'does-not-exist' });
         expect(res.status()).toBeGreaterThanOrEqual(400);
         // The gateway wraps errors in a one-element array: [{ httpStatusCode, message: { messageCode, ... } }]
         const body = await res.json();

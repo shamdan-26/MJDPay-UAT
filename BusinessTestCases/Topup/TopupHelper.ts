@@ -46,16 +46,18 @@ export const LOGIN_PASSWORD = process.env['LOGIN_PASSWORD'] ?? '';
 export interface TopupAccount { company: string; mobile: string; password?: string }
 
 /**
- * Account for the UI specs under Topup/ui/: company W1550 / mobile 500021788. The Biller
- * wallet accumulates every successful top-up and eventually hits
- * COLLECTION_DESTINATION_WALLET_LIMITATION_EXCEEDED, so UI testing runs on this account
- * instead. Functional specs keep the Biller account (they assert BILLER wallet type and
- * Biller-scoped commission). Password is the shared test default (data/testAccounts.json).
- * The wallet-code prefix depends on the account type — assert on the generic pattern.
+ * Account for the UI specs under Topup/ui/. The Biller wallet accumulates every successful
+ * top-up and eventually hits COLLECTION_DESTINATION_WALLET_LIMITATION_EXCEEDED, so UI testing
+ * runs on its own account (functional specs keep the Biller account, they assert BILLER wallet
+ * type and Biller-scoped commission). Moved from W1550 to the shared `merchant` account
+ * (K9491, data/testAccounts.json) on 2026-10-15: W1550 got locked and then had a data issue.
+ * Override with TOPUP_UI_COMPANY / TOPUP_UI_MOBILE (quote values containing `#` in .env files).
+ * Do not use merchant2 (E9306): it is documented as locked (HTTP 423). The wallet-code prefix
+ * depends on the account type, so assert on the generic pattern.
  */
 export const TOPUP_UI_ACCOUNT: TopupAccount = {
-    company:  'W1550',
-    mobile:   '500021788',
+    company:  process.env['TOPUP_UI_COMPANY'] ?? testAccounts.merchant.company,
+    mobile:   process.env['TOPUP_UI_MOBILE']  ?? testAccounts.merchant.mobile,
     password: testAccounts.defaultPassword,
 };
 
@@ -114,6 +116,13 @@ export async function loginToTopup(browser: Browser, account: TopupAccount = { c
         ]).catch(() => 'none' as const);
         if (next === 'otp') {
             await otp.fillAndVerify(await getOtpFromDb(account.mobile));
+            // The OTP code is only valid for a short window and Verify can be slow or missed on dev.
+            // If the page did not leave /auth/, start the whole login again for a fresh code
+            // instead of waiting out the final timeout on an expired OTP screen.
+            const left = await page.waitForURL(url => !url.pathname.includes('/auth/'), { timeout: 15000 }).then(() => true).catch(() => false);
+            if (left) break;
+            if (attempt === 2) throw new Error(`Login did not get past the OTP step for ${account.company}/${account.mobile} after 2 attempts (code typed, page stayed on /auth/). Check the account is not locked and the OTP screen's error/timer.`);
+            continue;
         }
         if (next !== 'none' || attempt === 2) break;
     }
@@ -209,7 +218,12 @@ export async function reachCardEntryPopup(session: TopupSession, method: 'mada' 
     } catch {
         page.off('response', onResponse);
         if (initiationFailure) {
-            throw new Error(`Payment initiation was rejected (${initiationFailure}) — the backend refused the top-up, so no gateway popup could open. For COLLECTION_DESTINATION_WALLET_LIMITATION_EXCEEDED the test wallet has reached its limit (see this file's header); it needs resetting, not a test fix.`);
+            const hint = /COUNT_LIMITS_EXCEEDED/.test(initiationFailure)
+                ? 'The hourly/daily COUNT cap for this account type was reached: dev counts every initiated top-up, paid or not (AS4, max 5 per hour). Wait for the hour to roll over, use another account, or raise the count limit in the admin portal (restore it afterwards).'
+                : /SESSION_INVALID|HTTP 401/.test(initiationFailure)
+                ? 'The session was invalidated (another login with the same account, or it expired) — run the Topup UI specs with --workers=1 and do not use this account elsewhere at the same time.'
+                : 'For COLLECTION_DESTINATION_WALLET_LIMITATION_EXCEEDED the test wallet has reached its limit (see the header of TopupHelper.ts); it needs resetting, not a test fix.';
+            throw new Error(`Payment initiation was rejected (${initiationFailure}) — the backend refused the top-up, so no gateway popup could open. ${hint}`);
         }
         throw new Error('Payment gateway popup did not open within 20s after Next / OTP verification — likely a backend/gateway outage, not a test issue.');
     }

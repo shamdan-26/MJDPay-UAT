@@ -25,16 +25,11 @@ export async function signInThroughOtp(page: Page, account: FirstLoginAccount, p
     await otp.heading.waitFor({ state: 'visible', timeout: 20000 });
 
     // Watch the verify call so a stuck OTP screen turns into a clear message (status + body) instead of a URL timeout.
-    // The OTP widget normally auto-submits on the last digit; if no request is seen, press Verify ourselves.
+    // The OTP widget auto-submits on the last digit: just wait for the verify request, never click Verify.
     const isVerify = (r: Response) => r.request().method() === 'POST' && /\/auth\/verify\/otp/.test(r.url());
-    const seen = page.waitForResponse(isVerify, { timeout: 12000 }).catch(() => null);
+    const seen = page.waitForResponse(isVerify, { timeout: 15000 }).catch(() => null);
     await otp.fillAndVerify(VALID_OTP);
-    let verifyResponse = await seen;
-    if (!verifyResponse && await otp.verifyButton.isEnabled().catch(() => false)) {
-        const retry = page.waitForResponse(isVerify, { timeout: 15000 }).catch(() => null);
-        await otp.verifyButton.click().catch(() => { /* advanced meanwhile */ });
-        verifyResponse = await retry;
-    }
+    const verifyResponse = await seen;
     if (verifyResponse && !verifyResponse.ok()) {
         throw new Error(`OTP verify for ${account.company} returned ${verifyResponse.status()}: ${(await verifyResponse.text().catch(() => '')).slice(0, 200)}`);
     }

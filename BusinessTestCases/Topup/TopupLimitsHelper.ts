@@ -1,4 +1,4 @@
-import { type Browser, type BrowserContext } from '@playwright/test';
+import { test, type Browser, type BrowserContext } from '@playwright/test';
 import { createAdminContext } from '../pageElements/Shared/AdminOtpConfigPage';
 import { AdminLimitsApi, TOPUP_TYPE_NAME, type TopupLimitsSnapshot } from '../pageElements/Shared/AdminLimitsApi';
 import { gotoTopupScreen, type TopupSession } from './TopupHelper';
@@ -47,6 +47,8 @@ export type TopupAttempt =
     | 'blocked-at-proceed'
     /** Summary appeared but Next led neither to the OTP screen nor the gateway popup. */
     | 'blocked-at-next'
+    /** Next was answered with an HTTP 5xx: the server failed, no limit rejected anything. isBlocked() still counts it as blocked (unchanged for the older specs); only callers that must prove a LIMIT check for it. */
+    | 'server-error'
     /** OTP screen or gateway popup reached — nothing was rejected before payment. */
     | 'proceeded';
 
@@ -55,6 +57,9 @@ export type TopupAttempt =
  * an abandoned OTP/gateway step consumes no quota (TUA-C28). The caller must call `gotoTopupScreen` again for the
  * next attempt (done here at the start so every attempt is a fresh amount screen).
  */
+/** What the backend answered the last time an attempt stopped at Next ('' when it did not): callers put it in their failure message. */
+export const attemptInfo = { detail: '' };
+
 export async function attemptTopup(session: TopupSession, amount: string, method: 'mada' | 'visa' | 'master' = 'mada'): Promise<TopupAttempt> {
     const { page, topup, otp } = session;
     await gotoTopupScreen(session);
@@ -72,12 +77,23 @@ export async function attemptTopup(session: TopupSession, amount: string, method
     await topup.waitForSummaryToSettle().catch(() => { /* summary may not show a total when blocked late */ });
     const popup = page.context().waitForEvent('page', { timeout: 15000 }).then(() => true).catch(() => false);
     const otpShown = otp.inputs.first().waitFor({ state: 'visible', timeout: 15000 }).then(() => true).catch(() => false);
+    // Evidence only: what the backend answered to the initiation call, so a stop at Next can be explained (limit, commission, wallet...).
+    const initiation = page.waitForResponse(r => r.request().method() === 'POST' && /\/api\/v1\/payments$/.test(r.url()), { timeout: 15000 }).catch(() => null);
     await topup.summaryNextButton.click();
     const reached = await Promise.race([
         otpShown.then(v => (v ? true : popup)),
         popup.then(v => (v ? true : otpShown)),
     ]);
-    return reached ? 'proceeded' : 'blocked-at-next';
+    if (!reached) {
+        const res = await initiation;
+        const detail = res ? `HTTP ${res.status()} ${(await res.text().catch(() => '')).slice(0, 300)}` : 'no initiation call was sent';
+        test.info().annotations.push({ type: 'stopped-at-next', description: detail });
+        attemptInfo.detail = detail;
+        console.warn(`[topup-limits] the attempt stopped at Next: ${detail}`);
+        return res && res.status() >= 500 ? 'server-error' : 'blocked-at-next';
+    }
+    attemptInfo.detail = '';
+    return 'proceeded';
 }
 
 /** True for any outcome where the platform stopped the top-up before payment. */

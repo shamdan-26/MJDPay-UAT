@@ -157,7 +157,7 @@ Locator catalog: [Topup.generated.md](Topup.generated.md) (`TopupPage`, `TopupSa
 | Summary total label differs: code/EN "Total amount to be sent" vs live "Total Amount to be Received"; OTP mini-summary is all caps | `Topup.md` TUP-17, TUP-22; `TopupHelper.ts:266` |
 | Disclaimer copy on dev differs from older locator ("powered by Hyper Pay") | `Topup.md` findings, TUP-19 |
 | Second wrong OTP on this screen hangs the page for minutes | `functional/TopupSecurity.spec.ts:109-117` (comment) |
-| Biller account wallet fills up and hits `COLLECTION_DESTINATION_WALLET_LIMITATION_EXCEEDED`; UI specs moved to account W1550 | `TopupHelper.ts:48-55` |
+| Biller account wallet fills up and hits `COLLECTION_DESTINATION_WALLET_LIMITATION_EXCEEDED`; UI specs use `TOPUP_UI_ACCOUNT` (merchant K9491 since 2026-10-15; W1550 was locked then had a data issue; override with TOPUP_UI_COMPANY/MOBILE) | `TopupHelper.ts:48-62` |
 | Commission/VAT shown as 0 in manual runs; non-zero tiers only covered by automated TU-CM specs | `Topup.md` findings |
 | Matrix doc assumes a WEEK period and a TXN_MAX; live API has neither | `Topup-Admin-Config-Matrix.md` vs `AdminLimitsApi.ts:14-17` |
 | Many TUA cases are `test.skip` ("Not automated yet"); VIBAN/SADAD automation archived | `TopupMinAmount.spec.ts`, `TopupLimits.spec.ts:182`, `Topup.md` cross-references |

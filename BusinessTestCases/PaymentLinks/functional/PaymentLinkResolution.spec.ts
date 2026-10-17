@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { FIXED_OTP } from '../../../support/otp';
 import { PaymentLinkPage } from '../../pageElements/PaymentLinks/PaymentLinkPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import {
@@ -143,7 +144,7 @@ test.describe('Payment Links — Full Navigation Flow (TC-PL-008)', () => {
         await link.continueButton.click();
 
         if (await otp.isVisible()) {
-            await otp.fillAndVerify('918512');
+            await otp.fillAndVerify(FIXED_OTP);
         }
 
         await expect(link.resultHeading.or(link.summarySection)).toBeVisible({ timeout: 15000 });

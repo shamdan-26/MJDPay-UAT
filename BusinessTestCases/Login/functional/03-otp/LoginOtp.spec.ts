@@ -101,7 +101,7 @@ test.describe('Login — OTP Flow', { tag: ['@login', '@functional', '@otp'], an
     test('should remain on the OTP popup after submitting a wrong OTP', { annotation: [{ type: 'testcase', description: "LG-74: Wrong OTP keeps user on the OTP dialog" }] }, async () => {
         const count = await otp.inputs.count();
         for (let i = 0; i < count; i++) await otp.inputs.nth(i).fill(INVALID_OTP[i] ?? '1');
-        await otp.verifyButton.click({ timeout: 5000 }).catch(() => { /* widget may auto-submit on the last digit */ });
+        await otp.verify();
         await expect(otp.heading).toBeVisible();
     });
 
