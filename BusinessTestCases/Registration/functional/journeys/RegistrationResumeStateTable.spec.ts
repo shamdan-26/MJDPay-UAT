@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { goToInfoStepMocked, mockProfileType, NEW_APPLICATION_STATE, RESIDENT_ASSETS, generateEmail } from '../../RegistrationHelper';
+import { goToInfoStepMocked, mockProfileType, NEW_APPLICATION_STATE, RESIDENT_ASSETS, generateEmail } from '../../helpers/RegistrationHelper';
 import { RegistrationInfoPage } from '../../../pageElements/Registration/RegistrationInfoPage';
 import { RegistrationFinancialPage } from '../../../pageElements/Registration/RegistrationFinancialPage';
 import { RegistrationNafathPage } from '../../../pageElements/Registration/RegistrationNafathPage';

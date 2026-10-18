@@ -1,10 +1,12 @@
 import type { Page, Route } from '@playwright/test';
-import { REGISTER_URL, generateEmail } from './registrationConfig';
+import { REGISTER_URL } from './registrationConfig';
 import { generateKSAMobile, RESIDENT_ASSETS } from './registrationAssets';
 import { RegistrationInfoPage } from '../../pageElements/Registration/RegistrationInfoPage';
 import { RegistrationFinancialPage } from '../../pageElements/Registration/RegistrationFinancialPage';
 import { RegistrationVerificationPage } from '../../pageElements/Registration/RegistrationVerificationPage';
-import { fillFinancialForm } from './registrationSteps';
+import { RegistrationContractPage } from '../../pageElements/Registration/RegistrationContractPage';
+import { RegistrationConfirmationPage } from '../../pageElements/Registration/RegistrationConfirmationPage';
+import { fillBusinessInfo, fillFinancialForm } from './registrationSteps';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Network mocks that make the wizard reachable WITHOUT a real OTP or a pool
@@ -20,7 +22,7 @@ const VERIFY_OTP   = '**/emi-profile/api/v1/register/verify/otp';
 const PROFILE_TYPE = '**/emi-profile/api/v1/register/profile-registration-type';
 
 /** Three-part placeholder shaped like a JWT; built at runtime so it is obviously not a real credential. */
-function dummyJwt(kind: string): string { return [`dummy-${kind}-header`, `dummy-${kind}-payload`, `dummy-${kind}-sig`].join("."); }
+function dummyJwt(kind: string): string { return [`dummy-${kind}-header`, `dummy-${kind}-payload`, `dummy-${kind}-sig`].join('.'); }
 
 export const DUMMY_SESSION = {
     sessionToken: { token: dummyJwt('s'), expirationDuration: 600_000 },
@@ -114,17 +116,12 @@ export const NEW_APPLICATION_STATE = {
  * Never calls markResidentAssetUsed — the server is mocked, so no pool identity is consumed.
  */
 export async function goToFinancialStepMocked(page: Page, state: Record<string, unknown> = NEW_APPLICATION_STATE): Promise<void> {
-    const submitted = await mockProfileType(page, 201, state);
+    await mockProfileType(page, 201, state);
     await goToInfoStepMocked(page);
     const info = new RegistrationInfoPage(page);
-    const asset = RESIDENT_ASSETS[0];
-    await info.profileTypeGroup.getByRole('radio').first().click();
-    await info.crnInput.fill(asset.crn);
-    await info.idInput.fill(asset.nationalId);
-    await info.emailInput.fill(generateEmail());
+    await fillBusinessInfo(info, RESIDENT_ASSETS[0]);
     await info.nextButton.click();
     await new RegistrationFinancialPage(page).monthlyBillsInput.waitFor({ state: 'visible', timeout: 30000 });
-    void submitted;
 }
 
 /** As goToFinancialStepMocked, then fills Financial & Business and advances to Verification & Uploads. */
@@ -135,6 +132,35 @@ export async function goToVerificationStepMocked(page: Page): Promise<void> {
     await new RegistrationVerificationPage(page).waitForLoad();
 }
 
+/** Progress flags for an application that has finished Nafath and Products — the wizard resumes at Contract. */
+export const AT_CONTRACT_STATE = { ...NEW_APPLICATION_STATE, isGetNafathRandomNumberCompleted: true, isGetNafathStatusCompleted: true, isProductAssigned: true };
+
+/** The Contract step's "Submit and finish" call. */
+export const CONTRACT_ACCEPT = '**/emi-profile/api/v1/register/contract/accept';
+
+/** Mobile → Business Info → Contract with no real OTP and no pool identity (Business Info answered with `AT_CONTRACT_STATE`). */
+export async function goToContractStepMocked(page: Page): Promise<void> {
+    await mockProfileType(page, 201, AT_CONTRACT_STATE);
+    await goToInfoStepMocked(page);
+    const info = new RegistrationInfoPage(page);
+    await fillBusinessInfo(info, RESIDENT_ASSETS[0]);
+    await info.nextButton.click();
+    await new RegistrationContractPage(page).waitForLoad();
+}
+
+/**
+ * As goToContractStepMocked, then ticks the agreement and submits with the accept call answered 200,
+ * ending on the Confirmation screen. The response body is not inspected by the app's happy path (unconfirmed — empty object).
+ */
+export async function goToConfirmationStepMocked(page: Page): Promise<void> {
+    await page.route(CONTRACT_ACCEPT, route => json(route, 200, {}));
+    await goToContractStepMocked(page);
+    const contract = new RegistrationContractPage(page);
+    await contract.agreeCheckbox.check();
+    await contract.submitButton.click();
+    await new RegistrationConfirmationPage(page).waitForLoad();
+}
+
 /** Mobile → OTP dialog (mocked OTP requirement, see mockOtpRequired). */
 export async function goToOtpDialogMocked(page: Page, mobile: string = generateKSAMobile()): Promise<string> {
     await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
@@ -142,4 +168,38 @@ export async function goToOtpDialogMocked(page: Page, mobile: string = generateK
     await page.getByRole('button', { name: /next|التالي/i }).click();
     await page.getByRole('heading', { name: /Enter OTP|أدخل رمز التحقق/i }).waitFor({ state: 'visible', timeout: 20000 });
     return mobile;
+}
+
+// ── Sprint 71 feature mocks ──────────────────────────────────────────────────
+/**
+ * Route-mocking helpers for the Sprint 71 registration items (section 13 of
+ * the test-case doc): auto-approval/auto-activation (EMI-5748), fixed-Merchant
+ * sign-up mode (EMI-5768), and activation email (EMI-5777).
+ *
+ * None of these endpoints are given verbatim in the ticket text (unlike the
+ * PoS section), so the paths below are best-effort guesses following this
+ * app's existing `/emi-profile/api/v1/...` convention — reconcile against the
+ * real network tab on first live run, same caveat as RegistrationProductsPage.ts.
+ */
+
+/** Toggles the EMI-5768 fixed-Merchant sign-up mode config the registration
+ *  wizard is expected to read before rendering the profile-type step. */
+export async function mockFixedMerchantMode(page: Page, enabled: boolean): Promise<void> {
+    await page.route('**/*registration*settings*', route =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ fixedMerchantMode: enabled }) })
+    );
+}
+
+/** Mocks the final registration submission so the response reflects
+ *  auto-approval + auto-activation (EMI-5748) instead of a "pending review"
+ *  status, and includes an activation-email-sent flag (EMI-5777). */
+export async function mockAutoApprovedRegistration(page: Page): Promise<void> {
+    await page.route('**/emi-profile/api/v1/register/**', route => {
+        if (route.request().method() !== 'POST') return route.continue();
+        return route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({ status: 'ACTIVE', approvalStatus: 'APPROVED', activationEmailSent: true }),
+        });
+    });
 }

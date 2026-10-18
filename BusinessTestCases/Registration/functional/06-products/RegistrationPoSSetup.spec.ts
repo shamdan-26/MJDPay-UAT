@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { goToProductsStep, expandPosCard } from '../../RegistrationHelper';
+import { goToProductsStep, expandPosCard } from '../../helpers/RegistrationHelper';
 import { RegistrationProductsPage } from '../../../pageElements/Registration/RegistrationProductsPage';
 import { RegistrationContractPage } from '../../../pageElements/Registration/RegistrationContractPage';
 

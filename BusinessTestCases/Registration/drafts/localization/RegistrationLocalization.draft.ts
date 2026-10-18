@@ -7,7 +7,7 @@
 //               rejected — the expected behaviour is a product decision; the test records what happens and asserts
 //               "never accepted as-is"). Hijri date display exists only on the Contract (acceptance date) — unverified.
 import { test, expect } from '@playwright/test';
-import { REGISTER_URL, goToInfoStepMocked, goToFinancialStepMocked, RESIDENT_ASSETS } from '../../RegistrationHelper';
+import { REGISTER_URL, goToInfoStepMocked, goToFinancialStepMocked, RESIDENT_ASSETS } from '../../helpers/RegistrationHelper';
 import { RegistrationInfoPage } from '../../../pageElements/Registration/RegistrationInfoPage';
 import { RegistrationFinancialPage } from '../../../pageElements/Registration/RegistrationFinancialPage';
 

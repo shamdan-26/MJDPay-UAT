@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { fillOTP, goToOtpDialogMocked, mockOtpRequired, OTP_NOT_VALID } from '../../RegistrationHelper';
+import { fillOTP, goToOtpDialogMocked, mockOtpRequired, OTP_NOT_VALID } from '../../helpers/RegistrationHelper';
 
 // OTP dialog — accessibility and state presentation, with the gateway mocked (no real OTP needed).
 const OTP_BOX    = { name: 'One time password input' };

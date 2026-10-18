@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { goToVerificationStep } from '../../RegistrationHelper';
+import { goToVerificationStep } from '../../helpers/RegistrationHelper';
 import { RegistrationVerificationPage } from '../../../pageElements/Registration/RegistrationVerificationPage';
 
 // ─────────────────────────────────────────────────────────────────────────────

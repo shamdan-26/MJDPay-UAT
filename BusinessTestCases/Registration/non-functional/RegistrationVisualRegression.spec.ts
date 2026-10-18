@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { REGISTER_URL, goToInfoStepMocked, goToFinancialStepMocked, goToOtpDialogMocked, mockOtpRequired, OTP_NOT_VALID } from '../RegistrationHelper';
+import { REGISTER_URL, goToInfoStepMocked, goToFinancialStepMocked, goToOtpDialogMocked, mockOtpRequired, OTP_NOT_VALID } from '../helpers/RegistrationHelper';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Visual regression — pixel snapshots of each step reachable without a real OTP, English/Arabic × light/dark,

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { goToFinancialStep, selectRandomOption } from '../../RegistrationHelper';
+import { goToFinancialStep, selectRandomOption } from '../../helpers/RegistrationHelper';
 import { RegistrationFinancialPage } from '../../../pageElements/Registration/RegistrationFinancialPage';
 
 // ─────────────────────────────────────────────────────────────────────────────

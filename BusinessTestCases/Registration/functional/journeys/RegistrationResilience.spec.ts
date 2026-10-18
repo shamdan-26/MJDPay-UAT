@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { REGISTER_URL, generateKSAMobile, goToInfoStepMocked, goToFinancialStepMocked, mockProfileType, apiError, NEW_APPLICATION_STATE, RESIDENT_ASSETS, generateEmail } from '../../RegistrationHelper';
+import { REGISTER_URL, generateKSAMobile, goToInfoStepMocked, goToFinancialStepMocked, mockProfileType, apiError, NEW_APPLICATION_STATE, RESIDENT_ASSETS, generateEmail } from '../../helpers/RegistrationHelper';
 import { RegistrationInfoPage } from '../../../pageElements/Registration/RegistrationInfoPage';
 import { RegistrationMobilePage } from '../../../pageElements/Registration/RegistrationMobilePage';
 

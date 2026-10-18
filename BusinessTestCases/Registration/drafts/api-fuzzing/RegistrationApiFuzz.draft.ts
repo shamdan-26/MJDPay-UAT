@@ -9,7 +9,7 @@
 //                 Each OTP request sends a real SMS/email on environments where delivery works.
 import { test, expect } from '@playwright/test';
 import { postRegistration, toApiMobile } from '../../helpers/registrationApi';
-import { generateFreshKSAMobile } from '../../RegistrationHelper';
+import { generateFreshKSAMobile } from '../../helpers/RegistrationHelper';
 
 const NUM_RUNS = 25;
 

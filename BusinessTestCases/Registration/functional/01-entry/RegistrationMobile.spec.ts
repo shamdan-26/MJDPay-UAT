@@ -1,5 +1,5 @@
 ﻿import { test, expect } from '../../../fixtures';
-import { LOGIN_URL, REGISTER_URL, generateKSAMobile } from '../../RegistrationHelper';
+import { LOGIN_URL, REGISTER_URL, generateKSAMobile } from '../../helpers/RegistrationHelper';
 
 test.describe('Registration - Mobile Number Functionality', { tag: ['@registration', '@entry', '@functional'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'functional' }] }, () => {
     test.describe.configure({ mode: 'serial' });

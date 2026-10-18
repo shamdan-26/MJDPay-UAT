@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { goToInfoStepMocked, mockProfileType, apiError, NEW_APPLICATION_STATE, RESIDENT_ASSETS, generateEmail } from '../../RegistrationHelper';
+import { goToInfoStepMocked, mockProfileType, apiError, NEW_APPLICATION_STATE, RESIDENT_ASSETS, generateEmail } from '../../helpers/RegistrationHelper';
 import { RegistrationInfoPage } from '../../../pageElements/Registration/RegistrationInfoPage';
 
 // Business Info — interaction states, keyboard operation and error presentation, reached through the mocked

@@ -7,7 +7,7 @@
 //
 // Prerequisites: none beyond the mock helpers. Assumptions: autocomplete/inputmode attributes are the app's contract.
 import { test, expect, devices } from '@playwright/test';
-import { REGISTER_URL, goToInfoStepMocked, goToOtpDialogMocked, mockOtpRequired, OTP_NOT_VALID, generateKSAMobile } from '../../RegistrationHelper';
+import { REGISTER_URL, goToInfoStepMocked, goToOtpDialogMocked, mockOtpRequired, OTP_NOT_VALID, generateKSAMobile } from '../../helpers/RegistrationHelper';
 
 const DEVICES = ['iPhone 14', 'Pixel 7', 'Galaxy S9+', 'iPad (gen 7)'] as const;
 

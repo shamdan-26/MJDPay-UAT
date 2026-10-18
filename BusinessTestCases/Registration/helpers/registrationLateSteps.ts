@@ -5,9 +5,25 @@ import { RegistrationVerificationPage } from '../../pageElements/Registration/Re
 import { RegistrationProductsPage } from '../../pageElements/Registration/RegistrationProductsPage';
 import { RegistrationNafathPage } from '../../pageElements/Registration/RegistrationNafathPage';
 import { RegistrationContractPage } from '../../pageElements/Registration/RegistrationContractPage';
-import { generateEmail } from './registrationConfig';
 import { CITIZEN_ASSETS, markCitizenAssetUsed, getWorkerPartition, nextCitizenAsset } from './registrationAssets';
-import { fillAndVerify, goToInfoStep, isAlreadyRegisteredMessage, fillFinancialForm, fillVerificationForm } from './registrationSteps';
+import { fillBusinessInfo, goToInfoStep, isAlreadyRegisteredMessage, fillFinancialForm, fillVerificationForm } from './registrationSteps';
+
+/**
+ * The mobile number of whichever CITIZEN_ASSETS entry `goToProductsStep`
+ * most recently succeeded with — set on every loop iteration, not just on
+ * return, so it's already correct by the time any of that function's several
+ * `return true` points fires. Exposed as a side-channel (`lastReachedAssetMobile`)
+ * rather than added to `goToProductsStep`'s own return value: that value is a
+ * bare boolean asserted directly (`expect(reachedProducts).toBe(true)`) by six
+ * other call sites across this suite, so widening it to an object would break
+ * every one of them. A caller that needs to know which identity was actually
+ * used (e.g. to look its record up afterward in the database) reads this
+ * immediately after `goToProductsStep`/`goToContractStep` resolves.
+ */
+let lastReachedAssetMobile: string | null = null;
+export function lastReachedCitizenAssetMobile(): string | null {
+    return lastReachedAssetMobile;
+}
 
 /**
  * Drives the registration wizard forward until it lands on the outer Products
@@ -40,25 +56,9 @@ import { fillAndVerify, goToInfoStep, isAlreadyRegisteredMessage, fillFinancialF
  * destination. Other callers (which specifically need the Products panel) leave
  * this false.
  */
-/**
- * The mobile number of whichever CITIZEN_ASSETS entry `goToProductsStep`
- * most recently succeeded with — set on every loop iteration, not just on
- * return, so it's already correct by the time any of that function's several
- * `return true` points fires. Exposed as a side-channel (`lastReachedAssetMobile`)
- * rather than added to `goToProductsStep`'s own return value: that value is a
- * bare boolean asserted directly (`expect(reachedProducts).toBe(true)`) by six
- * other call sites across this suite, so widening it to an object would break
- * every one of them. A caller that needs to know which identity was actually
- * used (e.g. to look its record up afterward in the database) reads this
- * immediately after `goToProductsStep`/`goToContractStep` resolves.
- */
-let lastReachedAssetMobile: string | null = null;
-export function lastReachedCitizenAssetMobile(): string | null {
-    return lastReachedAssetMobile;
-}
-
 export async function goToProductsStep(page: Page, maxAttempts = getWorkerPartition(CITIZEN_ASSETS).length, landOnContractOk = false): Promise<boolean> {
     const products = new RegistrationProductsPage(page);
+    const financialPage = new RegistrationFinancialPage(page);
     // Scoped to products.productCards (.mp-product-card), not products.formSubTitle
     // (.form-sub-title) — that class is shared by every wizard step's own header,
     // including Business Info's, so racing it below could false-win as 'products'
@@ -86,14 +86,9 @@ export async function goToProductsStep(page: Page, maxAttempts = getWorkerPartit
         await goToInfoStep(page, asset.mobile);
 
         const infoPage = new RegistrationInfoPage(page);
-        await infoPage.profileTypeGroup.getByRole('radio').first().click();
-        await fillAndVerify(infoPage.crnInput, asset.crn);
-        await fillAndVerify(infoPage.idInput, asset.nationalId);
-        await fillAndVerify(infoPage.emailInput, generateEmail());
+        await fillBusinessInfo(infoPage, asset);
         await infoPage.nextButton.click();
-        await page.getByRole('button', { name: /Loading|جاري التحميل/i })
-            .waitFor({ state: 'hidden', timeout: 20000 })
-            .catch(() => {});
+        await financialPage.loadingButton.waitFor({ state: 'hidden', timeout: 20000 }).catch(() => {});
 
         // Check for an "already registered" rejection right away — it renders as a
         // toast that auto-dismisses within seconds, so it must be read before sinking
@@ -105,7 +100,6 @@ export async function goToProductsStep(page: Page, maxAttempts = getWorkerPartit
             continue;
         }
 
-        const financialPage = new RegistrationFinancialPage(page);
         const reachedFinancial = await financialPage.monthlyBillsInput
             .waitFor({ state: 'visible', timeout: 15000 })
             .then(() => true)
@@ -125,9 +119,7 @@ export async function goToProductsStep(page: Page, maxAttempts = getWorkerPartit
         if (reachedVerification) {
             await fillVerificationForm(page);
             await verificationPage.signUpButton.click();
-            await page.getByRole('button', { name: /Loading|جاري التحميل/i })
-                .waitFor({ state: 'hidden', timeout: 20000 })
-                .catch(() => {});
+            await financialPage.loadingButton.waitFor({ state: 'hidden', timeout: 20000 }).catch(() => {});
         }
 
         const contractStep = products.activeStep.filter({ hasText: 'العقد' });

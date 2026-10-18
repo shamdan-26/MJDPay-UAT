@@ -1,6 +1,6 @@
 import { chromium } from '@playwright/test';
 import { mkdirSync } from 'fs';
-import { getOtpFromDb, fillOTP } from '../BusinessTestCases/Registration/RegistrationHelper';
+import { getOtpFromDb, fillOTP } from '../BusinessTestCases/Registration/helpers/RegistrationHelper';
 import {
     loginAsMerchant,
     homepageAccountPool,

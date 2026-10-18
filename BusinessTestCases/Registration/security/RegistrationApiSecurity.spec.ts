@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { FIXED_OTP } from '../../../support/otp';
-import { nextResidentAsset, generateFreshKSAMobile } from '../RegistrationHelper';
+import { nextResidentAsset, generateFreshKSAMobile } from '../helpers/RegistrationHelper';
 import { REGISTRATION_API, registrationHeaders, postRegistration, toApiMobile, openRegistrationSession } from '../helpers/registrationApi';
 
 // ─────────────────────────────────────────────────────────────────────────────

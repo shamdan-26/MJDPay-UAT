@@ -1,5 +1,5 @@
 import { test, expect, Page, Browser } from '@playwright/test';
-import { goToInfoStepMocked, RESIDENT_ASSETS } from '../../RegistrationHelper';
+import { goToInfoStepMocked, RESIDENT_ASSETS } from '../../helpers/RegistrationHelper';
 import { RegistrationInfoPage } from '../../../pageElements/Registration/RegistrationInfoPage';
 
 async function navigateToInfoStep(browser: Browser, workerIndex: number): Promise<InfoNav> {

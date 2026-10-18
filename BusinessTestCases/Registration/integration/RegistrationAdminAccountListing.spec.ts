@@ -4,7 +4,7 @@ import {
     ACTIVATION_API_CREDENTIALS_MARKER, ACTIVATION_LOGIN_DETAILS_MARKER,
     getBusinessRegistrationRequestByMobileFromSql, getRegistrationProvisioningFromSql,
     type RegistrationFullDetail,
-} from '../RegistrationHelper';
+} from '../helpers/RegistrationHelper';
 import { closeMongoClient } from '../../../support/mongoClient';
 import { RegistrationContractPage } from '../../pageElements/Registration/RegistrationContractPage';
 import { RegistrationConfirmationPage } from '../../pageElements/Registration/RegistrationConfirmationPage';

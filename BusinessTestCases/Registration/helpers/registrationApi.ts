@@ -49,16 +49,20 @@ export async function openRegistrationSession(request: APIRequestContext, localM
     const sent = await postRegistration(request, '/register/mobile/otp', { mobileNumber });
     if (sent.status() !== 200) return null;
     const sentBody = await sent.json().catch(() => ({}));
-    if (sentBody.sessionToken?.token ?? (typeof sentBody.sessionToken === 'string' ? sentBody.sessionToken : null)) {
-        return sentBody.sessionToken?.token ?? sentBody.sessionToken;
-    }
+    const direct = sessionTokenOf(sentBody);
+    if (direct) return direct;
     try {
         const otp = await getOtpFromDb(localMobile);
         const verified = await postRegistration(request, '/register/verify/otp', { mobileNumber, otp, requestId: sentBody.requestId });
         if (verified.status() !== 200) return null;
-        const body = await verified.json().catch(() => ({}));
-        return body.sessionToken?.token ?? (typeof body.sessionToken === 'string' ? body.sessionToken : null);
+        return sessionTokenOf(await verified.json().catch(() => ({})));
     } catch {
         return null;
     }
+}
+
+/** The API answers `sessionToken` either as `{ token }` or as a bare string. */
+function sessionTokenOf(body: { sessionToken?: { token?: string } | string | null }): string | null {
+    const t = body.sessionToken;
+    return (typeof t === 'string' ? t : t?.token) || null;
 }

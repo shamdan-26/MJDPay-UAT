@@ -12,7 +12,7 @@
 import { test, expect, Page } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
-import { goToInfoStepMocked, mockProfileType, RESIDENT_ASSETS, generateEmail } from '../../RegistrationHelper';
+import { goToInfoStepMocked, mockProfileType, RESIDENT_ASSETS, generateEmail } from '../../helpers/RegistrationHelper';
 import { RegistrationInfoPage } from '../../../pageElements/Registration/RegistrationInfoPage';
 import { RegistrationFinancialPage } from '../../../pageElements/Registration/RegistrationFinancialPage';
 import { RegistrationNafathPage } from '../../../pageElements/Registration/RegistrationNafathPage';

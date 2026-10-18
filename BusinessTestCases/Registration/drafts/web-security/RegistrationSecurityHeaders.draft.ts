@@ -7,7 +7,7 @@
 //               The gateway answers preflight with Access-Control-* headers.
 // Prerequisites: none.
 import { test, expect } from '@playwright/test';
-import { REGISTER_URL } from '../../RegistrationHelper';
+import { REGISTER_URL } from '../../helpers/RegistrationHelper';
 import { REGISTRATION_API } from '../../helpers/registrationApi';
 
 test.describe('Registration – web security posture (DRAFT)', { tag: ['@registration', '@security'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'security' }] }, () => {

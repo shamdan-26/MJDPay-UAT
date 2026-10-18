@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { goToFinancialStepWithDedicatedAsset } from '../../RegistrationHelper';
+import { goToFinancialStepWithDedicatedAsset } from '../../helpers/RegistrationHelper';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // This test owns its own resident asset outright rather than sharing the

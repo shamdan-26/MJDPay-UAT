@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { RESIDENT_ASSETS } from '../../../RegistrationHelper';
+import { RESIDENT_ASSETS } from '../../../helpers/RegistrationHelper';
 import { PROFILE_MERCHANT, PROFILE_FREELANCER, Asset, gotoTab1 } from '../../../helpers/infoStepForm';
 
 // ─────────────────────────────────────────────────────────────────────────────

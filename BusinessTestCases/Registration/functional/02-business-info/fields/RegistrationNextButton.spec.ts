@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { RESIDENT_ASSETS, generateEmail } from '../../../RegistrationHelper';
+import { RESIDENT_ASSETS, generateEmail } from '../../../helpers/RegistrationHelper';
 import { PROFILE_MERCHANT, PROFILE_FREELANCER, CRN_INPUT, ID_INPUT, EMAIL_INPUT, NEXT_BTN, ACTIVE_STEP, CLEAR_BTN_NAME, BUSINESS_INFO_TEXT, Asset, gotoTab1, fillTab1 } from '../../../helpers/infoStepForm';
 
 // ─────────────────────────────────────────────────────────────────────────────

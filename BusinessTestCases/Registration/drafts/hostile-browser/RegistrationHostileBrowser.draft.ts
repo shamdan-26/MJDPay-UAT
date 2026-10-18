@@ -7,7 +7,7 @@
 // Prerequisites: none (mock-driven). `page.clock` needs Playwright >= 1.45. CPU throttling uses CDP (Chromium/Edge only).
 // Assumptions  : third-party hosts blocked below are the ones the page contacts on load (Firebase installations observed).
 import { test, expect, Page } from '@playwright/test';
-import { REGISTER_URL, goToInfoStepMocked, goToOtpDialogMocked, mockOtpRequired, OTP_NOT_VALID, generateKSAMobile } from '../../RegistrationHelper';
+import { REGISTER_URL, goToInfoStepMocked, goToOtpDialogMocked, mockOtpRequired, OTP_NOT_VALID, generateKSAMobile } from '../../helpers/RegistrationHelper';
 
 const TRACKERS = /firebaseinstallations|googleapis\.com|google-analytics|googletagmanager|doubleclick|facebook\.net|hotjar|sentry/i;
 

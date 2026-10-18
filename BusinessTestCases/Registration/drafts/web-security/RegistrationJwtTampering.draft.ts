@@ -10,7 +10,7 @@
 //                 the refresh endpoint is POST /register/session/refresh with the refresh token in a `refreshToken` header.
 import { test, expect } from '@playwright/test';
 import { postRegistration, openRegistrationSession, registrationHeaders, REGISTRATION_API } from '../../helpers/registrationApi';
-import { generateFreshKSAMobile } from '../../RegistrationHelper';
+import { generateFreshKSAMobile } from '../../helpers/RegistrationHelper';
 
 const b64url = (o: unknown) => Buffer.from(typeof o === 'string' ? o : JSON.stringify(o)).toString('base64url');
 const parts = (jwt: string) => jwt.split('.') as [string, string, string];

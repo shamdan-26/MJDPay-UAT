@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { goToInfoStep, goToVerificationStep, nextCitizenAsset, REGISTER_URL, fillVerificationForm, mockFixedMerchantMode, mockAutoApprovedRegistration } from '../../RegistrationHelper';
+import { goToInfoStep, goToVerificationStep, nextCitizenAsset, REGISTER_URL, fillVerificationForm, mockFixedMerchantMode, mockAutoApprovedRegistration } from '../../helpers/RegistrationHelper';
 import { RegistrationInfoPage } from '../../../pageElements/Registration/RegistrationInfoPage';
 
 // ─────────────────────────────────────────────────────────────────────────────

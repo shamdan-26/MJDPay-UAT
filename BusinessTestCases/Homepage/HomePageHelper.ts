@@ -1,5 +1,5 @@
 import { Browser, Locator, Page, test } from '@playwright/test';
-import { getOtpFromDb, fillOTP } from '../Registration/RegistrationHelper';
+import { getOtpFromDb, fillOTP } from '../Registration/helpers/RegistrationHelper';
 import { waitForToastClear } from '../toastMessages';
 import { DashboardPage } from '../pageElements/Shared/DashboardPage';
 import { HomepageSidebarPage } from '../pageElements/Shared/HomepageSidebarPage';

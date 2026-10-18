@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { REGISTER_URL, VALID_EMAIL, nextResidentAsset, goToFinancialStep, fillFinancialForm } from '../RegistrationHelper';
+import { REGISTER_URL, VALID_EMAIL, nextResidentAsset, goToFinancialStep, fillFinancialForm } from '../helpers/RegistrationHelper';
 import { RegistrationFinancialPage } from '../../pageElements/Registration/RegistrationFinancialPage';
 import { RegistrationVerificationPage } from '../../pageElements/Registration/RegistrationVerificationPage';
 import { CRN_INPUT, ID_INPUT, EMAIL_INPUT, EMAIL_ERROR, gotoTab1 } from '../helpers/infoStepForm';

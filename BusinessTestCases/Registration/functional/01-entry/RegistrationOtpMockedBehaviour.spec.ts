@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { fillOTP, goToOtpDialogMocked, mockOtpRequired, OTP_OK, OTP_NOT_VALID, apiError } from '../../RegistrationHelper';
+import { fillOTP, goToOtpDialogMocked, mockOtpRequired, OTP_OK, OTP_NOT_VALID, apiError } from '../../helpers/RegistrationHelper';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // OTP behaviour with the backend mocked. Dev now issues real 30s OTPs, so the

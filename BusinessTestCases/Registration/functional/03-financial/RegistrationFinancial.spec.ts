@@ -5,7 +5,7 @@ import {
     fillFinancialForm,
     selectRandomOption,
     REGISTER_URL,
-} from '../../RegistrationHelper';
+} from '../../helpers/RegistrationHelper';
 import { RegistrationFinancialPage } from '../../../pageElements/Registration/RegistrationFinancialPage';
 import { RegistrationInfoPage } from '../../../pageElements/Registration/RegistrationInfoPage';
 import { RegistrationVerificationPage } from '../../../pageElements/Registration/RegistrationVerificationPage';

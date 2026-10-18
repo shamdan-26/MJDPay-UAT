@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { REGISTER_URL, generateKSAMobile, goToInfoStepMocked, goToVerificationStepMocked, json } from '../RegistrationHelper';
+import { REGISTER_URL, generateKSAMobile, goToInfoStepMocked, goToVerificationStepMocked, json } from '../helpers/RegistrationHelper';
 import { RegistrationMobilePage } from '../../pageElements/Registration/RegistrationMobilePage';
 
 // ─────────────────────────────────────────────────────────────────────────────

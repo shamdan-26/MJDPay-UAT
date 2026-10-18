@@ -4,7 +4,7 @@ import {
     getFullRegistrationDetailByMobileFromSql, getActivationNotificationFromMongo,
     countProfilesByMobileFromSql, countActivationNotificationsFromMongo,
     getActivationNotificationsFromMongo, ACTIVATION_API_CREDENTIALS_MARKER, ACTIVATION_LOGIN_DETAILS_MARKER,
-} from '../../RegistrationHelper';
+} from '../../helpers/RegistrationHelper';
 import { RegistrationContractPage } from '../../../pageElements/Registration/RegistrationContractPage';
 import { RegistrationConfirmationPage } from '../../../pageElements/Registration/RegistrationConfirmationPage';
 

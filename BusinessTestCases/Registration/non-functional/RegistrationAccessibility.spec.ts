@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { REGISTER_URL, goToInfoStepMocked, goToFinancialStepMocked, goToOtpDialogMocked, mockOtpRequired, OTP_NOT_VALID } from '../RegistrationHelper';
+import { REGISTER_URL, goToInfoStepMocked, goToFinancialStepMocked, goToOtpDialogMocked, mockOtpRequired, OTP_NOT_VALID } from '../helpers/RegistrationHelper';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Accessibility — axe-core scans of every step reachable without a real OTP, in English/Arabic and light/dark.

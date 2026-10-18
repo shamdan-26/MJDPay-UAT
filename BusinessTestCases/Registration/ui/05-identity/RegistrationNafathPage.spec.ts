@@ -2,7 +2,7 @@ import { test, expect, Page } from '@playwright/test';
 import {
     goToInfoStep, nextCitizenAsset, generateEmail, isAlreadyRegisteredMessage,
     fillFinancialForm, fillVerificationForm, markCitizenAssetUsed,
-} from '../../RegistrationHelper';
+} from '../../helpers/RegistrationHelper';
 import { RegistrationNafathPage } from '../../../pageElements/Registration/RegistrationNafathPage';
 import { RegistrationInfoPage } from '../../../pageElements/Registration/RegistrationInfoPage';
 import { RegistrationFinancialPage } from '../../../pageElements/Registration/RegistrationFinancialPage';

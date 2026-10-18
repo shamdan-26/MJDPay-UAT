@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { DEV_OTP_ASSETS, getOtpFromDb, generateEmail, VALID_IBAN, VALID_VAT_NUMBER, TEST_FILE_BUFFER } from '../RegistrationHelper';
+import { DEV_OTP_ASSETS, getOtpFromDb, generateEmail, VALID_IBAN, VALID_VAT_NUMBER, TEST_FILE_BUFFER } from '../helpers/RegistrationHelper';
 import { REGISTRATION_API_BASE, registrationHeaders } from '../helpers/registrationApi';
 
 const API_BASE = REGISTRATION_API_BASE;

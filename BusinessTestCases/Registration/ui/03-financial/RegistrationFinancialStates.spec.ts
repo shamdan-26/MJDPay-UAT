@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { goToFinancialStepMocked } from '../../RegistrationHelper';
+import { goToFinancialStepMocked } from '../../helpers/RegistrationHelper';
 import { RegistrationFinancialPage } from '../../../pageElements/Registration/RegistrationFinancialPage';
 
 // Financial & Business — lookup failures, dropdown keyboard operation and layout, reached with no real OTP

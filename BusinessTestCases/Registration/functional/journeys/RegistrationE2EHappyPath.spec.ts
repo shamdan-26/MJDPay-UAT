@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { goToVerificationStep, goToContractStep, selectRandomOption, VALID_IBAN, VALID_VAT_NUMBER, TEST_FILE_BUFFER } from '../../RegistrationHelper';
+import { goToVerificationStep, goToContractStep, selectRandomOption, VALID_IBAN, VALID_VAT_NUMBER, TEST_FILE_BUFFER } from '../../helpers/RegistrationHelper';
 import { RegistrationVerificationPage } from '../../../pageElements/Registration/RegistrationVerificationPage';
 import { RegistrationNafathPage } from '../../../pageElements/Registration/RegistrationNafathPage';
 import { RegistrationProductsPage } from '../../../pageElements/Registration/RegistrationProductsPage';

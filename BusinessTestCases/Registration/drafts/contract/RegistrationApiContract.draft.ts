@@ -9,7 +9,7 @@
 import { test, expect } from '@playwright/test';
 import { FIXED_OTP } from '../../../../support/otp';
 import { postRegistration, toApiMobile } from '../../helpers/registrationApi';
-import { generateFreshKSAMobile } from '../../RegistrationHelper';
+import { generateFreshKSAMobile } from '../../helpers/RegistrationHelper';
 
 // Tiny inline schema checker: a schema maps key -> predicate. No dependency needed.
 type Schema = Record<string, (v: unknown) => boolean>;

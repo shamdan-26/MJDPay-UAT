@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { RESIDENT_ASSETS, nextResidentAsset } from '../../RegistrationHelper';
+import { RESIDENT_ASSETS, nextResidentAsset } from '../../helpers/RegistrationHelper';
 import { CRN_TOOLTIP_INFO_BTN, ID_TOOLTIP_INFO_BTN, FIELD_HINT_TOOLTIP_POPUP, TERMS_TEXT, PRIVACY_TEXT, Asset, gotoTab1 } from '../../helpers/infoStepForm';
 
 // ─────────────────────────────────────────────────────────────────────────────

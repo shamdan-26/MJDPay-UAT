@@ -1,5 +1,5 @@
 ﻿import { test, expect } from '@playwright/test';
-import { REGISTER_URL, generateFreshKSAMobile, markUatOtpAssetUsed } from '../../RegistrationHelper';
+import { REGISTER_URL, generateFreshKSAMobile, markUatOtpAssetUsed } from '../../helpers/RegistrationHelper';
 
 test.describe('Registration - OTP Popup Page Elements', { tag: ['@registration', '@entry', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
     test.describe.configure({ mode: 'serial' });

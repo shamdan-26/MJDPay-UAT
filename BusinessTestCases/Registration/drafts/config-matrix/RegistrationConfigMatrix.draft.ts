@@ -8,7 +8,7 @@
 //               config endpoints correctly (their URL patterns are marked best-effort guesses in that file).
 // Prerequisites: none (mock-driven, no OTP, no pool identity).
 import { test, expect } from '@playwright/test';
-import { REGISTER_URL, generateKSAMobile, mockFixedMerchantMode, mockAutoApprovedRegistration, mockOtpBypass, mockOtpRequired, OTP_OK } from '../../RegistrationHelper';
+import { REGISTER_URL, generateKSAMobile, mockFixedMerchantMode, mockAutoApprovedRegistration, mockOtpBypass, mockOtpRequired, OTP_OK } from '../../helpers/RegistrationHelper';
 
 interface Row { otpRequired: boolean; fixedMerchant: boolean; autoApprove: boolean; lang: 'EN' | 'AR'; theme: 'light' | 'dark' }
 

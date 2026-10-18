@@ -8,7 +8,7 @@
 // Assumptions   : third-party hosts that must not receive PII are matched by the THIRD_PARTY regex (Firebase, Google
 //                 analytics/tag manager); storage keys are not known in advance, so whole stores are scanned.
 import { test, expect, Page } from '@playwright/test';
-import { goToInfoStepMocked, mockProfileType, NEW_APPLICATION_STATE, RESIDENT_ASSETS, generateEmail, generateKSAMobile } from '../../RegistrationHelper';
+import { goToInfoStepMocked, mockProfileType, NEW_APPLICATION_STATE, RESIDENT_ASSETS, generateEmail, generateKSAMobile } from '../../helpers/RegistrationHelper';
 import { RegistrationInfoPage } from '../../../pageElements/Registration/RegistrationInfoPage';
 
 const THIRD_PARTY = /firebase|googleapis|google-analytics|googletagmanager|doubleclick|facebook|hotjar|segment|mixpanel|sentry/i;

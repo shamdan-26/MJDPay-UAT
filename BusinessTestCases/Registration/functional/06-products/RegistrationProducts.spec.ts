@@ -1,5 +1,5 @@
 import { test, expect, Page, Locator } from '@playwright/test';
-import { goToInfoStep, nextCitizenAsset, generateEmail, selectRandomOption, VALID_IBAN, VALID_VAT_NUMBER, TEST_FILE_BUFFER, isAlreadyRegisteredMessage, submitBusinessInfo } from '../../RegistrationHelper';
+import { goToInfoStep, nextCitizenAsset, generateEmail, selectRandomOption, VALID_IBAN, VALID_VAT_NUMBER, TEST_FILE_BUFFER, isAlreadyRegisteredMessage, submitBusinessInfo } from '../../helpers/RegistrationHelper';
 import { RegistrationInfoPage } from '../../../pageElements/Registration/RegistrationInfoPage';
 import { RegistrationFinancialPage } from '../../../pageElements/Registration/RegistrationFinancialPage';
 import { RegistrationVerificationPage } from '../../../pageElements/Registration/RegistrationVerificationPage';

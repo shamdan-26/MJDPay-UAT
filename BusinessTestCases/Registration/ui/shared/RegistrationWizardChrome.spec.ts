@@ -1,5 +1,5 @@
 import { test, expect, Page, Locator } from '@playwright/test';
-import { REGISTER_URL, goToInfoStepMocked } from '../../RegistrationHelper';
+import { REGISTER_URL, goToInfoStepMocked } from '../../helpers/RegistrationHelper';
 import { RegistrationMobilePage } from '../../../pageElements/Registration/RegistrationMobilePage';
 import { RegistrationInfoPage } from '../../../pageElements/Registration/RegistrationInfoPage';
 

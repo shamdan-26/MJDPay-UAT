@@ -15,7 +15,7 @@ import { test, expect } from '@playwright/test';
 import {
     goToInfoStepMocked, mockProfileType, NEW_APPLICATION_STATE, RESIDENT_ASSETS, generateEmail,
     goToContractStep, countProfilesByMobileFromSql, getFullRegistrationDetailByMobileFromSql, countActivationNotificationsFromMongo,
-} from '../../RegistrationHelper';
+} from '../../helpers/RegistrationHelper';
 import { RegistrationInfoPage } from '../../../pageElements/Registration/RegistrationInfoPage';
 import { RegistrationContractPage } from '../../../pageElements/Registration/RegistrationContractPage';
 

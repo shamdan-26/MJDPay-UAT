@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { goToVerificationStepMocked, apiError, json, VALID_IBAN, VALID_VAT_NUMBER, TEST_FILE_BUFFER } from '../../RegistrationHelper';
+import { goToVerificationStepMocked, apiError, json, VALID_IBAN, VALID_VAT_NUMBER, TEST_FILE_BUFFER } from '../../helpers/RegistrationHelper';
 import { RegistrationVerificationPage } from '../../../pageElements/Registration/RegistrationVerificationPage';
 
 // Verification & Uploads — upload failures, replace/retry, Sign Up submit states. Reached with no real OTP and no

@@ -1,5 +1,5 @@
 import { expect, Page, BrowserContext } from '@playwright/test';
-import { goToInfoStep, REGISTER_URL, RESIDENT_ASSETS, generateEmail } from '../RegistrationHelper';
+import { goToInfoStep, REGISTER_URL, RESIDENT_ASSETS, generateEmail } from './RegistrationHelper';
 
 // ── Selectors ─────────────────────────────────────────────────────────────────
 export const PROFILE_MERCHANT   = '#register-profile-card-MERCHANT';

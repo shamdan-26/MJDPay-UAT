@@ -3,7 +3,7 @@
 // Smoke tier: five fast checks proving the registration wizard is alive after a deploy. See drafts/process/smoke-tier.md.
 // Four are mock-driven (no backend), one is a single real gateway call.
 import { test, expect } from '@playwright/test';
-import { REGISTER_URL, goToInfoStepMocked, goToFinancialStepMocked, postRegistration, toApiMobile, generateFreshKSAMobile } from '../../RegistrationHelper';
+import { REGISTER_URL, goToInfoStepMocked, goToFinancialStepMocked, postRegistration, toApiMobile, generateFreshKSAMobile } from '../../helpers/RegistrationHelper';
 
 test.describe('Registration – smoke (DRAFT)', { tag: ['@registration', '@smoke'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'smoke' }] }, () => {
     test.beforeEach(() => { test.setTimeout(60_000); });

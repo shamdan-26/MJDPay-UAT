@@ -1,13 +1,12 @@
-import { Page, Locator, test, expect } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 import { waitForToastClear } from '../../toastMessages';
-import registrationAssets from '../../../data/registrationAssets.json';
 import { RegistrationMobilePage } from '../../pageElements/Registration/RegistrationMobilePage';
 import { RegistrationInfoPage } from '../../pageElements/Registration/RegistrationInfoPage';
 import { RegistrationFinancialPage } from '../../pageElements/Registration/RegistrationFinancialPage';
 import { RegistrationVerificationPage } from '../../pageElements/Registration/RegistrationVerificationPage';
 import { RegistrationProductsPage } from '../../pageElements/Registration/RegistrationProductsPage';
 import { REGISTER_URL, VALID_IBAN, VALID_VAT_NUMBER, TEST_FILE_BUFFER, generateEmail } from './registrationConfig';
-import { RESIDENT_ASSETS, DEDICATED_RESIDENT_ASSETS, GENERAL_RESIDENT_ASSETS, AssetAlreadyProgressedError, markResidentAssetUsed, getWorkerPartition, nextResidentAsset, generateKSAMobile } from './registrationAssets';
+import { DEDICATED_RESIDENT_ASSETS, GENERAL_RESIDENT_ASSETS, AssetAlreadyProgressedError, markResidentAssetUsed, getWorkerPartition, nextResidentAsset, generateKSAMobile } from './registrationAssets';
 import { getOtpFromDb, fillOTP } from './registrationOtp';
 import { selectRandomOption } from './registrationUi';
 
@@ -28,6 +27,26 @@ export async function fillAndVerify(locator: Locator, value: string): Promise<vo
         await locator.fill(value);
         await expect(locator).toHaveValue(value);
     }
+}
+
+/**
+ * Fills Business Info (profile type, CRN, National ID, email) — does not click Next.
+ * `merchant` clicks the id-based Merchant card (the accessible name is Arabic-only when the app
+ * defaults to Arabic); anything else takes the first radio, which is Merchant (the only enabled card).
+ */
+export async function fillBusinessInfo(
+    infoPage: RegistrationInfoPage,
+    identity: { crn: string; nationalId: string },
+    options: { profileType?: 'individual' | 'merchant'; email?: string } = {},
+): Promise<void> {
+    if (options.profileType === 'merchant') {
+        await infoPage.merchantButton.click();
+    } else {
+        await infoPage.profileTypeGroup.getByRole('radio').first().click();
+    }
+    await fillAndVerify(infoPage.crnInput, identity.crn);
+    await fillAndVerify(infoPage.idInput, identity.nationalId);
+    await fillAndVerify(infoPage.emailInput, options.email ?? generateEmail());
 }
 
 export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
@@ -143,7 +162,6 @@ export async function goToFinancialStep(page: Page, credentials?: FinancialStepC
         const mobile     = credentials?.mobile     ?? asset.mobile;
         const crn        = credentials?.crn        ?? asset.crn;
         const nationalId = credentials?.nationalId ?? asset.nationalId;
-        const profileType = credentials?.profileType ?? 'individual';
 
         // The retry loop below can legitimately take several minutes across
         // maxAttempts (each a full mobile->OTP->Business Info round trip) — with
@@ -153,22 +171,7 @@ export async function goToFinancialStep(page: Page, credentials?: FinancialStepC
         await goToInfoStep(page, mobile);
 
         const infoPage = new RegistrationInfoPage(page);
-        if (profileType === 'merchant') {
-            // Accessible name is Arabic-only ("تاجر") when the app defaults to Arabic, so a
-            // name-based locator can't find it — infoPage.merchantButton is an id selector,
-            // stable across languages.
-            await infoPage.merchantButton.click();
-        } else {
-            // The profile-type radiogroup now only has two cards: Merchant (index 0,
-            // pre-selected by default) and Freelancer (index 1, disabled/"coming soon").
-            // .first() reliably lands on Merchant — there's no separate individual/
-            // resident option in the UI anymore.
-            await infoPage.profileTypeGroup.getByRole('radio').first().click();
-        }
-
-        await fillAndVerify(infoPage.crnInput, crn);
-        await fillAndVerify(infoPage.idInput, nationalId);
-        await fillAndVerify(infoPage.emailInput, credentials?.email ?? generateEmail());
+        await fillBusinessInfo(infoPage, { crn, nationalId }, { profileType: credentials?.profileType, email: credentials?.email });
         await infoPage.nextButton.click();
 
         const financialPage = new RegistrationFinancialPage(page);
@@ -246,6 +249,23 @@ export async function goToFinancialStep(page: Page, credentials?: FinancialStepC
     throw new Error('goToFinancialStep: no attempts were made (empty resident pool).');
 }
 
+const DEDICATED_FALLBACK_THRESHOLD = 5;
+
+// If this many attempts IN A ROW land on 'products' — spanning BOTH the
+// dedicated pool and (after DEDICATED_FALLBACK_THRESHOLD) the general pool —
+// bail out rather than burning the rest of maxAttempts / the 600s hook
+// timeout. Originally added chasing what looked like systemic pool
+// exhaustion (every run producing 16-20/20 straight 'products' outcomes,
+// unaffected by clearing localStorage/cookies) — the real cause turned out
+// to be goToFinancialStep's outcome race matching products.formSubTitle
+// (.form-sub-title), a class shared by every wizard step's own header
+// including Financial's, so it false-won the race almost every attempt
+// regardless of which step actually loaded (fixed: races productCards
+// instead, which only renders on the real Products step). Kept as a
+// defensive cap for genuine pool exhaustion now that the false-positive
+// source is gone.
+const SYSTEMIC_FAILURE_THRESHOLD = 8;
+
 /**
  * Drives goToFinancialStep for a caller that wants one dedicated identity of
  * its own (see getFreshResidentAsset), retrying across the reserved
@@ -284,23 +304,6 @@ export async function goToFinancialStep(page: Page, credentials?: FinancialStepC
  * remaining attempts trades a little of this pool's isolation guarantee for
  * a bounded worst-case runtime.
  */
-const DEDICATED_FALLBACK_THRESHOLD = 5;
-
-// If this many attempts IN A ROW land on 'products' — spanning BOTH the
-// dedicated pool and (after DEDICATED_FALLBACK_THRESHOLD) the general pool —
-// bail out rather than burning the rest of maxAttempts / the 600s hook
-// timeout. Originally added chasing what looked like systemic pool
-// exhaustion (every run producing 16-20/20 straight 'products' outcomes,
-// unaffected by clearing localStorage/cookies) — the real cause turned out
-// to be goToFinancialStep's outcome race matching products.formSubTitle
-// (.form-sub-title), a class shared by every wizard step's own header
-// including Financial's, so it false-won the race almost every attempt
-// regardless of which step actually loaded (fixed: races productCards
-// instead, which only renders on the real Products step). Kept as a
-// defensive cap for genuine pool exhaustion now that the false-positive
-// source is gone.
-const SYSTEMIC_FAILURE_THRESHOLD = 8;
-
 export async function goToFinancialStepWithDedicatedAsset(page: Page): Promise<void> {
     const maxAttempts = Math.min(DEDICATED_RESIDENT_ASSETS.length, 20);
     let dedicatedFailures = 0;
@@ -339,21 +342,11 @@ export async function goToFinancialStepWithDedicatedAsset(page: Page): Promise<v
     }
 }
 
-
-
 export async function goToVerificationStep(page: Page): Promise<void> {
     await goToFinancialStep(page);
-    const financialPage = new RegistrationFinancialPage(page);
-    await financialPage.fill('1500', '50000', '10000', '20000');
-
-    // Only Industries (index 0) and Annual Income (index 1) render on this
-    // step — there is no separate Banks select to fill.
-    await selectRandomOption(page, page.locator('#mat-select-value-0'));
-    await selectRandomOption(page, page.locator('#mat-select-value-1'));
-
-    await financialPage.next();
-    const verificationPage = new RegistrationVerificationPage(page);
-    await verificationPage.waitForLoad();
+    await fillFinancialForm(page);
+    await new RegistrationFinancialPage(page).next();
+    await new RegistrationVerificationPage(page).waitForLoad();
 }
 
 export async function fillFinancialForm(page: Page): Promise<void> {

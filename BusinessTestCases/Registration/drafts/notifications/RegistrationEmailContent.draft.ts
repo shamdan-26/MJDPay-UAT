@@ -9,7 +9,7 @@
 // Assumptions   : Mailosaur message JSON (subject, from, html.links, html.body, text.body, spamAnalysis?) as documented at
 //                 https://mailosaur.com/docs/api ; marker strings come from helpers/registrationDb.ts.
 import { test, expect } from '@playwright/test';
-import { REGISTRATION_EMAIL, ACTIVATION_API_CREDENTIALS_MARKER, ACTIVATION_LOGIN_DETAILS_MARKER } from '../../RegistrationHelper';
+import { REGISTRATION_EMAIL, ACTIVATION_API_CREDENTIALS_MARKER, ACTIVATION_LOGIN_DETAILS_MARKER } from '../../helpers/RegistrationHelper';
 
 declare const process: { env: Record<string, string | undefined> };
 

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { REGISTER_URL, generateKSAMobile, apiError, json } from '../../RegistrationHelper';
+import { REGISTER_URL, generateKSAMobile, apiError, json } from '../../helpers/RegistrationHelper';
 import { RegistrationMobilePage } from '../../../pageElements/Registration/RegistrationMobilePage';
 
 // Mobile step — interaction states (loading, error, keyboard, focus, input handling), with the OTP request mocked.
