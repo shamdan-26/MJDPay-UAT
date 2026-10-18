@@ -3,7 +3,7 @@ import { HomePage } from '../../pageElements/Shared/HomePage';
 import { TransactionsPage } from '../../pageElements/Shared/TransactionsPage';
 import {
     findTopupCase,
-    loginToTopup,
+    loginToTopup, TOPUP_UI_ACCOUNT,
     gotoTopupScreen,
     reachCardEntryPopup,
     getLatestTopupTransactionFromDb,
@@ -14,6 +14,7 @@ import {
     HOME_URL,
     type TopupSession,
 } from '../TopupHelper';
+import { raiseMerchantCountHeadroom, SKIP_LEDGER_ASSERTIONS } from '../ui/TopupBizUiHelper';
 import { closeMongoClient } from '../../../support/mongoClient';
 import { closeSqlPool } from '../../../support/sqlServerClient';
 
@@ -37,13 +38,22 @@ test.describe('Topup – Happy Path', { tag: ['@topup', '@functional'], annotati
     test.setTimeout(150000);
 
     let session: TopupSession;
+    let restoreLimits: (() => Promise<void>) | undefined;
 
     test.beforeAll(async ({ browser }) => {
-        session = await loginToTopup(browser);
+        test.setTimeout(300000); // hooks do not inherit the describe timeout; includes the admin limits round trip
+        restoreLimits = await raiseMerchantCountHeadroom(browser); // dev allows 5 Merchant Cashin initiations per hour; raised for the run, restored in afterAll (admin login first, never overlapping the app login)
+        session = await loginToTopup(browser, TOPUP_UI_ACCOUNT); // the default Q9557 is rejected at sign-in on dev
+
     });
 
     test.afterAll(async () => {
-        await session.page.close();
+        test.setTimeout(300000); // hooks do not inherit the describe timeout; the cap restore is an admin login plus a verified write
+        try {
+            await session?.page.close();
+        } finally {
+            await restoreLimits?.();
+        }
         await closeMongoClient();
         await closeSqlPool();
     });
@@ -153,6 +163,14 @@ test.describe('Topup – Happy Path', { tag: ['@topup', '@functional'], annotati
         // anything the UI renders. See TopupHelper.ts for how the schema was
         // confirmed.
         expect(profileCode, 'no Authorization header was captured off POST /api/v1/payments').not.toBe('');
+        // Skipped on request (2026-10-18): Mongo and the SQL Server (10.10.100.241:1433) are unreachable from the test machine.
+        // The UI half above (balance on Topup and Home, last transaction amount and status) still runs. Set the flag to false in
+        // ui/TopupBizUiHelper.ts once the DB connection is back. NOTE: the DB checks below were written for the Biller account
+        // ('BILLER', 'Biller Bank Cashin'); with the Merchant account they need 'MERCHANT' and 'Merchant Cashin'.
+        if (SKIP_LEDGER_ASSERTIONS) {
+            test.info().annotations.push({ type: 'not-covered', description: 'DB-level assertions (Mongo transactionLog, SQL base_transaction and transaction_log) skipped: databases unreachable' });
+            return;
+        }
         const dbTxn = await getLatestTopupTransactionFromDb(profileCode);
         expect(dbTxn, `no transactionLog entry found for initiator ${profileCode}`).not.toBeNull();
         expect(dbTxn!.status).toBe('SUCCESS');

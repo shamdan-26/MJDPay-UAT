@@ -154,8 +154,20 @@ export class TopupPage {
         this.payNowButton = this.page.getByRole('button', { name: /pay now|إدفع الأن/i });
         this.hyperpayIframe = this.page.locator('iframe.wpwl-target');
         this.hyperpaySubmitButton = this.page.frameLocator('iframe.wpwl-target').locator('form input[value="Pay"]');
-        this.cardSchemeSubmitButton = this.page.frameLocator('iframe[name^="card_"]')
-            .locator('button[type="submit"]:has-text("Submit"), button.btn-primary');
+        this.cardSchemeSubmitButton = this.cardSchemeSubmit(this.page);
+    }
+
+    /**
+     * The 3DS Submit button. Two simulator pages exist: the older one with a `button[type=submit]` / `.btn-primary` inside the `card_*`
+     * iframe, and the MiGS Issuer Simulation page (seen 2026-10-18: a PASSWORD box and a plain "Submit" button, no `type=submit`, no
+     * outcome dropdown). A role-based match covers both, inside the iframe or at the top of the popup.
+     */
+    private cardSchemeSubmit(page: Page): Locator {
+        const frame = page.frameLocator('iframe[name^="card_"]');
+        return frame.locator('button[type="submit"]:has-text("Submit"), button.btn-primary')
+            .or(frame.getByRole('button', { name: /^\s*submit\s*$/i }))
+            .or(page.getByRole('button', { name: /^\s*submit\s*$/i }))
+            .first();
     }
 
     /** Scopes gateway-popup locators (card fields, Pay Now, submit) to `popup` until reset. */
@@ -170,8 +182,7 @@ export class TopupPage {
         this.payNowButton = popup.getByRole('button', { name: /pay now|إدفع الأن/i });
         this.hyperpayIframe = popup.locator('iframe.wpwl-target');
         this.hyperpaySubmitButton = popup.frameLocator('iframe.wpwl-target').locator('form input[value="Pay"]');
-        this.cardSchemeSubmitButton = popup.frameLocator('iframe[name^="card_"]')
-            .locator('button[type="submit"]:has-text("Submit"), button.btn-primary');
+        this.cardSchemeSubmitButton = this.cardSchemeSubmit(popup);
     }
 
     resetActivePage(): void {
@@ -374,11 +385,17 @@ export class TopupPage {
      * live 2026-10-04 — options: Y=Approve, N=Decline, D=Decoupled Fallback,
      * U=Technical error, X=Cancel. Call this BEFORE `clickCardSchemeSubmitButton`.
      */
-    async select3dsOutcome(value: 'Y' | 'N' | 'D' | 'U' | 'X') {
+    async select3dsOutcome(value: 'Y' | 'N' | 'D' | 'U' | 'X'): Promise<boolean> {
         await this.activePage.waitForTimeout(3000);
         const dropdown = this.activePage.frameLocator('iframe[name^="card_"]').last().locator('select#outcomeSelect');
-        await expect(dropdown).toBeVisible({ timeout: 20000 });
-        await dropdown.selectOption(value);
+        // On 2026-10-18 dev served the MiGS Issuer Simulation page instead (PASSWORD box + Submit, no outcome dropdown): wait for either.
+        await expect(dropdown.or(this.cardSchemeSubmitButton)).toBeVisible({ timeout: 20000 });
+        if (await dropdown.isVisible()) {
+            await dropdown.selectOption(value);
+            return true;
+        }
+        // No dropdown: Submit on the MiGS page approves, so only the approve outcome can be driven. Returns false for any other outcome.
+        return value === 'Y';
     }
 
     async clickResultOkButton() {

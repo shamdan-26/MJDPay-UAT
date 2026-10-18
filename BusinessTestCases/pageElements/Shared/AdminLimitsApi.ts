@@ -193,7 +193,15 @@ export class AdminLimitsApi {
 
     /** Logs in as admin and opens a Manage Limits screen so the SPA fires an authenticated gateway request to relay. */
     async open(): Promise<void> {
-        await new AdminOtpConfigPage(this.page).login();
+        // One clean second try when the sign-in did not land on the admin shell (seen 2026-10-18: no lock, no HTTP error, page stayed on
+        // /admin/auth/login). A locked account (423) or a refused sign-in is a different message and is not retried.
+        try {
+            await new AdminOtpConfigPage(this.page).login();
+        } catch (e) {
+            if (!/did not reach the admin shell/.test(String(e))) throw e;
+            await this.page.waitForTimeout(5000);
+            await new AdminOtpConfigPage(this.page).login();
+        }
         await this.page.goto(WALLET_LIMITS_URL);
         await this.waitForHeaders();
     }
@@ -220,9 +228,18 @@ export class AdminLimitsApi {
     private async request(method: 'GET' | 'PUT', path: string, body?: unknown): Promise<unknown> {
         const send = async (headers: Record<string, string>) => {
             const url = `${ADMIN_GATEWAY}${path}`;
-            return method === 'GET'
-                ? this.page.request.get(url, { headers })
-                : this.page.request.put(url, { headers: { ...headers, 'content-type': 'application/json' }, data: body });
+            // Dev drops a connection now and then (ECONNRESET, 2026-10-18). Retry only dropped connections, never an HTTP answer;
+            // a PUT here writes absolute values, so repeating it is safe.
+            for (let attempt = 1; ; attempt++) {
+                try {
+                    return method === 'GET'
+                        ? await this.page.request.get(url, { headers })
+                        : await this.page.request.put(url, { headers: { ...headers, 'content-type': 'application/json' }, data: body });
+                } catch (e) {
+                    if (attempt >= 3 || !/ECONNRESET|ETIMEDOUT|ECONNREFUSED|socket hang up|EPIPE/i.test(String(e))) throw e;
+                    await this.page.waitForTimeout(1500 * attempt);
+                }
+            }
         };
         let res = await send(await this.authHeaders());
         if (res.status() === 401) res = await send(await this.authHeaders(true));

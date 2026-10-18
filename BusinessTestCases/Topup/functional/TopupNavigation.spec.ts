@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { HOME_URL, loginToTopup, type TopupSession } from '../TopupHelper';
+import { HOME_URL, loginToTopup, TOPUP_UI_ACCOUNT, type TopupSession } from '../TopupHelper';
 import { HomepageSidebarPage } from '../../pageElements/Shared/HomepageSidebarPage';
 
 // Navigation — the two entry points that land on Topup. Maps to
@@ -20,12 +20,14 @@ test.describe('Topup – Navigation', { tag: ['@topup', '@functional'], annotati
     let sidebar: HomepageSidebarPage;
 
     test.beforeAll(async ({ browser }) => {
-        session = await loginToTopup(browser);
+        test.setTimeout(180000); // hooks do not inherit the describe timeout
+        session = await loginToTopup(browser, TOPUP_UI_ACCOUNT); // the default Q9557 is rejected at sign-in on dev
+
         sidebar = new HomepageSidebarPage(session.page);
     });
 
     test.afterAll(async () => {
-        await session.page.close();
+        await session?.page.close();
     });
 
     test.beforeEach(async () => {

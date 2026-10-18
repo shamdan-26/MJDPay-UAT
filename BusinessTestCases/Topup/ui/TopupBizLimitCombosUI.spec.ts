@@ -85,6 +85,10 @@ test.describe('Topup business – UI – limit combinations (Biller)', { tag: ['
     };
 
     test('TUB-112: count and amount both fail', { annotation: [{ type: 'testcase', description: 'TUB-112: Count 0 plus a tiny amount cap -> the top-up is stopped before payment; restoring the limits lets it proceed' }] }, async () => {
+        // Known defect (found 2026-10-18 on dev): with count 0 plus an amount cap the Next step answers HTTP 500
+        // INTERNAL_SERVER_ERROR instead of a limit rejection. Expected to fail; this test starts failing the run
+        // ("expected to fail but passed") once the backend is fixed - then remove this line.
+        test.fail(true, 'Known defect: count 0 + amount cap returns HTTP 500 instead of a limit rejection');
         await admin!.api.setCountAllTiers(admin!.snapshot, ZERO_COUNT);
         await admin!.api.setAmountAllTiers(admin!.snapshot, capAmounts(5));
         await expectBlocked(session, 'count 0 and amount cap 5');

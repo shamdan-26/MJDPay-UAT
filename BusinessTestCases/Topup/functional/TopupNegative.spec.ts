@@ -1,7 +1,7 @@
 import { test, expect, type Request } from '@playwright/test';
 import {
     findTopupCase,
-    loginToTopup,
+    loginToTopup, TOPUP_UI_ACCOUNT,
     gotoTopupScreen,
     reachCardEntryPopup,
     reachOtpScreen,
@@ -10,6 +10,7 @@ import {
     decodeJwtProfileCode,
     type TopupSession,
 } from '../TopupHelper';
+import { raiseMerchantCountHeadroom, SKIP_LEDGER_ASSERTIONS } from '../ui/TopupBizUiHelper';
 import { closeSqlPool } from '../../../support/sqlServerClient';
 
 // Negative — client-side validation and mid-flow rejection/cancellation. Maps
@@ -24,13 +25,22 @@ test.describe('Topup – Negative', { tag: ['@topup', '@functional'], annotation
     test.setTimeout(150000);
 
     let session: TopupSession;
+    let restoreLimits: (() => Promise<void>) | undefined;
 
     test.beforeAll(async ({ browser }) => {
-        session = await loginToTopup(browser);
+        test.setTimeout(300000); // hooks do not inherit the describe timeout; includes the admin limits round trip
+        restoreLimits = await raiseMerchantCountHeadroom(browser); // dev allows 5 Merchant Cashin initiations per hour; raised for the run, restored in afterAll (admin login first, never overlapping the app login)
+        session = await loginToTopup(browser, TOPUP_UI_ACCOUNT); // the default Q9557 is rejected at sign-in on dev
+
     });
 
     test.afterAll(async () => {
-        await session.page.close();
+        test.setTimeout(300000); // hooks do not inherit the describe timeout; the cap restore is an admin login plus a verified write
+        try {
+            await session?.page.close();
+        } finally {
+            await restoreLimits?.();
+        }
         await closeSqlPool();
     });
 
@@ -172,6 +182,12 @@ test.describe('Topup – Negative', { tag: ['@topup', '@functional'], annotation
         // case. A failed row carries a non-empty `reasons` array naming why
         // (TopupHelper.ts's own header comment on TopupTransactionLogSqlRow).
         expect(profileCode, 'no Authorization header was captured off POST /api/v1/payments').not.toBe('');
+        // Skipped on request (2026-10-18): the SQL Server (10.10.100.241:1433) is unreachable from the test machine. The UI half above
+        // (failed popup, balance unchanged) still runs. Set the flag to false in ui/TopupBizUiHelper.ts once the DB is back.
+        if (SKIP_LEDGER_ASSERTIONS) {
+            test.info().annotations.push({ type: 'not-covered', description: 'transaction_log checks (PENDING then one FAILED row) skipped: SQL Server unreachable' });
+            return;
+        }
         const sqlLogTxn = await getLatestTopupTransactionLogFromSql(profileCode);
         expect(sqlLogTxn, `no transaction_log row found for initiator ${profileCode}`).not.toBeNull();
         expect(sqlLogTxn!.status).toBe('FAILED');

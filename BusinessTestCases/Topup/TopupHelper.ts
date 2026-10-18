@@ -1,4 +1,4 @@
-import { test, type Browser, type Page } from '@playwright/test';
+import { test, type Browser, type Page, type Response } from '@playwright/test';
 import { COMMISSION_CATEGORY, ACCOUNT_TYPE, apiEntryToFormValues, type CommissionFormValues, type AdminCommissionManagementPage } from '../pageElements/CommissionManagement/AdminCommissionManagementPage';
 import { loginToCommissionManagement, randomCommissionValues } from '../CommissionManagement/CommissionManagementHelper';
 import { LoginPage } from '../pageElements/Shared/LoginPage';
@@ -108,7 +108,18 @@ export async function loginToTopup(browser: Browser, account: TopupAccount = { c
     // OTP screen can appear a moment AFTER submit — so wait for either the OTP
     // screen or the post-login page rather than checking for the OTP once.
     for (let attempt = 1; attempt <= 2; attempt++) {
-        await loginPage.goto(LOGIN_URL);
+        try {
+            await loginPage.goto(LOGIN_URL);
+        } catch (e) {
+            // Dev sometimes serves a blank bootstrap or a slow login page (form not visible within 15 s). Reload once and give the form
+            // 45 s before counting the attempt as failed; if it still does not render, try the next attempt (and fail on the last one).
+            await page.reload({ waitUntil: 'domcontentloaded' }).catch(() => null);
+            const rendered = await loginPage.formBox.waitFor({ state: 'visible', timeout: 45000 }).then(() => true).catch(() => false);
+            if (!rendered) {
+                if (attempt === 2) throw e;
+                continue;
+            }
+        }
         await loginPage.fillAndSubmit(account.company, account.mobile, account.password ?? LOGIN_PASSWORD);
         const next = await Promise.race([
             otp.inputs.first().waitFor({ state: 'visible', timeout: 20000 }).then(() => 'otp' as const),
@@ -168,13 +179,35 @@ export async function clickSummaryNextAndDetectOtp(topup: TopupPage, otp: OtpPag
  * full-completion equivalent. Skips the calling test when the top-up OTP is
  * disabled, since there is no OTP screen to test.
  */
+let topupOtpKnownOff = false;
+
 export async function reachOtpScreen(session: TopupSession, method: 'mada' | 'visa' | 'master', data: TopupCase): Promise<void> {
+    // Once one attempt showed the OTP is off, skip the rest straight away: every further attempt would start (and count) another real payment for nothing.
+    test.skip(topupOtpKnownOff, 'Top-up OTP is disabled (operationCode 102) — no OTP screen to test.');
     const { topup, otp } = session;
     await topup.selectPaymentMethod(method);
     await topup.enterAmount(data.amount);
     await topup.clickProceedButton();
     await topup.waitForSummaryToSettle();
-    const otpShown = await clickSummaryNextAndDetectOtp(topup, otp);
+    // A rejected initiation (for example the hourly count cap) leaves the app on the Summary with no message and no OTP screen;
+    // without this check it looks exactly like "OTP is off" and the test would be skipped for the wrong reason.
+    let rejected = '';
+    const onResponse = async (r: Response) => {
+        if (r.request().method() === 'POST' && /\/api\/v1\/payments$/.test(r.url()) && r.status() >= 400) {
+            rejected = `HTTP ${r.status()} ${(await r.text().catch(() => '')).slice(0, 300)}`;
+        }
+    };
+    session.page.on('response', onResponse);
+    let otpShown: boolean;
+    try {
+        otpShown = await clickSummaryNextAndDetectOtp(topup, otp);
+    } finally {
+        session.page.off('response', onResponse);
+    }
+    if (rejected) {
+        throw new Error(`Payment initiation was rejected after Next, so no OTP screen could open: ${rejected}. If this is HOURLY_TRANSACTION_COUNT_LIMITS_EXCEEDED, wait for the hourly window to reset or raise the count cap.`);
+    }
+    if (!otpShown) topupOtpKnownOff = true;
     test.skip(!otpShown, 'Top-up OTP is disabled (operationCode 102) — no OTP screen to test.');
 }
 
@@ -249,7 +282,8 @@ export async function completeCardPayment(session: TopupSession, method: 'mada' 
     // U=Technical error, X=Cancel — TopupPage.select3dsOutcome.
     if (gatewayReturnCode) {
         if (method === 'mada' || method === 'master') {
-            await topup.select3dsOutcome(gatewayReturnCode as 'Y' | 'N' | 'D' | 'U' | 'X');
+            const applied = await topup.select3dsOutcome(gatewayReturnCode as 'Y' | 'N' | 'D' | 'U' | 'X');
+            test.skip(!applied, `The 3DS simulator shows the MiGS page (PASSWORD + Submit, no outcome dropdown), so outcome "${gatewayReturnCode}" cannot be selected: only approve (Y) can be driven.`);
         } else {
             await topup.selectGatewayReturnCode(gatewayReturnCode);
         }

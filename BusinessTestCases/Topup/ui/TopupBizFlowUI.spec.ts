@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { findTopupCase, loginToTopup, gotoTopupScreen, reachOtpScreen, TOPUP_UI_ACCOUNT, type TopupSession } from '../TopupHelper';
-import { proceedToSummary, readBalanceBefore, raiseMerchantCountHeadroom, ledgerFor, watchInitiation } from './TopupBizUiHelper';
+import { proceedToSummary, readBalanceBefore, raiseMerchantCountHeadroom, ledgerFor, watchInitiation, SKIP_LEDGER_ASSERTIONS } from './TopupBizUiHelper';
 import { closeSqlPool } from '../../../support/sqlServerClient';
 
 // Business rules of the top-up flow, through the browser, with the DB read as evidence only. TUB-48 (cancel at the summary has
@@ -79,9 +79,11 @@ test.describe('Topup business – UI – flow rules', { tag: ['@topup', '@ui', '
         }
         test.skip(!(await otp.inputs.first().isVisible().catch(() => false)), 'The OTP step did not appear: OTP is off for top-ups on this environment');
         expect(watch.keys.length, 'one initiation call for this flow').toBe(1);
-        const rows = await ledgerFor(watch.keys[0]!, false);
-        expect(rows.length, 'a PENDING row exists once the payment is initiated').toBeGreaterThan(0);
-        expect(rows.filter(r => r.status !== 'PENDING'), 'nothing is settled before the OTP is verified').toHaveLength(0);
+        if (!SKIP_LEDGER_ASSERTIONS) {
+            const rows = await ledgerFor(watch.keys[0]!, false);
+            expect(rows.length, 'a PENDING row exists once the payment is initiated').toBeGreaterThan(0);
+            expect(rows.filter(r => r.status !== 'PENDING'), 'nothing is settled before the OTP is verified').toHaveLength(0);
+        }
         await otp.cancelButton.click({ timeout: 3000 }).catch(() => { /* best-effort cleanup */ });
         await gotoTopupScreen(session);
         expect(await readBalanceBefore(session), 'balance after abandoning at the OTP step').toBe(before);
@@ -110,7 +112,7 @@ test.describe('Topup business – UI – flow rules', { tag: ['@topup', '@ui', '
         test.info().annotations.push({ type: 'wrong-tries-until-the-step-ended', description: String(tries) });
         expect(await otp.inputs.first().isVisible().catch(() => false), `the OTP step must end after repeated wrong codes (tried ${tries})`).toBe(false);
         expect(popups, 'a wrong code must never open the gateway popup').toBe(0);
-        if (watch.keys[0]) {
+        if (watch.keys[0] && !SKIP_LEDGER_ASSERTIONS) {
             const rows = await ledgerFor(watch.keys[0], false);
             expect(rows.filter(r => r.status === 'SUCCESS'), 'nothing is credited').toHaveLength(0);
         }

@@ -1,5 +1,6 @@
 import { test, expect, type Request } from '@playwright/test';
-import { findTopupCase, loginToTopup, gotoTopupScreen, reachCardEntryPopup, reachOtpScreen, BASE_URL, type TopupSession } from '../TopupHelper';
+import { findTopupCase, loginToTopup, TOPUP_UI_ACCOUNT, gotoTopupScreen, reachCardEntryPopup, reachOtpScreen, BASE_URL, type TopupSession } from '../TopupHelper';
+import { raiseMerchantCountHeadroom } from '../ui/TopupBizUiHelper';
 
 // Security — maps to docs/manual-test-cases/Topup.md section H (TUP-35).
 //
@@ -11,13 +12,22 @@ test.describe('Topup – Security', { tag: ['@topup', '@functional'], annotation
     test.setTimeout(150000);
 
     let session: TopupSession;
+    let restoreLimits: (() => Promise<void>) | undefined;
 
     test.beforeAll(async ({ browser }) => {
-        session = await loginToTopup(browser);
+        test.setTimeout(300000); // hooks do not inherit the describe timeout; includes the admin limits round trip
+        restoreLimits = await raiseMerchantCountHeadroom(browser); // dev allows 5 Merchant Cashin initiations per hour; raised for the run, restored in afterAll (admin login first, never overlapping the app login)
+        session = await loginToTopup(browser, TOPUP_UI_ACCOUNT); // the default Q9557 is rejected at sign-in on dev
+
     });
 
     test.afterAll(async () => {
-        await session.page.close();
+        test.setTimeout(300000); // hooks do not inherit the describe timeout; the cap restore is an admin login plus a verified write
+        try {
+            await session?.page.close();
+        } finally {
+            await restoreLimits?.();
+        }
     });
 
     test.beforeEach(async () => {
