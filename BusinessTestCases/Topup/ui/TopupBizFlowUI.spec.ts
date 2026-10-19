@@ -120,9 +120,7 @@ test.describe('Topup business – UI – flow rules', { tag: ['@topup', '@ui', '
         expect(await readBalanceBefore(session), 'balance after repeated wrong OTPs').toBe(before);
     });
 
-    // Skipped on request (2026-10-17): the ledger read needs the SQL Server (10.10.100.241:1433), which was unreachable from the test machine.
-    // Remove the `.skip` once the DB connection is available.
-    test.skip('TUB-85: a double submit leaves exactly one ledger entry', { annotation: [{ type: 'testcase', description: 'TUB-85: two clicks on Next -> one PENDING ledger row for the key, nothing else (success-time posting is covered by the outcome specs)' }] }, async () => {
+    test('TUB-85: a double submit leaves exactly one ledger entry', { annotation: [{ type: 'testcase', description: 'TUB-85: two clicks on Next -> one PENDING ledger row for the key, nothing else (success-time posting is covered by the outcome specs)' }] }, async () => {
         const { page, topup, otp } = session;
         const data = findTopupCase('VISA');
         let popups = 0;

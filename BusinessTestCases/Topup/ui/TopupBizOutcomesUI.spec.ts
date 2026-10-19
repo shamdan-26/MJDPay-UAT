@@ -121,20 +121,32 @@ test.describe('Topup business – UI – payment outcomes', { tag: ['@topup', '@
 
     test('TUB-21: failed and pending top-ups post no success row', { annotation: [{ type: 'testcase', description: 'TUB-21: no success posting, hence no commission or VAT, for failed, cancelled or pending outcomes' }] }, async () => {
         test.skip(SKIP_LEDGER_ASSERTIONS, 'Ledger-only case; the SQL Server is unreachable');
+        let checked = 0;
         for (const name of ['declined', 'cancelled', '3ds-declined', 'pending']) {
             const rows = ledgers[name];
-            test.skip(!rows, `the "${name}" payment did not run; run the whole file`);
-            expect(rows!.filter(r => r.status === 'SUCCESS'), `${name}: SUCCESS row posted`).toHaveLength(0);
+            if (!rows) {
+                test.info().annotations.push({ type: 'not-covered', description: `the "${name}" payment did not run (skipped or not reached), so it is not checked` });
+                continue;
+            }
+            checked++;
+            expect(rows.filter(r => r.status === 'SUCCESS'), `${name}: SUCCESS row posted`).toHaveLength(0);
         }
+        test.skip(checked === 0, 'No failed or pending payment ran; run the whole file');
     });
 
     test('TUB-67: every top-up has pending then exactly one terminal row', { annotation: [{ type: 'testcase', description: 'TUB-67: append-only ledger, one terminal row per finished top-up' }] }, async () => {
         test.skip(SKIP_LEDGER_ASSERTIONS, 'Ledger-only case; the SQL Server is unreachable');
+        let checked = 0;
         for (const name of ['success', 'declined', 'cancelled', '3ds-declined']) {
             const rows = ledgers[name];
-            test.skip(!rows, `the "${name}" payment did not run; run the whole file`);
-            expect(rows![0]!.status, `${name}: first row`).toBe('PENDING');
-            expect(rows!.filter(r => r.status !== 'PENDING'), `${name}: terminal rows`).toHaveLength(1);
+            if (!rows) {
+                test.info().annotations.push({ type: 'not-covered', description: `the "${name}" payment did not run (skipped or not reached), so it is not checked` });
+                continue;
+            }
+            checked++;
+            expect(rows[0]!.status, `${name}: first row`).toBe('PENDING');
+            expect(rows.filter(r => r.status !== 'PENDING'), `${name}: terminal rows`).toHaveLength(1);
         }
+        test.skip(checked === 0, 'No payment ran; run the whole file');
     });
 });

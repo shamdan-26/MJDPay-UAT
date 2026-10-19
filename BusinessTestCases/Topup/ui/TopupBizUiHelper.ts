@@ -40,16 +40,18 @@ export async function payWithOutcome(session: TopupSession, method: 'visa' | 'ma
 /**
  * Skipped on request (2026-10-18): ledger assertions need the SQL Server (10.10.100.241:1433), which was unreachable
  * from the test machine. While true, the UI checks of each case still run and the ledger assertions are skipped.
- * Set to false once the DB connection is available.
+ * Now false (2026-10-19): ledger assertions run again. Set to true if the DB is unreachable.
  */
-export const SKIP_LEDGER_ASSERTIONS = true;
+export const SKIP_LEDGER_ASSERTIONS = false;
 
 /** Ledger rows of one top-up, oldest first, polled briefly because the terminal row is written asynchronously. */
 export async function ledgerFor(key: string, terminalExpected: boolean, timeoutMs = 15000): Promise<TopupTransactionLogSqlRow[]> {
     const deadline = Date.now() + timeoutMs;
     let rows: TopupTransactionLogSqlRow[] = [];
     while (Date.now() < deadline) {
-        rows = await getTopupTransactionLogHistoryFromSql(key);
+        // One top-up writes three legs per stage under the same key: the principal (Merchant Cashin, to MERCHANT), the commission
+        // (Control Commission Credit) and the VAT (Vat Transaction). The cases below read the principal leg only.
+        rows = (await getTopupTransactionLogHistoryFromSql(key)).filter(r => r.txn_type_name === 'Merchant Cashin');
         const terminal = rows.filter(r => r.status !== 'PENDING').length;
         if (terminalExpected ? terminal >= 1 : rows.length >= 1) return rows;
         await new Promise(r => setTimeout(r, 1000));

@@ -55,7 +55,8 @@ export const TOPUP_TYPE_NAME = {
  * 2026-09-25). `GET /api/v1/transaction-types` did not return this type by name on dev (2026-10-15), so the lookup by name is
  * only the fallback for types not listed here.
  */
-const KNOWN_TYPE_CODES: Record<string, string> = { 'Biller Bank Cashin': '102003' };
+// 'Merchant Cashin' = 102002 is the code seen in the count-limits probe (2026-10-17, see TYPE_NAME_BY_CODE); same by-name gap as the Biller type.
+const KNOWN_TYPE_CODES: Record<string, string> = { 'Biller Bank Cashin': '102003', 'Merchant Cashin': '102002' };
 
 /** One GET row of the Transaction limits grid — one per type × risk × platform × period. */
 export interface TransactionLimitRow {

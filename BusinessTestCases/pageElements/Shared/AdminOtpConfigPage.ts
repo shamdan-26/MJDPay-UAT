@@ -270,6 +270,123 @@ export class AdminOtpConfigPage {
         await expect(this.operationsModal).toBeVisible({ timeout: 15000 });
     }
 
+    // ── Transaction OTP tab ─────────────────────────────────────────────────
+    // NOT yet read off the live DOM (the tab is not in QA-DATA-TESTID-HANDOFF.md): role/text locators from the
+    // visible labels — Columns "transaction | Minimum Amount | Max Attempts | Status", button "Add New Configurations".
+    // Tighten to page-authored ids after the first run on dev.
+
+    get transactionOtpTab(): Locator {
+        return this.page.getByRole('tab', { name: /Transaction OTP/i })
+            .or(this.page.getByText(/^\s*Transaction OTP\s*$/i)).first();
+    }
+
+    get addNewConfigurationButton(): Locator {
+        return this.page.getByRole('button', { name: /Add New Configurations?/i }).first();
+    }
+
+    /** Table rows of the Transaction OTP tab (header row excluded). */
+    get transactionOtpRows(): Locator {
+        // Not a <table>: rows are plain elements. The row is the outermost ancestor of a "Row actions" button that
+        // still contains exactly one such button (the list container holds one per record).
+        return this.page.getByRole('button', { name: 'Row actions' }).locator(
+            'xpath=(ancestor::*[count(.//button[contains(@aria-label,"Row actions") or contains(@title,"Row actions")])=1])[1]',
+        );
+    }
+
+    /** The create/edit dialog opened by "Add New Configurations". */
+    get configurationDialog(): Locator {
+        return this.page.locator('.modal.show, [role="dialog"]').first();
+    }
+
+    configurationField(label: RegExp): Locator {
+        const dialog = this.configurationDialog;
+        return dialog.getByLabel(label)
+            .or(dialog.locator('.form-group, .row, div', { has: this.page.getByText(label) }).locator('input').first())
+            .first();
+    }
+
+    get configurationSaveButton(): Locator {
+        return this.configurationDialog.getByRole('button', { name: /^\s*(save|submit|add|create|confirm)\s*$/i }).first();
+    }
+
+    /** Validation / toast text shown after a rejected save. */
+    get configurationError(): Locator {
+        return this.page.locator('.invalid-feedback:visible, .text-danger:visible, .toast-error, .toast-message, [role="alert"]').first();
+    }
+
+    async openTransactionOtpTab(): Promise<void> {
+        await this.gotoOtpConfiguration();
+        await this.transactionOtpTab.click();
+        await expect(this.addNewConfigurationButton).toBeVisible({ timeout: 15000 });
+    }
+
+    /** Row of the table for a transaction name (first cell), or an empty locator when absent. */
+    transactionOtpRow(transaction: RegExp): Locator {
+        return this.transactionOtpRows.filter({ hasText: transaction });
+    }
+
+    /** Reads every row as `{ transaction, minimumAmount, maxAttempts, status }` (cell text, trimmed). */
+    async readTransactionOtpRows(): Promise<{ transaction: string; minimumAmount: string; maxAttempts: string; status: string }[]> {
+        // Tag-agnostic: the list is plain divs, so parse the panel's text instead of locating rows. After the four
+        // header labels every record reads name / minimum / attempts / status (the currency icon is an <img>, no
+        // text; the "Row actions" button has no text either).
+        const panel = this.page.getByRole('tabpanel');
+        await expect(panel.getByRole('button', { name: 'Row actions' }).first()).toBeVisible({ timeout: 15000 });
+        const lines = (await panel.innerText()).split('\n').map(t => t.trim()).filter(Boolean);
+        const start = lines.findIndex(l => /^status$/i.test(l)) + 1;
+        const data = lines.slice(start).filter(l => !/^add new configurations?$/i.test(l));
+        const out = [];
+        for (let i = 0; i + 3 < data.length; i += 4) {
+            out.push({ transaction: data[i]!, minimumAmount: data[i + 1]!, maxAttempts: data[i + 2]!, status: data[i + 3]! });
+        }
+        return out;
+    }
+
+    /**
+     * Opens "Add New Configurations", fills the given fields (label regex → value) and clicks save.
+     * Returns whether the dialog closed (accepted) or stayed open with an error (rejected).
+     */
+    async createTransactionOtpConfiguration(fields: Record<string, { label: RegExp; value: string }>): Promise<{ accepted: boolean; error: string }> {
+        await this.addNewConfigurationButton.click();
+        await expect(this.configurationDialog).toBeVisible({ timeout: 10000 });
+        for (const { label, value } of Object.values(fields)) {
+            const field = this.configurationField(label);
+            if (value.startsWith('select:')) {
+                // A dropdown (native <select> or a custom list): pick the option by its visible text.
+                const optionText = new RegExp(value.slice('select:'.length), 'i');
+                const isNative = await field.evaluate(el => el.tagName === 'SELECT').catch(() => false);
+                if (isNative) {
+                    const options = await field.locator('option').allInnerTexts();
+                    await field.selectOption({ label: options.find(o => optionText.test(o))! });
+                } else {
+                    await field.click();
+                    await this.page.locator('[role="option"], .ng-option, .dropdown-item, li', { hasText: optionText }).first().click();
+                }
+            } else {
+                await this.typeExactly(field, value);
+            }
+        }
+        await this.configurationSaveButton.click();
+        const closed = await this.configurationDialog.waitFor({ state: 'hidden', timeout: 8000 }).then(() => true).catch(() => false);
+        const error = closed ? '' : ((await this.configurationError.innerText().catch(() => '')) || 'dialog stayed open, no message');
+        return { accepted: closed, error };
+    }
+
+    /** Best-effort delete of a row through its ⋮ menu — returns false when the menu offers no Delete. */
+    async deleteTransactionOtpRow(transaction: RegExp): Promise<boolean> {
+        const row = this.transactionOtpRow(transaction).first();
+        if (!(await row.isVisible().catch(() => false))) return false;
+        await row.locator('[id$="row-options-button"], button').last().click();
+        const del = this.page.getByRole('button', { name: /^\s*delete\s*$/i })
+            .or(this.page.locator('.dropdown-item:visible', { hasText: /delete/i })).first();
+        if (!(await del.isVisible({ timeout: 2000 }).catch(() => false))) return false;
+        await del.click();
+        const confirm = this.page.getByRole('button', { name: /^\s*(yes|confirm|delete|ok)\s*$/i }).last();
+        if (await confirm.isVisible({ timeout: 2000 }).catch(() => false)) await confirm.click();
+        await expect(this.transactionOtpRow(transaction)).toHaveCount(0, { timeout: 10000 });
+        return true;
+    }
+
     /** The checkbox for a given OTP operation inside the open operations modal. */
     operationCheckbox(operationCode: string): Locator {
         return this.operationsModal

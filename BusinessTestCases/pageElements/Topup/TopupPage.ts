@@ -62,7 +62,6 @@ export class TopupPage {
     payNowButton: Locator;
     private hyperpayIframe: Locator;
     private hyperpaySubmitButton: Locator;
-    private cardSchemeSubmitButton: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -154,7 +153,6 @@ export class TopupPage {
         this.payNowButton = this.page.getByRole('button', { name: /pay now|إدفع الأن/i });
         this.hyperpayIframe = this.page.locator('iframe.wpwl-target');
         this.hyperpaySubmitButton = this.page.frameLocator('iframe.wpwl-target').locator('form input[value="Pay"]');
-        this.cardSchemeSubmitButton = this.cardSchemeSubmit(this.page);
     }
 
     /**
@@ -162,12 +160,26 @@ export class TopupPage {
      * iframe, and the MiGS Issuer Simulation page (seen 2026-10-18: a PASSWORD box and a plain "Submit" button, no `type=submit`, no
      * outcome dropdown). A role-based match covers both, inside the iframe or at the top of the popup.
      */
-    private cardSchemeSubmit(page: Page): Locator {
+    private cardSchemeSubmitCandidates(page: Page): Locator[] {
+        // Playwright rejects frame locators inside .or()/.and(), so the candidates stay separate and are polled one by one.
         const frame = page.frameLocator('iframe[name^="card_"]');
-        return frame.locator('button[type="submit"]:has-text("Submit"), button.btn-primary')
-            .or(frame.getByRole('button', { name: /^\s*submit\s*$/i }))
-            .or(page.getByRole('button', { name: /^\s*submit\s*$/i }))
-            .first();
+        return [
+            frame.locator('button[type="submit"]:has-text("Submit"), button.btn-primary').first(),
+            frame.getByRole('button', { name: /^\s*submit\s*$/i }).first(),
+            page.getByRole('button', { name: /^\s*submit\s*$/i }).first(),
+        ];
+    }
+
+    /** First visible 3DS Submit button, polling until `timeoutMs`; null when none shows. */
+    private async findCardSchemeSubmit(timeoutMs: number): Promise<Locator | null> {
+        const deadline = Date.now() + timeoutMs;
+        do {
+            for (const candidate of this.cardSchemeSubmitCandidates(this.activePage)) {
+                if (await candidate.isVisible().catch(() => false)) return candidate;
+            }
+            await this.activePage.waitForTimeout(500);
+        } while (Date.now() < deadline);
+        return null;
     }
 
     /** Scopes gateway-popup locators (card fields, Pay Now, submit) to `popup` until reset. */
@@ -182,7 +194,6 @@ export class TopupPage {
         this.payNowButton = popup.getByRole('button', { name: /pay now|إدفع الأن/i });
         this.hyperpayIframe = popup.locator('iframe.wpwl-target');
         this.hyperpaySubmitButton = popup.frameLocator('iframe.wpwl-target').locator('form input[value="Pay"]');
-        this.cardSchemeSubmitButton = this.cardSchemeSubmit(popup);
     }
 
     resetActivePage(): void {
@@ -358,8 +369,9 @@ export class TopupPage {
     /** MADA/MASTER route through a 3DS iframe named "card_*" rather than the Hyperpay `.wpwl-target` one. */
     async clickCardSchemeSubmitButton() {
         await this.activePage.waitForTimeout(3000);
-        await expect(this.cardSchemeSubmitButton).toBeVisible({ timeout: 20000 });
-        await this.cardSchemeSubmitButton.click();
+        const submit = await this.findCardSchemeSubmit(20000);
+        expect(submit, '3DS Submit button did not appear').not.toBeNull();
+        await submit!.click();
     }
 
     /**
@@ -389,8 +401,15 @@ export class TopupPage {
         await this.activePage.waitForTimeout(3000);
         const dropdown = this.activePage.frameLocator('iframe[name^="card_"]').last().locator('select#outcomeSelect');
         // On 2026-10-18 dev served the MiGS Issuer Simulation page instead (PASSWORD box + Submit, no outcome dropdown): wait for either.
-        await expect(dropdown.or(this.cardSchemeSubmitButton)).toBeVisible({ timeout: 20000 });
-        if (await dropdown.isVisible()) {
+        const deadline = Date.now() + 20000;
+        let hasDropdown = false;
+        while (Date.now() < deadline) {
+            hasDropdown = await dropdown.isVisible().catch(() => false);
+            if (hasDropdown || (await this.findCardSchemeSubmit(0))) break;
+            await this.activePage.waitForTimeout(500);
+        }
+        expect(hasDropdown || (await this.findCardSchemeSubmit(0)) !== null, '3DS page showed neither the outcome dropdown nor a Submit button').toBe(true);
+        if (hasDropdown) {
             await dropdown.selectOption(value);
             return true;
         }

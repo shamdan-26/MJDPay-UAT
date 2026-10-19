@@ -703,10 +703,10 @@ export function decodeJwtProfileCode(bearerToken: string): string {
  * credit from, independent of what the UI's Home page/Transactions list
  * renders.
  */
-export async function getLatestTopupTransactionFromDb(initiatorProfileCode: string): Promise<TopupTransactionLogEntry | null> {
+export async function getLatestTopupTransactionFromDb(initiatorProfileCode: string, txnTypeName = 'Biller Bank Cashin'): Promise<TopupTransactionLogEntry | null> {
     const db = await getMongoDb('transaction_query_log');
     const doc = await db.collection('transactionLog')
-        .find({ initiator: initiatorProfileCode, txnTypeName: 'Biller Bank Cashin' })
+        .find({ initiator: initiatorProfileCode, txnTypeName })
         .sort({ createdAt: -1 })
         .limit(1)
         .next();
@@ -790,17 +790,18 @@ export interface TopupTransactionLogSqlRow {
  * Reads the most recent "Biller Bank Cashin" row for the given initiator
  * (the account's JWT profileCode) directly from emi_transaction.transaction_log.
  */
-export async function getLatestTopupTransactionLogFromSql(initiatorProfileCode: string): Promise<TopupTransactionLogSqlRow | null> {
+export async function getLatestTopupTransactionLogFromSql(initiatorProfileCode: string, txnTypeName = 'Biller Bank Cashin'): Promise<TopupTransactionLogSqlRow | null> {
     const pool = await getSqlPool();
     const result = await pool.request()
         .input('initiator', initiatorProfileCode)
+        .input('txnTypeName', txnTypeName)
         .query(`
             USE [emi_transaction];
             SELECT TOP 1 id, created_at, status, reasons, destination_amount, destination_currency,
                    destination_reference, destination_wallet_code, initiator, txn_type_name,
                    idempotency_key, batch_transaction_reference
             FROM transaction_log
-            WHERE initiator = @initiator AND txn_type_name = 'Biller Bank Cashin'
+            WHERE initiator = @initiator AND txn_type_name = @txnTypeName
             ORDER BY created_at DESC;
         `);
     return (result.recordset[0] as TopupTransactionLogSqlRow) ?? null;
