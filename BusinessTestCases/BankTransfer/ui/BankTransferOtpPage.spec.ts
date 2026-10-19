@@ -3,8 +3,8 @@ import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { HomepageQuickActionsPage } from '../../pageElements/Shared/HomepageQuickActionsPage';
 import { BankTransferPage } from '../../pageElements/Shared/BankTransferPage';
-import { HOME_URL, proceedToConfirmation, ensureNonZeroBalance } from '../BankTransferHelper';
-import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/LoginHelper';
+import { HOME_URL, proceedToConfirmation, ensureNonZeroBalance } from '../helpers/BankTransferHelper.ts';
+import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 
 // Element-presence assertions for the OTP step that don't require completing
 // a real transfer (box count, countdown). The success modal's heading/Ok

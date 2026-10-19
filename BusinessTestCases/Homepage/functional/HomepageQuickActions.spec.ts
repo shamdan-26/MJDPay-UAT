@@ -1,5 +1,5 @@
-import { test, expect, Page } from '../HomepageFixtures';
-import { refreshHomepage } from '../HomePageHelper';
+import { test, expect, Page } from '../helpers/HomepageFixtures.ts';
+import { refreshHomepage } from '../helpers/HomePageHelper.ts';
 import { HomepageQuickActionsPage } from '../../pageElements/Shared/HomepageQuickActionsPage';
 
 test.describe('Homepage – Quick actions navigation', () => {

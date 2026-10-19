@@ -50,7 +50,7 @@ const HEADERS = ['TC ID', 'Sub-Area', 'Source ID', 'Title', 'Priority', 'Precond
     'Expected Result', 'Status', 'Test Type', 'Interface', 'Source', 'Jira Ref', 'Automated',
     'Automated By', 'Channel'];
 const WIDTHS = [15, 26, 18, 40, 11, 34, 42, 44, 17, 19, 12, 17, 22, 12, 52, 10];
-const AUTOMATED_XLSX = path.join(ROOT, 'test-case-exports', 'All-Automated-Test-Cases.xlsx');
+const AUTOMATED_XLSX = path.join(ROOT, 'docs', 'test-case-exports', 'All-Automated-Test-Cases.xlsx');
 
 /** Manual-case ids as they appear inside automated test titles. The suite uses
  *  several id shapes: EMI-TC-1234 from AIO, TC-Refund-01 style from the epic

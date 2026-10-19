@@ -1,5 +1,5 @@
-import { test, expect } from '../../fixtures';
-import { LOGIN_URL } from '../LoginHelper';
+import { test, expect } from '../../shared/fixtures.ts';
+import { LOGIN_URL } from '../helpers/LoginHelper.ts';
 import { LoginPage } from '../../pageElements/Shared/LoginPage';
 
 test.describe('Login Page', { tag: ['@login', '@ui'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'ui' }] }, () => {

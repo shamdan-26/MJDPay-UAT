@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { SESSION_PATH } from '../../Login/LoginHelper';
+import { SESSION_PATH } from '../../Login/helpers/LoginHelper.ts';
 import { GroupsRolesPage } from '../../pageElements/UserManagement/GroupsRolesPage';
 import {
     fetchJson,
@@ -12,7 +12,7 @@ import {
     mockRoleUpdateBadRequest,
     mockAssignUsersWithValidation,
     mockAssignUsersWithoutValidation,
-} from '../UserManagementHelper';
+} from '../helpers/UserManagementHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Manage Accounts → Access & Permissions (Groups / Roles) — GR-01..GR-08.

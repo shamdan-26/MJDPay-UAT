@@ -3,8 +3,8 @@ import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { HomepageSidebarPage } from '../../pageElements/Shared/HomepageSidebarPage';
 import { BeneficiaryManagementPage } from '../../pageElements/BeneficiaryManagement/BeneficiaryManagementPage';
-import { HOME_URL, uniqueAlias, KNOWN_CRN, UNKNOWN_CRN } from '../BeneficiaryManagementHelper';
-import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/LoginHelper';
+import { HOME_URL, uniqueAlias, KNOWN_CRN, UNKNOWN_CRN } from '../helpers/BeneficiaryManagementHelper.ts';
+import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 
 // Bill Beneficiary Management (EMI-185, epic EMI-2192). The sidebar link to
 // this screen already existed and was nav-smoke-tested (Homepage/functional/

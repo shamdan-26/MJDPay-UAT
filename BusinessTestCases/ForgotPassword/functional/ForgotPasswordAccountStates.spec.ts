@@ -1,11 +1,11 @@
-import { test, expect } from '../../fixtures';
+import { test, expect } from '../../shared/fixtures.ts';
 import {
     BLOCKED_COMPANY,
     BLOCKED_MOBILE,
     VALID_COMPANY,
     VALID_MOBILE,
     submitStep1AndGetResult,
-} from '../ForgotPasswordHelper';
+} from '../helpers/ForgotPasswordHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Account states on step 1 — real backend. Checks how unknown and blocked identities are treated:

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { SESSION_PATH } from '../../Login/LoginHelper';
+import { SESSION_PATH } from '../../Login/helpers/LoginHelper.ts';
 import { SubWalletsPage } from '../../pageElements/SubWallets/SubWalletsPage';
 import { SubWalletFormPage } from '../../pageElements/SubWallets/SubWalletFormPage';
 import { SubWalletDetailsPage } from '../../pageElements/SubWallets/SubWalletDetailsPage';
@@ -15,7 +15,7 @@ import {
     mockWalletConfigurationSuccess,
     mockWalletConfigurationServerError,
     SAMPLE_WALLET_CODE,
-} from '../SubWalletsHelper';
+} from '../helpers/SubWalletsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Sub-Wallet Bugs — MOCK ONLY (SWB-01..SWB-04): EMI-5571, EMI-5417, EMI-5248,

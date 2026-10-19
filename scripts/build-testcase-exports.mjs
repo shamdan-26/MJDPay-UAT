@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Rebuilds test-case-exports/ from the Playwright specs under BusinessTestCases/.
+ * Rebuilds docs/test-case-exports/ from the Playwright specs under BusinessTestCases/.
  *
  *   npm run build:testcase-exports
  *
@@ -41,7 +41,7 @@ import ExcelJS from 'exceljs';
 const run = promisify(execFile);
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'BusinessTestCases');
-const OUT_DIR = path.join(ROOT, 'test-case-exports');
+const OUT_DIR = path.join(ROOT, 'docs', 'test-case-exports');
 
 const NAVY = 'FF1F4E79';
 const HEADERS = ['#', 'Module', 'Spec File', 'Describe Block', 'Nested Describe',
@@ -245,9 +245,10 @@ const main = async () => {
         const helperDir = path.dirname(path.dirname(file));
         let shared = new Map();
         try {
-            const helpers = (await readdir(helperDir)).filter(f => f.endsWith('Helper.ts'));
+            const helpersDir = path.join(helperDir, 'helpers');
+            const helpers = (await readdir(helpersDir)).filter(f => f.endsWith('Helper.ts'));
             for (const h of helpers) {
-                shared = new Map([...shared, ...localConsts(await readFile(path.join(helperDir, h), 'utf8'))]);
+                shared = new Map([...shared, ...localConsts(await readFile(path.join(helpersDir, h), 'utf8'))]);
             }
         } catch { /* no helper alongside — fine */ }
         metaByFile.set(rel, parseMeta(text, shared));

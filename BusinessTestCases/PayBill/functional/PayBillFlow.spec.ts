@@ -5,8 +5,8 @@ import { HomePage } from '../../pageElements/Shared/HomePage';
 import { BillsPage } from '../../pageElements/PayBill/BillsPage';
 import { BankTransferPage } from '../../pageElements/Shared/BankTransferPage';
 import { TransactionsPage } from '../../pageElements/Shared/TransactionsPage';
-import { HOME_URL, BILL_COMPANY, BILL_MOBILE, BILL_PASSWORD, BILL_STATUS } from '../PayBillHelper';
-import { LOGIN_URL, getOtpFromDb } from '../../Login/LoginHelper';
+import { HOME_URL, BILL_COMPANY, BILL_MOBILE, BILL_PASSWORD, BILL_STATUS } from '../helpers/PayBillHelper.ts';
+import { LOGIN_URL, getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 
 // Full "pay a received bill" flow: submission popup, wallet debit, ledger entry,
 // and the insufficient-funds rejection. Requires BILL_COMPANY/BILL_MOBILE to have

@@ -197,7 +197,7 @@ balance-calculation rule.
 Import both files into Postman, select the **Topup API - dev (majdpay)**
 environment, then fill in `token` (a real Bearer JWT for an authenticated
 business account — e.g. the Q9557/597389429 Biller account
-`BusinessTestCases/Topup/TopupHelper.ts` logs into) and `deviceFingerPrint`.
+`BusinessTestCases/Topup/helpers/TopupHelper.ts` logs into) and `deviceFingerPrint`.
 
 Run folders **1–5 in order** for the initiation half of the flow: payment
 methods → summary → initiate → OTP settings → verify (captures `paymentId`

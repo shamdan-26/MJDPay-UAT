@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { findTopupCase, loginToTopup, gotoTopupScreen, completeCardPayment, type TopupSession, TOPUP_UI_ACCOUNT } from '../TopupHelper';
+import { findTopupCase, loginToTopup, gotoTopupScreen, completeCardPayment, type TopupSession, TOPUP_UI_ACCOUNT } from '../helpers/TopupHelper.ts';
 
 // UI — the Payment Success screen that follows a completed top-up. Reaching
 // it takes a REAL card payment through the gateway (the same flow as

@@ -3,8 +3,8 @@ import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { HomepageQuickActionsPage } from '../../pageElements/Shared/HomepageQuickActionsPage';
 import { QRPaymentPage } from '../../pageElements/QRPayment/QRPaymentPage';
-import { HOME_URL } from '../QRPaymentHelper';
-import { LOGIN_URL, getOtpFromDb } from '../../Login/LoginHelper';
+import { HOME_URL } from '../helpers/QRPaymentHelper.ts';
+import { LOGIN_URL, getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 import topupData from '../../../data/topupData.json';
 
 // Fixed/percentage commission, Default-vs-Custom schema, and validation rules

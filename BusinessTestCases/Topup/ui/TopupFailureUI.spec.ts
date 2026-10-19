@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { findTopupCase, loginToTopup, gotoTopupScreen, completeCardPayment, HOME_URL, type TopupSession, TOPUP_UI_ACCOUNT } from '../TopupHelper';
+import { findTopupCase, loginToTopup, gotoTopupScreen, completeCardPayment, HOME_URL, type TopupSession, TOPUP_UI_ACCOUNT } from '../helpers/TopupHelper.ts';
 
 // UI — the Payment Failed screen. Reached by three UAT gateway simulator
 // results: "User canceled" (code 2, used for the main checks), "Error, limit

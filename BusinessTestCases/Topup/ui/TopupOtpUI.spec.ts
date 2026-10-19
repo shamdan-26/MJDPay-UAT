@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { findTopupCase, loginToTopup, gotoTopupScreen, reachOtpScreen, type TopupSession, TOPUP_UI_ACCOUNT } from '../TopupHelper';
+import { findTopupCase, loginToTopup, gotoTopupScreen, reachOtpScreen, type TopupSession, TOPUP_UI_ACCOUNT } from '../helpers/TopupHelper.ts';
 
 // UI — the OTP step (TUP-22, docs/manual-test-cases/Topup.md section G).
 // Assertions check visibility/non-emptiness or bilingual patterns rather than

@@ -1,5 +1,5 @@
-import { test, expect } from '../../fixtures';
-import { LOGIN_URL } from '../LoginHelper';
+import { test, expect } from '../../shared/fixtures.ts';
+import { LOGIN_URL } from '../helpers/LoginHelper.ts';
 
 // Layout of the login screen across viewport sizes. No account or backend is used.
 

@@ -14,8 +14,8 @@ import {
     decodeJwtProfileCode,
     HOME_URL,
     type TopupSession,
-} from '../TopupHelper';
-import { getOtpFromDb } from '../../Login/LoginHelper';
+} from '../helpers/TopupHelper.ts';
+import { getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 import { raiseMerchantCountHeadroom, SKIP_LEDGER_ASSERTIONS } from '../ui/TopupBizUiHelper';
 import { closeMongoClient } from '../../../support/mongoClient';
 import { closeSqlPool } from '../../../support/sqlServerClient';

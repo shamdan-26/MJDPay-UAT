@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { createHomepageSession, refreshHomepage } from '../HomePageHelper';
+import { createHomepageSession, refreshHomepage } from '../helpers/HomePageHelper.ts';
 import { HomepageTransactionsPage } from '../../pageElements/Homepage/HomepageTransactionsPage';
 
 test.describe('Homepage – Transactions empty state', () => {

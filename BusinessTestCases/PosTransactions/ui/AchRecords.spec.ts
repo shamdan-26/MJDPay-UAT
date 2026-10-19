@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { SESSION_PATH } from '../../Login/LoginHelper';
+import { SESSION_PATH } from '../../Login/helpers/LoginHelper.ts';
 import { AchRecordsPage } from '../../pageElements/PosTransactions/AchRecordsPage';
 import {
     TERMINAL_ID,
@@ -9,7 +9,7 @@ import {
     mockAchRecordsWithoutBeneficiary,
     mockAchReleaseSuccess,
     gotoAchRecords,
-} from '../PosTransactionsHelper';
+} from '../helpers/PosTransactionsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ACH Records — Admin web screen (ACH-UI-01..ACH-UI-07). MOCK ONLY.

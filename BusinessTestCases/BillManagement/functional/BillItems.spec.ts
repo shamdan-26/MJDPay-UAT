@@ -15,8 +15,8 @@ import {
     parseMoney,
     expectedItemTotal,
     expectedItemTotalLineDiscount,
-} from '../BillManagementHelper';
-import { LOGIN_URL, getOtpFromDb } from '../../Login/LoginHelper';
+} from '../helpers/BillManagementHelper.ts';
+import { LOGIN_URL, getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 
 // Detailed Bill — LINE ITEMS (BI-01..BI-26).
 //

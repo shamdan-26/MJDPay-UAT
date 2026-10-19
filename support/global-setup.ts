@@ -7,7 +7,7 @@ import {
     LOGIN_URL,
     watchAuthGatewayFailure,
     formatGatewayNote,
-} from '../BusinessTestCases/Homepage/HomePageHelper';
+} from '../BusinessTestCases/Homepage/helpers/HomePageHelper.ts';
 
 const env            = process.env['ENV'] ?? 'dev';
 const VALID_COMPANY  = process.env['DEV_SETUP_COMPANY'];

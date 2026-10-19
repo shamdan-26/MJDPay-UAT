@@ -1,11 +1,11 @@
-import { test, expect } from '../../../fixtures';
-import { assertToast } from '../../../toastMessages';
+import { test, expect } from '../../../shared/fixtures.ts';
+import { assertToast } from '../../../shared/toastMessages.ts';
 import {
     LOGIN_URL,
     NEGATIVE_COMPANY,
     NEGATIVE_MOBILE,
     VALID_PASSWORD,
-} from '../../LoginHelper';
+} from '../../helpers/LoginHelper.ts';
 import { mockSignIn, mockSlowSignIn, mockSignInNetworkFailure, SIGNIN_GLOB } from '../../helpers/loginMocks';
 
 // How the login form reacts to gateway failures. /auth/signin is mocked everywhere, so no real

@@ -1,8 +1,8 @@
-import { test } from '../../../fixtures';
+import { test } from '../../../shared/fixtures.ts';
 import testAccounts from '../../../../data/testAccounts.json';
 import { LoginPage } from '../../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../../pageElements/Shared/OtpPage';
-import { FIRST_LOGIN_DEFAULT_PASSWORD, VALID_PASSWORD, VALID_OTP, LOGIN_URL, generateUnregisteredMobile } from '../../LoginHelper';
+import { FIRST_LOGIN_DEFAULT_PASSWORD, VALID_PASSWORD, VALID_OTP, LOGIN_URL, generateUnregisteredMobile } from '../../helpers/LoginHelper.ts';
 
 // Step 0 of the first-login plan: find which registration-created accounts still have the default password.
 // Read-only and opt-in (FIRST_LOGIN_PROBE=1): exactly ONE sign-in attempt per account, so the 3-attempt lockout is

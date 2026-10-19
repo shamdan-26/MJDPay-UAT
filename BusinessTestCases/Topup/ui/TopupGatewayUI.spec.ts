@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { findTopupCase, loginToTopup, gotoTopupScreen, reachCardEntryPopup, type TopupSession, TOPUP_UI_ACCOUNT } from '../TopupHelper';
+import { findTopupCase, loginToTopup, gotoTopupScreen, reachCardEntryPopup, type TopupSession, TOPUP_UI_ACCOUNT } from '../helpers/TopupHelper.ts';
 
 // UI — our side of the payment-gateway hand-off (TUP-31, section H).
 // Assertions check visibility/non-emptiness or bilingual patterns rather than

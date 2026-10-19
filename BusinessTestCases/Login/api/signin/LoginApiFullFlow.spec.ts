@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { VALID_PASSWORD } from '../../LoginHelper';
+import { VALID_PASSWORD } from '../../helpers/LoginHelper.ts';
 import { API_BASE, commonHeaders, VALID_USERNAME, VALID_TENANT, DEVICE_ID } from '../../helpers/loginApi';
 
 

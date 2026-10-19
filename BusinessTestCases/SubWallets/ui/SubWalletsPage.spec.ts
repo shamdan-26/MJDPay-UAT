@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { SESSION_PATH } from '../../Login/LoginHelper';
+import { SESSION_PATH } from '../../Login/helpers/LoginHelper.ts';
 import { SubWalletsPage } from '../../pageElements/SubWallets/SubWalletsPage';
 import { SubWalletFormPage } from '../../pageElements/SubWallets/SubWalletFormPage';
-import { gotoSubWallets, mockSubWalletList, mockEmptySubWalletList } from '../SubWalletsHelper';
+import { gotoSubWallets, mockSubWalletList, mockEmptySubWalletList } from '../helpers/SubWalletsHelper.ts';
 
 // Sub-Wallets root screen — element/text presence only (SW-UI-01..SW-UI-04),
 // EMI-5185. Business outcomes live in functional/SubWalletManagement.spec.ts.

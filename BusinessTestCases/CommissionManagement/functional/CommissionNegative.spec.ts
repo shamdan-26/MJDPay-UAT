@@ -1,5 +1,5 @@
 import { test, expect, type BrowserContext } from '@playwright/test';
-import { loginToCommissionManagement } from '../CommissionManagementHelper';
+import { loginToCommissionManagement } from '../helpers/CommissionManagementHelper.ts';
 import {
     type AdminCommissionManagementPage,
     COMMISSION_CATEGORY,

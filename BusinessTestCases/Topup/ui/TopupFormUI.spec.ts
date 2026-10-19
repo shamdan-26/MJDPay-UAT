@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { findTopupCase, loginToTopup, gotoTopupScreen, type TopupSession, TOPUP_UI_ACCOUNT } from '../TopupHelper';
+import { findTopupCase, loginToTopup, gotoTopupScreen, type TopupSession, TOPUP_UI_ACCOUNT } from '../helpers/TopupHelper.ts';
 
 // UI — the first Topup page: the amount form (payment methods, amount field, chips, disclaimer, Proceed state, input handling).
 // Assertions check visibility/non-emptiness or bilingual patterns rather than

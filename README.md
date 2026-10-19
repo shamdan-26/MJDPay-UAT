@@ -120,7 +120,7 @@ Most spec files get a fresh Playwright `page` per test. A handful (`BankTransfer
 
 Everything else uses one of two fixture files that extend `test`/`expect`:
 
-- **`BusinessTestCases/fixtures.ts`** — one lazy fixture per page object (`loginPage`, `dashboard`, `otp`, `homepageBalanceCard`, `registrationInfo`, ...). Import `{ test, expect }` from here instead of `@playwright/test` and destructure the fixtures you need in `beforeEach` — no more manual `new LoginPage(page)`.
+- **`BusinessTestCases/shared/fixtures.ts`** — one lazy fixture per page object (`loginPage`, `dashboard`, `otp`, `homepageBalanceCard`, `registrationInfo`, ...). Import `{ test, expect }` from here instead of `@playwright/test` and destructure the fixtures you need in `beforeEach` — no more manual `new LoginPage(page)`.
 - **`Homepage/HomepageFixtures.ts`** — worker-scoped: one authenticated homepage session is created per Playwright worker and reused across every Homepage spec file that worker runs, instead of each file logging in again in its own `beforeAll`. Three files that need a *specific* pinned account (transaction-history / empty-state fixtures) opt out and keep their own `beforeAll` — see `CLAUDE.md` for which ones.
 
 ### Conventions
@@ -128,7 +128,7 @@ Everything else uses one of two fixture files that extend `test`/`expect`:
 - **Page Object Model** — locators are `readonly` properties set once in the constructor; spec files call action methods rather than raw `page.locator()`.
 - **`functional/` vs `ui/`** — `functional/` covers business logic, interactions, and outcomes (does the flow complete, is the math right); `ui/` covers element/text presence only (does it render, with the right label). The same flow is often exercised in both, deliberately kept separate.
 - **Serial mode** — every `test.describe` block uses `test.describe.configure({ mode: 'serial' })`; tests within a file frequently share session/page state or have a required order.
-- **Toast guard** — `waitForToastClear` (in `BusinessTestCases/toastMessages.ts`) is called after every landing-page navigation to absorb transient background-API error banners before asserting anything.
+- **Toast guard** — `waitForToastClear` (in `BusinessTestCases/shared/toastMessages.ts`) is called after every landing-page navigation to absorb transient background-API error banners before asserting anything.
 - **Archive folders** — specs under `*/archive/` are retired but still discovered by Playwright; they carry `test.skip()` at the describe level.
 - **Failure artifacts** — `playwright.config.ts` retains trace, screenshot, and video on failure; `npx playwright show-report` surfaces all three.
 

@@ -1,13 +1,13 @@
 import { test, expect } from '@playwright/test';
 import testAccounts from '../../../data/testAccounts.json';
 import { envAccount, startSession, initiate, expectRejected, why, ledger } from '../business/TopupBizApi';
-import { loginToCommissionManagement } from '../../CommissionManagement/CommissionManagementHelper';
+import { loginToCommissionManagement } from '../../CommissionManagement/helpers/CommissionManagementHelper.ts';
 import { TOPUP_TYPE_NAME } from '../../pageElements/Shared/AdminLimitsApi';
-import { loginToTopup,gotoTopupScreen, type TopupSession } from '../TopupHelper';
+import { loginToTopup,gotoTopupScreen, type TopupSession } from '../helpers/TopupHelper.ts';
 import {
     openAdminLimits, closeAdminLimits, attemptTopup, isBlocked,
     type AdminLimitsHandle,
-} from '../TopupLimitsHelper';
+} from '../helpers/TopupLimitsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Topup × admin-configured MINIMUM amount (TUA-B…, docs/manual-test-cases/Topup-Admin-Config-Matrix.md §B).

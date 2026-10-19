@@ -1,5 +1,5 @@
 import { test, expect, type BrowserContext, type Page } from '@playwright/test';
-import { VALID_PASSWORD } from '../LoginHelper';
+import { VALID_PASSWORD } from '../helpers/LoginHelper.ts';
 import { signIn } from '../helpers/loginApi';
 import { AdminOtpConfigPage, createAdminContext } from '../../pageElements/Shared/AdminOtpConfigPage';
 import { AdminBusinessAccountsPage } from '../../pageElements/UserManagement/AdminBusinessAccountsPage';

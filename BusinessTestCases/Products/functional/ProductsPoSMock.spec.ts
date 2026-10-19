@@ -14,7 +14,7 @@ import {
     countPosOrderSubmissions,
     mockAdminPosOrdersLeak,
     DEFAULT_MOCK_PRODUCTS,
-} from '../ProductsPoSHelper';
+} from '../helpers/ProductsPoSHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Products Navigation & In-App PoS Request Flow — MOCK ONLY (EMI-5780/5782/5784)

@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { API_BASE, commonHeaders } from '../ReconciliationHelper';
+import { API_BASE, commonHeaders } from '../helpers/ReconciliationHelper.ts';
 
 // Reconciliation framework (EMI-4537, Done — core external/internal
 // reconciliation; EMI-4538/4541/4542/4543/4549/4550/4551, To Do — Dynamic

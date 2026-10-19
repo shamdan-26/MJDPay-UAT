@@ -1,5 +1,5 @@
 import { type Page, type Locator, expect } from '@playwright/test';
-import type { NewBillInput } from '../../BillManagement/BillManagementHelper';
+import type { NewBillInput } from '../../BillManagement/helpers/BillManagementHelper.ts';
 
 /**
  * Create Bill / Bill Management (EMI-183, EMI-242, EMI-3020). No page object

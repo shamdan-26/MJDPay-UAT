@@ -28,7 +28,7 @@ import {
     mockValidWalletLink,
     mockGuestWalletPaymentSuccess,
     VALID_WALLET_TOKEN,
-} from '../PaymentLinkHelper';
+} from '../helpers/PaymentLinkHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Bill Payment Link — regression coverage (BPL-01..BPL-11), MOCK ONLY.

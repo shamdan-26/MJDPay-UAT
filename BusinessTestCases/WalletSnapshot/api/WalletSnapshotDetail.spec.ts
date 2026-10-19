@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { API_BASE, detailPath, commonHeaders, PENDING_ADMIN_TOKEN } from '../WalletSnapshotHelper';
+import { API_BASE, detailPath, commonHeaders, PENDING_ADMIN_TOKEN } from '../helpers/WalletSnapshotHelper.ts';
 
 // Wallet Snapshot Admin API (EMI-6127) — GET /api/v1/admin/wallet-snapshots/{id}
 // (detail: adds discrepancies + validationDetails on top of the list shape).

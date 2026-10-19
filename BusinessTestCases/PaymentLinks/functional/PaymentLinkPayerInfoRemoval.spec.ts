@@ -6,7 +6,7 @@ import {
     mockIncompleteOwnerProfile,
     VALID_BILL_TOKEN,
     VALID_WALLET_TOKEN,
-} from '../PaymentLinkHelper';
+} from '../helpers/PaymentLinkHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Update Payment Links Flow — Remove Payer Info Step — MOCK ONLY

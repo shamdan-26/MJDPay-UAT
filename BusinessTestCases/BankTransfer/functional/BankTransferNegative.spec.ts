@@ -3,9 +3,9 @@ import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { HomepageQuickActionsPage } from '../../pageElements/Shared/HomepageQuickActionsPage';
 import { BankTransferPage } from '../../pageElements/Shared/BankTransferPage';
-import { assertToast } from '../../toastMessages';
-import { HOME_URL, proceedToConfirmation, ensureNonZeroBalance } from '../BankTransferHelper';
-import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/LoginHelper';
+import { assertToast } from '../../shared/toastMessages.ts';
+import { HOME_URL, proceedToConfirmation, ensureNonZeroBalance } from '../helpers/BankTransferHelper.ts';
+import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 
 // Invalid-input rejection and failure handling. Happy-path completion lives in
 // BankTransferHappyPath.spec.ts; the boundary between "3 decimals rejected"

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { API_BASE, LIST_PATH, commonHeaders, ALL_STATUSES, PENDING_ADMIN_TOKEN } from '../WalletSnapshotHelper';
+import { API_BASE, LIST_PATH, commonHeaders, ALL_STATUSES, PENDING_ADMIN_TOKEN } from '../helpers/WalletSnapshotHelper.ts';
 
 // Wallet Snapshot Admin API (EMI-6127) — GET /api/v1/admin/wallet-snapshots
 // (paged list). See docs/business-knowledge/EMI-6127-Refined-Ticket.md for

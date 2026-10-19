@@ -1,6 +1,6 @@
 import { test, expect, type BrowserContext, type Request } from '@playwright/test';
 import { type AdminCommissionManagementPage } from '../../pageElements/CommissionManagement/AdminCommissionManagementPage';
-import { loginToCommissionManagement } from '../../CommissionManagement/CommissionManagementHelper';
+import { loginToCommissionManagement } from '../../CommissionManagement/helpers/CommissionManagementHelper.ts';
 import {
     SUMMARY_LABEL,
     TOPUP_COMMISSION_TRANSACTION_TYPE,
@@ -15,9 +15,9 @@ import {
     LOGIN_MOBILE,
     type TopupSession,
     type TopupCommissionSnapshot,
-} from '../TopupHelper';
+} from '../helpers/TopupHelper.ts';
 import { closeSqlPool } from '../../../support/sqlServerClient';
-import { openAdminLimits, closeAdminLimits } from '../TopupLimitsHelper';
+import { openAdminLimits, closeAdminLimits } from '../helpers/TopupLimitsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Topup × commission for the MERCHANT account (company T2605, same mobile as the Biller login; its Cash-In type is

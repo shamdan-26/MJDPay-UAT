@@ -1,5 +1,5 @@
-import { test, expect, Page } from '../HomepageFixtures';
-import { ASSERTION_TIMEOUT_MS, refreshHomepage } from '../HomePageHelper';
+import { test, expect, Page } from '../helpers/HomepageFixtures.ts';
+import { ASSERTION_TIMEOUT_MS, refreshHomepage } from '../helpers/HomePageHelper.ts';
 import { DashboardPage } from '../../pageElements/Shared/DashboardPage';
 import { HomepageGreetingPage } from '../../pageElements/Homepage/HomepageGreetingPage';
 

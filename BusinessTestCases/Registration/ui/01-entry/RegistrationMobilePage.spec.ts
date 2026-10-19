@@ -1,4 +1,4 @@
-import { test, expect } from '../../../fixtures';
+import { test, expect } from '../../../shared/fixtures.ts';
 import { REGISTER_URL } from '../../helpers/RegistrationHelper';
 import { RegistrationMobilePage } from '../../../pageElements/Registration/RegistrationMobilePage';
 

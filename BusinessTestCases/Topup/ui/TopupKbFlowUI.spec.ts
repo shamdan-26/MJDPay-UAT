@@ -1,5 +1,5 @@
 import { test, expect, type Request, type Response } from '@playwright/test';
-import { findTopupCase, loginToTopup, gotoTopupScreen, completeCardPayment, reachOtpScreen, reachCardEntryPopup, getTopupTransactionLogHistoryFromSql, HOME_URL, TOPUP_UI_ACCOUNT, type TopupSession } from '../TopupHelper';
+import { findTopupCase, loginToTopup, gotoTopupScreen, completeCardPayment, reachOtpScreen, reachCardEntryPopup, getTopupTransactionLogHistoryFromSql, HOME_URL, TOPUP_UI_ACCOUNT, type TopupSession } from '../helpers/TopupHelper.ts';
 import { proceedToSummary, readBalanceBefore, raiseMerchantCountHeadroom } from './TopupBizUiHelper';
 import { HomepageSidebarPage } from '../../pageElements/Shared/HomepageSidebarPage';
 

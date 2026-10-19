@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { findTopupCase, loginToTopup, TOPUP_UI_ACCOUNT, gotoTopupScreen, reachOtpScreen, type TopupSession } from '../TopupHelper';
+import { findTopupCase, loginToTopup, TOPUP_UI_ACCOUNT, gotoTopupScreen, reachOtpScreen, type TopupSession } from '../helpers/TopupHelper.ts';
 import { raiseMerchantCountHeadroom } from '../ui/TopupBizUiHelper';
 
 // OTP Flow — depth on the OTP screen's own input/button/countdown behavior,

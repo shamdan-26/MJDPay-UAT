@@ -3,7 +3,7 @@ import {
     API_BASE, ADMIN_TRANSACTIONS, ADMIN_LEDGER, ADMIN_TOKEN, PROFILE_CODE,
     TERMINAL_ID, WALLET_REFERENCE,
     authHeaders, getBusinessToken, isSpringPage, firstError,
-} from '../PosTransactionsHelper';
+} from '../helpers/PosTransactionsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // POS – Admin Transactions & Ledger  (unscoped, back-office)

@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { ASSERTION_TIMEOUT_MS, createHomepageSession, refreshHomepage } from '../HomePageHelper';
+import { ASSERTION_TIMEOUT_MS, createHomepageSession, refreshHomepage } from '../helpers/HomePageHelper.ts';
 import { DashboardPage } from '../../pageElements/Shared/DashboardPage';
 import { HomepageTransactionsPage } from '../../pageElements/Homepage/HomepageTransactionsPage';
 

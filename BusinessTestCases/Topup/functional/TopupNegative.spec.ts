@@ -9,7 +9,7 @@ import {
     getTopupTransactionLogHistoryFromSql,
     decodeJwtProfileCode,
     type TopupSession,
-} from '../TopupHelper';
+} from '../helpers/TopupHelper.ts';
 import { raiseMerchantCountHeadroom, SKIP_LEDGER_ASSERTIONS } from '../ui/TopupBizUiHelper';
 import { closeSqlPool } from '../../../support/sqlServerClient';
 

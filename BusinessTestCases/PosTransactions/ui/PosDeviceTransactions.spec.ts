@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { SESSION_PATH } from '../../Login/LoginHelper';
+import { SESSION_PATH } from '../../Login/helpers/LoginHelper.ts';
 import { PosDeviceTransactionsPage } from '../../pageElements/PosTransactions/PosDeviceTransactionsPage';
 import {
     TERMINAL_ID,
@@ -10,7 +10,7 @@ import {
     mockPosTransactionsWithNullDeviceId,
     gotoPosBusinessTransactions,
     gotoPosAdminTransactions,
-} from '../PosTransactionsHelper';
+} from '../helpers/PosTransactionsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // POS Device Transactions — Business and Admin web screens (POS-UI-01..POS-UI-08).

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { SESSION_PATH } from '../../Login/LoginHelper';
+import { SESSION_PATH } from '../../Login/helpers/LoginHelper.ts';
 import { ManageUsersPage } from '../../pageElements/UserManagement/ManageUsersPage';
 import { AddUserFormPage } from '../../pageElements/UserManagement/AddUserFormPage';
 import { ExternalPartyPage } from '../../pageElements/UserManagement/ExternalPartyPage';
@@ -16,7 +16,7 @@ import {
     mockAdminStaffGroupsServerError,
     mockExternalPartyRoles,
     mockExternalPartyRolesEmpty,
-} from '../UserManagementHelper';
+} from '../helpers/UserManagementHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Admin / Business user provisioning — post-creation visibility and the two

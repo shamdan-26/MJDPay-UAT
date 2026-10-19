@@ -3,8 +3,8 @@ import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { HomePage } from '../../pageElements/Shared/HomePage';
 import { BillsPage } from '../../pageElements/PayBill/BillsPage';
-import { BILL_COMPANY, BILL_MOBILE, BILL_PASSWORD } from '../PayBillHelper';
-import { LOGIN_URL, getOtpFromDb } from '../../Login/LoginHelper';
+import { BILL_COMPANY, BILL_MOBILE, BILL_PASSWORD } from '../helpers/PayBillHelper.ts';
+import { LOGIN_URL, getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 
 // Fixed/percentage commission, Default-vs-Custom schema, and validation rules
 // for Pay Bill (EMI-2031 Commission management — epic EMI-2186). Gated on an

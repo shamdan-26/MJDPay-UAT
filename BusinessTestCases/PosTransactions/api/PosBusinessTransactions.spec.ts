@@ -4,7 +4,7 @@ import {
     PROCESSING_STATUSES, MERCHANT_2_TOKEN, NO_PRIVILEGE_TOKEN, EXPIRED_TOKEN,
     authHeaders, headersWithout, commonHeaders, getBusinessToken, hasPosAccess,
     isSpringPage, isClientError, firstError,
-} from '../PosTransactionsHelper';
+} from '../helpers/PosTransactionsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // POS – Business Transactions API  (tenant-scoped, GET_POS_TRANSACTIONS)

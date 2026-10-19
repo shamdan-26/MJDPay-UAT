@@ -1,5 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
-import { waitForToastClear } from '../../toastMessages';
+import { waitForToastClear } from '../../shared/toastMessages.ts';
 import { RegistrationMobilePage } from '../../pageElements/Registration/RegistrationMobilePage';
 import { RegistrationInfoPage } from '../../pageElements/Registration/RegistrationInfoPage';
 import { RegistrationFinancialPage } from '../../pageElements/Registration/RegistrationFinancialPage';

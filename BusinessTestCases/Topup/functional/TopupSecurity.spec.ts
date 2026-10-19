@@ -1,5 +1,5 @@
 import { test, expect, type Request } from '@playwright/test';
-import { findTopupCase, loginToTopup, TOPUP_UI_ACCOUNT, gotoTopupScreen, reachCardEntryPopup, reachOtpScreen, BASE_URL, type TopupSession } from '../TopupHelper';
+import { findTopupCase, loginToTopup, TOPUP_UI_ACCOUNT, gotoTopupScreen, reachCardEntryPopup, reachOtpScreen, BASE_URL, type TopupSession } from '../helpers/TopupHelper.ts';
 import { raiseMerchantCountHeadroom } from '../ui/TopupBizUiHelper';
 
 // Security — maps to docs/manual-test-cases/Topup.md section H (TUP-35).

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginToTopup, gotoTopupScreen, TOPUP_UI_ACCOUNT, type TopupSession } from '../TopupHelper';
+import { loginToTopup, gotoTopupScreen, TOPUP_UI_ACCOUNT, type TopupSession } from '../helpers/TopupHelper.ts';
 import { RGB, readStyle, contrastRatio, expectSize } from './TopupUiTokens';
 
 // UI look of the Top-up form: text, colours, sizes, states. Cases TUI-03..TUI-58 from Topup-UITestCases.md that no

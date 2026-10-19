@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { SESSION_PATH } from '../../Login/LoginHelper';
+import { SESSION_PATH } from '../../Login/helpers/LoginHelper.ts';
 import { GroupsRolesPage } from '../../pageElements/UserManagement/GroupsRolesPage';
 import {
     fetchJson,
@@ -8,7 +8,7 @@ import {
     localizedRoles,
     mockCustomGroupsAndRoles,
     mockCustomListingsWithoutArabicFields,
-} from '../UserManagementHelper';
+} from '../helpers/UserManagementHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Access & Permissions — Arabic layout and form completeness (GRL-01..GRL-06).

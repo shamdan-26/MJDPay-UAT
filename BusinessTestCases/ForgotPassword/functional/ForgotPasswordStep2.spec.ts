@@ -1,4 +1,4 @@
-import { test, expect } from '../../fixtures';
+import { test, expect } from '../../shared/fixtures.ts';
 import {
     SUBMIT_BUTTON,
     VALID_PASSWORD,
@@ -10,7 +10,7 @@ import {
     mockPasswordResetFailure,
     gotoForgotPassword,
     fillStep1AndProceed,
-} from '../ForgotPasswordHelper';
+} from '../helpers/ForgotPasswordHelper.ts';
 import { ForgotPasswordPage } from '../../pageElements/ForgotPassword/ForgotPasswordPage';
 
 // ─────────────────────────────────────────────────────────────────────────────

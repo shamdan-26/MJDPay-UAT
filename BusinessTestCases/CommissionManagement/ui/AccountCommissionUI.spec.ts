@@ -1,5 +1,5 @@
 import { test, expect, type BrowserContext } from '@playwright/test';
-import { loginToCommissionManagement } from '../CommissionManagementHelper';
+import { loginToCommissionManagement } from '../helpers/CommissionManagementHelper.ts';
 import { type AdminCommissionManagementPage } from '../../pageElements/CommissionManagement/AdminCommissionManagementPage';
 
 // UI presence and read-only behaviour for the Accounts Commission screens for

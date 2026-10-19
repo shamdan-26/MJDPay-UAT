@@ -4,7 +4,7 @@ import {
     ADMIN_TOKEN, ADMIN_READONLY_TOKEN, ACH_STATUSES, TERMINAL_ID,
     ALLOW_ACH_MUTATIONS, ACH_MUTATION_GUARD, AWAITING_BATCH_REF, RELEASED_BATCH_REF,
     authHeaders, getBusinessToken, isSpringPage,
-} from '../PosTransactionsHelper';
+} from '../helpers/PosTransactionsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // POS – ACH Transfers  (admin settlement of aggregated POS ledger batches)

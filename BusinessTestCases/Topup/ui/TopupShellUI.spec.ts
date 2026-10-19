@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginToTopup, gotoTopupScreen, type TopupSession, TOPUP_UI_ACCOUNT } from '../TopupHelper';
+import { loginToTopup, gotoTopupScreen, type TopupSession, TOPUP_UI_ACCOUNT } from '../helpers/TopupHelper.ts';
 
 // UI — the app shell around the Topup screen: RTL sidebar, top header and profile dropdown.
 // Assertions check visibility/non-emptiness or bilingual patterns rather than

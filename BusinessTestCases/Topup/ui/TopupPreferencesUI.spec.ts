@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginToTopup, gotoTopupScreen, type TopupSession, TOPUP_UI_ACCOUNT } from '../TopupHelper';
+import { loginToTopup, gotoTopupScreen, type TopupSession, TOPUP_UI_ACCOUNT } from '../helpers/TopupHelper.ts';
 
 // UI — account preferences reachable from the profile dropdown on the Topup
 // screen: language (Arabic <-> English) and dark mode. Both change persistent

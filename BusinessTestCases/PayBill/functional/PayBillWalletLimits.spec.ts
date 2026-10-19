@@ -3,8 +3,8 @@ import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { HomePage } from '../../pageElements/Shared/HomePage';
 import { BillsPage } from '../../pageElements/PayBill/BillsPage';
-import { BILL_COMPANY, BILL_MOBILE, BILL_PASSWORD } from '../PayBillHelper';
-import { LOGIN_URL, getOtpFromDb } from '../../Login/LoginHelper';
+import { BILL_COMPANY, BILL_MOBILE, BILL_PASSWORD } from '../helpers/PayBillHelper.ts';
+import { LOGIN_URL, getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 
 // Wallet-balance limit enforcement for Pay Bill (EMI-659, EMI-1653, EMI-195 —
 // epic EMI-2185). Gated on an Admin Portal risk-level/wallet-type

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { VALID_PASSWORD, WRONG_PASSWORD } from '../LoginHelper';
+import { VALID_PASSWORD, WRONG_PASSWORD } from '../helpers/LoginHelper.ts';
 import { API_BASE, commonHeaders, VALID_USERNAME, VALID_TENANT } from '../helpers/loginApi';
 
 // API performance budgets for the login endpoints. Budgets are generous (dev environment variance) and exist to

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { loginToTopup, HOME_URL, BASE_URL, TOPUP_UI_ACCOUNT, type TopupSession } from '../TopupHelper';
-import { removeTopupPrivilege, TOPUP_PRIVILEGE } from '../TopupPrivilegeHelper';
+import { loginToTopup, HOME_URL, BASE_URL, TOPUP_UI_ACCOUNT, type TopupSession } from '../helpers/TopupHelper.ts';
+import { removeTopupPrivilege, TOPUP_PRIVILEGE } from '../helpers/TopupPrivilegeHelper.ts';
 import { ADMIN_ROLE } from '../../pageElements/UserManagement/AdminGroupsManagementPage';
 import { HomepageSidebarPage } from '../../pageElements/Shared/HomepageSidebarPage';
 

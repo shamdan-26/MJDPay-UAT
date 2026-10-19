@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { findTopupCase, loginToTopup, gotoTopupScreen, SUMMARY_LABEL, type TopupSession, TOPUP_UI_ACCOUNT } from '../TopupHelper';
+import { findTopupCase, loginToTopup, gotoTopupScreen, SUMMARY_LABEL, type TopupSession, TOPUP_UI_ACCOUNT } from '../helpers/TopupHelper.ts';
 
 // UI — the Add Funds Summary step: rows, amounts, balance card, Cancel, reload and Back.
 // Assertions check visibility/non-emptiness or bilingual patterns rather than

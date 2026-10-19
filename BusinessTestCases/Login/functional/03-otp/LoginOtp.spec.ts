@@ -1,11 +1,11 @@
-import { test, expect } from '../../../fixtures';
+import { test, expect } from '../../../shared/fixtures.ts';
 import {
     LOGIN_MOBILE,
     INVALID_OTP,
     gotoLogin,
     fillAndSubmitLogin,
     getOtpFromDb,
-} from '../../LoginHelper';
+} from '../../helpers/LoginHelper.ts';
 import { LoginPage } from '../../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../../pageElements/Shared/OtpPage';
 

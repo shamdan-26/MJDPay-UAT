@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { SESSION_PATH } from '../../Login/LoginHelper';
+import { SESSION_PATH } from '../../Login/helpers/LoginHelper.ts';
 import { SubWalletsPage } from '../../pageElements/SubWallets/SubWalletsPage';
 import { SubWalletFormPage } from '../../pageElements/SubWallets/SubWalletFormPage';
 import { SubWalletDetailsPage } from '../../pageElements/SubWallets/SubWalletDetailsPage';
@@ -9,7 +9,7 @@ import {
     mockSubWalletList,
     mockCloseSubWalletSuccess,
     mockCloseSubWalletBlockedByChild,
-} from '../SubWalletsHelper';
+} from '../helpers/SubWalletsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Sub-Wallets Management (SW-01..SW-09) — EMI-5185 (FE-Web), EMI-5186 (BE),

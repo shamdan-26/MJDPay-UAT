@@ -6,7 +6,7 @@ import {
     authHeaders, commonHeaders, buildCallback, buildCallbackXml, callbackXmlHeaders,
     freshStan, freshRrn, idempotencyInputs, isFullPan, isClientError, firstError,
     getBusinessToken, hasPosAccess,
-} from '../PosTransactionsHelper';
+} from '../helpers/PosTransactionsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // POS – Terminal callback defects (POS-CBD-01..POS-CBD-08)

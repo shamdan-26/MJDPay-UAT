@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { SESSION_PATH } from '../../Login/LoginHelper';
+import { SESSION_PATH } from '../../Login/helpers/LoginHelper.ts';
 import { BeneficiaryManagementPage } from '../../pageElements/BeneficiaryManagement/BeneficiaryManagementPage';
 import { BeneficiaryDetailsPage } from '../../pageElements/BeneficiaryManagement/BeneficiaryDetailsPage';
 import {
@@ -25,7 +25,7 @@ import {
     mockBeneficiaryOtpResendServerError,
     mockBeneficiaryOtpResendForbidden,
     KNOWN_INDIVIDUAL_MOBILE,
-} from '../BeneficiaryManagementHelper';
+} from '../helpers/BeneficiaryManagementHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Manage Accounts → Manage Beneficiary — bug regression suite

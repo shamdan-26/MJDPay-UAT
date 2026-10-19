@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import {
     API_BASE, POS_CALLBACK, CALLBACK_TOKEN, TERMINAL_ID, MASKED_PAN, FULL_PAN,
     authHeaders, headersWithout, commonHeaders, buildCallback, freshStan, freshRrn,
-} from '../PosTransactionsHelper';
+} from '../helpers/PosTransactionsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // POS – Terminal Transaction Callback

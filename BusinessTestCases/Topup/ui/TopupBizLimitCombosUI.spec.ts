@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { loginToTopup, gotoTopupScreen, TOPUP_UI_ACCOUNT, type TopupSession } from '../TopupHelper';
-import { openAdminLimits, closeAdminLimits, attemptTopup, attemptInfo, isBlocked, type AdminLimitsHandle, type TopupAttempt } from '../TopupLimitsHelper';
+import { loginToTopup, gotoTopupScreen, TOPUP_UI_ACCOUNT, type TopupSession } from '../helpers/TopupHelper.ts';
+import { openAdminLimits, closeAdminLimits, attemptTopup, attemptInfo, isBlocked, type AdminLimitsHandle, type TopupAttempt } from '../helpers/TopupLimitsHelper.ts';
 import { TOPUP_TYPE_NAME } from '../../pageElements/Shared/AdminLimitsApi';
 import testAccounts from '../../../data/testAccounts.json';
 

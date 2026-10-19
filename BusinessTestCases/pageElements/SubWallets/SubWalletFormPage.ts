@@ -1,5 +1,5 @@
 import { type Page, type Locator, expect } from '@playwright/test';
-import type { SubWalletInput } from '../../SubWallets/SubWalletsHelper';
+import type { SubWalletInput } from '../../SubWallets/helpers/SubWalletsHelper.ts';
 
 /**
  * Sub-wallet create / edit form (EMI-5185). Field set comes from the ticket:

@@ -3,8 +3,8 @@ import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { HomepageQuickActionsPage } from '../../pageElements/Shared/HomepageQuickActionsPage';
 import { BankTransferPage } from '../../pageElements/Shared/BankTransferPage';
-import { HOME_URL, ensureNonZeroBalance } from '../BankTransferHelper';
-import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/LoginHelper';
+import { HOME_URL, ensureNonZeroBalance } from '../helpers/BankTransferHelper.ts';
+import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 
 // System / Admin cash-out (EMI-2050, TC-3129–3133, plus the notification cases
 // TC-3127 / TC-3132). This is the *Admin Portal* "System Cash-Out" surface —

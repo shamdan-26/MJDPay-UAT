@@ -1,4 +1,4 @@
-import { test, expect } from '../../fixtures';
+import { test, expect } from '../../shared/fixtures.ts';
 import {
     FORGOT_URL,
     VALID_COMPANY,
@@ -8,7 +8,7 @@ import {
     mockForgetPasswordFailure,
     abortUnmockedGatewayRequests,
     gotoForgotPassword,
-} from '../ForgotPasswordHelper';
+} from '../helpers/ForgotPasswordHelper.ts';
 import { ForgotPasswordPage } from '../../pageElements/ForgotPassword/ForgotPasswordPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 

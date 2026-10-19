@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { SESSION_PATH } from '../../Login/LoginHelper';
+import { SESSION_PATH } from '../../Login/helpers/LoginHelper.ts';
 import { SubWalletsPage } from '../../pageElements/SubWallets/SubWalletsPage';
 import { HomepageSidebarPage } from '../../pageElements/Shared/HomepageSidebarPage';
 import {
@@ -8,7 +8,7 @@ import {
     mockSubWalletList,
     mockSubWalletPrivileges,
     mockCreateSubWalletForbidden,
-} from '../SubWalletsHelper';
+} from '../helpers/SubWalletsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Sub-Wallet Permissions — MOCK ONLY (SWP-01..SWP-04): EMI-5274 (Biller/

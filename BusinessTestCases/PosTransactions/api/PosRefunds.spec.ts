@@ -6,7 +6,7 @@ import {
     authHeaders, buildCallbackXml, callbackXmlHeaders,
     freshRrn, freshStan, isClientError, firstError, isSpringPage,
     getBusinessToken, hasPosAccess, walletLedgerTotal, findByRrn,
-} from '../PosTransactionsHelper';
+} from '../helpers/PosTransactionsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // POS – Refunds (POS-REF-01..POS-REF-18) — EMI-5918

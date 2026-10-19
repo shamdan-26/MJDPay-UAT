@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginToTopup, gotoTopupScreen, TOPUP_UI_ACCOUNT, type TopupSession, type TopupTransactionLogSqlRow } from '../TopupHelper';
+import { loginToTopup, gotoTopupScreen, TOPUP_UI_ACCOUNT, type TopupSession, type TopupTransactionLogSqlRow } from '../helpers/TopupHelper.ts';
 import { payWithOutcome, ledgerFor, raiseMerchantCountHeadroom, SKIP_LEDGER_ASSERTIONS } from './TopupBizUiHelper';
 import { closeSqlPool } from '../../../support/sqlServerClient';
 

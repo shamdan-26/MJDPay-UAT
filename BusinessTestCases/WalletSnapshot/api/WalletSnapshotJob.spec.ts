@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { API_BASE, JOBS_API_BASE, JOBS_PATH, PENDING_INTERNAL_NETWORK } from '../WalletSnapshotHelper';
+import { API_BASE, JOBS_API_BASE, JOBS_PATH, PENDING_INTERNAL_NETWORK } from '../helpers/WalletSnapshotHelper.ts';
 
 // Wallet Snapshot Job trigger (EMI-6115) — POST /api/v1/wallet-snapshot-jobs
 // on an internal-only host (JOBS_API_BASE), not the public gateway. See

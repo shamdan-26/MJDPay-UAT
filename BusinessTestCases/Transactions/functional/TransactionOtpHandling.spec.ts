@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { FIXED_OTP } from '../../../support/otp';
-import { SESSION_PATH } from '../../Login/LoginHelper';
+import { SESSION_PATH } from '../../Login/helpers/LoginHelper.ts';
 import {
     fetchJson,
     gotoTransactions,
@@ -8,7 +8,7 @@ import {
     mockOtpConfigUpdateSuccess,
     mockOtpConfigUpdateIgnoresRequired,
     mockOtpMaxAttemptsExceeded,
-} from '../TransactionsHelper';
+} from '../helpers/TransactionsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Transaction OTP Handling (TO-01..TO-03) — MOCK ONLY.

@@ -342,4 +342,4 @@ The Playwright specs for this feature are in `BusinessTestCases/Login/` (layer f
 | L–P, not yet automatable | `functional/06-pending/LoginPendingCases.spec.ts` | LG-154, LG-155, LG-160 to LG-170 and LG-137, each skipped with its blocker |
 | Non-functional | `non-functional/*` | LG-A11Y, LG-PERF, LG-APIPERF and the visual baselines have no manual counterpart |
 
-Supporting code: `BusinessTestCases/Login/LoginHelper.ts` (accounts and the fixed OTP `918512`), `BusinessTestCases/Login/helpers/` (API, mocks, session and first-login helpers) and `BusinessTestCases/pageElements/Shared/LoginPage.ts` (the page object for the login screen).
+Supporting code: `BusinessTestCases/Login/helpers/LoginHelper.ts` (accounts and the fixed OTP `918512`), `BusinessTestCases/Login/helpers/` (API, mocks, session and first-login helpers) and `BusinessTestCases/pageElements/Shared/LoginPage.ts` (the page object for the login screen).

@@ -8,7 +8,7 @@ import {
     WATHIQ_EXPIRED_COMPANY,
     WATHIQ_EXPIRED_MOBILE,
     WATHIQ_EXPIRED_PASSWORD,
-} from '../../LoginHelper';
+} from '../../helpers/LoginHelper.ts';
 import { API_BASE, signIn } from '../../helpers/loginApi';
 
 // ─────────────────────────────────────────────────────────────────────────────

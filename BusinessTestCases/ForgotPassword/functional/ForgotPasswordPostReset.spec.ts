@@ -1,7 +1,7 @@
-import { test, expect } from '../../fixtures';
+import { test, expect } from '../../shared/fixtures.ts';
 import testAccounts from '../../../data/testAccounts.json';
-import { VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, gotoOtpModal } from '../ForgotPasswordHelper';
-import { getOtpFromDb } from '../../Login/LoginHelper';
+import { VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, gotoOtpModal } from '../helpers/ForgotPasswordHelper.ts';
+import { getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 import { signIn } from '../../Login/helpers/loginApi';
 import type { Page } from '@playwright/test';
 import type { OtpPage } from '../../pageElements/Shared/OtpPage';

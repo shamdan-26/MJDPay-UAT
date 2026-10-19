@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
-import { loginToTopup, gotoTopupScreen, type TopupSession } from '../TopupHelper';
+import { loginToTopup, gotoTopupScreen, type TopupSession } from '../helpers/TopupHelper.ts';
 import {
     openAdminLimits, closeAdminLimits, attemptTopup, isBlocked,
     type AdminLimitsHandle,
-} from '../TopupLimitsHelper';
+} from '../helpers/TopupLimitsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Topup × admin-configured LIMITS (TUA-C…, docs/manual-test-cases/Topup-Admin-Config-Matrix.md §C).

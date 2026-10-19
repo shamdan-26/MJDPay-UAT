@@ -1,5 +1,5 @@
-import { test, expect } from '../../../fixtures';
-import { LOGIN_URL, INVALID_OTP, VALID_OTP } from '../../LoginHelper';
+import { test, expect } from '../../../shared/fixtures.ts';
+import { LOGIN_URL, INVALID_OTP, VALID_OTP } from '../../helpers/LoginHelper.ts';
 import { loginToOtpDialog } from '../../helpers/loginSession';
 import { VERIFY_OTP_GLOB, json } from '../../helpers/loginMocks';
 

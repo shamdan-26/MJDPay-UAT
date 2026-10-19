@@ -14,7 +14,7 @@ import {
     VALID_WALLET_TOKEN,
     EXPIRED_TOKEN,
     GUEST_WALLET_QR_TOKEN,
-} from '../PaymentLinkHelper';
+} from '../helpers/PaymentLinkHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Guest Flow (unauthenticated payment via public link / QR) — MOCK ONLY.

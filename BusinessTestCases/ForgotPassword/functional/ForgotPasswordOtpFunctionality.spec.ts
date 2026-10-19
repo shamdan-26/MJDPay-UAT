@@ -1,6 +1,6 @@
-import { test, expect } from '../../fixtures';
-import { VALID_MOBILE, INVALID_OTP, gotoOtpModal } from '../ForgotPasswordHelper';
-import { getOtpFromDb } from '../../Login/LoginHelper';
+import { test, expect } from '../../shared/fixtures.ts';
+import { VALID_MOBILE, INVALID_OTP, gotoOtpModal } from '../helpers/ForgotPasswordHelper.ts';
+import { getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { ForgotPasswordPage } from '../../pageElements/ForgotPassword/ForgotPasswordPage';
 

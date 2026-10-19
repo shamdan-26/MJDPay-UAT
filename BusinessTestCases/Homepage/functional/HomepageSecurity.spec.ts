@@ -1,11 +1,11 @@
-import { test, expect } from '../../fixtures';
+import { test, expect } from '../../shared/fixtures.ts';
 import {
     HOME_URL, BASE_ORIGIN, ACCOUNT_1_STORAGE_STATE,
     POST_NAV_SETTLE_MS, TOAST_APPEAR_TIMEOUT_MS, TOAST_CLEAR_TIMEOUT_MS,
-} from '../HomePageHelper';
+} from '../helpers/HomePageHelper.ts';
 import { DashboardPage } from '../../pageElements/Shared/DashboardPage';
 import { HomepageBalanceCardPage } from '../../pageElements/Homepage/HomepageBalanceCardPage';
-import { waitForToastClear } from '../../toastMessages';
+import { waitForToastClear } from '../../shared/toastMessages.ts';
 
 // True security/edge-case checks only. UI-presence assertions (greeting
 // format, last-login text, brand name) live in ui/HomepageGreetingPage.spec.ts

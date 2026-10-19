@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { SESSION_PATH } from '../../Login/LoginHelper';
+import { SESSION_PATH } from '../../Login/helpers/LoginHelper.ts';
 import {
     fetchJson,
     gotoTransactions,
@@ -15,7 +15,7 @@ import {
     mockExemptTransactionAmountWithCommission,
     mockTransactionLog,
     mockControlWalletBalance,
-} from '../TransactionsHelper';
+} from '../helpers/TransactionsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Transaction amount composition (TAC-01..TAC-06) — MOCK ONLY.

@@ -4,8 +4,8 @@ import { HomePage } from '../../pageElements/Shared/HomePage';
 import { W2WTransferPage } from '../../pageElements/W2WTransfer/W2WTransferPage';
 import { TransactionsPage } from '../../pageElements/Shared/TransactionsPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
-import { performLogin, type W2WTestData } from '../W2WTransferHelper';
-import { waitForToastClear } from '../../toastMessages';
+import { performLogin, type W2WTestData } from '../helpers/W2WTransferHelper.ts';
+import { waitForToastClear } from '../../shared/toastMessages.ts';
 import w2wData from '../../../data/w2wTransferData.json';
 
 const dataSets = w2wData as W2WTestData[];

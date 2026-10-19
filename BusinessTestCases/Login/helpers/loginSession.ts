@@ -1,6 +1,6 @@
 import { expect, type Page } from '@playwright/test';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
-import { LOGIN_MOBILE, gotoLogin, fillAndSubmitLogin, getOtpFromDb } from '../LoginHelper';
+import { LOGIN_MOBILE, gotoLogin, fillAndSubmitLogin, getOtpFromDb } from './LoginHelper.ts';
 
 /** Logs the happy-path account in (answering the OTP dialog when it is enabled) and waits for the dashboard. */
 export async function loginToDashboard(page: Page): Promise<void> {

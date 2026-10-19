@@ -5,7 +5,7 @@ import {
     mockValidBillLink,
     mockUpdateStatusSuccess,
     VALID_BILL_TOKEN,
-} from '../PaymentLinkHelper';
+} from '../helpers/PaymentLinkHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Payment Link Bugs — MOCK ONLY (EMI-5774, EMI-5775, EMI-5814), section 2.3

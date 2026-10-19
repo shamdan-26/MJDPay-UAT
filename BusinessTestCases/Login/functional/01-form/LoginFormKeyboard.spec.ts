@@ -1,10 +1,10 @@
-import { test, expect } from '../../../fixtures';
+import { test, expect } from '../../../shared/fixtures.ts';
 import {
     LOGIN_URL,
     NEGATIVE_COMPANY,
     NEGATIVE_MOBILE,
     VALID_PASSWORD,
-} from '../../LoginHelper';
+} from '../../helpers/LoginHelper.ts';
 import { mockSignIn } from '../../helpers/loginMocks';
 
 // Keyboard and input-handling behaviour of the login form. /auth/signin is mocked, so no real

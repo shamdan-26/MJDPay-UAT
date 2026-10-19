@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { SESSION_PATH } from '../../Login/LoginHelper';
+import { SESSION_PATH } from '../../Login/helpers/LoginHelper.ts';
 import { TransactionSummaryPage } from '../../pageElements/Transactions/TransactionSummaryPage';
 import {
     gotoTransactions,
@@ -7,7 +7,7 @@ import {
     mockTransactionListWithoutCommission,
     W2W_WITH_COMMISSION,
     TOPUP_WITH_COMMISSION,
-} from '../TransactionsHelper';
+} from '../helpers/TransactionsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Transaction Summary Display (TS-01..TS-06) — EMI-5699 (commission & VAT

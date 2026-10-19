@@ -1,7 +1,7 @@
 import { expect, test, type Browser, type Page, type Request } from '@playwright/test';
 import { AdminLimitsApi, ladderCount, type CountTier } from '../../pageElements/Shared/AdminLimitsApi';
 import { createAdminContext } from '../../pageElements/Shared/AdminOtpConfigPage';
-import { completeCardPayment, findTopupCase, getTopupTransactionLogHistoryFromSql, type TopupAccount, type TopupSession, type TopupTransactionLogSqlRow } from '../TopupHelper';
+import { completeCardPayment, findTopupCase, getTopupTransactionLogHistoryFromSql, type TopupAccount, type TopupSession, type TopupTransactionLogSqlRow } from '../helpers/TopupHelper.ts';
 import testAccounts from '../../../data/testAccounts.json';
 
 // Shared by the TUB-* browser-tier specs in this folder (TopupBiz*UI.spec.ts).

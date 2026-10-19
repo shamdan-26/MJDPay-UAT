@@ -5,7 +5,7 @@ import {
     ensureCommissionExistsAndActive,
     ensureCommissionExistsAndActiveByPlatform,
     randomCommissionValues,
-} from '../CommissionManagementHelper';
+} from '../helpers/CommissionManagementHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Admin Portal → Commission Management → Default Commission.

@@ -3,8 +3,8 @@ import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { HomepageQuickActionsPage } from '../../pageElements/Shared/HomepageQuickActionsPage';
 import { BankTransferPage } from '../../pageElements/Shared/BankTransferPage';
-import { HOME_URL, proceedToConfirmation, SUMMARY_LABEL, ensureNonZeroBalance } from '../BankTransferHelper';
-import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/LoginHelper';
+import { HOME_URL, proceedToConfirmation, SUMMARY_LABEL, ensureNonZeroBalance } from '../helpers/BankTransferHelper.ts';
+import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 
 // Abandon/cancel flows and cross-step state persistence. The legacy suite had
 // two near-duplicate "cancel from Confirmation" tests (one via the redesigned

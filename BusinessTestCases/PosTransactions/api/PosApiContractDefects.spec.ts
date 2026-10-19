@@ -6,7 +6,7 @@ import {
     ADMIN_TOKEN, EXPIRED_TOKEN,
     authHeaders, commonHeaders, localeHeaders, getBusinessToken, hasPosAccess,
     isSpringPage, isClientError, firstError, ARABIC_SCRIPT,
-} from '../PosTransactionsHelper';
+} from '../helpers/PosTransactionsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // POS – API contract defects (POS-DEF-01..POS-DEF-08)

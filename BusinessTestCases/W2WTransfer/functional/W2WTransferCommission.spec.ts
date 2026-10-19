@@ -3,7 +3,7 @@ import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { HomePage } from '../../pageElements/Shared/HomePage';
 import { W2WTransferPage } from '../../pageElements/W2WTransfer/W2WTransferPage';
-import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/LoginHelper';
+import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 
 // Fixed/percentage commission, Default-vs-Custom schema, and validation rules
 // for W2W Transfer (EMI-2031 Commission management — epic EMI-2186). Gated on

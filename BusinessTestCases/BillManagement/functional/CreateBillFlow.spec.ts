@@ -4,8 +4,8 @@ import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { HomePage } from '../../pageElements/Shared/HomePage';
 import { CreateBillPage } from '../../pageElements/BillManagement/CreateBillPage';
-import { HOME_URL, BILLER_COMPANY, BILLER_MOBILE, BILLER_PASSWORD, uniqueBillRef } from '../BillManagementHelper';
-import { LOGIN_URL, getOtpFromDb } from '../../Login/LoginHelper';
+import { HOME_URL, BILLER_COMPANY, BILLER_MOBILE, BILLER_PASSWORD, uniqueBillRef } from '../helpers/BillManagementHelper.ts';
+import { LOGIN_URL, getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 
 // Create Bill / Bill Management (EMI-183, EMI-242, EMI-3020). No prior
 // automation existed for the Biller-side "Add Bill" screens — see

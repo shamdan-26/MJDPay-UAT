@@ -8,7 +8,7 @@ import {
     mockBillQrMaxAttemptsExceeded,
     mockBillQrMaxAttemptsServerError,
     VALID_BILL_QR,
-} from '../BillQrHelper';
+} from '../helpers/BillQrHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Bill QR Code Scanning — Customer app (BQR-01, BQR-02), MOCK ONLY.

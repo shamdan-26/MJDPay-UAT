@@ -12,8 +12,8 @@ import {
     BILLER_PASSWORD,
     uniqueBillRef,
     uniqueItemName,
-} from '../BillManagementHelper';
-import { LOGIN_URL, getOtpFromDb } from '../../Login/LoginHelper';
+} from '../helpers/BillManagementHelper.ts';
+import { LOGIN_URL, getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 
 // Detailed Bill — line items, PRESENCE-ONLY checks (BI-U01..BI-U04).
 //

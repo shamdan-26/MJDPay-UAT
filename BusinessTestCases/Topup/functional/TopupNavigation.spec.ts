@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { HOME_URL, loginToTopup, TOPUP_UI_ACCOUNT, type TopupSession } from '../TopupHelper';
+import { HOME_URL, loginToTopup, TOPUP_UI_ACCOUNT, type TopupSession } from '../helpers/TopupHelper.ts';
 import { HomepageSidebarPage } from '../../pageElements/Shared/HomepageSidebarPage';
 
 // Navigation — the two entry points that land on Topup. Maps to

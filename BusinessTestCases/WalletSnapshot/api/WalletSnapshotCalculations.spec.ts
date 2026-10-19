@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { API_BASE, detailPath, commonHeaders, PENDING_ADMIN_TOKEN } from '../WalletSnapshotHelper';
+import { API_BASE, detailPath, commonHeaders, PENDING_ADMIN_TOKEN } from '../helpers/WalletSnapshotHelper.ts';
 
 // Wallet Snapshot Pipeline — the internal calculation/validation steps that
 // have no REST endpoint of their own (EMI-6116, 6117, 6118, 6119, 6121, 6122,

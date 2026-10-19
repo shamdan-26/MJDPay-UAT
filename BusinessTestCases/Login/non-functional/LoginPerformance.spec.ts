@@ -1,5 +1,5 @@
-import { test, expect } from '../../fixtures';
-import { LOGIN_URL, NEGATIVE_COMPANY, NEGATIVE_MOBILE, VALID_PASSWORD } from '../LoginHelper';
+import { test, expect } from '../../shared/fixtures.ts';
+import { LOGIN_URL, NEGATIVE_COMPANY, NEGATIVE_MOBILE, VALID_PASSWORD } from '../helpers/LoginHelper.ts';
 import { mockSignIn } from '../helpers/loginMocks';
 
 // Front-end performance budgets for the login page. Budgets are generous (dev variance) and catch order-of-magnitude

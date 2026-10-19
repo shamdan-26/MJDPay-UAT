@@ -51,7 +51,7 @@ IMAP auth is OAuth2 (XOAUTH2), not a password — the mailbox is a managed Micro
 
 ### Toast / snackbar guard
 
-`waitForToastClear` and `assertToast` live in `BusinessTestCases/toastMessages.ts`. `waitForToastClear` is called after every landing-page navigation immediately once the page settles — it waits up to 3 s for a `mat-snack-bar-container` / `[class*="snack"]` / `[class*="toast"]` to appear, then up to 8 s for it to clear, and is a no-op when no toast appears. `assertToast` asserts a toast is visible and optionally contains expected text — used in negative-scenario tests that expect an error/warning toast. This exists because Angular fires background API calls on load that can produce transient error banners in the dev environment.
+`waitForToastClear` and `assertToast` live in `BusinessTestCases/shared/toastMessages.ts`. `waitForToastClear` is called after every landing-page navigation immediately once the page settles — it waits up to 3 s for a `mat-snack-bar-container` / `[class*="snack"]` / `[class*="toast"]` to appear, then up to 8 s for it to clear, and is a no-op when no toast appears. `assertToast` asserts a toast is visible and optionally contains expected text — used in negative-scenario tests that expect an error/warning toast. This exists because Angular fires background API calls on load that can produce transient error banners in the dev environment.
 
 ### Page Object Model
 
@@ -71,9 +71,9 @@ A page object lives in `Shared/` only once it's actually consumed by more than o
 
 The suite has **two session lifecycles**, and each has its own fixtures file extending `@playwright/test`'s `test`/`expect`:
 
-1. **`BusinessTestCases/fixtures.ts`** — for specs that get a fresh `page` per test (the common case). Defines one lazy fixture per page object (all 27 classes), keyed by name (`loginPage`, `dashboard`, `otp`, `homepageBalanceCard`, `registrationInfo`, etc. — see the file for the full list). It also re-exports everything else from `@playwright/test` (`Page`, `Browser`, `expect`, ...), so a spec file only has to change its import source, not add a second import line for types:
+1. **`BusinessTestCases/shared/fixtures.ts`** — for specs that get a fresh `page` per test (the common case). Defines one lazy fixture per page object (all 27 classes), keyed by name (`loginPage`, `dashboard`, `otp`, `homepageBalanceCard`, `registrationInfo`, etc. — see the file for the full list). It also re-exports everything else from `@playwright/test` (`Page`, `Browser`, `expect`, ...), so a spec file only has to change its import source, not add a second import line for types:
    ```typescript
-   import { test, expect, type Page } from '../../fixtures'; // was '@playwright/test'
+   import { test, expect, type Page } from '../../shared/fixtures'; // was '@playwright/test'
 
    let loginPage: LoginPage;
    test.beforeEach(async ({ page, loginPage: lp }) => {

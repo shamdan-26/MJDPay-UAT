@@ -4,7 +4,7 @@ import {
     loginToCommissionManagement,
     ensureAccountCommissionExistsAndActive,
     randomCommissionValues,
-} from '../CommissionManagementHelper';
+} from '../helpers/CommissionManagementHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Admin Portal → Commission Management → Accounts Commission.

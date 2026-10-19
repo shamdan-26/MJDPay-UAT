@@ -1,5 +1,5 @@
-import { test, expect, Page } from '../HomepageFixtures';
-import { HOME_URL_PATTERN, refreshHomepage } from '../HomePageHelper';
+import { test, expect, Page } from '../helpers/HomepageFixtures.ts';
+import { HOME_URL_PATTERN, refreshHomepage } from '../helpers/HomePageHelper.ts';
 import { HomepageBalanceCardPage } from '../../pageElements/Homepage/HomepageBalanceCardPage';
 
 test.describe('Homepage – Balance card interactions', () => {

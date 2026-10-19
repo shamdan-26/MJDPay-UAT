@@ -1,5 +1,5 @@
-import { test, expect } from '../../fixtures';
-import { gotoOtpModal } from '../ForgotPasswordHelper';
+import { test, expect } from '../../shared/fixtures.ts';
+import { gotoOtpModal } from '../helpers/ForgotPasswordHelper.ts';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 
 test.describe('Forgot Password OTP Popup — UI', () => {

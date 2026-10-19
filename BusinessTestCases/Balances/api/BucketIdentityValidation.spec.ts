@@ -5,7 +5,7 @@ import {
     FINANCE_LEAD_TOKEN, COMMISSION_WALLET_CODE,
     authHeaders, satisfiesIdentity, conservationDelta, isShortfall, isSurplus,
     NEGATIVE_AVAILABLE_TOLERATED,
-} from '../BalancesHelper';
+} from '../helpers/BalancesHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Bucket Identity Validation & Variance Detection (BAL-ID-01..16) — EMI-5950

@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { API_BASE, INCOMING_BANK_TRANSACTIONS_JOB, commonHeaders } from '../ReconciliationHelper';
+import { API_BASE, INCOMING_BANK_TRANSACTIONS_JOB, commonHeaders } from '../helpers/ReconciliationHelper.ts';
 
 // End-of-Day (EOD) processing — EMI-636 (EOD Internal Reconciliation, Done),
 // EMI-637 (EOD External reconciliation with ANB, Done), EMI-710 (Get EOD bank

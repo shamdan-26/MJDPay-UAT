@@ -7,8 +7,8 @@ import {
     HOME_URL,
     REQUESTER_COMPANY, REQUESTER_MOBILE, REQUESTER_PASSWORD,
     PAYER_COMPANY, PAYER_MOBILE, PAYER_PASSWORD,
-} from '../MoneyRequestHelper';
-import { LOGIN_URL, getOtpFromDb } from '../../Login/LoginHelper';
+} from '../helpers/MoneyRequestHelper.ts';
+import { LOGIN_URL, getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 
 // Money Request (EMI-834) — a wallet holder requests money from another
 // wallet holder, who can Accept (pay), Decline, or scan a generated QR to

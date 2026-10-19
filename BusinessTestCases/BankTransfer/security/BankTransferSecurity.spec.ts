@@ -3,8 +3,8 @@ import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { HomepageQuickActionsPage } from '../../pageElements/Shared/HomepageQuickActionsPage';
 import { BankTransferPage } from '../../pageElements/Shared/BankTransferPage';
-import { HOME_URL, proceedToConfirmation, ensureNonZeroBalance } from '../BankTransferHelper';
-import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, VALID_OTP, getOtpFromDb } from '../../Login/LoginHelper';
+import { HOME_URL, proceedToConfirmation, ensureNonZeroBalance } from '../helpers/BankTransferHelper.ts';
+import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, VALID_OTP, getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 
 // Security scenarios for the Bank Transfer / Cashout flow. NEW folder for this
 // feature — the rest of BankTransfer/ is functional/ + ui/ only. Kept separate

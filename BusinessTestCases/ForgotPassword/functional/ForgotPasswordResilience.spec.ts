@@ -1,4 +1,4 @@
-import { test, expect } from '../../fixtures';
+import { test, expect } from '../../shared/fixtures.ts';
 import {
     VALID_COMPANY,
     VALID_MOBILE,
@@ -8,7 +8,7 @@ import {
     abortUnmockedGatewayRequests,
     gotoForgotPassword,
     fillStep1AndProceed,
-} from '../ForgotPasswordHelper';
+} from '../helpers/ForgotPasswordHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Resilience — server errors and dropped connections at each step (all mocked).

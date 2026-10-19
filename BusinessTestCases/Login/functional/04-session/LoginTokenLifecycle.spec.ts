@@ -1,6 +1,6 @@
-import { test, expect } from '../../../fixtures';
-import { assertToast } from '../../../toastMessages';
-import { LOGIN_MOBILE, LOGIN_URL, gotoLogin, fillAndSubmitLogin, getOtpFromDb } from '../../LoginHelper';
+import { test, expect } from '../../../shared/fixtures.ts';
+import { assertToast } from '../../../shared/toastMessages.ts';
+import { LOGIN_MOBILE, LOGIN_URL, gotoLogin, fillAndSubmitLogin, getOtpFromDb } from '../../helpers/LoginHelper.ts';
 import { loginToDashboard } from '../../helpers/loginSession';
 
 // Token and session rules (EMI-2042 / EMI-2043, EMI-4625). These sign in through the real login page and read the

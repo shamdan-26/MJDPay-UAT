@@ -1,5 +1,5 @@
-import { test, expect } from '../../../fixtures';
-import { LOGIN_URL } from '../../LoginHelper';
+import { test, expect } from '../../../shared/fixtures.ts';
+import { LOGIN_URL } from '../../helpers/LoginHelper.ts';
 import { loginToDashboard } from '../../helpers/loginSession';
 
 // Session behaviour after a successful login: logout, back button, refresh, deep links, multiple tabs/contexts.

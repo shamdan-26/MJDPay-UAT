@@ -1,6 +1,6 @@
 import { test, expect, type BrowserContext, type Locator, type Request } from '@playwright/test';
 import { COMMISSION_CATEGORY, type AdminCommissionManagementPage } from '../../pageElements/CommissionManagement/AdminCommissionManagementPage';
-import { loginToCommissionManagement, ensureAccountCommissionExistsAndActive } from '../../CommissionManagement/CommissionManagementHelper';
+import { loginToCommissionManagement, ensureAccountCommissionExistsAndActive } from '../../CommissionManagement/helpers/CommissionManagementHelper.ts';
 import {
     SUMMARY_LABEL,
     TOPUP_BILLER_COMMISSION_TRANSACTION_TYPE,
@@ -19,9 +19,9 @@ import {
     LOGIN_MOBILE,
     type TopupSession,
     type TopupCommissionSnapshot,
-} from '../TopupHelper';
+} from '../helpers/TopupHelper.ts';
 import { closeSqlPool } from '../../../support/sqlServerClient';
-import { openAdminLimits, closeAdminLimits, attemptTopup, isBlocked, type AdminLimitsHandle } from '../TopupLimitsHelper';
+import { openAdminLimits, closeAdminLimits, attemptTopup, isBlocked, type AdminLimitsHandle } from '../helpers/TopupLimitsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Topup — LIMITS × COMMISSION matrix (TUA-D01…D25 and TUA-E01…E09, docs/manual-test-cases/Topup-Admin-Config-Matrix.md).

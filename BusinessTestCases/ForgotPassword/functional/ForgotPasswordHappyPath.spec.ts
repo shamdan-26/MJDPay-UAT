@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
-import { assertToast } from '../../toastMessages';
+import { assertToast } from '../../shared/toastMessages.ts';
 import {
     SUBMIT_BUTTON,
     VALID_PASSWORD,
@@ -8,7 +8,7 @@ import {
     mockAllPasswordsSuccess,
     gotoForgotPassword,
     fillStep1AndProceed,
-} from '../ForgotPasswordHelper';
+} from '../helpers/ForgotPasswordHelper.ts';
 
 interface ForgotPasswordPageContext {
     page: Page;

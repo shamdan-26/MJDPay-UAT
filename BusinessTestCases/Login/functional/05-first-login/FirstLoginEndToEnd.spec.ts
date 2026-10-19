@@ -1,7 +1,7 @@
-import { test, expect } from '../../../fixtures';
+import { test, expect } from '../../../shared/fixtures.ts';
 import { FirstLoginPasswordPage } from '../../../pageElements/Login/FirstLoginPasswordPage';
 import { LoginPage } from '../../../pageElements/Shared/LoginPage';
-import { FIRST_LOGIN_DEFAULT_PASSWORD, LOGIN_URL } from '../../LoginHelper';
+import { FIRST_LOGIN_DEFAULT_PASSWORD, LOGIN_URL } from '../../helpers/LoginHelper.ts';
 import { FIRST_LOGIN_ACCOUNTS, NEW_PASSWORD, RESET_PASSWORD_URL, signInThroughOtp } from '../../helpers/firstLogin';
 
 // First-time login — END TO END. This case CONSUMES one account: it sets the new password, so the account is no longer

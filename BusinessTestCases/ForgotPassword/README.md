@@ -19,7 +19,7 @@ Flow: Step 1 (company + mobile) → optional OTP dialog → Step 2 (new password
 - Unknown identities (`Z####`, `511111111`) are used for load, security and enumeration checks so no real account is affected.
 
 ## Conventions
-- Import `test`/`expect` from `../../fixtures`; use the `forgotPassword` and `otp` fixtures.
+- Import `test`/`expect` from `../../shared/fixtures`; use the `forgotPassword` and `otp` fixtures.
 - Tag every describe with `@forgotpassword` plus a layer tag, and add a `testcase` annotation `FP-nn: title` so the exports link the test to its manual case in `docs/manual-test-cases/ForgotPassword.md`.
 - Register an `abortUnmockedGatewayRequests` route first, then specific mocks.
 - Real-backend specs that change the password must put it back (see `ForgotPasswordPostReset`).

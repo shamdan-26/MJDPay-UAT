@@ -1,5 +1,5 @@
 import type { APIRequestContext } from '@playwright/test';
-import { VALID_MOBILE, VALID_PASSWORD, VALID_COMPANY } from '../LoginHelper';
+import { VALID_MOBILE, VALID_PASSWORD, VALID_COMPANY } from './LoginHelper.ts';
 import { browserIdentityHeaders } from '../../../support/deviceFingerprint';
 
 // Shared API config for the Login API specs (api/signin, api/document-expiry).

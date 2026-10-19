@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { openAdminLimits, closeAdminLimits, TOPUP_LIMIT_TYPE, TOPUP_WALLET_TYPE, type AdminLimitsHandle } from '../TopupLimitsHelper';
+import { openAdminLimits, closeAdminLimits, TOPUP_LIMIT_TYPE, TOPUP_WALLET_TYPE, type AdminLimitsHandle } from '../helpers/TopupLimitsHelper.ts';
 import { AMT, why, startSession, initiate, expectRejected, ledger, balances, paymentIdOf, type BizSession } from './TopupBizApi';
 
 // Business rules: top-up limits and minimum (EMI-87). TUB-12, 25..29, 31, 33, 35 (groups B and D).

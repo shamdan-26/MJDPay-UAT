@@ -1,13 +1,13 @@
-import { test, expect } from '../../fixtures';
+import { test, expect } from '../../shared/fixtures.ts';
 import {
     HOME_URL, HOME_URL_PATTERN, BASE_ORIGIN, ACCOUNT_1_STORAGE_STATE,
     POST_NAV_SETTLE_MS, TOAST_APPEAR_TIMEOUT_MS, TOAST_CLEAR_TIMEOUT_MS, ASSERTION_TIMEOUT_MS,
-} from '../HomePageHelper';
+} from '../helpers/HomePageHelper.ts';
 import { DashboardPage } from '../../pageElements/Shared/DashboardPage';
 import { HomepageGreetingPage } from '../../pageElements/Homepage/HomepageGreetingPage';
 import { HomepageBillsOverviewPage } from '../../pageElements/Homepage/HomepageBillsOverviewPage';
 import { HomepageSubWalletsPage } from '../../pageElements/Homepage/HomepageSubWalletsPage';
-import { waitForToastClear } from '../../toastMessages';
+import { waitForToastClear } from '../../shared/toastMessages.ts';
 
 test.describe('Homepage – Negative Scenarios', () => {
     test.describe.configure({ mode: 'serial' });

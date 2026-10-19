@@ -1,5 +1,5 @@
 import { type Page, type Locator, expect } from '@playwright/test';
-import type { BillItemInput } from '../../BillManagement/BillManagementHelper';
+import type { BillItemInput } from '../../BillManagement/helpers/BillManagementHelper.ts';
 
 /**
  * Detailed Bill — line items (the "Add Items" / "Item Info" steps and the

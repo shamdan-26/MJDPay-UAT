@@ -2,7 +2,7 @@ import { expect, type Page, type Response } from '@playwright/test';
 import testAccounts from '../../../data/testAccounts.json';
 import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
-import { FIRST_LOGIN_DEFAULT_PASSWORD, LOGIN_URL, VALID_OTP } from '../LoginHelper';
+import { FIRST_LOGIN_DEFAULT_PASSWORD, LOGIN_URL, VALID_OTP } from './LoginHelper.ts';
 
 // Helpers for the first-login specs (Login/functional/05-first-login).
 

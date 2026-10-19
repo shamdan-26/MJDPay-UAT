@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { VALID_PASSWORD, WRONG_PASSWORD } from '../LoginHelper';
+import { VALID_PASSWORD, WRONG_PASSWORD } from '../helpers/LoginHelper.ts';
 import { API_BASE, commonHeaders, VALID_USERNAME, VALID_TENANT, signIn } from '../helpers/loginApi';
 
 // Gateway-level security checks on /auth/signin. Failed attempts use a company/mobile that does not exist

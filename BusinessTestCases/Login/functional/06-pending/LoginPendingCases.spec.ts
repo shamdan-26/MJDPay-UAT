@@ -1,4 +1,4 @@
-import { test } from '../../../fixtures';
+import { test } from '../../../shared/fixtures.ts';
 
 // Login cases that are specified (see docs/manual-test-cases/Login.md, sections L–P) but cannot be automated yet.
 // Each one is a skipped placeholder carrying WHY it is blocked and WHAT unblocks it, so the gap shows up in every

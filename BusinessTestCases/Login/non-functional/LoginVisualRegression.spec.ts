@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
-import { LOGIN_URL, NEGATIVE_COMPANY, NEGATIVE_MOBILE, VALID_PASSWORD } from '../LoginHelper';
+import { LOGIN_URL, NEGATIVE_COMPANY, NEGATIVE_MOBILE, VALID_PASSWORD } from '../helpers/LoginHelper.ts';
 import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { mockSignIn, json, SIGNIN_GLOB } from '../helpers/loginMocks';

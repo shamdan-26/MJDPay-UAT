@@ -10,8 +10,8 @@ import {
     mockQrDecodeTampered,
     SAMPLE_DYNAMIC_QR,
     SAMPLE_WALLET_QR,
-} from '../QRPaymentHelper';
-import { LOGIN_URL, getOtpFromDb } from '../../Login/LoginHelper';
+} from '../helpers/QRPaymentHelper.ts';
+import { LOGIN_URL, getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 import topupData from '../../../data/topupData.json';
 
 // Wallet Payment QR (EMI-590 QR payment, EMI-3545 Dynamic QR, EMI-922 QR

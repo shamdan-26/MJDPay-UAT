@@ -1,5 +1,5 @@
-import { test, expect } from '../../../fixtures';
-import { LOGIN_URL, LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../LoginHelper';
+import { test, expect } from '../../../shared/fixtures.ts';
+import { LOGIN_URL, LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../helpers/LoginHelper.ts';
 import { LoginPage } from '../../../pageElements/Shared/LoginPage';
 import { DashboardPage } from '../../../pageElements/Shared/DashboardPage';
 import { OtpPage } from '../../../pageElements/Shared/OtpPage';

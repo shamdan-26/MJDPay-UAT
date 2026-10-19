@@ -1,6 +1,6 @@
 import { test, expect, type BrowserContext } from '@playwright/test';
-import { loginToCommissionManagement } from '../../CommissionManagement/CommissionManagementHelper';
-import { TOPUP_BILLER_COMMISSION_TRANSACTION_TYPE_CODE } from '../TopupHelper';
+import { loginToCommissionManagement } from '../../CommissionManagement/helpers/CommissionManagementHelper.ts';
+import { TOPUP_BILLER_COMMISSION_TRANSACTION_TYPE_CODE } from '../helpers/TopupHelper.ts';
 import type { AdminCommissionManagementPage } from '../../pageElements/CommissionManagement/AdminCommissionManagementPage';
 import { startSession, openSummary, initiate, expectRejected, findNumber, round2, type BizSession } from './TopupBizApi';
 

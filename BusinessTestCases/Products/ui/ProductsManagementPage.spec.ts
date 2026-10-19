@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { createHomepageSession } from '../../Homepage/HomePageHelper';
+import { createHomepageSession } from '../../Homepage/helpers/HomePageHelper.ts';
 import { HomepageSidebarPage } from '../../pageElements/Shared/HomepageSidebarPage';
 import { ProductsManagementPage } from '../../pageElements/Products/ProductsManagementPage';
 

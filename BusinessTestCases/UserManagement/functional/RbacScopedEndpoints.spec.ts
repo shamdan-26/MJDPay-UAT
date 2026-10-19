@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { SESSION_PATH } from '../../Login/LoginHelper';
+import { SESSION_PATH } from '../../Login/helpers/LoginHelper.ts';
 import { GroupsRolesPage } from '../../pageElements/UserManagement/GroupsRolesPage';
 import {
     fetchJson,
@@ -21,7 +21,7 @@ import {
     mockGroupRoleAssignmentSuccess,
     CREATE_GROUP_PRIVILEGE,
     OBSOLETE_PRIVILEGE,
-} from '../UserManagementHelper';
+} from '../helpers/UserManagementHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Access & Permissions — scope-aware RBAC (RBS-01..RBS-10) — MOCK ONLY.

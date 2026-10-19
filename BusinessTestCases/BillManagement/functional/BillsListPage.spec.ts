@@ -3,8 +3,8 @@ import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { HomePage } from '../../pageElements/Shared/HomePage';
 import { BillsListPage } from '../../pageElements/BillManagement/BillsListPage';
-import { HOME_URL, BILLER_COMPANY, BILLER_MOBILE, BILLER_PASSWORD } from '../BillManagementHelper';
-import { LOGIN_URL, getOtpFromDb } from '../../Login/LoginHelper';
+import { HOME_URL, BILLER_COMPANY, BILLER_MOBILE, BILLER_PASSWORD } from '../helpers/BillManagementHelper.ts';
+import { LOGIN_URL, getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 
 // Bills Table / My Bills / Bill Report page (EMI-5807, EMI-5616, EMI-5673,
 // EMI-5119). No prior automation existed for this screen — see

@@ -1,10 +1,10 @@
-import { test, expect } from '../../fixtures';
+import { test, expect } from '../../shared/fixtures.ts';
 import {
     mockOtpDisabled,
     mockForgetPasswordSuccess,
     gotoForgotPassword,
     fillStep1AndProceed,
-} from '../ForgotPasswordHelper';
+} from '../helpers/ForgotPasswordHelper.ts';
 import { ForgotPasswordPage } from '../../pageElements/ForgotPassword/ForgotPasswordPage';
 
 test.describe('Forgot Password – Step 2 Page', () => {

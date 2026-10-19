@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { WRONG_PASSWORD } from '../../LoginHelper';
+import { WRONG_PASSWORD } from '../../helpers/LoginHelper.ts';
 import { API_BASE, commonHeaders } from '../../helpers/loginApi';
 
 // Locale handling of the auth endpoints: the `locale` / `Accept-Language` headers select en_uk or ar_sa and the error

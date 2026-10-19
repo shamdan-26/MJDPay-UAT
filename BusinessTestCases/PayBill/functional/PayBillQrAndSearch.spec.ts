@@ -3,8 +3,8 @@ import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { HomePage } from '../../pageElements/Shared/HomePage';
 import { BillsPage } from '../../pageElements/PayBill/BillsPage';
-import { BILL_COMPANY, BILL_MOBILE, BILL_PASSWORD, BILL_LOOKUP_NUMBER } from '../PayBillHelper';
-import { LOGIN_URL, getOtpFromDb } from '../../Login/LoginHelper';
+import { BILL_COMPANY, BILL_MOBILE, BILL_PASSWORD, BILL_LOOKUP_NUMBER } from '../helpers/PayBillHelper.ts';
+import { LOGIN_URL, getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 
 // Bill QR Code scanning — Business/merchant app (BQR-03, BQR-04). EMI-5144
 // (500 when scanning the bill QR) and EMI-5143 ("Something went wrong" when

@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test';
-import { test, expect } from '../../fixtures';
-import { assertToast } from '../../toastMessages';
+import { test, expect } from '../../shared/fixtures.ts';
+import { assertToast } from '../../shared/toastMessages.ts';
 import {
     LOGIN_URL,
     NEGATIVE_COMPANY,
@@ -9,7 +9,7 @@ import {
     WRONG_PASSWORD,
     LOCKOUT_COMPANY,
     LOCKOUT_MOBILE,
-} from '../LoginHelper';
+} from '../helpers/LoginHelper.ts';
 import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { AdminOtpConfigPage, createAdminContext } from '../../pageElements/Shared/AdminOtpConfigPage';
 import { AdminBusinessAccountsPage } from '../../pageElements/UserManagement/AdminBusinessAccountsPage';

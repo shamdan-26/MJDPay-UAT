@@ -7,7 +7,7 @@ import {
     mockForgetPasswordSuccess,
     gotoForgotPassword,
     fillStep1AndProceed,
-} from '../ForgotPasswordHelper';
+} from '../helpers/ForgotPasswordHelper.ts';
 import { ForgotPasswordPage } from '../../pageElements/ForgotPassword/ForgotPasswordPage';
 
 // ─────────────────────────────────────────────────────────────────────────────

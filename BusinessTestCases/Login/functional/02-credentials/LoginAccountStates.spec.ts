@@ -1,6 +1,6 @@
-import { test, expect } from '../../../fixtures';
-import { assertToast } from '../../../toastMessages';
-import { LOGIN_URL, VALID_PASSWORD, CREATED_ACCOUNTS } from '../../LoginHelper';
+import { test, expect } from '../../../shared/fixtures.ts';
+import { assertToast } from '../../../shared/toastMessages.ts';
+import { LOGIN_URL, VALID_PASSWORD, CREATED_ACCOUNTS } from '../../helpers/LoginHelper.ts';
 import { signIn } from '../../helpers/loginApi';
 
 // Account-state coverage that depends on provisioned accounts. Every env var below is optional: the test skips

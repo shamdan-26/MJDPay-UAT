@@ -214,7 +214,7 @@ Automated by the specs added in `ForgotPassword/functional`, `security`, `ui` an
 
 This manual test suite mirrors the existing Playwright automation for the Forgot Password feature. The corresponding automated specs are:
 
-- `BusinessTestCases/ForgotPassword/ForgotPasswordHelper.ts` — shared navigation/route-mocking helpers (`mockOtpDisabled`, `mockForgetPasswordSuccess`, `mockForgetPasswordFailure`, `mockAllPasswordsSuccess`, `gotoForgotPassword`, `gotoOtpModal`) used across the specs below
+- `BusinessTestCases/ForgotPassword/helpers/ForgotPasswordHelper.ts` — shared navigation/route-mocking helpers (`mockOtpDisabled`, `mockForgetPasswordSuccess`, `mockForgetPasswordFailure`, `mockAllPasswordsSuccess`, `gotoForgotPassword`, `gotoOtpModal`) used across the specs below
 - `BusinessTestCases/ForgotPassword/ui/ForgotPassword.spec.ts` — Step 1 page elements & layout (sections A)
 - `BusinessTestCases/ForgotPassword/ui/ForgotPasswordStep2.spec.ts` — Step 2 page elements & layout (section I)
 - `BusinessTestCases/ForgotPassword/ui/ForgotPasswordOtpPage.spec.ts` — OTP modal UI elements (section G)

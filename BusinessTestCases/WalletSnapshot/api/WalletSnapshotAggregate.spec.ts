@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { PENDING_ADMIN_TOKEN, PENDING_INTERNAL_NETWORK } from '../WalletSnapshotHelper';
+import { PENDING_ADMIN_TOKEN, PENDING_INTERNAL_NETWORK } from '../helpers/WalletSnapshotHelper.ts';
 
 // Wallet Snapshot Aggregate (EMI-6124) — WalletSnapshotFacade.start(cutoff),
 // the composition root over EMI-6116–6123/6126. This ticket has no behavior

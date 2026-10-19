@@ -1,5 +1,5 @@
-import { test, expect } from '../../fixtures';
-import { LOGIN_URL } from '../LoginHelper';
+import { test, expect } from '../../shared/fixtures.ts';
+import { LOGIN_URL } from '../helpers/LoginHelper.ts';
 
 // Language (EN/AR), RTL layout and persistence of the language/theme choice on the login screen.
 

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { SESSION_PATH } from '../../Login/LoginHelper';
+import { SESSION_PATH } from '../../Login/helpers/LoginHelper.ts';
 import { ManageUsersPage } from '../../pageElements/UserManagement/ManageUsersPage';
 import { AddUserFormPage } from '../../pageElements/UserManagement/AddUserFormPage';
 import {
@@ -26,7 +26,7 @@ import {
     mockEmptyGroupList,
     mockResetPasswordSuccess,
     mockResetPasswordForbidden,
-} from '../UserManagementHelper';
+} from '../helpers/UserManagementHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Manage Users — bug regression suite (MUB-01..MUB-11) — MOCK ONLY.

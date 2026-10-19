@@ -1,7 +1,7 @@
 import { expect, request as playwrightRequest, type APIRequestContext, type APIResponse, type Browser, type Page, type Request } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
-import { decodeJwtProfileCode, getTopupTransactionLogHistoryFromSql, loginToTopup, HOME_URL, type TopupAccount, type TopupTransactionLogSqlRow } from '../TopupHelper';
-import { openAdminLimits, closeAdminLimits } from '../TopupLimitsHelper';
+import { decodeJwtProfileCode, getTopupTransactionLogHistoryFromSql, loginToTopup, HOME_URL, type TopupAccount, type TopupTransactionLogSqlRow } from '../helpers/TopupHelper.ts';
+import { openAdminLimits, closeAdminLimits } from '../helpers/TopupLimitsHelper.ts';
 import { FIXED_OTP } from '../../../support/otp';
 import testAccounts from '../../../data/testAccounts.json';
 

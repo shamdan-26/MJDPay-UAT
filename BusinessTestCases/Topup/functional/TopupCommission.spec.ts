@@ -1,6 +1,6 @@
 import { test, expect, type BrowserContext, type Locator, type Request } from '@playwright/test';
 import { type AdminCommissionManagementPage, COMMISSION_CATEGORY } from '../../pageElements/CommissionManagement/AdminCommissionManagementPage';
-import { loginToCommissionManagement, ensureAccountCommissionExistsAndActive } from '../../CommissionManagement/CommissionManagementHelper';
+import { loginToCommissionManagement, ensureAccountCommissionExistsAndActive } from '../../CommissionManagement/helpers/CommissionManagementHelper.ts';
 import {
     SUMMARY_LABEL,
     TOPUP_BILLER_COMMISSION_TRANSACTION_TYPE,
@@ -19,10 +19,10 @@ import {
     LOGIN_COMPANY,
     type TopupSession,
     type TopupCommissionSnapshot,
-} from '../TopupHelper';
-import { getOtpFromDb } from '../../Login/LoginHelper';
+} from '../helpers/TopupHelper.ts';
+import { getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 import { closeSqlPool } from '../../../support/sqlServerClient';
-import { openAdminLimits, closeAdminLimits } from '../TopupLimitsHelper';
+import { openAdminLimits, closeAdminLimits } from '../helpers/TopupLimitsHelper.ts';
 
 // Business rules agreed 2026-10-13 (docs/manual-test-cases/Topup-Admin-Config-Matrix.md §M):
 //   Total = amount − commission. VAT is INSIDE the commission: VAT = commission × 15/115.

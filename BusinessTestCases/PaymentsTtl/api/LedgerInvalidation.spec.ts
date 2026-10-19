@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import {
     TTL_IMPLEMENTED, PENDING_BUILD, PENDING_JOBS_UI, NO_DB,
     LEDGER_PENDING, ON_EXPIRY_ACTIONS, PROPOSED_TTL_MATRIX, TTL_ACTOR,
-} from '../PaymentsTtlHelper';
+} from '../helpers/PaymentsTtlHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Payments TTL – Ledger invalidation (TTL-LG-01..14) — EMI-6031, section C

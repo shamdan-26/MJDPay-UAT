@@ -1,5 +1,5 @@
 import { test, expect, type Browser } from '@playwright/test';
-import { openAdminLimits, closeAdminLimits, type AdminLimitsHandle } from '../TopupLimitsHelper';
+import { openAdminLimits, closeAdminLimits, type AdminLimitsHandle } from '../helpers/TopupLimitsHelper.ts';
 import { TOPUP_TYPE_NAME } from '../../pageElements/Shared/AdminLimitsApi';
 import { AMT, SECOND_USER, codeOf, why, startSession, initiate, expectRejected, ledger, balances, envAccount, paymentIdOf, type BizSession } from './TopupBizApi';
 

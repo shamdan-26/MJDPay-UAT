@@ -1,12 +1,12 @@
-import { test, expect } from '../../../fixtures';
-import { assertToast } from '../../../toastMessages';
+import { test, expect } from '../../../shared/fixtures.ts';
+import { assertToast } from '../../../shared/toastMessages.ts';
 import {
     LOGIN_URL,
     NEGATIVE_COMPANY,
     NEGATIVE_MOBILE,
     VALID_PASSWORD,
     generateUnregisteredMobile,
-} from '../../LoginHelper';
+} from '../../helpers/LoginHelper.ts';
 import { LoginPage } from '../../../pageElements/Shared/LoginPage';
 
 test.describe('Login — Account Status Errors', { tag: ['@login', '@functional', '@credentials'], annotation: [{ type: 'feature', description: 'Login' }, { type: 'layer', description: 'functional' }] }, () => {

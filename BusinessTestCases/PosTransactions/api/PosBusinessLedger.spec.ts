@@ -4,7 +4,7 @@ import {
     TERMINAL_ID, WALLET_REFERENCE, OTHER_TERMINAL_ID, OTHER_WALLET_REFERENCE,
     LEDGER_STATUSES, LEDGER_ENTRY_TYPES, ADMIN_TOKEN, NO_PRIVILEGE_TOKEN,
     authHeaders, getBusinessToken, hasPosAccess, isSpringPage, isClientError, firstError,
-} from '../PosTransactionsHelper';
+} from '../helpers/PosTransactionsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // POS – Business Ledger API  (tenant-scoped, GET_POS_LEDGER)

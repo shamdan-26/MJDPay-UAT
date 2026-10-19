@@ -1,5 +1,5 @@
-import { test, expect, Page } from '../HomepageFixtures';
-import { HOME_URL_PATTERN, refreshHomepage } from '../HomePageHelper';
+import { test, expect, Page } from '../helpers/HomepageFixtures.ts';
+import { HOME_URL_PATTERN, refreshHomepage } from '../helpers/HomePageHelper.ts';
 import { HomepageBillsOverviewPage } from '../../pageElements/Homepage/HomepageBillsOverviewPage';
 
 test.describe('Homepage – Bills section interactions', () => {

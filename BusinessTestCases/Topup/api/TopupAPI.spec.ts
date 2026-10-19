@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { findTopupCase, loginToTopup, gotoTopupScreen, reachOtpScreen, clickSummaryNextAndDetectOtp, type TopupSession } from '../TopupHelper';
+import { findTopupCase, loginToTopup, gotoTopupScreen, reachOtpScreen, clickSummaryNextAndDetectOtp, type TopupSession } from '../helpers/TopupHelper.ts';
 
 // API / Contract — maps to docs/manual-test-cases/audit-additions.json
 // (TU-API-01) plus two additional cases extending its coverage: an

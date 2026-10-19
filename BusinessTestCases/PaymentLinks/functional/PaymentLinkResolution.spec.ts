@@ -11,7 +11,7 @@ import {
     VALID_BILL_TOKEN,
     VALID_WALLET_TOKEN,
     EXPIRED_TOKEN,
-} from '../PaymentLinkHelper';
+} from '../helpers/PaymentLinkHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Bill/Wallet Payment Link Resolution & Payment — MOCK ONLY (EMI-5463),

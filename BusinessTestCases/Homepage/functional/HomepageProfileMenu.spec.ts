@@ -1,5 +1,5 @@
-import { test, expect, Page } from '../HomepageFixtures';
-import { refreshHomepage } from '../HomePageHelper';
+import { test, expect, Page } from '../helpers/HomepageFixtures.ts';
+import { refreshHomepage } from '../helpers/HomePageHelper.ts';
 import { DashboardPage } from '../../pageElements/Shared/DashboardPage';
 import { HomepageHeaderPage } from '../../pageElements/Homepage/HomepageHeaderPage';
 

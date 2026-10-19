@@ -1,7 +1,7 @@
-import { test, expect } from '../../../fixtures';
-import { assertToast } from '../../../toastMessages';
+import { test, expect } from '../../../shared/fixtures.ts';
+import { assertToast } from '../../../shared/toastMessages.ts';
 import { FirstLoginPasswordPage } from '../../../pageElements/Login/FirstLoginPasswordPage';
-import { FIRST_LOGIN_DEFAULT_PASSWORD, LOGIN_URL } from '../../LoginHelper';
+import { FIRST_LOGIN_DEFAULT_PASSWORD, LOGIN_URL } from '../../helpers/LoginHelper.ts';
 import { FIRST_LOGIN_ACCOUNTS, NEW_PASSWORD, RESET_PASSWORD_URL, reachResetScreen } from '../../helpers/firstLogin';
 
 // First-time login — the forced password-change screen. A Business user whose password is still the default

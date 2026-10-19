@@ -1,10 +1,10 @@
-import { test, expect } from '../../fixtures';
+import { test, expect } from '../../shared/fixtures.ts';
 import {
     mockOtpDisabled,
     mockForgetPasswordSuccess,
     gotoForgotPassword,
     fillStep1AndProceed,
-} from '../ForgotPasswordHelper';
+} from '../helpers/ForgotPasswordHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Step 2 — password policy edge cases not covered by ForgotPasswordStep2.spec.ts (all mocked).

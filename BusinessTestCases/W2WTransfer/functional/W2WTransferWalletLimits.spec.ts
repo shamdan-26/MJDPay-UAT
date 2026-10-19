@@ -3,7 +3,7 @@ import { LoginPage } from '../../pageElements/Shared/LoginPage';
 import { OtpPage } from '../../pageElements/Shared/OtpPage';
 import { HomePage } from '../../pageElements/Shared/HomePage';
 import { W2WTransferPage } from '../../pageElements/W2WTransfer/W2WTransferPage';
-import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/LoginHelper';
+import { LOGIN_URL, VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD, getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 
 // Wallet-balance limit enforcement for W2W Transfer (EMI-659 Wallet balance
 // limitation, EMI-1653 Admin Limitation management, EMI-195 Limitation

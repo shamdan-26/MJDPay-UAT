@@ -5,7 +5,7 @@ import {
     AWAITING_BATCH_REF, RELEASED_BATCH_REF,
     ACH_REASON_MAX_LENGTH, ACH_RELEASE_RESULTS,
     authHeaders, isSpringPage, isClientError, firstError,
-} from '../PosTransactionsHelper';
+} from '../helpers/PosTransactionsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // POS – ACH batch release semantics (POS-ACHB-01..POS-ACHB-05)

@@ -1,6 +1,6 @@
 import { test, expect, type BrowserContext, type Request } from '@playwright/test';
 import { type AdminCommissionManagementPage } from '../../pageElements/CommissionManagement/AdminCommissionManagementPage';
-import { loginToCommissionManagement } from '../../CommissionManagement/CommissionManagementHelper';
+import { loginToCommissionManagement } from '../../CommissionManagement/helpers/CommissionManagementHelper.ts';
 import {
     SUMMARY_LABEL,
     TOPUP_BILLER_COMMISSION_TRANSACTION_TYPE,
@@ -19,10 +19,10 @@ import {
     type TopupCommissionSnapshot,
     type TopupBaseTransactionRow,
     type TopupTransactionLogSqlRow,
-} from '../TopupHelper';
-import { getOtpFromDb } from '../../Login/LoginHelper';
+} from '../helpers/TopupHelper.ts';
+import { getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
 import { closeSqlPool } from '../../../support/sqlServerClient';
-import { openAdminLimits, closeAdminLimits, type AdminLimitsHandle } from '../TopupLimitsHelper';
+import { openAdminLimits, closeAdminLimits, type AdminLimitsHandle } from '../helpers/TopupLimitsHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Topup × commission — what the LEDGER and the payment request do (not just the Summary preview).

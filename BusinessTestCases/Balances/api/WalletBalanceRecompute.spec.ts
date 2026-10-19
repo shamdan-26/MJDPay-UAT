@@ -4,7 +4,7 @@ import {
     BALANCES_IMPLEMENTED, PENDING_BUILD, PENDING_TOOLING, NO_DB,
     FINANCE_LEAD_TOKEN, NO_PRIVILEGE_TOKEN, WALLET_CODE,
     authHeaders, satisfiesIdentity, NEGATIVE_AVAILABLE_TOLERATED,
-} from '../BalancesHelper';
+} from '../helpers/BalancesHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Wallet Balance Recompute (BAL-RC-01..20) — EMI-5946

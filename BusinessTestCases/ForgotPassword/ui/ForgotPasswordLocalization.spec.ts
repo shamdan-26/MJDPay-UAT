@@ -1,4 +1,4 @@
-import { test, expect } from '../../fixtures';
+import { test, expect } from '../../shared/fixtures.ts';
 import {
     mockOtpDisabled,
     mockForgetPasswordSuccess,
@@ -6,7 +6,7 @@ import {
     fillStep1AndProceed,
     VALID_COMPANY,
     VALID_MOBILE,
-} from '../ForgotPasswordHelper';
+} from '../helpers/ForgotPasswordHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Arabic / RTL on the forgot-password screens (mocked).

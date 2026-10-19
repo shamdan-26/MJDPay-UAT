@@ -2,7 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 import { DashboardPage } from '../../pageElements/Shared/DashboardPage';
 import { HomePage } from '../../pageElements/Shared/HomePage';
 import { W2WTransferPage } from '../../pageElements/W2WTransfer/W2WTransferPage';
-import { performLogin, type W2WTestData } from '../W2WTransferHelper';
+import { performLogin, type W2WTestData } from '../helpers/W2WTransferHelper.ts';
 import w2wData from '../../../data/w2wTransferData.json';
 
 const dataSets = w2wData as W2WTestData[];
