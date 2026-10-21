@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
-import { raiseHeadroom, amt, AMT, SECOND_USER, why, startSession, initiate, verifyOtp, paymentIdOf, paymentMethodId, otherPaymentMethodId, expectRejected, ledger, waitLedger, type BizSession } from './TopupBizApi';
+import { DEV_PAYMENTS_DOWN, raiseHeadroom, amt, AMT, SECOND_USER, why, startSession, initiate, verifyOtp, paymentIdOf, paymentMethodId, otherPaymentMethodId, expectRejected, ledger, waitLedger, type BizSession } from '../helpers/TopupBizApi.ts';
 
 // Business rules: one user intent gives at most one payment. TUB-36, 37, 39, 40, 41 (group E) and TUB-78 to 81, 83 to 85 (group M).
 // Group M follows AS17: a retry with the same key and data returns the ORIGINAL result; the same key with different data
@@ -14,6 +14,7 @@ import { raiseHeadroom, amt, AMT, SECOND_USER, why, startSession, initiate, veri
 const distinctIds = (rs: Array<{ ok: boolean; body: any }>) => new Set(rs.filter(r => r.ok).map(r => String(paymentIdOf(r.body))));
 
 test.describe('Topup business – no duplicate processing', { tag: ['@topup', '@business', '@api'], annotation: [{ type: 'feature', description: 'Topup' }, { type: 'layer', description: 'api' }] }, () => {
+    test.skip(DEV_PAYMENTS_DOWN, 'DEV OUTAGE: POST /api/v1/payments returns HTTP 500 for every request on dev (2026-10-20), so payment-initiation cases cannot be judged. Set TOPUP_DEV_PAYMENTS_DOWN=0 once dev is fixed.');
     // One worker per file: a second login as the same account invalidates the first session (401 SESSION_INVALID).
     test.describe.configure({ mode: 'serial' });
     let s: BizSession;

@@ -42,7 +42,7 @@ Grep, in this order, for each candidate case id, its title keywords and its `Rel
 | Where | What it tells you |
 |---|---|
 | `BusinessTestCases/<Module>/ui/` and `functional/` | UI/functional tests already proving it (read `testcase` annotations and titles) |
-| `BusinessTestCases/<Module>/business/` incl. `<Module>BizNotAutomated.spec.ts` | API tier proof; the skip row you will remove if you automate it |
+| `BusinessTestCases/<Module>/api/` incl. `<Module>BizNotAutomated.spec.ts` | API tier proof; the skip row you will remove if you automate it |
 | `<Module>Helper.ts`, `pageElements/<Module>/` | the helper/locator to reuse |
 
 Build the gap table and show it before writing:
@@ -67,7 +67,7 @@ Folder `BusinessTestCases/<Module>/ui/`. Name `<Module>Biz<Group>UI.spec.ts`, gr
 
 | Convention | Detail |
 |---|---|
-| Ids | Use the md case id as the title prefix and `testcase` annotation: `TUB-56: ...`. A test covering several ids: `TUB-36/KB-04:`. KB-only ideas not in the md keep `KB-NN`. An id appears at most once per folder (once in `business/`, once in `ui/` is fine: different layers) |
+| Ids | Use the md case id as the title prefix and `testcase` annotation: `TUB-56: ...`. A test covering several ids: `TUB-36/KB-04:`. KB-only ideas not in the md keep `KB-NN`. An id appears at most once per folder (once in `api/`, once in `ui/` is fine: different layers) |
 | Describe | `test.describe('<Module> business – UI – <group>', { tag: ['@<module>','@ui','@business'], annotation: [{type:'feature',...},{type:'layer',description:'ui'}] }, ...)` |
 | Serial + timeouts | `describe.configure({ mode: 'serial' })`; `test.setTimeout(180000)` at describe level and inside `beforeAll` when it pays |
 | Session | `beforeAll`: `loginTo<Module>(browser, <UI_ACCOUNT>)`; `afterAll`: close page and `closeSqlPool()` if SQL is used |

@@ -140,7 +140,7 @@ test.describe('Topup – Commission (Merchant)', { tag: ['@topup', '@functional'
     });
 
     for (const awkward of ['10.01', '33.33', '99.99']) {
-        test(`TU-CM33 (Merchant) — commission and VAT round half-up to 2 decimals (${awkward})`, async () => {
+        test(`TU-CM33 (Merchant) — commission and VAT round half-up to 2 decimals (${awkward})`, { annotation: [{ type: 'testcase', description: 'TUB-15: Percentage commission rounds half-up' }] }, async () => {
             test.skip(!isPercentage, 'Fixed commission has nothing to round.');
             const amount = Number(awkward);
             test.skip(amount < minimumAmount || amount > maximumAmount, `${awkward} is outside the live tier ${minimumAmount}-${maximumAmount}.`);

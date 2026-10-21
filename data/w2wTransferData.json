@@ -12,7 +12,7 @@
     "password_Biller": "Aa#1234567",
     "receiverCRN": "1130000123",
     "amount": "100",
-    "otpCode": "0000"
+    "otpCode": "918512"
   },
   {
     "testName": "W2W_Transfer_Valid_Decimal_Amount_Updates_Balances",
@@ -27,7 +27,7 @@
     "password_Biller": "Aa#1234567",
     "receiverCRN": "1130000123",
     "amount": "50.50",
-    "otpCode": "0000"
+    "otpCode": "918512"
   },
   {
     "testName": "W2W_Transfer_Transaction_Appears_In_Transaction_Table",
@@ -42,7 +42,7 @@
     "password_Biller": "Aa#1234567",
     "receiverCRN": "1130000123",
     "amount": "100",
-    "otpCode": "0000",
+    "otpCode": "918512",
     "purposeOfTransfer": "Item purchases"
   },
   {
@@ -58,7 +58,7 @@
     "password_Biller": "",
     "receiverCRN": "1010088888",
     "amount": "100",
-    "otpCode": "0000"
+    "otpCode": "918512"
   },
   {
     "testName": "W2W_Transfer_InvalidCRN_IsSame_For_Sender_And_Receiver ",
@@ -73,7 +73,7 @@
     "password_Biller": "",
     "receiverCRN": "1120000115",
     "amount": "100",
-    "otpCode": "0000"
+    "otpCode": "918512"
   },
   {
     "testName": "W2W_Transfer_InvalidCRN_Empty",
@@ -88,7 +88,7 @@
     "password_Biller": "",
     "receiverCRN": "",
     "amount": "100",
-    "otpCode": "0000",
+    "otpCode": "918512",
     "expectButtonDisabled": true
   },
   {
@@ -198,7 +198,7 @@
     "password_Biller": "",
     "receiverCRN": "1130000123",
     "amount": "-100",
-    "otpCode": "0000",
+    "otpCode": "918512",
     "expectedUIValue": "100",
     "expectButtonDisabled": false
   },
@@ -215,7 +215,7 @@
     "password_Biller": "",
     "receiverCRN": "1130000123",
     "amount": "0",
-    "otpCode": "0000",
+    "otpCode": "918512",
     "expectedUIValue": "",
     "expectButtonDisabled": true
   },
@@ -232,7 +232,7 @@
     "password_Biller": "",
     "receiverCRN": "1130000123",
     "amount": "abc",
-    "otpCode": "0000",
+    "otpCode": "918512",
     "expectedUIValue": "",
     "expectButtonDisabled": true
   },
@@ -249,7 +249,7 @@
     "password_Biller": "",
     "receiverCRN": "1130000123",
     "amount": "!@#$%",
-    "otpCode": "0000",
+    "otpCode": "918512",
     "expectedUIValue": "",
     "expectButtonDisabled": true
   },
@@ -266,7 +266,7 @@
     "password_Biller": "",
     "receiverCRN": "1130000123",
     "amount": "10.55",
-    "otpCode": "0000",
+    "otpCode": "918512",
     "expectedUIValue": "10.55",
     "expectButtonDisabled": false
   },
@@ -283,7 +283,7 @@
     "password_Biller": "",
     "receiverCRN": "1130000123",
     "amount": "10.5",
-    "otpCode": "0000",
+    "otpCode": "918512",
     "expectedUIValue": "10.5",
     "expectButtonDisabled": false
   },
@@ -300,7 +300,7 @@
     "password_Biller": "",
     "receiverCRN": "1130000123",
     "amount": "10.555",
-    "otpCode": "0000",
+    "otpCode": "918512",
     "expectedUIValue": "10.55",
     "expectButtonDisabled": false
   },
@@ -317,7 +317,7 @@
     "password_Biller": "",
     "receiverCRN": "1130000123",
     "amount": "100",
-    "otpCode": "0000",
+    "otpCode": "918512",
     "isClipboardTest": true,
     "expectedUIValue": "100",
     "expectButtonDisabled": false
@@ -334,6 +334,6 @@
     "password_Biller": "",
     "receiverCRN": "1130000123",
     "amount": "",
-    "otpCode": "0000"
+    "otpCode": "918512"
   }
 ]

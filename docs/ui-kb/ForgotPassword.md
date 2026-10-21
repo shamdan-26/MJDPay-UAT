@@ -9,8 +9,8 @@ Locators: [ForgotPassword.generated.md](ForgotPassword.generated.md) (`ForgotPas
 | Route step 2 | URL contains `change-password` (`/business/auth/change-password`) | ForgotPasswordStep1.spec.ts:66; ForgotPasswordAPIFlow.spec.ts:21 |
 | Route after success | Login (`/business/auth/login`) | ForgotPasswordHappyPath.spec.ts:34 |
 | Who can see it | Anyone not signed in; reached from the Login link "Forgot Password?" | Login/functional/04-session/LoginNavigation.spec.ts (LG-101) |
-| Page title | `EMI - Business` | ui/ForgotPassword.spec.ts:23 |
-| Default language | Arabic (AR button active on load) | ui/ForgotPassword.spec.ts:51 |
+| Page title | `EMI - Business` | ui/ForgotPasswordStep1Ui.spec.ts:23 |
+| Default language | Arabic (AR button active on load) | ui/ForgotPasswordStep1Ui.spec.ts:51 |
 
 ## Pages and sections
 
@@ -37,7 +37,7 @@ Locators: [ForgotPassword.generated.md](ForgotPassword.generated.md) (`ForgotPas
 | Mobile number | `mobileInput` | text with (+966) prefix, placeholder "أدخل هنا" | Yes | 9 digits starting with 5; short (4 digits) or leading 0 keeps Next disabled; letters and special characters ignored; spaces and dashes stripped | None on field | Always |
 | Next | `nextButton` | button | - | Disabled when either field is empty or invalid; re-disabled when a field is cleared | - | Both fields valid |
 
-Sources: functional/ForgotPasswordStep1.spec.ts; ui/ForgotPassword.spec.ts; manual-test-cases/ForgotPassword.md (FP-10 to FP-27).
+Sources: functional/ForgotPasswordStep1.spec.ts; ui/ForgotPasswordStep1Ui.spec.ts; manual-test-cases/ForgotPassword.md (FP-10 to FP-27).
 
 ### Step 2 - new password
 
@@ -49,7 +49,7 @@ Sources: functional/ForgotPasswordStep1.spec.ts; ui/ForgotPassword.spec.ts; manu
 | Show Confirm Password | `showConfirmPasswordToggle` | button | No | Switches type | - | Always |
 | Reset Password | `resetPasswordButton` (also `saveButton` regex) | submit | - | Disabled until both fields filled, policy met and match; Enter key submits; correcting a mismatch re-enables it | - | New and Confirm valid and equal |
 
-Sources: functional/ForgotPasswordStep2.spec.ts; functional/ForgotPasswordPasswordPolicy.spec.ts (FP-88 to FP-92); ui/ForgotPasswordStep2.spec.ts.
+Sources: functional/ForgotPasswordStep2.spec.ts; functional/ForgotPasswordPasswordPolicy.spec.ts (FP-88 to FP-92); ui/ForgotPasswordStep2Ui.spec.ts.
 
 ### OTP modal
 
@@ -82,7 +82,7 @@ Not applicable. The module has no tables or lists.
 | `enButton` / `arabicButton` | Header | Language switch; `aria-pressed` shows active | Always | RTL/LTR; Arabic persists from step 1 to step 2 |
 | `themeToggle` | Header | Light/dark; theme survives language switch | Always | Same page |
 
-Sources: ui/ForgotPassword.spec.ts; functional/ForgotPasswordStep2.spec.ts; ForgotPasswordOtpFunctionality.spec.ts; ui/ForgotPasswordLocalization.spec.ts (FP-103 to 105).
+Sources: ui/ForgotPasswordStep1Ui.spec.ts; functional/ForgotPasswordStep2.spec.ts; ForgotPasswordOtpFunctionality.spec.ts; ui/ForgotPasswordLocalization.spec.ts (FP-103 to 105).
 
 ## Conditions and states
 

@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { FIXED_OTP } from '../../../support/otp.ts';
 import { type Page } from '@playwright/test';
 import { HomePage } from '../../pageElements/Shared/HomePage';
 import { W2WTransferPage } from '../../pageElements/W2WTransfer/W2WTransferPage';
@@ -24,11 +25,11 @@ test.describe('MajdPay W2W Transfer Tests', () => {
             if (!data.execute) continue;
 
             test(`${data.testName} | Amount Type: ${data.amountType}`, async ({ page, browser }) => {
-                await performLogin(page, data.companyNumber, data.mobileNumber, data.password, data.otpCode ?? '0000');
+                await performLogin(page, data.companyNumber, data.mobileNumber, data.password, data.otpCode ?? FIXED_OTP);
 
                 const billerContext = await browser.newContext();
                 const billerPage    = await billerContext.newPage();
-                await performLogin(billerPage, data.companyNumber_Biller, data.mobileNumber_Biller, data.password_Biller, data.otpCode ?? '0000');
+                await performLogin(billerPage, data.companyNumber_Biller, data.mobileNumber_Biller, data.password_Biller, data.otpCode ?? FIXED_OTP);
 
                 const w2wMerchant   = new W2WTransferPage(page);
                 const w2wBiller     = new W2WTransferPage(billerPage);
@@ -54,7 +55,7 @@ test.describe('MajdPay W2W Transfer Tests', () => {
 
                 const otp = new OtpPage(page);
                 if (await otp.isVisible()) {
-                    await otp.fillAndVerify(data.otpCode ?? '0000');
+                    await otp.fillAndVerify(data.otpCode ?? FIXED_OTP);
                 }
 
                 await w2wMerchant.clickOkButton();
@@ -78,7 +79,7 @@ test.describe('MajdPay W2W Transfer Tests', () => {
             if (!data.execute) continue;
 
             test(`${data.testName}`, async ({ page }) => {
-                await performLogin(page, data.companyNumber, data.mobileNumber, data.password, data.otpCode ?? '0000');
+                await performLogin(page, data.companyNumber, data.mobileNumber, data.password, data.otpCode ?? FIXED_OTP);
 
                 const w2w      = new W2WTransferPage(page);
                 const homePage = new HomePage(page);
@@ -99,7 +100,7 @@ test.describe('MajdPay W2W Transfer Tests', () => {
 
                 const otp = new OtpPage(page);
                 if (await otp.isVisible()) {
-                    await otp.fillAndVerify(data.otpCode ?? '0000');
+                    await otp.fillAndVerify(data.otpCode ?? FIXED_OTP);
                 }
 
                 await w2w.clickOkButton();
@@ -139,7 +140,7 @@ test.describe('MajdPay W2W Transfer Tests', () => {
             sharedPage     = await context.newPage();
             const baseData = invalidCrnTests.find(d => d.execute) || invalidCrnTests[0];
 
-            await performLogin(sharedPage, baseData.companyNumber, baseData.mobileNumber, baseData.password, baseData.otpCode ?? '0000');
+            await performLogin(sharedPage, baseData.companyNumber, baseData.mobileNumber, baseData.password, baseData.otpCode ?? FIXED_OTP);
 
             w2w      = new W2WTransferPage(sharedPage);
             homePage = new HomePage(sharedPage);
@@ -191,7 +192,7 @@ test.describe('MajdPay W2W Transfer Tests', () => {
             sharedPage     = await context.newPage();
             const baseData = amountValidationTests.find(d => d.execute) || amountValidationTests[0];
 
-            await performLogin(sharedPage, baseData.companyNumber, baseData.mobileNumber, baseData.password, baseData.otpCode ?? '0000');
+            await performLogin(sharedPage, baseData.companyNumber, baseData.mobileNumber, baseData.password, baseData.otpCode ?? FIXED_OTP);
 
             w2w      = new W2WTransferPage(sharedPage);
             homePage = new HomePage(sharedPage);
@@ -244,7 +245,7 @@ test.describe('MajdPay W2W Transfer Tests', () => {
             if (!data.execute) continue;
 
             test(`${data.testName}`, async ({ page }) => {
-                await performLogin(page, data.companyNumber, data.mobileNumber, data.password, data.otpCode ?? '0000');
+                await performLogin(page, data.companyNumber, data.mobileNumber, data.password, data.otpCode ?? FIXED_OTP);
 
                 const w2w      = new W2WTransferPage(page);
                 const homePage = new HomePage(page);
@@ -286,7 +287,7 @@ test.describe('MajdPay W2W Transfer Tests', () => {
             sharedPage     = await context.newPage();
             const baseData = crnValidationTests.find(d => d.execute) || crnValidationTests[0];
 
-            await performLogin(sharedPage, baseData.companyNumber, baseData.mobileNumber, baseData.password, baseData.otpCode ?? '0000');
+            await performLogin(sharedPage, baseData.companyNumber, baseData.mobileNumber, baseData.password, baseData.otpCode ?? FIXED_OTP);
 
             w2wTransferPage = new W2WTransferPage(sharedPage);
             homePage        = new HomePage(sharedPage);

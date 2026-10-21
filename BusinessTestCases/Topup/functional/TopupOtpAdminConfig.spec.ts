@@ -1,5 +1,5 @@
 import { test, expect, type Page, type BrowserContext } from '@playwright/test';
-import { envAccount } from '../business/TopupBizApi';
+import { envAccount } from '../helpers/TopupBizApi.ts';
 import { AdminOtpConfigPage, createAdminContext } from '../../pageElements/Shared/AdminOtpConfigPage';
 import { loginToTopup, gotoTopupScreen, clickSummaryNextAndDetectOtp, TOPUP_UI_ACCOUNT, type TopupSession } from '../helpers/TopupHelper.ts';
 

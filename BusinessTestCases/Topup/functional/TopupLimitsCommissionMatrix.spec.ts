@@ -166,7 +166,7 @@ test.describe('Topup — limits × commission matrix', { tag: ['@topup', '@funct
 
     // ---------- D.1 Amount limits × commission ----------
 
-    test('TUA-D02: gross over the cap is blocked even though the net would fit', async () => {
+    test('TUA-D02: gross over the cap is blocked even though the net would fit', { annotation: [{ type: 'testcase', description: 'TUB-28: Limits are judged on the gross entered amount' }] }, async () => {
         await liftAmountAndCount();
         const q = await quote(amount);
         test.skip(q.commission <= 0, 'Needs a positive commission so that net < gross.');
@@ -191,7 +191,7 @@ test.describe('Topup — limits × commission matrix', { tag: ['@topup', '@funct
 
     // ---------- D.2 Wallet max-balance × commission ----------
 
-    test('TUA-D11/D15: net credit (Summary Total, VAT inside the commission) landing exactly on the ceiling is allowed', async () => {
+    test('TUA-D11/D15: net credit (Summary Total, VAT inside the commission) landing exactly on the ceiling is allowed', { annotation: [{ type: 'testcase', description: 'TUB-29: Wallet max balance is judged on balance plus net credit (exact)' }] }, async () => {
         await liftAmountAndCount();
         const q = await quote(amount);
         test.skip(q.commission <= 0, 'Needs a positive commission.');
@@ -200,7 +200,7 @@ test.describe('Topup — limits × commission matrix', { tag: ['@topup', '@funct
         expect(await attemptTopup(session, String(amount))).toBe('proceeded');
     });
 
-    test('TUA-D12: gross would exceed the ceiling but the net fits — allowed', async () => {
+    test('TUA-D12: gross would exceed the ceiling but the net fits — allowed', { annotation: [{ type: 'testcase', description: 'TUB-29: Wallet max balance is judged on balance plus net credit' }] }, async () => {
         await liftAmountAndCount();
         const q = await quote(amount);
         test.skip(q.commission <= 0, 'Needs a positive commission.');
@@ -211,7 +211,7 @@ test.describe('Topup — limits × commission matrix', { tag: ['@topup', '@funct
         expect(await attemptTopup(session, String(amount))).toBe('proceeded');
     });
 
-    test('TUA-D13: net exceeds the ceiling by 0.01 — blocked', async () => {
+    test('TUA-D13: net exceeds the ceiling by 0.01 — blocked', { annotation: [{ type: 'testcase', description: 'TUB-29: Net over the ceiling by 0.01 is blocked' }] }, async () => {
         await liftAmountAndCount();
         const q = await quote(amount);
         test.skip(q.commission <= 0, 'Needs a positive commission.');
@@ -233,7 +233,7 @@ test.describe('Topup — limits × commission matrix', { tag: ['@topup', '@funct
 
     // ---------- D.3 Count limits × commission ----------
 
-    test('TUA-D18: a daily count of 0 blocks regardless of commission — and no commission is previewed', async () => {
+    test('TUA-D18: a daily count of 0 blocks regardless of commission — and no commission is previewed', { annotation: [{ type: 'testcase', description: 'TUB-119: A count of 0 blocks before payment, no commission posted' }] }, async () => {
         await admin!.api.setCountAllTiers(admin!.snapshot, { daily: 0 });
         const outcome = await attemptTopup(session, String(amount));
         expect(blockedBeforeSummary(outcome), `blocked before the Summary (got "${outcome}")`).toBe(true);
@@ -241,7 +241,7 @@ test.describe('Topup — limits × commission matrix', { tag: ['@topup', '@funct
 
     // ---------- D.4 Platform and override interplay ----------
 
-    test('TUA-D21: an account override prices the top-up, and the limit decision is identical', async () => {
+    test('TUA-D21: an account override prices the top-up, and the limit decision is identical', { annotation: [{ type: 'testcase', description: 'TUB-17: Account override prices the top-up' }] }, async () => {
         await liftAmountAndCount();
         const defaultQuote = await quote(amount);
         let row: Locator | undefined;
@@ -290,7 +290,7 @@ test.describe('Topup — limits × commission matrix', { tag: ['@topup', '@funct
         }
     });
 
-    test('TUA-D23: an APP-only commission does not affect a Web top-up, and the limit still applies', async () => {
+    test('TUA-D23: an APP-only commission does not affect a Web top-up, and the limit still applies', { annotation: [{ type: 'testcase', description: 'TUB-18: APP-only commission does not apply on Web' }] }, async () => {
         await liftAmountAndCount();
         await setWebCommissionActive(false);
         const appTier = await ensureAppScopedBillerTopupCommission(adminCommission);
@@ -304,7 +304,7 @@ test.describe('Topup — limits × commission matrix', { tag: ['@topup', '@funct
         }
     });
 
-    test('TUA-D24: no commission in force (WEB rule disabled) — commission 0, limits still apply, no error', async () => {
+    test('TUA-D24: no commission in force (WEB rule disabled) — commission 0, limits still apply, no error', { annotation: [{ type: 'testcase', description: 'TUB-19: No commission configured: full amount credited' }] }, async () => {
         await liftAmountAndCount();
         await setWebCommissionActive(false);
         const q = await quote(amount);
@@ -316,7 +316,7 @@ test.describe('Topup — limits × commission matrix', { tag: ['@topup', '@funct
 
     // ---------- E. Cross-rule precedence ----------
 
-    test('TUA-E01: below the minimum AND over the daily limit — the minimum message wins', async () => {
+    test('TUA-E01: below the minimum AND over the daily limit — the minimum message wins', { annotation: [{ type: 'testcase', description: 'TUB-32: Minimum is reported when both minimum and limit are violated' }] }, async () => {
         const min = Math.max(minimumAmount, 10);
         await admin!.api.setAmountAllTiers(admin!.snapshot, { min, hourly: HIGH, daily: HIGH, monthly: HIGH, yearly: HIGH });
         const minOnly = await attemptWithMessage(min - 1);
@@ -356,7 +356,7 @@ test.describe('Topup — limits × commission matrix', { tag: ['@topup', '@funct
         expect(second.message).toBe(first.message);
     });
 
-    test('TUA-E06: golden path — every rule satisfied, the commission is deducted and the ledger matches the Summary', async () => {
+    test('TUA-E06: golden path — every rule satisfied, the commission is deducted and the ledger matches the Summary', { annotation: [{ type: 'testcase', description: 'TUB-20: Figures shown before payment equal what is posted' }] }, async () => {
         test.info().annotations.push({ type: 'known-defect', description: 'TU-CM13: a completed top-up credits the gross amount; the wallet assertion fails until fixed.' });
         await liftAmountAndCount();
         await admin!.api.setWalletAllTiers(admin!.snapshot, { maxBalance: HIGH });

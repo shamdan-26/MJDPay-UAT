@@ -17,7 +17,7 @@ import { OtpPage } from '../../pageElements/Shared/OtpPage';
 // ─────────────────────────────────────────────────────────────────────────────
 //
 // Static page-load/logo/language/theme/field-visibility checks live in
-// ui/ForgotPassword.spec.ts — this describe owns flow-progression only.
+// ui/ForgotPasswordStep1Ui.spec.ts — this describe owns flow-progression only.
 
 test.describe('Forgot Password — Step 1: Happy Path', () => {
     test.describe.configure({ mode: 'serial' });

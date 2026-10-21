@@ -9,7 +9,7 @@ Run from the repo root (dev only): `npm run test:dev -- BusinessTestCases/Regist
 |---|---|
 | `functional/01-entry … 08-confirmation/` | Behaviour per wizard step. `02-business-info/fields/` has one spec per field (profile type, CRN, National ID, email, Next-button logic). |
 | `functional/journeys/` | Cross-step flows: E2E happy path, fixed-merchant auto-approve, resilience, **resume** (`ResumeFromInfo`, `ResumeStateTable`). |
-| `ui/01-entry … 07-contract/` | Elements and layout (`*Page`, `*Shell`, `*Form`) and mocked screen states (`*States`) per step. `ui/shared/` = wizard chrome. |
+| `ui/01-entry … 08-confirmation/` | Elements and layout (`*Page`, `*Shell`, `*Form`) and mocked screen states (`*States`) per step. `ui/shared/` = wizard chrome. |
 | `non-functional/` | Accessibility (axe), performance budgets, visual regression. |
 | `api/` | `RegistrationAPIFlow` (serial 22-endpoint chain, shares session state — keep whole), `RegistrationLookups`, `RegistrationSessionRefresh`. |
 | `security/` | `RegistrationApiSecurity` (gateway: auth, validation, brute force, replay) and `RegistrationInputSecurity` (browser inputs). |
@@ -22,7 +22,7 @@ Page objects live in `BusinessTestCases/pageElements/Registration/`.
 **Test-case catalog:** [`TEST-CATALOG.md`](TEST-CATALOG.md) lists every case grouped by type (functional, UI/UX, API, security, integration, accessibility, performance, visual) → wizard step → file. Regenerate after adding specs: `node ../../scripts/registration-catalog.mjs TEST-CATALOG.md` (from this folder).
 
 ## Tags
-Every describe carries `@registration`, a layer tag (`@functional @ui @api @security @integration`) and, for step specs, a step tag:
+Every top-level describe carries `@registration` (nested describes inherit it), a layer tag (`@functional @ui @api @security @integration`) and, for step specs, a step tag:
 `@entry @business-info @financial @verification @identity @products @contract @confirmation @journey`.
 Extra: `@a11y @performance @visual`.
 

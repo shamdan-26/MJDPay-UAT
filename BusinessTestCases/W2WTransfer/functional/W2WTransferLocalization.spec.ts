@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { FIXED_OTP } from '../../../support/otp.ts';
 import { DashboardPage } from '../../pageElements/Shared/DashboardPage';
 import { HomePage } from '../../pageElements/Shared/HomePage';
 import { W2WTransferPage } from '../../pageElements/W2WTransfer/W2WTransferPage';
@@ -25,7 +26,7 @@ test.describe('W2WTransfer — Arabic Localization', () => {
 
     test.beforeAll(async ({ browser }) => {
         page = await browser.newPage();
-        await performLogin(page, baseData.companyNumber, baseData.mobileNumber, baseData.password, baseData.otpCode ?? '0000');
+        await performLogin(page, baseData.companyNumber, baseData.mobileNumber, baseData.password, baseData.otpCode ?? FIXED_OTP);
 
         dashboard = new DashboardPage(page);
         homePage = new HomePage(page);

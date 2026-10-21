@@ -26,7 +26,7 @@
       "crn": "1010051690",
       "nationalId": "1618667578",
       "mobile": "500083440",
-      "used": false
+      "used": true
     },
     {
       "type": "citizen",
@@ -68,7 +68,7 @@
       "crn": "1010121708",
       "nationalId": "1572609475",
       "mobile": "500802581",
-      "used": false
+      "used": true
     },
     {
       "type": "citizen",
@@ -229,14 +229,14 @@
       "crn": "1010369202",
       "nationalId": "1508279211",
       "mobile": "501234567",
-      "used": false
+      "used": true
     },
     {
       "type": "citizen",
       "crn": "1010375242",
       "nationalId": "1563796935",
       "mobile": "502310965",
-      "used": "nafath"
+      "used": true
     },
     {
       "type": "citizen",
@@ -635,7 +635,7 @@
       "crn": "1010781506",
       "nationalId": "1471001170",
       "mobile": "506714469",
-      "used": false
+      "used": true
     },
     {
       "type": "citizen",
@@ -705,7 +705,7 @@
       "crn": "1010880509",
       "nationalId": "1537632091",
       "mobile": "510203001",
-      "used": false
+      "used": true
     },
     {
       "type": "citizen",
@@ -7005,14 +7005,14 @@
       "crn": "1000659746",
       "nationalId": "2959795515",
       "mobile": "599000000",
-      "used": false
+      "used": true
     },
     {
       "type": "resident",
       "crn": "1002382941",
       "nationalId": "2258981709",
       "mobile": "599000001",
-      "used": false
+      "used": true
     },
     {
       "type": "resident",
@@ -7026,35 +7026,35 @@
       "crn": "1005720915",
       "nationalId": "2012260838",
       "mobile": "599000003",
-      "used": false
+      "used": true
     },
     {
       "type": "resident",
       "crn": "1006122426",
       "nationalId": "2874935543",
       "mobile": "599000004",
-      "used": false
+      "used": true
     },
     {
       "type": "resident",
       "crn": "1006666281",
       "nationalId": "2191277199",
       "mobile": "599000005",
-      "used": false
+      "used": true
     },
     {
       "type": "resident",
       "crn": "1007027103",
       "nationalId": "2521396180",
       "mobile": "599000006",
-      "used": false
+      "used": true
     },
     {
       "type": "resident",
       "crn": "1008274647",
       "nationalId": "2452854447",
       "mobile": "599000007",
-      "used": false
+      "used": true
     },
     {
       "type": "resident",
@@ -14006,13 +14006,13 @@
       "id": "1000000008",
       "crn": "1100000008",
       "mobile": "510203001",
-      "used": false
+      "used": true
     },
     {
       "id": "1000000016",
       "crn": "1200000016",
       "mobile": "510203002",
-      "used": false
+      "used": true
     },
     {
       "id": "1000000032",

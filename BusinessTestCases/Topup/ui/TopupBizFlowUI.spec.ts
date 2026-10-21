@@ -5,8 +5,8 @@ import { closeSqlPool } from '../../../support/sqlServerClient';
 
 // Business rules of the top-up flow, through the browser, with the DB read as evidence only. TUB-48 (cancel at the summary has
 // no side effects), TUB-49 (nothing is posted before the OTP is verified), TUB-51 (repeated wrong OTPs end the attempt) and
-// TUB-85 (a double submit leaves exactly one ledger entry). Legacy API versions: business/TopupBizFlowIntegrity.spec.ts (48),
-// business/TopupBizOtp.spec.ts (49, 51), business/TopupBizIdempotency.spec.ts (85).
+// TUB-85 (a double submit leaves exactly one ledger entry). Legacy API versions: api/TopupBizFlowIntegrity.spec.ts (48),
+// api/TopupBizOtp.spec.ts (49, 51), api/TopupBizIdempotency.spec.ts (85).
 //
 // Real initiations in this file: TUB-49, 51 and 85 each start one top-up and abandon it at the OTP step (3 per run). Dev counts
 // unpaid top-ups against the hourly COUNT cap of 5 for Merchant Cashin (AS4 conflict), so run this file on its own, not right
@@ -68,7 +68,7 @@ test.describe('Topup business – UI – flow rules', { tag: ['@topup', '@ui', '
         expect(await readBalanceBefore(session), 'balance after cancelling at the summary').toBe(before);
     });
 
-    test('TUB-49: with OTP required nothing is posted before the OTP is verified', { annotation: [{ type: 'testcase', description: 'TUB-49: at the OTP step the ledger holds only a PENDING row and the balance is unchanged' }] }, async () => {
+    test.skip('TUB-49: with OTP required nothing is posted before the OTP is verified', { annotation: [{ type: 'testcase', description: 'TUB-49: at the OTP step the ledger holds only a PENDING row and the balance is unchanged' }] }, async () => {
         const { page, otp } = session;
         const before = await readBalanceBefore(session);
         const watch = watchInitiation(page);

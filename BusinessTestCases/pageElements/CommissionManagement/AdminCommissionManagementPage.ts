@@ -1295,6 +1295,11 @@ export class AdminCommissionManagementPage {
      */
     async readCurrentValues(row: Locator): Promise<CommissionFormValues> {
         await this.openEditForm(row);
+        // openEditForm only waits for Platform; the amount fields are patched by the same
+        // reactive form and can still be empty here, which Number('') silently turns into 0.
+        await expect(this.minimumAmountInput(), 'edit form\'s Minimum field populates from the row data').not.toHaveValue('', { timeout: 10000 });
+        await expect(this.maximumAmountInput(), 'edit form\'s Maximum field populates from the row data').not.toHaveValue('', { timeout: 10000 });
+        await expect(this.valueInput(), 'edit form\'s Value field populates from the row data').not.toHaveValue('', { timeout: 10000 });
         // The dropdown mirrors the grid's own casing (observed lowercase,
         // e.g. "web") while `choosePlatform`/callers work in uppercase
         // ('WEB' | 'APP' | 'SYSTEM') — normalize here so every consumer of

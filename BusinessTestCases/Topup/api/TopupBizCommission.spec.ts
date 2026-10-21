@@ -2,7 +2,7 @@ import { test, expect, type BrowserContext } from '@playwright/test';
 import { loginToCommissionManagement } from '../../CommissionManagement/helpers/CommissionManagementHelper.ts';
 import { TOPUP_BILLER_COMMISSION_TRANSACTION_TYPE_CODE } from '../helpers/TopupHelper.ts';
 import type { AdminCommissionManagementPage } from '../../pageElements/CommissionManagement/AdminCommissionManagementPage';
-import { startSession, openSummary, initiate, expectRejected, findNumber, round2, type BizSession } from './TopupBizApi';
+import { DEV_PAYMENTS_DOWN, startSession, openSummary, initiate, expectRejected, findNumber, round2, type BizSession } from '../helpers/TopupBizApi.ts';
 
 // Business rules: commission and VAT math. TUB-13..16 (group C).
 // The WEB "Biller Bank Cashin" default commission row is READ through the admin API (apiFindCommission). If it exists
@@ -20,6 +20,7 @@ import { startSession, openSummary, initiate, expectRejected, findNumber, round2
 interface Row { min: number; max: number; amountValue: number; type: string; isActive: boolean }
 
 test.describe('Topup business – commission and VAT', { tag: ['@topup', '@business', '@api'], annotation: [{ type: 'feature', description: 'Topup' }, { type: 'layer', description: 'api' }] }, () => {
+    test.skip(DEV_PAYMENTS_DOWN, 'DEV OUTAGE: POST /api/v1/payments returns HTTP 500 for every request on dev (2026-10-20), so payment-initiation cases cannot be judged. Set TOPUP_DEV_PAYMENTS_DOWN=0 once dev is fixed.');
     test.describe.configure({ mode: 'serial' });
     test.setTimeout(180_000); // Biller UI login + admin login + commission lookup all happen in beforeAll
     let s: BizSession;

@@ -86,7 +86,7 @@ test.describe('Topup — admin limits (amount, count, wallet balance)', { tag: [
         expect(await readBalance()).toBe(balance);
     });
 
-    test('TUA-C02: a top-up that would cross the ceiling is blocked before the gateway', async () => {
+    test('TUA-C02: a top-up that would cross the ceiling is blocked before the gateway', { annotation: [{ type: 'testcase', description: 'TUB-121: A top-up that would cross the wallet ceiling is blocked before the gateway' }] }, async () => {
         const balance = await readBalance();
         await admin!.api.setWalletAllTiers(admin!.snapshot, { maxBalance: Math.ceil(balance) + 5 });
         // Net credit of a 500 top-up exceeds 5 even after any realistic commission, so it must be refused.
@@ -137,7 +137,7 @@ test.describe('Topup — admin limits (amount, count, wallet balance)', { tag: [
 
     // ---------- Count limits (CNT_*) ----------
 
-    test('TUA-C26: daily count of 0 disables top-up — page opens, blocked at initiation', async () => {
+    test('TUA-C26: daily count of 0 disables top-up — page opens, blocked at initiation', { annotation: [{ type: 'testcase', description: 'TUB-25: Count 0 means top-up is blocked outright' }] }, async () => {
         await admin!.api.setCountAllTiers(admin!.snapshot, { daily: 0 });
         expect(isBlocked(await attemptTopup(session, '10'))).toBe(true);
         // The Topup page itself still opened (attemptTopup navigated to it and reached the amount field).

@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { test, type Browser, type Page, type Response } from '@playwright/test';
 import { COMMISSION_CATEGORY, ACCOUNT_TYPE, apiEntryToFormValues, type CommissionFormValues, type AdminCommissionManagementPage } from '../../pageElements/CommissionManagement/AdminCommissionManagementPage.ts';
 import { loginToCommissionManagement, randomCommissionValues } from '../../CommissionManagement/helpers/CommissionManagementHelper.ts';
@@ -51,14 +53,18 @@ export interface TopupAccount { company: string; mobile: string; password?: stri
  * runs on its own account (functional specs keep the Biller account, they assert BILLER wallet
  * type and Biller-scoped commission). Moved from W1550 to the shared `merchant` account
  * (K9491, data/testAccounts.json) on 2026-10-15: W1550 got locked and then had a data issue.
- * Override with TOPUP_UI_COMPANY / TOPUP_UI_MOBILE (quote values containing `#` in .env files).
+ * Moved again on 2026-10-21 to `moduleAccounts.payBill` (H4218): K9491 reached its limits. It must be a Merchant wallet (the specs
+ * read the "Merchant Cashin" limit rows); if it is not, set TOPUP_UI_COMPANY / TOPUP_UI_MOBILE to a Merchant account.
+ * If this account cannot log in, loginToTopup notes the issue in data/testAccounts.json -> accountIssues and runs as another Merchant
+ * account instead (see loginToTopup); check those notes and fix or replace the account.
+ * Override with TOPUP_UI_COMPANY / TOPUP_UI_MOBILE / TOPUP_UI_PASSWORD (quote values containing `#` in .env files).
  * Do not use merchant2 (E9306): it is documented as locked (HTTP 423). The wallet-code prefix
  * depends on the account type, so assert on the generic pattern.
  */
 export const TOPUP_UI_ACCOUNT: TopupAccount = {
-    company:  process.env['TOPUP_UI_COMPANY'] ?? testAccounts.merchant.company,
-    mobile:   process.env['TOPUP_UI_MOBILE']  ?? testAccounts.merchant.mobile,
-    password: testAccounts.defaultPassword,
+    company:  process.env['TOPUP_UI_COMPANY'] ?? testAccounts.moduleAccounts.payBill.company,
+    mobile:   process.env['TOPUP_UI_MOBILE']  ?? testAccounts.moduleAccounts.payBill.mobile,
+    password: process.env['TOPUP_UI_PASSWORD'] ?? testAccounts.defaultPassword,
 };
 
 
@@ -95,49 +101,129 @@ export interface TopupSession {
     mobile: string;
 }
 
-/** Logs into the Biller account and returns ready-to-use page objects — the standard beforeAll for every Core Scenarios file. */
+/** Accounts that must never be a fallback: documented locked (HTTP 423, see TOPUP_UI_ACCOUNT's comment). */
+const NEVER_FALLBACK = new Set<string>([testAccounts.merchant2.company]);
+const MAX_FALLBACKS = 4; // each failed login costs up to ~70 s, so a broken environment must not burn the whole run
+const TEST_ACCOUNTS_FILE = path.resolve(process.cwd(), 'data', 'testAccounts.json');
+
+/**
+ * Leaves a note on the account in data/testAccounts.json -> accountIssues[company], so someone can check it later (accountStatus
+ * is kept for the string labels FirstLoginActivateAll writes). Never writes a password or token. An unchanged issue only bumps `lastSeen`.
+ */
+export function noteAccountIssue(account: TopupAccount, issue: string, seenIn: string): void {
+    try {
+        const json = JSON.parse(fs.readFileSync(TEST_ACCOUNTS_FILE, 'utf8'));
+        const status = (json.accountIssues ??= {});
+        const now = new Date().toISOString();
+        const previous = status[account.company];
+        status[account.company] = previous?.issue === issue
+            ? { ...previous, lastSeen: now }
+            : { mobile: account.mobile, issue, firstSeen: now, lastSeen: now, seenIn };
+        fs.writeFileSync(TEST_ACCOUNTS_FILE, JSON.stringify(json, null, 2) + '\n');
+    } catch (e) {
+        console.warn(`[topup-account] could not write the note for ${account.company}: ${String(e)}`);
+    }
+}
+
+/** Other accounts to try when the default one cannot log in: created and module accounts, shuffled, minus locked ones and ones already noted with an issue. */
+function fallbackAccounts(tried: string): TopupAccount[] {
+    const noted = new Set(Object.keys((testAccounts as { accountIssues?: Record<string, unknown> }).accountIssues ?? {}));
+    // Accounts still in first-login state have the first-login password, so the shared password would be a wrong-password attempt.
+    const firstLogin = new Set(testAccounts.firstLoginAccounts.map(a => a.company));
+    const pool = [...Object.values(testAccounts.createdAccounts), ...Object.values(testAccounts.moduleAccounts)];
+    const unique = new Map(pool.map(a => [a.company, a]));
+    const candidates = [...unique.values()]
+        .filter(a => a.company !== tried && !NEVER_FALLBACK.has(a.company) && !noted.has(a.company) && !firstLogin.has(a.company))
+        .map(a => ({ company: a.company, mobile: a.mobile, password: testAccounts.defaultPassword }));
+    for (let i = candidates.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [candidates[i], candidates[j]] = [candidates[j]!, candidates[i]!];
+    }
+    return candidates.slice(0, MAX_FALLBACKS);
+}
+
+/**
+ * Logs into the Biller account and returns ready-to-use page objects — the standard beforeAll for every Core Scenarios file.
+ * For the shared default (TOPUP_UI_ACCOUNT) an account that cannot log in does not fail the run: the issue is noted on the account
+ * (accountIssues) and another account is used; if none works the calling test or describe is skipped. Each account gets ONE login attempt,
+ * never a retry. Any other account passed in keeps the strict behaviour (still one attempt).
+ */
 export async function loginToTopup(browser: Browser, account: TopupAccount = { company: LOGIN_COMPANY, mobile: LOGIN_MOBILE }): Promise<TopupSession> {
+    if (account !== TOPUP_UI_ACCOUNT) return loginOnce(browser, account);
+    const seenIn = test.info().titlePath.slice(0, 2).join(' > ');
+    const failures: string[] = [];
+    for (const [i, candidate] of [account, ...fallbackAccounts(account.company)].entries()) {
+        try {
+            const session = await loginOnce(browser, candidate);
+            if (i > 0) {
+                // A fallback must be a Merchant wallet: the limit specs read the "Merchant Cashin" rows. The default is trusted as before.
+                try {
+                    await gotoTopupScreen(session); // throws when the account has no Top-up quick action (no privilege)
+                    const walletCode = (await session.topup.balanceWalletCode.innerText().catch(() => '')).trim();
+                    if (!/^MER/i.test(walletCode)) throw new Error(`the wallet is not a Merchant wallet (wallet code "${walletCode || 'unreadable'}")`);
+                } catch (e) {
+                    await session.page.close().catch(() => { /* already closed */ });
+                    throw e;
+                }
+                console.warn(`[topup-account] ${account.company} could not be used; running as ${candidate.company}.`);
+            }
+            test.info().annotations.push({ type: 'topup-account', description: `${candidate.company}${i > 0 ? ` (fallback; ${account.company} had an issue)` : ''}` });
+            return session;
+        } catch (e) {
+            const message = String((e as Error).message ?? e);
+            // The run is being torn down (timeout, abort): that says nothing about the account, so it is neither noted nor followed by another try.
+            if (/has been closed|Target page, context or browser/i.test(message)) throw e;
+            const issue = message.split('\n')[0]!.slice(0, 240);
+            failures.push(`${candidate.company}: ${issue}`);
+            noteAccountIssue(candidate, issue, seenIn);
+        }
+    }
+    test.skip(true, `No Topup account could log in (${failures.join(' | ')}). The issues are noted in data/testAccounts.json -> accountIssues; check those accounts.`);
+    throw new Error('unreachable: test.skip ends the test');
+}
+
+/** One login attempt cycle for one account; closes its page when it fails so nothing leaks. */
+async function loginOnce(browser: Browser, account: TopupAccount): Promise<TopupSession> {
     const page = await browser.newPage();
+    try {
+        return await loginSteps(page, account);
+    } catch (e) {
+        await page.close().catch(() => { /* already closed */ });
+        throw e;
+    }
+}
+
+async function loginSteps(page: Page, account: TopupAccount): Promise<TopupSession> {
     const loginPage = new LoginPage(page);
     const otp = new OtpPage(page);
     const quickActions = new HomepageQuickActionsPage(page);
     const topup = new TopupPage(page);
     const shell = new AppShellPage(page);
 
-    // Up to two attempts: dev's /auth/signin intermittently returns 404, and the
-    // OTP screen can appear a moment AFTER submit — so wait for either the OTP
-    // screen or the post-login page rather than checking for the OTP once.
-    for (let attempt = 1; attempt <= 2; attempt++) {
-        try {
-            await loginPage.goto(LOGIN_URL);
-        } catch (e) {
-            // Dev sometimes serves a blank bootstrap or a slow login page (form not visible within 15 s). Reload once and give the form
-            // 45 s before counting the attempt as failed; if it still does not render, try the next attempt (and fail on the last one).
-            await page.reload({ waitUntil: 'domcontentloaded' }).catch(() => null);
-            const rendered = await loginPage.formBox.waitFor({ state: 'visible', timeout: 45000 }).then(() => true).catch(() => false);
-            if (!rendered) {
-                if (attempt === 2) throw e;
-                continue;
-            }
-        }
-        await loginPage.fillAndSubmit(account.company, account.mobile, account.password ?? LOGIN_PASSWORD);
-        const next = await Promise.race([
-            otp.inputs.first().waitFor({ state: 'visible', timeout: 20000 }).then(() => 'otp' as const),
-            page.waitForURL(url => !url.pathname.includes('/auth/'), { timeout: 20000 }).then(() => 'home' as const),
-        ]).catch(() => 'none' as const);
-        if (next === 'otp') {
-            await otp.fillAndVerify(await getOtpFromDb(account.mobile));
-            // The OTP code is only valid for a short window and Verify can be slow or missed on dev.
-            // If the page did not leave /auth/, start the whole login again for a fresh code
-            // instead of waiting out the final timeout on an expired OTP screen.
-            const left = await page.waitForURL(url => !url.pathname.includes('/auth/'), { timeout: 15000 }).then(() => true).catch(() => false);
-            if (left) break;
-            if (attempt === 2) throw new Error(`Login did not get past the OTP step for ${account.company}/${account.mobile} after 2 attempts (code typed, page stayed on /auth/). Check the account is not locked and the OTP screen's error/timer.`);
-            continue;
-        }
-        if (next !== 'none' || attempt === 2) break;
+    // ONE attempt only: credentials are submitted once and the OTP is typed once. Repeated wrong passwords lock the account (3 attempts),
+    // and most test accounts still have the first-login password, so a failed first try is reported and never repeated. The only
+    // recovery kept is the reload of a blank login page, which happens before any credentials are submitted.
+    let signinStatus = 0;
+    page.on('response', res => { if (res.request().method() === 'POST' && /\/auth\/signin$/.test(res.url())) signinStatus = res.status(); });
+    try {
+        await loginPage.goto(LOGIN_URL);
+    } catch (e) {
+        // Dev sometimes serves a blank bootstrap or a slow login page (form not visible within 15 s): reload once and give the form 45 s.
+        await page.reload({ waitUntil: 'domcontentloaded' }).catch(() => null);
+        const rendered = await loginPage.formBox.waitFor({ state: 'visible', timeout: 45000 }).then(() => true).catch(() => false);
+        if (!rendered) throw e;
     }
-    await page.waitForURL(url => !url.pathname.includes('/auth/'), { timeout: 30000 });
+    await loginPage.fillAndSubmit(account.company, account.mobile, account.password ?? LOGIN_PASSWORD);
+    const next = await Promise.race([
+        otp.inputs.first().waitFor({ state: 'visible', timeout: 20000 }).then(() => 'otp' as const),
+        page.waitForURL(url => !url.pathname.includes('/auth/'), { timeout: 20000 }).then(() => 'home' as const),
+    ]).catch(() => 'none' as const);
+    if (next === 'otp') await otp.fillAndVerify(await getOtpFromDb(account.mobile));
+    const left = next === 'home' || await page.waitForURL(url => !url.pathname.includes('/auth/'), { timeout: 20000 }).then(() => true).catch(() => false);
+    if (!left) {
+        const where = next === 'otp' ? 'after the OTP code was typed' : next === 'none' ? 'after Login was clicked (no OTP screen, no redirect)' : 'after Login';
+        throw new Error(`Login for ${account.company}/${account.mobile} did not leave /auth/ ${where}; /auth/signin answered ${signinStatus || 'nothing'}; page is ${page.url()}. Not retried (one attempt per account): check it is not locked, and whether the password is still the first-login one.`);
+    }
 
     return { page, loginPage, otp, quickActions, topup, shell, mobile: account.mobile };
 }
@@ -236,7 +322,8 @@ export async function reachCardEntryPopup(session: TopupSession, method: 'mada' 
         if (res.request().method() === 'POST' && res.url().endsWith('/api/v1/payments') && res.status() >= 400) {
             const body = await res.text().catch(() => '');
             const code = /"messageCode":"([^"]+)"/.exec(body)?.[1] ?? '';
-            initiationFailure = `HTTP ${res.status()}${code ? ` ${code}` : ''}`;
+            // Keep the raw body: a generic 500 (INTERNAL_SERVER_ERROR) carries the real reason only there.
+            initiationFailure = `HTTP ${res.status()}${code ? ` ${code}` : ''} ${body.slice(0, 300)}`.trim();
         }
     };
     page.on('response', onResponse);
@@ -255,7 +342,11 @@ export async function reachCardEntryPopup(session: TopupSession, method: 'mada' 
                 ? 'The hourly/daily COUNT cap for this account type was reached: dev counts every initiated top-up, paid or not (AS4, max 5 per hour). Wait for the hour to roll over, use another account, or raise the count limit in the admin portal (restore it afterwards).'
                 : /SESSION_INVALID|HTTP 401/.test(initiationFailure)
                 ? 'The session was invalidated (another login with the same account, or it expired) — run the Topup UI specs with --workers=1 and do not use this account elsewhere at the same time.'
-                : 'For COLLECTION_DESTINATION_WALLET_LIMITATION_EXCEEDED the test wallet has reached its limit (see the header of TopupHelper.ts); it needs resetting, not a test fix.';
+                : /WALLET_LIMITATION_EXCEEDED/.test(initiationFailure)
+                ? 'The test wallet has reached its limit (see the header of TopupHelper.ts); it needs resetting, not a test fix.'
+                : /HTTP 500/.test(initiationFailure)
+                ? 'Backend threw INTERNAL_SERVER_ERROR on payment initiation (no business code). Check the payment-service logs and that the raised hourly cap was applied cleanly; retry or switch account.'
+                : 'Unrecognised rejection — read the response body above for the real reason.';
             throw new Error(`Payment initiation was rejected (${initiationFailure}) — the backend refused the top-up, so no gateway popup could open. ${hint}`);
         }
         throw new Error('Payment gateway popup did not open within 20s after Next / OTP verification — likely a backend/gateway outage, not a test issue.');

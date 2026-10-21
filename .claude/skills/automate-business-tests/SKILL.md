@@ -9,7 +9,7 @@ allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
 
 Input: `$ARGUMENTS` (module name). Reference implementation: `BusinessTestCases/Topup/ui/` (`TopupBizOutcomesUI.spec.ts`, `TopupKbFlowUI.spec.ts`, helper `TopupBizUiHelper.ts`). Copy its structure and style.
 
-`BusinessTestCases/<Module>/business/` (the older API+DB specs, helper `TopupBizApi.ts`) is **legacy**: keep it, do not extend it, do not copy its style. The same case id may exist once there and once in `ui/` (different layers).
+`BusinessTestCases/<Module>/api/` (the API+DB specs, helper `helpers/TopupBizApi.ts`; formerly `business/`) is the API tier: keep it, do not extend it with UI steps, do not copy its style. The same case id may exist once there and once in `ui/` (different layers).
 
 **Before writing anything, read `.claude/skills/automate-ui-tests/SKILL.md` and follow its hard rules and Step 3 conventions** (ENV=dev, serial and one session per account, `recordFlow`, `payWithOutcome`, `ledgerFor`, rate-cap rule, no `dblclick`, popup cleanup, soft vs hard asserts, findings as annotations). This skill does not repeat them. It adds the part that is specific to "every md case goes through the UI".
 
@@ -58,7 +58,7 @@ Rule of thumb: if the case can be done by a person with the app and the admin po
 
 ## Step 3 - Existing coverage pass (mandatory)
 
-Follow automate-ui-tests Step 2: grep `ui/`, `functional/`, `business/` (including `<Module>BizNotAutomated.spec.ts`) for each case id, its title keywords and its `Related existing` ids. Show the gap table before writing:
+Follow automate-ui-tests Step 2: grep `ui/`, `functional/`, `api/` (including `<Module>BizNotAutomated.spec.ts`) for each case id, its title keywords and its `Related existing` ids. Show the gap table before writing:
 
 | Case | Legacy API spec | UI spec (existing) | Class | Plan |
 |---|---|---|---|---|
@@ -89,7 +89,7 @@ Extra rules for this skill:
 
 ## Step 6 - Check without running
 
-Allowed: a text check (python or grep) that every md case id appears exactly once across `ui/` and the NotAutomated file (an id may also appear once in legacy `business/`), that tier counts in the md equal the specs, that every page-object member and helper import exists, and that the xlsx row count equals the md case count. Not allowed: running Playwright or tsc.
+Allowed: a text check (python or grep) that every md case id appears exactly once across `ui/` and the NotAutomated file (an id may also appear once in `api/`), that tier counts in the md equal the specs, that every page-object member and helper import exists, and that the xlsx row count equals the md case count. Not allowed: running Playwright or tsc.
 
 ## Step 7 - Report
 

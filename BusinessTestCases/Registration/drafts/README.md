@@ -8,10 +8,10 @@ change test counts or CI. Each file starts with a banner listing prerequisites a
 
 | # | Type | Draft | Prerequisites | Risk / safety |
 |---|---|---|---|---|
-| 1 | API fuzzing | `api-fuzzing/RegistrationApiFuzz.draft.ts` | `npm i -D fast-check`; OTP only for the profile-type property | sends many requests (cap `NUM_RUNS`); dev only |
-| 2 | API contract | `contract/RegistrationApiContract.draft.ts` | captured fixtures in `data/registrationFixtures/` | read-only |
+| 1 | API fuzzing | `api-fuzzing/RegistrationApiFuzz.draft.ts` | `npm i -D fast-check` (not installed); OTP only for the profile-type property | sends many requests (cap `NUM_RUNS`); dev only |
+| 2 | API contract | `contract/RegistrationApiContract.draft.ts` | captured fixtures in `data/registrationFixtures/` (folder does not exist yet) | read-only |
 | 3 | Load / soak | `load/registration-load.k6.js` | k6 binary | **sends real OTPs** — dev only, backend sign-off, low VUs first |
-| 4 | Config matrix | `config-matrix/RegistrationConfigMatrix.draft.ts` | none (mocked) | the config-endpoint URL patterns in `registrationUi.ts` are guesses |
+| 4 | Config matrix | `config-matrix/RegistrationConfigMatrix.draft.ts` | none (mocked) | the config-endpoint URL patterns inside the draft itself are guesses (`registrationUi.ts` only holds PoS/dropdown helpers) |
 | 5 | Email content | `notifications/RegistrationEmailContent.draft.ts` | Mailosaur configured **and** dev mail relay delivering | blocked until email delivery works |
 | 6 | Idempotency / partial failure | `idempotency/RegistrationPartialFailure.draft.ts` | A: none; B: OTP + SQL/Mongo access | B consumes a pool identity |
 | 7 | Release resume | `release-resume/RegistrationReleaseResume.draft.ts` | fixtures per release in `data/registrationFixtures/resume/<tag>/` | needs fixture capture |

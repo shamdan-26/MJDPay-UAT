@@ -7,7 +7,7 @@ import {
 } from '../helpers/ForgotPasswordHelper.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Step 2 — password policy edge cases not covered by ForgotPasswordStep2.spec.ts (all mocked).
+// Step 2 — password policy edge cases not covered by functional/ForgotPasswordStep2.spec.ts (all mocked).
 // ─────────────────────────────────────────────────────────────────────────────
 
 const tags = { tag: ['@forgotpassword', '@functional', '@password-policy'], annotation: [{ type: 'feature', description: 'ForgotPassword' }, { type: 'layer', description: 'functional' }] };

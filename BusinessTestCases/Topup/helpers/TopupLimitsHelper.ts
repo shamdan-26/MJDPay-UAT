@@ -1,6 +1,7 @@
 import { test, type Browser, type BrowserContext } from '@playwright/test';
 import { createAdminContext } from '../../pageElements/Shared/AdminOtpConfigPage.ts';
-import { AdminLimitsApi, TOPUP_TYPE_NAME, type TopupLimitsSnapshot } from '../../pageElements/Shared/AdminLimitsApi.ts';
+import { AdminLimitsApi, TOPUP_TYPE_NAME, type AmountLimitValues, type TopupLimitsSnapshot } from '../../pageElements/Shared/AdminLimitsApi.ts';
+import { AdminTransactionLimitsPage } from '../../pageElements/Shared/AdminTransactionLimitsPage.ts';
 import { gotoTopupScreen, type TopupSession } from './TopupHelper.ts';
 
 /**
@@ -37,6 +38,27 @@ export async function closeAdminLimits(handle: AdminLimitsHandle | undefined): P
         await handle.api.restoreTopup(handle.snapshot);
     } finally {
         await handle.context.close();
+    }
+}
+
+/**
+ * Writes the amount limits of every captured cell (type x risk x platform of the snapshot) on the admin Transaction limits
+ * SCREEN, not through the API. `values` receives the cell's ORIGINAL values and returns what to save, so the same call also
+ * puts the originals back (`o => o`). The snapshot itself is still read through the API (read-only).
+ */
+export async function applyAmountsOnScreen(admin: AdminLimitsHandle, values: (original: AmountLimitValues) => AmountLimitValues, group = 'Cash-In'): Promise<void> {
+    const page = await admin.context.newPage();
+    try {
+        const screen = new AdminTransactionLimitsPage(page);
+        await screen.open();
+        for (const cell of admin.snapshot.cells) {
+            const original = admin.snapshot.amount.get(`${cell.typeName}|${cell.risk}|${cell.platform}`);
+            if (!original) continue;
+            const result = await screen.setAmounts(group, cell.typeName, cell.risk, cell.platform, values(original));
+            if (!result.accepted) throw new Error(`Update Limits for ${cell.typeName} ${cell.risk} ${cell.platform} was rejected: ${result.error}`);
+        }
+    } finally {
+        await page.close().catch(() => { /* already closed */ });
     }
 }
 

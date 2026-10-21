@@ -11,7 +11,7 @@
     "expiry": "0528",
     "holder": "MADA TEST",
     "cvv": "123",
-    "otpCode": "0000"
+    "otpCode": "918512"
   },
   {
     "testName": "Topup_with_Enter_Amount_VISA",
@@ -25,7 +25,7 @@
     "expiry": "0528",
     "holder": "VISA TEST",
     "cvv": "123",
-    "otpCode": "0000"
+    "otpCode": "918512"
   },
   {
     "testName": "Topup_with_Enter_Amount_MASTER",
@@ -39,7 +39,7 @@
     "expiry": "0528",
     "holder": "MASTER TEST",
     "cvv": "123",
-    "otpCode": "0000"
+    "otpCode": "918512"
   },
   {
     "testName": "Topup_with_Select_Amount_VISA",
@@ -53,7 +53,7 @@
     "expiry": "0528",
     "holder": "VISA TEST",
     "cvv": "123",
-    "otpCode": "0000",
+    "otpCode": "918512",
     "isSelectAmount": true
   },
   {
@@ -68,7 +68,7 @@
     "expiry": "0528",
     "holder": "VISA TEST",
     "cvv": "123",
-    "otpCode": "0000"
+    "otpCode": "918512"
   },
   {
     "testName": "Topup_with_Invalid_Card_Data_PayNowDisabled",
@@ -82,7 +82,7 @@
     "expiry": "0528",
     "holder": "INVALID HOLDER",
     "cvv": "999",
-    "otpCode": "0000",
+    "otpCode": "918512",
     "expectDisabled": true
   },
   {
@@ -97,7 +97,7 @@
     "expiry": "0528",
     "holder": "VISA TEST",
     "cvv": "123",
-    "otpCode": "0000",
+    "otpCode": "918512",
     "returnCode": "2",
     "expectedStatus": "FAILED"
   },
@@ -113,7 +113,7 @@
     "expiry": "0528",
     "holder": "VISA TEST",
     "cvv": "123",
-    "otpCode": "0000",
+    "otpCode": "918512",
     "returnCode": "4",
     "expectedStatus": "FAILED"
   },
@@ -129,7 +129,7 @@
     "expiry": "0528",
     "holder": "VISA TEST",
     "cvv": "123",
-    "otpCode": "0000",
+    "otpCode": "918512",
     "returnCode": "5",
     "expectedStatus": "FAILED"
   },
@@ -145,7 +145,7 @@
     "expiry": "0528",
     "holder": "VISA TEST",
     "cvv": "123",
-    "otpCode": "0000",
+    "otpCode": "918512",
     "returnCode": "3",
     "expectedStatus": "PENDING"
   },

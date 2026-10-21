@@ -1,7 +1,8 @@
 import { expect, request as playwrightRequest, type APIRequestContext, type APIResponse, type Browser, type Page, type Request } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
-import { decodeJwtProfileCode, getTopupTransactionLogHistoryFromSql, loginToTopup, HOME_URL, type TopupAccount, type TopupTransactionLogSqlRow } from '../helpers/TopupHelper.ts';
-import { openAdminLimits, closeAdminLimits } from '../helpers/TopupLimitsHelper.ts';
+import { decodeJwtProfileCode, getTopupTransactionLogHistoryFromSql, loginToTopup, HOME_URL, type TopupAccount, type TopupTransactionLogSqlRow } from './TopupHelper.ts';
+import { openAdminLimits, closeAdminLimits } from './TopupLimitsHelper.ts';
+import { TOPUP_TYPE_NAME } from '../../pageElements/Shared/AdminLimitsApi';
 import { FIXED_OTP } from '../../../support/otp';
 import testAccounts from '../../../data/testAccounts.json';
 
@@ -24,7 +25,13 @@ import testAccounts from '../../../data/testAccounts.json';
 // Accounts come from data/testAccounts.json (shared default password). The UI Topup specs use Q9557 with a separate
 // LOGIN_PASSWORD; the business specs use the listed Biller (limit/commission rows targeted are the "Biller Bank Cashin"
 // ones) and the listed Merchant as the second user.
-export const BILLER: TopupAccount = { ...testAccounts.biller, password: testAccounts.defaultPassword };
+// Set TOPUP_BIZ_ACCOUNT=company:mobile in .env.dev to run the business specs as another account when the default one has hit a limit
+// (a capped wallet / count makes POST /api/v1/payments answer 500). Add TOPUP_BIZ_ACCOUNT_TYPE=merchant when that account is a Merchant:
+// the admin limit rows the specs change (and restore) must be the rows of the account's own type. The commission spec is Biller-only.
+export const BILLER: TopupAccount = envAccount('TOPUP_BIZ_ACCOUNT') ?? { ...testAccounts.biller, password: testAccounts.defaultPassword };
+const BIZ_IS_MERCHANT = process.env['TOPUP_BIZ_ACCOUNT_TYPE']?.toLowerCase() === 'merchant';
+export const BIZ_LIMIT_TYPE: string = BIZ_IS_MERCHANT ? TOPUP_TYPE_NAME.MERCHANT : TOPUP_TYPE_NAME.BILLER;
+export const BIZ_WALLET_TYPE: string = BIZ_IS_MERCHANT ? 'Merchant' : 'Biller';
 export const SECOND_USER: TopupAccount = { ...testAccounts.merchant, password: testAccounts.defaultPassword };
 export const WRONG_OTP = '194857';
 
@@ -263,7 +270,7 @@ export function envAccount(name: string): TopupAccount | null {
  * function that puts the original limits back (call it in afterAll). Amount limits and the minimum are left alone.
  */
 export async function raiseHeadroom(browser: Browser): Promise<() => Promise<void>> {
-    const handle = await openAdminLimits(browser);
+    const handle = await openAdminLimits(browser, BIZ_LIMIT_TYPE, BIZ_WALLET_TYPE);
     try {
         await handle.api.setCountAllTiers(handle.snapshot, { hourly: 1000, daily: 1000, monthly: 1000, yearly: 1000 });
     } catch (e) {
@@ -272,3 +279,9 @@ export async function raiseHeadroom(browser: Browser): Promise<() => Promise<voi
     }
     return () => closeAdminLimits(handle);
 }
+
+/**
+ * Opt-in kill switch: TOPUP_DEV_PAYMENTS_DOWN=1 makes the business specs that initiate payments skip themselves. The 2026-10-20 run of
+ * 500s on POST /api/v1/payments turned out to be the test account reaching its limit, not a dev outage, so this is OFF by default.
+ */
+export const DEV_PAYMENTS_DOWN = process.env.TOPUP_DEV_PAYMENTS_DOWN === '1';

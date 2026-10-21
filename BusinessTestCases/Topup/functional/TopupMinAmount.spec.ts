@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import testAccounts from '../../../data/testAccounts.json';
-import { envAccount, startSession, initiate, expectRejected, why, ledger } from '../business/TopupBizApi';
+import { envAccount, startSession, initiate, expectRejected, why, ledger } from '../helpers/TopupBizApi.ts';
 import { loginToCommissionManagement } from '../../CommissionManagement/helpers/CommissionManagementHelper.ts';
 import { TOPUP_TYPE_NAME } from '../../pageElements/Shared/AdminLimitsApi';
 import { loginToTopup,gotoTopupScreen, type TopupSession } from '../helpers/TopupHelper.ts';
@@ -182,7 +182,7 @@ test.describe('Topup — admin minimum top-up amount', { tag: ['@topup', '@funct
         await expect(otp.inputs.first()).toBeHidden();
     });
 
-    test('TUA-B10: minimum applied per account type × risk tier (no cross-cell leakage)', async () => {
+    test('TUA-B10: minimum applied per account type × risk tier (no cross-cell leakage)', { annotation: [{ type: 'testcase', description: 'TUB-26: Rule is chosen by account type and risk level' }] }, async () => {
         // Config level: a different minimum per Merchant risk tier must land only on its own tier, and the Biller type must not move.
         // (Judging a user against their own cell needs one dedicated account per cell — matrix §0.4 — which dev does not have.)
         const { api, snapshot } = admin!;
@@ -246,7 +246,7 @@ test.describe('Topup — admin minimum top-up amount', { tag: ['@topup', '@funct
         }
     });
 
-    test('TUA-B15: net credit would be ≤ 0 is blocked', async ({ browser }) => {
+    test('TUA-B15: net credit would be ≤ 0 is blocked', { annotation: [{ type: 'testcase', description: 'TUB-13: Net credit zero or negative is blocked' }] }, async ({ browser }) => {
         // Needs an active FIXED commission on this type: one cannot be created (one rule per type+platform, edit defect TU-CM03),
         // so this runs only when dev already holds one.
         const { context, commission } = await loginToCommissionManagement(browser);

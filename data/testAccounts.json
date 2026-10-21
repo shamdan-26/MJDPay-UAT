@@ -5,62 +5,236 @@
   "wrongPassword": "WrongPass@99",
   "validOtp": "918512",
   "invalidOtp": "11111111",
-  "merchant": { "company": "K9491", "mobile": "599000000" },
-  "merchant2": { "company": "E9306", "mobile": "502310965" },
-  "biller": { "company": "Y4171", "mobile": "599000007" },
+  "merchant": {
+    "company": "K9491",
+    "mobile": "599000000"
+  },
+  "merchant2": {
+    "company": "E9306",
+    "mobile": "502310965"
+  },
+  "biller": {
+    "company": "Y4171",
+    "mobile": "599000007"
+  },
   "loginAccounts": {
-    "happy":   { "company": "K9491", "mobile": "599000000" },
-    "blocked": { "company": "T8448", "mobile": "504142908" }
+    "happy": {
+      "company": "K9491",
+      "mobile": "599000000"
+    },
+    "blocked": {
+      "company": "T8448",
+      "mobile": "504142908"
+    }
   },
   "moduleAccounts": {
-    "moneyRequestRequester": { "company": "H7485", "mobile": "500062901" },
-    "moneyRequestPayer":     { "company": "H3460", "mobile": "500064975" },
-    "billCreate":            { "company": "R4989", "mobile": "500318143" },
-    "payBill":               { "company": "H4218", "mobile": "500474285" }
+    "moneyRequestRequester": {
+      "company": "H7485",
+      "mobile": "500062901"
+    },
+    "moneyRequestPayer": {
+      "company": "H3460",
+      "mobile": "500064975"
+    },
+    "billCreate": {
+      "company": "R4989",
+      "mobile": "500318143"
+    },
+    "payBill": {
+      "company": "H4218",
+      "mobile": "500474285"
+    }
   },
   "firstLoginAccounts": [
-    { "company": "W1550", "mobile": "500021788" },
-    { "company": "E0488", "mobile": "500528763" },
-    { "company": "N5355", "mobile": "500622883" },
-    { "company": "T8477", "mobile": "500664869" },
-    { "company": "K8104", "mobile": "500901343" },
-    { "company": "U7350", "mobile": "501017560" },
-    { "company": "X5017", "mobile": "501018826" },
-    { "company": "F2269", "mobile": "501169260" },
-    { "company": "X5998", "mobile": "501330615" },
-    { "company": "F9628", "mobile": "501469741" },
-    { "company": "N1629", "mobile": "502079816" },
-    { "company": "A5699", "mobile": "502195533" },
-    { "company": "Z6394", "mobile": "502231255" },
-    { "company": "B8502", "mobile": "502917488" },
-    { "company": "U4875", "mobile": "503596330" },
-    { "company": "I4020", "mobile": "503872949" },
-    { "company": "A4975", "mobile": "503972174" }
+    {
+      "company": "W1550",
+      "mobile": "500021788"
+    },
+    {
+      "company": "E0488",
+      "mobile": "500528763"
+    },
+    {
+      "company": "N5355",
+      "mobile": "500622883"
+    },
+    {
+      "company": "T8477",
+      "mobile": "500664869"
+    },
+    {
+      "company": "K8104",
+      "mobile": "500901343"
+    },
+    {
+      "company": "U7350",
+      "mobile": "501017560"
+    },
+    {
+      "company": "X5017",
+      "mobile": "501018826"
+    },
+    {
+      "company": "F2269",
+      "mobile": "501169260"
+    },
+    {
+      "company": "X5998",
+      "mobile": "501330615"
+    },
+    {
+      "company": "F9628",
+      "mobile": "501469741"
+    },
+    {
+      "company": "N1629",
+      "mobile": "502079816"
+    },
+    {
+      "company": "A5699",
+      "mobile": "502195533"
+    },
+    {
+      "company": "Z6394",
+      "mobile": "502231255"
+    },
+    {
+      "company": "B8502",
+      "mobile": "502917488"
+    },
+    {
+      "company": "U4875",
+      "mobile": "503596330"
+    },
+    {
+      "company": "I4020",
+      "mobile": "503872949"
+    },
+    {
+      "company": "A4975",
+      "mobile": "503972174"
+    }
   ],
+  "accountStatus": {},
   "createdAccounts": [
-    { "company": "W1550", "mobile": "500021788" },
-    { "company": "H7485", "mobile": "500062901" },
-    { "company": "H3460", "mobile": "500064975" },
-    { "company": "R4989", "mobile": "500318143" },
-    { "company": "H4218", "mobile": "500474285" },
-    { "company": "E0488", "mobile": "500528763" },
-    { "company": "N5355", "mobile": "500622883" },
-    { "company": "T8477", "mobile": "500664869" },
-    { "company": "K8104", "mobile": "500901343" },
-    { "company": "U7350", "mobile": "501017560" },
-    { "company": "X5017", "mobile": "501018826" },
-    { "company": "F2269", "mobile": "501169260" },
-    { "company": "X5998", "mobile": "501330615" },
-    { "company": "F9628", "mobile": "501469741" },
-    { "company": "N1629", "mobile": "502079816" },
-    { "company": "A5699", "mobile": "502195533" },
-    { "company": "Z6394", "mobile": "502231255" },
-    { "company": "E9306", "mobile": "502310965" },
-    { "company": "E7176", "mobile": "502436329" },
-    { "company": "B8502", "mobile": "502917488" },
-    { "company": "U4875", "mobile": "503596330" },
-    { "company": "I4020", "mobile": "503872949" },
-    { "company": "A4975", "mobile": "503972174" },
-    { "company": "T8448", "mobile": "504142908" }
-  ]
+    {
+      "company": "W1550",
+      "mobile": "500021788"
+    },
+    {
+      "company": "H7485",
+      "mobile": "500062901"
+    },
+    {
+      "company": "H3460",
+      "mobile": "500064975"
+    },
+    {
+      "company": "R4989",
+      "mobile": "500318143"
+    },
+    {
+      "company": "H4218",
+      "mobile": "500474285"
+    },
+    {
+      "company": "E0488",
+      "mobile": "500528763"
+    },
+    {
+      "company": "N5355",
+      "mobile": "500622883"
+    },
+    {
+      "company": "T8477",
+      "mobile": "500664869"
+    },
+    {
+      "company": "K8104",
+      "mobile": "500901343"
+    },
+    {
+      "company": "U7350",
+      "mobile": "501017560"
+    },
+    {
+      "company": "X5017",
+      "mobile": "501018826"
+    },
+    {
+      "company": "F2269",
+      "mobile": "501169260"
+    },
+    {
+      "company": "X5998",
+      "mobile": "501330615"
+    },
+    {
+      "company": "F9628",
+      "mobile": "501469741"
+    },
+    {
+      "company": "N1629",
+      "mobile": "502079816"
+    },
+    {
+      "company": "A5699",
+      "mobile": "502195533"
+    },
+    {
+      "company": "Z6394",
+      "mobile": "502231255"
+    },
+    {
+      "company": "E9306",
+      "mobile": "502310965"
+    },
+    {
+      "company": "E7176",
+      "mobile": "502436329"
+    },
+    {
+      "company": "B8502",
+      "mobile": "502917488"
+    },
+    {
+      "company": "U4875",
+      "mobile": "503596330"
+    },
+    {
+      "company": "I4020",
+      "mobile": "503872949"
+    },
+    {
+      "company": "A4975",
+      "mobile": "503972174"
+    },
+    {
+      "company": "T8448",
+      "mobile": "504142908"
+    }
+  ],
+  "accountIssues": {
+    "H4218": {
+      "mobile": "500474285",
+      "issue": "Login for H4218/500474285 did not leave /auth/ after Login was clicked (no OTP screen, no redirect); /auth/signin answered 423; page is https://dev-emi.dg-cash.app/business/auth/login. Not retried (one attempt per account): check it is not ",
+      "firstSeen": "2026-10-21T10:21:56.329Z",
+      "lastSeen": "2026-10-21T10:21:56.329Z",
+      "seenIn": "Topup\\ui\\TopupBizFlowUI.spec.ts > Topup business – UI – flow rules"
+    },
+    "R4989": {
+      "mobile": "500318143",
+      "issue": "Login for R4989/500318143 did not leave /auth/ after Login was clicked (no OTP screen, no redirect); /auth/signin answered 423; page is https://dev-emi.dg-cash.app/business/auth/login. Not retried (one attempt per account): check it is not ",
+      "firstSeen": "2026-10-21T10:22:35.065Z",
+      "lastSeen": "2026-10-21T10:22:35.065Z",
+      "seenIn": "Topup\\ui\\TopupBizFlowUI.spec.ts > Topup business – UI – flow rules"
+    },
+    "H7485": {
+      "mobile": "500062901",
+      "issue": "Login for H7485/500062901 did not leave /auth/ after Login was clicked (no OTP screen, no redirect); /auth/signin answered 403; page is https://dev-emi.dg-cash.app/business/auth/login. Not retried (one attempt per account): check it is not ",
+      "firstSeen": "2026-10-21T10:23:15.705Z",
+      "lastSeen": "2026-10-21T10:23:15.705Z",
+      "seenIn": "Topup\\ui\\TopupBizFlowUI.spec.ts > Topup business – UI – flow rules"
+    }
+  }
 }

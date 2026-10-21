@@ -5,7 +5,7 @@ import { OtpPage } from '../../pageElements/Shared/OtpPage.ts';
 import { LOGIN_URL, VALID_OTP, INVALID_OTP } from '../../Login/helpers/LoginHelper.ts';
 import testAccounts from '../../../data/testAccounts.json';
 
-const BASE_URL              = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
+const BASE_URL              = process.env['BASE_URL'] ?? 'https://dev-emi.dg-cash.app';
 export const FORGOT_URL     = `${BASE_URL}/business/auth/forgot-password`;
 export { LOGIN_URL, VALID_OTP, INVALID_OTP };
 

@@ -175,7 +175,7 @@ test.describe('Topup – Commission ledger and integrity', { tag: ['@topup', '@f
         expect(await topup.getBalanceBeforeTopup()).toBeCloseTo(balanceBefore, 2);
     });
 
-    test('TUA-D16: a SUCCESS payment — the ledger commission and VAT equal what the Summary quoted', async () => {
+    test('TUA-D16: a SUCCESS payment — the ledger commission and VAT equal what the Summary quoted', { annotation: [{ type: 'testcase', description: 'TUB-20: Ledger commission and VAT equal the Summary figures' }] }, async () => {
         const quote = await quoteFor(amount);
         const { w } = await pay();
         w.stop();

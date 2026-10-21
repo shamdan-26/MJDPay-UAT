@@ -289,7 +289,7 @@ test.describe('Topup – Happy Path', { tag: ['@topup', '@functional'], annotati
         console.log(`[STATUS] home="${homeStatus}" mongo="${dbTxn?.status ?? 'n/a'}" sql.base_transaction="${sqlTxn!.status}" sql.transaction_log="${sqlLogTxn!.status}"`);
     }
 
-    test('should top up with a VISA card and credit the wallet with the exact amount', async () => {
+    test('should top up with a VISA card and credit the wallet with the exact amount', { annotation: [{ type: 'testcase', description: 'TUB-02: Merchant with the Topup privilege can top up end to end' }] }, async () => {
         await runTopupScenario('visa');
     });
 

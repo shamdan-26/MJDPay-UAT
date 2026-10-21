@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
+import { FIXED_OTP } from '../../../support/otp.ts';
 
 export class BillsPage {
     readonly page: Page;
@@ -143,7 +144,7 @@ export class BillsPage {
      * `getOtp` is only invoked if the OTP modal actually appears, so callers can
      * pass a lazy DB lookup without paying its cost/latency on the no-OTP path.
      */
-    async confirmPayment(getOtp: () => Promise<string> = async () => '0000'): Promise<void> {
+    async confirmPayment(getOtp: () => Promise<string> = async () => FIXED_OTP): Promise<void> {
         await this.clickSummaryPayButton();
         await this.clickConfirmPayButton();
 

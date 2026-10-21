@@ -601,6 +601,8 @@ Items 3–4 are tracked here as known coverage gaps so a "green" run is not mist
 | PB-CM18 — re-enabling a commission schema resumes applying it | Positive | *(Skipped.)* |
 
 ## 5. Wallet Top-up
+> **Stale section:** `TopupFlow`, `TopupSadadFlow`, `TopupWalletLimits` and `TopupTransactionLimits` no longer exist. Current Top-up specs live in `BusinessTestCases/Topup/{api,functional,ui}/`; the case catalogues are `Topup-BusinessTestCases.md` and `Topup-UITestCases.md` in that folder.
+
 **File Reference:** `BusinessTestCases/Topup/functional/TopupFlow.spec.ts`
 
 | Exact Test Title (From Code) | Test Type | Target Assertions & Verification Points |

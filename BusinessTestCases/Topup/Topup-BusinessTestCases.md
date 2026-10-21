@@ -247,7 +247,7 @@ One account per row (A1 to A6, reused by the next batch) so limits and counts do
 
 ## Automation summary
 
-Tier: T1 = automated at API + DB level (no browser), T2 = needs the browser (HyperPay popup, 3DS simulator, admin OTP UI), T3 = manual or blocked. Specs live in `BusinessTestCases/Topup/business/`.
+Tier: T1 = automated at API + DB level (no browser), T2 = needs the browser (HyperPay popup, 3DS simulator, admin OTP UI), T3 = manual or blocked. Specs live in `BusinessTestCases/Topup/api/`.
 
 | Tier | Cases | Count |
 |---|---|---|
@@ -268,7 +268,7 @@ Tier: T1 = automated at API + DB level (no browser), T2 = needs the browser (Hyp
 
 ### Browser-tier UI specs (`/automate-ui-tests`)
 
-The same case ids are also proven through the UI in `BusinessTestCases/Topup/ui/`. An id may appear once in `business/` (API+DB) and once in `ui/` (browser); each is unique within its folder. `TopupBizNotAutomated.spec.ts` no longer lists the ids below.
+The same case ids are also proven through the UI in `BusinessTestCases/Topup/ui/`. An id may appear once in `api/` (API+DB) and once in `ui/` (browser); each is unique within its folder. `TopupBizNotAutomated.spec.ts` no longer lists the ids below.
 
 | Spec file | Cases | Note |
 |---|---|---|
@@ -277,7 +277,7 @@ The same case ids are also proven through the UI in `BusinessTestCases/Topup/ui/
 
 ### UI conversion of the API+DB cases (2026-10-16, `/automate-business-tests`)
 
-The API+DB specs in `business/` are kept as legacy. The same rules are now proven through the screens:
+The API+DB specs in `api/` are kept as legacy. The same rules are now proven through the screens:
 
 | Spec file | Cases | Note |
 |---|---|---|
@@ -286,7 +286,22 @@ The API+DB specs in `business/` are kept as legacy. The same rules are now prove
 | `TopupBizFlowUI.spec.ts` | 48, 49, 51, 85 | UI action plus ledger read as evidence; 3 real initiations per run |
 | `TopupBizUiNotAutomated.spec.ts` | 06, 33, 37, 39, 44, 45, 46, 78-81, 84, 123 | No screen path or missing account, one annotated skip each |
 
-API-only by design (kept in `business/`, no UI version planned): 33, 44, 78-81, 84.
+### Browser coverage of every API-layer case (2026-10-21)
+
+Every id that has an API spec in `api/` now appears in a browser spec (`functional/` or `ui/`), as a test or as one annotated skip:
+
+| Where | Ids | Note |
+|---|---|---|
+| `ui/TopupBizAmountEntryUI.spec.ts` (new) | 09, 10, 11 (screen-only twin of the functional file) | The amount typed equals the amount on the Summary; no payment is started |
+| `functional/TopupBizAmountEntryFunctional.spec.ts` (new) | 08, 09, 10, 11 | Field vs Summary, plus zero `POST /api/v1/payments` and an unchanged balance; no payment is started |
+| `functional/TopupBizLimitsFunctional.spec.ts` (new) | 12, 22, 27, 31, 35 | Amount limits changed on the admin Transaction limits screen (`AdminTransactionLimitsPage`, restored after every test); each block has a control. Merchant hourly count raised for the run |
+| `functional/TopupBizOtpFunctional.spec.ts` (new) | 50 | Wrong code: no gateway popup, OTP step stays, balance unchanged |
+| `testcase` annotation on the existing functional test | 02, 13, 15, 16, 17, 18, 19, 20, 25, 26, 28, 29, 32, 93, 96, 109, 119, 121 | The rule is already proven there under another id scheme (`TUA-*`, `TU-CM*`); not rebuilt because it needs the commission or Wallet Balance / Count admin screens (no page object) or would only repeat the existing test |
+| `ui/TopupBizUiNotAutomated.spec.ts` | 03, 14, 23, 24, 30, 34, 52-55, 60, 63-66, 68-77, 82, 83, 86-92, 94-108, 110, 111, 115-118, 124-127 | One annotated skip each, with the missing tool, locator, account or decision named in the reason (fresh account, clock, reserved-credit locators, admin Transaction Log page object, VAT screen, OTP-threshold write helper, ...). 94-95, 97-101, 106-108 are the ids the md marks Dropped |
+
+The rows of the case table are unchanged, so the xlsx stays valid.
+
+API-only by design (kept in `api/`, no UI version planned): 33, 44, 78-81, 84.
 
 Already proven in the UI before this conversion (no new test): 08-11 (`TopupFormUI`), 12, 13, 25-29, 31, 35 (`functional/TopupMinAmount`, `TopupLimits`, `TopupLimitsCommissionMatrix`), 14-16 (`functional/TopupCommission`), 36, 83 (double click, `TopupKbFlowUI`), 40, 41, 43, 47 (`TopupKbFlowUI`), 50 (`functional/TopupNegative`), 119, 121, 129 (`functional/TopupLimits` count 0, wallet ceiling and amount cap).
 

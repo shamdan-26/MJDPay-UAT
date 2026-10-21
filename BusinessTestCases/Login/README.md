@@ -7,10 +7,13 @@ Run from the repo root (dev only): `npm run test:dev -- BusinessTestCases/Login/
 
 | Folder | What lives here |
 |---|---|
-| `functional/01-form/` | Button enable/disable matrix, mobile-field rules, password show/hide. |
-| `functional/02-credentials/` | `LoginInvalidCredentials` (wrong company / mobile / password), `LoginAccountStatus` (not registered, locked, deactivated, AML), `LoginEdgeCases` (whitespace, 500, retry, field retention). |
-| `functional/03-otp/` | `LoginOtp` (dialog, verify button, resend, cancel, wrong/correct OTP), `LoginValidationCard` (per-step checkmarks/spinner, no-card on failure). |
-| `functional/04-session/` | `LoginHappyPath` (dashboard landing + logout), `LoginNavigation` (links, theme, already-authenticated redirect). |
+| `functional/01-form/` | Button enable/disable matrix, mobile-field rules, password show/hide, `LoginFormKeyboard`. |
+| `functional/02-credentials/` | `LoginInvalidCredentials` (wrong company / mobile / password), `LoginAccountStatus` (not registered, locked, deactivated, AML), `LoginAccountStates` (env-gated + registration-created accounts), `LoginEdgeCases` (whitespace, 500, retry, field retention), `LoginErrorHandling` (mocked 4xx/5xx/network). |
+| `functional/03-otp/` | `LoginOtp` (dialog, verify button, resend, cancel, wrong/correct OTP), `LoginOtpEdgeCases`, `LoginValidationCard` (per-step checkmarks/spinner, no-card on failure). |
+| `functional/04-session/` | `LoginHappyPath` (dashboard landing + logout), `LoginNavigation` (links, theme, already-authenticated redirect), `LoginSessionLifecycle`, `LoginTokenLifecycle`. |
+| `functional/05-first-login/` | `FirstLoginUi`, `FirstLoginEndToEnd` (opt-in), first-login password change on registration-created accounts. |
+| `functional/06-pending/` | `LoginPendingCases` — skipped placeholders, each with its blocker in the annotations. |
+| `tools/` | Opt-in account-maintenance scripts, **not tests**: `FirstLoginProbe` (`FIRST_LOGIN_PROBE=1`), `FirstLoginActivateAll` (`FIRST_LOGIN_ACTIVATE_ALL=1`), `RepairTriedAccounts` (`REPAIR_TRIED_ACCOUNTS=1`). Skipped unless their env var is set. |
 | `ui/` | Static layout: `LoginPage` (elements, i18n, theme), `LoginValidationPopup` (card text). |
 | `api/signin/` | Gateway endpoints 1-4 + full flow: `ip-address`, `devices/uuid`, `auth/signin`, `auth/verify/otp`. |
 | `api/document-expiry/` | EMI-5836 / EMI-5969 NAFATH & WATHIQ expiry (409). Most cases are env-gated or `skip(true)` pending. |
@@ -18,7 +21,7 @@ Run from the repo root (dev only): `npm run test:dev -- BusinessTestCases/Login/
 | `integration/` | Login ⇄ Admin Portal status changes. |
 | `security/` | `LoginSecurity` — enumeration, XSS, POST-only, error leakage, **lockout (destructive, keep last)**. |
 | `helpers/loginApi.ts` | Shared API headers + `signIn()`. UI/functional specs must not import it. |
-| `LoginHelper.ts` | Accounts, OTP helpers, `gotoLogin`. Imported by ~25 other modules — keep the path stable. |
+| `helpers/LoginHelper.ts` | Accounts, OTP helpers, `gotoLogin`. Imported by ~25 other modules (de facto shared helper) — keep the path stable. Also in `helpers/`: `firstLogin`, `loginMocks`, `loginSession`. |
 
 The admin OTP-configuration check (Login ⇄ Admin) lives in `../OtpAdminConfig/`.
 
@@ -42,7 +45,10 @@ New in `functional/`: `04-session/LoginTokenLifecycle.spec.ts` (498 sign-out, re
 - `NEGATIVE_*` — wrong-password / invalid-credential tests. Not locked out by the suite any more.
 - `LOCKOUT_*` — used only by the lockout test; it really locks it; `afterAll` unlocks it via Admin Portal → Accounts → Business → details → Users tab (needs `ADMIN_*` env vars, already in `.env.dev`).
 - `LOCKED_*`, `DEACTIVATED_*`, `AML_*`, `*_EXPIRED_*` — env-provisioned; dependent tests skip when unset.
-- `firstLoginAccounts` (`data/testAccounts.json`) — registration-created accounts still on the default password `Aa#123456` (`FIRST_LOGIN_DEFAULT_PASSWORD`). Sign-in returns 200 and the OTP; after OTP `918512` the app forces `/business/auth/reset-password`. Used by `functional/05-first-login/`: `FirstLoginUi.spec.ts` (accounts 0–4, one per worker for the form cases, never consumes one), `FirstLoginEndToEnd.spec.ts` (opt-in `FIRST_LOGIN_E2E=1`, consumes the account at `FIRST_LOGIN_E2E_INDEX`, default last, and sets the password to `Aa#1234567`), and `FirstLoginProbe.spec.ts` (opt-in `FIRST_LOGIN_PROBE=1`, re-checks which accounts are still first-time). A direct `signIn()` API call gets an empty 412 on dev for every user, so these specs sign in through the browser.
+- `firstLoginAccounts` (`data/testAccounts.json`) — registration-created accounts still on the default password `Aa#123456` (`FIRST_LOGIN_DEFAULT_PASSWORD`). Sign-in returns 200 and the OTP; after OTP `918512` the app forces `/business/auth/reset-password`. Used by `functional/05-first-login/`: `FirstLoginUi.spec.ts` (accounts 0–4, one per worker for the form cases, never consumes one), `FirstLoginEndToEnd.spec.ts` (opt-in `FIRST_LOGIN_E2E=1`, consumes the account at `FIRST_LOGIN_E2E_INDEX`, default last, and sets the password to `Aa#1234567`), and `tools/FirstLoginProbe.spec.ts` (opt-in `FIRST_LOGIN_PROBE=1`, re-checks which accounts are still first-time). A direct `signIn()` API call gets an empty 412 on dev for every user, so these specs sign in through the browser.
+- `tools/FirstLoginActivateAll.spec.ts` (opt-in `FIRST_LOGIN_ACTIVATE_ALL=1`) does the first login for every `createdAccounts` entry, sets `Aa#1234567`, and writes `accountStatus` (company → `first-login` = just activated, `used` = already had its own password, `unknown`) to `data/testAccounts.json`. It consumes the first-login state of all accounts, including `firstLoginAccounts`, so the other `05-first-login` specs need new accounts afterwards.
+- `tools/RepairTriedAccounts.spec.ts` (opt-in `REPAIR_TRIED_ACCOUNTS=1`) unlocks/unblocks the five accounts the Topup fallback tried (H4218, T8477, X5017, U4875, X5998) in the admin portal and sets the shared password on H4218 (the only one outside `firstLoginAccounts`) with ONE first-login sign-in. The four first-login accounts keep their state.
+- `accountIssues` (`data/testAccounts.json`) — notes written by the Topup login fallback when an account cannot log in (issue text, first/last seen, spec). Separate from `accountStatus` (string labels). One login attempt per account, never a retry, so wrong passwords cannot lock accounts.
 
 ## Known weaknesses (not yet fixed)
 1. ~~Lockout vs parallel files~~ — fixed: lockout now uses the dedicated `LOCKOUT_*` account and skips when it is unset.
@@ -59,7 +65,7 @@ New in `functional/`: `04-session/LoginTokenLifecycle.spec.ts` (498 sign-out, re
 | API | `api/signin/LoginApiContract` (shapes/types/JWT), `api/signin/LoginApiLocalization` (en_uk / ar_sa, stable codes) |
 | Security | `security/LoginApiSecurity` (injection, type confusion, malformed bodies, headers, CORS, JWT tamper/alg=none, repeated attempts), `security/LoginSessionSecurity` (URL/console/storage/cookie leaks, tampered token) |
 | Performance | `non-functional/LoginPerformance` (LCP, CLS, long tasks, weight, slow 3G, toast latency), `non-functional/LoginApiPerformance` (latency p95, concurrency, degradation, timing-leak guard) |
-| Accessibility / Visual | `non-functional/LoginAccessibility` (axe + keyboard + zoom), `non-functional/LoginVisualRegression` (EN/AR × light/dark × desktop/phone) |
+| Accessibility / Visual | `non-functional/LoginAccessibility` (axe + keyboard + zoom), `non-functional/LoginVisualRegression` (baselines committed for light theme only, `-Microsoft-Edge-win32`; they will not match on other browsers/OSes, and dark/AR variants are not yet captured) |
 | UI | `ui/LoginResponsive`, `ui/LoginLocalization` (RTL, persistence, dark scheme) |
 | Integration | `integration/LoginAdminStatusIntegration` (admin deactivate/activate → login), `02-credentials/LoginAccountStates` (registration-created accounts) |
 | Helpers | `helpers/loginMocks` (gateway mocks), `helpers/loginSession` (`loginToDashboard`, `loginToOtpDialog`) |

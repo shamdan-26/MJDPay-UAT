@@ -13,7 +13,7 @@ import { HomepageSidebarPage } from '../../pageElements/Shared/HomepageSidebarPa
 // RISK: the privilege is on the ROLE, so every Merchant Admin on dev loses Topup while this file runs. Run it when nobody else
 // is testing Top-up. Manual recovery steps are at the top of TopupPrivilegeHelper.ts.
 // Not covered: a Biller account (TUB-123 stays manual: the order "permission before limit" cannot be seen in the UI).
-// Legacy API version: business/TopupBizEligibility.spec.ts (TUB-04) and business/TopupBizCombinations.spec.ts (TUB-122).
+// Legacy API version: api/TopupBizEligibility.spec.ts (TUB-04) and api/TopupBizCombinations.spec.ts (TUB-122).
 // One account, one session: run with --workers=1.
 
 const TOPUP_URL = `${BASE_URL}/business/main/transfer/top-up`;

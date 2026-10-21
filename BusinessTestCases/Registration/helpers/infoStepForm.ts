@@ -1,5 +1,6 @@
-import { expect, Page, BrowserContext } from '@playwright/test';
-import { goToInfoStep, REGISTER_URL, RESIDENT_ASSETS, generateEmail } from './RegistrationHelper';
+import { expect, Page, Browser, BrowserContext } from '@playwright/test';
+import { goToInfoStep, goToInfoStepMocked, REGISTER_URL, RESIDENT_ASSETS, generateEmail } from './RegistrationHelper';
+import { RegistrationInfoPage } from '../../pageElements/Registration/RegistrationInfoPage';
 
 // ── Selectors ─────────────────────────────────────────────────────────────────
 export const PROFILE_MERCHANT   = '#register-profile-card-MERCHANT';
@@ -65,4 +66,16 @@ export async function fillTab1AndAdvance(page: Page, asset: Asset, profile = PRO
         .catch(() => {});
     await page.getByRole(FINANCIAL_FIELD, { name: MONTHLY_EXPECTED_NUMBER })
         .waitFor({ state: 'visible', timeout: 30000 });
+}
+
+export interface InfoNav { page: Page; infoPage: RegistrationInfoPage }
+
+/** Fresh context on the Business Info step via the mocked OTP bypass (read-only checks, no pool identity burned). */
+export async function navigateToInfoStep(browser: Browser, workerIndex: number): Promise<InfoNav> {
+    const context = await browser.newContext();
+    const page: Page = await context.newPage();
+    const asset = RESIDENT_ASSETS[workerIndex % RESIDENT_ASSETS.length];
+    await goToInfoStepMocked(page, asset.mobile);
+    await page.locator('input[type="email"]').waitFor({ state: 'visible', timeout: 15000 });
+    return { page, infoPage: new RegistrationInfoPage(page) };
 }

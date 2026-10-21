@@ -138,50 +138,26 @@ BusinessTestCases/
     ProductsPoSHelper.ts
     functional/ · ui/
   Topup/
-    TopupHelper.ts               ← also holds the shared "Core Scenarios" setup (loginToTopup,
-                                   gotoTopupScreen, findTopupCase, reachCardEntryPopup) the six
-                                   functional/Topup*.spec.ts files below all import, so each
-                                   testing type stays a thin file instead of repeating login/nav;
-                                   also holds the Biller-scoped commission helpers
-                                   (prepareBillerTopupCommission, restoreBillerTopupCommission,
-                                   ensureAppScopedBillerTopupCommission,
-                                   restoreAppScopedBillerTopupCommission) TopupCommission.spec.ts
-                                   uses — "Biller Bank Cashin" / ACCOUNT_TYPE.BILLER, not the
-                                   Merchant-scoped ones archive/TopupCommission.spec.ts used
-    functional/                 ← "Core Scenarios" — one file per testing type, all against the
-                                   Biller account (Q9557), ENV=dev:
-                                     TopupHappyPath.spec.ts   — VISA/MASTER/MADA, full OTP + gateway
-                                       completion, exact-amount balance credit
-                                     ui/Topup{Form,Summary,Otp,Gateway,Shell,Success,Failure}UI.spec.ts
-                                       — element presence, one file per page/step (amount form,
-                                       Add Funds Summary, OTP, gateway hand-off, sidebar/header
-                                       shell, Payment Success, Payment Failed); replaces the old
-                                       single TopupUI.spec.ts
-                                     TopupNegative.spec.ts    — invalid amount, no method selected,
-                                       Summary cancel, wrong OTP
-                                     TopupSecurity.spec.ts    — card/CVV PCI-iframe isolation
-                                     TopupAPI.spec.ts         — POST /api/v1/payments contract (201 +
-                                       OTP-initiation)
-                                     TopupCommission.spec.ts  — live Default Commission schema for
-                                       "Biller Bank Cashin" (TU-CM03/08/13/16/17/18/19/20/21/22/23/
-                                       29/31/32), boundaries/value/type-flag read at runtime from
-                                       the admin-configured row, never hardcoded; TU-CM13 is the
-                                       one case that carries a top-up all the way through OTP/card/
-                                       gateway (the rest stop at the Summary screen) — admin edits
-                                       the live value, Summary reflects it, the wallet is credited
-                                       net of it, SQL base_transaction's commission column matches,
-                                       then the original value is restored; TU-CM02/14/15 stay
-                                       test.skip() (not yet automatable — see each note)
-                                   Limits, SADAD, and declined-payment/session-expiry remain
-                                   deliberately out of scope — archived below, not superseded
-    archive/                    ← all other Topup functional/ui specs archived (still discovered,
-                                   not skipped), including the Merchant-scoped
-                                   archive/TopupCommission.spec.ts (superseded by
-                                   functional/TopupCommission.spec.ts above, kept for reference) and
-                                   the original data-driven TopupFlow.spec.ts; pageElements/Topup/
-                                   stays in place — still imported by these archived specs, by every
-                                   functional/Topup*.spec.ts above, and by BankTransferHelper.ts's
-                                   own card-topup step
+    helpers/                    ← TopupHelper.ts (shared "Core Scenarios" setup: loginToTopup,
+                                   gotoTopupScreen, findTopupCase, reachCardEntryPopup, plus the
+                                   Biller-scoped commission helpers), TopupBizApi.ts (API client:
+                                   startSession, initiate, verifyOtp, ledger, envAccount, AMT),
+                                   TopupLimitsHelper.ts, TopupPrivilegeHelper.ts
+    api/                        ← TopupAPI.spec.ts (POST /api/v1/payments contract) and the
+                                   TopupBiz*.spec.ts API+DB business specs (amount rules,
+                                   combinations, commission, eligibility, flow integrity,
+                                   idempotency, limits, OTP, NotAutomated skips); formerly business/
+    functional/                 ← browser flows against the Biller account (Q9557), ENV=dev:
+                                   HappyPath, Negative, Security, Navigation, OtpFlow,
+                                   OtpAdminConfig, MinAmount, Limits, LimitsCommissionMatrix,
+                                   Commission, CommissionLedger, CommissionMerchant, and the
+                                   TopupBiz*Functional specs (AmountEntry, Limits, Otp)
+    ui/                         ← per-step element/look specs (Form, Summary, Otp, Gateway, Shell,
+                                   Success, Failure), TopupBiz*UI, TopupStyle*, TopupKbFlowUI,
+                                   TopupBizUiHelper.ts, TopupUiTokens.ts
+    Topup-BusinessTestCases.{md,xlsx}, Topup-UITestCases.{md,xlsx}  ← case catalogues (ids TUB-/TUI-)
+                                   pageElements/Topup/ stays in place (also imported by
+                                   BankTransferHelper.ts's card-topup step)
   W2WTransfer/
     W2WTransferHelper.ts
     functional/

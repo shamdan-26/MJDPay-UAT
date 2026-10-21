@@ -1,18 +1,7 @@
 import { test, expect, Page, Browser } from '@playwright/test';
 import { goToInfoStep, goToInfoStepMocked, RESIDENT_ASSETS, generateEmail } from '../../helpers/RegistrationHelper';
 import { RegistrationInfoPage } from '../../../pageElements/Registration/RegistrationInfoPage';
-
-async function navigateToInfoStep(browser: Browser, workerIndex: number): Promise<InfoNav> {
-    const context = await browser.newContext();
-    const page: Page = await context.newPage();
-    const asset = RESIDENT_ASSETS[workerIndex % RESIDENT_ASSETS.length];
-    // Read-only checks: reach Business Info through the mocked OTP bypass (no real OTP, no pool identity burned).
-    await goToInfoStepMocked(page, asset.mobile);
-    await page.locator('input[type="email"]').waitFor({ state: 'visible', timeout: 15000 });
-    return { page, infoPage: new RegistrationInfoPage(page) };
-}
-
-interface InfoNav { page: Page; infoPage: RegistrationInfoPage }
+import { navigateToInfoStep } from '../../helpers/infoStepForm';
 
 test.describe('Registration - Info Page — Form', { tag: ['@registration', '@business-info', '@ui'], annotation: [{ type: 'feature', description: 'Registration' }, { type: 'layer', description: 'ui' }] }, () => {
     // ─────────────────────────────────────────────────────────────────────────

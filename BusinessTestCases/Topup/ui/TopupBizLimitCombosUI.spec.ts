@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { loginToTopup, gotoTopupScreen, TOPUP_UI_ACCOUNT, type TopupSession } from '../helpers/TopupHelper.ts';
-import { openAdminLimits, closeAdminLimits, attemptTopup, attemptInfo, isBlocked, type AdminLimitsHandle, type TopupAttempt } from '../helpers/TopupLimitsHelper.ts';
+import { openAdminLimits, closeAdminLimits, applyAmountsOnScreen, attemptTopup, attemptInfo, isBlocked, type AdminLimitsHandle, type TopupAttempt } from '../helpers/TopupLimitsHelper.ts';
 import { TOPUP_TYPE_NAME } from '../../pageElements/Shared/AdminLimitsApi';
 import testAccounts from '../../../data/testAccounts.json';
 
@@ -12,7 +12,7 @@ const BILLER_ACCOUNT = { company: testAccounts.biller.company, mobile: testAccou
 // Business rules: several limits at once, and the matrix rows that are limit x account type. TUB-112, 113, 114 (Biller) and
 // TUB-120, 128 (Merchant), driven through the browser: the admin config is changed with the admin-portal helper, then the
 // top-up is attempted on the Amount screen. The attempt stops before payment (attemptTopup never pays).
-// The legacy API version is business/TopupBizCombinations.spec.ts (same ids, different layer).
+// The legacy API version is api/TopupBizCombinations.spec.ts (same ids, different layer).
 //
 // Every block is followed by a CONTROL: the limits go back (count raised) and the SAME top-up must now proceed, so a block
 // caused by anything other than the configured limit cannot pass. Per AS11 only "blocked" is asserted, never the wording;
@@ -112,6 +112,15 @@ test.describe('Topup business – UI – limit combinations (Biller)', { tag: ['
         await admin!.api.setWalletAllTiers(admin!.snapshot, { maxBalance: Math.floor(balance) });
         await expectBlocked(session, 'count 0, amount cap 5 and wallet at max');
         await expectProceedsAfterRestore(admin!, session, 'TUB-114');
+    });
+
+    test('TUB-129: Biller, per-transaction maximum exceeded', { annotation: [{ type: 'testcase', description: 'TUB-129: amount cap 5 set on the admin Transaction limits screen, a top-up of 100 is entered -> stopped before OTP and payment; restoring the limits on the same screen lets the same top-up proceed' }] }, async () => {
+        // Count headroom is not part of the rule under test and has no page object yet (Count screen), so it stays on the API helper.
+        await admin!.api.setCountAllTiers(admin!.snapshot, OPEN_COUNT);
+        await applyAmountsOnScreen(admin!, original => ({ min: original.min, hourly: 5, daily: 5, monthly: 5, yearly: 5 }));
+        await expectBlocked(session, 'Biller amount cap 5');
+        await applyAmountsOnScreen(admin!, original => original);
+        expect(await attemptTopup(session, AMOUNT), 'TUB-129 control: with the limits restored on the screen the same top-up must proceed').toBe('proceeded');
     });
 });
 

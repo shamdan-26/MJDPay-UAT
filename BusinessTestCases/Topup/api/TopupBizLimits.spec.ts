@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { openAdminLimits, closeAdminLimits, TOPUP_LIMIT_TYPE, TOPUP_WALLET_TYPE, type AdminLimitsHandle } from '../helpers/TopupLimitsHelper.ts';
-import { AMT, why, startSession, initiate, expectRejected, ledger, balances, paymentIdOf, type BizSession } from './TopupBizApi';
+import { openAdminLimits, closeAdminLimits, type AdminLimitsHandle } from '../helpers/TopupLimitsHelper.ts';
+import { DEV_PAYMENTS_DOWN, BIZ_LIMIT_TYPE, BIZ_WALLET_TYPE,AMT, why, startSession, initiate, expectRejected, ledger, balances, paymentIdOf, type BizSession } from '../helpers/TopupBizApi.ts';
 
 // Business rules: top-up limits and minimum (EMI-87). TUB-12, 25..29, 31, 33, 35 (groups B and D).
 // Only the REJECTION side is automated here: a limit is checked when the payment is initiated, so a tiny cap or Count 0
@@ -15,6 +15,7 @@ const caps = (n: number) => ({ hourly: n, daily: n, monthly: n, yearly: n });
 const BIG = 1_000_000;
 
 test.describe('Topup business – limits and minimum', { tag: ['@topup', '@business', '@api'], annotation: [{ type: 'feature', description: 'Topup' }, { type: 'layer', description: 'api' }] }, () => {
+    test.skip(DEV_PAYMENTS_DOWN, 'DEV OUTAGE: POST /api/v1/payments returns HTTP 500 for every request on dev (2026-10-20), so payment-initiation cases cannot be judged. Set TOPUP_DEV_PAYMENTS_DOWN=0 once dev is fixed.');
     test.describe.configure({ mode: 'serial' });
     test.setTimeout(120_000);
 
@@ -24,7 +25,7 @@ test.describe('Topup business – limits and minimum', { tag: ['@topup', '@busin
     test.beforeAll(async ({ browser }) => {
         test.setTimeout(180_000); // hook timeout is separate from the describe/test timeout: UI login + admin work
         s = await startSession(browser);
-        admin = await openAdminLimits(browser);
+        admin = await openAdminLimits(browser, BIZ_LIMIT_TYPE, BIZ_WALLET_TYPE);
         await admin.api.setCountAllTiers(admin.snapshot, { hourly: 1000, daily: 1000, monthly: 1000, yearly: 1000 });
     });
 
@@ -57,9 +58,9 @@ test.describe('Topup business – limits and minimum', { tag: ['@topup', '@busin
     test('TUB-26: a rule for another platform does not affect this one', { annotation: [{ type: 'testcase', description: 'TUB-26: APP rule Count 0 does not block a WEB top-up' }] }, async () => {
         let appSnap;
         try {
-            appSnap = await admin!.api.snapshotTopup(TOPUP_LIMIT_TYPE, 'APP', TOPUP_WALLET_TYPE);
+            appSnap = await admin!.api.snapshotTopup(BIZ_LIMIT_TYPE, 'APP', BIZ_WALLET_TYPE);
         } catch (e) {
-            test.skip(true, `No APP-platform limit rows for ${TOPUP_LIMIT_TYPE}: ${(e as Error).message.slice(0, 120)}`);
+            test.skip(true, `No APP-platform limit rows for ${BIZ_LIMIT_TYPE}: ${(e as Error).message.slice(0, 120)}`);
             return;
         }
         try {
