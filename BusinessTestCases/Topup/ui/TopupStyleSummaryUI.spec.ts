@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginToTopup, gotoTopupScreen, TOPUP_UI_ACCOUNT, type TopupSession } from '../helpers/TopupHelper.ts';
+import { loginToTopup, gotoTopupScreen, TOPUP_UI_ACCOUNT, type TopupSession } from '../helpers/TopupHelper';
 import { proceedToSummary } from './TopupBizUiHelper';
 import { RGB, expectSize } from './TopupUiTokens';
 
