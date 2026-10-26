@@ -1,0 +1,74 @@
+name: Login UI Tests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'BusinessTestCases/Login/**'
+      - 'BusinessTestCases/pageElements/**'
+      - 'support/**'
+      - '.github/workflows/login-ui.yml'
+
+jobs:
+  test:
+    name: Shard ${{ matrix.shard }}/4
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+      - run: npm ci
+      # Every GitHub repository variable and secret becomes a line in .env.dev, which playwright.config.ts loads.
+      # A secret wins over a variable of the same name; the auto-provided github_token is left out.
+      - name: Write .env.dev from repository variables and secrets
+        env:
+          REPO_VARS: ${{ toJSON(vars) }}
+          REPO_SECRETS: ${{ toJSON(secrets) }}
+        run: |
+          jq -rn 'env.REPO_VARS | fromjson' > vars.json
+          jq -rn 'env.REPO_SECRETS | fromjson | del(.github_token)' > secrets.json
+          jq -rs 'add | to_entries[] | "\(.key)=\(.value | @json)"' vars.json secrets.json > .env.dev
+          rm vars.json secrets.json
+          # Mask sensitive values in the logs even when they were stored as plain variables.
+          grep -E '^(MSSQL_|MONGO_)|^[A-Za-z0-9_]*(PASSWORD|API_KEY|SECRET|TOKEN|URI)=' .env.dev | sed -E 's/^[^=]*=//' | jq -r 'fromjson' | while IFS= read -r v; do [ -n "$v" ] && echo "::add-mask::$v"; done
+      # The config's only project is headed Microsoft Edge, so install Edge and give it a virtual display.
+      - run: npx playwright install --with-deps msedge
+      - name: Run Login UI specs (shard ${{ matrix.shard }}/4)
+        run: xvfb-run --auto-servernum npx playwright test BusinessTestCases/Login/ui --reporter=blob --shard=${{ matrix.shard }}/4
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: blob-report-${{ matrix.shard }}
+          path: blob-report/
+          retention-days: 7
+
+  merge-reports:
+    name: Merge HTML report
+    needs: test
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          path: all-blob-reports
+          pattern: blob-report-*
+          merge-multiple: true
+      - run: npx playwright merge-reports --reporter=html ./all-blob-reports
+      - uses: actions/upload-artifact@v4
+        with:
+          name: login-ui-html-report
+          path: playwright-report/
+          retention-days: 30
