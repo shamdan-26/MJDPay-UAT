@@ -18,32 +18,6 @@ jobs:
       fail-fast: false
       matrix:
         shard: [1, 2, 3, 4]
-    env:
-      ENV: dev
-      BASE_URL: ${{ secrets.BASE_URL }}
-      DEV_SETUP_COMPANY: ${{ secrets.DEV_SETUP_COMPANY }}
-      DEV_SETUP_MOBILE: ${{ secrets.DEV_SETUP_MOBILE }}
-      DEV_SETUP_PASSWORD: ${{ secrets.DEV_SETUP_PASSWORD }}
-      DEV_COMPANY: ${{ secrets.DEV_COMPANY }}
-      DEV_MOBILE: ${{ secrets.DEV_MOBILE }}
-      DEV_COMPANY_2: ${{ secrets.DEV_COMPANY_2 }}
-      DEV_MOBILE_2: ${{ secrets.DEV_MOBILE_2 }}
-      DEV_PASSWORD_2: ${{ secrets.DEV_PASSWORD_2 }}
-      DEV_BILLER_COMPANY: ${{ secrets.DEV_BILLER_COMPANY }}
-      DEV_BILLER_MOBILE: ${{ secrets.DEV_BILLER_MOBILE }}
-      DEV_BILLER_PASSWORD: ${{ secrets.DEV_BILLER_PASSWORD }}
-      IMAP_HOST: ${{ secrets.IMAP_HOST }}
-      IMAP_PORT: ${{ secrets.IMAP_PORT }}
-      IMAP_USER: ${{ secrets.IMAP_USER }}
-      IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD }}
-      MAILOSAUR_SERVER_ID: ${{ secrets.MAILOSAUR_SERVER_ID }}
-      MAILOSAUR_API_KEY: ${{ secrets.MAILOSAUR_API_KEY }}
-      MONGO_URI: ${{ secrets.MONGO_URI }}
-      MSSQL_HOST: ${{ secrets.MSSQL_HOST }}
-      MSSQL_PORT: ${{ secrets.MSSQL_PORT }}
-      MSSQL_DATABASE: ${{ secrets.MSSQL_DATABASE }}
-      MSSQL_USER: ${{ secrets.MSSQL_USER }}
-      MSSQL_PASSWORD: ${{ secrets.MSSQL_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -51,6 +25,11 @@ jobs:
           node-version: lts/*
           cache: npm
       - run: npm ci
+      # Every GitHub repository variable becomes a line in .env.dev, which playwright.config.ts loads.
+      - name: Write .env.dev from repository variables
+        env:
+          REPO_VARS: ${{ toJSON(vars) }}
+        run: printf '%s' "$REPO_VARS" | jq -r 'to_entries[] | "\(.key)=\(.value | @json)"' > .env.dev
       # The config's only project is headed Microsoft Edge, so install Edge and give it a virtual display.
       - run: npx playwright install --with-deps msedge
       - name: Run Homepage UI specs (shard ${{ matrix.shard }}/4)
