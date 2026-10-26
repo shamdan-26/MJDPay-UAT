@@ -7,6 +7,7 @@ import { RegistrationNafathPage } from '../../pageElements/Registration/Registra
 import { RegistrationContractPage } from '../../pageElements/Registration/RegistrationContractPage';
 import { CITIZEN_ASSETS, markCitizenAssetUsed, getWorkerPartition, nextCitizenAsset } from './registrationAssets';
 import { fillBusinessInfo, goToInfoStep, isAlreadyRegisteredMessage, fillFinancialForm, fillVerificationForm } from './registrationSteps';
+import { boxStep } from '../../shared/boxStep.ts';
 
 /**
  * The mobile number of whichever CITIZEN_ASSETS entry `goToProductsStep`
@@ -57,6 +58,7 @@ export function lastReachedCitizenAssetMobile(): string | null {
  * this false.
  */
 export async function goToProductsStep(page: Page, maxAttempts = getWorkerPartition(CITIZEN_ASSETS).length, landOnContractOk = false): Promise<boolean> {
+    return boxStep('goToProductsStep', async () => {
     const products = new RegistrationProductsPage(page);
     const financialPage = new RegistrationFinancialPage(page);
     // Scoped to products.productCards (.mp-product-card), not products.formSubTitle
@@ -223,6 +225,7 @@ export async function goToProductsStep(page: Page, maxAttempts = getWorkerPartit
         }
     }
     return false;
+    });
 }
 
 /**
@@ -241,6 +244,7 @@ export async function goToProductsStep(page: Page, maxAttempts = getWorkerPartit
  * of the CITIZEN_ASSETS pool's ~2000 entries goToProductsStep landed on.
  */
 export async function goToContractStep(page: Page): Promise<string> {
+    return boxStep('goToContractStep', async () => {
     const reachedProducts = await goToProductsStep(page, undefined, true);
     if (!reachedProducts) {
         throw new Error('Could not reach the Products step, so the Contract step is unreachable.');
@@ -283,4 +287,5 @@ export async function goToContractStep(page: Page): Promise<string> {
     await contractPage.waitForLoad();
     console.log('[goToContractStep] contract page loaded');
     return mobile;
+    });
 }

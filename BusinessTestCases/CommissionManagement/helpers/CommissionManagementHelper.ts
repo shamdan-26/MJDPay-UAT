@@ -1,6 +1,7 @@
 import { type Page, type Locator, type Browser, type BrowserContext } from '@playwright/test';
 import { AdminOtpConfigPage, createAdminContext } from '../../pageElements/Shared/AdminOtpConfigPage.ts';
 import { AdminCommissionManagementPage, type CommissionFormValues } from '../../pageElements/CommissionManagement/AdminCommissionManagementPage.ts';
+import { boxStep } from '../../shared/boxStep.ts';
 
 export { createAdminContext };
 
@@ -43,11 +44,13 @@ export async function loginToCommissionManagement(browser: Browser): Promise<{
     page: Page;
     commission: AdminCommissionManagementPage;
 }> {
-    const context = await createAdminContext(browser);
-    const page = await context.newPage();
-    await new AdminOtpConfigPage(page).login();
-    const commission = new AdminCommissionManagementPage(page);
-    return { context, page, commission };
+    return boxStep('loginToCommissionManagement', async () => {
+        const context = await createAdminContext(browser);
+        const page = await context.newPage();
+        await new AdminOtpConfigPage(page).login();
+        const commission = new AdminCommissionManagementPage(page);
+        return { context, page, commission };
+    });
 }
 
 /**
@@ -71,6 +74,7 @@ export async function ensureCommissionExistsAndActive(
     transactionType: string,
     createValues: Parameters<AdminCommissionManagementPage['fillCommissionValues']>[0],
 ): Promise<Locator> {
+    return boxStep('ensureCommissionExistsAndActive', async () => {
     let row = await commission.findRowByTransactionType(transactionType);
     if (!row) {
         await commission.createCommission(category, accountType, createValues);
@@ -96,6 +100,7 @@ export async function ensureCommissionExistsAndActive(
 
     await commission.activateRow(row);
     return row;
+    });
 }
 
 /**
@@ -116,6 +121,7 @@ export async function ensureCommissionExistsAndActiveByPlatform(
     platform: CommissionFormValues['platform'],
     createValues: CommissionFormValues,
 ): Promise<{ row: Locator; values: CommissionFormValues }> {
+    return boxStep('ensureCommissionExistsAndActiveByPlatform', async () => {
     let found = await commission.findRowByFilter(transactionType, platform);
     if (!found) {
         await commission.createCommission(category, accountType, { ...createValues, platform });
@@ -138,6 +144,7 @@ export async function ensureCommissionExistsAndActiveByPlatform(
     const { row } = found;
     await commission.activateRow(row);
     return found;
+    });
 }
 
 /**
@@ -160,6 +167,7 @@ export async function ensureAccountCommissionExistsAndActive(
     createValues: CommissionFormValues,
     companyNumber?: string,
 ): Promise<Locator> {
+    return boxStep('ensureAccountCommissionExistsAndActive', async () => {
     await commission.openAccountCommissionsByMobile(mobileNumber, companyNumber);
     let row = await commission.findAccountRowByTransactionType(transactionType);
     if (!row) {
@@ -196,4 +204,5 @@ export async function ensureAccountCommissionExistsAndActive(
 
     await commission.activateAccountRow(row);
     return row;
+    });
 }

@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test';
 import { waitForToastClear } from '../../shared/toastMessages.ts';
+import { boxStep } from '../../shared/boxStep.ts';
 
 /**
  * Bill Beneficiary Management (EMI-185, epic EMI-2192 / EMI-4382) — admin users
@@ -94,25 +95,29 @@ export async function fetchJson(
     path: string,
     options: { method?: string; body?: unknown } = {}
 ): Promise<{ status: number; body: unknown }> {
-    const url = `${BASE_URL}${path}`;
-    return page.evaluate(
-        async ({ url, method, body }) => {
-            const res = await fetch(url, {
-                method: method ?? 'GET',
-                headers: { 'Content-Type': 'application/json' },
-                body: body !== undefined ? JSON.stringify(body) : undefined,
-            });
-            const parsedBody = await res.json().catch(() => null);
-            return { status: res.status, body: parsedBody };
-        },
-        { url, method: options.method, body: options.body }
-    );
+    return boxStep('fetchJson', async () => {
+        const url = `${BASE_URL}${path}`;
+        return page.evaluate(
+            async ({ url, method, body }) => {
+                const res = await fetch(url, {
+                    method: method ?? 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: body !== undefined ? JSON.stringify(body) : undefined,
+                });
+                const parsedBody = await res.json().catch(() => null);
+                return { status: res.status, body: parsedBody };
+            },
+            { url, method: options.method, body: options.body }
+        );
+    });
 }
 
 export async function gotoBeneficiaries(page: Page): Promise<void> {
-    await page.goto(BENEFICIARY_URL);
-    await page.waitForLoadState('domcontentloaded');
-    await waitForToastClear(page);
+    return boxStep('gotoBeneficiaries', async () => {
+        await page.goto(BENEFICIARY_URL);
+        await page.waitForLoadState('domcontentloaded');
+        await waitForToastClear(page);
+    });
 }
 
 // ── List & status filter ─────────────────────────────────────────────────
@@ -132,51 +137,59 @@ export function defaultBeneficiaries(): MockBeneficiary[] {
  * REJECTED rows into a Select Beneficiary context.
  */
 export async function mockBeneficiaryList(page: Page, all = defaultBeneficiaries()): Promise<void> {
-    await page.route(BENEFICIARY_API, route => {
-        if (route.request().method() !== 'GET') return route.fallback();
-        const requested = new URL(route.request().url()).searchParams.get('statusCode');
-        const content = requested ? all.filter(b => b.beneficiaryStatus.code === requested) : all;
-        return route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({ content, totalElements: content.length }),
+    return boxStep('mockBeneficiaryList', async () => {
+        await page.route(BENEFICIARY_API, route => {
+            if (route.request().method() !== 'GET') return route.fallback();
+            const requested = new URL(route.request().url()).searchParams.get('statusCode');
+            const content = requested ? all.filter(b => b.beneficiaryStatus.code === requested) : all;
+            return route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ content, totalElements: content.length }),
+            });
         });
     });
 }
 
 /** EMI-4812 pre-fix state: statusCode ignored, everything comes back. */
 export async function mockBeneficiaryListIgnoringStatusFilter(page: Page, all = defaultBeneficiaries()): Promise<void> {
-    await page.route(BENEFICIARY_API, route => {
-        if (route.request().method() !== 'GET') return route.fallback();
-        return route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({ content: all, totalElements: all.length }),
+    return boxStep('mockBeneficiaryListIgnoringStatusFilter', async () => {
+        await page.route(BENEFICIARY_API, route => {
+            if (route.request().method() !== 'GET') return route.fallback();
+            return route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ content: all, totalElements: all.length }),
+            });
         });
     });
 }
 
 /** EMI-5652 / EMI-5376 / EMI-5128 pre-fix state: identifier missing from the payload. */
 export async function mockBeneficiaryListWithoutIdentifier(page: Page): Promise<void> {
-    const stripped = defaultBeneficiaries().map(({ beneficiaryIdentifier: _ignored, ...rest }) => rest);
-    await page.route(BENEFICIARY_API, route => {
-        if (route.request().method() !== 'GET') return route.fallback();
-        return route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({ content: stripped, totalElements: stripped.length }),
+    return boxStep('mockBeneficiaryListWithoutIdentifier', async () => {
+        const stripped = defaultBeneficiaries().map(({ beneficiaryIdentifier: _ignored, ...rest }) => rest);
+        await page.route(BENEFICIARY_API, route => {
+            if (route.request().method() !== 'GET') return route.fallback();
+            return route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ content: stripped, totalElements: stripped.length }),
+            });
         });
     });
 }
 
 /** EMI-5130: a maker with the view privilege must see the admin's beneficiaries. */
 export async function mockBeneficiaryListForbidden(page: Page): Promise<void> {
-    await page.route(BENEFICIARY_API, route => {
-        if (route.request().method() !== 'GET') return route.fallback();
-        return route.fulfill({
-            status: 403,
-            contentType: 'application/json',
-            body: JSON.stringify([{ httpStatusCode: 403, message: { messageCode: 'UNAUTHORIZED_EXCEPTION', plainText: 'You are not authorized to access this resource.' } }]),
+    return boxStep('mockBeneficiaryListForbidden', async () => {
+        await page.route(BENEFICIARY_API, route => {
+            if (route.request().method() !== 'GET') return route.fallback();
+            return route.fulfill({
+                status: 403,
+                contentType: 'application/json',
+                body: JSON.stringify([{ httpStatusCode: 403, message: { messageCode: 'UNAUTHORIZED_EXCEPTION', plainText: 'You are not authorized to access this resource.' } }]),
+            });
         });
     });
 }
@@ -184,51 +197,61 @@ export async function mockBeneficiaryListForbidden(page: Page): Promise<void> {
 // ── Add beneficiary ──────────────────────────────────────────────────────
 
 export async function mockAddBeneficiarySuccess(page: Page, created = mockBeneficiary({ alias: 'QA-NEW' })): Promise<void> {
-    await page.route(BENEFICIARY_API, route => {
-        if (route.request().method() === 'POST') {
-            return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(created) });
-        }
-        return route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({ content: [created], totalElements: 1 }),
+    return boxStep('mockAddBeneficiarySuccess', async () => {
+        await page.route(BENEFICIARY_API, route => {
+            if (route.request().method() === 'POST') {
+                return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(created) });
+            }
+            return route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ content: [created], totalElements: 1 }),
+            });
         });
     });
 }
 
 /** EMI-3686 / EMI-4414: a genuine duplicate must be rejected with a real message. */
 export async function mockAddBeneficiaryDuplicate(page: Page): Promise<void> {
-    await page.route(BENEFICIARY_API, route => {
-        if (route.request().method() !== 'POST') return route.fallback();
-        return route.fulfill({
-            status: 400,
-            contentType: 'application/json',
-            body: JSON.stringify({ messageCode: 'BENEFICIARY_ALREADY_EXISTS', plainText: 'This beneficiary has already been added' }),
+    return boxStep('mockAddBeneficiaryDuplicate', async () => {
+        await page.route(BENEFICIARY_API, route => {
+            if (route.request().method() !== 'POST') return route.fallback();
+            return route.fulfill({
+                status: 400,
+                contentType: 'application/json',
+                body: JSON.stringify({ messageCode: 'BENEFICIARY_ALREADY_EXISTS', plainText: 'This beneficiary has already been added' }),
+            });
         });
     });
 }
 
 /** EMI-3686 pre-fix state: the duplicate returned 200 with a success message. */
 export async function mockAddBeneficiaryDuplicateAccepted(page: Page): Promise<void> {
-    await page.route(BENEFICIARY_API, route => {
-        if (route.request().method() !== 'POST') return route.fallback();
-        return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(mockBeneficiary({ alias: 'QA-DUP' })) });
+    return boxStep('mockAddBeneficiaryDuplicateAccepted', async () => {
+        await page.route(BENEFICIARY_API, route => {
+            if (route.request().method() !== 'POST') return route.fallback();
+            return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(mockBeneficiary({ alias: 'QA-DUP' })) });
+        });
     });
 }
 
 /** EMI-4414 pre-fix state: a genuinely new beneficiary was wrongly told it exists. */
 export async function mockAddBeneficiaryFalseAlreadyExists(page: Page): Promise<void> {
-    await mockAddBeneficiaryDuplicate(page);
+    return boxStep('mockAddBeneficiaryFalseAlreadyExists', async () => {
+        await mockAddBeneficiaryDuplicate(page);
+    });
 }
 
 /** EMI-5317 / EMI-5448 / EMI-5138 pre-fix state: add blew up server-side. */
 export async function mockAddBeneficiaryServerError(page: Page): Promise<void> {
-    await page.route(BENEFICIARY_API, route => {
-        if (route.request().method() !== 'POST') return route.fallback();
-        return route.fulfill({
-            status: 500,
-            contentType: 'application/json',
-            body: JSON.stringify({ status: 500, error: 'Internal Server Error', path: '/api/v1/beneficiary' }),
+    return boxStep('mockAddBeneficiaryServerError', async () => {
+        await page.route(BENEFICIARY_API, route => {
+            if (route.request().method() !== 'POST') return route.fallback();
+            return route.fulfill({
+                status: 500,
+                contentType: 'application/json',
+                body: JSON.stringify({ status: 500, error: 'Internal Server Error', path: '/api/v1/beneficiary' }),
+            });
         });
     });
 }
@@ -238,122 +261,146 @@ export async function mockAddBeneficiaryServerError(page: Page): Promise<void> {
  * not a bare "Something Went Wrong!".
  */
 export async function mockContractUploadTooLarge(page: Page): Promise<void> {
-    await page.route(BENEFICIARY_API, route => {
-        if (route.request().method() !== 'POST') return route.fallback();
-        return route.fulfill({
-            status: 413,
-            contentType: 'application/json',
-            body: JSON.stringify({
-                messageCode: 'FILE_TOO_LARGE',
-                plainText: 'The uploaded file exceeds the maximum allowed size (50MB).',
-            }),
+    return boxStep('mockContractUploadTooLarge', async () => {
+        await page.route(BENEFICIARY_API, route => {
+            if (route.request().method() !== 'POST') return route.fallback();
+            return route.fulfill({
+                status: 413,
+                contentType: 'application/json',
+                body: JSON.stringify({
+                    messageCode: 'FILE_TOO_LARGE',
+                    plainText: 'The uploaded file exceeds the maximum allowed size (50MB).',
+                }),
+            });
         });
     });
 }
 
 /** EMI-4791: the stored contract must actually be retrievable. */
 export async function mockContractAttachmentAvailable(page: Page): Promise<void> {
-    await page.route('**/api/v1/**contract**', route =>
-        route.fulfill({ status: 200, contentType: 'application/pdf', body: '%PDF-1.4 mock contract' })
-    );
+    return boxStep('mockContractAttachmentAvailable', async () => {
+        await page.route('**/api/v1/**contract**', route =>
+            route.fulfill({ status: 200, contentType: 'application/pdf', body: '%PDF-1.4 mock contract' })
+        );
+    });
 }
 
 /** EMI-4791 pre-fix state: opening the attachment 404'd. */
 export async function mockContractAttachmentMissing(page: Page): Promise<void> {
-    await page.route('**/api/v1/**contract**', route =>
-        route.fulfill({ status: 404, contentType: 'application/json', body: JSON.stringify({ error: 'Not Found' }) })
-    );
+    return boxStep('mockContractAttachmentMissing', async () => {
+        await page.route('**/api/v1/**contract**', route =>
+            route.fulfill({ status: 404, contentType: 'application/json', body: JSON.stringify({ error: 'Not Found' }) })
+        );
+    });
 }
 
 // ── OTP (EMI-5692, EMI-5769, EMI-5800, EMI-5864, EMI-5118) ───────────────
 
 export async function mockBeneficiaryOtpSuccess(page: Page): Promise<void> {
-    for (const glob of [BENEFICIARY_OTP_API, BENEFICIARY_OTP_RESEND_API]) {
-        await page.route(glob, route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ sent: true, expiresInSeconds: 300 }) })
-        );
-    }
+    return boxStep('mockBeneficiaryOtpSuccess', async () => {
+        for (const glob of [BENEFICIARY_OTP_API, BENEFICIARY_OTP_RESEND_API]) {
+            await page.route(glob, route =>
+                route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ sent: true, expiresInSeconds: 300 }) })
+            );
+        }
+    });
 }
 
 /** EMI-5864 pre-fix state: the OTP was never issued. */
 export async function mockBeneficiaryOtpNotSent(page: Page): Promise<void> {
-    await page.route(BENEFICIARY_OTP_API, route =>
-        route.fulfill({ status: 500, contentType: 'application/json', body: JSON.stringify({ status: 500, error: 'Internal Server Error', path: '/api/v1/beneficiary-otp' }) })
-    );
+    return boxStep('mockBeneficiaryOtpNotSent', async () => {
+        await page.route(BENEFICIARY_OTP_API, route =>
+            route.fulfill({ status: 500, contentType: 'application/json', body: JSON.stringify({ status: 500, error: 'Internal Server Error', path: '/api/v1/beneficiary-otp' }) })
+        );
+    });
 }
 
 /** EMI-5692 pre-fix state: resend 500'd. */
 export async function mockBeneficiaryOtpResendServerError(page: Page): Promise<void> {
-    await page.route(BENEFICIARY_OTP_RESEND_API, route =>
-        route.fulfill({ status: 500, contentType: 'application/json', body: JSON.stringify({ status: 500, error: 'Internal Server Error', path: '/api/v1/beneficiary-otp/resend' }) })
-    );
+    return boxStep('mockBeneficiaryOtpResendServerError', async () => {
+        await page.route(BENEFICIARY_OTP_RESEND_API, route =>
+            route.fulfill({ status: 500, contentType: 'application/json', body: JSON.stringify({ status: 500, error: 'Internal Server Error', path: '/api/v1/beneficiary-otp/resend' }) })
+        );
+    });
 }
 
 /** EMI-5769 / EMI-5800 pre-fix state: resend 403'd with an authorisation message. */
 export async function mockBeneficiaryOtpResendForbidden(page: Page): Promise<void> {
-    await page.route(BENEFICIARY_OTP_RESEND_API, route =>
-        route.fulfill({
-            status: 403,
-            contentType: 'application/json',
-            body: JSON.stringify([{ httpStatusCode: 403, message: { messageCode: 'UNAUTHORIZED_EXCEPTION', plainText: 'You are not authorized to access this resource.' } }]),
-        })
-    );
-}
-
-// ── Approval workflow (EMI-4435 / EMI-4436) ──────────────────────────────
-
-export async function mockBeneficiaryPrivileges(page: Page, privileges: string[]): Promise<void> {
-    await page.route('**/api/v1/**privilege**', route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ privileges }) })
-    );
-}
-
-export async function mockApproveRejectSuccess(page: Page): Promise<void> {
-    await page.route(BENEFICIARY_APPROVE_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ beneficiaryStatus: beneficiaryStatus('APPROVED') }) })
-    );
-    await page.route(BENEFICIARY_REJECT_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ beneficiaryStatus: beneficiaryStatus('REJECTED') }) })
-    );
-}
-
-/** EMI-4435: an unprivileged staff member must be refused by the API, not just by a hidden button. */
-export async function mockApproveRejectForbidden(page: Page): Promise<void> {
-    for (const glob of [BENEFICIARY_APPROVE_API, BENEFICIARY_REJECT_API]) {
-        await page.route(glob, route =>
+    return boxStep('mockBeneficiaryOtpResendForbidden', async () => {
+        await page.route(BENEFICIARY_OTP_RESEND_API, route =>
             route.fulfill({
                 status: 403,
                 contentType: 'application/json',
                 body: JSON.stringify([{ httpStatusCode: 403, message: { messageCode: 'UNAUTHORIZED_EXCEPTION', plainText: 'You are not authorized to access this resource.' } }]),
             })
         );
-    }
+    });
+}
+
+// ── Approval workflow (EMI-4435 / EMI-4436) ──────────────────────────────
+
+export async function mockBeneficiaryPrivileges(page: Page, privileges: string[]): Promise<void> {
+    return boxStep('mockBeneficiaryPrivileges', async () => {
+        await page.route('**/api/v1/**privilege**', route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ privileges }) })
+        );
+    });
+}
+
+export async function mockApproveRejectSuccess(page: Page): Promise<void> {
+    return boxStep('mockApproveRejectSuccess', async () => {
+        await page.route(BENEFICIARY_APPROVE_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ beneficiaryStatus: beneficiaryStatus('APPROVED') }) })
+        );
+        await page.route(BENEFICIARY_REJECT_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ beneficiaryStatus: beneficiaryStatus('REJECTED') }) })
+        );
+    });
+}
+
+/** EMI-4435: an unprivileged staff member must be refused by the API, not just by a hidden button. */
+export async function mockApproveRejectForbidden(page: Page): Promise<void> {
+    return boxStep('mockApproveRejectForbidden', async () => {
+        for (const glob of [BENEFICIARY_APPROVE_API, BENEFICIARY_REJECT_API]) {
+            await page.route(glob, route =>
+                route.fulfill({
+                    status: 403,
+                    contentType: 'application/json',
+                    body: JSON.stringify([{ httpStatusCode: 403, message: { messageCode: 'UNAUTHORIZED_EXCEPTION', plainText: 'You are not authorized to access this resource.' } }]),
+                })
+            );
+        }
+    });
 }
 
 // ── Bill creation gate (EMI-4009, EMI-4905, EMI-4805) ────────────────────
 
 /** EMI-4009 / EMI-4905: bill creation must refuse a non-APPROVED beneficiary. */
 export async function mockCreateBillWithBeneficiaryValidation(page: Page): Promise<void> {
-    await page.route('**/api/v1/bills**', async route => {
-        if (route.request().method() !== 'POST') return route.fallback();
-        const body = route.request().postDataJSON() as { beneficiaryStatusCode?: string } | null;
-        const approved = body?.beneficiaryStatusCode === 'APPROVED';
-        await route.fulfill({
-            status: approved ? 200 : 400,
-            contentType: 'application/json',
-            body: JSON.stringify(
-                approved
-                    ? { billId: 1477 }
-                    : { messageCode: 'BENEFICIARY_NOT_APPROVED', plainText: 'Beneficiary is not approved' }
-            ),
+    return boxStep('mockCreateBillWithBeneficiaryValidation', async () => {
+        await page.route('**/api/v1/bills**', async route => {
+            if (route.request().method() !== 'POST') return route.fallback();
+            const body = route.request().postDataJSON() as { beneficiaryStatusCode?: string } | null;
+            const approved = body?.beneficiaryStatusCode === 'APPROVED';
+            await route.fulfill({
+                status: approved ? 200 : 400,
+                contentType: 'application/json',
+                body: JSON.stringify(
+                    approved
+                        ? { billId: 1477 }
+                        : { messageCode: 'BENEFICIARY_NOT_APPROVED', plainText: 'Beneficiary is not approved' }
+                ),
+            });
         });
     });
 }
 
 /** EMI-4009 pre-fix state: an unapproved beneficiary sailed through. */
 export async function mockCreateBillWithoutBeneficiaryValidation(page: Page): Promise<void> {
-    await page.route('**/api/v1/bills**', route => {
-        if (route.request().method() !== 'POST') return route.fallback();
-        return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ billId: 1477 }) });
+    return boxStep('mockCreateBillWithoutBeneficiaryValidation', async () => {
+        await page.route('**/api/v1/bills**', route => {
+            if (route.request().method() !== 'POST') return route.fallback();
+            return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ billId: 1477 }) });
+        });
     });
 }

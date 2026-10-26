@@ -5,6 +5,7 @@ import { openAdminLimits, closeAdminLimits } from './TopupLimitsHelper.ts';
 import { TOPUP_TYPE_NAME } from '../../pageElements/Shared/AdminLimitsApi';
 import { FIXED_OTP } from '../../../support/otp';
 import testAccounts from '../../../data/testAccounts.json';
+import { boxStep } from '../../shared/boxStep.ts';
 
 /**
  * API+DB helper for the business-rule top-up specs (TopupBiz*.spec.ts). No UI locators, no UI assertions.
@@ -109,6 +110,7 @@ async function refreshCapture(cap: Capture): Promise<void> {
 
 /** Log in through the app once, relay its real headers, and fail loudly if they are not accepted (a 401 must never look like a rule). */
 export async function startSession(browser: Browser, account: TopupAccount = BILLER): Promise<BizSession> {
+    return boxStep('startSession', async () => {
     const request = await playwrightRequest.newContext();
     let cap: Capture;
     try {
@@ -142,32 +144,37 @@ export async function startSession(browser: Browser, account: TopupAccount = BIL
         throw new Error(`startSession: relayed headers for ${account.company} were refused by GET /api/v1/wallets/balance after a refresh (${detail}). If two workers log in as the same account they invalidate each other: run with --workers=1.`);
     }
     return session;
+    });
 }
 
 export interface Called { status: number; ok: boolean; text: string; body: any; res: APIResponse }
 
 /** Sends one gateway request with the relayed headers; on 401 refreshes the capture and retries ONCE (a 401 means nothing was processed). */
 export async function call(s: BizSession, method: 'GET' | 'POST', path: string, opts: { data?: unknown; headers?: Record<string, string> } = {}): Promise<Called> {
-    const send = async (): Promise<Called> => {
-        const res = await s.request.fetch(`${s.base}${path}`, { method, data: opts.data, headers: await s.headers(opts.headers) });
-        const text = await res.text();
-        let body: any = null;
-        try { body = JSON.parse(text); } catch { body = text; }
-        return { status: res.status(), ok: res.ok(), text, body, res };
-    };
-    let r = await send();
-    if (r.status === 401) {
-        await s.refresh();
-        r = await send();
-    }
-    return r;
+    return boxStep('call', async () => {
+        const send = async (): Promise<Called> => {
+            const res = await s.request.fetch(`${s.base}${path}`, { method, data: opts.data, headers: await s.headers(opts.headers) });
+            const text = await res.text();
+            let body: any = null;
+            try { body = JSON.parse(text); } catch { body = text; }
+            return { status: res.status(), ok: res.ok(), text, body, res };
+        };
+        let r = await send();
+        if (r.status === 401) {
+            await s.refresh();
+            r = await send();
+        }
+        return r;
+    });
 }
 
 export async function paymentMethodId(s: BizSession, code = 'VISA'): Promise<number> {
-    const r = await call(s, 'GET', '/api/v1/payment-method');
-    expect(r.status, 'GET /api/v1/payment-method').toBe(200);
-    const list = r.body as Array<{ id: number; code: string }>;
-    return (list.find(m => m.code?.toUpperCase() === code) ?? list[0]).id;
+    return boxStep('paymentMethodId', async () => {
+        const r = await call(s, 'GET', '/api/v1/payment-method');
+        expect(r.status, 'GET /api/v1/payment-method').toBe(200);
+        const list = r.body as Array<{ id: number; code: string }>;
+        return (list.find(m => m.code?.toUpperCase() === code) ?? list[0]).id;
+    });
 }
 
 export function openSummary(s: BizSession, amount: number | string) {
@@ -178,26 +185,32 @@ export interface Initiated { res: APIResponse; key: string; body: any; status: n
 
 /** POST /api/v1/payments. `key` is the idempotency key sent as the request header; a fresh UUID unless given. `noKey` sends no idempotency header at all (key comes back as ''). */
 export async function initiate(s: BizSession, amount: number | string, opts: { key?: string; methodId?: number; headers?: Record<string, string>; noKey?: boolean } = {}): Promise<Initiated> {
-    const key = opts.noKey ? '' : opts.key ?? randomUUID();
-    const methodId = opts.methodId ?? await paymentMethodId(s);
-    const r = await call(s, 'POST', '/api/v1/payments', {
-        data: { amount: String(amount), isDeductCommissionFromAmount: true, platformType: 'web', paymentMethodId: methodId },
-        headers: { ...(opts.noKey ? {} : { idempotencyKey: key }), ...(opts.headers ?? {}) },
+    return boxStep('initiate', async () => {
+        const key = opts.noKey ? '' : opts.key ?? randomUUID();
+        const methodId = opts.methodId ?? await paymentMethodId(s);
+        const r = await call(s, 'POST', '/api/v1/payments', {
+            data: { amount: String(amount), isDeductCommissionFromAmount: true, platformType: 'web', paymentMethodId: methodId },
+            headers: { ...(opts.noKey ? {} : { idempotencyKey: key }), ...(opts.headers ?? {}) },
+        });
+        return { res: r.res, key, body: r.body, status: r.status, ok: r.ok };
     });
-    return { res: r.res, key, body: r.body, status: r.status, ok: r.ok };
 }
 
 /** Id of a payment method other than `notId` (null when the account only has one). */
 export async function otherPaymentMethodId(s: BizSession, notId: number): Promise<number | null> {
-    const r = await call(s, 'GET', '/api/v1/payment-method');
-    expect(r.status, 'GET /api/v1/payment-method').toBe(200);
-    const other = (r.body as Array<{ id: number }>).find(m => m.id !== notId);
-    return other ? other.id : null;
+    return boxStep('otherPaymentMethodId', async () => {
+        const r = await call(s, 'GET', '/api/v1/payment-method');
+        expect(r.status, 'GET /api/v1/payment-method').toBe(200);
+        const other = (r.body as Array<{ id: number }>).find(m => m.id !== notId);
+        return other ? other.id : null;
+    });
 }
 
 export async function verifyOtp(s: BizSession, paymentId: number | string, otp: string = FIXED_OTP, extra: Record<string, unknown> = {}, methodId?: number) {
-    const r = await call(s, 'POST', '/api/v1/payments/verify', { data: { paymentMethodId: methodId ?? await paymentMethodId(s), paymentId, otp, ...extra } });
-    return { res: r.res, status: r.status, ok: r.ok, body: r.body };
+    return boxStep('verifyOtp', async () => {
+        const r = await call(s, 'POST', '/api/v1/payments/verify', { data: { paymentMethodId: methodId ?? await paymentMethodId(s), paymentId, otp, ...extra } });
+        return { res: r.res, status: r.status, ok: r.ok, body: r.body };
+    });
 }
 
 export function updateStatus(s: BizSession, checkoutId: string, methodId: number) {
@@ -207,12 +220,14 @@ export function updateStatus(s: BizSession, checkoutId: string, methodId: number
 export interface Balances { available: number; raw: any }
 
 export async function balances(s: BizSession): Promise<Balances> {
-    const r = await call(s, 'GET', '/api/v1/wallets/balance');
-    expect(r.status, 'GET /api/v1/wallets/balance').toBe(200);
-    const raw = r.body;
-    const available = [raw.availableBalance, raw.balance, raw.currentBalance].find(v => typeof v === 'number');
-    if (typeof available !== 'number') throw new Error(`balances: no numeric balance field in ${JSON.stringify(raw).slice(0, 200)}`);
-    return { available, raw };
+    return boxStep('balances', async () => {
+        const r = await call(s, 'GET', '/api/v1/wallets/balance');
+        expect(r.status, 'GET /api/v1/wallets/balance').toBe(200);
+        const raw = r.body;
+        const available = [raw.availableBalance, raw.balance, raw.currentBalance].find(v => typeof v === 'number');
+        if (typeof available !== 'number') throw new Error(`balances: no numeric balance field in ${JSON.stringify(raw).slice(0, 200)}`);
+        return { available, raw };
+    });
 }
 
 /** Ledger lifecycle for one idempotency key (emi_transaction.transaction_log). */
@@ -220,12 +235,14 @@ export const ledger = (key: string): Promise<TopupTransactionLogSqlRow[]> => get
 
 /** Polls the ledger until at least one row exists for the key, or returns [] after the timeout. */
 export async function waitLedger(key: string, timeoutMs = 10_000): Promise<TopupTransactionLogSqlRow[]> {
-    const end = Date.now() + timeoutMs;
-    for (;;) {
-        const rows = await ledger(key);
-        if (rows.length || Date.now() > end) return rows;
-        await new Promise(r => setTimeout(r, 1000));
-    }
+    return boxStep('waitLedger', async () => {
+        const end = Date.now() + timeoutMs;
+        for (;;) {
+            const rows = await ledger(key);
+            if (rows.length || Date.now() > end) return rows;
+            await new Promise(r => setTimeout(r, 1000));
+        }
+    });
 }
 
 /** Business rule "rejected": a 4xx answer and no payment created. Wording and exact code are intentionally not asserted. */
@@ -270,14 +287,16 @@ export function envAccount(name: string): TopupAccount | null {
  * function that puts the original limits back (call it in afterAll). Amount limits and the minimum are left alone.
  */
 export async function raiseHeadroom(browser: Browser): Promise<() => Promise<void>> {
-    const handle = await openAdminLimits(browser, BIZ_LIMIT_TYPE, BIZ_WALLET_TYPE);
-    try {
-        await handle.api.setCountAllTiers(handle.snapshot, { hourly: 1000, daily: 1000, monthly: 1000, yearly: 1000 });
-    } catch (e) {
-        await closeAdminLimits(handle);
-        throw e;
-    }
-    return () => closeAdminLimits(handle);
+    return boxStep('raiseHeadroom', async () => {
+        const handle = await openAdminLimits(browser, BIZ_LIMIT_TYPE, BIZ_WALLET_TYPE);
+        try {
+            await handle.api.setCountAllTiers(handle.snapshot, { hourly: 1000, daily: 1000, monthly: 1000, yearly: 1000 });
+        } catch (e) {
+            await closeAdminLimits(handle);
+            throw e;
+        }
+        return () => closeAdminLimits(handle);
+    });
 }
 
 /**

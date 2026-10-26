@@ -4,6 +4,7 @@ import { LoginPage } from '../../pageElements/Shared/LoginPage.ts';
 import { OtpPage } from '../../pageElements/Shared/OtpPage.ts';
 import { LOGIN_URL, VALID_OTP, INVALID_OTP } from '../../Login/helpers/LoginHelper.ts';
 import testAccounts from '../../../data/testAccounts.json';
+import { boxStep } from '../../shared/boxStep.ts';
 
 const BASE_URL              = process.env['BASE_URL'] ?? 'https://dev-emi.dg-cash.app';
 export const FORGOT_URL     = `${BASE_URL}/business/auth/forgot-password`;
@@ -26,27 +27,35 @@ export const MODAL_SELECTOR = "div.my-modal-container";
 // ── Route mocking helpers ─────────────────────────────────────────────────────
 
 export async function mockOtpDisabled(page: Page): Promise<void> {
-    await page.route('**/otp/otp-settings/**', route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ enabled: false }) })
-    );
+    return boxStep('mockOtpDisabled', async () => {
+        await page.route('**/otp/otp-settings/**', route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ enabled: false }) })
+        );
+    });
 }
 
 export async function mockForgetPasswordSuccess(page: Page): Promise<void> {
-    await page.route('**/auth/passwords/forget', route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
-    );
+    return boxStep('mockForgetPasswordSuccess', async () => {
+        await page.route('**/auth/passwords/forget', route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
+        );
+    });
 }
 
 export async function mockForgetPasswordFailure(page: Page): Promise<void> {
-    await page.route('**/auth/passwords/forget', route =>
-        route.fulfill({ status: 401, contentType: 'application/json', body: JSON.stringify({ message: 'Invalid credentials' }) })
-    );
+    return boxStep('mockForgetPasswordFailure', async () => {
+        await page.route('**/auth/passwords/forget', route =>
+            route.fulfill({ status: 401, contentType: 'application/json', body: JSON.stringify({ message: 'Invalid credentials' }) })
+        );
+    });
 }
 
 export async function mockAllPasswordsSuccess(page: Page): Promise<void> {
-    await page.route('**/auth/passwords/**', route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
-    );
+    return boxStep('mockAllPasswordsSuccess', async () => {
+        await page.route('**/auth/passwords/**', route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
+        );
+    });
 }
 
 /**
@@ -56,39 +65,47 @@ export async function mockAllPasswordsSuccess(page: Page): Promise<void> {
  * error) rather than when the initial company/mobile lookup fails.
  */
 export async function mockPasswordResetFailure(page: Page): Promise<void> {
-    await page.route('**/auth/passwords/**', async route => {
-        if (route.request().url().includes('/forget')) {
-            await route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
-        } else {
-            await route.fulfill({
-                status: 400,
-                contentType: 'application/json',
-                body: JSON.stringify({ message: 'Unable to reset password' }),
-            });
-        }
+    return boxStep('mockPasswordResetFailure', async () => {
+        await page.route('**/auth/passwords/**', async route => {
+            if (route.request().url().includes('/forget')) {
+                await route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+            } else {
+                await route.fulfill({
+                    status: 400,
+                    contentType: 'application/json',
+                    body: JSON.stringify({ message: 'Unable to reset password' }),
+                });
+            }
+        });
     });
 }
 
 // Register a catch-all abort BEFORE specific mocks so LIFO ordering lets
 // targeted mocks take priority while preventing teardown hangs from unmocked requests.
 export async function abortUnmockedGatewayRequests(page: Page): Promise<void> {
-    await page.route('https://gateway-uat.majdpay.com/**', route => route.abort());
+    return boxStep('abortUnmockedGatewayRequests', async () => {
+        await page.route('https://gateway-uat.majdpay.com/**', route => route.abort());
+    });
 }
 
 // ── Navigation helpers ────────────────────────────────────────────────────────
 
 export async function gotoForgotPassword(page: Page): Promise<void> {
-    const loginPage = new LoginPage(page);
-    await loginPage.goto(LOGIN_URL);
-    await loginPage.forgotPasswordLink.click();
-    const fp = new ForgotPasswordPage(page);
-    await fp.companyInput.waitFor({ state: 'visible', timeout: 15000 });
+    return boxStep('gotoForgotPassword', async () => {
+        const loginPage = new LoginPage(page);
+        await loginPage.goto(LOGIN_URL);
+        await loginPage.forgotPasswordLink.click();
+        const fp = new ForgotPasswordPage(page);
+        await fp.companyInput.waitFor({ state: 'visible', timeout: 15000 });
+    });
 }
 
 export async function fillStep1AndProceed(page: Page): Promise<void> {
-    const fp = new ForgotPasswordPage(page);
-    await fp.fillStep1(VALID_COMPANY, VALID_MOBILE);
-    await fp.submitStep1();
+    return boxStep('fillStep1AndProceed', async () => {
+        const fp = new ForgotPasswordPage(page);
+        await fp.fillStep1(VALID_COMPANY, VALID_MOBILE);
+        await fp.submitStep1();
+    });
 }
 
 /** Submits step 1 with the given identity against the real (unmocked) backend
@@ -101,20 +118,22 @@ export async function submitStep1AndGetResult(
     company: string,
     mobile: string
 ): Promise<{ status: number | null; body: string; pageText: string }> {
-    await gotoForgotPassword(page);
-    const fp = new ForgotPasswordPage(page);
-    await fp.fillStep1(company, mobile);
-    // Click directly rather than fp.submitStep1() — that hard-waits on step 2
-    // appearing, which throws for identities the backend rejects (exactly the
-    // case this helper exists to observe).
-    const [resp] = await Promise.all([
-        page.waitForResponse(r => r.url().includes('/auth/passwords/forget'), { timeout: 15000 }).catch(() => null),
-        fp.nextButton.click(),
-    ]);
-    const body = resp ? await resp.text().catch(() => '') : '';
-    await page.waitForTimeout(1000);
-    const pageText = await page.evaluate(() => document.body.innerText);
-    return { status: resp ? resp.status() : null, body, pageText };
+    return boxStep('submitStep1AndGetResult', async () => {
+        await gotoForgotPassword(page);
+        const fp = new ForgotPasswordPage(page);
+        await fp.fillStep1(company, mobile);
+        // Click directly rather than fp.submitStep1() — that hard-waits on step 2
+        // appearing, which throws for identities the backend rejects (exactly the
+        // case this helper exists to observe).
+        const [resp] = await Promise.all([
+            page.waitForResponse(r => r.url().includes('/auth/passwords/forget'), { timeout: 15000 }).catch(() => null),
+            fp.nextButton.click(),
+        ]);
+        const body = resp ? await resp.text().catch(() => '') : '';
+        await page.waitForTimeout(1000);
+        const pageText = await page.evaluate(() => document.body.innerText);
+        return { status: resp ? resp.status() : null, body, pageText };
+    });
 }
 
 /** Drives the full step1 → step2 → submit flow up to the OTP modal, for specs
@@ -123,13 +142,15 @@ export async function submitStep1AndGetResult(
  *  where forget-password OTP may be disabled can skip instead of hard-failing.
  *  `newPassword` defaults to the account's current password so the account is left unchanged. */
 export async function gotoOtpModal(page: Page, newPassword: string = VALID_PASSWORD): Promise<boolean> {
-    await gotoForgotPassword(page);
-    await fillStep1AndProceed(page);
-    const fp = new ForgotPasswordPage(page);
-    await fp.fillStep2(newPassword, newPassword);
-    await fp.resetPasswordButton.click();
-    const otp = new OtpPage(page);
-    return otp.modalContainer.waitFor({ state: 'visible', timeout: 20000 })
-        .then(() => true)
-        .catch(() => false);
+    return boxStep('gotoOtpModal', async () => {
+        await gotoForgotPassword(page);
+        await fillStep1AndProceed(page);
+        const fp = new ForgotPasswordPage(page);
+        await fp.fillStep2(newPassword, newPassword);
+        await fp.resetPasswordButton.click();
+        const otp = new OtpPage(page);
+        return otp.modalContainer.waitFor({ state: 'visible', timeout: 20000 })
+            .then(() => true)
+            .catch(() => false);
+    });
 }

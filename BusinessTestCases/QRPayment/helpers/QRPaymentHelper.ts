@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+import { boxStep } from '../../shared/boxStep.ts';
 
 /**
  * Wallet Payment QR (EMI-590 QR payment, EMI-3545 Dynamic QR, EMI-922 QR
@@ -24,23 +25,29 @@ export interface DecodedQr {
 
 /** Mocks the QR-decode call the app makes right after a (real or simulated) camera scan. */
 export async function mockQrDecode(page: Page, qr: DecodedQr): Promise<void> {
-    await page.route('**/qr/**/decode', route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(qr) })
-    );
+    return boxStep('mockQrDecode', async () => {
+        await page.route('**/qr/**/decode', route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(qr) })
+        );
+    });
 }
 
 /** Mocks a decode call for an invalid/expired/already-used QR (EMI-3545 QR-expiry rule). */
 export async function mockQrDecodeInvalid(page: Page): Promise<void> {
-    await page.route('**/qr/**/decode', route =>
-        route.fulfill({ status: 410, contentType: 'application/json', body: JSON.stringify({ message: 'Invalid or Expired QR' }) })
-    );
+    return boxStep('mockQrDecodeInvalid', async () => {
+        await page.route('**/qr/**/decode', route =>
+            route.fulfill({ status: 410, contentType: 'application/json', body: JSON.stringify({ message: 'Invalid or Expired QR' }) })
+        );
+    });
 }
 
 /** Mocks a tampered/signature-invalid QR payload (EMI-922 encryption/integrity rule). */
 export async function mockQrDecodeTampered(page: Page): Promise<void> {
-    await page.route('**/qr/**/decode', route =>
-        route.fulfill({ status: 400, contentType: 'application/json', body: JSON.stringify({ message: 'QR signature validation failed' }) })
-    );
+    return boxStep('mockQrDecodeTampered', async () => {
+        await page.route('**/qr/**/decode', route =>
+            route.fulfill({ status: 400, contentType: 'application/json', body: JSON.stringify({ message: 'QR signature validation failed' }) })
+        );
+    });
 }
 
 export const SAMPLE_DYNAMIC_QR: DecodedQr = {

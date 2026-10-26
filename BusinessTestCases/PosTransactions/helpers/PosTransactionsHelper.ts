@@ -2,6 +2,7 @@ import type { APIRequestContext, Page } from '@playwright/test';
 import { VALID_COMPANY, VALID_MOBILE, VALID_PASSWORD } from '../../Login/helpers/LoginHelper.ts';
 import { waitForToastClear } from '../../shared/toastMessages.ts';
 import { ADMIN_BASE_URL } from '../../pageElements/Shared/AdminOtpConfigPage.ts';
+import { boxStep } from '../../shared/boxStep.ts';
 
 /**
  * POS Transactions, Ledger, ACH Transfers and Terminal Callback — shared API helpers.
@@ -130,6 +131,7 @@ let cachedBusinessToken: string | null = null;
  * Returns '' rather than throwing so callers can skip cleanly.
  */
 export async function getBusinessToken(request: APIRequestContext): Promise<string> {
+    return boxStep('getBusinessToken', async () => {
     if (cachedBusinessToken !== null) return cachedBusinessToken;
 
     const res = await request.post(`${API_BASE}/auth/signin`, {
@@ -150,6 +152,7 @@ export async function getBusinessToken(request: APIRequestContext): Promise<stri
     const token: string = body?.accessToken?.token ?? '';
     cachedBusinessToken = token;
     return token;
+    });
 }
 
 /**
@@ -159,9 +162,11 @@ export async function getBusinessToken(request: APIRequestContext): Promise<stri
  * this lets each suite skip with an actionable reason instead.
  */
 export async function hasPosAccess(request: APIRequestContext, token: string, path: string): Promise<boolean> {
-    if (!token) return false;
-    const res = await request.get(`${API_BASE}${path}`, { headers: authHeaders(token) });
-    return res.status() !== 403 && res.status() !== 401;
+    return boxStep('hasPosAccess', async () => {
+        if (!token) return false;
+        const res = await request.get(`${API_BASE}${path}`, { headers: authHeaders(token) });
+        return res.status() !== 403 && res.status() !== 401;
+    });
 }
 
 // ─── Callback payload builder ────────────────────────────────────────────────
@@ -432,29 +437,33 @@ export const REFUND_PARK_ESCALATION_HOURS = 48;
 export async function walletLedgerTotal(
     request: APIRequestContext, token: string, walletCode: string,
 ): Promise<number | null> {
-    const res = await request.get(`${API_BASE}${POS_LEDGER_WALLET_PATH(walletCode)}?page=0&size=200`, {
-        headers: authHeaders(token),
+    return boxStep('walletLedgerTotal', async () => {
+        const res = await request.get(`${API_BASE}${POS_LEDGER_WALLET_PATH(walletCode)}?page=0&size=200`, {
+            headers: authHeaders(token),
+        });
+        if (!res.ok()) return null;
+        const body = await res.json().catch(() => null);
+        if (!isSpringPage(body)) return null;
+        return body.content.reduce((sum, row) => {
+            const amount = Number((row as Record<string, unknown>)['amount'] ?? 0);
+            return sum + (Number.isFinite(amount) ? amount : 0);
+        }, 0);
     });
-    if (!res.ok()) return null;
-    const body = await res.json().catch(() => null);
-    if (!isSpringPage(body)) return null;
-    return body.content.reduce((sum, row) => {
-        const amount = Number((row as Record<string, unknown>)['amount'] ?? 0);
-        return sum + (Number.isFinite(amount) ? amount : 0);
-    }, 0);
 }
 
 /** Finds a stored POS transaction by its RRN, or null. */
 export async function findByRrn(
     request: APIRequestContext, token: string, rrn: string,
 ): Promise<Record<string, unknown> | null> {
-    const res = await request.get(`${API_BASE}${POS_TRANSACTIONS}?page=0&size=200`, {
-        headers: authHeaders(token),
+    return boxStep('findByRrn', async () => {
+        const res = await request.get(`${API_BASE}${POS_TRANSACTIONS}?page=0&size=200`, {
+            headers: authHeaders(token),
+        });
+        if (!res.ok()) return null;
+        const body = await res.json().catch(() => null);
+        if (!isSpringPage(body)) return null;
+        return (body.content.find(r => (r as Record<string, unknown>)['rrn'] === rrn) as Record<string, unknown>) ?? null;
     });
-    if (!res.ok()) return null;
-    const body = await res.json().catch(() => null);
-    if (!isSpringPage(body)) return null;
-    return (body.content.find(r => (r as Record<string, unknown>)['rrn'] === rrn) as Record<string, unknown>) ?? null;
 }
 
 /** Headers the terminal actually sends — XML, not JSON. */
@@ -582,91 +591,113 @@ function springPageBody(content: unknown[]): string {
  * query params would pass even against a UI that never sends them.
  */
 export async function mockPosTransactionList(page: Page, rows = posTransactionRows()): Promise<void> {
-    await page.route(POS_TRANSACTIONS_ROUTE, route => {
-        const params = new URL(route.request().url()).searchParams;
-        const terminal = params.get('terminalId');
-        const status   = params.get('processingStatus');
-        const pageNo   = Number(params.get('page') ?? '0');
+    return boxStep('mockPosTransactionList', async () => {
+        await page.route(POS_TRANSACTIONS_ROUTE, route => {
+            const params = new URL(route.request().url()).searchParams;
+            const terminal = params.get('terminalId');
+            const status   = params.get('processingStatus');
+            const pageNo   = Number(params.get('page') ?? '0');
 
-        let content = rows;
-        if (terminal) content = content.filter(r => r.terminalId === terminal);
-        if (status)   content = content.filter(r => r.processingStatus === status);
-        // Page 1+ returns different ids so the "pagination without duplication"
-        // AC in EMI-6011 can be asserted rather than assumed.
-        if (pageNo > 0) content = content.map(r => ({ ...r, id: r.id + 5000 }));
+            let content = rows;
+            if (terminal) content = content.filter(r => r.terminalId === terminal);
+            if (status)   content = content.filter(r => r.processingStatus === status);
+            // Page 1+ returns different ids so the "pagination without duplication"
+            // AC in EMI-6011 can be asserted rather than assumed.
+            if (pageNo > 0) content = content.map(r => ({ ...r, id: r.id + 5000 }));
 
-        return route.fulfill({ status: 200, contentType: 'application/json', body: springPageBody(content) });
+            return route.fulfill({ status: 200, contentType: 'application/json', body: springPageBody(content) });
+        });
     });
 }
 
 export async function mockPosTransactionsEmpty(page: Page): Promise<void> {
-    await page.route(POS_TRANSACTIONS_ROUTE, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: springPageBody([]) })
-    );
+    return boxStep('mockPosTransactionsEmpty', async () => {
+        await page.route(POS_TRANSACTIONS_ROUTE, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: springPageBody([]) })
+        );
+    });
 }
 
 export async function mockPosTransactionsServerError(page: Page): Promise<void> {
-    await page.route(POS_TRANSACTIONS_ROUTE, route =>
-        route.fulfill({
-            status: 500,
-            contentType: 'application/json',
-            body: JSON.stringify([{ httpStatusCode: 500, message: { messageCode: 'INTERNAL_SERVER_ERROR', plainText: 'Failed to process your request.Please contact support.' } }]),
-        })
-    );
+    return boxStep('mockPosTransactionsServerError', async () => {
+        await page.route(POS_TRANSACTIONS_ROUTE, route =>
+            route.fulfill({
+                status: 500,
+                contentType: 'application/json',
+                body: JSON.stringify([{ httpStatusCode: 500, message: { messageCode: 'INTERNAL_SERVER_ERROR', plainText: 'Failed to process your request.Please contact support.' } }]),
+            })
+        );
+    });
 }
 
 /** EMI-6053 pre-fix state: every admin row comes back with posDeviceId null. */
 export async function mockPosTransactionsWithNullDeviceId(page: Page): Promise<void> {
-    await mockPosTransactionList(page, posTransactionRows(3, { posDeviceId: null }));
+    return boxStep('mockPosTransactionsWithNullDeviceId', async () => {
+        await mockPosTransactionList(page, posTransactionRows(3, { posDeviceId: null }));
+    });
 }
 
 export async function mockAchRecordList(page: Page, rows = achRecordRows()): Promise<void> {
-    await page.route(ACH_TRANSFERS_ROUTE, route => {
-        if (route.request().method() !== 'GET') return route.fallback();
-        const params = new URL(route.request().url()).searchParams;
-        const terminal = params.get('terminalId');
-        const content = terminal ? rows.filter(r => r.terminalId === terminal) : rows;
-        return route.fulfill({ status: 200, contentType: 'application/json', body: springPageBody(content) });
+    return boxStep('mockAchRecordList', async () => {
+        await page.route(ACH_TRANSFERS_ROUTE, route => {
+            if (route.request().method() !== 'GET') return route.fallback();
+            const params = new URL(route.request().url()).searchParams;
+            const terminal = params.get('terminalId');
+            const content = terminal ? rows.filter(r => r.terminalId === terminal) : rows;
+            return route.fulfill({ status: 200, contentType: 'application/json', body: springPageBody(content) });
+        });
     });
 }
 
 export async function mockAchRecordsEmpty(page: Page): Promise<void> {
-    await page.route(ACH_TRANSFERS_ROUTE, route => {
-        if (route.request().method() !== 'GET') return route.fallback();
-        return route.fulfill({ status: 200, contentType: 'application/json', body: springPageBody([]) });
+    return boxStep('mockAchRecordsEmpty', async () => {
+        await page.route(ACH_TRANSFERS_ROUTE, route => {
+            if (route.request().method() !== 'GET') return route.fallback();
+            return route.fulfill({ status: 200, contentType: 'application/json', body: springPageBody([]) });
+        });
     });
 }
 
 /** EMI-6036 pre-fix state: AchTransfer rows carry no beneficiary IBAN or name. */
 export async function mockAchRecordsWithoutBeneficiary(page: Page): Promise<void> {
-    const stripped = achRecordRows().map(r => ({ ...r, beneficiaryAccountIban: null, beneficiaryName: null }));
-    await mockAchRecordList(page, stripped as unknown as AchRecordRow[]);
+    return boxStep('mockAchRecordsWithoutBeneficiary', async () => {
+        const stripped = achRecordRows().map(r => ({ ...r, beneficiaryAccountIban: null, beneficiaryName: null }));
+        await mockAchRecordList(page, stripped as unknown as AchRecordRow[]);
+    });
 }
 
 export async function mockAchReleaseSuccess(page: Page): Promise<void> {
-    await page.route('**/api/v1/admin/pos/ach-transfers/release', route =>
-        route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({ total: 1, succeeded: 1, failed: 0, skipped: 0, items: [{ batchRef: 'BATCH-0001', result: 'RELEASED' }] }),
-        })
-    );
+    return boxStep('mockAchReleaseSuccess', async () => {
+        await page.route('**/api/v1/admin/pos/ach-transfers/release', route =>
+            route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ total: 1, succeeded: 1, failed: 0, skipped: 0, items: [{ batchRef: 'BATCH-0001', result: 'RELEASED' }] }),
+            })
+        );
+    });
 }
 
 export async function gotoPosBusinessTransactions(page: Page): Promise<void> {
-    await page.goto(POS_BUSINESS_TRANSACTIONS_URL);
-    await page.waitForLoadState('domcontentloaded');
-    await waitForToastClear(page);
+    return boxStep('gotoPosBusinessTransactions', async () => {
+        await page.goto(POS_BUSINESS_TRANSACTIONS_URL);
+        await page.waitForLoadState('domcontentloaded');
+        await waitForToastClear(page);
+    });
 }
 
 export async function gotoPosAdminTransactions(page: Page): Promise<void> {
-    await page.goto(POS_ADMIN_TRANSACTIONS_URL);
-    await page.waitForLoadState('domcontentloaded');
-    await waitForToastClear(page);
+    return boxStep('gotoPosAdminTransactions', async () => {
+        await page.goto(POS_ADMIN_TRANSACTIONS_URL);
+        await page.waitForLoadState('domcontentloaded');
+        await waitForToastClear(page);
+    });
 }
 
 export async function gotoAchRecords(page: Page): Promise<void> {
-    await page.goto(ACH_RECORDS_URL);
-    await page.waitForLoadState('domcontentloaded');
-    await waitForToastClear(page);
+    return boxStep('gotoAchRecords', async () => {
+        await page.goto(ACH_RECORDS_URL);
+        await page.waitForLoadState('domcontentloaded');
+        await waitForToastClear(page);
+    });
 }

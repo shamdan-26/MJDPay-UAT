@@ -3,6 +3,7 @@ import { createHomepageSession } from '../../Homepage/helpers/HomePageHelper.ts'
 import { HomepageSidebarPage } from '../../pageElements/Shared/HomepageSidebarPage.ts';
 import { ProductsManagementPage } from '../../pageElements/Products/ProductsManagementPage.ts';
 import productsPosMocks from '../../../data/productsPosMocks.json';
+import { boxStep } from '../../shared/boxStep.ts';
 
 /**
  * Route-mocking helpers for the Products / PoS request flow (EMI-5780/5782/5784,
@@ -22,25 +23,33 @@ export interface MockProduct {
 export const DEFAULT_MOCK_PRODUCTS: MockProduct[] = productsPosMocks.defaultMockProducts as MockProduct[];
 
 export async function mockProfileProducts(page: Page, products: MockProduct[] = DEFAULT_MOCK_PRODUCTS): Promise<void> {
-    await page.route('**/emi-profile/api/v1/products', route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ data: products }) })
-    );
+    return boxStep('mockProfileProducts', async () => {
+        await page.route('**/emi-profile/api/v1/products', route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ data: products }) })
+        );
+    });
 }
 
 export async function mockEmptyProfileProducts(page: Page): Promise<void> {
-    await mockProfileProducts(page, []);
+    return boxStep('mockEmptyProfileProducts', async () => {
+        await mockProfileProducts(page, []);
+    });
 }
 
 export async function mockProfileProductsServerError(page: Page): Promise<void> {
-    await page.route('**/emi-profile/api/v1/products', route =>
-        route.fulfill({ status: 500, contentType: 'application/json', body: JSON.stringify({ message: 'Internal Server Error' }) })
-    );
+    return boxStep('mockProfileProductsServerError', async () => {
+        await page.route('**/emi-profile/api/v1/products', route =>
+            route.fulfill({ status: 500, contentType: 'application/json', body: JSON.stringify({ message: 'Internal Server Error' }) })
+        );
+    });
 }
 
 export async function mockProfileProductsSlow(page: Page, delayMs = 3000, products: MockProduct[] = DEFAULT_MOCK_PRODUCTS): Promise<void> {
-    await page.route('**/emi-profile/api/v1/products', async route => {
-        await new Promise(r => setTimeout(r, delayMs));
-        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ data: products }) });
+    return boxStep('mockProfileProductsSlow', async () => {
+        await page.route('**/emi-profile/api/v1/products', async route => {
+            await new Promise(r => setTimeout(r, delayMs));
+            await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ data: products }) });
+        });
     });
 }
 
@@ -54,9 +63,11 @@ export interface MockPosOrder {
 export const DEFAULT_MOCK_ORDERS: MockPosOrder[] = productsPosMocks.defaultMockOrders as MockPosOrder[];
 
 export async function mockPosOrders(page: Page, orders: MockPosOrder[] = DEFAULT_MOCK_ORDERS): Promise<void> {
-    await page.route('**/api/v1/pos/orders/my-order', route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ data: orders }) })
-    );
+    return boxStep('mockPosOrders', async () => {
+        await page.route('**/api/v1/pos/orders/my-order', route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ data: orders }) })
+        );
+    });
 }
 
 export interface MockDevice {
@@ -73,15 +84,19 @@ export const DEFAULT_MOCK_DEVICES: MockDevice[] = productsPosMocks.defaultMockDe
 /** Devices-list endpoint path is not given verbatim in the ticket; this guesses
  *  the sibling-resource pattern of the documented `.../pos/orders/my-order` path. */
 export async function mockPosDevices(page: Page, devices: MockDevice[] = DEFAULT_MOCK_DEVICES): Promise<void> {
-    await page.route('**/api/v1/pos/devices/**', route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ data: devices }) })
-    );
+    return boxStep('mockPosDevices', async () => {
+        await page.route('**/api/v1/pos/devices/**', route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ data: devices }) })
+        );
+    });
 }
 
 export async function mockPosOrderSubmitSuccess(page: Page): Promise<void> {
-    await page.route('**/emi-profile/api/v1/products/orders/pos', route =>
-        route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify({ id: 'order-new', status: 'Requesting' }) })
-    );
+    return boxStep('mockPosOrderSubmitSuccess', async () => {
+        await page.route('**/emi-profile/api/v1/products/orders/pos', route =>
+            route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify({ id: 'order-new', status: 'Requesting' }) })
+        );
+    });
 }
 
 /** Counts how many times the PoS order submission endpoint was actually hit —
@@ -102,16 +117,18 @@ export function countPosOrderSubmissions(page: Page): { get: () => number } {
  *  the assertion exercises. */
 
 export async function mockAdminPosOrdersLeak(page: Page, ownOrderIds: string[]): Promise<void> {
-    await page.route('**/api/v1/pos/orders', route => {
-        const url = route.request().url();
-        if (url.endsWith('/pos/orders') || url.includes('/pos/orders?')) {
-            return route.fulfill({
-                status: 200,
-                contentType: 'application/json',
-                body: JSON.stringify({ data: ownOrderIds.map(id => ({ id, status: 'Active' })) }),
-            });
-        }
-        return route.continue();
+    return boxStep('mockAdminPosOrdersLeak', async () => {
+        await page.route('**/api/v1/pos/orders', route => {
+            const url = route.request().url();
+            if (url.endsWith('/pos/orders') || url.includes('/pos/orders?')) {
+                return route.fulfill({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify({ data: ownOrderIds.map(id => ({ id, status: 'Active' })) }),
+                });
+            }
+            return route.continue();
+        });
     });
 }
 
@@ -125,9 +142,11 @@ export interface PosSession {
  *  without navigating to Products yet, so callers can register route mocks on
  *  the returned `page` first. Call `openProductsManagement` afterwards. */
 export async function createPosSession(browser: Browser): Promise<PosSession> {
-    const { page, sidebar } = await createHomepageSession(browser);
-    const products = new ProductsManagementPage(page);
-    return { page, sidebar, products };
+    return boxStep('createPosSession', async () => {
+        const { page, sidebar } = await createHomepageSession(browser);
+        const products = new ProductsManagementPage(page);
+        return { page, sidebar, products };
+    });
 }
 
 /** Clicks the "Manage Products" sidebar link and waits for the Products
@@ -136,6 +155,8 @@ export async function createPosSession(browser: Browser): Promise<PosSession> {
  *  `session.page` so they're in place before the page's initial data-load
  *  requests fire. */
 export async function openProductsManagement(session: PosSession): Promise<void> {
-    await session.sidebar.manageProductsLink.click();
-    await session.page.waitForURL(/products-management/i, { timeout: 15000 });
+    return boxStep('openProductsManagement', async () => {
+        await session.sidebar.manageProductsLink.click();
+        await session.page.waitForURL(/products-management/i, { timeout: 15000 });
+    });
 }

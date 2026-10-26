@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test';
 import { waitForToastClear } from '../../shared/toastMessages.ts';
+import { boxStep } from '../../shared/boxStep.ts';
 
 /**
  * Transactions — summary display, validation, and OTP handling.
@@ -66,163 +67,193 @@ export async function fetchJson(
     path: string,
     options: { method?: string; body?: unknown; headers?: Record<string, string> } = {}
 ): Promise<{ status: number; body: unknown }> {
-    const url = `${BASE_URL}${path}`;
-    return page.evaluate(
-        async ({ url, method, body, headers }) => {
-            const res = await fetch(url, {
-                method: method ?? 'GET',
-                headers: { 'Content-Type': 'application/json', ...(headers ?? {}) },
-                body: body !== undefined ? JSON.stringify(body) : undefined,
-            });
-            const parsedBody = await res.json().catch(() => null);
-            return { status: res.status, body: parsedBody };
-        },
-        { url, method: options.method, body: options.body, headers: options.headers }
-    );
+    return boxStep('fetchJson', async () => {
+        const url = `${BASE_URL}${path}`;
+        return page.evaluate(
+            async ({ url, method, body, headers }) => {
+                const res = await fetch(url, {
+                    method: method ?? 'GET',
+                    headers: { 'Content-Type': 'application/json', ...(headers ?? {}) },
+                    body: body !== undefined ? JSON.stringify(body) : undefined,
+                });
+                const parsedBody = await res.json().catch(() => null);
+                return { status: res.status, body: parsedBody };
+            },
+            { url, method: options.method, body: options.body, headers: options.headers }
+        );
+    });
 }
 
 export async function gotoTransactions(page: Page): Promise<void> {
-    await page.goto(TRANSACTIONS_URL);
-    await page.waitForLoadState('domcontentloaded');
-    await waitForToastClear(page);
+    return boxStep('gotoTransactions', async () => {
+        await page.goto(TRANSACTIONS_URL);
+        await page.waitForLoadState('domcontentloaded');
+        await waitForToastClear(page);
+    });
 }
 
 export async function mockTransactionList(page: Page, summaries: TransactionSummary[]): Promise<void> {
-    await page.route(TRANSACTIONS_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ content: summaries, totalElements: summaries.length }) })
-    );
+    return boxStep('mockTransactionList', async () => {
+        await page.route(TRANSACTIONS_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ content: summaries, totalElements: summaries.length }) })
+        );
+    });
 }
 
 /** EMI-5699/5621/5544 pre-fix state: commission and VAT fields absent entirely. */
 export async function mockTransactionListWithoutCommission(page: Page, summary: TransactionSummary): Promise<void> {
-    const { sourceCommission, sourceVat, destinationCommission, destinationVat, ...stripped } = summary;
-    void sourceCommission; void sourceVat; void destinationCommission; void destinationVat;
+    return boxStep('mockTransactionListWithoutCommission', async () => {
+        const { sourceCommission, sourceVat, destinationCommission, destinationVat, ...stripped } = summary;
+        void sourceCommission; void sourceVat; void destinationCommission; void destinationVat;
 
-    await page.route(TRANSACTIONS_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ content: [stripped], totalElements: 1 }) })
-    );
+        await page.route(TRANSACTIONS_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ content: [stripped], totalElements: 1 }) })
+        );
+    });
 }
 
 /** EMI-5525: an empty idempotency key must be refused. */
 export async function mockTransferRejectsEmptyIdempotencyKey(page: Page): Promise<void> {
-    await page.route(TRANSFER_API, async route => {
-        const key = route.request().headers()['idempotencykey'] ?? route.request().headers()['idempotency-key'] ?? '';
-        if (key.trim() === '') {
-            await route.fulfill({
-                status: 400,
-                contentType: 'application/json',
-                body: JSON.stringify({ messageCode: 'IDEMPOTENCY_KEY_REQUIRED', plainText: 'Idempotency key is required' }),
-            });
-            return;
-        }
-        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ status: 'SUCCESS' }) });
+    return boxStep('mockTransferRejectsEmptyIdempotencyKey', async () => {
+        await page.route(TRANSFER_API, async route => {
+            const key = route.request().headers()['idempotencykey'] ?? route.request().headers()['idempotency-key'] ?? '';
+            if (key.trim() === '') {
+                await route.fulfill({
+                    status: 400,
+                    contentType: 'application/json',
+                    body: JSON.stringify({ messageCode: 'IDEMPOTENCY_KEY_REQUIRED', plainText: 'Idempotency key is required' }),
+                });
+                return;
+            }
+            await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ status: 'SUCCESS' }) });
+        });
     });
 }
 
 /** EMI-5525 pre-fix state: processed regardless of the missing key. */
 export async function mockTransferAcceptsEmptyIdempotencyKey(page: Page): Promise<void> {
-    await page.route(TRANSFER_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ status: 'SUCCESS' }) })
-    );
+    return boxStep('mockTransferAcceptsEmptyIdempotencyKey', async () => {
+        await page.route(TRANSFER_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ status: 'SUCCESS' }) })
+        );
+    });
 }
 
 /** EMI-5570: a transaction type the wallet config disallows must be blocked. */
 export async function mockTransferBlockedByWalletConfig(page: Page): Promise<void> {
-    await page.route(TRANSFER_API, route =>
-        route.fulfill({
-            status: 400,
-            contentType: 'application/json',
-            body: JSON.stringify({
-                messageCode: 'TRANSACTION_TYPE_NOT_ALLOWED',
-                plainText: 'This transaction type is not allowed for this wallet configuration',
-            }),
-        })
-    );
+    return boxStep('mockTransferBlockedByWalletConfig', async () => {
+        await page.route(TRANSFER_API, route =>
+            route.fulfill({
+                status: 400,
+                contentType: 'application/json',
+                body: JSON.stringify({
+                    messageCode: 'TRANSACTION_TYPE_NOT_ALLOWED',
+                    plainText: 'This transaction type is not allowed for this wallet configuration',
+                }),
+            })
+        );
+    });
 }
 
 /** EMI-5570 pre-fix state: the restricted transaction went through. */
 export async function mockTransferIgnoresWalletConfig(page: Page): Promise<void> {
-    await page.route(TRANSFER_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ status: 'SUCCESS' }) })
-    );
+    return boxStep('mockTransferIgnoresWalletConfig', async () => {
+        await page.route(TRANSFER_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ status: 'SUCCESS' }) })
+        );
+    });
 }
 
 /** EMI-5803: low balance must read as insufficient funds, not an hourly-limit error. */
 export async function mockTransferInsufficientFunds(page: Page): Promise<void> {
-    await page.route(TRANSFER_API, route =>
-        route.fulfill({
-            status: 400,
-            contentType: 'application/json',
-            body: JSON.stringify({ messageCode: 'INSUFFICIENT_FUNDS', plainText: 'Insufficient funds' }),
-        })
-    );
+    return boxStep('mockTransferInsufficientFunds', async () => {
+        await page.route(TRANSFER_API, route =>
+            route.fulfill({
+                status: 400,
+                contentType: 'application/json',
+                body: JSON.stringify({ messageCode: 'INSUFFICIENT_FUNDS', plainText: 'Insufficient funds' }),
+            })
+        );
+    });
 }
 
 /** EMI-5803 pre-fix state. */
 export async function mockTransferHourlyLimitError(page: Page): Promise<void> {
-    await page.route(TRANSFER_API, route =>
-        route.fulfill({
-            status: 400,
-            contentType: 'application/json',
-            body: JSON.stringify({ messageCode: 'HOURLY_TRANSACTION_LIMITS_EXCEEDED', plainText: 'HOURLY_TRANSACTION_LIMITS_EXCEEDED' }),
-        })
-    );
+    return boxStep('mockTransferHourlyLimitError', async () => {
+        await page.route(TRANSFER_API, route =>
+            route.fulfill({
+                status: 400,
+                contentType: 'application/json',
+                body: JSON.stringify({ messageCode: 'HOURLY_TRANSACTION_LIMITS_EXCEEDED', plainText: 'HOURLY_TRANSACTION_LIMITS_EXCEEDED' }),
+            })
+        );
+    });
 }
 
 /** EMI-5087: an inactive recipient must say so, not "profile could not be found". */
 export async function mockTransferInactiveRecipient(page: Page): Promise<void> {
-    await page.route(TRANSFER_API, route =>
-        route.fulfill({
-            status: 400,
-            contentType: 'application/json',
-            body: JSON.stringify({ messageCode: 'RECIPIENT_INACTIVE', plainText: 'Recipient account is inactive' }),
-        })
-    );
+    return boxStep('mockTransferInactiveRecipient', async () => {
+        await page.route(TRANSFER_API, route =>
+            route.fulfill({
+                status: 400,
+                contentType: 'application/json',
+                body: JSON.stringify({ messageCode: 'RECIPIENT_INACTIVE', plainText: 'Recipient account is inactive' }),
+            })
+        );
+    });
 }
 
 /** EMI-5087 pre-fix state. */
 export async function mockTransferProfileNotFound(page: Page): Promise<void> {
-    await page.route(TRANSFER_API, route =>
-        route.fulfill({
-            status: 400,
-            contentType: 'application/json',
-            body: JSON.stringify({ messageCode: 'PROFILE_NOT_FOUND', plainText: 'The profile could not be found.' }),
-        })
-    );
+    return boxStep('mockTransferProfileNotFound', async () => {
+        await page.route(TRANSFER_API, route =>
+            route.fulfill({
+                status: 400,
+                contentType: 'application/json',
+                body: JSON.stringify({ messageCode: 'PROFILE_NOT_FOUND', plainText: 'The profile could not be found.' }),
+            })
+        );
+    });
 }
 
 /** EMI-5627: the payload uses `required`, and the update must persist it. */
 export async function mockOtpConfigUpdateSuccess(page: Page): Promise<void> {
-    await page.route(OTP_CONFIG_API, async route => {
-        const payload = route.request().postDataJSON() as { required?: boolean } | null;
-        await route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({ id: 5, required: payload?.required ?? false, code: '102', minimumAmount: 10, maxAttempts: 3 }),
+    return boxStep('mockOtpConfigUpdateSuccess', async () => {
+        await page.route(OTP_CONFIG_API, async route => {
+            const payload = route.request().postDataJSON() as { required?: boolean } | null;
+            await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ id: 5, required: payload?.required ?? false, code: '102', minimumAmount: 10, maxAttempts: 3 }),
+            });
         });
     });
 }
 
 /** EMI-5627 pre-fix state: `required` was ignored, so the value never changed. */
 export async function mockOtpConfigUpdateIgnoresRequired(page: Page): Promise<void> {
-    await page.route(OTP_CONFIG_API, route =>
-        route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({ id: 5, required: false, code: '102', minimumAmount: 10, maxAttempts: 3 }),
-        })
-    );
+    return boxStep('mockOtpConfigUpdateIgnoresRequired', async () => {
+        await page.route(OTP_CONFIG_API, route =>
+            route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ id: 5, required: false, code: '102', minimumAmount: 10, maxAttempts: 3 }),
+            })
+        );
+    });
 }
 
 /** EMI-5560: exceeding max OTP attempts restarts the flow rather than dead-ending. */
 export async function mockOtpMaxAttemptsExceeded(page: Page): Promise<void> {
-    await page.route('**/otp/**verify**', route =>
-        route.fulfill({
-            status: 400,
-            contentType: 'application/json',
-            body: JSON.stringify({ messageCode: 'OTP_MAX_ATTEMPTS_EXCEEDED', plainText: 'Maximum OTP attempts exceeded' }),
-        })
-    );
+    return boxStep('mockOtpMaxAttemptsExceeded', async () => {
+        await page.route('**/otp/**verify**', route =>
+            route.fulfill({
+                status: 400,
+                contentType: 'application/json',
+                body: JSON.stringify({ messageCode: 'OTP_MAX_ATTEMPTS_EXCEEDED', plainText: 'Maximum OTP attempts exceeded' }),
+            })
+        );
+    });
 }
 
 // ═════════════════════════════════════════════════════════════════════════
@@ -301,18 +332,22 @@ export async function mockTransactionAmountComposed(
     page: Page,
     breakdown: Omit<AmountBreakdown, 'totalAmount'> = EXTERNAL_WALLET_BREAKDOWN
 ): Promise<void> {
-    const body = withTotal(breakdown, expectedTotal(breakdown));
-    await page.route(TRANSFER_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) })
-    );
+    return boxStep('mockTransactionAmountComposed', async () => {
+        const body = withTotal(breakdown, expectedTotal(breakdown));
+        await page.route(TRANSFER_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) })
+        );
+    });
 }
 
 /** EMI-5970 pre-fix state: commission and VAT were netted off instead of added. */
 export async function mockTransactionAmountMiscalculated(page: Page): Promise<void> {
-    const body = withTotal(EXTERNAL_WALLET_BREAKDOWN, EMI_5970_OBSERVED_TOTAL);
-    await page.route(TRANSFER_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) })
-    );
+    return boxStep('mockTransactionAmountMiscalculated', async () => {
+        const body = withTotal(EXTERNAL_WALLET_BREAKDOWN, EMI_5970_OBSERVED_TOTAL);
+        await page.route(TRANSFER_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) })
+        );
+    });
 }
 
 /**
@@ -320,20 +355,24 @@ export async function mockTransactionAmountMiscalculated(page: Page): Promise<vo
  * commission there would be the double-charge the ticket warns about.
  */
 export async function mockExemptTransactionAmount(page: Page, transactionTypeCode: 'CASH_OUT' | 'VIBAN'): Promise<void> {
-    const breakdown = { ...EXTERNAL_WALLET_BREAKDOWN, transactionTypeCode };
-    const body = withTotal(breakdown, breakdown.amount);
-    await page.route(TRANSFER_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) })
-    );
+    return boxStep('mockExemptTransactionAmount', async () => {
+        const breakdown = { ...EXTERNAL_WALLET_BREAKDOWN, transactionTypeCode };
+        const body = withTotal(breakdown, breakdown.amount);
+        await page.route(TRANSFER_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) })
+        );
+    });
 }
 
 /** EMI-6020 pre-fix risk: an exempt type gets commission added anyway. */
 export async function mockExemptTransactionAmountWithCommission(page: Page, transactionTypeCode: 'CASH_OUT' | 'VIBAN'): Promise<void> {
-    const breakdown = { ...EXTERNAL_WALLET_BREAKDOWN, transactionTypeCode };
-    const body = withTotal(breakdown, expectedTotal(breakdown));
-    await page.route(TRANSFER_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) })
-    );
+    return boxStep('mockExemptTransactionAmountWithCommission', async () => {
+        const breakdown = { ...EXTERNAL_WALLET_BREAKDOWN, transactionTypeCode };
+        const body = withTotal(breakdown, expectedTotal(breakdown));
+        await page.route(TRANSFER_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) })
+        );
+    });
 }
 
 /**
@@ -345,32 +384,36 @@ export async function mockTransactionLog(
     page: Page,
     options: { amount: number; externalPartyAmount?: number }
 ): Promise<void> {
-    const { amount, externalPartyAmount = options.amount } = options;
-    await page.route(TRANSACTION_LOG_API, route =>
-        route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({
-                content: [{
-                    transactionTypeCode: EXTERNAL_WALLET_BREAKDOWN.transactionTypeCode,
-                    amount,
-                    externalParty: { name: 'HYPERPAY', amountSent: externalPartyAmount },
-                }],
-                totalElements: 1,
-            }),
-        })
-    );
+    return boxStep('mockTransactionLog', async () => {
+        const { amount, externalPartyAmount = options.amount } = options;
+        await page.route(TRANSACTION_LOG_API, route =>
+            route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({
+                    content: [{
+                        transactionTypeCode: EXTERNAL_WALLET_BREAKDOWN.transactionTypeCode,
+                        amount,
+                        externalParty: { name: 'HYPERPAY', amountSent: externalPartyAmount },
+                    }],
+                    totalElements: 1,
+                }),
+            })
+        );
+    });
 }
 
 /** EMI-5970: the control wallet must not be driven negative by the miscalculation. */
 export const CONTROL_WALLET_API = '**/api/v1/**wallet**control**';
 
 export async function mockControlWalletBalance(page: Page, balance: number): Promise<void> {
-    await page.route(CONTROL_WALLET_API, route =>
-        route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({ availableBalance: balance, currentBalance: balance, walletCode: 'CONTROL' }),
-        })
-    );
+    return boxStep('mockControlWalletBalance', async () => {
+        await page.route(CONTROL_WALLET_API, route =>
+            route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ availableBalance: balance, currentBalance: balance, walletCode: 'CONTROL' }),
+            })
+        );
+    });
 }

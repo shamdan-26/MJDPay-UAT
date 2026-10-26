@@ -1,5 +1,6 @@
 import type { APIRequestContext, APIResponse } from '@playwright/test';
 import { getOtpFromDb } from './registrationOtp';
+import { boxStep } from '../../shared/boxStep.ts';
 
 declare const process: { env: Record<string, string | undefined> };
 
@@ -37,7 +38,9 @@ export async function postRegistration(
     token?: string,
     extraHeaders: Record<string, string> = {},
 ): Promise<APIResponse> {
-    return request.post(`${REGISTRATION_API}${path}`, { data, headers: registrationHeaders(token, extraHeaders) });
+    return boxStep('postRegistration', async () => {
+        return request.post(`${REGISTRATION_API}${path}`, { data, headers: registrationHeaders(token, extraHeaders) });
+    });
 }
 
 /**
@@ -45,20 +48,22 @@ export async function postRegistration(
  * or null when it cannot be obtained (OTP unreadable / rejected) so callers can skip instead of failing.
  */
 export async function openRegistrationSession(request: APIRequestContext, localMobile: string): Promise<string | null> {
-    const mobileNumber = toApiMobile(localMobile);
-    const sent = await postRegistration(request, '/register/mobile/otp', { mobileNumber });
-    if (sent.status() !== 200) return null;
-    const sentBody = await sent.json().catch(() => ({}));
-    const direct = sessionTokenOf(sentBody);
-    if (direct) return direct;
-    try {
-        const otp = await getOtpFromDb(localMobile);
-        const verified = await postRegistration(request, '/register/verify/otp', { mobileNumber, otp, requestId: sentBody.requestId });
-        if (verified.status() !== 200) return null;
-        return sessionTokenOf(await verified.json().catch(() => ({})));
-    } catch {
-        return null;
-    }
+    return boxStep('openRegistrationSession', async () => {
+        const mobileNumber = toApiMobile(localMobile);
+        const sent = await postRegistration(request, '/register/mobile/otp', { mobileNumber });
+        if (sent.status() !== 200) return null;
+        const sentBody = await sent.json().catch(() => ({}));
+        const direct = sessionTokenOf(sentBody);
+        if (direct) return direct;
+        try {
+            const otp = await getOtpFromDb(localMobile);
+            const verified = await postRegistration(request, '/register/verify/otp', { mobileNumber, otp, requestId: sentBody.requestId });
+            if (verified.status() !== 200) return null;
+            return sessionTokenOf(await verified.json().catch(() => ({})));
+        } catch {
+            return null;
+        }
+    });
 }
 
 /** The API answers `sessionToken` either as `{ token }` or as a bare string. */

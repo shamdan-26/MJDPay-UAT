@@ -2,6 +2,7 @@ import { type Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 import { LoginPage } from '../../pageElements/Shared/LoginPage.ts';
 import { OtpPage } from '../../pageElements/Shared/OtpPage.ts';
+import { boxStep } from '../../shared/boxStep.ts';
 
 export const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 
@@ -34,6 +35,7 @@ export async function performLogin(
     password: string,
     otpCode: string
 ): Promise<void> {
+    return boxStep('performLogin', async () => {
     await page.context().clearCookies();
     await page.goto(`${BASE_URL}/business/auth/login`);
     await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
@@ -48,4 +50,5 @@ export async function performLogin(
     }
 
     await expect(page).toHaveURL(/\/business\/main\/home/i, { timeout: 10000 });
+    });
 }

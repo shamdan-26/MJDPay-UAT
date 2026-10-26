@@ -1,5 +1,6 @@
 import { Page, Locator } from '@playwright/test';
 import { RegistrationProductsPage } from '../../pageElements/Registration/RegistrationProductsPage';
+import { boxStep } from '../../shared/boxStep.ts';
 
 /**
  * From the Products step (after goToProductsStep resolves true), expands the
@@ -11,20 +12,22 @@ import { RegistrationProductsPage } from '../../pageElements/Registration/Regist
  * Returns false without clicking anything if the "POS" card isn't found at all.
  */
 export async function expandPosCard(page: Page): Promise<boolean> {
-    const products = new RegistrationProductsPage(page);
-    const posCard = products.productCard('POS');
-    const posCardFound = await posCard
-        .waitFor({ state: 'visible', timeout: 10000 })
-        .then(() => true)
-        .catch(() => false);
-    if (!posCardFound) return false;
+    return boxStep('expandPosCard', async () => {
+        const products = new RegistrationProductsPage(page);
+        const posCard = products.productCard('POS');
+        const posCardFound = await posCard
+            .waitFor({ state: 'visible', timeout: 10000 })
+            .then(() => true)
+            .catch(() => false);
+        if (!posCardFound) return false;
 
-    await posCard.click({ timeout: 10000 });
-    const contractStep = products.activeStep.filter({ hasText: 'العقد' });
-    return await Promise.race([
-        products.requestDevicesNowButton.waitFor({ state: 'visible', timeout: 8000 }).then(() => true),
-        contractStep.waitFor({ state: 'visible', timeout: 8000 }).then(() => false),
-    ]).catch(() => false);
+        await posCard.click({ timeout: 10000 });
+        const contractStep = products.activeStep.filter({ hasText: 'العقد' });
+        return await Promise.race([
+            products.requestDevicesNowButton.waitFor({ state: 'visible', timeout: 8000 }).then(() => true),
+            contractStep.waitFor({ state: 'visible', timeout: 8000 }).then(() => false),
+        ]).catch(() => false);
+    });
 }
 
 /**
@@ -45,34 +48,38 @@ export async function fillPosDevicesDeliveryForm(
     page: Page,
     options?: { deviceCount?: string; contactName?: string; contactMobile?: string }
 ): Promise<void> {
-    const products = new RegistrationProductsPage(page);
-    await products.requestDevicesNowButton.click();
-    await products.skipSetupLaterButton.click();
-    await products.deviceCountInput.waitFor({ state: 'visible', timeout: 10000 });
+    return boxStep('fillPosDevicesDeliveryForm', async () => {
+        const products = new RegistrationProductsPage(page);
+        await products.requestDevicesNowButton.click();
+        await products.skipSetupLaterButton.click();
+        await products.deviceCountInput.waitFor({ state: 'visible', timeout: 10000 });
 
-    await products.deviceCountInput.fill(options?.deviceCount ?? '1');
-    await products.updateWathiqAddressButton.waitFor({ state: 'visible', timeout: 20000 }).catch(() => {});
-    await products.contactNameInput.fill(options?.contactName ?? 'Test Contact');
-    await products.contactMobileInput.fill(options?.contactMobile ?? '512345678');
+        await products.deviceCountInput.fill(options?.deviceCount ?? '1');
+        await products.updateWathiqAddressButton.waitFor({ state: 'visible', timeout: 20000 }).catch(() => {});
+        await products.contactNameInput.fill(options?.contactName ?? 'Test Contact');
+        await products.contactMobileInput.fill(options?.contactMobile ?? '512345678');
+    });
 }
 
 /** Picks a random selectable option from a native <select> or a custom (mat/ng/bootstrap) dropdown. */
 export async function selectRandomOption(page: Page, dropdownLocator: Locator) {
-    const tag = await dropdownLocator.evaluate((el: Element) => el.tagName.toLowerCase());
-    if (tag === 'select') {
-        const options    = await dropdownLocator.locator('option').all();
-        const selectable = options.slice(1);
-        const pick       = selectable[Math.floor(Math.random() * selectable.length)];
-        await dropdownLocator.selectOption(await pick.getAttribute('value'));
-    } else {
-        await dropdownLocator.click();
-        const items = page.locator(
-            '[role="option"]:visible:not([aria-disabled="true"]):not([disabled]), ' +
-            '.dropdown-item:visible:not([aria-disabled="true"]):not([disabled]), ' +
-            '.ng-option:visible:not([aria-disabled="true"]):not([disabled])'
-        );
-        await items.first().waitFor({ state: 'visible', timeout: 5000 });
-        const count = await items.count();
-        await items.nth(Math.floor(Math.random() * count)).click();
-    }
+    return boxStep('selectRandomOption', async () => {
+        const tag = await dropdownLocator.evaluate((el: Element) => el.tagName.toLowerCase());
+        if (tag === 'select') {
+            const options    = await dropdownLocator.locator('option').all();
+            const selectable = options.slice(1);
+            const pick       = selectable[Math.floor(Math.random() * selectable.length)];
+            await dropdownLocator.selectOption(await pick.getAttribute('value'));
+        } else {
+            await dropdownLocator.click();
+            const items = page.locator(
+                '[role="option"]:visible:not([aria-disabled="true"]):not([disabled]), ' +
+                '.dropdown-item:visible:not([aria-disabled="true"]):not([disabled]), ' +
+                '.ng-option:visible:not([aria-disabled="true"]):not([disabled])'
+            );
+            await items.first().waitFor({ state: 'visible', timeout: 5000 });
+            const count = await items.count();
+            await items.nth(Math.floor(Math.random() * count)).click();
+        }
+    });
 }

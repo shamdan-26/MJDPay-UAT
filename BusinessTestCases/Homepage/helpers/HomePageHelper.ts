@@ -11,6 +11,7 @@ import { HomepageBillsOverviewPage } from '../../pageElements/Homepage/HomepageB
 import { HomepageSubWalletsPage } from '../../pageElements/Homepage/HomepageSubWalletsPage.ts';
 import { HomepageTransactionsPage } from '../../pageElements/Homepage/HomepageTransactionsPage.ts';
 import testAccounts from '../../../data/testAccounts.json';
+import { boxStep } from '../../shared/boxStep.ts';
 
 export const BASE_URL = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 export const LOGIN_URL        = `${BASE_URL}/business/auth/login`;
@@ -151,65 +152,11 @@ export interface HomepageSession {
  *  Note (AMB-HP-01): assumes biller uses the same /business/auth/login endpoint as merchant.
  */
 export async function loginAsBiller(page: Page): Promise<void> {
-    await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-    await page.getByRole('textbox', { name: /Company number|رقم الشركة/ }).fill(VALID_BILLER_COMPANY);
-    await page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ }).fill(VALID_BILLER_MOBILE);
-    await page.locator('input[aria-label="Password"], input[aria-label="كلمة المرور"]').fill(VALID_BILLER_PASSWORD);
-    const stopWatchingGateway = watchAuthGatewayFailure(page);
-    await loginButton(page).click();
-
-    const otpHeading = page.getByRole('heading', { name: /Enter OTP|أدخل رمز التحقق/i });
-    let landed: 'home' | 'otp';
-    try {
-        landed = await Promise.race([
-            page.waitForURL(HOME_URL_PATTERN, { timeout: 20000 }).then(() => 'home' as const),
-            otpHeading.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'otp' as const),
-        ]);
-    } catch (err) {
-        throw new Error(describeLoginTimeout(page, stopWatchingGateway(), err, 'Biller '));
-    }
-    stopWatchingGateway();
-
-    if (landed === 'otp') {
-        await page.getByRole('textbox', { name: 'One time password input' }).first()
-            .waitFor({ state: 'visible', timeout: 10000 });
-        const otp = await getOtpFromDb(VALID_BILLER_MOBILE);
-        await fillOTP(page, otp);
-        const verifyBtn = page.getByRole('button', { name: /Verify|تحقق/i });
-        if (await verifyBtn.isVisible().catch(() => false)) {
-            await verifyBtn.click();
-        }
-        await page.waitForURL(HOME_URL_PATTERN, { timeout: 30000 });
-    }
-    await waitForToastClear(page);
-}
-
-/** Full login flow: credentials → OTP (fetched by email) → home page.
- *  Defaults to the primary merchant account; pass `creds` to log in as a
- *  different account (e.g. VALID_COMPANY_2 / VALID_MOBILE_2 / VALID_PASSWORD_2).
- *
- *  Retries once on failure: when multiple spec files log into the same
- *  account concurrently (parallel workers sharing one of the two test
- *  accounts), the backend can invalidate one of the racing sessions. A
- *  short-delayed retry lets the other login finish first and self-heals. */
-export async function loginAsMerchant(page: Page, creds?: MerchantCredentials): Promise<void> {
-    const company  = creds?.company  ?? VALID_COMPANY;
-    const mobile   = creds?.mobile   ?? VALID_MOBILE;
-    const password = creds?.password ?? VALID_PASSWORD;
-
-    const attemptLogin = async (): Promise<void> => {
-        // A cold/stale auth gateway can 404 the first hit after a deploy —
-        // only called from global-setup.ts's homepage-account-pool
-        // pre-authentication, which hit exactly this failure class (see
-        // global-setup.ts's own attemptSessionLogin, fixed the same way).
-        // A genuine hard refresh (CDP cache-disable) avoids it; a plain
-        // page.goto() alone can still be served a stale bundle.
-        const client = await page.context().newCDPSession(page);
-        await client.send('Network.setCacheDisabled', { cacheDisabled: true });
+    return boxStep('loginAsBiller', async () => {
         await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-        await page.getByRole('textbox', { name: /Company number|رقم الشركة/ }).fill(company);
-        await page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ }).fill(mobile);
-        await page.locator('input[aria-label="Password"], input[aria-label="كلمة المرور"]').fill(password);
+        await page.getByRole('textbox', { name: /Company number|رقم الشركة/ }).fill(VALID_BILLER_COMPANY);
+        await page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ }).fill(VALID_BILLER_MOBILE);
+        await page.locator('input[aria-label="Password"], input[aria-label="كلمة المرور"]').fill(VALID_BILLER_PASSWORD);
         const stopWatchingGateway = watchAuthGatewayFailure(page);
         await loginButton(page).click();
 
@@ -221,14 +168,14 @@ export async function loginAsMerchant(page: Page, creds?: MerchantCredentials): 
                 otpHeading.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'otp' as const),
             ]);
         } catch (err) {
-            throw new Error(describeLoginTimeout(page, stopWatchingGateway(), err));
+            throw new Error(describeLoginTimeout(page, stopWatchingGateway(), err, 'Biller '));
         }
         stopWatchingGateway();
 
         if (landed === 'otp') {
             await page.getByRole('textbox', { name: 'One time password input' }).first()
                 .waitFor({ state: 'visible', timeout: 10000 });
-            const otp = await getOtpFromDb(mobile);
+            const otp = await getOtpFromDb(VALID_BILLER_MOBILE);
             await fillOTP(page, otp);
             const verifyBtn = page.getByRole('button', { name: /Verify|تحقق/i });
             if (await verifyBtn.isVisible().catch(() => false)) {
@@ -236,22 +183,82 @@ export async function loginAsMerchant(page: Page, creds?: MerchantCredentials): 
             }
             await page.waitForURL(HOME_URL_PATTERN, { timeout: 30000 });
         }
-    };
+        await waitForToastClear(page);
+    });
+}
 
-    try {
-        await attemptLogin();
-    } catch (err) {
-        console.warn(`[loginAsMerchant] first attempt failed for ${mobile}, retrying once. Cause: ${err}`);
-        await new Promise(r => setTimeout(r, 3000));
-        await attemptLogin();
-    }
-    await waitForToastClear(page);
+/** Full login flow: credentials → OTP (fetched by email) → home page.
+ *  Defaults to the primary merchant account; pass `creds` to log in as a
+ *  different account (e.g. VALID_COMPANY_2 / VALID_MOBILE_2 / VALID_PASSWORD_2).
+ *
+ *  Retries once on failure: when multiple spec files log into the same
+ *  account concurrently (parallel workers sharing one of the two test
+ *  accounts), the backend can invalidate one of the racing sessions. A
+ *  short-delayed retry lets the other login finish first and self-heals. */
+export async function loginAsMerchant(page: Page, creds?: MerchantCredentials): Promise<void> {
+    return boxStep('loginAsMerchant', async () => {
+        const company  = creds?.company  ?? VALID_COMPANY;
+        const mobile   = creds?.mobile   ?? VALID_MOBILE;
+        const password = creds?.password ?? VALID_PASSWORD;
+
+        const attemptLogin = async (): Promise<void> => {
+            // A cold/stale auth gateway can 404 the first hit after a deploy —
+            // only called from global-setup.ts's homepage-account-pool
+            // pre-authentication, which hit exactly this failure class (see
+            // global-setup.ts's own attemptSessionLogin, fixed the same way).
+            // A genuine hard refresh (CDP cache-disable) avoids it; a plain
+            // page.goto() alone can still be served a stale bundle.
+            const client = await page.context().newCDPSession(page);
+            await client.send('Network.setCacheDisabled', { cacheDisabled: true });
+            await page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+            await page.getByRole('textbox', { name: /Company number|رقم الشركة/ }).fill(company);
+            await page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ }).fill(mobile);
+            await page.locator('input[aria-label="Password"], input[aria-label="كلمة المرور"]').fill(password);
+            const stopWatchingGateway = watchAuthGatewayFailure(page);
+            await loginButton(page).click();
+
+            const otpHeading = page.getByRole('heading', { name: /Enter OTP|أدخل رمز التحقق/i });
+            let landed: 'home' | 'otp';
+            try {
+                landed = await Promise.race([
+                    page.waitForURL(HOME_URL_PATTERN, { timeout: 20000 }).then(() => 'home' as const),
+                    otpHeading.waitFor({ state: 'visible', timeout: 20000 }).then(() => 'otp' as const),
+                ]);
+            } catch (err) {
+                throw new Error(describeLoginTimeout(page, stopWatchingGateway(), err));
+            }
+            stopWatchingGateway();
+
+            if (landed === 'otp') {
+                await page.getByRole('textbox', { name: 'One time password input' }).first()
+                    .waitFor({ state: 'visible', timeout: 10000 });
+                const otp = await getOtpFromDb(mobile);
+                await fillOTP(page, otp);
+                const verifyBtn = page.getByRole('button', { name: /Verify|تحقق/i });
+                if (await verifyBtn.isVisible().catch(() => false)) {
+                    await verifyBtn.click();
+                }
+                await page.waitForURL(HOME_URL_PATTERN, { timeout: 30000 });
+            }
+        };
+
+        try {
+            await attemptLogin();
+        } catch (err) {
+            console.warn(`[loginAsMerchant] first attempt failed for ${mobile}, retrying once. Cause: ${err}`);
+            await new Promise(r => setTimeout(r, 3000));
+            await attemptLogin();
+        }
+        await waitForToastClear(page);
+    });
 }
 
 /** Opens the profile dropdown and waits for the logout item to be visible. */
 export async function openProfileMenu(page: Page): Promise<void> {
-    const dashboard = new DashboardPage(page);
-    await dashboard.openProfileMenu();
+    return boxStep('openProfileMenu', async () => {
+        const dashboard = new DashboardPage(page);
+        await dashboard.openProfileMenu();
+    });
 }
 
 /** Restores a pre-authenticated homepage session and instantiates every
@@ -271,32 +278,36 @@ export async function createHomepageSession(
     account?: string,
     workerIndexOverride?: number
 ): Promise<HomepageSession> {
-    const chosen = account
-        ? homepageAccountPool.find(a => a.key === account) ?? homepageAccountPool[0]
-        : homepageAccountForWorker(workerIndexOverride ?? test.info().parallelIndex);
+    return boxStep('createHomepageSession', async () => {
+        const chosen = account
+            ? homepageAccountPool.find(a => a.key === account) ?? homepageAccountPool[0]
+            : homepageAccountForWorker(workerIndexOverride ?? test.info().parallelIndex);
 
-    const context = await browser.newContext({ storageState: chosen.storageState });
-    await context.grantPermissions(['geolocation'], { origin: BASE_ORIGIN });
-    const page = await context.newPage();
+        const context = await browser.newContext({ storageState: chosen.storageState });
+        await context.grantPermissions(['geolocation'], { origin: BASE_ORIGIN });
+        const page = await context.newPage();
 
-    return {
-        page,
-        dashboard: new DashboardPage(page),
-        sidebar: new HomepageSidebarPage(page),
-        header: new HomepageHeaderPage(page),
-        greeting: new HomepageGreetingPage(page),
-        balanceCard: new HomepageBalanceCardPage(page),
-        quickActions: new HomepageQuickActionsPage(page),
-        billsOverview: new HomepageBillsOverviewPage(page),
-        subWallets: new HomepageSubWalletsPage(page),
-        transactions: new HomepageTransactionsPage(page),
-    };
+        return {
+            page,
+            dashboard: new DashboardPage(page),
+            sidebar: new HomepageSidebarPage(page),
+            header: new HomepageHeaderPage(page),
+            greeting: new HomepageGreetingPage(page),
+            balanceCard: new HomepageBalanceCardPage(page),
+            quickActions: new HomepageQuickActionsPage(page),
+            billsOverview: new HomepageBillsOverviewPage(page),
+            subWallets: new HomepageSubWalletsPage(page),
+            transactions: new HomepageTransactionsPage(page),
+        };
+    });
 }
 
 /** Re-navigates to the homepage and waits for the post-navigation settle +
  *  transient toast to clear — the standard beforeEach for homepage specs. */
 export async function refreshHomepage(page: Page): Promise<void> {
-    await page.goto(HOME_URL, { waitUntil: 'domcontentloaded' });
-    await page.waitForTimeout(POST_NAV_SETTLE_MS);
-    await waitForToastClear(page, TOAST_APPEAR_TIMEOUT_MS, TOAST_CLEAR_TIMEOUT_MS);
+    return boxStep('refreshHomepage', async () => {
+        await page.goto(HOME_URL, { waitUntil: 'domcontentloaded' });
+        await page.waitForTimeout(POST_NAV_SETTLE_MS);
+        await waitForToastClear(page, TOAST_APPEAR_TIMEOUT_MS, TOAST_CLEAR_TIMEOUT_MS);
+    });
 }

@@ -13,6 +13,7 @@ import { getMongoDb } from '../../../support/mongoClient.ts';
 import { getSqlPool } from '../../../support/sqlServerClient.ts';
 import topupData from '../../../data/topupData.json';
 import testAccounts from '../../../data/testAccounts.json';
+import { boxStep } from '../../shared/boxStep.ts';
 
 export const BASE_URL  = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 export const LOGIN_URL = `${BASE_URL}/business/auth/login`;
@@ -149,6 +150,7 @@ function fallbackAccounts(tried: string): TopupAccount[] {
  * never a retry. Any other account passed in keeps the strict behaviour (still one attempt).
  */
 export async function loginToTopup(browser: Browser, account: TopupAccount = { company: LOGIN_COMPANY, mobile: LOGIN_MOBILE }): Promise<TopupSession> {
+    return boxStep('loginToTopup', async () => {
     if (account !== TOPUP_UI_ACCOUNT) return loginOnce(browser, account);
     const seenIn = test.info().titlePath.slice(0, 2).join(' > ');
     const failures: string[] = [];
@@ -180,6 +182,7 @@ export async function loginToTopup(browser: Browser, account: TopupAccount = { c
     }
     test.skip(true, `No Topup account could log in (${failures.join(' | ')}). The issues are noted in data/testAccounts.json -> accountIssues; check those accounts.`);
     throw new Error('unreachable: test.skip ends the test');
+    });
 }
 
 /** One login attempt cycle for one account; closes its page when it fails so nothing leaks. */
@@ -230,18 +233,20 @@ async function loginSteps(page: Page, account: TopupAccount): Promise<TopupSessi
 
 /** Navigates fresh to the Topup amount-entry screen — the standard beforeEach for every Core Scenarios file. */
 export async function gotoTopupScreen(session: TopupSession): Promise<void> {
-    // A previous test that failed/skipped before its own `popup.close()` leaves
-    // the gateway window open in this shared context — close any extra window
-    // and point the page object back at the main page before starting fresh.
-    for (const stray of session.page.context().pages()) {
-        if (stray !== session.page) await stray.close().catch(() => { /* already closed */ });
-    }
-    session.topup.resetActivePage();
+    return boxStep('gotoTopupScreen', async () => {
+        // A previous test that failed/skipped before its own `popup.close()` leaves
+        // the gateway window open in this shared context — close any extra window
+        // and point the page object back at the main page before starting fresh.
+        for (const stray of session.page.context().pages()) {
+            if (stray !== session.page) await stray.close().catch(() => { /* already closed */ });
+        }
+        session.topup.resetActivePage();
 
-    await session.page.goto(HOME_URL);
-    await session.page.waitForLoadState('domcontentloaded');
-    await session.quickActions.quickActionTopupCard.click();
-    await session.topup.inputAmount.waitFor({ state: 'visible', timeout: 15000 });
+        await session.page.goto(HOME_URL);
+        await session.page.waitForLoadState('domcontentloaded');
+        await session.quickActions.quickActionTopupCard.click();
+        await session.topup.inputAmount.waitFor({ state: 'visible', timeout: 15000 });
+    });
 }
 
 /**
@@ -250,11 +255,13 @@ export async function gotoTopupScreen(session: TopupSession): Promise<void> {
  * switched off — in that case the gateway popup opens straight after Next.
  */
 export async function clickSummaryNextAndDetectOtp(topup: TopupPage, otp: OtpPage): Promise<boolean> {
-    await topup.clickSummaryNextButton();
-    return otp.inputs.first()
-        .waitFor({ state: 'visible', timeout: 15000 })
-        .then(() => true)
-        .catch(() => false);
+    return boxStep('clickSummaryNextAndDetectOtp', async () => {
+        await topup.clickSummaryNextButton();
+        return otp.inputs.first()
+            .waitFor({ state: 'visible', timeout: 15000 })
+            .then(() => true)
+            .catch(() => false);
+    });
 }
 
 /**
@@ -268,6 +275,7 @@ export async function clickSummaryNextAndDetectOtp(topup: TopupPage, otp: OtpPag
 let topupOtpKnownOff = false;
 
 export async function reachOtpScreen(session: TopupSession, method: 'mada' | 'visa' | 'master', data: TopupCase): Promise<void> {
+    return boxStep('reachOtpScreen', async () => {
     // Once one attempt showed the OTP is off, skip the rest straight away: every further attempt would start (and count) another real payment for nothing.
     test.skip(topupOtpKnownOff, 'Top-up OTP is disabled (operationCode 102) — no OTP screen to test.');
     const { topup, otp } = session;
@@ -295,6 +303,7 @@ export async function reachOtpScreen(session: TopupSession, method: 'mada' | 'vi
     }
     if (!otpShown) topupOtpKnownOff = true;
     test.skip(!otpShown, 'Top-up OTP is disabled (operationCode 102) — no OTP screen to test.');
+    });
 }
 
 /**
@@ -303,6 +312,7 @@ export async function reachOtpScreen(session: TopupSession, method: 'mada' | 'vi
  * to reach the card-entry popup.
  */
 export async function reachCardEntryPopup(session: TopupSession, method: 'mada' | 'visa' | 'master', data: TopupCase): Promise<Page> {
+    return boxStep('reachCardEntryPopup', async () => {
     const { page, topup, otp } = session;
     await topup.selectPaymentMethod(method);
     await topup.enterAmount(data.amount);
@@ -355,6 +365,7 @@ export async function reachCardEntryPopup(session: TopupSession, method: 'mada' 
     topup.setActivePage(popup);
     await popup.waitForLoadState('load');
     return popup;
+    });
 }
 
 /**
@@ -363,29 +374,31 @@ export async function reachCardEntryPopup(session: TopupSession, method: 'mada' 
  * popup closes. Leaves the main page on the result screen with OK un-clicked.
  */
 export async function completeCardPayment(session: TopupSession, method: 'mada' | 'visa' | 'master', data: TopupCase, gatewayReturnCode?: string): Promise<void> {
-    const { topup } = session;
-    const popup = await reachCardEntryPopup(session, method, data);
-    await topup.fillCardDetails(data.cardNumber, data.expiry, data.holder, data.cvv);
-    await topup.clickPayNowButton();
-    // Optional simulator result. VISA (HyperPay): 1=Success, 2=User canceled,
-    // 3=Pending, 4=limit exceeded, 5=too many tries — TopupPage.selectGatewayReturnCode.
-    // MADA/MASTER (3-D Secure): Y=Approve, N=Decline, D=Decoupled Fallback,
-    // U=Technical error, X=Cancel — TopupPage.select3dsOutcome.
-    if (gatewayReturnCode) {
-        if (method === 'mada' || method === 'master') {
-            const applied = await topup.select3dsOutcome(gatewayReturnCode as 'Y' | 'N' | 'D' | 'U' | 'X');
-            test.skip(!applied, `The 3DS simulator shows the MiGS page (PASSWORD + Submit, no outcome dropdown), so outcome "${gatewayReturnCode}" cannot be selected: only approve (Y) can be driven.`);
-        } else {
-            await topup.selectGatewayReturnCode(gatewayReturnCode);
+    return boxStep('completeCardPayment', async () => {
+        const { topup } = session;
+        const popup = await reachCardEntryPopup(session, method, data);
+        await topup.fillCardDetails(data.cardNumber, data.expiry, data.holder, data.cvv);
+        await topup.clickPayNowButton();
+        // Optional simulator result. VISA (HyperPay): 1=Success, 2=User canceled,
+        // 3=Pending, 4=limit exceeded, 5=too many tries — TopupPage.selectGatewayReturnCode.
+        // MADA/MASTER (3-D Secure): Y=Approve, N=Decline, D=Decoupled Fallback,
+        // U=Technical error, X=Cancel — TopupPage.select3dsOutcome.
+        if (gatewayReturnCode) {
+            if (method === 'mada' || method === 'master') {
+                const applied = await topup.select3dsOutcome(gatewayReturnCode as 'Y' | 'N' | 'D' | 'U' | 'X');
+                test.skip(!applied, `The 3DS simulator shows the MiGS page (PASSWORD + Submit, no outcome dropdown), so outcome "${gatewayReturnCode}" cannot be selected: only approve (Y) can be driven.`);
+            } else {
+                await topup.selectGatewayReturnCode(gatewayReturnCode);
+            }
         }
-    }
-    if (method === 'mada' || method === 'master') {
-        await topup.clickCardSchemeSubmitButton();
-    } else if (await topup.isHyperpayScreenDisplayed()) {
-        await topup.clickHyperpaySubmitButton();
-    }
-    await popup.waitForEvent('close', { timeout: 30000 }).catch(() => null);
-    topup.resetActivePage();
+        if (method === 'mada' || method === 'master') {
+            await topup.clickCardSchemeSubmitButton();
+        } else if (await topup.isHyperpayScreenDisplayed()) {
+            await topup.clickHyperpaySubmitButton();
+        }
+        await popup.waitForEvent('close', { timeout: 30000 }).catch(() => null);
+        topup.resetActivePage();
+    });
 }
 
 /**
@@ -456,6 +469,7 @@ function defaultTopupCommissionSeed(): CommissionFormValues {
  * long-lived session.
  */
 export async function prepareTopupCommission(commission: AdminCommissionManagementPage): Promise<TopupCommissionSnapshot> {
+    return boxStep('prepareTopupCommission', async () => {
     // 1. Go to Default Commission.
     await commission.gotoDefaultCommission();
 
@@ -496,6 +510,7 @@ export async function prepareTopupCommission(commission: AdminCommissionManageme
     if (!wasActive) await commission.activateRow(row);
 
     return { values, wasActive };
+    });
 }
 
 /**
@@ -512,14 +527,16 @@ export async function prepareTopupCommission(commission: AdminCommissionManageme
  * admin session is kept open across the whole file instead of reopened here.
  */
 export async function restoreTopupCommission(commission: AdminCommissionManagementPage, snapshot: TopupCommissionSnapshot): Promise<void> {
-    if (snapshot.wasActive) return; // it was already Active — nothing to undo.
+    return boxStep('restoreTopupCommission', async () => {
+        if (snapshot.wasActive) return; // it was already Active — nothing to undo.
 
-    await commission.gotoDefaultCommission();
-    const row = await commission.findRowByTransactionTypeAndValues(
-        TOPUP_COMMISSION_TRANSACTION_TYPE,
-        snapshot.values,
-    );
-    if (row) await commission.disableRow(row);
+        await commission.gotoDefaultCommission();
+        const row = await commission.findRowByTransactionTypeAndValues(
+            TOPUP_COMMISSION_TRANSACTION_TYPE,
+            snapshot.values,
+        );
+        if (row) await commission.disableRow(row);
+    });
 }
 
 /**
@@ -546,6 +563,7 @@ function appScopedCommissionSeed(): CommissionFormValues {
  * shared snapshot with a second, differently-filtered lookup.
  */
 export async function ensureAppScopedTopupCommission(browser: Browser): Promise<TopupCommissionSnapshot> {
+    return boxStep('ensureAppScopedTopupCommission', async () => {
     const { context, commission } = await loginToCommissionManagement(browser);
     try {
         await commission.gotoDefaultCommission();
@@ -580,6 +598,7 @@ export async function ensureAppScopedTopupCommission(browser: Browser): Promise<
     } finally {
         await context.close();
     }
+    });
 }
 
 /**
@@ -588,19 +607,21 @@ export async function ensureAppScopedTopupCommission(browser: Browser): Promise<
  * by the APP row's own snapshotted values, independent of the main tier.
  */
 export async function restoreAppScopedTopupCommission(browser: Browser, snapshot: TopupCommissionSnapshot): Promise<void> {
-    if (snapshot.wasActive) return;
+    return boxStep('restoreAppScopedTopupCommission', async () => {
+        if (snapshot.wasActive) return;
 
-    const { context, commission } = await loginToCommissionManagement(browser);
-    try {
-        await commission.gotoDefaultCommission();
-        const row = await commission.findRowByTransactionTypeAndValues(
-            TOPUP_COMMISSION_TRANSACTION_TYPE,
-            snapshot.values,
-        );
-        if (row) await commission.disableRow(row);
-    } finally {
-        await context.close();
-    }
+        const { context, commission } = await loginToCommissionManagement(browser);
+        try {
+            await commission.gotoDefaultCommission();
+            const row = await commission.findRowByTransactionTypeAndValues(
+                TOPUP_COMMISSION_TRANSACTION_TYPE,
+                snapshot.values,
+            );
+            if (row) await commission.disableRow(row);
+        } finally {
+            await context.close();
+        }
+    });
 }
 
 /**
@@ -647,6 +668,7 @@ function defaultBillerTopupCommissionSeed(): CommissionFormValues {
  * the numeric code and an explicit `platformType`/`isActive` field.
  */
 export async function prepareBillerTopupCommission(commission: AdminCommissionManagementPage): Promise<TopupCommissionSnapshot> {
+    return boxStep('prepareBillerTopupCommission', async () => {
     await commission.gotoDefaultCommission();
 
     let entry = await commission.apiFindCommission(TOPUP_BILLER_COMMISSION_TRANSACTION_TYPE_CODE, 'WEB');
@@ -670,6 +692,7 @@ export async function prepareBillerTopupCommission(commission: AdminCommissionMa
     if (!wasActive) await commission.apiSetActive(entry.id, true);
 
     return { values, wasActive };
+    });
 }
 
 /**
@@ -682,11 +705,13 @@ export async function prepareBillerTopupCommission(commission: AdminCommissionMa
  * platform alone already identifies the exact row to restore.
  */
 export async function restoreBillerTopupCommission(commission: AdminCommissionManagementPage, snapshot: TopupCommissionSnapshot): Promise<void> {
-    if (snapshot.wasActive) return;
+    return boxStep('restoreBillerTopupCommission', async () => {
+        if (snapshot.wasActive) return;
 
-    await commission.gotoDefaultCommission();
-    const entry = await commission.apiFindCommission(TOPUP_BILLER_COMMISSION_TRANSACTION_TYPE_CODE, snapshot.values.platform);
-    if (entry) await commission.apiSetActive(entry.id, false);
+        await commission.gotoDefaultCommission();
+        const entry = await commission.apiFindCommission(TOPUP_BILLER_COMMISSION_TRANSACTION_TYPE_CODE, snapshot.values.platform);
+        if (entry) await commission.apiSetActive(entry.id, false);
+    });
 }
 
 /** Seed values for a fresh APP-platform Biller Bank Cashin row — see `appScopedCommissionSeed`. */
@@ -711,6 +736,7 @@ function appScopedBillerCommissionSeed(): CommissionFormValues {
  * one session avoids that entirely.
  */
 export async function ensureAppScopedBillerTopupCommission(commission: AdminCommissionManagementPage): Promise<TopupCommissionSnapshot> {
+    return boxStep('ensureAppScopedBillerTopupCommission', async () => {
     await commission.gotoDefaultCommission();
     let entry = await commission.apiFindCommission(TOPUP_BILLER_COMMISSION_TRANSACTION_TYPE_CODE, 'APP');
 
@@ -734,6 +760,7 @@ export async function ensureAppScopedBillerTopupCommission(commission: AdminComm
     if (!wasActive) await commission.apiSetActive(entry.id, true);
 
     return { values, wasActive };
+    });
 }
 
 /**
@@ -745,11 +772,13 @@ export async function ensureAppScopedBillerTopupCommission(commission: AdminComm
  * header comment for why a second concurrent login is avoided.
  */
 export async function restoreAppScopedBillerTopupCommission(commission: AdminCommissionManagementPage, snapshot: TopupCommissionSnapshot): Promise<void> {
-    if (snapshot.wasActive) return;
+    return boxStep('restoreAppScopedBillerTopupCommission', async () => {
+        if (snapshot.wasActive) return;
 
-    await commission.gotoDefaultCommission();
-    const entry = await commission.apiFindCommission(TOPUP_BILLER_COMMISSION_TRANSACTION_TYPE_CODE, snapshot.values.platform);
-    if (entry) await commission.apiSetActive(entry.id, false);
+        await commission.gotoDefaultCommission();
+        const entry = await commission.apiFindCommission(TOPUP_BILLER_COMMISSION_TRANSACTION_TYPE_CODE, snapshot.values.platform);
+        if (entry) await commission.apiSetActive(entry.id, false);
+    });
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -795,13 +824,15 @@ export function decodeJwtProfileCode(bearerToken: string): string {
  * renders.
  */
 export async function getLatestTopupTransactionFromDb(initiatorProfileCode: string, txnTypeName = 'Biller Bank Cashin'): Promise<TopupTransactionLogEntry | null> {
-    const db = await getMongoDb('transaction_query_log');
-    const doc = await db.collection('transactionLog')
-        .find({ initiator: initiatorProfileCode, txnTypeName })
-        .sort({ createdAt: -1 })
-        .limit(1)
-        .next();
-    return doc as TopupTransactionLogEntry | null;
+    return boxStep('getLatestTopupTransactionFromDb', async () => {
+        const db = await getMongoDb('transaction_query_log');
+        const doc = await db.collection('transactionLog')
+            .find({ initiator: initiatorProfileCode, txnTypeName })
+            .sort({ createdAt: -1 })
+            .limit(1)
+            .next();
+        return doc as TopupTransactionLogEntry | null;
+    });
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -835,6 +866,7 @@ export interface TopupBaseTransactionRow {
  * against real rows this account's own top-ups produced.
  */
 export async function getLatestTopupTransactionFromSql(initiatorProfileCode: string): Promise<TopupBaseTransactionRow | null> {
+    return boxStep('getLatestTopupTransactionFromSql', async () => {
     const pool = await getSqlPool();
     const result = await pool.request()
         .input('initiator', initiatorProfileCode)
@@ -849,6 +881,7 @@ export async function getLatestTopupTransactionFromSql(initiatorProfileCode: str
             ORDER BY created_at DESC;
         `);
     return (result.recordset[0] as TopupBaseTransactionRow) ?? null;
+    });
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -882,6 +915,7 @@ export interface TopupTransactionLogSqlRow {
  * (the account's JWT profileCode) directly from emi_transaction.transaction_log.
  */
 export async function getLatestTopupTransactionLogFromSql(initiatorProfileCode: string, txnTypeName = 'Biller Bank Cashin'): Promise<TopupTransactionLogSqlRow | null> {
+    return boxStep('getLatestTopupTransactionLogFromSql', async () => {
     const pool = await getSqlPool();
     const result = await pool.request()
         .input('initiator', initiatorProfileCode)
@@ -896,6 +930,7 @@ export async function getLatestTopupTransactionLogFromSql(initiatorProfileCode: 
             ORDER BY created_at DESC;
         `);
     return (result.recordset[0] as TopupTransactionLogSqlRow) ?? null;
+    });
 }
 
 /**
@@ -907,6 +942,7 @@ export async function getLatestTopupTransactionLogFromSql(initiatorProfileCode: 
  * once the gateway responds — rather than one row mutated in place.
  */
 export async function getTopupTransactionLogHistoryFromSql(idempotencyKey: string): Promise<TopupTransactionLogSqlRow[]> {
+    return boxStep('getTopupTransactionLogHistoryFromSql', async () => {
     const pool = await getSqlPool();
     const result = await pool.request()
         .input('idempotencyKey', idempotencyKey)
@@ -920,4 +956,5 @@ export async function getTopupTransactionLogHistoryFromSql(idempotencyKey: strin
             ORDER BY created_at ASC;
         `);
     return result.recordset as TopupTransactionLogSqlRow[];
+    });
 }

@@ -9,6 +9,7 @@ import { REGISTER_URL, VALID_IBAN, VALID_VAT_NUMBER, TEST_FILE_BUFFER, generateE
 import { DEDICATED_RESIDENT_ASSETS, GENERAL_RESIDENT_ASSETS, AssetAlreadyProgressedError, markResidentAssetUsed, getWorkerPartition, nextResidentAsset, generateKSAMobile } from './registrationAssets';
 import { getOtpFromDb, fillOTP } from './registrationOtp';
 import { selectRandomOption } from './registrationUi';
+import { boxStep } from '../../shared/boxStep.ts';
 
 /**
  * fill() followed by a verifying assertion, retried once. On a step that just
@@ -20,13 +21,15 @@ import { selectRandomOption } from './registrationUi';
  * for the same race on the previous step.
  */
 export async function fillAndVerify(locator: Locator, value: string): Promise<void> {
-    await locator.fill(value);
-    try {
-        await expect(locator).toHaveValue(value, { timeout: 3000 });
-    } catch {
+    return boxStep('fillAndVerify', async () => {
         await locator.fill(value);
-        await expect(locator).toHaveValue(value);
-    }
+        try {
+            await expect(locator).toHaveValue(value, { timeout: 3000 });
+        } catch {
+            await locator.fill(value);
+            await expect(locator).toHaveValue(value);
+        }
+    });
 }
 
 /**
@@ -39,53 +42,57 @@ export async function fillBusinessInfo(
     identity: { crn: string; nationalId: string },
     options: { profileType?: 'individual' | 'merchant'; email?: string } = {},
 ): Promise<void> {
-    if (options.profileType === 'merchant') {
-        await infoPage.merchantButton.click();
-    } else {
-        await infoPage.profileTypeGroup.getByRole('radio').first().click();
-    }
-    await fillAndVerify(infoPage.crnInput, identity.crn);
-    await fillAndVerify(infoPage.idInput, identity.nationalId);
-    await fillAndVerify(infoPage.emailInput, options.email ?? generateEmail());
+    return boxStep('fillBusinessInfo', async () => {
+        if (options.profileType === 'merchant') {
+            await infoPage.merchantButton.click();
+        } else {
+            await infoPage.profileTypeGroup.getByRole('radio').first().click();
+        }
+        await fillAndVerify(infoPage.crnInput, identity.crn);
+        await fillAndVerify(infoPage.idInput, identity.nationalId);
+        await fillAndVerify(infoPage.emailInput, options.email ?? generateEmail());
+    });
 }
 
 export async function goToInfoStep(page: Page, mobile?: string): Promise<void> {
-    const usedMobile = mobile ?? generateKSAMobile();
-    const mobilePage = new RegistrationMobilePage(page);
-    await mobilePage.goto(REGISTER_URL);
-    // Clear any in-progress application resumed from a previous identity on this
-    // same page/context. The app persists registration state client-side, so a
-    // plain re-navigation to REGISTER_URL isn't enough — retry loops that reuse
-    // one page across many identities (goToFinancialStep, goToFinancialStepWithDedicatedAsset)
-    // were observed resuming the FIRST identity's stuck application on every
-    // later attempt regardless of the new mobile/CRN, making every attempt after
-    // the first report the same outcome (see the RegistrationFinancialPage.spec.ts
-    // hook-timeout failures this fixed — 19-20 consecutive 'products' outcomes
-    // drawn from an 86%-fresh pool, statistically impossible without state leakage).
-    await page.evaluate(() => localStorage.clear()).catch(() => {});
-    await page.context().clearCookies();
-    await mobilePage.goto(REGISTER_URL);
-    await mobilePage.fillMobile(usedMobile);
-    await mobilePage.submitMobile();
-    const otpVisible = await page.getByRole('heading', { name: /Enter OTP|أدخل رمز التحقق/i })
-        .waitFor({ state: 'visible', timeout: 20000 })
-        .then(() => true)
-        .catch(() => false);
-    if (otpVisible) {
-        await page.getByRole('textbox', { name: 'One time password input' }).first()
-            .waitFor({ state: 'visible', timeout: 10000 });
-        // getOtpFromDb() returns a fixed all-zero OTP in both dev and uat —
-        // see its own comment for why the real IMAP/Azure fetch path is
-        // skipped entirely for any mobile in either environment now.
-        const otp = await getOtpFromDb(usedMobile);
-        await fillOTP(page, otp);
-        const verifyBtn = page.getByRole('button', { name: /Verify|تحقق/i });
-        if (await verifyBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
-            await verifyBtn.click();
+    return boxStep('goToInfoStep', async () => {
+        const usedMobile = mobile ?? generateKSAMobile();
+        const mobilePage = new RegistrationMobilePage(page);
+        await mobilePage.goto(REGISTER_URL);
+        // Clear any in-progress application resumed from a previous identity on this
+        // same page/context. The app persists registration state client-side, so a
+        // plain re-navigation to REGISTER_URL isn't enough — retry loops that reuse
+        // one page across many identities (goToFinancialStep, goToFinancialStepWithDedicatedAsset)
+        // were observed resuming the FIRST identity's stuck application on every
+        // later attempt regardless of the new mobile/CRN, making every attempt after
+        // the first report the same outcome (see the RegistrationFinancialPage.spec.ts
+        // hook-timeout failures this fixed — 19-20 consecutive 'products' outcomes
+        // drawn from an 86%-fresh pool, statistically impossible without state leakage).
+        await page.evaluate(() => localStorage.clear()).catch(() => {});
+        await page.context().clearCookies();
+        await mobilePage.goto(REGISTER_URL);
+        await mobilePage.fillMobile(usedMobile);
+        await mobilePage.submitMobile();
+        const otpVisible = await page.getByRole('heading', { name: /Enter OTP|أدخل رمز التحقق/i })
+            .waitFor({ state: 'visible', timeout: 20000 })
+            .then(() => true)
+            .catch(() => false);
+        if (otpVisible) {
+            await page.getByRole('textbox', { name: 'One time password input' }).first()
+                .waitFor({ state: 'visible', timeout: 10000 });
+            // getOtpFromDb() returns a fixed all-zero OTP in both dev and uat —
+            // see its own comment for why the real IMAP/Azure fetch path is
+            // skipped entirely for any mobile in either environment now.
+            const otp = await getOtpFromDb(usedMobile);
+            await fillOTP(page, otp);
+            const verifyBtn = page.getByRole('button', { name: /Verify|تحقق/i });
+            if (await verifyBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+                await verifyBtn.click();
+            }
         }
-    }
-    await page.getByText(/Tell us about your business|أخبرنا عن نشاطك التجاري/i).waitFor({ state: 'visible', timeout: 60000 });
-    await waitForToastClear(page);
+        await page.getByText(/Tell us about your business|أخبرنا عن نشاطك التجاري/i).waitFor({ state: 'visible', timeout: 60000 });
+        await waitForToastClear(page);
+    });
 }
 
 /**
@@ -112,11 +119,13 @@ export async function submitBusinessInfo(
     page: Page,
     infoPage: RegistrationInfoPage
 ): Promise<{ conflict: boolean }> {
-    const [response] = await Promise.all([
-        page.waitForResponse(res => res.url().includes('/register/profile-registration-type'), { timeout: 15000 }).catch(() => null),
-        infoPage.nextButton.click(),
-    ]);
-    return { conflict: response?.status() === 409 };
+    return boxStep('submitBusinessInfo', async () => {
+        const [response] = await Promise.all([
+            page.waitForResponse(res => res.url().includes('/register/profile-registration-type'), { timeout: 15000 }).catch(() => null),
+            infoPage.nextButton.click(),
+        ]);
+        return { conflict: response?.status() === 409 };
+    });
 }
 
 export interface FinancialStepCredentials {
@@ -144,6 +153,7 @@ export function isAlreadyRegisteredMessage(text: string | null | undefined): boo
 
 /** Resolves with the mobile of the identity that reached the Financial & Business step. */
 export async function goToFinancialStep(page: Page, credentials?: FinancialStepCredentials): Promise<string> {
+    return boxStep('goToFinancialStep', async () => {
     // Only the default round-robin pool is safe to retry across — an explicit
     // crn/nationalId means the caller is deliberately testing a specific
     // (often intentionally invalid) identity and must not be silently swapped.
@@ -247,6 +257,7 @@ export async function goToFinancialStep(page: Page, credentials?: FinancialStepC
         );
     }
     throw new Error('goToFinancialStep: no attempts were made (empty resident pool).');
+    });
 }
 
 const DEDICATED_FALLBACK_THRESHOLD = 5;
@@ -305,6 +316,7 @@ const SYSTEMIC_FAILURE_THRESHOLD = 8;
  * a bounded worst-case runtime.
  */
 export async function goToFinancialStepWithDedicatedAsset(page: Page): Promise<void> {
+    return boxStep('goToFinancialStepWithDedicatedAsset', async () => {
     const maxAttempts = Math.min(DEDICATED_RESIDENT_ASSETS.length, 20);
     let dedicatedFailures = 0;
     let totalFailures = 0;
@@ -340,51 +352,58 @@ export async function goToFinancialStepWithDedicatedAsset(page: Page): Promise<v
             throw err;
         }
     }
+    });
 }
 
 export async function goToVerificationStep(page: Page): Promise<void> {
-    await goToFinancialStep(page);
-    await fillFinancialForm(page);
-    await new RegistrationFinancialPage(page).next();
-    await new RegistrationVerificationPage(page).waitForLoad();
+    return boxStep('goToVerificationStep', async () => {
+        await goToFinancialStep(page);
+        await fillFinancialForm(page);
+        await new RegistrationFinancialPage(page).next();
+        await new RegistrationVerificationPage(page).waitForLoad();
+    });
 }
 
 export async function fillFinancialForm(page: Page): Promise<void> {
-    const financialPage = new RegistrationFinancialPage(page);
-    await financialPage.fill('1500', '50000', '10000', '20000');
+    return boxStep('fillFinancialForm', async () => {
+        const financialPage = new RegistrationFinancialPage(page);
+        await financialPage.fill('1500', '50000', '10000', '20000');
 
-    // Only Industries (index 0) and Annual Income (index 1) render on this
-    // step — there is no separate Banks select to fill.
-    await selectRandomOption(page, page.locator('#mat-select-value-0'));
-    await selectRandomOption(page, page.locator('#mat-select-value-1'));
+        // Only Industries (index 0) and Annual Income (index 1) render on this
+        // step — there is no separate Banks select to fill.
+        await selectRandomOption(page, page.locator('#mat-select-value-0'));
+        await selectRandomOption(page, page.locator('#mat-select-value-1'));
+    });
 }
 
 /** Fills the Verification & Uploads step (Tab 3): bank, IBAN, VAT number, and
  *  every file-upload input on the panel. Does not submit — callers click
  *  signUpButton themselves once the form is filled. */
 export async function fillVerificationForm(page: Page): Promise<void> {
-    const verificationPage = new RegistrationVerificationPage(page);
-    await verificationPage.waitForLoad();
+    return boxStep('fillVerificationForm', async () => {
+        const verificationPage = new RegistrationVerificationPage(page);
+        await verificationPage.waitForLoad();
 
-    if (await verificationPage.bankDropdown.count() > 0) {
-        await selectRandomOption(page, verificationPage.bankDropdown.first());
-    }
-    await verificationPage.ibanInput.fill(VALID_IBAN);
-    await verificationPage.vatInput.fill(VALID_VAT_NUMBER);
+        if (await verificationPage.bankDropdown.count() > 0) {
+            await selectRandomOption(page, verificationPage.bankDropdown.first());
+        }
+        await verificationPage.ibanInput.fill(VALID_IBAN);
+        await verificationPage.vatInput.fill(VALID_VAT_NUMBER);
 
-    const fileInputs = page.locator('input[type="file"]');
-    const fileInputCount = await fileInputs.count();
-    for (let i = 0; i < fileInputCount; i++) {
-        const fileName = `doc${i}.pdf`;
-        await fileInputs.nth(i)
-            .setInputFiles({ name: fileName, mimeType: 'application/pdf', buffer: TEST_FILE_BUFFER })
-            .catch(() => {});
-        // Confirmed live (RegistrationVerificationUploads.spec.ts): setInputFiles()
-        // resolves once the DOM input holds the file, NOT once the app's own
-        // async upload finishes — callers clicking Sign Up right after this loop
-        // used to race that upload and find it still disabled. Wait for each
-        // filename to actually render (the app's own "Uploaded" confirmation)
-        // before moving on, same fix already applied at that call site.
-        await page.getByText(fileName).waitFor({ state: 'visible', timeout: 15000 }).catch(() => {});
-    }
+        const fileInputs = page.locator('input[type="file"]');
+        const fileInputCount = await fileInputs.count();
+        for (let i = 0; i < fileInputCount; i++) {
+            const fileName = `doc${i}.pdf`;
+            await fileInputs.nth(i)
+                .setInputFiles({ name: fileName, mimeType: 'application/pdf', buffer: TEST_FILE_BUFFER })
+                .catch(() => {});
+            // Confirmed live (RegistrationVerificationUploads.spec.ts): setInputFiles()
+            // resolves once the DOM input holds the file, NOT once the app's own
+            // async upload finishes — callers clicking Sign Up right after this loop
+            // used to race that upload and find it still disabled. Wait for each
+            // filename to actually render (the app's own "Uploaded" confirmation)
+            // before moving on, same fix already applied at that call site.
+            await page.getByText(fileName).waitFor({ state: 'visible', timeout: 15000 }).catch(() => {});
+        }
+    });
 }

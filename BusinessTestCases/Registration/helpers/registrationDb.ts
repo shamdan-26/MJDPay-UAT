@@ -1,5 +1,6 @@
 import { getSqlPool } from '../../../support/sqlServerClient';
 import { getMongoDb } from '../../../support/mongoClient';
+import { boxStep } from '../../shared/boxStep.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SQL Server (emi_profile.*) — direct DB assertions for the account a
@@ -43,6 +44,7 @@ export interface RegistrationProfileRow {
 
 /** Reads the `profiles` row for a mobile number straight from emi_profile — the actual provisioned account, not the in-progress registration request. */
 export async function getRegistrationProfileByMobileFromSql(mobileNumber: string): Promise<RegistrationProfileRow | null> {
+    return boxStep('getRegistrationProfileByMobileFromSql', async () => {
     const pool = await getSqlPool();
     const result = await pool.request()
         .input('mobile', mobileNumber)
@@ -56,6 +58,7 @@ export async function getRegistrationProfileByMobileFromSql(mobileNumber: string
             ORDER BY created_at DESC;
         `);
     return (result.recordset[0] as RegistrationProfileRow) ?? null;
+    });
 }
 
 export interface BusinessProfileRegistrationRequestRow {
@@ -78,6 +81,7 @@ export interface BusinessProfileRegistrationRequestRow {
 
 /** Reads the `business_profile_registration_requests` row for a mobile number, most-recently-modified first (see header comment on why not `created_at`). */
 export async function getBusinessRegistrationRequestByMobileFromSql(mobileNumber: string): Promise<BusinessProfileRegistrationRequestRow | null> {
+    return boxStep('getBusinessRegistrationRequestByMobileFromSql', async () => {
     const pool = await getSqlPool();
     const result = await pool.request()
         .input('mobile', mobileNumber)
@@ -92,6 +96,7 @@ export async function getBusinessRegistrationRequestByMobileFromSql(mobileNumber
             ORDER BY last_modified_at DESC;
         `);
     return (result.recordset[0] as BusinessProfileRegistrationRequestRow) ?? null;
+    });
 }
 
 export interface RegistrationFullDetail {
@@ -127,6 +132,7 @@ export interface RegistrationFullDetail {
  * business-side rows are fully populated.
  */
 export async function getFullRegistrationDetailByMobileFromSql(mobileNumber: string): Promise<RegistrationFullDetail | null> {
+    return boxStep('getFullRegistrationDetailByMobileFromSql', async () => {
     const pool = await getSqlPool();
     const result = await pool.request()
         .input('mobile', mobileNumber)
@@ -146,6 +152,7 @@ export async function getFullRegistrationDetailByMobileFromSql(mobileNumber: str
             ORDER BY p.created_at DESC;
         `);
     return (result.recordset[0] as RegistrationFullDetail) ?? null;
+    });
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -181,13 +188,15 @@ export interface RegistrationActivationNotification {
 
 /** Reads the most recent "User Activation" notification for a profile code straight from notifications-log.notifications. */
 export async function getActivationNotificationFromMongo(profileCode: string): Promise<RegistrationActivationNotification | null> {
-    const db = await getMongoDb('notifications-log');
-    const doc = await db.collection('notifications')
-        .find({ userId: profileCode, subject: 'User Activation' })
-        .sort({ createdAt: -1 })
-        .limit(1)
-        .next();
-    return doc as RegistrationActivationNotification | null;
+    return boxStep('getActivationNotificationFromMongo', async () => {
+        const db = await getMongoDb('notifications-log');
+        const doc = await db.collection('notifications')
+            .find({ userId: profileCode, subject: 'User Activation' })
+            .sort({ createdAt: -1 })
+            .limit(1)
+            .next();
+        return doc as RegistrationActivationNotification | null;
+    });
 }
 
 /**
@@ -199,12 +208,14 @@ export async function getActivationNotificationFromMongo(profileCode: string): P
  * The "- QA Test" copies sent to a QA mailbox have a different subject and are excluded.
  */
 export async function getActivationNotificationsFromMongo(profileCode: string): Promise<RegistrationActivationNotification[]> {
-    const db = await getMongoDb('notifications-log');
-    const docs = await db.collection('notifications')
-        .find({ userId: profileCode, subject: 'User Activation' })
-        .sort({ createdAt: 1 })
-        .toArray();
-    return docs as unknown as RegistrationActivationNotification[];
+    return boxStep('getActivationNotificationsFromMongo', async () => {
+        const db = await getMongoDb('notifications-log');
+        const docs = await db.collection('notifications')
+            .find({ userId: profileCode, subject: 'User Activation' })
+            .sort({ createdAt: 1 })
+            .toArray();
+        return docs as unknown as RegistrationActivationNotification[];
+    });
 }
 
 export const ACTIVATION_API_CREDENTIALS_MARKER = 'المفتاح السري';
@@ -212,6 +223,7 @@ export const ACTIVATION_LOGIN_DETAILS_MARKER = 'رقم الشركة';
 
 /** Number of `profiles` rows provisioned for a mobile number — a completed registration must leave exactly one. */
 export async function countProfilesByMobileFromSql(mobileNumber: string): Promise<number> {
+    return boxStep('countProfilesByMobileFromSql', async () => {
     const pool = await getSqlPool();
     const result = await pool.request()
         .input('mobile', mobileNumber)
@@ -221,6 +233,7 @@ export async function countProfilesByMobileFromSql(mobileNumber: string): Promis
             SELECT COUNT(*) AS n FROM profiles WHERE mobile_number IN (@mobile, @mobileE164);
         `);
     return Number(result.recordset[0]?.n ?? 0);
+    });
 }
 
 export interface RegistrationProvisioning {
@@ -245,6 +258,7 @@ export interface RegistrationProvisioning {
  * Contract step's "Submit and finish" — none exist before it.
  */
 export async function getRegistrationProvisioningFromSql(mobileNumber: string): Promise<RegistrationProvisioning | null> {
+    return boxStep('getRegistrationProvisioningFromSql', async () => {
     const pool = await getSqlPool();
     const result = await pool.request()
         .input('mobile', mobileNumber)
@@ -265,10 +279,13 @@ export async function getRegistrationProvisioningFromSql(mobileNumber: string): 
             ORDER BY p.created_at DESC;
         `);
     return (result.recordset[0] as RegistrationProvisioning) ?? null;
+    });
 }
 
 /** Number of "User Activation" notification records for a profile code (see getActivationNotificationFromMongo). */
 export async function countActivationNotificationsFromMongo(profileCode: string): Promise<number> {
-    const db = await getMongoDb('notifications-log');
-    return db.collection('notifications').countDocuments({ userId: profileCode, subject: 'User Activation' });
+    return boxStep('countActivationNotificationsFromMongo', async () => {
+        const db = await getMongoDb('notifications-log');
+        return db.collection('notifications').countDocuments({ userId: profileCode, subject: 'User Activation' });
+    });
 }

@@ -1,6 +1,7 @@
 import { expect, Page, Browser, BrowserContext } from '@playwright/test';
 import { goToInfoStep, goToInfoStepMocked, REGISTER_URL, RESIDENT_ASSETS, generateEmail } from './RegistrationHelper';
 import { RegistrationInfoPage } from '../../pageElements/Registration/RegistrationInfoPage';
+import { boxStep } from '../../shared/boxStep.ts';
 
 // ── Selectors ─────────────────────────────────────────────────────────────────
 export const PROFILE_MERCHANT   = '#register-profile-card-MERCHANT';
@@ -40,42 +41,50 @@ export type Asset = typeof RESIDENT_ASSETS[number];
 // ── Shared navigation helpers ─────────────────────────────────────────────────
 
 export async function gotoTab1(page: Page, context: BrowserContext, asset: Asset): Promise<void> {
-    const origin = new URL(REGISTER_URL).origin;
-    await goToInfoStep(page, asset.mobile);
-    await page.locator(EMAIL_INPUT).waitFor({ state: 'visible', timeout: 15000 });
-    await page.locator('[class*="snack"], [class*="toast"], mat-snack-bar-container')
-        .first()
-        .waitFor({ state: 'hidden', timeout: 8000 })
-        .catch(() => {});
-    await page.locator(PROFILE_MERCHANT).waitFor({ state: 'visible', timeout: 10000 });
+    return boxStep('gotoTab1', async () => {
+        const origin = new URL(REGISTER_URL).origin;
+        await goToInfoStep(page, asset.mobile);
+        await page.locator(EMAIL_INPUT).waitFor({ state: 'visible', timeout: 15000 });
+        await page.locator('[class*="snack"], [class*="toast"], mat-snack-bar-container')
+            .first()
+            .waitFor({ state: 'hidden', timeout: 8000 })
+            .catch(() => {});
+        await page.locator(PROFILE_MERCHANT).waitFor({ state: 'visible', timeout: 10000 });
+    });
 }
 
 export async function fillTab1(page: Page, asset: Asset, profile = PROFILE_MERCHANT): Promise<void> {
-    await page.locator(profile).click();
-    await page.locator(CRN_INPUT).fill(asset.crn);
-    await page.locator(ID_INPUT).fill(asset.nationalId);
-    await page.locator(EMAIL_INPUT).fill(generateEmail());
-    await expect(page.locator(NEXT_BTN)).toBeEnabled({ timeout: 10000 });
+    return boxStep('fillTab1', async () => {
+        await page.locator(profile).click();
+        await page.locator(CRN_INPUT).fill(asset.crn);
+        await page.locator(ID_INPUT).fill(asset.nationalId);
+        await page.locator(EMAIL_INPUT).fill(generateEmail());
+        await expect(page.locator(NEXT_BTN)).toBeEnabled({ timeout: 10000 });
+    });
 }
 
 export async function fillTab1AndAdvance(page: Page, asset: Asset, profile = PROFILE_MERCHANT): Promise<void> {
-    await fillTab1(page, asset, profile);
-    await page.locator(NEXT_BTN).click();
-    await page.getByRole('button', { name: /Loading|جاري التحميل/i })
-        .waitFor({ state: 'hidden', timeout: 20000 })
-        .catch(() => {});
-    await page.getByRole(FINANCIAL_FIELD, { name: MONTHLY_EXPECTED_NUMBER })
-        .waitFor({ state: 'visible', timeout: 30000 });
+    return boxStep('fillTab1AndAdvance', async () => {
+        await fillTab1(page, asset, profile);
+        await page.locator(NEXT_BTN).click();
+        await page.getByRole('button', { name: /Loading|جاري التحميل/i })
+            .waitFor({ state: 'hidden', timeout: 20000 })
+            .catch(() => {});
+        await page.getByRole(FINANCIAL_FIELD, { name: MONTHLY_EXPECTED_NUMBER })
+            .waitFor({ state: 'visible', timeout: 30000 });
+    });
 }
 
 export interface InfoNav { page: Page; infoPage: RegistrationInfoPage }
 
 /** Fresh context on the Business Info step via the mocked OTP bypass (read-only checks, no pool identity burned). */
 export async function navigateToInfoStep(browser: Browser, workerIndex: number): Promise<InfoNav> {
-    const context = await browser.newContext();
-    const page: Page = await context.newPage();
-    const asset = RESIDENT_ASSETS[workerIndex % RESIDENT_ASSETS.length];
-    await goToInfoStepMocked(page, asset.mobile);
-    await page.locator('input[type="email"]').waitFor({ state: 'visible', timeout: 15000 });
-    return { page, infoPage: new RegistrationInfoPage(page) };
+    return boxStep('navigateToInfoStep', async () => {
+        const context = await browser.newContext();
+        const page: Page = await context.newPage();
+        const asset = RESIDENT_ASSETS[workerIndex % RESIDENT_ASSETS.length];
+        await goToInfoStepMocked(page, asset.mobile);
+        await page.locator('input[type="email"]').waitFor({ state: 'visible', timeout: 15000 });
+        return { page, infoPage: new RegistrationInfoPage(page) };
+    });
 }

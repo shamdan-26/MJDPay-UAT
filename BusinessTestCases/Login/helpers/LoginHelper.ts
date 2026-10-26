@@ -3,6 +3,7 @@ import { FIXED_OTP } from '../../../support/otp.ts';
 import { waitForToastClear } from '../../shared/toastMessages.ts';
 import { LoginPage } from '../../pageElements/Shared/LoginPage.ts';
 import testAccounts from '../../../data/testAccounts.json';
+import { boxStep } from '../../shared/boxStep.ts';
 
 export const LOGIN_URL    = `${process.env['BASE_URL'] ?? 'https://dev-emi.dg-cash.app'}/business/auth/login`;
 export const SESSION_PATH = 'session.json';
@@ -81,23 +82,31 @@ export async function getOtpFromDb(
     _delayMs?: number,
     _messageFilter?: RegExp
 ): Promise<string> {
-    return VALID_OTP;
+    return boxStep('getOtpFromDb', async () => {
+        return VALID_OTP;
+    });
 }
 
 export async function fillOtpInputs(page: Page, otp: string): Promise<void> {
-    const inputs = page.getByRole('textbox', { name: 'One time password input' });
-    const count  = await inputs.count();
-    for (let i = 0; i < count; i++) {
-        await inputs.nth(i).pressSequentially(otp[i] ?? '0', { delay: 50 });
-    }
+    return boxStep('fillOtpInputs', async () => {
+        const inputs = page.getByRole('textbox', { name: 'One time password input' });
+        const count  = await inputs.count();
+        for (let i = 0; i < count; i++) {
+            await inputs.nth(i).pressSequentially(otp[i] ?? '0', { delay: 50 });
+        }
+    });
 }
 
 export async function gotoLogin(page: Page): Promise<void> {
-    const loginPage = new LoginPage(page);
-    await loginPage.goto(LOGIN_URL);
+    return boxStep('gotoLogin', async () => {
+        const loginPage = new LoginPage(page);
+        await loginPage.goto(LOGIN_URL);
+    });
 }
 
 export async function fillAndSubmitLogin(page: Page): Promise<void> {
-    const loginPage = new LoginPage(page);
-    await loginPage.fillAndSubmit(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
+    return boxStep('fillAndSubmitLogin', async () => {
+        const loginPage = new LoginPage(page);
+        await loginPage.fillAndSubmit(LOGIN_COMPANY, LOGIN_MOBILE, VALID_PASSWORD);
+    });
 }

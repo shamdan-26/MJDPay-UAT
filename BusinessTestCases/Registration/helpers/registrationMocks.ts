@@ -7,6 +7,7 @@ import { RegistrationVerificationPage } from '../../pageElements/Registration/Re
 import { RegistrationContractPage } from '../../pageElements/Registration/RegistrationContractPage';
 import { RegistrationConfirmationPage } from '../../pageElements/Registration/RegistrationConfirmationPage';
 import { fillBusinessInfo, fillFinancialForm } from './registrationSteps';
+import { boxStep } from '../../shared/boxStep.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Network mocks that make the wizard reachable WITHOUT a real OTP or a pool
@@ -40,7 +41,9 @@ export function json(route: Route, status: number, body: unknown): Promise<void>
 
 /** The mobile step answers "no OTP needed" with a session — the wizard goes straight to Business Info. */
 export async function mockOtpBypass(page: Page): Promise<void> {
-    await page.route(MOBILE_OTP, route => json(route, 200, { requestId: 'mock-request', otpRequired: false, ...DUMMY_SESSION }));
+    return boxStep('mockOtpBypass', async () => {
+        await page.route(MOBILE_OTP, route => json(route, 200, { requestId: 'mock-request', otpRequired: false, ...DUMMY_SESSION }));
+    });
 }
 
 export interface VerifyCall { mobileNumber?: string; otp?: string; requestId?: string }
@@ -54,6 +57,7 @@ export async function mockOtpRequired(
     page: Page,
     verify: (attempt: number, call: VerifyCall) => VerifyReply,
 ): Promise<{ verifyCalls: VerifyCall[]; sendCalls: { count: number }; resendCalls: { count: number } }> {
+    return boxStep('mockOtpRequired', async () => {
     const verifyCalls: VerifyCall[] = [];
     const sendCalls = { count: 0 };
     const resendCalls = { count: 0 };
@@ -72,6 +76,7 @@ export async function mockOtpRequired(
         return json(route, reply.status, reply.body);
     });
     return { verifyCalls, sendCalls, resendCalls };
+    });
 }
 
 export const OTP_OK: VerifyReply = { status: 200, body: { ...DUMMY_SESSION } };
@@ -79,23 +84,27 @@ export const OTP_NOT_VALID = apiError(400, 'OTP_NOT_VALID');
 
 /** Stubs the Business Info submit (POST /register/profile-registration-type). */
 export async function mockProfileType(page: Page, status: number, body: unknown): Promise<{ calls: Record<string, unknown>[] }> {
-    const calls: Record<string, unknown>[] = [];
-    await page.route(PROFILE_TYPE, route => {
-        if (route.request().method() !== 'POST') return route.continue();
-        calls.push((route.request().postDataJSON() ?? {}) as Record<string, unknown>);
-        return json(route, status, body);
+    return boxStep('mockProfileType', async () => {
+        const calls: Record<string, unknown>[] = [];
+        await page.route(PROFILE_TYPE, route => {
+            if (route.request().method() !== 'POST') return route.continue();
+            calls.push((route.request().postDataJSON() ?? {}) as Record<string, unknown>);
+            return json(route, status, body);
+        });
+        return { calls };
     });
-    return { calls };
 }
 
 /** Mobile → (mocked, no OTP) → Business Info, with no pool identity consumed. */
 export async function goToInfoStepMocked(page: Page, mobile: string = generateKSAMobile()): Promise<string> {
-    await mockOtpBypass(page);
-    await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-    await page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ }).fill(mobile);
-    await page.getByRole('button', { name: /next|التالي/i }).click();
-    await page.locator('#register-profile-card-MERCHANT').waitFor({ state: 'visible', timeout: 30000 });
-    return mobile;
+    return boxStep('goToInfoStepMocked', async () => {
+        await mockOtpBypass(page);
+        await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        await page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ }).fill(mobile);
+        await page.getByRole('button', { name: /next|التالي/i }).click();
+        await page.locator('#register-profile-card-MERCHANT').waitFor({ state: 'visible', timeout: 30000 });
+        return mobile;
+    });
 }
 
 /** What POST /register/profile-registration-type answers for a brand-new application (all progress flags false). */
@@ -116,20 +125,24 @@ export const NEW_APPLICATION_STATE = {
  * Never calls markResidentAssetUsed — the server is mocked, so no pool identity is consumed.
  */
 export async function goToFinancialStepMocked(page: Page, state: Record<string, unknown> = NEW_APPLICATION_STATE): Promise<void> {
-    await mockProfileType(page, 201, state);
-    await goToInfoStepMocked(page);
-    const info = new RegistrationInfoPage(page);
-    await fillBusinessInfo(info, RESIDENT_ASSETS[0]);
-    await info.nextButton.click();
-    await new RegistrationFinancialPage(page).monthlyBillsInput.waitFor({ state: 'visible', timeout: 30000 });
+    return boxStep('goToFinancialStepMocked', async () => {
+        await mockProfileType(page, 201, state);
+        await goToInfoStepMocked(page);
+        const info = new RegistrationInfoPage(page);
+        await fillBusinessInfo(info, RESIDENT_ASSETS[0]);
+        await info.nextButton.click();
+        await new RegistrationFinancialPage(page).monthlyBillsInput.waitFor({ state: 'visible', timeout: 30000 });
+    });
 }
 
 /** As goToFinancialStepMocked, then fills Financial & Business and advances to Verification & Uploads. */
 export async function goToVerificationStepMocked(page: Page): Promise<void> {
-    await goToFinancialStepMocked(page);
-    await fillFinancialForm(page);
-    await new RegistrationFinancialPage(page).next();
-    await new RegistrationVerificationPage(page).waitForLoad();
+    return boxStep('goToVerificationStepMocked', async () => {
+        await goToFinancialStepMocked(page);
+        await fillFinancialForm(page);
+        await new RegistrationFinancialPage(page).next();
+        await new RegistrationVerificationPage(page).waitForLoad();
+    });
 }
 
 /** Progress flags for an application that has finished Nafath and Products — the wizard resumes at Contract. */
@@ -140,12 +153,14 @@ export const CONTRACT_ACCEPT = '**/emi-profile/api/v1/register/contract/accept';
 
 /** Mobile → Business Info → Contract with no real OTP and no pool identity (Business Info answered with `AT_CONTRACT_STATE`). */
 export async function goToContractStepMocked(page: Page): Promise<void> {
-    await mockProfileType(page, 201, AT_CONTRACT_STATE);
-    await goToInfoStepMocked(page);
-    const info = new RegistrationInfoPage(page);
-    await fillBusinessInfo(info, RESIDENT_ASSETS[0]);
-    await info.nextButton.click();
-    await new RegistrationContractPage(page).waitForLoad();
+    return boxStep('goToContractStepMocked', async () => {
+        await mockProfileType(page, 201, AT_CONTRACT_STATE);
+        await goToInfoStepMocked(page);
+        const info = new RegistrationInfoPage(page);
+        await fillBusinessInfo(info, RESIDENT_ASSETS[0]);
+        await info.nextButton.click();
+        await new RegistrationContractPage(page).waitForLoad();
+    });
 }
 
 /**
@@ -153,21 +168,25 @@ export async function goToContractStepMocked(page: Page): Promise<void> {
  * ending on the Confirmation screen. The response body is not inspected by the app's happy path (unconfirmed — empty object).
  */
 export async function goToConfirmationStepMocked(page: Page): Promise<void> {
-    await page.route(CONTRACT_ACCEPT, route => json(route, 200, {}));
-    await goToContractStepMocked(page);
-    const contract = new RegistrationContractPage(page);
-    await contract.agreeCheckbox.check();
-    await contract.submitButton.click();
-    await new RegistrationConfirmationPage(page).waitForLoad();
+    return boxStep('goToConfirmationStepMocked', async () => {
+        await page.route(CONTRACT_ACCEPT, route => json(route, 200, {}));
+        await goToContractStepMocked(page);
+        const contract = new RegistrationContractPage(page);
+        await contract.agreeCheckbox.check();
+        await contract.submitButton.click();
+        await new RegistrationConfirmationPage(page).waitForLoad();
+    });
 }
 
 /** Mobile → OTP dialog (mocked OTP requirement, see mockOtpRequired). */
 export async function goToOtpDialogMocked(page: Page, mobile: string = generateKSAMobile()): Promise<string> {
-    await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-    await page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ }).fill(mobile);
-    await page.getByRole('button', { name: /next|التالي/i }).click();
-    await page.getByRole('heading', { name: /Enter OTP|أدخل رمز التحقق/i }).waitFor({ state: 'visible', timeout: 20000 });
-    return mobile;
+    return boxStep('goToOtpDialogMocked', async () => {
+        await page.goto(REGISTER_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        await page.getByRole('textbox', { name: /Mobile number|رقم الجوال/ }).fill(mobile);
+        await page.getByRole('button', { name: /next|التالي/i }).click();
+        await page.getByRole('heading', { name: /Enter OTP|أدخل رمز التحقق/i }).waitFor({ state: 'visible', timeout: 20000 });
+        return mobile;
+    });
 }
 
 // ── Sprint 71 feature mocks ──────────────────────────────────────────────────
@@ -185,21 +204,25 @@ export async function goToOtpDialogMocked(page: Page, mobile: string = generateK
 /** Toggles the EMI-5768 fixed-Merchant sign-up mode config the registration
  *  wizard is expected to read before rendering the profile-type step. */
 export async function mockFixedMerchantMode(page: Page, enabled: boolean): Promise<void> {
-    await page.route('**/*registration*settings*', route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ fixedMerchantMode: enabled }) })
-    );
+    return boxStep('mockFixedMerchantMode', async () => {
+        await page.route('**/*registration*settings*', route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ fixedMerchantMode: enabled }) })
+        );
+    });
 }
 
 /** Mocks the final registration submission so the response reflects
  *  auto-approval + auto-activation (EMI-5748) instead of a "pending review"
  *  status, and includes an activation-email-sent flag (EMI-5777). */
 export async function mockAutoApprovedRegistration(page: Page): Promise<void> {
-    await page.route('**/emi-profile/api/v1/register/**', route => {
-        if (route.request().method() !== 'POST') return route.continue();
-        return route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({ status: 'ACTIVE', approvalStatus: 'APPROVED', activationEmailSent: true }),
+    return boxStep('mockAutoApprovedRegistration', async () => {
+        await page.route('**/emi-profile/api/v1/register/**', route => {
+            if (route.request().method() !== 'POST') return route.continue();
+            return route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ status: 'ACTIVE', approvalStatus: 'APPROVED', activationEmailSent: true }),
+            });
         });
     });
 }

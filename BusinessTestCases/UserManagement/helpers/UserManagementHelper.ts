@@ -1,6 +1,7 @@
 import type { Page } from '@playwright/test';
 import { waitForToastClear } from '../../shared/toastMessages.ts';
 import { ADMIN_BASE_URL } from '../../pageElements/Shared/AdminOtpConfigPage.ts';
+import { boxStep } from '../../shared/boxStep.ts';
 
 /**
  * Manage Accounts → Manage Users (Business web portal).
@@ -103,53 +104,63 @@ export async function fetchJson(
     path: string,
     options: { method?: string; body?: unknown; headers?: Record<string, string> } = {}
 ): Promise<{ status: number; body: unknown }> {
-    const url = `${BASE_URL}${path}`;
-    return page.evaluate(
-        async ({ url, method, body, headers }) => {
-            const res = await fetch(url, {
-                method: method ?? 'GET',
-                headers: { 'Content-Type': 'application/json', ...(headers ?? {}) },
-                body: body !== undefined ? JSON.stringify(body) : undefined,
-            });
-            const parsedBody = await res.json().catch(() => null);
-            return { status: res.status, body: parsedBody };
-        },
-        { url, method: options.method, body: options.body, headers: options.headers }
-    );
+    return boxStep('fetchJson', async () => {
+        const url = `${BASE_URL}${path}`;
+        return page.evaluate(
+            async ({ url, method, body, headers }) => {
+                const res = await fetch(url, {
+                    method: method ?? 'GET',
+                    headers: { 'Content-Type': 'application/json', ...(headers ?? {}) },
+                    body: body !== undefined ? JSON.stringify(body) : undefined,
+                });
+                const parsedBody = await res.json().catch(() => null);
+                return { status: res.status, body: parsedBody };
+            },
+            { url, method: options.method, body: options.body, headers: options.headers }
+        );
+    });
 }
 
 export async function gotoManageUsers(page: Page): Promise<void> {
-    await page.goto(MANAGE_USERS_URL);
-    await page.waitForLoadState('domcontentloaded');
-    await waitForToastClear(page);
+    return boxStep('gotoManageUsers', async () => {
+        await page.goto(MANAGE_USERS_URL);
+        await page.waitForLoadState('domcontentloaded');
+        await waitForToastClear(page);
+    });
 }
 
 export async function gotoGroupsAndRoles(page: Page): Promise<void> {
-    await page.goto(GROUPS_ROLES_URL);
-    await page.waitForLoadState('domcontentloaded');
-    await waitForToastClear(page);
+    return boxStep('gotoGroupsAndRoles', async () => {
+        await page.goto(GROUPS_ROLES_URL);
+        await page.waitForLoadState('domcontentloaded');
+        await waitForToastClear(page);
+    });
 }
 
 // ── Users list ───────────────────────────────────────────────────────────
 
 export async function mockUserList(page: Page, users?: MockUser[]): Promise<void> {
-    const content = users ?? [
-        mockUser({ firstName: 'Sara', lastName: 'Ahmed', groupName: 'FINANCE' }),
-        mockUser({ firstName: 'Omar', lastName: 'Khalid', groupName: 'OPERATIONS', status: statusObject('DEACTIVATED') }),
-    ];
-    await page.route(USERS_API, route =>
-        route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({ content, totalElements: content.length }),
-        })
-    );
+    return boxStep('mockUserList', async () => {
+        const content = users ?? [
+            mockUser({ firstName: 'Sara', lastName: 'Ahmed', groupName: 'FINANCE' }),
+            mockUser({ firstName: 'Omar', lastName: 'Khalid', groupName: 'OPERATIONS', status: statusObject('DEACTIVATED') }),
+        ];
+        await page.route(USERS_API, route =>
+            route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ content, totalElements: content.length }),
+            })
+        );
+    });
 }
 
 export async function mockEmptyUserList(page: Page): Promise<void> {
-    await page.route(USERS_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ content: [], totalElements: 0 }) })
-    );
+    return boxStep('mockEmptyUserList', async () => {
+        await page.route(USERS_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ content: [], totalElements: 0 }) })
+        );
+    });
 }
 
 /**
@@ -159,40 +170,46 @@ export async function mockEmptyUserList(page: Page): Promise<void> {
  * back and the assertion fails.
  */
 export async function mockUserListFilteredByStatus(page: Page): Promise<void> {
-    const all = [
-        mockUser({ firstName: 'Active', lastName: 'User', status: statusObject('ACTIVE') }),
-        mockUser({ firstName: 'Deactivated', lastName: 'User', status: statusObject('DEACTIVATED') }),
-        mockUser({ firstName: 'Pending', lastName: 'User', status: statusObject('PENDING_VERIFICATION') }),
-    ];
-    await page.route(USERS_API, route => {
-        const requested = new URL(route.request().url()).searchParams.get('statusCode');
-        const content = requested ? all.filter(u => u.status.code === requested) : all;
-        route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({ content, totalElements: content.length }),
+    return boxStep('mockUserListFilteredByStatus', async () => {
+        const all = [
+            mockUser({ firstName: 'Active', lastName: 'User', status: statusObject('ACTIVE') }),
+            mockUser({ firstName: 'Deactivated', lastName: 'User', status: statusObject('DEACTIVATED') }),
+            mockUser({ firstName: 'Pending', lastName: 'User', status: statusObject('PENDING_VERIFICATION') }),
+        ];
+        await page.route(USERS_API, route => {
+            const requested = new URL(route.request().url()).searchParams.get('statusCode');
+            const content = requested ? all.filter(u => u.status.code === requested) : all;
+            route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ content, totalElements: content.length }),
+            });
         });
     });
 }
 
 /** EMI-4812 pre-fix state: the list ignores statusCode and always returns everything. */
 export async function mockUserListIgnoringStatusFilter(page: Page): Promise<void> {
-    await mockUserList(page, [
-        mockUser({ firstName: 'Active', lastName: 'User', status: statusObject('ACTIVE') }),
-        mockUser({ firstName: 'Deactivated', lastName: 'User', status: statusObject('DEACTIVATED') }),
-        mockUser({ firstName: 'Pending', lastName: 'User', status: statusObject('PENDING_VERIFICATION') }),
-    ]);
+    return boxStep('mockUserListIgnoringStatusFilter', async () => {
+        await mockUserList(page, [
+            mockUser({ firstName: 'Active', lastName: 'User', status: statusObject('ACTIVE') }),
+            mockUser({ firstName: 'Deactivated', lastName: 'User', status: statusObject('DEACTIVATED') }),
+            mockUser({ firstName: 'Pending', lastName: 'User', status: statusObject('PENDING_VERIFICATION') }),
+        ]);
+    });
 }
 
 /** EMI-5285 pre-fix state: GET /users blew up. */
 export async function mockUserListServerError(page: Page): Promise<void> {
-    await page.route(USERS_API, route =>
-        route.fulfill({
-            status: 500,
-            contentType: 'application/json',
-            body: JSON.stringify({ status: 500, error: 'Internal Server Error', path: '/api/v1/users' }),
-        })
-    );
+    return boxStep('mockUserListServerError', async () => {
+        await page.route(USERS_API, route =>
+            route.fulfill({
+                status: 500,
+                contentType: 'application/json',
+                body: JSON.stringify({ status: 500, error: 'Internal Server Error', path: '/api/v1/users' }),
+            })
+        );
+    });
 }
 
 /**
@@ -200,10 +217,12 @@ export async function mockUserListServerError(page: Page): Promise<void> {
  * and the UI concatenated two undefined fields into "Undefined Undefined".
  */
 export async function mockUserListWithoutFullName(page: Page): Promise<void> {
-    const broken = [{ id: 1, mobileNumber: '500000000', groupName: 'FINANCE', status: statusObject('ACTIVE') }];
-    await page.route(USERS_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ content: broken, totalElements: 1 }) })
-    );
+    return boxStep('mockUserListWithoutFullName', async () => {
+        const broken = [{ id: 1, mobileNumber: '500000000', groupName: 'FINANCE', status: statusObject('ACTIVE') }];
+        await page.route(USERS_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ content: broken, totalElements: 1 }) })
+        );
+    });
 }
 
 // ── Create user ──────────────────────────────────────────────────────────
@@ -213,43 +232,49 @@ export async function mockUserListWithoutFullName(page: Page): Promise<void> {
  * fully populated. The first GET after the POST serves the enlarged list.
  */
 export async function mockCreateUserSuccess(page: Page, newUser = mockUser({ firstName: 'New', lastName: 'Staff' })): Promise<void> {
-    let created = false;
-    await page.route(USERS_API, route => {
-        if (route.request().method() === 'POST') {
-            created = true;
-            return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(newUser) });
-        }
-        const content = created ? [newUser] : [];
-        return route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({ content, totalElements: content.length }),
+    return boxStep('mockCreateUserSuccess', async () => {
+        let created = false;
+        await page.route(USERS_API, route => {
+            if (route.request().method() === 'POST') {
+                created = true;
+                return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(newUser) });
+            }
+            const content = created ? [newUser] : [];
+            return route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ content, totalElements: content.length }),
+            });
         });
     });
 }
 
 /** EMI-4742 pre-fix state: POST succeeds but the row comes back with blank fields. */
 export async function mockCreateUserReturnsBlankRow(page: Page): Promise<void> {
-    const blank = { id: 99, fullName: '', mobileNumber: '', groupName: '', status: null };
-    await page.route(USERS_API, route => {
-        if (route.request().method() === 'POST') {
-            return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ id: 99 }) });
-        }
-        return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ content: [blank], totalElements: 1 }) });
+    return boxStep('mockCreateUserReturnsBlankRow', async () => {
+        const blank = { id: 99, fullName: '', mobileNumber: '', groupName: '', status: null };
+        await page.route(USERS_API, route => {
+            if (route.request().method() === 'POST') {
+                return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ id: 99 }) });
+            }
+            return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ content: [blank], totalElements: 1 }) });
+        });
     });
 }
 
 /** EMI-5815 pre-fix state: POST /users returned a 500 and no user was created. */
 export async function mockCreateUserServerError(page: Page): Promise<void> {
-    await page.route(USERS_API, route => {
-        if (route.request().method() === 'POST') {
-            return route.fulfill({
-                status: 500,
-                contentType: 'application/json',
-                body: JSON.stringify({ status: 500, error: 'Internal Server Error', path: '/api/v1/users' }),
-            });
-        }
-        return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ content: [], totalElements: 0 }) });
+    return boxStep('mockCreateUserServerError', async () => {
+        await page.route(USERS_API, route => {
+            if (route.request().method() === 'POST') {
+                return route.fulfill({
+                    status: 500,
+                    contentType: 'application/json',
+                    body: JSON.stringify({ status: 500, error: 'Internal Server Error', path: '/api/v1/users' }),
+                });
+            }
+            return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ content: [], totalElements: 0 }) });
+        });
     });
 }
 
@@ -258,37 +283,47 @@ export async function mockCreateUserServerError(page: Page): Promise<void> {
  * explicitly assigned — never the full Super Admin set.
  */
 export async function mockCreatedUserPrivileges(page: Page, privileges: string[]): Promise<void> {
-    await page.route(PRIVILEGES_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ privileges }) })
-    );
+    return boxStep('mockCreatedUserPrivileges', async () => {
+        await page.route(PRIVILEGES_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ privileges }) })
+        );
+    });
 }
 
 // ── Edit / status transitions ────────────────────────────────────────────
 
 export async function mockUpdateUserSuccess(page: Page): Promise<void> {
-    await page.route(USER_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ updated: true }) })
-    );
+    return boxStep('mockUpdateUserSuccess', async () => {
+        await page.route(USER_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ updated: true }) })
+        );
+    });
 }
 
 /** EMI-5816 pre-fix state: changing a user's group 500'd. */
 export async function mockUpdateUserGroupServerError(page: Page): Promise<void> {
-    await page.route(USER_API, route =>
-        route.fulfill({ status: 500, contentType: 'application/json', body: JSON.stringify({ status: 500, error: 'Internal Server Error' }) })
-    );
+    return boxStep('mockUpdateUserGroupServerError', async () => {
+        await page.route(USER_API, route =>
+            route.fulfill({ status: 500, contentType: 'application/json', body: JSON.stringify({ status: 500, error: 'Internal Server Error' }) })
+        );
+    });
 }
 
 /** EMI-5078 pre-fix state: activate/deactivate on legacy users returned 405. */
 export async function mockUserStatusChangeMethodNotAllowed(page: Page): Promise<void> {
-    await page.route('**/api/v1/users/*/status**', route =>
-        route.fulfill({ status: 405, contentType: 'application/json', body: JSON.stringify({ error: 'Method Not Allowed' }) })
-    );
+    return boxStep('mockUserStatusChangeMethodNotAllowed', async () => {
+        await page.route('**/api/v1/users/*/status**', route =>
+            route.fulfill({ status: 405, contentType: 'application/json', body: JSON.stringify({ error: 'Method Not Allowed' }) })
+        );
+    });
 }
 
 export async function mockUserStatusChangeSuccess(page: Page, status: UserStatus = 'DEACTIVATED'): Promise<void> {
-    await page.route('**/api/v1/users/*/status**', route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ status: statusObject(status) }) })
-    );
+    return boxStep('mockUserStatusChangeSuccess', async () => {
+        await page.route('**/api/v1/users/*/status**', route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ status: statusObject(status) }) })
+        );
+    });
 }
 
 /**
@@ -296,21 +331,23 @@ export async function mockUserStatusChangeSuccess(page: Page, status: UserStatus
  * refused with an authorisation message even though the privilege was granted.
  */
 export async function mockUserStatusChangeForbidden(page: Page): Promise<void> {
-    await page.route('**/api/v1/users/*/status**', route =>
-        route.fulfill({
-            status: 403,
-            contentType: 'application/json',
-            body: JSON.stringify([
-                {
-                    httpStatusCode: 403,
-                    message: {
-                        messageCode: 'UNAUTHORIZED_EXCEPTION',
-                        plainText: 'You are not authorized to perform this action. Please check your permissions',
+    return boxStep('mockUserStatusChangeForbidden', async () => {
+        await page.route('**/api/v1/users/*/status**', route =>
+            route.fulfill({
+                status: 403,
+                contentType: 'application/json',
+                body: JSON.stringify([
+                    {
+                        httpStatusCode: 403,
+                        message: {
+                            messageCode: 'UNAUTHORIZED_EXCEPTION',
+                            plainText: 'You are not authorized to perform this action. Please check your permissions',
+                        },
                     },
-                },
-            ]),
-        })
-    );
+                ]),
+            })
+        );
+    });
 }
 
 // ── Groups & roles ───────────────────────────────────────────────────────
@@ -329,52 +366,64 @@ export function mockGroups(names = ['FINANCE', 'OPERATIONS', 'COMPLIANCE']) {
 }
 
 export async function mockGroupList(page: Page, groups = mockGroups()): Promise<void> {
-    await page.route(GROUPS_API, route => {
-        if (route.request().method() !== 'GET') return route.fallback();
-        return route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({ content: groups, totalElements: groups.length }),
+    return boxStep('mockGroupList', async () => {
+        await page.route(GROUPS_API, route => {
+            if (route.request().method() !== 'GET') return route.fallback();
+            return route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ content: groups, totalElements: groups.length }),
+            });
         });
     });
 }
 
 /** EMI-5583/EMI-5584 pre-fix state: the edit screen's group list came back empty. */
 export async function mockEmptyGroupList(page: Page): Promise<void> {
-    await page.route(GROUPS_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ content: [], totalElements: 0 }) })
-    );
+    return boxStep('mockEmptyGroupList', async () => {
+        await page.route(GROUPS_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ content: [], totalElements: 0 }) })
+        );
+    });
 }
 
 export async function mockRoleList(page: Page, roles = [{ id: 1, name: 'Maker', description: 'Creates requests', usersCount: 2, isSystem: false }]): Promise<void> {
-    await page.route(ROLES_API, route => {
-        if (route.request().method() !== 'GET') return route.fallback();
-        return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ content: roles, totalElements: roles.length }) });
+    return boxStep('mockRoleList', async () => {
+        await page.route(ROLES_API, route => {
+            if (route.request().method() !== 'GET') return route.fallback();
+            return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ content: roles, totalElements: roles.length }) });
+        });
     });
 }
 
 export async function mockGroupRoleUpdateSuccess(page: Page): Promise<void> {
-    await page.route(/\/api\/v1\/(groups|roles)\/\d+/, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ updated: true }) })
-    );
+    return boxStep('mockGroupRoleUpdateSuccess', async () => {
+        await page.route(/\/api\/v1\/(groups|roles)\/\d+/, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ updated: true }) })
+        );
+    });
 }
 
 /** EMI-5240 / EMI-5613 pre-fix state: update and delete both 403'd. */
 export async function mockGroupRoleUpdateForbidden(page: Page): Promise<void> {
-    await page.route(/\/api\/v1\/(groups|roles)\/\d+/, route =>
-        route.fulfill({
-            status: 403,
-            contentType: 'application/json',
-            body: JSON.stringify({ message: { messageCode: 'FORBIDDEN', plainText: 'Forbidden' } }),
-        })
-    );
+    return boxStep('mockGroupRoleUpdateForbidden', async () => {
+        await page.route(/\/api\/v1\/(groups|roles)\/\d+/, route =>
+            route.fulfill({
+                status: 403,
+                contentType: 'application/json',
+                body: JSON.stringify({ message: { messageCode: 'FORBIDDEN', plainText: 'Forbidden' } }),
+            })
+        );
+    });
 }
 
 /** EMI-5210 pre-fix state: editing a role name or description returned 400. */
 export async function mockRoleUpdateBadRequest(page: Page): Promise<void> {
-    await page.route(/\/api\/v1\/roles\/\d+/, route =>
-        route.fulfill({ status: 400, contentType: 'application/json', body: JSON.stringify({ error: 'Bad Request' }) })
-    );
+    return boxStep('mockRoleUpdateBadRequest', async () => {
+        await page.route(/\/api\/v1\/roles\/\d+/, route =>
+            route.fulfill({ status: 400, contentType: 'application/json', body: JSON.stringify({ error: 'Bad Request' }) })
+        );
+    });
 }
 
 /**
@@ -382,56 +431,64 @@ export async function mockRoleUpdateBadRequest(page: Page): Promise<void> {
  * who is not) must be rejected instead of silently succeeding again.
  */
 export async function mockAssignUsersWithValidation(page: Page, alreadyAssigned: number[] = [7]): Promise<void> {
-    await page.route(ASSIGN_USERS_API, async route => {
-        const body = route.request().postDataJSON() as { userIds?: number[] } | null;
-        const duplicate = (body?.userIds ?? []).some(id => alreadyAssigned.includes(id));
-        await route.fulfill({
-            status: duplicate ? 400 : 200,
-            contentType: 'application/json',
-            body: JSON.stringify(
-                duplicate
-                    ? { messageCode: 'USER_ALREADY_ASSIGNED', plainText: 'User is already assigned to this group' }
-                    : { assigned: true }
-            ),
+    return boxStep('mockAssignUsersWithValidation', async () => {
+        await page.route(ASSIGN_USERS_API, async route => {
+            const body = route.request().postDataJSON() as { userIds?: number[] } | null;
+            const duplicate = (body?.userIds ?? []).some(id => alreadyAssigned.includes(id));
+            await route.fulfill({
+                status: duplicate ? 400 : 200,
+                contentType: 'application/json',
+                body: JSON.stringify(
+                    duplicate
+                        ? { messageCode: 'USER_ALREADY_ASSIGNED', plainText: 'User is already assigned to this group' }
+                        : { assigned: true }
+                ),
+            });
         });
-    });
-    await page.route(UNASSIGN_USERS_API, async route => {
-        const body = route.request().postDataJSON() as { userIds?: number[] } | null;
-        const notAssigned = (body?.userIds ?? []).some(id => !alreadyAssigned.includes(id));
-        await route.fulfill({
-            status: notAssigned ? 400 : 200,
-            contentType: 'application/json',
-            body: JSON.stringify(
-                notAssigned
-                    ? { messageCode: 'USER_NOT_ASSIGNED', plainText: 'User is not assigned to this group' }
-                    : { unassigned: true }
-            ),
+        await page.route(UNASSIGN_USERS_API, async route => {
+            const body = route.request().postDataJSON() as { userIds?: number[] } | null;
+            const notAssigned = (body?.userIds ?? []).some(id => !alreadyAssigned.includes(id));
+            await route.fulfill({
+                status: notAssigned ? 400 : 200,
+                contentType: 'application/json',
+                body: JSON.stringify(
+                    notAssigned
+                        ? { messageCode: 'USER_NOT_ASSIGNED', plainText: 'User is not assigned to this group' }
+                        : { unassigned: true }
+                ),
+            });
         });
     });
 }
 
 /** EMI-5234 pre-fix state: repeated assign/unassign always returned 200. */
 export async function mockAssignUsersWithoutValidation(page: Page): Promise<void> {
-    for (const glob of [ASSIGN_USERS_API, UNASSIGN_USERS_API]) {
-        await page.route(glob, route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true }) })
-        );
-    }
+    return boxStep('mockAssignUsersWithoutValidation', async () => {
+        for (const glob of [ASSIGN_USERS_API, UNASSIGN_USERS_API]) {
+            await page.route(glob, route =>
+                route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true }) })
+            );
+        }
+    });
 }
 
 // ── Password reset (EMI-5817) ────────────────────────────────────────────
 
 export async function mockResetPasswordSuccess(page: Page): Promise<void> {
-    await page.route('**/api/v1/**reset-password**', route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ reset: true }) })
-    );
+    return boxStep('mockResetPasswordSuccess', async () => {
+        await page.route('**/api/v1/**reset-password**', route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ reset: true }) })
+        );
+    });
 }
 
 /** EMI-5817 pre-fix state: the post-reset login was bounced to Forbidden. */
 export async function mockResetPasswordForbidden(page: Page): Promise<void> {
-    await page.route('**/api/v1/**reset-password**', route =>
-        route.fulfill({ status: 403, contentType: 'application/json', body: JSON.stringify({ message: { plainText: 'Forbidden' } }) })
-    );
+    return boxStep('mockResetPasswordForbidden', async () => {
+        await page.route('**/api/v1/**reset-password**', route =>
+            route.fulfill({ status: 403, contentType: 'application/json', body: JSON.stringify({ message: { plainText: 'Forbidden' } }) })
+        );
+    });
 }
 
 // ═════════════════════════════════════════════════════════════════════════
@@ -520,12 +577,14 @@ export async function mockCustomGroupsAndRoles(
     groups: LocalizedEntity[] = localizedGroups(),
     roles: LocalizedEntity[] = localizedRoles()
 ): Promise<void> {
-    await page.route(CUSTOM_GROUPS_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(groups) })
-    );
-    await page.route(CUSTOM_ROLES_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(roles) })
-    );
+    return boxStep('mockCustomGroupsAndRoles', async () => {
+        await page.route(CUSTOM_GROUPS_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(groups) })
+        );
+        await page.route(CUSTOM_ROLES_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(roles) })
+        );
+    });
 }
 
 /**
@@ -534,14 +593,16 @@ export async function mockCustomGroupsAndRoles(
  * Arabic UI has nothing to render and shows a blank Name column.
  */
 export async function mockCustomListingsWithoutArabicFields(page: Page): Promise<void> {
-    const strip = (rows: LocalizedEntity[]) =>
-        rows.map(({ id, name, description, isSystem, usersCount }) => ({ id, name, description, isSystem, usersCount }));
-    await page.route(CUSTOM_GROUPS_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(strip(localizedGroups())) })
-    );
-    await page.route(CUSTOM_ROLES_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(strip(localizedRoles())) })
-    );
+    return boxStep('mockCustomListingsWithoutArabicFields', async () => {
+        const strip = (rows: LocalizedEntity[]) =>
+            rows.map(({ id, name, description, isSystem, usersCount }) => ({ id, name, description, isSystem, usersCount }));
+        await page.route(CUSTOM_GROUPS_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(strip(localizedGroups())) })
+        );
+        await page.route(CUSTOM_ROLES_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(strip(localizedRoles())) })
+        );
+    });
 }
 
 /**
@@ -581,49 +642,59 @@ const ALL_PRIVILEGES = [
  * else — a privilege they do not have (privilege escalation).
  */
 export async function mockPrivilegesScopedToCaller(page: Page, held: string[]): Promise<void> {
-    const content = ALL_PRIVILEGES.filter(p => held.includes(p.code));
-    for (const glob of [CUSTOM_PRIVILEGES_API, SYSTEM_PRIVILEGES_API]) {
-        await page.route(glob, route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(content) })
-        );
-    }
+    return boxStep('mockPrivilegesScopedToCaller', async () => {
+        const content = ALL_PRIVILEGES.filter(p => held.includes(p.code));
+        for (const glob of [CUSTOM_PRIVILEGES_API, SYSTEM_PRIVILEGES_API]) {
+            await page.route(glob, route =>
+                route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(content) })
+            );
+        }
+    });
 }
 
 /** EMI-6016 pre-fix state: the full system privilege list, unfiltered. */
 export async function mockPrivilegesUnscoped(page: Page): Promise<void> {
-    for (const glob of [CUSTOM_PRIVILEGES_API, SYSTEM_PRIVILEGES_API]) {
-        await page.route(glob, route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(ALL_PRIVILEGES) })
-        );
-    }
+    return boxStep('mockPrivilegesUnscoped', async () => {
+        for (const glob of [CUSTOM_PRIVILEGES_API, SYSTEM_PRIVILEGES_API]) {
+            await page.route(glob, route =>
+                route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(ALL_PRIVILEGES) })
+            );
+        }
+    });
 }
 
 /** EMI-6027 fixed behaviour: no "Get All privilege" -> 403 UNAUTHORIZED_USER. */
 export async function mockCustomPrivilegesForbidden(page: Page): Promise<void> {
-    await page.route(CUSTOM_PRIVILEGES_API, route =>
-        route.fulfill({
-            status: 403,
-            contentType: 'application/json',
-            body: JSON.stringify([{
-                httpStatusCode: 403,
-                message: { messageCode: 'UNAUTHORIZED_USER', plainText: 'You are not authorized to perform this action' },
-            }]),
-        })
-    );
+    return boxStep('mockCustomPrivilegesForbidden', async () => {
+        await page.route(CUSTOM_PRIVILEGES_API, route =>
+            route.fulfill({
+                status: 403,
+                contentType: 'application/json',
+                body: JSON.stringify([{
+                    httpStatusCode: 403,
+                    message: { messageCode: 'UNAUTHORIZED_USER', plainText: 'You are not authorized to perform this action' },
+                }]),
+            })
+        );
+    });
 }
 
 /** EMI-6027 pre-fix state: 200 OK, full privilege list leaked to an unauthorised caller. */
 export async function mockCustomPrivilegesLeaked(page: Page): Promise<void> {
-    await page.route(CUSTOM_PRIVILEGES_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(ALL_PRIVILEGES) })
-    );
+    return boxStep('mockCustomPrivilegesLeaked', async () => {
+        await page.route(CUSTOM_PRIVILEGES_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(ALL_PRIVILEGES) })
+        );
+    });
 }
 
 /** EMI-5999 pre-fix state: the retired "Get Groups Settings" (id 220) is still assignable. */
 export async function mockSystemPrivilegesIncludingObsolete(page: Page): Promise<void> {
-    await page.route(SYSTEM_PRIVILEGES_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: pageBody([...ALL_PRIVILEGES, OBSOLETE_PRIVILEGE]) })
-    );
+    return boxStep('mockSystemPrivilegesIncludingObsolete', async () => {
+        await page.route(SYSTEM_PRIVILEGES_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: pageBody([...ALL_PRIVILEGES, OBSOLETE_PRIVILEGE]) })
+        );
+    });
 }
 
 /**
@@ -632,39 +703,47 @@ export async function mockSystemPrivilegesIncludingObsolete(page: Page): Promise
  * open the modal and then fail with an error toast.
  */
 export async function mockCallerPrivileges(page: Page, held: string[]): Promise<void> {
-    await page.route(PRIVILEGES_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ privileges: held }) })
-    );
+    return boxStep('mockCallerPrivileges', async () => {
+        await page.route(PRIVILEGES_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ privileges: held }) })
+        );
+    });
 }
 
 // ── Group / role deletion (EMI-5985, EMI-5986, EMI-6001) ─────────────────
 
 export async function mockDeleteGroupSuccess(page: Page): Promise<void> {
-    await page.route(GROUP_DELETE_API, route => {
-        if (route.request().method() !== 'DELETE') return route.fallback();
-        return route.fulfill({ status: 204, body: '' });
+    return boxStep('mockDeleteGroupSuccess', async () => {
+        await page.route(GROUP_DELETE_API, route => {
+            if (route.request().method() !== 'DELETE') return route.fallback();
+            return route.fulfill({ status: 204, body: '' });
+        });
     });
 }
 
 /** EMI-5986 pre-fix state: DELETE /groups/{id} blew up with a 500. */
 export async function mockDeleteGroupServerError(page: Page): Promise<void> {
-    await page.route(GROUP_DELETE_API, route => {
-        if (route.request().method() !== 'DELETE') return route.fallback();
-        return route.fulfill({
-            status: 500,
-            contentType: 'application/json',
-            body: JSON.stringify([{
-                httpStatusCode: 500,
-                message: { messageCode: 'INTERNAL_SERVER_ERROR', plainText: 'Failed to process your request.Please contact support.' },
-            }]),
+    return boxStep('mockDeleteGroupServerError', async () => {
+        await page.route(GROUP_DELETE_API, route => {
+            if (route.request().method() !== 'DELETE') return route.fallback();
+            return route.fulfill({
+                status: 500,
+                contentType: 'application/json',
+                body: JSON.stringify([{
+                    httpStatusCode: 500,
+                    message: { messageCode: 'INTERNAL_SERVER_ERROR', plainText: 'Failed to process your request.Please contact support.' },
+                }]),
+            });
         });
     });
 }
 
 export async function mockDeleteRoleSuccess(page: Page): Promise<void> {
-    await page.route(ROLE_DELETE_API, route => {
-        if (route.request().method() !== 'DELETE') return route.fallback();
-        return route.fulfill({ status: 204, body: '' });
+    return boxStep('mockDeleteRoleSuccess', async () => {
+        await page.route(ROLE_DELETE_API, route => {
+            if (route.request().method() !== 'DELETE') return route.fallback();
+            return route.fulfill({ status: 204, body: '' });
+        });
     });
 }
 
@@ -674,76 +753,88 @@ export async function mockDeleteRoleSuccess(page: Page): Promise<void> {
  * SystemEntityCannotBeModifiedException rather than deleting it.
  */
 export async function mockDeleteSystemEntityRejected(page: Page): Promise<void> {
-    for (const glob of [GROUP_DELETE_API, ROLE_DELETE_API]) {
-        await page.route(glob, route => {
-            if (route.request().method() !== 'DELETE') return route.fallback();
-            return route.fulfill({
-                status: 400,
-                contentType: 'application/json',
-                body: JSON.stringify([{
-                    httpStatusCode: 400,
-                    message: { messageCode: 'SYSTEM_ENTITY_CANNOT_BE_MODIFIED', plainText: 'System groups/roles cannot be modified or deleted' },
-                }]),
+    return boxStep('mockDeleteSystemEntityRejected', async () => {
+        for (const glob of [GROUP_DELETE_API, ROLE_DELETE_API]) {
+            await page.route(glob, route => {
+                if (route.request().method() !== 'DELETE') return route.fallback();
+                return route.fulfill({
+                    status: 400,
+                    contentType: 'application/json',
+                    body: JSON.stringify([{
+                        httpStatusCode: 400,
+                        message: { messageCode: 'SYSTEM_ENTITY_CANNOT_BE_MODIFIED', plainText: 'System groups/roles cannot be modified or deleted' },
+                    }]),
+                });
             });
-        });
-    }
+        }
+    });
 }
 
 // ── Group role assignment diffing (EMI-6000) ─────────────────────────────
 
 export async function mockGroupRoleAssignmentSuccess(page: Page): Promise<void> {
-    // Remove is registered first so the more specific /roles/remove glob is
-    // matched by the later, narrower handler — Playwright runs the most
-    // recently registered handler first.
-    await page.route(GROUP_ROLES_ASSIGN_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ assigned: true }) })
-    );
-    await page.route(GROUP_ROLES_REMOVE_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ removed: true }) })
-    );
+    return boxStep('mockGroupRoleAssignmentSuccess', async () => {
+        // Remove is registered first so the more specific /roles/remove glob is
+        // matched by the later, narrower handler — Playwright runs the most
+        // recently registered handler first.
+        await page.route(GROUP_ROLES_ASSIGN_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ assigned: true }) })
+        );
+        await page.route(GROUP_ROLES_REMOVE_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ removed: true }) })
+        );
+    });
 }
 
 // ── Admin staff groups & external parties (EMI-6066, EMI-6067) ───────────
 
 export async function mockAdminStaffGroups(page: Page, groups = localizedGroups()): Promise<void> {
-    await page.route(ADMIN_STAFF_GROUPS_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(groups) })
-    );
+    return boxStep('mockAdminStaffGroups', async () => {
+        await page.route(ADMIN_STAFF_GROUPS_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(groups) })
+        );
+    });
 }
 
 /** EMI-6066 pre-fix state: GET /groups/admin/staff 500s, so the Group dropdown is empty. */
 export async function mockAdminStaffGroupsServerError(page: Page): Promise<void> {
-    await page.route(ADMIN_STAFF_GROUPS_API, route =>
-        route.fulfill({
-            status: 500,
-            contentType: 'application/json',
-            body: JSON.stringify([{
-                httpStatusCode: 500,
-                message: { messageCode: 'INTERNAL_SERVER_ERROR', plainText: 'Failed to process your request.Please contact support.' },
-            }]),
-        })
-    );
+    return boxStep('mockAdminStaffGroupsServerError', async () => {
+        await page.route(ADMIN_STAFF_GROUPS_API, route =>
+            route.fulfill({
+                status: 500,
+                contentType: 'application/json',
+                body: JSON.stringify([{
+                    httpStatusCode: 500,
+                    message: { messageCode: 'INTERNAL_SERVER_ERROR', plainText: 'Failed to process your request.Please contact support.' },
+                }]),
+            })
+        );
+    });
 }
 
 export async function mockExternalPartyRoles(page: Page, roles = localizedRoles()): Promise<void> {
-    await page.route(EXTERNAL_PARTY_ROLES_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(roles) })
-    );
-    // EMI-6067 does not name the endpoint the modal reads from, only that the
-    // dropdown is empty. Serving the standard Admin role source too means the
-    // test passes whichever of the two the modal actually calls.
-    await page.route(CUSTOM_ROLES_API, route =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(roles) })
-    );
+    return boxStep('mockExternalPartyRoles', async () => {
+        await page.route(EXTERNAL_PARTY_ROLES_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(roles) })
+        );
+        // EMI-6067 does not name the endpoint the modal reads from, only that the
+        // dropdown is empty. Serving the standard Admin role source too means the
+        // test passes whichever of the two the modal actually calls.
+        await page.route(CUSTOM_ROLES_API, route =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: pageBody(roles) })
+        );
+    });
 }
 
 /** EMI-6067 pre-fix state: the Role dropdown source returns nothing at all. */
 export async function mockExternalPartyRolesEmpty(page: Page): Promise<void> {
-    for (const glob of [EXTERNAL_PARTY_ROLES_API, CUSTOM_ROLES_API]) {
-        await page.route(glob, route =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: pageBody([]) })
-        );
-    }
+    return boxStep('mockExternalPartyRolesEmpty', async () => {
+        for (const glob of [EXTERNAL_PARTY_ROLES_API, CUSTOM_ROLES_API]) {
+            await page.route(glob, route =>
+                route.fulfill({ status: 200, contentType: 'application/json', body: pageBody([]) })
+            );
+        }
+    });
 }
 
 /**
@@ -751,29 +842,37 @@ export async function mockExternalPartyRolesEmpty(page: Page): Promise<void> {
  * follow-up list call comes back empty so the new row never appears.
  */
 export async function mockCreateUserThenEmptyList(page: Page): Promise<void> {
-    const created = mockUser({ firstName: 'New', lastName: 'Staff' });
-    await page.route(USERS_API, route => {
-        if (route.request().method() === 'POST') {
-            return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(created) });
-        }
-        return route.fulfill({ status: 200, contentType: 'application/json', body: pageBody([]) });
+    return boxStep('mockCreateUserThenEmptyList', async () => {
+        const created = mockUser({ firstName: 'New', lastName: 'Staff' });
+        await page.route(USERS_API, route => {
+            if (route.request().method() === 'POST') {
+                return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(created) });
+            }
+            return route.fulfill({ status: 200, contentType: 'application/json', body: pageBody([]) });
+        });
     });
 }
 
 export async function gotoGroupsManagement(page: Page): Promise<void> {
-    await page.goto(GROUPS_MANAGEMENT_URL);
-    await page.waitForLoadState('domcontentloaded');
-    await waitForToastClear(page);
+    return boxStep('gotoGroupsManagement', async () => {
+        await page.goto(GROUPS_MANAGEMENT_URL);
+        await page.waitForLoadState('domcontentloaded');
+        await waitForToastClear(page);
+    });
 }
 
 export async function gotoAdminExternalParties(page: Page): Promise<void> {
-    await page.goto(ADMIN_EXTERNAL_PARTY_URL);
-    await page.waitForLoadState('domcontentloaded');
-    await waitForToastClear(page);
+    return boxStep('gotoAdminExternalParties', async () => {
+        await page.goto(ADMIN_EXTERNAL_PARTY_URL);
+        await page.waitForLoadState('domcontentloaded');
+        await waitForToastClear(page);
+    });
 }
 
 export async function gotoAdminUsers(page: Page): Promise<void> {
-    await page.goto(ADMIN_USERS_URL);
-    await page.waitForLoadState('domcontentloaded');
-    await waitForToastClear(page);
+    return boxStep('gotoAdminUsers', async () => {
+        await page.goto(ADMIN_USERS_URL);
+        await page.waitForLoadState('domcontentloaded');
+        await waitForToastClear(page);
+    });
 }

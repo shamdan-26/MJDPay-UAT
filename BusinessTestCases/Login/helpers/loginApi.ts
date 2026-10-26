@@ -1,6 +1,7 @@
 import type { APIRequestContext } from '@playwright/test';
 import { VALID_MOBILE, VALID_PASSWORD, VALID_COMPANY } from './LoginHelper.ts';
 import { browserIdentityHeaders } from '../../../support/deviceFingerprint';
+import { boxStep } from '../../shared/boxStep.ts';
 
 // Shared API config for the Login API specs (api/signin, api/document-expiry).
 // Kept out of LoginHelper.ts so UI/functional specs do not pull in API-only values.
@@ -26,10 +27,12 @@ let deviceUuid = process.env['LOGIN_DEVICE_UUID'] ?? '3297e2a1-d813-432f-a79c-54
 
 /** Registers DEVICE_ID with the gateway (idempotent) and uses the returned uuid for every later call in this worker. */
 export async function registerDevice(request: APIRequestContext): Promise<string> {
+    return boxStep('registerDevice', async () => {
     const res = await request.post(`${API_BASE}/devices/uuid`, { data: devicePayload(), headers: commonHeaders() });
     if (res.status() !== 200) throw new Error(`POST /devices/uuid returned ${res.status()}: ${await res.text()}`);
     deviceUuid = (await res.json()).uuid as string;
     return deviceUuid;
+    });
 }
 
 export function commonHeaders(): Record<string, string> {
@@ -50,6 +53,7 @@ export function commonHeaders(): Record<string, string> {
 
 /** POST /auth/signin with the common headers; password defaults to the shared merchant password. */
 export async function signIn(request: APIRequestContext, company: string, mobile: string, password: string = VALID_PASSWORD, extraHeaders: Record<string, string> = {}) {
+    return boxStep('signIn', async () => {
     const send = () => request.post(`${API_BASE}/auth/signin`, {
         data: { username: `+966${mobile}`, password, tenantNumber: company },
         headers: { ...commonHeaders(), ...extraHeaders },
@@ -60,4 +64,5 @@ export async function signIn(request: APIRequestContext, company: string, mobile
         return send();
     }
     return res;
+    });
 }

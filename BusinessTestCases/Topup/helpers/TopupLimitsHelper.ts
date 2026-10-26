@@ -3,6 +3,7 @@ import { createAdminContext } from '../../pageElements/Shared/AdminOtpConfigPage
 import { AdminLimitsApi, TOPUP_TYPE_NAME, type AmountLimitValues, type TopupLimitsSnapshot } from '../../pageElements/Shared/AdminLimitsApi.ts';
 import { AdminTransactionLimitsPage } from '../../pageElements/Shared/AdminTransactionLimitsPage.ts';
 import { gotoTopupScreen, type TopupSession } from './TopupHelper.ts';
+import { boxStep } from '../../shared/boxStep.ts';
 
 /**
  * Shared setup for the Topup admin-config suites (TUA-… in docs/manual-test-cases/Topup-Admin-Config-Matrix.md).
@@ -23,22 +24,26 @@ export interface AdminLimitsHandle {
 
 /** One admin login for the whole suite, plus the snapshot taken BEFORE the first change. */
 export async function openAdminLimits(browser: Browser, typeName: string = TOPUP_LIMIT_TYPE, walletType: string = TOPUP_WALLET_TYPE): Promise<AdminLimitsHandle> {
-    const context = await createAdminContext(browser);
-    const page = await context.newPage();
-    const api = new AdminLimitsApi(page);
-    await api.open();
-    const snapshot = await api.snapshotTopup(typeName, TOPUP_LIMIT_PLATFORM, walletType);
-    return { context, api, snapshot };
+    return boxStep('openAdminLimits', async () => {
+        const context = await createAdminContext(browser);
+        const page = await context.newPage();
+        const api = new AdminLimitsApi(page);
+        await api.open();
+        const snapshot = await api.snapshotTopup(typeName, TOPUP_LIMIT_PLATFORM, walletType);
+        return { context, api, snapshot };
+    });
 }
 
 /** afterAll body: restore + verify, then always close the admin context (restore errors still surface). */
 export async function closeAdminLimits(handle: AdminLimitsHandle | undefined): Promise<void> {
-    if (!handle) return;
-    try {
-        await handle.api.restoreTopup(handle.snapshot);
-    } finally {
-        await handle.context.close();
-    }
+    return boxStep('closeAdminLimits', async () => {
+        if (!handle) return;
+        try {
+            await handle.api.restoreTopup(handle.snapshot);
+        } finally {
+            await handle.context.close();
+        }
+    });
 }
 
 /**
@@ -47,6 +52,7 @@ export async function closeAdminLimits(handle: AdminLimitsHandle | undefined): P
  * puts the originals back (`o => o`). The snapshot itself is still read through the API (read-only).
  */
 export async function applyAmountsOnScreen(admin: AdminLimitsHandle, values: (original: AmountLimitValues) => AmountLimitValues, group = 'Cash-In'): Promise<void> {
+    return boxStep('applyAmountsOnScreen', async () => {
     const page = await admin.context.newPage();
     try {
         const screen = new AdminTransactionLimitsPage(page);
@@ -60,6 +66,7 @@ export async function applyAmountsOnScreen(admin: AdminLimitsHandle, values: (or
     } finally {
         await page.close().catch(() => { /* already closed */ });
     }
+    });
 }
 
 export type TopupAttempt =
@@ -83,6 +90,7 @@ export type TopupAttempt =
 export const attemptInfo = { detail: '' };
 
 export async function attemptTopup(session: TopupSession, amount: string, method: 'mada' | 'visa' | 'master' = 'mada'): Promise<TopupAttempt> {
+    return boxStep('attemptTopup', async () => {
     const { page, topup, otp } = session;
     await gotoTopupScreen(session);
     await topup.selectPaymentMethod(method);
@@ -116,6 +124,7 @@ export async function attemptTopup(session: TopupSession, amount: string, method
     }
     attemptInfo.detail = '';
     return 'proceeded';
+    });
 }
 
 /** True for any outcome where the platform stopped the top-up before payment. */

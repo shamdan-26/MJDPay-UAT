@@ -4,6 +4,7 @@ import { TopupPage } from '../../pageElements/Topup/TopupPage.ts';
 import { OtpPage } from '../../pageElements/Shared/OtpPage.ts';
 import { HomepageQuickActionsPage } from '../../pageElements/Shared/HomepageQuickActionsPage.ts';
 import { getOtpFromDb } from '../../Login/helpers/LoginHelper.ts';
+import { boxStep } from '../../shared/boxStep.ts';
 
 export const BASE_URL  = process.env['BASE_URL'] ?? 'https://uat.majdpay.com';
 export const LOGIN_URL = `${BASE_URL}/business/auth/login`;
@@ -35,31 +36,33 @@ export const SUMMARY_LABEL = {
  * async summary calculation for as long as it takes.
  */
 export async function proceedToConfirmation(page: Page, bt: BankTransferPage): Promise<void> {
-    // The Confirmation step is reached once the summary rows render. Detect it
-    // by the language-neutral .mp-sum-row container or the summary "Next"
-    // button (testid-first, bilingual role fallback — the Cashout flow defaults
-    // to Arabic on dev/UAT so a hardcoded English name never matches).
-    const summaryReady = page.locator('.mp-sum-row').first();
-    const nextButton = bt.proceedButtonInSummary;
-    const reachedConfirmation = async () =>
-        (await summaryReady.isVisible().catch(() => false)) ||
-        (await nextButton.isVisible().catch(() => false));
+    return boxStep('proceedToConfirmation', async () => {
+        // The Confirmation step is reached once the summary rows render. Detect it
+        // by the language-neutral .mp-sum-row container or the summary "Next"
+        // button (testid-first, bilingual role fallback — the Cashout flow defaults
+        // to Arabic on dev/UAT so a hardcoded English name never matches).
+        const summaryReady = page.locator('.mp-sum-row').first();
+        const nextButton = bt.proceedButtonInSummary;
+        const reachedConfirmation = async () =>
+            (await summaryReady.isVisible().catch(() => false)) ||
+            (await nextButton.isVisible().catch(() => false));
 
-    await bt.clickProceedButton();
+        await bt.clickProceedButton();
 
-    // Poll rather than retry once — on a slow/loaded dev backend a single
-    // extra click after a fixed wait isn't always enough. Every retry click is
-    // explicitly time-boxed: once the flow transitions the Amount-step button
-    // detaches, and an un-timed click there hangs until the test timeout.
-    const deadline = Date.now() + 90000;
-    while (Date.now() < deadline) {
-        if (await reachedConfirmation()) return;
-        await page.waitForTimeout(2000);
-        if (await bt.proceedButton.isEnabled({ timeout: 2000 }).catch(() => false)) {
-            await bt.proceedButton.click({ timeout: 5000 }).catch(() => {});
+        // Poll rather than retry once — on a slow/loaded dev backend a single
+        // extra click after a fixed wait isn't always enough. Every retry click is
+        // explicitly time-boxed: once the flow transitions the Amount-step button
+        // detaches, and an un-timed click there hangs until the test timeout.
+        const deadline = Date.now() + 90000;
+        while (Date.now() < deadline) {
+            if (await reachedConfirmation()) return;
+            await page.waitForTimeout(2000);
+            if (await bt.proceedButton.isEnabled({ timeout: 2000 }).catch(() => false)) {
+                await bt.proceedButton.click({ timeout: 5000 }).catch(() => {});
+            }
         }
-    }
-    await expect(nextButton).toBeVisible({ timeout: 5000 });
+        await expect(nextButton).toBeVisible({ timeout: 5000 });
+    });
 }
 
 // ── Ensuring a spendable balance ──────────────────────────────────────────────
@@ -133,54 +136,56 @@ async function clickSummaryNextWithRetry(topup: TopupPage): Promise<Page> {
 }
 
 export async function ensureNonZeroBalance(page: Page, mobile: string): Promise<void> {
-    const bt = new BankTransferPage(page);
-    const quickActions = new HomepageQuickActionsPage(page);
+    return boxStep('ensureNonZeroBalance', async () => {
+        const bt = new BankTransferPage(page);
+        const quickActions = new HomepageQuickActionsPage(page);
 
-    await page.goto(HOME_URL);
-    await page.waitForLoadState('domcontentloaded');
-    await quickActions.quickActionCashoutCard.click();
-    await expect(bt.inputAmount).toBeVisible({ timeout: 15000 });
+        await page.goto(HOME_URL);
+        await page.waitForLoadState('domcontentloaded');
+        await quickActions.quickActionCashoutCard.click();
+        await expect(bt.inputAmount).toBeVisible({ timeout: 15000 });
 
-    const balance = await bt.getBalanceBeforeBankTransfer();
-    if (balance > 0) return;
+        const balance = await bt.getBalanceBeforeBankTransfer();
+        if (balance > 0) return;
 
-    console.log('[ensureNonZeroBalance] balance is 0 — funding the wallet via top-up');
-    const topup = new TopupPage(page);
-    const otp = new OtpPage(page);
+        console.log('[ensureNonZeroBalance] balance is 0 — funding the wallet via top-up');
+        const topup = new TopupPage(page);
+        const otp = new OtpPage(page);
 
-    await page.goto(HOME_URL);
-    await page.waitForLoadState('domcontentloaded');
-    await quickActions.quickActionTopupCard.click();
-    await expect(topup.inputAmount).toBeVisible({ timeout: 15000 });
+        await page.goto(HOME_URL);
+        await page.waitForLoadState('domcontentloaded');
+        await quickActions.quickActionTopupCard.click();
+        await expect(topup.inputAmount).toBeVisible({ timeout: 15000 });
 
-    await topup.selectPaymentMethod('mada');
-    await topup.enterAmount(TOPUP_AMOUNT);
-    await topup.clickProceedButton();
-    console.log('[ensureNonZeroBalance] step: proceeded past amount, opening payment popup');
-    const popup = await clickSummaryNextWithRetry(topup);
-    console.log('[ensureNonZeroBalance] step: payment popup opened, filling card details');
-    await topup.fillCardDetails(TOPUP_CARD.number, TOPUP_CARD.expiry, TOPUP_CARD.holder, TOPUP_CARD.cvv);
-    await topup.clickPayNowButton();
-    await topup.clickCardSchemeSubmitButton();
-    console.log('[ensureNonZeroBalance] step: card submitted, waiting for popup to close');
-    await popup.waitForEvent('close', { timeout: 30000 }).catch(() => null);
-    topup.resetActivePage();
+        await topup.selectPaymentMethod('mada');
+        await topup.enterAmount(TOPUP_AMOUNT);
+        await topup.clickProceedButton();
+        console.log('[ensureNonZeroBalance] step: proceeded past amount, opening payment popup');
+        const popup = await clickSummaryNextWithRetry(topup);
+        console.log('[ensureNonZeroBalance] step: payment popup opened, filling card details');
+        await topup.fillCardDetails(TOPUP_CARD.number, TOPUP_CARD.expiry, TOPUP_CARD.holder, TOPUP_CARD.cvv);
+        await topup.clickPayNowButton();
+        await topup.clickCardSchemeSubmitButton();
+        console.log('[ensureNonZeroBalance] step: card submitted, waiting for popup to close');
+        await popup.waitForEvent('close', { timeout: 30000 }).catch(() => null);
+        topup.resetActivePage();
 
-    // Top-up's OTP is the inline widget (heading "ملخص إضافة الأموال" / "Top-up
-    // Summary"), not the login-style "Enter OTP" dialog OtpPage.isVisible()
-    // checks for — gate on the input boxes themselves instead, which both
-    // widget shapes expose (see OtpPage.ts's own comment on this split).
-    const otpShown = await otp.inputs.first()
-        .waitFor({ state: 'visible', timeout: 15000 })
-        .then(() => true)
-        .catch(() => false);
-    console.log(`[ensureNonZeroBalance] step: otpShown=${otpShown}`);
-    if (otpShown) {
-        await otp.fillAndVerify(await getOtpFromDb(mobile));
-    }
-    await topup.clickResultOkButton();
-    console.log('[ensureNonZeroBalance] step: top-up result acknowledged');
+        // Top-up's OTP is the inline widget (heading "ملخص إضافة الأموال" / "Top-up
+        // Summary"), not the login-style "Enter OTP" dialog OtpPage.isVisible()
+        // checks for — gate on the input boxes themselves instead, which both
+        // widget shapes expose (see OtpPage.ts's own comment on this split).
+        const otpShown = await otp.inputs.first()
+            .waitFor({ state: 'visible', timeout: 15000 })
+            .then(() => true)
+            .catch(() => false);
+        console.log(`[ensureNonZeroBalance] step: otpShown=${otpShown}`);
+        if (otpShown) {
+            await otp.fillAndVerify(await getOtpFromDb(mobile));
+        }
+        await topup.clickResultOkButton();
+        console.log('[ensureNonZeroBalance] step: top-up result acknowledged');
 
-    await page.goto(HOME_URL);
-    await page.waitForLoadState('domcontentloaded');
+        await page.goto(HOME_URL);
+        await page.waitForLoadState('domcontentloaded');
+    });
 }

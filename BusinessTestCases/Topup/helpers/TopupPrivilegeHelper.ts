@@ -1,6 +1,7 @@
 import type { Browser } from '@playwright/test';
 import { AdminOtpConfigPage, createAdminContext } from '../../pageElements/Shared/AdminOtpConfigPage.ts';
 import { AdminGroupsManagementPage, ADMIN_ROLE } from '../../pageElements/UserManagement/AdminGroupsManagementPage.ts';
+import { boxStep } from '../../shared/boxStep.ts';
 
 /**
  * Removes the Top-up privilege from an admin ROLE and puts it back (TUB-04 / TUB-122).
@@ -33,7 +34,9 @@ async function withAdminRole<T>(browser: Browser, role: TopupRole, work: (groups
 
 /** True when the privilege is in the role's ASSIGNED list (fresh admin login, nothing is changed). */
 export async function roleHasTopupPrivilege(browser: Browser, role: TopupRole): Promise<boolean> {
-    return withAdminRole(browser, role, async groups => (await groups.assignedMatching(TOPUP_PRIVILEGE)).some(n => n.toLowerCase() === TOPUP_PRIVILEGE.toLowerCase()));
+    return boxStep('roleHasTopupPrivilege', async () => {
+        return withAdminRole(browser, role, async groups => (await groups.assignedMatching(TOPUP_PRIVILEGE)).some(n => n.toLowerCase() === TOPUP_PRIVILEGE.toLowerCase()));
+    });
 }
 
 /**
@@ -41,6 +44,7 @@ export async function roleHasTopupPrivilege(browser: Browser, role: TopupRole): 
  * verifies. If the role did not have the privilege to begin with, nothing is changed and restore() does nothing.
  */
 export async function removeTopupPrivilege(browser: Browser, role: TopupRole): Promise<{ hadPrivilege: boolean; restore: () => Promise<void> }> {
+    return boxStep('removeTopupPrivilege', async () => {
     const hadPrivilege = await withAdminRole(browser, role, async groups => {
         const has = (await groups.assignedMatching(TOPUP_PRIVILEGE)).some(n => n.toLowerCase() === TOPUP_PRIVILEGE.toLowerCase());
         if (!has) return false;
@@ -64,4 +68,5 @@ export async function removeTopupPrivilege(browser: Browser, role: TopupRole): P
         }
     };
     return { hadPrivilege, restore };
+    });
 }
