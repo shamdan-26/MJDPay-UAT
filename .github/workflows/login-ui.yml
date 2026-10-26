@@ -39,7 +39,8 @@ jobs:
           # Mask sensitive values in the logs even when they were stored as plain variables.
           grep -E '^(MSSQL_|MONGO_)|^[A-Za-z0-9_]*(PASSWORD|API_KEY|SECRET|TOKEN|URI)=' .env.dev | sed -E 's/^[^=]*=//' | jq -r '.' | while IFS= read -r v; do [ -n "$v" ] && echo "::add-mask::$v"; done
       # The config's only project is headed Microsoft Edge, so install Edge and give it a virtual display.
-      - run: npx playwright install --with-deps msedge
+      # global-setup also launches plain Chromium, so install both.
+      - run: npx playwright install --with-deps msedge chromium
       - name: Run Login UI specs (shard ${{ matrix.shard }}/4)
         run: xvfb-run --auto-servernum npx playwright test BusinessTestCases/Login/ui --reporter=blob --shard=${{ matrix.shard }}/4
       - uses: actions/upload-artifact@v4
