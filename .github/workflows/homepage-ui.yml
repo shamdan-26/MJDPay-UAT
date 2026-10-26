@@ -25,11 +25,17 @@ jobs:
           node-version: lts/*
           cache: npm
       - run: npm ci
-      # Every GitHub repository variable becomes a line in .env.dev, which playwright.config.ts loads.
-      - name: Write .env.dev from repository variables
+      # Every GitHub repository variable and secret becomes a line in .env.dev, which playwright.config.ts loads.
+      # A secret wins over a variable of the same name; the auto-provided github_token is left out.
+      - name: Write .env.dev from repository variables and secrets
         env:
           REPO_VARS: ${{ toJSON(vars) }}
-        run: printf '%s' "$REPO_VARS" | jq -r 'to_entries[] | "\(.key)=\(.value | @json)"' > .env.dev
+          REPO_SECRETS: ${{ toJSON(secrets) }}
+        run: |
+          jq -rn 'env.REPO_VARS | fromjson' > vars.json
+          jq -rn 'env.REPO_SECRETS | fromjson | del(.github_token)' > secrets.json
+          jq -rs 'add | to_entries[] | "\(.key)=\(.value | @json)"' vars.json secrets.json > .env.dev
+          rm vars.json secrets.json
       # The config's only project is headed Microsoft Edge, so install Edge and give it a virtual display.
       - run: npx playwright install --with-deps msedge
       - name: Run Homepage UI specs (shard ${{ matrix.shard }}/4)
