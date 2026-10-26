@@ -1,0 +1,87 @@
+name: Homepage UI Tests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'BusinessTestCases/Homepage/**'
+      - 'BusinessTestCases/pageElements/**'
+      - 'support/**'
+      - '.github/workflows/homepage-ui.yml'
+
+jobs:
+  test:
+    name: Shard ${{ matrix.shard }}/4
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    env:
+      ENV: dev
+      BASE_URL: ${{ secrets.BASE_URL }}
+      DEV_SETUP_COMPANY: ${{ secrets.DEV_SETUP_COMPANY }}
+      DEV_SETUP_MOBILE: ${{ secrets.DEV_SETUP_MOBILE }}
+      DEV_SETUP_PASSWORD: ${{ secrets.DEV_SETUP_PASSWORD }}
+      DEV_COMPANY: ${{ secrets.DEV_COMPANY }}
+      DEV_MOBILE: ${{ secrets.DEV_MOBILE }}
+      DEV_COMPANY_2: ${{ secrets.DEV_COMPANY_2 }}
+      DEV_MOBILE_2: ${{ secrets.DEV_MOBILE_2 }}
+      DEV_PASSWORD_2: ${{ secrets.DEV_PASSWORD_2 }}
+      DEV_BILLER_COMPANY: ${{ secrets.DEV_BILLER_COMPANY }}
+      DEV_BILLER_MOBILE: ${{ secrets.DEV_BILLER_MOBILE }}
+      DEV_BILLER_PASSWORD: ${{ secrets.DEV_BILLER_PASSWORD }}
+      IMAP_HOST: ${{ secrets.IMAP_HOST }}
+      IMAP_PORT: ${{ secrets.IMAP_PORT }}
+      IMAP_USER: ${{ secrets.IMAP_USER }}
+      IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD }}
+      MAILOSAUR_SERVER_ID: ${{ secrets.MAILOSAUR_SERVER_ID }}
+      MAILOSAUR_API_KEY: ${{ secrets.MAILOSAUR_API_KEY }}
+      MONGO_URI: ${{ secrets.MONGO_URI }}
+      MSSQL_HOST: ${{ secrets.MSSQL_HOST }}
+      MSSQL_PORT: ${{ secrets.MSSQL_PORT }}
+      MSSQL_DATABASE: ${{ secrets.MSSQL_DATABASE }}
+      MSSQL_USER: ${{ secrets.MSSQL_USER }}
+      MSSQL_PASSWORD: ${{ secrets.MSSQL_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+      - run: npm ci
+      # The config's only project is headed Microsoft Edge, so install Edge and give it a virtual display.
+      - run: npx playwright install --with-deps msedge
+      - name: Run Homepage UI specs (shard ${{ matrix.shard }}/4)
+        run: xvfb-run --auto-servernum npx playwright test BusinessTestCases/Homepage/ui --reporter=blob --shard=${{ matrix.shard }}/4
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: blob-report-${{ matrix.shard }}
+          path: blob-report/
+          retention-days: 7
+
+  merge-reports:
+    name: Merge HTML report
+    needs: test
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          path: all-blob-reports
+          pattern: blob-report-*
+          merge-multiple: true
+      - run: npx playwright merge-reports --reporter=html ./all-blob-reports
+      - uses: actions/upload-artifact@v4
+        with:
+          name: homepage-ui-html-report
+          path: playwright-report/
+          retention-days: 30
