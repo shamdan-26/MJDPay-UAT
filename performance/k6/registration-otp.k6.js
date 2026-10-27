@@ -3,7 +3,7 @@
 // SAFETY: dev environment only, with the backend team's agreement. Every `mobile/otp` call can send a real OTP.
 // Keep VUS/duration low first (defaults below are deliberately small) and raise gradually.
 //
-// Run:  k6 run BusinessTestCases/Registration/drafts/load/registration-load.k6.js
+// Run:  k6 run performance/k6/registration-otp.k6.js
 //       k6 run -e SCENARIO=soak -e VUS=10 -e DURATION=30m ...   (see options below)
 //
 // Assumptions: host and required headers as discovered on dev; response shapes as in RegistrationApiContract.draft.ts.

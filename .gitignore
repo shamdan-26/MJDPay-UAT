@@ -12,7 +12,7 @@ bug-report-assets/
 .env
 .env.*
 
-# JMeter load testing
+# k6 load testing
 /performance/results/
 *.jtl
 
